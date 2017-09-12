@@ -79,6 +79,7 @@
         <url-pattern>*.less</url-pattern>
         <url-pattern>*.ico</url-pattern>
         <url-pattern>*.svg</url-pattern>
+        <url-pattern>*.swf</url-pattern>
     </servlet-mapping>
 <!--    <context-param>
         <param-name>webAppRootKey</param-name>

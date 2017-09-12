@@ -170,6 +170,19 @@
         UE.getEditor('editor').execCommand( "clearlocaldata" );
         alert("已清空草稿箱")
     }
+    //重写图片上传地址
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function(action) {
+        //判断路径   这里是config.json 中设置执行上传的action名称
+        if (action == 'uploadimage') {
+            return '/ueditor/imageUpload';
+        //上传视频
+        } else if (action == 'uploadvideo') {
+            return '';
+        } else {
+            return this._bkGetActionUrl.call(this, action);
+        }
+    }
 </script>
 </body>
 </html>
