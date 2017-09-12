@@ -42,8 +42,6 @@ public class UeditorController extends BaseController {
         Map<String,Object> config = new HashMap<String,Object>();//总配置对象
 		/* 上传图片配置项 */
         config.put("imageActionName", "uploadimage");
-        //
-        config.put("imageUrl", ctx+"/ueditor/imageUpload");
         //提交的图片表单名称
         config.put("imageFieldName", "dht_image_upload");
         //上传大小限制，单位B
@@ -74,7 +72,6 @@ public class UeditorController extends BaseController {
     @RequestMapping("/imageUpload")
     public  Map<String,String> uploadImg(@RequestParam("dht_image_upload") CommonsMultipartFile upfile){
         logger.info("进入图片上传");
-        System.out.println("----------------------------->>>:");
 //        InputStream stream=null;
 //        try {
 //            stream=upfile.getInputStream();
