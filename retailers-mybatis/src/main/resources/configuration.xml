@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+        <!-- 配置mybatis默认日志工厂为log4j http://blog.csdn.net/isea533/article/details/22931341 -->
+        <setting name="logImpl" value="SLF4J"/>
+        <setting name="callSettersOnNulls" value="true" />
+    </settings>
+    <plugins>
+        <plugin interceptor="com.esp.mybatis.pagination.PageInterceptor">
+            <property name="databaseType" value="mysql"/>
+        </plugin>
+    </plugins>
+</configuration>
