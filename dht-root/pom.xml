@@ -14,7 +14,30 @@
     <modules>
         <module>dht-common</module>
         <module>dht-web</module>
-        <module>dht-manager</module>
+        <module>dht-manage</module>
     </modules>
-
+    <build>
+        <filters> <!-- 指定使用的 filter -->
+            <filter>../../filters/filter-${env}-env.properties</filter>
+        </filters>
+        <resources>
+            <resource>
+                <directory>src/main/java</directory>
+                <includes>
+                    <include>**/*.xml</include>
+                    <include>**/*.properties</include>
+                </includes>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>**/*.properties</include>
+                    <include>**/*.xml</include>
+                    <include>**/*.tld</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 </project>

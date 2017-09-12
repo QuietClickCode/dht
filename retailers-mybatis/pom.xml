@@ -16,8 +16,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.esp</groupId>
-            <artifactId>esp-tools</artifactId>
+            <groupId>com.retailers</groupId>
+            <artifactId>retailers-tools</artifactId>
             <version>${parent.version}</version>
         </dependency>
         <!--mysql -->

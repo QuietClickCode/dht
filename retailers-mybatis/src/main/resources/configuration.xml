@@ -9,7 +9,7 @@
         <setting name="callSettersOnNulls" value="true" />
     </settings>
     <plugins>
-        <plugin interceptor="com.esp.mybatis.pagination.PageInterceptor">
+        <plugin interceptor="com.retailers.mybatis.pagination.PageInterceptor">
             <property name="databaseType" value="mysql"/>
         </plugin>
     </plugins>
