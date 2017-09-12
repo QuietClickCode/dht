@@ -9,6 +9,7 @@
     <modules>
         <module>retailers-tools</module>
         <module>retailers-mybatis</module>
+        <module>dht-root</module>
     </modules>
     <packaging>pom</packaging>
     <name>大汇堂主工程</name>
