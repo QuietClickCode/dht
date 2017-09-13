@@ -35,7 +35,7 @@ public class ImageUtils {
     private static Map<String,String> imageCompressType=new HashMap<String, String>();
     static {
         try{
-            waterMark=ImageIO.read(new File("d:\\water.png"));
+            waterMark=ImageIO.read(new File("/opt/attachment/watermark/water.png"));
             WATER_MARK_WIDTH =waterMark.getWidth();
             WATER_MARK_HEIGHT=waterMark.getHeight();
             Map<String,Integer> smallImage=new HashMap<String, Integer>();
