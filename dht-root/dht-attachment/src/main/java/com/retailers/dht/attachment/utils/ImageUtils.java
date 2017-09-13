@@ -1,6 +1,5 @@
 package com.retailers.dht.attachment.utils;
 
-import com.alibaba.druid.sql.dialect.db2.visitor.DB2ASTVisitorAdapter;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
