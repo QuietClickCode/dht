@@ -4836,6 +4836,20 @@ public class StringUtils {
         String result = String.format(data, args);
         return result;
     }
+    public static String formates(String data,Object ...args){
+		int count=0;
+		while (data.indexOf("{}")>=0){
+			System.out.println(args.length);
+			if(count>=args.length){
+				break;
+			}
+			data=data.substring(0,data.indexOf("{}"))+args[count]+data.substring(data.indexOf("{}")+2);
+			count++;
+		}
+		return data;
+	}
+
+
 	/**
 	 * @Description: 把数组转换为一个用逗号分隔的字符串 ，以便于用in+String 查询
 	 */
@@ -4993,6 +5007,7 @@ public class StringUtils {
 //		String key=unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA");
 //		System.out.println(key.equals(key1));
 //		System.out.println(unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA"));
-		System.out.println(formate("1",null));
+//		System.out.println(formate("1",null));
+		System.out.println(StringUtils.formates("数据测试:{},datae:[{}],哈哈：{}","ok","oky"));
 	}
 }

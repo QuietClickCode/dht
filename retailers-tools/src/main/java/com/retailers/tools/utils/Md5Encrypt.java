@@ -59,8 +59,8 @@ public class Md5Encrypt {
     }
 
     public static void main(String[] args) {
-		System.out.println(md5("9fc2fdce3752e9e7d87eb2d5a8f3dd061438323403055","UTF-8"));
-		System.out.println(md5("res.xsfapp.com","UTF-8"));
+//		System.out.println(md5("9fc2fdce3752e9e7d87eb2d5a8f3dd061438323403055","UTF-8"));
+		System.out.println(md5("http://www.zgrmdht.com_zpaman","UTF-8"));
 	}
 
 }
