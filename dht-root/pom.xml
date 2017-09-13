@@ -15,6 +15,7 @@
         <module>dht-common</module>
         <module>dht-web</module>
         <module>dht-manage</module>
+        <module>dht-attachment</module>
     </modules>
     <build>
         <filters> <!-- 指定使用的 filter -->
