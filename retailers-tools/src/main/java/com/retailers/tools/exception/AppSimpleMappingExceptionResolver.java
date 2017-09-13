@@ -88,7 +88,7 @@ public class AppSimpleMappingExceptionResolver extends SimpleMappingExceptionRes
     }
     public static String getRemoteAddrIp(HttpServletRequest request) {
         String ipFromNginx = request.getHeader("X-Real-IP");
-        return StringUtils.isEmpty(ipFromNginx) ? request.getRemoteAddr() : ipFromNginx;
+        return ObjectUtils.isEmpty(ipFromNginx) ? request.getRemoteAddr() : ipFromNginx;
     }
 
     public void writeLog(HttpServletRequest req) {

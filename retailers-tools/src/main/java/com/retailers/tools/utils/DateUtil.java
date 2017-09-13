@@ -10,6 +10,10 @@ import java.util.*;
 public class DateUtil {
 	/** 简单年日期格式 */
 	public static final String DATE_YEAR = "yyyy";
+	/** 简单月日期格式 */
+	public static final String DATE_MONTH = "MM";
+	/** 简单日日期格式 */
+	public static final String DATE_DAY = "dd";
 	/** 简单周日期格式 */
 	public static final String DATE_WEEK = "EE";
 

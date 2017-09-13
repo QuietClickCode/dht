@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.mybatis.common.dao.AttachmentMapper">
+
+	<resultMap id="rm_attachment" type="com.retailers.mybatis.common.entity.Attachment">
+			<result property="id" column="id"/>
+			<result property="uuId" column="uu_id"/>
+			<result property="name" column="name"/>
+			<result property="type" column="type"/>
+			<result property="status" column="status"/>
+			<result property="path" column="path"/>
+			<result property="createTime" column="create_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="attachment_columns">
+		id,uu_id,name,type,status,path,create_time
+	</sql>
+	<!-- 根据系统附件表(用于存放上传物品)主键取得数据 -->
+	<select id="queryAttachmentById" resultMap="rm_attachment" parameterType="java.lang.Long">
+		SELECT <include refid="attachment_columns" />
+		FROM t_attachment WHERE id = #{id}
+	</select>
+	<!-- 系统附件表(用于存放上传物品)查询条件组合 -->
+	<sql id="attachment_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.uuId and '' != params.uuId">
+				AND uu_id = #{params.uuId}
+			</if>
+			<if test="null != params.name and '' != params.name">
+				AND name = #{params.name}
+			</if>
+			<if test="null != params.type and '' != params.type">
+				AND type = #{params.type}
+			</if>
+			<if test="null != params.status">
+				AND status = #{params.status}
+			</if>
+			<if test="null != params.path and '' != params.path">
+				AND path = #{params.path}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= #{params.createTime}
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= #{params.createTime}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryAttachmentList" resultMap="rm_attachment" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="attachment_columns" />
+		FROM t_attachment
+		<include refid="attachment_where"/>
+	</select>
+	<!--添加系统附件表(用于存放上传物品) -->
+	<insert id="saveAttachment" parameterType="com.retailers.mybatis.common.entity.Attachment" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_attachment (
+			uu_id,name,type,status,path,create_time
+		) VALUES
+		(
+			#{uuId,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{status,jdbcType=BIGINT},#{path,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改系统附件表(用于存放上传物品) -->
+	<update id="updateAttachment" parameterType="com.retailers.mybatis.common.entity.Attachment">
+		UPDATE t_attachment
+		<set>
+            <if test="null != uuId and '' != uuId">
+                uu_id = #{uuId},
+            </if>
+            <if test="null != name and '' != name">
+                name = #{name},
+            </if>
+            <if test="null != type and '' != type">
+                type = #{type},
+            </if>
+            <if test="null != status">
+                status = #{status},
+            </if>
+            <if test="null != path and '' != path">
+                path = #{path},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除系统附件表(用于存放上传物品) -->
+	<delete id="deleteAttachmentById" parameterType="java.lang.Long">
+		DELETE FROM t_attachment WHERE id = #{id}
+	</delete>
+</mapper>

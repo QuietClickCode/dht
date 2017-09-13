@@ -53,7 +53,7 @@ public class StringUtils {
 	 * @return
 	 */
 	public static String trimEx(String source) {
-		if (StringUtils.isEmpty(source))
+		if (ObjectUtils.isEmpty(source))
 			return "";
 		source = source.trim();
 		source = source.substring(source.lastIndexOf(" ") < 0 ? 0 : source.lastIndexOf(" "));
@@ -80,47 +80,6 @@ public class StringUtils {
 	 * ==========================================================================
 	 * ==
 	 */
-
-	/**
-	 * 检查字符串是否为<code>null</code>或空字符串<code>""</code>。
-	 *
-	 * <pre>
-	 * StringUtil.isEmpty(null)      = true
-	 * StringUtil.isEmpty("")        = true
-	 * StringUtil.isEmpty(" ")       = false
-	 * StringUtil.isEmpty("bob")     = false
-	 * StringUtil.isEmpty("  bob  ") = false
-	 * </pre>
-	 *
-	 * @param str
-	 *            要检查的字符串
-	 *
-	 * @return 如果为空, 则返回<code>true</code>
-	 */
-	public static boolean isEmpty(String str) {
-		return ((str == null) || (str.length() == 0) || "undefined".equals(str)|| "null".equals(str));
-	}
-
-	/**
-	 * 检查字符串是否不是<code>null</code>和空字符串<code>""</code>。
-	 *
-	 * <pre>
-	 * StringUtil.isEmpty(null)      = false
-	 * StringUtil.isEmpty("")        = false
-	 * StringUtil.isEmpty(" ")       = true
-	 * StringUtil.isEmpty("bob")     = true
-	 * StringUtil.isEmpty("  bob  ") = true
-	 * </pre>
-	 *
-	 * @param str
-	 *            要检查的字符串
-	 *
-	 * @return 如果不为空, 则返回<code>true</code>
-	 */
-	public static boolean isNotEmpty(String str) {
-		return ((str != null) && (str.length() > 0));
-	}
-
 	/**
 	 * 检查字符串是否是空白：<code>null</code>、空字符串<code>""</code>或只有空白字符。
 	 *
@@ -184,18 +143,6 @@ public class StringUtils {
 
 		return false;
 	}
-
-	/*
-	 * ==========================================================================
-	 * ==
-	 */
-	/* 默认值函数。 */
-	/*                                                                              */
-	/* 当字符串为null、empty或blank时，将字符串转换成指定的默认字符串。 */
-	/*
-	 * ==========================================================================
-	 * ==
-	 */
 
 	/**
 	 * 如果字符串是<code>null</code>，则返回空字符串<code>""</code>，否则返回字符串本身。
@@ -1539,7 +1486,7 @@ public class StringUtils {
 		 * Parse sentence。
 		 */
 		public String parse(String str) {
-			if (StringUtils.isEmpty(str)) {
+			if (ObjectUtils.isEmpty(str)) {
 				return str;
 			}
 
@@ -4879,7 +4826,7 @@ public class StringUtils {
 	}
 
 	public static String mobileHide(String mobile){
-		if(isNotEmpty(mobile)){
+		if(ObjectUtils.isNotEmpty(mobile)){
 			mobile = mobile.substring(0,3)+"****"+mobile.substring(mobile.length()-4);
 		}
 		return mobile;
@@ -5042,9 +4989,10 @@ public class StringUtils {
 		//System.out.println(JSON.toJSONString(urlParams("https://steamcommunity.com/tradeoffer/new/?partner=169636179&token=zjW5UBX8")));
 		//System.out.println(mobileHide("18623325918"));
 //		System.out.println(randomCode(5));
-		String key1="StatTrak™ Music Kit | Twin Atlantic, GLA";
-		String key=unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA");
-		System.out.println(key.equals(key1));
-		System.out.println(unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA"));
+//		String key1="StatTrak™ Music Kit | Twin Atlantic, GLA";
+//		String key=unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA");
+//		System.out.println(key.equals(key1));
+//		System.out.println(unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA"));
+		System.out.println(formate("1",null));
 	}
 }
