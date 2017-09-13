@@ -3,29 +3,28 @@ package com.retailers.dht.attachment;
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.attachment.utils.Config;
 import com.retailers.dht.attachment.utils.ImageUtils;
-import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.StringUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileItemFactory;
+import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.FileUploadException;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import org.apache.commons.fileupload.FileUploadBase.FileSizeLimitExceededException;
 import javax.servlet.Servlet;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 附件上传管理 多文件上传
@@ -40,7 +39,7 @@ public class FilesUploadServlet extends HttpServlet {
 	//上传文件最大数据
 	private final long MAXSize = 4194304 * 2L;// 4*2MB
 	Map<String, String> dir=new HashMap<String, String>();
-	private String keys="9fc2fdce3752e9e7d87eb2d5a8f3dd06";
+	private String keys="99695f8e24bd27ee2f70dba1b19785c6";
 	private Map<String,String> imageType=new HashMap<String, String>();
 
 	/**
@@ -120,6 +119,14 @@ public class FilesUploadServlet extends HttpServlet {
 			}else if (ObjectUtils.isNotEmpty(items)) {
 				sign=params.get("uploadSign").toString();
 				t = params.get("time").toString();
+				boolean isCompress=false;
+				if(params.containsKey("isCompress")&&ObjectUtils.isNotEmpty(params.get("isCompress"))){
+					isCompress=Boolean.parseBoolean(params.get("isCompress").toString());
+				}
+				boolean isAddWatermark=false;
+				if(params.containsKey("isAddWatermark")&&ObjectUtils.isNotEmpty(params.get("isAddWatermark"))){
+					isAddWatermark=Boolean.parseBoolean(params.get("isAddWatermark").toString());
+				}
 				String sign_= Md5Encrypt.md5(keys+t);
 				if(!sign_.equals(sign)){
 					map.put("status",1);
@@ -131,22 +138,25 @@ public class FilesUploadServlet extends HttpServlet {
 					//上传列表回传值
 					for (FileItem fileItem : items) {
 						if(!fileItem.isFormField()){
-//							String id= ImageUtils.saveImage(fileItem,uploadType,false,false);
-//							map.put(fileItem.getFieldName(),id);
+							String id= ImageUtils.saveImage(fileItem,uploadType,isCompress,isAddWatermark);
+							map.put(fileItem.getFieldName(),id);
 						}
 					}
 				}
 			}
 			logger.info("上传文件成功!");
+		} catch(FileSizeLimitExceededException e){
+			e.printStackTrace();
+			map.put("status",1);
+			map.put("msg","附件超过最大值");
 		} catch (FileUploadException e) {
 			e.printStackTrace();
 			map.put("status",1);
 			map.put("msg",e.getMessage());
-		}catch(Exception e){
+		} catch(Exception e){
 			e.printStackTrace();
 			map.put("status",1);
 			map.put("msg",e.getMessage());
-
 		}
 		out.write(JSON.toJSONString(map));
 	}

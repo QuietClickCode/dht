@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5" id="Pasrest_WebApp_ID">
+	<display-name>resourse-server</display-name>
+	<!-- 移动传文件接口 -->
+	<servlet>
+		<description></description>
+		<display-name>filesUpload</display-name>
+		<servlet-name>filesUpload</servlet-name>
+		<servlet-class>com.retailers.dht.attachment.FilesUploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>filesUpload</servlet-name>
+		<url-pattern>/filesUpload</url-pattern>
+	</servlet-mapping>
+</web-app>

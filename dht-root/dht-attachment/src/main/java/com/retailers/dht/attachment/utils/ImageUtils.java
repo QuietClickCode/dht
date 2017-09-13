@@ -1,5 +1,6 @@
 package com.retailers.dht.attachment.utils;
 
+import com.alibaba.druid.sql.dialect.db2.visitor.DB2ASTVisitorAdapter;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
@@ -46,8 +47,12 @@ public class ImageUtils {
             middleImage.put("height",720);
             compressRatio.add(smallImage);
             compressRatio.add(middleImage);
+            //缩略图 小图
             ysdj.add("small");
+            //缩略图中图
             ysdj.add("middle");
+            //原始文件
+            ysdj.add("originalfile");
             if(ObjectUtils.isNotEmpty(Config.imageCompressType)){
                 String[] imageCompressType_=Config.imageCompressType.split(",");
                 for(String key:imageCompressType_){
@@ -70,24 +75,30 @@ public class ImageUtils {
      */
     public static String saveImage(FileItem file, String dir, boolean isCompress, boolean isAddWatermark)throws Exception{
 //    public static String saveImage(File file,String dir, boolean isCompress, boolean isAddWatermark)throws Exception{
-        logger.info("上传文件名:{},文件路径:{},附件名：{}",file.getFieldName(),file.getName());
+        logger.info("上传参数名称:{},文件名称:{},是否压缩：{},是否添加水印:{}，上传文件用途:{}",file.getFieldName(),file.getName(),isCompress, isAddWatermark,dir);
         //文件名
-        String fileNm = file.getFieldName();
+        String fileNm = file.getName();
         //随机生成的文件名称
         String newFileNm = generateFileName(fileNm);
         //文件类型
         String fileType= FilenameUtils.getExtension(fileNm);
+        String isCom="";
+        if(isCompress){
+            isCom="{}";
+        }else{
+            isCom=ysdj.get(2);
+        }
         if(ObjectUtils.isNotEmpty(fileType)){
+            //组装保存文件的路径
+            String savePath =Config.savePath+pathDir+dir+pathDir+getUrl();
+            File sFile=new File(savePath);
+            if(!sFile.exists()){
+                sFile.mkdirs();
+            }
             //判断是否是图片类型附件
             if(imageCompressType.containsKey(fileType.toLowerCase())){
                 //取得原图片
                 BufferedImage bufferedImage=ImageIO.read(file.getInputStream());
-                //组装保存文件的路径
-                String savePath =Config.savePath+pathDir+dir+pathDir+getUrl();
-                File sFile=new File(savePath);
-                if(!sFile.exists()){
-                    sFile.mkdirs();
-                }
                 //判断是否压缩 压缩
                 if(isCompress){
                     int count=0;
@@ -96,11 +107,15 @@ public class ImageUtils {
                         count++;
                     }
                 }
-                keepAspectRatio(bufferedImage,fileType,bufferedImage.getWidth(),bufferedImage.getHeight(),fileSavePath(savePath,newFileNm,fileType,null),isAddWatermark);
+                keepAspectRatio(bufferedImage,fileType,bufferedImage.getWidth(),bufferedImage.getHeight(),fileSavePath(savePath,newFileNm,fileType,ysdj.get(2)),isAddWatermark);
+            }else{
+                File outFile = new File(fileSavePath(savePath,newFileNm,fileType,isCom));
+                logger.info("保存文件地址：{}",outFile.getAbsolutePath());
+                file.write(outFile);
             }
         }
 //        logger.info("文件保存地址:{}","/"+dir.get(path)+"/"+getUrls()+"/"+fileNm);
-        return "/"+dir+"/"+getUrls()+"/"+newFileNm+"."+fileType;
+        return "/"+dir+"/"+getUrls()+"/"+StringUtils.formate(newFileNm,isCom)+"."+fileType;
     }
 
     private static String fileSavePath(String savePath,String fileName,String fileType,String alias){
