@@ -87,7 +87,7 @@ public class UeditorController extends BaseController {
             e.printStackTrace();
         }
         FileUploader uploader= UploadFacatory.getUploaer();
-        String path = uploader.upload(stream, "goods",upfile.getOriginalFilename());
+        String path = uploader.upload(stream, "goods",upfile.getOriginalFilename(),false,true);
         Map<String,String> imgMap = new HashMap();
         imgMap.put("state", "SUCCESS");
         imgMap.put("url", path);
