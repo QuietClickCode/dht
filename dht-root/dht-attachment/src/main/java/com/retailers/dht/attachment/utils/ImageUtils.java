@@ -31,7 +31,7 @@ public class ImageUtils {
     //水印图片高度
     private static int WATER_MARK_HEIGHT=0;
     private static List<Map<String,Integer>> compressRatio=new ArrayList<Map<String, Integer>>();
-    private static List<String> ysdj=new ArrayList<String>();
+//    public static List<String> ysdj=new ArrayList<String>();
     private static Map<String,String> imageCompressType=new HashMap<String, String>();
     static {
         try{
@@ -46,12 +46,12 @@ public class ImageUtils {
             middleImage.put("height",720);
             compressRatio.add(smallImage);
             compressRatio.add(middleImage);
-            //缩略图 小图
-            ysdj.add("small");
-            //缩略图中图
-            ysdj.add("middle");
-            //原始文件
-            ysdj.add("originalfile");
+//            //缩略图 小图
+//            ysdj.add("small");
+//            //缩略图中图
+//            ysdj.add("middle");
+//            //原始文件
+//            ysdj.add("originalfile");
             if(ObjectUtils.isNotEmpty(Config.imageCompressType)){
                 String[] imageCompressType_=Config.imageCompressType.split(",");
                 for(String key:imageCompressType_){
@@ -72,8 +72,7 @@ public class ImageUtils {
      * @return
      * @throws Exception
      */
-    public static String saveImage(FileItem file, String dir, boolean isCompress, boolean isAddWatermark)throws Exception{
-//    public static String saveImage(File file,String dir, boolean isCompress, boolean isAddWatermark)throws Exception{
+    public static Map<String,String> saveImage(FileItem file, String dir, boolean isCompress, boolean isAddWatermark)throws Exception{
         logger.info("上传参数名称:{},文件名称:{},是否压缩：{},是否添加水印:{}，上传文件用途:{}",file.getFieldName(),file.getName(),isCompress, isAddWatermark,dir);
         //文件名
         String fileNm = file.getName();
@@ -82,10 +81,11 @@ public class ImageUtils {
         //文件类型
         String fileType= FilenameUtils.getExtension(fileNm);
         String isCom="";
+        Map<String,String> rtnMap=new HashMap<String, String>();
         if(isCompress){
             isCom="{}";
         }else{
-            isCom=ysdj.get(2);
+            isCom=Config.compressTypes.get(2);
         }
         if(ObjectUtils.isNotEmpty(fileType)){
             //组装保存文件的路径
@@ -102,19 +102,20 @@ public class ImageUtils {
                 if(isCompress){
                     int count=0;
                     for(Map<String,Integer> map:compressRatio){
-                        keepAspectRatio(bufferedImage,fileType,map.get("width"),map.get("height"),fileSavePath(savePath,newFileNm,fileType,ysdj.get(count)),isAddWatermark);
+                        keepAspectRatio(bufferedImage,fileType,map.get("width"),map.get("height"),fileSavePath(savePath,newFileNm,fileType,Config.compressTypes.get(count)),isAddWatermark);
                         count++;
                     }
                 }
-                keepAspectRatio(bufferedImage,fileType,bufferedImage.getWidth(),bufferedImage.getHeight(),fileSavePath(savePath,newFileNm,fileType,ysdj.get(2)),isAddWatermark);
+                keepAspectRatio(bufferedImage,fileType,bufferedImage.getWidth(),bufferedImage.getHeight(),fileSavePath(savePath,newFileNm,fileType,Config.compressTypes.get(2)),isAddWatermark);
             }else{
                 File outFile = new File(fileSavePath(savePath,newFileNm,fileType,isCom));
                 logger.info("保存文件地址：{}",outFile.getAbsolutePath());
                 file.write(outFile);
             }
+            rtnMap.put("savePath",fileSavePath(savePath,newFileNm,fileType,isCom));
         }
-//        logger.info("文件保存地址:{}","/"+dir.get(path)+"/"+getUrls()+"/"+fileNm);
-        return "/"+dir+"/"+getUrls()+"/"+StringUtils.formate(newFileNm,isCom)+"."+fileType;
+        rtnMap.put("showPath","/"+dir+"/"+getUrls()+"/"+StringUtils.formate(newFileNm,isCom)+"."+fileType);
+        return rtnMap;
     }
 
     private static String fileSavePath(String savePath,String fileName,String fileType,String alias){

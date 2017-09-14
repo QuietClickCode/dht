@@ -1,9 +1,13 @@
 package com.retailers.dht.attachment.utils;
 
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 
@@ -23,6 +27,11 @@ public class Config {
 	public static String fileUploadType="";
 	//图片压缩类型
 	public static String imageCompressType="";
+	//服务器通信校验keys
+	public static String validateKeys="";
+	//图片压缩后分类
+	private static String compressType;
+	public static List<String> compressTypes;
 	static{
 		initConfig();
 	}
@@ -39,6 +48,15 @@ public class Config {
 			savePath = properties.getProperty("savePath");
 			fileUploadType = properties.getProperty("uploadFileType");
 			imageCompressType = properties.getProperty("imageCompressType");
+			validateKeys = properties.getProperty("validateKeys");
+			compressType = properties.getProperty("compressType");
+			compressTypes=new ArrayList<String>();
+			if(ObjectUtils.isNotEmpty(compressType)){
+				String[] strs=compressType.split(",");
+				for(String str:strs){
+					compressTypes.add(str);
+				}
+			}
 		}catch(Exception e){
 			logger.error(StringUtils.getErrorInfoFromException(e));
 		}

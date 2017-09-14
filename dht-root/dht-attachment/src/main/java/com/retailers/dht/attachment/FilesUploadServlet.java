@@ -38,9 +38,7 @@ public class FilesUploadServlet extends HttpServlet {
 	//上传文件最大数据
 	private final long MAXSize = 4194304 * 2L;// 4*2MB
 	Map<String, String> dir=new HashMap<String, String>();
-	private String keys="99695f8e24bd27ee2f70dba1b19785c6";
 	private Map<String,String> imageType=new HashMap<String, String>();
-
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
@@ -126,7 +124,7 @@ public class FilesUploadServlet extends HttpServlet {
 				if (params.containsKey("isAddWatermark") && ObjectUtils.isNotEmpty(params.get("isAddWatermark"))) {
 					isAddWatermark = Boolean.parseBoolean(params.get("isAddWatermark").toString());
 				}
-				String sign_ = Md5Encrypt.md5(keys + t);
+				String sign_ = Md5Encrypt.md5(Config.validateKeys + t);
 				if (!sign_.equals(sign)) {
 					map.put("status", 1);
 					map.put("msg", "签名未授权");
@@ -137,8 +135,8 @@ public class FilesUploadServlet extends HttpServlet {
 					//上传列表回传值
 					for (FileItem fileItem : items) {
 						if (!fileItem.isFormField()) {
-							String id = ImageUtils.saveImage(fileItem, uploadType, isCompress, isAddWatermark);
-							map.put(fileItem.getFieldName(), id);
+							Map<String,String> saveInfo = ImageUtils.saveImage(fileItem, uploadType, isCompress, isAddWatermark);
+							map.put(fileItem.getFieldName(), saveInfo);
 						}
 					}
 				}

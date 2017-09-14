@@ -15,4 +15,16 @@
 		<servlet-name>filesUpload</servlet-name>
 		<url-pattern>/filesUpload</url-pattern>
 	</servlet-mapping>
+
+	<!-- 移动传文件接口 -->
+	<servlet>
+		<description></description>
+		<display-name>filesRemove</display-name>
+		<servlet-name>filesRemove</servlet-name>
+		<servlet-class>com.retailers.dht.attachment.FilesRemoveServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>filesRemove</servlet-name>
+		<url-pattern>/filesRemove</url-pattern>
+	</servlet-mapping>
 </web-app>
