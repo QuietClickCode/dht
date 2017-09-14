@@ -35,7 +35,8 @@ public class ImageUtils {
     private static Map<String,String> imageCompressType=new HashMap<String, String>();
     static {
         try{
-            waterMark=ImageIO.read(new File("/opt/attachment/watermark/water.png"));
+//            waterMark=ImageIO.read(new File("/opt/attachment/watermark/water.png"));
+            waterMark=ImageIO.read(new File("e:\\water.png"));
             WATER_MARK_WIDTH =waterMark.getWidth();
             WATER_MARK_HEIGHT=waterMark.getHeight();
             Map<String,Integer> smallImage=new HashMap<String, Integer>();
@@ -227,19 +228,22 @@ public class ImageUtils {
      */
     private static void keepAspectRatio(BufferedImage image,String imageType,int width,int height,String savePath,boolean isAddWatermark)throws Exception{
         Thumbnails.Builder<BufferedImage> abc =Thumbnails.of(image);
-        abc.size(width,height);
         if(isAddWatermark){
+            abc.size(width,height);
             List<Point> list = watermarkPoint(width,height);
             for(Point point:list){
                 abc.watermark(new com.retailers.dht.attachment.utils.Positions(point),waterMark,0.2f);
             }
+        }else{
+            abc.scale(1);
         }
-        abc.outputFormat(imageType).toFile(savePath);
+        abc.outputFormat(imageType).outputQuality(0.8).toFile(savePath);
     }
 
     public static void main(String[] args)throws Exception{
-//        addWaterMark(new File("d:\\abc.jpg"));
-//       String url= saveImage(new File("d:\\abc.jpg"),"head",true,true);
-//        System.out.println(url);
+        BufferedImage image=ImageIO.read(new File("d:\\abc.jpg"));
+        //文件类型
+        String fileType= FilenameUtils.getExtension("abc.jpg");
+        keepAspectRatio(image,fileType,image.getWidth(),image.getHeight(),"d:\\testzpaman",false);
     }
 }
