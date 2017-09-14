@@ -60,7 +60,7 @@
 		<!-- 自动扫描mapping目录, 省掉mybatis-config.xml里的手工配置 -->
 		<property name="mapperLocations">
 			<array>
-				<value>classpath*:com/retailers/mybatis/common/mapper/*.xml</value>
+				<value>classpath*:com/retailers/**/common/mapper/*.xml</value>
 			</array>
 		</property>
 		<!--<value>classpath*:com/esp/bot/**/mapper/*.xml</value>-->

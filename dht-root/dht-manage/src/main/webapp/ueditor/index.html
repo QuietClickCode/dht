@@ -174,8 +174,9 @@
     UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
     UE.Editor.prototype.getActionUrl = function(action) {
         //判断路径   这里是config.json 中设置执行上传的action名称
+        console.log(action)
         if (action == 'uploadimage') {
-            return '/ueditor/imageUpload';
+            return 'http://localhost:8080/ueditor/imageUpload';
         //上传视频
         } else if (action == 'uploadvideo') {
             return '';

@@ -1,5 +1,5 @@
-package com.retailers.mybatis.common.dao;
-import com.retailers.mybatis.common.entity.Attachment;
+package com.retailers.dht.common.dao;
+import com.retailers.dht.common.entity.Attachment;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -7,7 +7,7 @@ import java.util.List;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-09-13 14:03:02
+ * @date 2017-09-14 15:23:57
  */
 public interface AttachmentMapper {
 
@@ -16,7 +16,7 @@ public interface AttachmentMapper {
 	 * @param attachment
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public int saveAttachment(Attachment attachment);
 	/**
@@ -24,7 +24,7 @@ public interface AttachmentMapper {
 	 * @param attachment
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public int updateAttachment(Attachment attachment);
 	/**
@@ -32,7 +32,7 @@ public interface AttachmentMapper {
 	 * @param id
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public int deleteAttachmentById(Long id);
 	/**
@@ -40,7 +40,7 @@ public interface AttachmentMapper {
 	 * @param id
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public Attachment queryAttachmentById(Long id);
 	/**
@@ -48,7 +48,7 @@ public interface AttachmentMapper {
 	 * @param pagination 分页对象
 	 * @return  系统附件表(用于存放上传物品)列表
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public List<Attachment> queryAttachmentList(Pagination<Attachment> pagination);
 

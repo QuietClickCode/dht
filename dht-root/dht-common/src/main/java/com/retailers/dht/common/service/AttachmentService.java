@@ -1,14 +1,14 @@
 
-package com.retailers.mybatis.common.service;
+package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.mybatis.common.entity.Attachment;
+import com.retailers.dht.common.entity.Attachment;
 import java.util.Map;
 /**
  * 描述：系统附件表(用于存放上传物品)Service
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-09-13 14:03:02
+ * @date 2017-09-14 15:23:57
  */
 public interface AttachmentService {
 
@@ -17,7 +17,7 @@ public interface AttachmentService {
 	 * @param attachment
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public boolean saveAttachment(Attachment attachment);
 	/**
@@ -33,7 +33,7 @@ public interface AttachmentService {
 	 * @param id
 	 * @return attachment
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public Attachment queryAttachmentById(Long id);
 	/**
@@ -43,7 +43,7 @@ public interface AttachmentService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public Pagination<Attachment> queryAttachmentList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface AttachmentService {
 	 * @param id
 	 * @return
 	 * @author zhongp
-	 * @date 2017-09-13 14:03:02
+	 * @date 2017-09-14 15:23:57
 	 */
 	public boolean deleteAttachmentById(Long id);
 

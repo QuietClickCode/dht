@@ -1,10 +1,10 @@
 
-package com.retailers.mybatis.common.service.impl;
+package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
-import com.retailers.mybatis.common.entity.Attachment;
-import com.retailers.mybatis.common.dao.AttachmentMapper;
-import com.retailers.mybatis.common.service.AttachmentService;
+import com.retailers.dht.common.entity.Attachment;
+import com.retailers.dht.common.dao.AttachmentMapper;
+import com.retailers.dht.common.service.AttachmentService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-09-13 14:03:02
+ * @date 2017-09-14 15:23:57
  */
 @Service("attachmentService")
 public class AttachmentServiceImpl implements AttachmentService {

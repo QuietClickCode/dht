@@ -11,7 +11,7 @@ public class UploadFacatory {
      * @return
      */
     public static FileUploader getUploaer(){
-        FileUploader uploade =(FileUploader) SpringUtils.getBean("localUploader");
+        FileUploader uploade =(RemoteServerUpload) SpringUtils.getBean("remoteServerUpload");
 //        //如果开启fastdfs
 //        if(ClusterSetting.getFdfs_open()==1){
 //            return new FastDFSUploader();

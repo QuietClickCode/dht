@@ -1,10 +1,14 @@
 package com.retailers.dht.manage.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.upload.FileUploader;
+import com.retailers.dht.common.upload.UploadFacatory;
 import com.retailers.tools.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +17,7 @@ import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,6 +28,9 @@ import java.util.Map;
 @RequestMapping("ueditor")
 public class UeditorController extends BaseController {
     Logger logger = LoggerFactory.getLogger(UeditorController.class);
+    @Autowired
+    private AttachmentService attachmentService;
+
     /**
      * 百度富文本统一接口
      * @return
@@ -47,7 +55,7 @@ public class UeditorController extends BaseController {
         //上传大小限制，单位B
         config.put("imageMaxSize", "2048000");
         //图片访问路径前缀
-        config.put("imageUrlPrefix", "http://pic33.nipic.com/20130907");
+        config.put("imageUrlPrefix", "http://image.kuaiyis.com/attachment");
         config.put("imageCompressEnable", false);
         config.put("imageCompressBorder", 1600);
         config.put("imageInsertAlign", "none");
@@ -72,21 +80,19 @@ public class UeditorController extends BaseController {
     @RequestMapping("/imageUpload")
     public  Map<String,String> uploadImg(@RequestParam("dht_image_upload") CommonsMultipartFile upfile){
         logger.info("进入图片上传");
-//        InputStream stream=null;
-//        try {
-//            stream=upfile.getInputStream();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        FileUploader uploader= UploadFacatory.getUploaer();
-//        String path = uploader.upload(stream, "ueditor",upfile.getOriginalFilename());
-        //System.out.println(UploadUtil.replacePath(path));
+        InputStream stream=null;
+        try {
+            stream=upfile.getInputStream();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        FileUploader uploader= UploadFacatory.getUploaer();
+        String path = uploader.upload(stream, "goods",upfile.getOriginalFilename());
         Map<String,String> imgMap = new HashMap();
         imgMap.put("state", "SUCCESS");
-//        imgMap.put("url", StaticResourcesUtil.convertToUrl(path));
-        imgMap.put("url", "/12906030_161342990000_2.png");
-        imgMap.put("title", "http://pic33.nipic.com/20130907/12906030_161342990000_2.png");
-        imgMap.put("original", "http://pic33.nipic.com/20130907/12906030_161342990000_2.png");
+        imgMap.put("url", path);
+        imgMap.put("title", upfile.getOriginalFilename());
+        imgMap.put("original", upfile.getOriginalFilename());
         logger.info("进入图片结束");
         System.out.println(JSON.toJSON(imgMap));
         return imgMap;
