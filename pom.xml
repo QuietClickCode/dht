@@ -10,6 +10,7 @@
         <module>retailers-tools</module>
         <module>retailers-mybatis</module>
         <module>dht-root</module>
+        <module>retailers-auth</module>
     </modules>
     <packaging>pom</packaging>
     <name>大汇堂主工程</name>
