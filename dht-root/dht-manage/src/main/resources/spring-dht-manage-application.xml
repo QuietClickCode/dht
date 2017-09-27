@@ -19,7 +19,5 @@
     </context:component-scan>
     <!-- mybatis 配置文件 -->
     <import resource="classpath:spring-mybatis.xml" />
-<!--    &lt;!&ndash; 权限扫描文件 &ndash;&gt;
-    <import resource="classpath:spring-common-dht-mvc.xml" />-->
-    <import resource="classpath:spring/spring-auth-application-context.xml" />
+    <import resource="classpath:spring-common-dht-mvc.xml" />
 </beans>
