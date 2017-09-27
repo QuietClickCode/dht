@@ -6,6 +6,8 @@ retailers-tools  一些常用的工具类（比如为空校验的StringUtils.isE
 
 retailers-mybatis  数据库基本配置（数据库地址，连接接池，mybatis 扫描路径)
 
+retailers-auth 数据权限
+
 dht-root 在汇堂工程目录
 
 dht-common 所有大汇堂数据库处理service 和mapper 存放地址
