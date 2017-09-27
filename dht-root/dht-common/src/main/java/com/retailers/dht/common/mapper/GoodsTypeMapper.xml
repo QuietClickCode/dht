@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsTypeMapper">
+
+	<resultMap id="rm_goodsType" type="com.retailers.dht.common.entity.GoodsType">
+			<result property="gtId" column="gt_id"/>
+			<result property="gtName" column="gt_name"/>
+			<result property="isParams" column="is_params"/>
+			<result property="isTrademark" column="is_trademark"/>
+			<result property="isSpecification" column="is_specification"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsType_columns">
+		gt_id,gt_name,is_params,is_trademark,is_specification,version
+	</sql>
+	<!-- 根据部门人员表主键取得数据 -->
+	<select id="queryGoodsTypeByGtId" resultMap="rm_goodsType" parameterType="java.lang.Long">
+		SELECT <include refid="goodsType_columns" />
+		FROM t_goods_type WHERE gt_id = #{gtId}
+	</select>
+	<!-- 部门人员表查询条件组合 -->
+	<sql id="goodsType_where">
+		<where>
+			<if test="null != params.gtId">
+				AND gt_id = #{params.gtId}
+			</if>
+			<if test="null != params.gtName and '' != params.gtName">
+				AND gt_name = #{params.gtName}
+			</if>
+			<if test="null != params.isParams">
+				AND is_params = #{params.isParams}
+			</if>
+			<if test="null != params.isTrademark">
+				AND is_trademark = #{params.isTrademark}
+			</if>
+			<if test="null != params.isSpecification">
+				AND is_specification = #{params.isSpecification}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsTypeList" resultMap="rm_goodsType" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsType_columns" />
+		FROM t_goods_type
+		<include refid="goodsType_where"/>
+	</select>
+	<!--添加部门人员表 -->
+	<insert id="saveGoodsType" parameterType="com.retailers.dht.common.entity.GoodsType" useGeneratedKeys="true" keyProperty="gtId">
+		INSERT INTO t_goods_type (
+			gt_name,is_params,is_trademark,is_specification,version
+		) VALUES
+		(
+			#{gtName,jdbcType=VARCHAR},#{isParams,jdbcType=BIGINT},#{isTrademark,jdbcType=BIGINT},#{isSpecification,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改部门人员表 -->
+	<update id="updateGoodsType" parameterType="com.retailers.dht.common.entity.GoodsType">
+		UPDATE t_goods_type
+		<set>
+            <if test="null != gtName and '' != gtName">
+                gt_name = #{gtName},
+            </if>
+            <if test="null != isParams">
+                is_params = #{isParams},
+            </if>
+            <if test="null != isTrademark">
+                is_trademark = #{isTrademark},
+            </if>
+            <if test="null != isSpecification">
+                is_specification = #{isSpecification},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gt_id = #{gtId} and version = #{version}
+	</update>
+	<!--删除部门人员表 -->
+	<delete id="deleteGoodsTypeByGtId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_type WHERE gt_id = #{gtId}
+	</delete>
+</mapper>

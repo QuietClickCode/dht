@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsClassificationMapper">
+
+	<resultMap id="rm_goodsClassification" type="com.retailers.dht.common.entity.GoodsClassification">
+			<result property="ggId" column="gg_id"/>
+			<result property="ggName" column="gg_name"/>
+			<result property="ggManager" column="gg_manager"/>
+			<result property="ggHome" column="gg_home"/>
+			<result property="ggImgpath" column="gg_imgpath"/>
+			<result property="ggOrder" column="gg_order"/>
+			<result property="isTop" column="is_top"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsClassification_columns">
+		gg_id,gg_name,gg_manager,gg_home,gg_imgpath,gg_order,is_top,version
+	</sql>
+	<!-- 根据部门人员表主键取得数据 -->
+	<select id="queryGoodsClassificationByGgId" resultMap="rm_goodsClassification" parameterType="java.lang.Long">
+		SELECT <include refid="goodsClassification_columns" />
+		FROM t_goods_classification WHERE gg_id = #{ggId}
+	</select>
+	<!-- 部门人员表查询条件组合 -->
+	<sql id="goodsClassification_where">
+		<where>
+			<if test="null != params.ggId">
+				AND gg_id = #{params.ggId}
+			</if>
+			<if test="null != params.ggName and '' != params.ggName">
+				AND gg_name = #{params.ggName}
+			</if>
+			<if test="null != params.ggManager">
+				AND gg_manager = #{params.ggManager}
+			</if>
+			<if test="null != params.ggHome">
+				AND gg_home = #{params.ggHome}
+			</if>
+			<if test="null != params.ggImgpath and '' != params.ggImgpath">
+				AND gg_imgpath = #{params.ggImgpath}
+			</if>
+			<if test="null != params.ggOrder">
+				AND gg_order = #{params.ggOrder}
+			</if>
+			<if test="null != params.isTop">
+				AND is_top = #{params.isTop}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsClassificationList" resultMap="rm_goodsClassification" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsClassification_columns" />
+		FROM t_goods_classification
+		<include refid="goodsClassification_where"/>
+	</select>
+	<!--添加部门人员表 -->
+	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">
+		INSERT INTO t_goods_classification (
+			gg_name,gg_manager,gg_home,gg_imgpath,gg_order,is_top,version
+		) VALUES
+		(
+			#{ggName,jdbcType=VARCHAR},#{ggManager,jdbcType=BIGINT},#{ggHome,jdbcType=BIGINT},#{ggImgpath,jdbcType=VARCHAR},#{ggOrder,jdbcType=BIGINT},#{isTop,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改部门人员表 -->
+	<update id="updateGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification">
+		UPDATE t_goods_classification
+		<set>
+            <if test="null != ggName and '' != ggName">
+                gg_name = #{ggName},
+            </if>
+            <if test="null != ggManager">
+                gg_manager = #{ggManager},
+            </if>
+            <if test="null != ggHome">
+                gg_home = #{ggHome},
+            </if>
+            <if test="null != ggImgpath and '' != ggImgpath">
+                gg_imgpath = #{ggImgpath},
+            </if>
+            <if test="null != ggOrder">
+                gg_order = #{ggOrder},
+            </if>
+            <if test="null != isTop">
+                is_top = #{isTop},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gg_id = #{ggId} and version = #{version}
+	</update>
+	<!--删除部门人员表 -->
+	<delete id="deleteGoodsClassificationByGgId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_classification WHERE gg_id = #{ggId}
+	</delete>
+</mapper>
