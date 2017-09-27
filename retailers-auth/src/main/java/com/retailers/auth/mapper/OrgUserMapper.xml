@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.auth.dao.OrgUserMapper">
+
+	<resultMap id="rm_orgUser" type="com.retailers.auth.entity.OrgUser">
+			<result property="ouId" column="ou_id"/>
+			<result property="ouOrgId" column="ou_org_id"/>
+			<result property="ouSid" column="ou_s_id"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgUser_columns">
+		ou_id,ou_org_id,ou_s_id
+	</sql>
+	<!-- 根据部门人员表主键取得数据 -->
+	<select id="queryOrgUserByOuId" resultMap="rm_orgUser" parameterType="java.lang.Long">
+		SELECT <include refid="orgUser_columns" />
+		FROM t_org_user WHERE ou_id = #{ouId}
+	</select>
+	<!-- 部门人员表查询条件组合 -->
+	<sql id="orgUser_where">
+		<where>
+			<if test="null != params.ouId">
+				AND ou_id = #{params.ouId}
+			</if>
+			<if test="null != params.ouOrgId">
+				AND ou_org_id = #{params.ouOrgId}
+			</if>
+			<if test="null != params.ouSid">
+				AND ou_s_id = #{params.ouSid}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrgUserList" resultMap="rm_orgUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="orgUser_columns" />
+		FROM t_org_user
+		<include refid="orgUser_where"/>
+	</select>
+	<!--添加部门人员表 -->
+	<insert id="saveOrgUser" parameterType="com.retailers.auth.entity.OrgUser" useGeneratedKeys="true" keyProperty="ouId">
+		INSERT INTO t_org_user (
+			ou_org_id,ou_s_id
+		) VALUES
+		(
+			#{ouOrgId,jdbcType=BIGINT},#{ouSid,jdbcType=BIGINT}
+		)
+	</insert>
+	<insert id="saveOrgUsers" parameterType="com.retailers.auth.entity.OrgUser">
+		INSERT INTO t_org_user (
+		ou_org_id,ou_s_id
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.ouOrgId,jdbcType=BIGINT},
+			#{item.ouSid,jdbcType=BIGINT}
+			)
+		</foreach>
+	</insert>
+	<!--修改部门人员表 -->
+	<update id="updateOrgUser" parameterType="com.retailers.auth.entity.OrgUser">
+		UPDATE t_org_user
+		<set>
+            <if test="null != ouOrgId">
+                ou_org_id = #{ouOrgId},
+            </if>
+            <if test="null != ouSid">
+                ou_s_id = #{ouSid},
+            </if>
+		</set>
+		WHERE ou_id = #{ouId}
+	</update>
+	<!--删除部门人员表 -->
+	<delete id="deleteOrgUserByOuId" parameterType="java.lang.Long">
+		DELETE FROM t_org_user WHERE ou_id = #{ouId}
+	</delete>
+	<!--删除部门人员表 -->
+	<delete id="clearUserOrg" parameterType="java.lang.Long">
+		DELETE FROM t_org_user WHERE ou_s_id = #{uId}
+	</delete>
+</mapper>

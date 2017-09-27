@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.auth.dao.MenuMapper">
+
+	<resultMap id="rm_menu" type="com.retailers.auth.entity.Menu">
+		<result property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="type" column="type" />
+		<result property="resourse" column="resourse" />
+		<result property="url" column="url" />
+		<result property="label" column="label" />
+		<result property="icon" column="icon" />
+		<result property="isValid" column="is_valid" />
+		<result property="description" column="description" />
+		<result property="sort" column="sort" />
+		<result property="isDelete" column="is_delete" />
+		<result property="isChange" column="is_change" />
+		<result property="version" column="version" />
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="menu_columns">
+		id,parent_id,type,resourse,url,label,icon,is_valid,description,sort,is_delete,is_change,version
+	</sql>
+
+	<select id="queryMenuById" resultMap="rm_menu" parameterType="java.lang.Integer">
+		SELECT
+		<include refid="menu_columns" />
+		FROM t_menu WHERE id = #{id}
+	</select>
+	<select id="queryMenuByRes" resultMap="rm_menu" parameterType="java.lang.String">
+		SELECT
+		<include refid="menu_columns" />
+		FROM t_menu WHERE resourse = #{resourse}
+	</select>
+	<sql id="menu_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+			<if test="null != params.type">
+				AND type = #{params.type}
+			</if>
+			<if test="null != params.resourse and '' != params.resourse">
+				AND resourse = #{params.resourse}
+			</if>
+			<if test="null != params.url and '' != params.url">
+				AND url = #{params.url}
+			</if>
+			<if test="null != params.label and '' != params.label">
+				AND label = #{params.label}
+			</if>
+			<if test="null != params.icon and '' != params.icon">
+				AND icon = #{params.icon}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.description and '' != params.description">
+				AND description = #{params.description}
+			</if>
+			<if test="null != params.sort">
+				AND sort = #{params.sort}
+			</if>
+		</where>
+	</sql>
+	<select id="queryMenuList" resultMap="rm_menu">
+		SELECT
+		<include refid="menu_columns" />
+		FROM t_menu
+		<include refid="menu_where" />
+	</select>
+	<!--添加Menu -->
+	<insert id="saveMenu" parameterType="com.retailers.auth.entity.Menu" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_menu (
+		parent_id ,type ,resourse ,url ,label ,icon ,is_valid ,description ,sort
+		) VALUES (
+		#{parentId,jdbcType=INTEGER} ,#{type,jdbcType=INTEGER} ,#{resourse,jdbcType=CHAR}
+		,#{url,jdbcType=CHAR} ,#{label,jdbcType=CHAR} ,#{icon,jdbcType=CHAR}
+		,#{isValid,jdbcType=INTEGER} ,#{description,jdbcType=CHAR}
+		,#{sort,jdbcType=INTEGER}
+		)
+	</insert>
+	<!--修改Menu -->
+	<update id="updateMenu" parameterType="com.retailers.auth.entity.Menu">
+		UPDATE t_menu
+		<set>
+			<if test="null != parentId">
+				parent_id = #{parentId},
+			</if>
+			<if test="null != type">
+				type = #{type},
+			</if>
+			<if test="null != resourse and '' != resourse">
+				resourse = #{resourse},
+			</if>
+			<if test="null != url and '' != url">
+				url = #{url},
+			</if>
+			<if test="null != label and '' != label">
+				label = #{label},
+			</if>
+			<if test="null != icon and '' != icon">
+				icon = #{icon},
+			</if>
+			<if test="null != isValid">
+				is_valid = #{isValid},
+			</if>
+			<if test="null != description and '' != description">
+				description = #{description},
+			</if>
+			<if test="null != sort">
+				sort = #{sort},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除Menu -->
+	<delete id="deleteMenuById" parameterType="java.lang.Integer">
+		DELETE FROM t_menu WHERE
+		id = #{id}
+	</delete>
+
+	<resultMap type="com.retailers.auth.entity.Menu" id="menuLists"
+               extends="rm_menu">
+		<collection property="child" javaType="list"
+			ofType="com.retailers.auth.entity.Menu">
+		<result property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="type" column="type" />
+		<result property="resourse" column="resourse" />
+		<result property="url" column="url" />
+		<result property="label" column="label" />
+		<result property="icon" column="icon" />
+		<result property="isValid" column="is_valid" />
+		<result property="description" column="description" />
+		<result property="sort" column="sort" />
+		</collection>
+	</resultMap>
+
+    <resultMap id="rm_all_menu" type="com.retailers.auth.entity.Menu">
+        <result property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="type" column="type" />
+		<result property="resourse" column="resourse" />
+		<result property="url" column="url" />
+		<result property="label" column="label" />
+		<result property="icon" column="icon" />
+		<result property="isValid" column="is_valid" />
+		<result property="description" column="description" />
+		<result property="sort" column="sort" />
+        <collection property="child" column="id" select="getChildNodeById" ></collection>
+    </resultMap>
+	<resultMap id="rm_menu_tree_vo" type="com.retailers.auth.vo.MenuVo">
+		<result property="id" column="id" />
+		<result property="parentId" column="parent_id" />
+		<result property="type" column="type" />
+		<result property="resourse" column="resourse" />
+		<result property="url" column="url" />
+		<result property="label" column="label" />
+		<result property="icon" column="icon" />
+		<result property="isValid" column="is_valid" />
+		<result property="description" column="description" />
+		<result property="sort" column="sort" />
+		<result property="isDelete" column="is_delete" />
+		<result property="version" column="version" />
+	</resultMap>
+	<select id="getChildNodeById" resultMap="rm_all_menu">
+        SELECT * FROM t_menu WHERE parent_id = #{id} and  type!=2 AND is_delete=0 and is_valid=0 order by sort asc
+    </select>
+     <select id="getAllMenus" resultMap="rm_all_menu">
+        SELECT <include refid="menu_columns" /> FROM t_menu <include refid="all_menu_where"></include>
+        order by parent_id asc,sort asc
+    </select>
+    <sql id="all_menu_where">
+    	<where>
+    		<if test="null != id">
+				AND id = #{id}
+			</if>
+			<if test="null == id">
+				AND parent_id is null
+			</if>
+			<if test="null!=resourse and ''!=resourse">
+				and resourse=#{resourse}
+			</if>
+			and type!=2
+			AND is_delete=0 and is_valid=0
+    	</where>
+    </sql>
+
+
+	<select id="queryMenuTree" resultMap="rm_menu_tree_vo">
+		SELECT * FROM t_menu where is_delete=0 ORDER BY parent_id asc,sort ASC
+	</select>
+	<select id="queryMenuNode" resultMap="rm_menu_tree_vo">
+		SELECT * FROM t_menu where is_delete=0 and id!=#{menuId} and type=0 ORDER BY parent_id asc,sort ASC
+	</select>
+	<!--修改Menu -->
+	<update id="removeMenu">
+		UPDATE t_menu
+		SET  is_delete = 1,
+		version=version+1
+		WHERE id = #{menuId}
+	</update>
+	<select id="queryMenuByid" resultMap="rm_menu_tree_vo">
+		SELECT * FROM t_menu where id=#{menuId}
+	</select>
+
+	<!--修改Menu -->
+	<update id="editResource" parameterType="com.retailers.auth.vo.MenuVo">
+		UPDATE t_menu
+		  set
+			parent_id = #{parentId},
+			label = #{label},
+			icon = #{icon},
+			is_valid = #{isValid},
+			description = #{description},
+			is_change = #{isChange},
+			sort = #{sort},
+			version=version+1
+		WHERE id = #{id} and version=#{version}
+	</update>
+
+	<select id="queryNeedPermissUrl" resultType="java.lang.String">
+		SELECT url FROM t_menu WHERE (type=1 or type =2) and is_delete=0 and is_valid=0
+	</select>
+
+
+	<select id="queryUserMenu" resultMap="rm_menu_tree_vo">
+		SELECT DISTINCT
+			m.*
+			FROM
+			t_menu m,
+			t_org_menu_permission p,
+			t_org_user ou,
+			t_sys_user u
+		WHERE
+			m.id = p.rs_id
+			AND m.is_valid = 0
+			AND m.is_delete = 0
+			AND p.org_id = ou.ou_org_id
+			AND ou.ou_s_id = u.u_id
+			<if test="true!=all">
+				AND m.type!=2
+			</if>
+			AND u.u_id=#{userId}
+		order by parent_id asc
+	</select>
+	<select id="queryAllMenu" resultMap="rm_menu_tree_vo">
+		SELECT
+		*
+		FROM
+		t_menu m
+		WHERE
+		m.is_valid = 0
+		AND m.is_delete = 0
+		<if test="true!=all">
+			AND m.type!=2
+		</if>
+		order by parent_id asc
+	</select>
+</mapper>
+

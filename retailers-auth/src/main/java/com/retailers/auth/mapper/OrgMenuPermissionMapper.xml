@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.auth.dao.OrgMenuPermissionMapper">
+
+	<resultMap id="rm_orgMenuPermission" type="com.retailers.auth.entity.OrgMenuPermission">
+			<result property="omId" column="om_id"/>
+			<result property="rsId" column="rs_id"/>
+			<result property="orgId" column="org_id"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orgMenuPermission_columns">
+		om_id,rs_id,org_id
+	</sql>
+	<!-- 根据菜单部门权限主键取得数据 -->
+	<select id="queryOrgMenuPermissionByOmId" resultMap="rm_orgMenuPermission" parameterType="java.lang.Long">
+		SELECT <include refid="orgMenuPermission_columns" />
+		FROM t_org_menu_permission WHERE om_id = #{omId}
+	</select>
+
+
+	<!--添加菜单部门权限 -->
+	<insert id="saveOrgMenuPermissions" parameterType="com.retailers.auth.entity.OrgMenuPermission">
+		INSERT INTO t_org_menu_permission (
+			rs_id,org_id
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+			#{item.rsId,jdbcType=BIGINT},
+			#{item.orgId,jdbcType=BIGINT}
+			)
+		</foreach>
+		ON DUPLICATE KEY UPDATE rs_id=VALUES(rs_id),org_id=VALUES(org_id)
+	</insert>
+	<!--删除菜单部门权限 -->
+	<delete id="deleteOrgMenuPermissionByOmId" parameterType="java.lang.Long">
+		DELETE FROM t_org_menu_permission WHERE om_id = #{omId}
+	</delete>
+	<!--删除菜单部门权限 -->
+	<delete id="deleteOrgMenuPermissionByOrgId" parameterType="java.lang.Long">
+		DELETE FROM t_org_menu_permission WHERE org_id = #{orgId}
+	</delete>
+</mapper>

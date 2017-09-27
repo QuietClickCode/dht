@@ -4,7 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.upload.FileUploader;
 import com.retailers.dht.common.upload.UploadFacatory;
-import com.retailers.tools.base.BaseController;
+import com.retailers.dht.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

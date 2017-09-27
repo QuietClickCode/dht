@@ -61,6 +61,7 @@
 		<property name="mapperLocations">
 			<array>
 				<value>classpath*:com/retailers/**/common/mapper/*.xml</value>
+				<value>classpath*:com/retailers/**/mapper/*.xml</value>
 			</array>
 		</property>
 		<!--<value>classpath*:com/esp/bot/**/mapper/*.xml</value>-->
@@ -68,7 +69,7 @@
 	<!-- 使用mapper接口的时候扫描 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<!--<property name="basePackage" value="com.esp.*.dao,com.esp.bot.*.dao,com.esp.mybatis.*.dao,com.esp.shop.*.dao" />-->
-		<property name="basePackage" value="com.retailers.*.*.dao" />
+		<property name="basePackage" value="com.retailers.*.*.dao,com.retailers.*.dao" />
 		<property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
 	</bean>
 

@@ -17,7 +17,7 @@ public class AppException extends Exception {
         this.message = message;
     }
 
-    public AppException(String message, String code) {
+    public AppException(String code,String message) {
         super(message);
         this.message = message;
         this.code = code;

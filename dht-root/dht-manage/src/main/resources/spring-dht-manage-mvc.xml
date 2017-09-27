@@ -39,25 +39,58 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <!-- 让Spring通过自动扫描来查询和管理Bean -->
-    <context:component-scan base-package="com.retailers.dht.manage.controller" use-default-filters="false">
+    <context:component-scan base-package="com.retailers.dht.manage.controller,com.retailers.dht.common.service,com.retailers.auth.interceptor">
+        <!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
-        <context:include-filter type="annotation"
-                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <!--<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>-->
     </context:component-scan>
-    <context:component-scan base-package="com.retailers.dht.common.service">
-        <!--将注解Service的类都注册为java bean容器中的bean-->
-        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
-    </context:component-scan>
-    <mvc:resources location="/assets" mapping="/assets/**" cache-period="604800"/>
-    <import resource="classpath:spring-common-dht-mvc.xml" />
-
     <!-- 上传配置 -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-        <property name="defaultEncoding" value="UTF-8"></property>
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8" />
+        <property name="maxUploadSize" value="104857600" />
+        <property name="maxInMemorySize" value="4096" />
     </bean>
-    <!-- 系统加载定时任务 -->
-<!--    <bean id="systemResource" class="com.esp.mybatis.common.sysparameter.SystemResourceUtil"
-          init-method="initJobDetails">
-    </bean>-->
+
+    <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
+                <!--<value>classpath:i18n/bussiness/bussiness</value>
+                <value>classpath:i18n/entity/entity</value>-->
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="false" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="cacheSeconds" value="60" />
+    </bean>
+
+    <!--对视图进行解析-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/page/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <mvc:resources location="/assets" mapping="/assets/**"     cache-period="604800"/>
+    <!--异常处理-->
+    <bean class="com.retailers.tools.exception.AppSimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="404/error"/>
+        <property name="defaultStatusCode" value="200"></property>
+        <!-- 配置多个statusCode -->
+        <property name="statusCodes">
+            <props>
+                <prop key="error">200</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN"></property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error</prop>
+                <prop key="java.lang.Exception">error</prop>
+            </props>
+        </property>
+    </bean>
 </beans>

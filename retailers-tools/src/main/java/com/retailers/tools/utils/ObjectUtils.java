@@ -125,7 +125,19 @@ public class ObjectUtils {
 		}
 		return isExist;
 	}
-
+	//判断是否相等
+	public static boolean compare(Long id,Long id1){
+		if(ObjectUtils.isNotEmpty(id)&&ObjectUtils.isNotEmpty(id1)){
+			if(id.intValue()!=id1.intValue()){
+				return false;
+			}
+		}else if(ObjectUtils.isEmpty(id)&&ObjectUtils.isEmpty(id1)){
+			return true;
+		}else{
+			return false;
+		}
+		return true;
+	}
 
 
 

@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.auth.dao.OrganizationMapper">
+
+	<resultMap id="rm_organization" type="com.retailers.auth.entity.Organization">
+			<result property="orgId" column="org_id"/>
+			<result property="orgName" column="org_name"/>
+			<result property="orgPid" column="org_pid"/>
+			<result property="orgDes" column="org_des"/>
+			<result property="orgSort" column="org_sort"/>
+			<result property="isValid" column="is_valid"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_ztree_vo" type="com.retailers.auth.vo.ZTreeVo">
+		<result property="id" column="id"/>
+		<result property="pId" column="pId"/>
+		<result property="name" column="name"/>
+		<result property="checked" column="checked"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="organization_columns">
+		org_name,org_pid,org_des,org_sort,is_valid,is_delete,version
+	</sql>
+	<!-- 根据组织结构主键取得数据 -->
+	<select id="queryOrganizationByOrgId" resultMap="rm_organization" parameterType="java.lang.Long">
+		SELECT <include refid="organization_columns" />
+		FROM t_organization WHERE org_id = #{orgId}
+	</select>
+	<!-- 组织结构查询条件组合 -->
+	<sql id="organization_where">
+		<where>
+			<if test="null != params.orgId">
+				AND org_id = #{params.orgId}
+			</if>
+			<if test="null != params.orgName and '' != params.orgName">
+				AND org_name = #{params.orgName}
+			</if>
+			<if test="null != params.orgPid">
+				AND org_pid = #{params.orgPid}
+			</if>
+			<if test="null != params.orgDes and '' != params.orgDes">
+				AND org_des = #{params.orgDes}
+			</if>
+			<if test="null != params.orgSort">
+				AND org_sort = #{params.orgSort}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrganizationList" resultMap="rm_organization" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="organization_columns" />
+		FROM t_organization
+		<include refid="organization_where"/>
+	</select>
+	<!--添加组织结构 -->
+	<insert id="saveOrganization" parameterType="com.retailers.auth.entity.Organization" useGeneratedKeys="true" keyProperty="orgId">
+		INSERT INTO t_organization (
+			org_name,org_pid,org_des,org_sort,is_valid,is_delete,version
+		) VALUES
+		(
+			#{orgName,jdbcType=VARCHAR},#{orgPid,jdbcType=BIGINT},#{orgDes,jdbcType=VARCHAR},#{orgSort,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改组织结构 -->
+	<update id="updateOrganization" parameterType="com.retailers.auth.entity.Organization">
+		UPDATE t_organization
+			set
+                org_name = #{orgName},
+                org_pid = #{orgPid},
+                org_des = #{orgDes},
+				org_sort = #{orgSort},
+                is_valid = #{isValid},
+                version = version+1
+		WHERE org_id = #{orgId} and version = #{version}
+	</update>
+	<!--删除组织结构 -->
+	<delete id="deleteOrganizationByOrgId" parameterType="java.lang.Long">
+		DELETE FROM t_organization WHERE org_id = #{orgId}
+	</delete>
+
+	<select id="queryOrganizationTree" resultMap="rm_organization">
+		SELECT * FROM t_organization WHERE is_delete=0
+		<if test="null != orgId">
+			and org_id!=#{orgId}
+		</if>
+		 ORDER BY org_pid asc,org_sort asc
+	</select>
+	<select id="getCurOrgSort" resultType="java.lang.Integer">
+		SELECT ifnull(max(org_sort),0)+1 curSort FROM t_organization o where
+		<if test="null != orgPid">
+			org_pid=#{orgPid}
+		</if>
+		<if test="null == orgPid">
+			org_pid is null
+		</if>
+	</select>
+
+	<!--删除组织结构 -->
+	<update id="removeOrg" parameterType="java.lang.Long">
+		UPDATE t_organization
+		SET
+		is_delete = 1,
+		version=version+1
+		WHERE org_id = #{orgId}
+	</update>
+	<!-- 取得部门权限 -->
+	<select id="reqRsOrgPermission" resultMap="rm_ztree_vo">
+		SELECT
+			m.id,
+			m.parent_id pId,
+			m.label 'name',
+			CASE
+			WHEN org_id IS NULL THEN
+			FALSE
+			ELSE
+			TRUE
+			END checked
+		FROM
+			t_menu m
+			LEFT JOIN t_org_menu_permission p ON m.id = p.rs_id
+			AND org_id = #{orgId}
+		WHERE
+			m.is_delete = 0
+			AND m.is_valid = 0
+	</select>
+
+	<select id="reqOrgTree" resultMap="rm_ztree_vo">
+		SELECT
+			o.org_id id,
+			o.org_pid pId,
+			o.org_name NAME,
+			CASE
+			WHEN os.org_id IS NULL THEN
+				FALSE
+			ELSE
+				TRUE
+			END checked
+		  FROM
+				t_organization o
+			LEFT JOIN t_organization os ON o.org_id = os.org_id
+			<if test="null != orgIds and orgIds.size>0">
+				AND os.org_id IN
+				<foreach collection="orgIds" item="item" index="index" separator="," open="(" close=")" >
+					#{item}
+				</foreach>
+			</if>
+		  WHERE
+			o.is_delete = 0
+			AND o.is_valid = 0
+	</select>
+</mapper>

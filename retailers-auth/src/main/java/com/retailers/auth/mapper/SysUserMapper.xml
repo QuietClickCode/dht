@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.auth.dao.SysUserMapper">
+
+	<resultMap id="rm_sysUser" type="com.retailers.auth.entity.SysUser">
+			<result property="uid" column="u_id"/>
+			<result property="uaccount" column="u_account"/>
+			<result property="uname" column="u_name"/>
+			<result property="upassword" column="u_password"/>
+			<result property="ucreateTime" column="u_create_time"/>
+			<result property="isValid" column="is_valid"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_sysUser_vo" type="com.retailers.auth.vo.SysUserVo">
+		<result property="uid" column="u_id"/>
+		<result property="uaccount" column="u_account"/>
+		<result property="uname" column="u_name"/>
+		<result property="upassword" column="u_password"/>
+		<result property="ucreateTime" column="u_create_time"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="orgIds" column="orgIds"/>
+		<result property="orgNms" column="orgNms"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="sysUser_columns">
+		u_id,u_account,u_name,u_password,u_create_time,is_valid,is_delete,version
+	</sql>
+	<!-- 根据公司员工表主键取得数据 -->
+	<select id="querySysUserByUid" resultMap="rm_sysUser" parameterType="java.lang.Long">
+		SELECT <include refid="sysUser_columns" />
+		FROM t_sys_user WHERE u_id = #{uid}
+	</select>
+	<!-- 公司员工表查询条件组合 -->
+	<sql id="sysUser_where">
+		<where>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.uaccount and '' != params.uaccount">
+				AND u_account = #{params.uaccount}
+			</if>
+			<if test="null != params.uname and '' != params.uname">
+				AND u_name = #{params.uname}
+			</if>
+			<if test="null != params.upassword and '' != params.upassword">
+				AND u_password = #{params.upassword}
+			</if>
+			<if test="null != params.ucreateTimeBegin">
+				AND u_create_time &gt;= #{params.ucreateTime}
+			</if>
+			<if test="null != params.ucreateTimeEnd">
+				AND u_create_time &lt;= #{params.ucreateTime}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySysUserList" resultMap="rm_sysUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="sysUser_columns" />
+		FROM t_sys_user
+		<include refid="sysUser_where"/>
+	</select>
+	<!--添加公司员工表 -->
+	<insert id="saveSysUser" parameterType="com.retailers.auth.entity.SysUser" useGeneratedKeys="true" keyProperty="uid">
+		INSERT INTO t_sys_user (
+			u_account,u_name,u_password,u_create_time,is_valid,is_delete,version
+		) VALUES
+		(
+			#{uaccount,jdbcType=VARCHAR},#{uname,jdbcType=VARCHAR},#{upassword,jdbcType=VARCHAR},#{ucreateTime,jdbcType=TIMESTAMP},#{isValid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改公司员工表 -->
+	<update id="updateSysUser" parameterType="com.retailers.auth.entity.SysUser">
+		UPDATE t_sys_user
+		<set>
+                u_name = #{uname},
+                is_valid = #{isValid},
+                is_delete = #{isDelete},
+                version = version+1,
+		</set>
+		WHERE u_id = #{uid} and version = #{version}
+	</update>
+	<!--删除公司员工表 -->
+	<delete id="deleteSysUserByUid" parameterType="java.lang.Long">
+		DELETE FROM t_sys_user WHERE u_id = #{uid}
+	</delete>
+
+	<!--分页查询 -->
+	<select id="querySysUserLists" resultMap="rm_sysUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		u.*,
+		GROUP_CONCAT(o.ou_org_id) orgIds,
+		GROUP_CONCAT(org.org_name) orgNms
+		FROM
+		t_sys_user u
+		LEFT JOIN t_org_user o ON u.u_id = o.ou_s_id LEFT JOIN t_organization org on o.ou_org_id = org.org_id
+		WHERE
+		1=1
+		<if test="null != params.uname and '' != params.uname">
+			AND u_name like '%${params.uname}%'
+		</if>
+		<if test="null != params.orgIds and '' != params.orgIds">
+			AND o.ou_org_id IN (#{params.orgIds})
+		</if>
+		GROUP BY u_id
+	</select>
+	<!--将职工设置为删除 -->
+	<update id="delSysUser" parameterType="java.lang.Long">
+		UPDATE t_sys_user
+		<set>
+			<if test="null != isDelete">
+				is_delete =1,
+			</if>
+		</set>
+		WHERE u_id = #{uid}
+	</update>
+</mapper>

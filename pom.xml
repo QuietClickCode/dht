@@ -22,6 +22,7 @@
         <org.aspectj.version>1.8.1</org.aspectj.version>
         <org.slf4j.version>1.7.2</org.slf4j.version>
         <org.hibernate.validator.version>5.2.0.Beta1</org.hibernate.validator.version>
+        <org.aspectj.version>1.8.1</org.aspectj.version>
         <junit>4.12</junit>
     </properties>
     <dependencies>
@@ -78,12 +79,6 @@
             <version>${org.slf4j.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>org.slf4j</groupId>-->
-        <!--<artifactId>jcl-over-slf4j</artifactId>-->
-        <!--<version>${org.slf4j.version}</version>-->
-        <!--&lt;!&ndash;<scope>runtime</scope>&ndash;&gt;-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
@@ -147,7 +142,17 @@
             <artifactId>mail</artifactId>
             <version>1.4.7</version>
         </dependency>
-
+        <!-- validate 校验工具类-->
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.0.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate.validator.version}</version>
+        </dependency>
 
     </dependencies>
     <!--多环境部署-->

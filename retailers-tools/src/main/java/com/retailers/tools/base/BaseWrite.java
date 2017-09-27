@@ -22,17 +22,6 @@ public class BaseWrite {
 		baseResp.setMsg(getMessage(msg));
 		return baseResp;
 	}
-	/**
-	 * 系统错误
-	 * @param msg
-	 * @return
-	 */
-	public BaseResp errorLockShop(String msg) {
-		BaseResp baseResp = new BaseResp();
-		baseResp.setStatus(WriteData.LOCK_SHOP_ERROR);
-		baseResp.setMsg(getMessage(msg));
-		return baseResp;
-	}
 
 	/**
 	 * 参数错误

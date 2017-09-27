@@ -34,10 +34,10 @@ public class AppSimpleMappingExceptionResolver extends SimpleMappingExceptionRes
             AppException appEx = (AppException) ex;
             if (ObjectUtils.isEmpty(appEx.getStatus())) {
                 //返回json
-                WriteData.writeObjects(WriteData.SERVER_ERROR, MessageUtil.getMessage(appEx.getMessage()),null,response);
+                WriteData.writeObject(WriteData.SERVER_ERROR, MessageUtil.getMessage(appEx.getMessage()),null,response);
 
             } else {
-                WriteData.writeObjects(appEx.getStatus(), MessageUtil.getMessage(appEx.getMessage()),appEx.getData(),response);
+                WriteData.writeObject(appEx.getStatus(), MessageUtil.getMessage(appEx.getMessage()),appEx.getData(),response);
             }
             return new ModelAndView("error");
         }
