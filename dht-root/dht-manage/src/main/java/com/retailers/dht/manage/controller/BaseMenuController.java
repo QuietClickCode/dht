@@ -10,6 +10,8 @@ import org.springframework.stereotype.Controller;
 public class BaseMenuController {
     @Resourse(resourse = "sys.manager.permissions",label = "权限管理")
     public String permissions;
+    @Resourse(resourse = "sys.manager.goods",label = "商品管理")
+    public String goodsManaage;
     @Resourse(resourse="sys.manager.org",label="部门管理",parentRes = "sys.manager.permissions",sort = 2)
     public String menu2;
     @Resourse(resourse="sys.user.manager",label="人员管理",changeRes="sys.manager.user",parentRes = "sys.manager.permissions",sort = 3)
@@ -37,4 +39,6 @@ public class BaseMenuController {
     public String menu14;
     @Resourse(resourse="sys.menu.test9",label="测试菜单9",parentRes="sys.menu.test7")
     public String menu15;
+
+
 }
