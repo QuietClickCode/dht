@@ -26,3 +26,20 @@ function clearFormValidation(formId,callback){
         callback();
     }
 }
+/**
+ * 取得ue富文本编译路径
+ * @param type 图片用途
+ * @param isWatermark 是否添加水印
+ * @param isCompress 是否压缩
+ */
+function ueditorUploadUrl(type,isWatermark,isCompress){
+    let fileUploadUrl ="/file/imageUpload";
+    if(!isWatermark){
+        isWatermark=false;
+    }
+    if(!isCompress){
+        isCompress=false;
+    }
+    fileUploadUrl+="?isWatermark="+isWatermark+"&isCompress="+isCompress+"&type="+type;
+    return fileUploadUrl;
+}
