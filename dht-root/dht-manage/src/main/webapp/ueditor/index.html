@@ -177,7 +177,7 @@
         //判断路径   这里是config.json 中设置执行上传的action名称
         console.log(action)
         if (action == 'uploadimage') {
-            return '/file/imageUpload?type=goods&isWatermark=true&isCompress=false';
+            return ueditorUploadUrl("goods",false,false);
         //上传视频
         } else if (action == 'uploadvideo') {
             return '';

@@ -84,6 +84,8 @@ public class FilesRemoveServlet extends HttpServlet {
                             for(String type: Config.compressTypes){
                                 list.add(StringUtils.formates(str,type));
                             }
+                        }else{
+                            list.add(str);
                         }
                     }
                     Map<String,Boolean> fileExe=new HashMap<String, Boolean>();

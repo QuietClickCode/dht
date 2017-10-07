@@ -112,4 +112,19 @@
 			#{item}
 		</foreach>
 	</update>
+
+	<select id="queryUnUsedAttachemnt" resultMap="rm_attachment">
+		SELECT <include refid="attachment_columns" />
+		FROM t_attachment
+		WHERE create_time&lt;#{curDate} AND `status`=0
+	</select>
+
+	<!--删除系统附件表(用于存放上传物品) -->
+	<delete id="clearUnUsedAttachemnt">
+		DELETE FROM t_attachment
+		WHERE id IN
+		<foreach collection="attIds" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
 </mapper>

@@ -34,4 +34,9 @@ public class AttachmentServiceTest extends TestBaseJunit{
         boolean flag =attachmentService.editorAttachment(list);
         System.out.println(flag);
     }
+
+    @Test
+    public void clearUnUsedAttachemnt(){
+        attachmentService.clearUnUsedAttachemnt();
+    }
 }

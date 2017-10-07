@@ -70,6 +70,12 @@ public interface AttachmentService {
 	 * @return
 	 */
 	public boolean editorAttachment(Long attachmentId);
+
+	/**
+	 * 清除未被使用的附件
+	 * @return
+	 */
+	public void clearUnUsedAttachemnt();
 }
 
 

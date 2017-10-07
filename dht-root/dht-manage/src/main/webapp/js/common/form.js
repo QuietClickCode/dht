@@ -40,6 +40,6 @@ function ueditorUploadUrl(type,isWatermark,isCompress){
     if(!isCompress){
         isCompress=false;
     }
-    fileUploadUrl+="?isWatermark="+isWatermark+"&isCompress="+isCompress+"&type="+type;
+    fileUploadUrl+="?isWatermark="+isWatermark+"&isCompress="+isCompress+"&imageUse="+type;
     return fileUploadUrl;
 }
