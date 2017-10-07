@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
 </head>
 <body>
-<input name="daterange">
-
 <div id="toolbar" class="form-inline">
     <ex:perm url="goods/addGoodsLabel">
         <button class="btn btn-primary" type="button" onclick="addGoodsLabel()">添加商品标签</button>
@@ -73,6 +71,9 @@
         </div>
     </div>
 </div>
+
+
+
 <!-- 公用下拉择树 -->
 <div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
     <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
@@ -122,13 +123,13 @@
                 rowDatas.set(row.glId,row);
                 let html='';
                 var now = new Date();
-                if(now<row.glStarttime){
+                if(now<new Date(row.glStarttime)){
                     html='未生效';
                 }
-                if(now>row.glStarttime && now<row.glEndtime){
+                if(now>new Date(row.glStarttime) && now<new Date(row.glEndtime)){
                     html='生效中';
                 }
-                if(now>row.glEndtime){
+                if(now>new Date(row.glEndtime)){
                     html='已失效';
                 }
                 return html;
@@ -433,16 +434,7 @@
         }
     }
 
-    $('input[name="daterange"]').daterangepicker(
-        {
-            format: 'YYYY-MM-DD',
-            startDate: '2013-01-01',
-            endDate: '2013-12-31'
-        },
-        function(start, end, label) {
-            alert('A date range was chosen: ' + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-        }
-    );
+
 </script>
 </body>
 </html>
