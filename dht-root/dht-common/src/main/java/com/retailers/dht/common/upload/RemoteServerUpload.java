@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.Attachment;
 import com.retailers.tools.http.HttpClientManager;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -77,6 +78,9 @@ public class RemoteServerUpload implements FileUploader{
                             Attachment attachment=setAttachment(fileType,fileName,obj.getString("savePath"),obj.getString("showPath"));
                             attachmentMapper.saveAttachment(attachment);
                             result=obj.getString("showPath");
+                            if(isCompress){
+                                result= StringUtils.formates(result,"middle");
+                            }
                         }
                     }
                 }else{
