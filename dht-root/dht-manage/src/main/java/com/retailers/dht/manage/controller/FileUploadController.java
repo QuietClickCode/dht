@@ -58,12 +58,12 @@ public class FileUploadController extends BaseController{
             e.printStackTrace();
         }
         FileUploader uploader= UploadFacatory.getUploaer();
-        String path = uploader.upload(stream, type,upfile.getOriginalFilename(),isCompress,isWatermark);
+        Map<String,String> rtn = uploader.upload(stream, type,upfile.getOriginalFilename(),isCompress,isWatermark);
         Map<String,String> imgMap = new HashMap();
         imgMap.put("state", "SUCCESS");
-        imgMap.put("url", path);
+        imgMap.put("url", "http://image.kuaiyis.com/attachment"+rtn.get("savePath"));
         imgMap.put("title", upfile.getOriginalFilename());
-        imgMap.put("original", upfile.getOriginalFilename());
+        imgMap.put("original", "{attachmentId:\""+rtn.get("attachmentId")+"\"}");
         logger.info("上传图片结束");
         return imgMap;
     }

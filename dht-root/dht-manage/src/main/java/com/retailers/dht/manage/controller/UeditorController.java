@@ -55,7 +55,7 @@ public class UeditorController extends BaseController {
         //上传大小限制，单位B
         config.put("imageMaxSize", "2048000");
         //图片访问路径前缀
-        config.put("imageUrlPrefix", "http://image.kuaiyis.com/attachment");
+        config.put("imageUrlPrefix", "");
         config.put("imageCompressEnable", false);
         config.put("imageCompressBorder", 1600);
         config.put("imageInsertAlign", "none");

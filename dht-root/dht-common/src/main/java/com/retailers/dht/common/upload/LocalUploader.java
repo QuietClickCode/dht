@@ -3,6 +3,7 @@ package com.retailers.dht.common.upload;
 import org.springframework.stereotype.Component;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * 上传文件到本地
@@ -20,7 +21,7 @@ public class LocalUploader implements FileUploader {
      * @param isAddWatermark 是否添加水印
      * @return
      */
-    public String upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark) {
+    public Map<String,String> upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark) {
         return null;
     }
 
@@ -31,7 +32,7 @@ public class LocalUploader implements FileUploader {
      * @param fileName 文件名
      * @return
      */
-    public String upload(InputStream stream, String type, String fileName) {
+    public Map<String,String> upload(InputStream stream, String type, String fileName) {
         return upload(stream,type,fileName,false,false);
     }
 }

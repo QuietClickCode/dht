@@ -1,6 +1,7 @@
 package com.retailers.dht.common.upload;
 
 import java.io.InputStream;
+import java.util.Map;
 
 /**
  * 文件上传类接口方法
@@ -17,7 +18,7 @@ public interface FileUploader {
      * @param isAddWatermark 是否添加水印
      * @return
      */
-    public String upload(InputStream stream,String type,String fileName,boolean isCompress,boolean isAddWatermark);
+    public Map<String,String> upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark);
     /**
      * 图片上传
      * @param stream 图处流
@@ -25,6 +26,6 @@ public interface FileUploader {
      * @param fileName 文件名
      * @return
      */
-    public String upload(InputStream stream,String type,String fileName);
+    public Map<String,String> upload(InputStream stream,String type,String fileName);
 
 }

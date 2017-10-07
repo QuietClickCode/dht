@@ -26,6 +26,8 @@ import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 上传至远程服务器
@@ -46,10 +48,11 @@ public class RemoteServerUpload implements FileUploader{
      * @param isAddWatermark 是否添加水印
      * @return
      */
-    public String upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark) {
+    public Map<String,String> upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark) {
         logger.info("开始进入远程服务器数据上传，传入类型：{}，文件名称：{}，是否压缩：{}，是否添加水印：{}",type,fileName,isCompress,isAddWatermark);
         String remote_url = "http://image.kuaiyis.com/filesUpload";// 第三方服务器请求地址
-        String result = "";
+        Map<String,String> rtnMap=new HashMap<String, String>();
+        String result="";
         try {
             CloseableHttpClient httpClient= HttpClientManager.getHttpClient();
             long curT = System.currentTimeMillis();
@@ -69,6 +72,7 @@ public class RemoteServerUpload implements FileUploader{
             if (responseEntity != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
                 logger.info("附件服务器返回状态:{}",statusCode);
+                rtnMap.put("status",statusCode+"");
                 if(statusCode == HttpStatus.SC_OK){
                     // 将响应内容转换为字符串
                     result = EntityUtils.toString(responseEntity, Charset.forName("UTF-8"));
@@ -78,6 +82,7 @@ public class RemoteServerUpload implements FileUploader{
                         if(ObjectUtils.isNotEmpty(obj)){
                             Attachment attachment=setAttachment(fileType,fileName,obj.getString("savePath"),obj.getString("showPath"));
                             attachmentMapper.saveAttachment(attachment);
+                            rtnMap.put("attachmentId",attachment.getId()+"");
                             result=obj.getString("showPath");
                             if(isCompress){
                                 result= StringUtils.formates(result,"middle");
@@ -93,7 +98,8 @@ public class RemoteServerUpload implements FileUploader{
             e.printStackTrace();
         }
         logger.info("远程服务器数据上传结束");
-        return result;
+        rtnMap.put("savePath",result);
+        return rtnMap;
     }
 
     /**
@@ -123,7 +129,7 @@ public class RemoteServerUpload implements FileUploader{
      * @param fileName 文件名
      * @return
      */
-    public String upload(InputStream stream, String type, String fileName) {
+    public Map<String,String> upload(InputStream stream, String type, String fileName) {
         return upload(stream,type,fileName,false,false);
     }
 

@@ -35,6 +35,8 @@
          */
         o_ueditorupload.addListener('afterUpfile', function (t, arg)
         {
+            console.log(arg)
+            console.log(t)
             alert('这是文件地址：'+arg[0].url);
         });
     });
