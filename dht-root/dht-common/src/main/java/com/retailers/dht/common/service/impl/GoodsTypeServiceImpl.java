@@ -1,19 +1,22 @@
 
 package com.retailers.dht.common.service.impl;
+
+import com.retailers.dht.common.dao.GoodsTypeMapper;
+import com.retailers.dht.common.entity.GoodsType;
+import com.retailers.dht.common.service.GoodsTypeService;
+import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
-import com.retailers.dht.common.entity.GoodsType;
-import com.retailers.dht.common.dao.GoodsTypeMapper;
-import com.retailers.dht.common.service.GoodsTypeService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
+
 /**
- * 描述：部门人员表Service
- * @author zhongp
+ * 描述：商品大类表Service
+ * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-09-27 16:32:45
+ * @date 2017-09-29 14:57:58
  */
 @Service("goodstypeService")
 public class GoodsTypeServiceImpl implements GoodsTypeService {
@@ -31,7 +34,7 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 		return goodsTypeMapper.queryGoodsTypeByGtId(gtId);
 	}
 
-	public Pagination<GoodsType> queryGoodsTypeList(Map<String, Object> params,int pageNo,int pageSize) {
+	public Pagination<GoodsType> queryGoodsTypeList(Map<String, Object> params, int pageNo, int pageSize) {
 		Pagination<GoodsType> page = new Pagination<GoodsType>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);

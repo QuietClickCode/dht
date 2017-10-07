@@ -1,17 +1,13 @@
 package com.retailers.dht.common.entity;
-
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
-import java.util.HashSet;
-import java.util.Set;
-
 /**
- * 描述：部门人员表对象
- * @author zhongp
+ * 描述：商品子类表对象
+ * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-09-27 16:28:01
+ * @date 2017-09-30 13:41:37
  */
 public class GoodsClassification implements java.io.Serializable {
 
@@ -24,7 +20,7 @@ public class GoodsClassification implements java.io.Serializable {
 	private String ggName;
 	/**子类的上级分类ID*/
 	@NotEmpty
-	private Long ggManager;
+	private Long parentId;
 	/**所属大类ID*/
 	@NotEmpty
 	private Long ggHome;
@@ -38,6 +34,12 @@ public class GoodsClassification implements java.io.Serializable {
 	/**是否是顶级元素*/
 	@NotEmpty
 	private Long isTop;
+	/**是否显示*/
+	@NotEmpty
+	private Long isShow;
+	/**是否删除*/
+	@NotEmpty
+	private Long isDelete;
 	/**版本号*/
 	@NotEmpty
 	private Long version;
@@ -64,12 +66,12 @@ public class GoodsClassification implements java.io.Serializable {
 	public String getGgName() {
 		return this.ggName;
 	}
-	public void setGgManager(Long value) {
-		this.ggManager = value;
+	public void setParentId(Long value) {
+		this.parentId = value;
 	}
 
-	public Long getGgManager() {
-		return this.ggManager;
+	public Long getParentId() {
+		return this.parentId;
 	}
 	public void setGgHome(Long value) {
 		this.ggHome = value;
@@ -99,31 +101,26 @@ public class GoodsClassification implements java.io.Serializable {
 	public Long getIsTop() {
 		return this.isTop;
 	}
+	public void setIsShow(Long value) {
+		this.isShow = value;
+	}
+
+	public Long getIsShow() {
+		return this.isShow;
+	}
+	public void setIsDelete(Long value) {
+		this.isDelete = value;
+	}
+
+	public Long getIsDelete() {
+		return this.isDelete;
+	}
 	public void setVersion(Long value) {
 		this.version = value;
 	}
 
 	public Long getVersion() {
 		return this.version;
-	}
-
-	private Set goodsClassifications = new HashSet(0);
-	public void setGoodsClassifications(Set<GoodsClassification> goodsClassification){
-		this.goodsClassifications = goodsClassification;
-	}
-
-	public Set<GoodsClassification> getGoodsClassifications() {
-		return goodsClassifications;
-	}
-
-	private GoodsClassification goodsClassification;
-
-	public void setGoodsClassification(GoodsClassification goodsClassification){
-		this.goodsClassification = goodsClassification;
-	}
-
-	public GoodsClassification getGoodsClassification() {
-		return goodsClassification;
 	}
 
 	private GoodsType goodsType;
