@@ -1,11 +1,9 @@
 package com.retailers.dht.common.upload;
 
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.AttachmentMapper;
 import com.retailers.dht.common.entity.Attachment;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.tools.http.HttpClientManager;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
@@ -26,9 +24,7 @@ import java.io.InputStream;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * 上传至远程服务器
