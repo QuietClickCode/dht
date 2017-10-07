@@ -130,7 +130,7 @@ public class FilesUploadServlet extends HttpServlet {
 					map.put("msg", "签名未授权");
 				} else {
 					if (ObjectUtils.isEmpty(uploadType)) {
-						uploadType = "realNm";
+						uploadType = "other";
 					}
 					//上传列表回传值
 					for (FileItem fileItem : items) {
