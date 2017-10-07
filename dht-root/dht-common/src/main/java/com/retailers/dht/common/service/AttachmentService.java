@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Attachment;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：系统附件表(用于存放上传物品)Service
@@ -55,6 +57,19 @@ public interface AttachmentService {
 	 */
 	public boolean deleteAttachmentById(Long id);
 
+	/**
+	 * 编辑附件属性
+	 * @param attachmentId 商品id
+	 * @return
+	 */
+	public boolean editorAttachment(List<Long> attachmentId);
+
+	/**
+	 * 编辑附件属性
+	 * @param attachmentId 商品id
+	 * @return
+	 */
+	public boolean editorAttachment(Long attachmentId);
 }
 
 

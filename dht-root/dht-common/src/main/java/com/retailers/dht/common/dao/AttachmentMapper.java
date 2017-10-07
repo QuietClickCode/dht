@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：系统附件表(用于存放上传物品)DAO
@@ -51,5 +53,12 @@ public interface AttachmentMapper {
 	 * @date 2017-09-14 15:23:57
 	 */
 	public List<Attachment> queryAttachmentList(Pagination<Attachment> pagination);
+
+	/**
+	 * 批量设置附件被使用
+	 * @param attachmentIds
+	 * @return
+	 */
+	public long editorAttachment(@Param("attachmentIds") List<Long> attachmentIds);
 
 }

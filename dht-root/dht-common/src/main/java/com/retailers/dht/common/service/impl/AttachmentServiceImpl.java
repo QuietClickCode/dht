@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.Attachment;
@@ -19,6 +20,8 @@ import com.retailers.mybatis.pagination.Pagination;
 public class AttachmentServiceImpl implements AttachmentService {
 	@Autowired
 	private AttachmentMapper attachmentMapper;
+
+
 	public boolean saveAttachment(Attachment attachment) {
 		int status = attachmentMapper.saveAttachment(attachment);
 		return status == 1 ? true : false;
@@ -43,6 +46,30 @@ public class AttachmentServiceImpl implements AttachmentService {
 	public boolean deleteAttachmentById(Long id) {
 		int status = attachmentMapper.deleteAttachmentById(id);
 		return status == 1 ? true : false;
+	}
+
+	/**
+	 * 编辑附件属性
+	 * @param attachmentId 商品id
+	 * @return
+	 */
+	public boolean editorAttachment(List<Long> attachmentId) {
+		long total = attachmentMapper.editorAttachment(attachmentId);
+		if(total>0){
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 编辑附件属性
+	 * @param attachmentId 商品id
+	 * @return
+	 */
+	public boolean editorAttachment(Long attachmentId) {
+		List<Long> list = new ArrayList<Long>();
+		list.add(attachmentId);
+		return editorAttachment(list);
 	}
 }
 
