@@ -12,6 +12,16 @@ public class GoodsClassificationVo extends GoodsClassification {
 
     private String homeName;
 
+    private String imgUrl;
+
+    public void setImgUrl(String value) {
+        this.imgUrl = value;
+    }
+
+    public String getImgUrl() {
+        return this.imgUrl;
+    }
+
     public void setLevel(Long value) {
         this.level = value;
     }
