@@ -8,19 +8,21 @@
 			<result property="isParams" column="is_params"/>
 			<result property="isTrademark" column="is_trademark"/>
 			<result property="isSpecification" column="is_specification"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsType_columns">
-		gt_id,gt_name,is_params,is_trademark,is_specification,version
+		gt_id,gt_name,is_params,is_trademark,is_specification,is_show,is_delete,version
 	</sql>
-	<!-- 根据部门人员表主键取得数据 -->
+	<!-- 根据商品大类表主键取得数据 -->
 	<select id="queryGoodsTypeByGtId" resultMap="rm_goodsType" parameterType="java.lang.Long">
 		SELECT <include refid="goodsType_columns" />
 		FROM t_goods_type WHERE gt_id = #{gtId}
 	</select>
-	<!-- 部门人员表查询条件组合 -->
+	<!-- 商品大类表查询条件组合 -->
 	<sql id="goodsType_where">
 		<where>
 			<if test="null != params.gtId">
@@ -38,6 +40,12 @@
 			<if test="null != params.isSpecification">
 				AND is_specification = #{params.isSpecification}
 			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
@@ -49,16 +57,17 @@
 		FROM t_goods_type
 		<include refid="goodsType_where"/>
 	</select>
-	<!--添加部门人员表 -->
+
+	<!--添加商品大类表 -->
 	<insert id="saveGoodsType" parameterType="com.retailers.dht.common.entity.GoodsType" useGeneratedKeys="true" keyProperty="gtId">
 		INSERT INTO t_goods_type (
-			gt_name,is_params,is_trademark,is_specification,version
+			gt_name,is_params,is_trademark,is_specification,is_show,is_delete,version
 		) VALUES
 		(
-			#{gtName,jdbcType=VARCHAR},#{isParams,jdbcType=BIGINT},#{isTrademark,jdbcType=BIGINT},#{isSpecification,jdbcType=BIGINT},0
+			#{gtName,jdbcType=VARCHAR},#{isParams,jdbcType=BIGINT},#{isTrademark,jdbcType=BIGINT},#{isSpecification,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改部门人员表 -->
+	<!--修改商品大类表 -->
 	<update id="updateGoodsType" parameterType="com.retailers.dht.common.entity.GoodsType">
 		UPDATE t_goods_type
 		<set>
@@ -74,13 +83,19 @@
             <if test="null != isSpecification">
                 is_specification = #{isSpecification},
             </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
             <if test="null != version">
                 version = version+1,
             </if>
 		</set>
 		WHERE gt_id = #{gtId} and version = #{version}
 	</update>
-	<!--删除部门人员表 -->
+	<!--删除商品大类表 -->
 	<delete id="deleteGoodsTypeByGtId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_type WHERE gt_id = #{gtId}
 	</delete>

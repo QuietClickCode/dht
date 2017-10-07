@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsLabelMapper">
+
+	<resultMap id="rm_goodsLabel" type="com.retailers.dht.common.entity.GoodsLabel">
+			<result property="glId" column="gl_id"/>
+			<result property="glName" column="gl_name"/>
+			<result property="glStarttime" column="gl_starttime"/>
+			<result property="glEndtime" column="gl_endtime"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsLabel_columns">
+		gl_id,gl_name,gl_starttime,gl_endtime,version
+	</sql>
+	<!-- 根据商品标签表主键取得数据 -->
+	<select id="queryGoodsLabelByGlId" resultMap="rm_goodsLabel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsLabel_columns" />
+		FROM t_goods_label WHERE gl_id = #{glId}
+	</select>
+	<!-- 商品标签表查询条件组合 -->
+	<sql id="goodsLabel_where">
+		<where>
+			<if test="null != params.glId">
+				AND gl_id = #{params.glId}
+			</if>
+			<if test="null != params.glName and '' != params.glName">
+				AND gl_name = #{params.glName}
+			</if>
+			<if test="null != params.glStarttimeBegin">
+				AND gl_starttime &gt;= #{params.glStarttime}
+			</if>
+			<if test="null != params.glStarttimeEnd">
+				AND gl_starttime &lt;= #{params.glStarttime}
+			</if>
+			<if test="null != params.glEndtimeBegin">
+				AND gl_endtime &gt;= #{params.glEndtime}
+			</if>
+			<if test="null != params.glEndtimeEnd">
+				AND gl_endtime &lt;= #{params.glEndtime}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsLabelList" resultMap="rm_goodsLabel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsLabel_columns" />
+		FROM t_goods_label
+		<include refid="goodsLabel_where"/>
+	</select>
+	<!--添加商品标签表 -->
+	<insert id="saveGoodsLabel" parameterType="com.retailers.dht.common.entity.GoodsLabel" useGeneratedKeys="true" keyProperty="glId">
+		INSERT INTO t_goods_label (
+			gl_name,gl_starttime,gl_endtime,version
+		) VALUES
+		(
+			#{glName,jdbcType=VARCHAR},#{glStarttime,jdbcType=TIMESTAMP},#{glEndtime,jdbcType=TIMESTAMP},0
+		)
+	</insert>
+	<!--修改商品标签表 -->
+	<update id="updateGoodsLabel" parameterType="com.retailers.dht.common.entity.GoodsLabel">
+		UPDATE t_goods_label
+		<set>
+            <if test="null != glName and '' != glName">
+                gl_name = #{glName},
+            </if>
+            <if test="null != glStarttime">
+                gl_starttime = #{glStarttime},
+            </if>
+            <if test="null != glEndtime">
+                gl_endtime = #{glEndtime},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gl_id = #{glId} and version = #{version}
+	</update>
+	<!--删除商品标签表 -->
+	<delete id="deleteGoodsLabelByGlId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_label WHERE gl_id = #{glId}
+	</delete>
+</mapper>

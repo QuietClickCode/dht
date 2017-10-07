@@ -7,11 +7,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
- * 描述：部门人员表对象
- * @author zhongp
+ * 描述：商品大类表对象
+ * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-09-27 16:32:45
+ * @date 2017-09-29 14:57:58
  */
 public class GoodsType implements java.io.Serializable {
 
@@ -22,15 +22,21 @@ public class GoodsType implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String gtName;
-	/**是否关联参数*/
+	/**是否关联参数 0代表没有关联参数 1代表有关联参数*/
 	@NotEmpty
 	private Long isParams;
-	/**是否关联品牌*/
+	/**是否关联品牌 0代表没有关联品牌 1代表有关联品牌*/
 	@NotEmpty
 	private Long isTrademark;
-	/**是否关联规格*/
+	/**是否关联规格 0代表没有关联规格 1代表有关联规格*/
 	@NotEmpty
 	private Long isSpecification;
+	/**是否显示*/
+	@NotEmpty
+	private Long isShow;
+	/**是否删除*/
+	@NotEmpty
+	private Long isDelete;
 	/**版本号*/
 	@NotEmpty
 	private Long version;
@@ -77,6 +83,20 @@ public class GoodsType implements java.io.Serializable {
 
 	public Long getIsSpecification() {
 		return this.isSpecification;
+	}
+	public void setIsShow(Long value) {
+		this.isShow = value;
+	}
+
+	public Long getIsShow() {
+		return this.isShow;
+	}
+	public void setIsDelete(Long value) {
+		this.isDelete = value;
+	}
+
+	public Long getIsDelete() {
+		return this.isDelete;
 	}
 	public void setVersion(Long value) {
 		this.version = value;

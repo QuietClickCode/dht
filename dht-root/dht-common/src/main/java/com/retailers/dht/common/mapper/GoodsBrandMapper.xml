@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsBrandMapper">
+
+	<resultMap id="rm_goodsBrand" type="com.retailers.dht.common.entity.GoodsBrand">
+			<result property="gbId" column="gb_id"/>
+			<result property="gbName" column="gb_name"/>
+			<result property="gbImgpath" column="gb_imgpath"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsBrand_columns">
+		gb_id,gb_name,gb_imgpath,is_delete,version
+	</sql>
+	<!-- 根据商品品牌表主键取得数据 -->
+	<select id="queryGoodsBrandByGbId" resultMap="rm_goodsBrand" parameterType="java.lang.Long">
+		SELECT <include refid="goodsBrand_columns" />
+		FROM t_goods_brand WHERE gb_id = #{gbId}
+	</select>
+	<!-- 商品品牌表查询条件组合 -->
+	<sql id="goodsBrand_where">
+		<where>
+			<if test="null != params.gbId">
+				AND gb_id = #{params.gbId}
+			</if>
+			<if test="null != params.gbName and '' != params.gbName">
+				AND gb_name = #{params.gbName}
+			</if>
+			<if test="null != params.gbImgpath and '' != params.gbImgpath">
+				AND gb_imgpath = #{params.gbImgpath}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsBrandList" resultMap="rm_goodsBrand" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsBrand_columns" />
+		FROM t_goods_brand
+		<include refid="goodsBrand_where"/>
+	</select>
+	<!--添加商品品牌表 -->
+	<insert id="saveGoodsBrand" parameterType="com.retailers.dht.common.entity.GoodsBrand" useGeneratedKeys="true" keyProperty="gbId">
+		INSERT INTO t_goods_brand (
+			gb_name,gb_imgpath,is_delete,version
+		) VALUES
+		(
+			#{gbName,jdbcType=VARCHAR},#{gbImgpath,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品品牌表 -->
+	<update id="updateGoodsBrand" parameterType="com.retailers.dht.common.entity.GoodsBrand">
+		UPDATE t_goods_brand
+		<set>
+            <if test="null != gbName and '' != gbName">
+                gb_name = #{gbName},
+            </if>
+            <if test="null != gbImgpath and '' != gbImgpath">
+                gb_imgpath = #{gbImgpath},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gb_id = #{gbId} and version = #{version}
+	</update>
+	<!--删除商品品牌表 -->
+	<delete id="deleteGoodsBrandByGbId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_brand WHERE gb_id = #{gbId}
+	</delete>
+</mapper>
