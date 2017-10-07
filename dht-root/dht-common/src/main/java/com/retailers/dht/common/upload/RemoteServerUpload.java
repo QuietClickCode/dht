@@ -68,6 +68,7 @@ public class RemoteServerUpload implements FileUploader{
             HttpEntity responseEntity = response.getEntity();
             if (responseEntity != null) {
                 int statusCode = response.getStatusLine().getStatusCode();
+                logger.info("附件服务器返回状态:{}",statusCode);
                 if(statusCode == HttpStatus.SC_OK){
                     // 将响应内容转换为字符串
                     result = EntityUtils.toString(responseEntity, Charset.forName("UTF-8"));

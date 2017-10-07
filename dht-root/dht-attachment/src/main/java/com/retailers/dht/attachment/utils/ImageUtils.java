@@ -31,36 +31,28 @@ public class ImageUtils {
     //水印图片高度
     private static int WATER_MARK_HEIGHT=0;
     private static List<Map<String,Integer>> compressRatio=new ArrayList<Map<String, Integer>>();
-//    public static List<String> ysdj=new ArrayList<String>();
     private static Map<String,String> imageCompressType=new HashMap<String, String>();
     static {
         try{
-//            waterMark=ImageIO.read(new File("/opt/attachment/watermark/water.png"));
-            waterMark=ImageIO.read(new File("e:\\water.png"));
-            WATER_MARK_WIDTH =waterMark.getWidth();
-            WATER_MARK_HEIGHT=waterMark.getHeight();
-            Map<String,Integer> smallImage=new HashMap<String, Integer>();
-            smallImage.put("width",640);
-            smallImage.put("height",480);
-            Map<String,Integer> middleImage=new HashMap<String, Integer>();
-            middleImage.put("width",1080);
-            middleImage.put("height",720);
-            compressRatio.add(smallImage);
-            compressRatio.add(middleImage);
-//            //缩略图 小图
-//            ysdj.add("small");
-//            //缩略图中图
-//            ysdj.add("middle");
-//            //原始文件
-//            ysdj.add("originalfile");
-            if(ObjectUtils.isNotEmpty(Config.imageCompressType)){
-                String[] imageCompressType_=Config.imageCompressType.split(",");
-                for(String key:imageCompressType_){
-                    imageCompressType.put(key.toLowerCase(),key.toLowerCase());
-                }
-            }
+            waterMark=ImageIO.read(new File(Config.watermarkPath));
         }catch(Exception e){
             e.printStackTrace();
+        }
+        WATER_MARK_WIDTH =waterMark.getWidth();
+        WATER_MARK_HEIGHT=waterMark.getHeight();
+        Map<String,Integer> smallImage=new HashMap<String, Integer>();
+        smallImage.put("width",640);
+        smallImage.put("height",480);
+        Map<String,Integer> middleImage=new HashMap<String, Integer>();
+        middleImage.put("width",1080);
+        middleImage.put("height",720);
+        compressRatio.add(smallImage);
+        compressRatio.add(middleImage);
+        if(ObjectUtils.isNotEmpty(Config.imageCompressType)){
+            String[] imageCompressType_=Config.imageCompressType.split(",");
+            for(String key:imageCompressType_){
+                imageCompressType.put(key.toLowerCase(),key.toLowerCase());
+            }
         }
     }
     private static String pathDir = File.separator;
