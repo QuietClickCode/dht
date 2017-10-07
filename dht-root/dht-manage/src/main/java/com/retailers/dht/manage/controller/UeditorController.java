@@ -55,7 +55,7 @@ public class UeditorController extends BaseController {
         //上传大小限制，单位B
         config.put("imageMaxSize", "2048000");
         //图片访问路径前缀
-        config.put("imageUrlPrefix", "http://image.kuaiyis.com/attachment");
+        config.put("imageUrlPrefix", "");
         config.put("imageCompressEnable", false);
         config.put("imageCompressBorder", 1600);
         config.put("imageInsertAlign", "none");
@@ -72,29 +72,29 @@ public class UeditorController extends BaseController {
         return config;
     }
 
-    /**
-     * 上传图片
-     * @return
-     */
-    @ResponseBody
-    @RequestMapping("/imageUpload")
-    public  Map<String,String> uploadImg(@RequestParam("dht_image_upload") CommonsMultipartFile upfile){
-        logger.info("进入图片上传");
-        InputStream stream=null;
-        try {
-            stream=upfile.getInputStream();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        FileUploader uploader= UploadFacatory.getUploaer();
-        String path = uploader.upload(stream, "goods",upfile.getOriginalFilename(),false,true);
-        Map<String,String> imgMap = new HashMap();
-        imgMap.put("state", "SUCCESS");
-        imgMap.put("url", path);
-        imgMap.put("title", upfile.getOriginalFilename());
-        imgMap.put("original", upfile.getOriginalFilename());
-        logger.info("进入图片结束");
-        System.out.println(JSON.toJSON(imgMap));
-        return imgMap;
-    }
+//    /**
+//     * 上传图片
+//     * @return
+//     */
+//    @ResponseBody
+//    @RequestMapping("/imageUpload")
+//    public  Map<String,String> uploadImg(@RequestParam("dht_image_upload") CommonsMultipartFile upfile){
+//        logger.info("进入图片上传");
+//        InputStream stream=null;
+//        try {
+//            stream=upfile.getInputStream();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        FileUploader uploader= UploadFacatory.getUploaer();
+//        String path = uploader.upload(stream, "goods",upfile.getOriginalFilename(),false,true);
+//        Map<String,String> imgMap = new HashMap();
+//        imgMap.put("state", "SUCCESS");
+//        imgMap.put("url", path);
+//        imgMap.put("title", upfile.getOriginalFilename());
+//        imgMap.put("original", upfile.getOriginalFilename());
+//        logger.info("进入图片结束");
+//        System.out.println(JSON.toJSON(imgMap));
+//        return imgMap;
+//    }
 }

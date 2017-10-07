@@ -35,6 +35,8 @@
          */
         o_ueditorupload.addListener('afterUpfile', function (t, arg)
         {
+            console.log(arg)
+            console.log(t)
             alert('这是文件地址：'+arg[0].url);
         });
     });
@@ -58,7 +60,7 @@
         //判断路径   这里是config.json 中设置执行上传的action名称
         console.log(action)
         if (action == 'uploadimage') {
-            return 'http://localhost:8080/ueditor/imageUpload';
+            return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=true&isCompress=false';
             //上传视频
         } else if (action == 'uploadvideo') {
             return '';

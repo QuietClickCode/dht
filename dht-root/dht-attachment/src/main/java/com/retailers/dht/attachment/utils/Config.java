@@ -31,6 +31,9 @@ public class Config {
 	public static String validateKeys="";
 	//图片压缩后分类
 	private static String compressType;
+	//水印图片所在位置
+	public static String watermarkPath;
+
 	public static List<String> compressTypes;
 	static{
 		initConfig();
@@ -50,6 +53,7 @@ public class Config {
 			imageCompressType = properties.getProperty("imageCompressType");
 			validateKeys = properties.getProperty("validateKeys");
 			compressType = properties.getProperty("compressType");
+			watermarkPath = properties.getProperty("watermarkPath");
 			compressTypes=new ArrayList<String>();
 			if(ObjectUtils.isNotEmpty(compressType)){
 				String[] strs=compressType.split(",");
