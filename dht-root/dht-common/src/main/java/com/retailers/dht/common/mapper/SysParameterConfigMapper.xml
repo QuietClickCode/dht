@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.SysParameterConfigMapper">
+
+	<resultMap id="rm_sysParameterConfig" type="com.retailers.dht.common.entity.SysParameterConfig">
+			<result property="parameterKey" column="parameter_key"/>
+			<result property="parameterValue" column="parameter_value"/>
+			<result property="parameterName" column="parameter_name"/>
+			<result property="parameterDes" column="parameter_des"/>
+			<result property="parameterCreateTime" column="parameter_create_time"/>
+			<result property="allowUpdate" column="allow_update"/>
+			<result property="parameterVersion" column="parameter_version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="sysParameterConfig_columns">
+		parameter_key,parameter_value,parameter_name,parameter_des,parameter_create_time,allow_update,parameter_version
+	</sql>
+	<!-- 根据系统参数配置表主键取得数据 -->
+	<select id="querySysParameterConfigByParameterKey" resultMap="rm_sysParameterConfig" parameterType="java.lang.String">
+		SELECT <include refid="sysParameterConfig_columns" />
+		FROM t_sys_parameter_config WHERE parameter_key = #{parameterKey}
+	</select>
+	<!-- 系统参数配置表查询条件组合 -->
+	<sql id="sysParameterConfig_where">
+		<where>
+			<if test="null != params.parameterKey and '' != params.parameterKey">
+				AND parameter_key = #{params.parameterKey}
+			</if>
+			<if test="null != params.parameterValue and '' != params.parameterValue">
+				AND parameter_value = #{params.parameterValue}
+			</if>
+			<if test="null != params.parameterName and '' != params.parameterName">
+				AND parameter_name = #{params.parameterName}
+			</if>
+			<if test="null != params.parameterDes and '' != params.parameterDes">
+				AND parameter_des = #{params.parameterDes}
+			</if>
+			<if test="null != params.parameterCreateTimeBegin">
+				AND parameter_create_time &gt;= TO_DATE('${params.parameterCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.parameterCreateTimeEnd">
+				AND parameter_create_time &lt;= TO_DATE('${params.parameterCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.allowUpdate">
+				AND allow_update = #{params.allowUpdate}
+			</if>
+			<if test="null != params.parameterVersion">
+				AND parameter_version = #{params.parameterVersion}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySysParameterConfigList" resultMap="rm_sysParameterConfig" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="sysParameterConfig_columns" />
+		FROM t_sys_parameter_config
+		<include refid="sysParameterConfig_where"/>
+	</select>
+	<!--添加系统参数配置表 -->
+	<insert id="saveSysParameterConfig" parameterType="com.retailers.dht.common.entity.SysParameterConfig" useGeneratedKeys="true" keyProperty="parameterKey">
+		INSERT INTO t_sys_parameter_config (
+			parameter_value,parameter_name,parameter_des,parameter_create_time,allow_update,parameter_version
+		) VALUES
+		(
+			#{parameterValue,jdbcType=VARCHAR},#{parameterName,jdbcType=VARCHAR},#{parameterDes,jdbcType=VARCHAR},#{parameterCreateTime,jdbcType=TIMESTAMP},#{allowUpdate,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改系统参数配置表 -->
+	<update id="updateSysParameterConfig" parameterType="com.retailers.dht.common.entity.SysParameterConfig">
+		UPDATE t_sys_parameter_config
+		<set>
+            <if test="null != parameterValue and '' != parameterValue">
+                parameter_value = #{parameterValue},
+            </if>
+            <if test="null != parameterName and '' != parameterName">
+                parameter_name = #{parameterName},
+            </if>
+            <if test="null != parameterDes and '' != parameterDes">
+                parameter_des = #{parameterDes},
+            </if>
+            <if test="null != parameterCreateTime">
+                parameter_create_time = #{parameterCreateTime},
+            </if>
+            <if test="null != allowUpdate">
+                allow_update = #{allowUpdate},
+            </if>
+            <if test="null != parameterVersion">
+                parameter_version = parameter_version+1,
+            </if>
+		</set>
+		WHERE parameter_key = #{parameterKey} and parameter_version = #{parameterVersion}
+	</update>
+	<!--删除系统参数配置表 -->
+	<delete id="deleteSysParameterConfigByParameterKey" parameterType="java.lang.String">
+		DELETE FROM t_sys_parameter_config WHERE parameter_key = #{parameterKey}
+	</delete>
+
+	<select id="querySysParameterConfigAll" resultMap="rm_sysParameterConfig">
+		SELECT <include refid="sysParameterConfig_columns" />
+		FROM t_sys_parameter_config
+	</select>
+
+</mapper>

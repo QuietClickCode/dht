@@ -2,6 +2,7 @@ package com.retailers.dht.common.upload;
 
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.dao.AttachmentMapper;
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.tools.http.HttpClientManager;
@@ -50,7 +51,7 @@ public class RemoteServerUpload implements FileUploader{
      */
     public Map<String,String> upload(InputStream stream, String type, String fileName, boolean isCompress, boolean isAddWatermark) {
         logger.info("开始进入远程服务器数据上传，传入类型：{}，文件名称：{}，是否压缩：{}，是否添加水印：{}",type,fileName,isCompress,isAddWatermark);
-        String remote_url = "http://image.kuaiyis.com/filesUpload";// 第三方服务器请求地址
+        String remote_url = AttachmentConstant.UPLOAD_ATTACHEMNT_URL;//"http://image.kuaiyis.com/filesUpload";// 第三方服务器请求地址
         Map<String,String> rtnMap=new HashMap<String, String>();
         String result="";
         try {

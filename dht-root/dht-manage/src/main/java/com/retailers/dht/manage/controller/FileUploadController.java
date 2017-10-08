@@ -1,6 +1,6 @@
 package com.retailers.dht.manage.controller;
 
-import com.alibaba.fastjson.JSON;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.upload.FileUploader;
 import com.retailers.dht.common.upload.UploadFacatory;
@@ -61,7 +61,7 @@ public class FileUploadController extends BaseController{
         Map<String,String> rtn = uploader.upload(stream, type,upfile.getOriginalFilename(),isCompress,isWatermark);
         Map<String,String> imgMap = new HashMap();
         imgMap.put("state", "SUCCESS");
-        imgMap.put("url", "http://image.kuaiyis.com/attachment"+rtn.get("savePath"));
+        imgMap.put("url", AttachmentConstant.IMAGE_SHOW_URL+rtn.get("savePath"));
         imgMap.put("title", upfile.getOriginalFilename());
         imgMap.put("original", rtn.get("attachmentId"));
         logger.info("上传图片结束");
