@@ -62,7 +62,11 @@ public class AttachmentServiceImpl implements AttachmentService {
 	 * @return
 	 */
 	public boolean editorAttachment(List<Long> attachmentId) {
-		long total = attachmentMapper.editorAttachment(attachmentId);
+		return editorAttachment(attachmentId,AttachmentConstant.ATTACHMENT_STATUS_YES);
+	}
+
+	public boolean editorAttachment(List<Long> attachmentIds, Long status) {
+		long total = attachmentMapper.editorAttachment(attachmentIds,status);
 		if(total>0){
 			return true;
 		}
@@ -75,9 +79,13 @@ public class AttachmentServiceImpl implements AttachmentService {
 	 * @return
 	 */
 	public boolean editorAttachment(Long attachmentId) {
+		return editorAttachment(attachmentId,AttachmentConstant.ATTACHMENT_STATUS_YES);
+	}
+
+	public boolean editorAttachment(Long attachmentId, Long status) {
 		List<Long> list = new ArrayList<Long>();
 		list.add(attachmentId);
-		return editorAttachment(list);
+		return editorAttachment(list,status);
 	}
 
 	/**

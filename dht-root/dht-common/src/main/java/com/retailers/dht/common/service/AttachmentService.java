@@ -65,11 +65,27 @@ public interface AttachmentService {
 	public boolean editorAttachment(List<Long> attachmentId);
 
 	/**
+	 * 设置附件状态
+	 * @param attachmentIds 附件ids
+	 * @param status 状态值
+	 * @return
+	 */
+	public boolean editorAttachment(List<Long> attachmentIds,Long status);
+
+	/**
 	 * 编辑附件属性
-	 * @param attachmentId 商品id
+	 * @param attachmentId 附件id
 	 * @return
 	 */
 	public boolean editorAttachment(Long attachmentId);
+
+	/**
+	 * 设置附件状态
+	 * @param attachmentId 附件id
+	 * @param status 状态
+	 * @return
+	 */
+	public boolean editorAttachment(Long attachmentId,Long status);
 
 	/**
 	 * 清除未被使用的附件

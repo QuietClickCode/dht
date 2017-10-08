@@ -60,7 +60,7 @@ public interface AttachmentMapper {
 	 * @param attachmentIds
 	 * @return
 	 */
-	public long editorAttachment(@Param("attachmentIds") List<Long> attachmentIds);
+	public long editorAttachment(@Param("attachmentIds") List<Long> attachmentIds,@Param("status") Long status);
 
 	/**
 	 * 取得超使未被使用的附件(两小时)

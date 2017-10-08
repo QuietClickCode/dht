@@ -106,7 +106,7 @@
 	<!--修改系统附件表(用于存放上传物品) -->
 	<update id="editorAttachment">
 		UPDATE t_attachment
-		SET status = 1
+		SET status = #{status}
 		WHERE id IN
 		<foreach collection="attachmentIds" item="item" index="index" open="(" close=")" separator=",">
 			#{item}
