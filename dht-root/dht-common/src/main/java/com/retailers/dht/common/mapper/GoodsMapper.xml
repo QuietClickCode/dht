@@ -1,0 +1,282 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsMapper">
+
+	<resultMap id="rm_goods" type="com.retailers.dht.common.entity.Goods">
+			<result property="gid" column="g_id"/>
+			<result property="gname" column="g_name"/>
+			<result property="gvender" column="g_vender"/>
+			<result property="gshop" column="g_shop"/>
+			<result property="gclassification" column="g_classification"/>
+			<result property="gbrand" column="g_brand"/>
+			<result property="gputawaytime" column="g_putawaytime"/>
+			<result property="gunshelvetime" column="g_unshelvetime"/>
+			<result property="garea" column="g_area"/>
+			<result property="gsalescope" column="g_salescope"/>
+			<result property="gprofitability" column="g_profitability"/>
+			<result property="gsalesvolume" column="g_salesvolume"/>
+			<result property="gfreight" column="g_freight"/>
+			<result property="gmaindirection" column="g_maindirection"/>
+			<result property="gunitname" column="g_unitname"/>
+			<result property="gstartbuy" column="g_startbuy"/>
+			<result property="gendbuy" column="g_endbuy"/>
+			<result property="gdescription" column="g_description"/>
+			<result property="gproductioninperson" column="g_productioninperson"/>
+			<result property="gproductioninaddress" column="g_productioninaddress"/>
+			<result property="gpickperson" column="g_pickperson"/>
+			<result property="gpickaddress" column="g_pickaddress"/>
+			<result property="gdeposit" column="g_deposit"/>
+			<result property="gcopyid" column="g_copyid"/>
+			<result property="isPutway" column="is_putway"/>
+			<result property="isChecked" column="is_checked"/>
+			<result property="isAllowsetdeliverytime" column="is_allowsetdeliverytime"/>
+			<result property="isShowsalesvolume" column="is_showsalesvolume"/>
+			<result property="isMenberdiscount" column="is_menberdiscount"/>
+			<result property="isCod" column="is_cod"/>
+			<result property="isMultiplebuy" column="is_multiplebuy"/>
+			<result property="isServicegoods" column="is_servicegoods"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goods_columns">
+		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_deposit,g_copyid,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,version
+	</sql>
+	<!-- 根据商品表主键取得数据 -->
+	<select id="queryGoodsByGid" resultMap="rm_goods" parameterType="java.lang.Long">
+		SELECT <include refid="goods_columns" />
+		FROM t_goods WHERE g_id = #{gid}
+	</select>
+	<!-- 商品表查询条件组合 -->
+	<sql id="goods_where">
+		<where>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gname and '' != params.gname">
+				AND g_name = #{params.gname}
+			</if>
+			<if test="null != params.gvender">
+				AND g_vender = #{params.gvender}
+			</if>
+			<if test="null != params.gshop">
+				AND g_shop = #{params.gshop}
+			</if>
+			<if test="null != params.gclassification">
+				AND g_classification = #{params.gclassification}
+			</if>
+			<if test="null != params.gbrand">
+				AND g_brand = #{params.gbrand}
+			</if>
+			<if test="null != params.gputawaytimeBegin">
+				AND g_putawaytime &gt;= #{params.gputawaytime}
+			</if>
+			<if test="null != params.gputawaytimeEnd">
+				AND g_putawaytime &lt;= #{params.gputawaytime}
+			</if>
+			<if test="null != params.gunshelvetimeBegin">
+				AND g_unshelvetime &gt;= #{params.gunshelvetime}
+			</if>
+			<if test="null != params.gunshelvetimeEnd">
+				AND g_unshelvetime &lt;= #{params.gunshelvetime}
+			</if>
+			<if test="null != params.garea">
+				AND g_area = #{params.garea}
+			</if>
+			<if test="null != params.gsalescope">
+				AND g_salescope = #{params.gsalescope}
+			</if>
+			<if test="null != params.gprofitability">
+				AND g_profitability = #{params.gprofitability}
+			</if>
+			<if test="null != params.gsalesvolume">
+				AND g_salesvolume = #{params.gsalesvolume}
+			</if>
+			<if test="null != params.gfreight">
+				AND g_freight = #{params.gfreight}
+			</if>
+			<if test="null != params.gmaindirection">
+				AND g_maindirection = #{params.gmaindirection}
+			</if>
+			<if test="null != params.gunitname and '' != params.gunitname">
+				AND g_unitname = #{params.gunitname}
+			</if>
+			<if test="null != params.gstartbuy">
+				AND g_startbuy = #{params.gstartbuy}
+			</if>
+			<if test="null != params.gendbuy">
+				AND g_endbuy = #{params.gendbuy}
+			</if>
+			<if test="null != params.gdescription">
+				AND g_description = #{params.gdescription}
+			</if>
+			<if test="null != params.gproductioninperson and '' != params.gproductioninperson">
+				AND g_productioninperson = #{params.gproductioninperson}
+			</if>
+			<if test="null != params.gproductioninaddress and '' != params.gproductioninaddress">
+				AND g_productioninaddress = #{params.gproductioninaddress}
+			</if>
+			<if test="null != params.gpickperson and '' != params.gpickperson">
+				AND g_pickperson = #{params.gpickperson}
+			</if>
+			<if test="null != params.gpickaddress and '' != params.gpickaddress">
+				AND g_pickaddress = #{params.gpickaddress}
+			</if>
+			<if test="null != params.gdeposit">
+				AND g_deposit = #{params.gdeposit}
+			</if>
+			<if test="null != params.gcopyid">
+				AND g_copyid = #{params.gcopyid}
+			</if>
+			<if test="null != params.isPutway">
+				AND is_putway = #{params.isPutway}
+			</if>
+			<if test="null != params.isChecked">
+				AND is_checked = #{params.isChecked}
+			</if>
+			<if test="null != params.isAllowsetdeliverytime">
+				AND is_allowsetdeliverytime = #{params.isAllowsetdeliverytime}
+			</if>
+			<if test="null != params.isShowsalesvolume">
+				AND is_showsalesvolume = #{params.isShowsalesvolume}
+			</if>
+			<if test="null != params.isMenberdiscount">
+				AND is_menberdiscount = #{params.isMenberdiscount}
+			</if>
+			<if test="null != params.isCod">
+				AND is_cod = #{params.isCod}
+			</if>
+			<if test="null != params.isMultiplebuy">
+				AND is_multiplebuy = #{params.isMultiplebuy}
+			</if>
+			<if test="null != params.isServicegoods">
+				AND is_servicegoods = #{params.isServicegoods}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsList" resultMap="rm_goods" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goods_columns" />
+		FROM t_goods
+		<include refid="goods_where"/>
+	</select>
+	<!--添加商品表 -->
+	<insert id="saveGoods" parameterType="com.retailers.dht.common.entity.Goods" useGeneratedKeys="true" keyProperty="gid">
+		INSERT INTO t_goods (
+			g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_deposit,g_copyid,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,version
+		) VALUES
+		(
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{gputawaytime,jdbcType=TIMESTAMP},#{gunshelvetime,jdbcType=TIMESTAMP},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gprofitability,jdbcType=DECIMAL},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=DECIMAL},#{gmaindirection,jdbcType=BIGINT},#{gunitname,jdbcType=VARCHAR},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gdescription,jdbcType=LONGVARBINARY},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gdeposit,jdbcType=DECIMAL},#{gcopyid,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品表 -->
+	<update id="updateGoods" parameterType="com.retailers.dht.common.entity.Goods">
+		UPDATE t_goods
+		<set>
+            <if test="null != gname and '' != gname">
+                g_name = #{gname},
+            </if>
+            <if test="null != gvender">
+                g_vender = #{gvender},
+            </if>
+            <if test="null != gshop">
+                g_shop = #{gshop},
+            </if>
+            <if test="null != gclassification">
+                g_classification = #{gclassification},
+            </if>
+            <if test="null != gbrand">
+                g_brand = #{gbrand},
+            </if>
+            <if test="null != gputawaytime">
+                g_putawaytime = #{gputawaytime},
+            </if>
+            <if test="null != gunshelvetime">
+                g_unshelvetime = #{gunshelvetime},
+            </if>
+            <if test="null != garea">
+                g_area = #{garea},
+            </if>
+            <if test="null != gsalescope">
+                g_salescope = #{gsalescope},
+            </if>
+            <if test="null != gprofitability">
+                g_profitability = #{gprofitability},
+            </if>
+            <if test="null != gsalesvolume">
+                g_salesvolume = #{gsalesvolume},
+            </if>
+            <if test="null != gfreight">
+                g_freight = #{gfreight},
+            </if>
+            <if test="null != gmaindirection">
+                g_maindirection = #{gmaindirection},
+            </if>
+            <if test="null != gunitname and '' != gunitname">
+                g_unitname = #{gunitname},
+            </if>
+            <if test="null != gstartbuy">
+                g_startbuy = #{gstartbuy},
+            </if>
+            <if test="null != gendbuy">
+                g_endbuy = #{gendbuy},
+            </if>
+            <if test="null != gdescription">
+                g_description = #{gdescription},
+            </if>
+            <if test="null != gproductioninperson and '' != gproductioninperson">
+                g_productioninperson = #{gproductioninperson},
+            </if>
+            <if test="null != gproductioninaddress and '' != gproductioninaddress">
+                g_productioninaddress = #{gproductioninaddress},
+            </if>
+            <if test="null != gpickperson and '' != gpickperson">
+                g_pickperson = #{gpickperson},
+            </if>
+            <if test="null != gpickaddress and '' != gpickaddress">
+                g_pickaddress = #{gpickaddress},
+            </if>
+            <if test="null != gdeposit">
+                g_deposit = #{gdeposit},
+            </if>
+            <if test="null != gcopyid">
+                g_copyid = #{gcopyid},
+            </if>
+            <if test="null != isPutway">
+                is_putway = #{isPutway},
+            </if>
+            <if test="null != isChecked">
+                is_checked = #{isChecked},
+            </if>
+            <if test="null != isAllowsetdeliverytime">
+                is_allowsetdeliverytime = #{isAllowsetdeliverytime},
+            </if>
+            <if test="null != isShowsalesvolume">
+                is_showsalesvolume = #{isShowsalesvolume},
+            </if>
+            <if test="null != isMenberdiscount">
+                is_menberdiscount = #{isMenberdiscount},
+            </if>
+            <if test="null != isCod">
+                is_cod = #{isCod},
+            </if>
+            <if test="null != isMultiplebuy">
+                is_multiplebuy = #{isMultiplebuy},
+            </if>
+            <if test="null != isServicegoods">
+                is_servicegoods = #{isServicegoods},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE g_id = #{gid} and version = #{version}
+	</update>
+	<!--删除商品表 -->
+	<delete id="deleteGoodsByGid" parameterType="java.lang.Long">
+		DELETE FROM t_goods WHERE g_id = #{gid}
+	</delete>
+</mapper>

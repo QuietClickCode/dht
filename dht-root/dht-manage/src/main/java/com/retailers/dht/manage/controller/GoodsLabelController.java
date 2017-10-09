@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("goods")
-public class GoodsLabelontroller extends BaseController {
+public class GoodsLabelController extends BaseController {
 
     @Autowired
     GoodsLabelService goodsLabelService;

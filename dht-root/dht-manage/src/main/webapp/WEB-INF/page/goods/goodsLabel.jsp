@@ -7,6 +7,18 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
+
+    <link rel="stylesheet" href="<%=path%>/js/timer/css/daterangepicker-1.3.7.css">
+    <link rel="stylesheet" href="<%=path%>/js/timer/css/daterangepicker-bs3.css">
+    <link rel="stylesheet" href="<%=path%>/js/timer/font-awesome-4.1.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <style>
+        li{
+            list-style:none;
+        }
+    </style>
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -53,13 +65,51 @@
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                商品品牌logo:
+                                 商品标签有效时间:
                               </span>
-                                <input type="text" class="form-control" name="gbImgpath" id="gbImgpath">
+                                <input type="hidden" class="form-control" name="glStarttime" id="glStarttime">
+                                <input type="hidden" class="form-control" name="glEndtime" id="glEndtime">
+                                <div id="reportrange" class="pull-left dateRange" style="width:350px;background:white;">
+                                    <i class="glyphicon glyphicon-calendar fa fa-calendar"></i>
+                                    <span id="searchDateRange"></span>
+                                    <b class="caret"></b>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <br>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                标签类型:
+                              </span>
+                                <div class="radio " style="display: inline-block;">
+                                    <input type="hidden" id="isGoodslabel" name="isGoodslabel">
+                                    <input type="radio" name="labelType" id="isGoodsShow" value="1" checked>
+                                    <label for="isGoodsShow">
+                                        选择商品
+                                    </label>
+                                </div>
+                                <div class="radio" style="display: inline-block;margin-left: 30px">
+                                    <input type="radio" name="labelType" id="isClassShow" value="0" >
+                                    <label for="isClassShow">
+                                        选择类型
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                              <span id="goodsBtn" class="input-group-addon" style="cursor: pointer">
+                                 选择商品
+                              </span>
+                                <span id="classBtn" class="input-group-addon" style="cursor: pointer;display: none">
+                                    选择类型
+                                </span>
+                            </div>
+                        </div>
+                    </div>
 
 
                 </form>
@@ -72,6 +122,74 @@
     </div>
 </div>
 
+<div class="modal fade" id="editorGoodsLabel" tabindex="-1" role="dialog" aria-labelledby="editorGoodsLabel">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorGoodsLabelTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="form-group" style="margin-top: 5px;display: inline-block">
+                        <input type="text" class="form-control" id="search_GoodsBrand_name" placeholder="请输入商品名称">
+                    </div>
+                    <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+                </center>
+                <button class="btn btn-default" type="button" onclick="refreshTableData()">新增</button>
+                <button class="btn btn-default" type="button" onclick="refreshTableData()">删除</button>
+
+
+                <form id="editorGoodsLabelRelForm">
+                    <input type="hidden" name="glId" id="">
+                    <input type="hidden" name="version" id="">
+
+                        <div class="row clearfix">
+                            <div class="col-md-12 column">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 30px;text-align: center">
+                                            <div class="checkbox checkbox-info">
+                                                <input id="checkbox4" class="styled" type="checkbox">
+                                                <label for="checkbox4">
+
+                                                </label>
+                                            </div>
+                                        </th>
+                                        <th style="text-align: center">
+                                            商品名称（已有）
+                                        </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="myTbody">
+                                    <tr>
+                                        <td>
+                                            <div class="checkbox checkbox-info">
+                                                <input id="checkbox1" class="styled" type="checkbox">
+                                                <label for="checkbox1">
+
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td style="text-align: center">
+                                            TB - Monthly
+                                        </td>
+                                    </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editorGoodsLabelRelSubmit">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 
 <!-- 公用下拉择树 -->
@@ -84,7 +202,6 @@
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
-<script type="text/javascript" src="/js/datetimepicker/bootstrap-datetimepicker.min.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -176,6 +293,10 @@
                 return;
             }
             var editSubmitIndex = layer.load(2);
+
+            var arr = $("#searchDateRange").html().split(" - ");
+            $('#glStarttime').val(arr[0]);
+            $('#glEndtime').val(arr[1]);
 
             var sendData=new Array();
             var formData=$("#editorGoodsLabelForm").serializeObject();
@@ -302,7 +423,7 @@
         editorGoodsLabelType=1;
         reloadOrgTree(orgId);
         initFormData(orgId);
-        $("#editorSysUserTitle").text("编辑商品品牌");
+        $("#editorSysUserTitle").text("编辑商品标签");
         $('#editorSysUser').modal("show")
     }
     /**
@@ -323,13 +444,26 @@
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
             $("#editorGoodsLabelForm #glId").val(rowData.glId);
-            $("#editorGoodsLabelForm #gbName").val(rowData.gbName);
-            $("#editorGoodsLabelForm #gbImgpath").val(rowData.gbImgpath);
+            $("#editorGoodsLabelForm #glName").val(rowData.glName);
+            $("#editorGoodsLabelForm #isGoodslabel").val(rowData.isGoodslabel);
+            $("#editorGoodsLabelForm #glStarttime").val(rowData.glStarttime);
+            $("#editorGoodsLabelForm #glEndtime").val(rowData.glEndtime);
+            $("#searchDateRange").html(rowData.glStarttime + ' - ' + rowData.glEndtime);
+
+            if(rowData.isGoodslabel==1){
+                $('#isGoodsShow').attr("checked","checked");
+            }else{
+                $('#isClassShow').attr("checked","checked");
+            }
 
         }else{
-            $("#editorGoodsLabelForm #gbName").val('');
+            $("#editorGoodsLabelForm #glName").val('');
             $("#editorGoodsLabelForm #glId").val('');
-            $("#editorGoodsLabelForm #gbImgpath").val('');
+            $("#editorGoodsLabelForm #isGoods").val('');
+            $("#editorGoodsLabelForm #glStarttime").val('');
+            $("#editorGoodsLabelForm #glEndtime").val('');
+            $("#searchDateRange").html('');
+            $('#isGoodsShow').attr("checked","checked");
         }
     }
     /**
@@ -341,7 +475,7 @@
         reloadOrgTree();
         initFormData();
 
-        $("#editorSysUserTitle").text("添加商品品牌");
+        $("#editorSysUserTitle").text("添加商品标签");
         $('#editorSysUser').modal("show")
     }
     /**
@@ -435,6 +569,109 @@
     }
 
 
+</script>
+
+<script>
+    $("input[name='isGoods']").click(function () {
+        var val = $(this).val();
+        if(val==1){
+            $("#goodsBtn").show();
+            $("#classBtn").hide();
+        }else{
+            $("#goodsBtn").hide();
+            $("#classBtn").show();
+        }
+    });
+
+    $('#goodsBtn').click(function () {
+        $("#editorGoodsLabelTitle").text("商品标签");
+        $('#editorGoodsLabel').modal("show");
+    });
+    $('#classBtn').click(function () {
+        $("#editorGoodsLabelTitle").text("类型标签");
+        $('#editorGoodsLabel').modal("show");
+    });
+
+
+
+</script>
+
+<!--timer时间选择器-->
+<script type="text/javascript"  src="/js/timer/js/moment.js"></script>
+<script type="text/javascript"  src="/js/timer/js/daterangepicker-1.3.7.js"></script>
+<script type="text/javascript">
+    $(document).ready(function (){
+        //时间插件
+        $('#reportrange span').html(moment().subtract('hours', 1).format('YYYY-MM-DD HH:mm:ss') + ' - ' + moment().format('YYYY-MM-DD HH:mm:ss'));
+
+        $('#reportrange').daterangepicker(
+            {
+                // startDate: moment().startOf('day'),
+                //endDate: moment(),
+                //minDate: '01/01/2012',	//最小时间
+                //maxDate : moment(), //最大时间
+                /*dateLimit : {
+                 days : 30
+                 }, //起止时间的最大间隔*/
+                showDropdowns : true,
+                showWeekNumbers : false, //是否显示第几周
+                timePicker : true, //是否显示小时和分钟
+                timePickerIncrement : 60, //时间的增量，单位为分钟
+                timePicker12Hour : false, //是否使用12小时制来显示时间
+                ranges : {
+                    //'最近1小时': [moment().subtract('hours',1), moment()],
+                    '今日': [moment().startOf('day'), moment()],
+                    '昨日': [moment().subtract('days', 1).startOf('day'), moment().subtract('days', 1).endOf('day')],
+                    '最近7日': [moment().subtract('days', 6), moment()],
+                    '最近30日': [moment().subtract('days', 29), moment()]
+                },
+                opens : 'right', //日期选择框的弹出位置
+                buttonClasses : [ 'btn btn-default' ],
+                applyClass : 'btn-small btn-primary blue',
+                cancelClass : 'btn-small',
+                format : 'YYYY-MM-DD HH:mm:ss', //控件中from和to 显示的日期格式
+                separator : ' to ',
+                locale : {
+                    applyLabel : '确定',
+                    cancelLabel : '取消',
+                    fromLabel : '起始时间',
+                    toLabel : '结束时间',
+                    customRangeLabel : '自定义',
+                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                    firstDay : 1
+                }
+            }, function(start, end, label) {//格式化日期显示框
+
+                $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+            });
+
+        //设置日期菜单被选项  --开始--
+        var dateOption ;
+        if("${riqi}"=='day') {
+            dateOption = "今日";
+        }else if("${riqi}"=='yday') {
+            dateOption = "昨日";
+        }else if("${riqi}"=='week'){
+            dateOption ="最近7日";
+        }else if("${riqi}"=='month'){
+            dateOption ="最近30日";
+        }else if("${riqi}"=='year'){
+            dateOption ="最近一年";
+        }else{
+            dateOption = "自定义";
+        }
+        $(".daterangepicker").find("li").each(function (){
+            if($(this).hasClass("active")){
+                $(this).removeClass("active");
+            }
+            if(dateOption==$(this).html()){
+                $(this).addClass("active");
+            }
+        });
+        //设置日期菜单被选项  --结束--
+    })
 </script>
 </body>
 </html>

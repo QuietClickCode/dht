@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-07 12:04:20
+ * @date 2017-10-09 13:43:52
  */
 public interface GoodsGoodslabelMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsGoodslabelMapper {
 	 * @param goodsGoodslabel
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:04:20
+	 * @date 2017-10-09 13:43:52
 	 */
 	public int saveGoodsGoodslabel(GoodsGoodslabel goodsGoodslabel);
 	/**
@@ -24,7 +24,7 @@ public interface GoodsGoodslabelMapper {
 	 * @param goodsGoodslabel
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:04:20
+	 * @date 2017-10-09 13:43:52
 	 */
 	public int updateGoodsGoodslabel(GoodsGoodslabel goodsGoodslabel);
 	/**
@@ -32,7 +32,7 @@ public interface GoodsGoodslabelMapper {
 	 * @param glrId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:04:20
+	 * @date 2017-10-09 13:43:52
 	 */
 	public int deleteGoodsGoodslabelByGlrId(Long glrId);
 	/**
@@ -40,7 +40,7 @@ public interface GoodsGoodslabelMapper {
 	 * @param glrId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:04:20
+	 * @date 2017-10-09 13:43:52
 	 */
 	public GoodsGoodslabel queryGoodsGoodslabelByGlrId(Long glrId);
 	/**
@@ -48,7 +48,7 @@ public interface GoodsGoodslabelMapper {
 	 * @param pagination 分页对象
 	 * @return  商品与标签关系表列表
 	 * @author fanghui
-	 * @date 2017-10-07 12:04:20
+	 * @date 2017-10-09 13:43:52
 	 */
 	public List<GoodsGoodslabel> queryGoodsGoodslabelList(Pagination<GoodsGoodslabel> pagination);
 

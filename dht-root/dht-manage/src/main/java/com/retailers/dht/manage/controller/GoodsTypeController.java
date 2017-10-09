@@ -60,9 +60,10 @@ public class GoodsTypeController extends BaseController {
     @Function(label="商品大类列表", description = "所有商品大类列表", resourse = "goods.queryGoodsTypeLists",sort=1,parentRes="goods.openGoodsType")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
-    public  Map<String,Object> queryGoodsTypeLists(String gtName,PageUtils pageForm){
+    public  Map<String,Object> queryGoodsTypeLists(String gtName,Long isShow, PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gtName",gtName);
+        map.put("isShow",isShow);
         Pagination<GoodsType> goodsTypePagination = goodsTypeService.queryGoodsTypeList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",goodsTypePagination.getTotalCount());

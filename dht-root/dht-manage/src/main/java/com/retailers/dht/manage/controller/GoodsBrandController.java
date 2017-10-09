@@ -7,6 +7,7 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.GoodsBrand;
 import com.retailers.dht.common.service.GoodsBrandService;
 import com.retailers.dht.common.service.GoodsBrandService;
+import com.retailers.dht.common.vo.GoodsBrandVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -64,7 +65,7 @@ public class GoodsBrandController extends BaseController {
     public  Map<String,Object> queryGoodsBrandLists(String gbName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gbName",gbName);
-        Pagination<GoodsBrand> GoodsBrandPagination = goodsBrandService.queryGoodsBrandList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<GoodsBrandVo> GoodsBrandPagination = goodsBrandService.queryGoodsBrandList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsBrandPagination.getTotalCount());
         gtm.put("rows",GoodsBrandPagination.getData());

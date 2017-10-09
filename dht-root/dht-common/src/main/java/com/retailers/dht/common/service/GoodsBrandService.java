@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsBrandVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsBrand;
 import java.util.Map;
@@ -45,7 +46,7 @@ public interface GoodsBrandService {
 	 * @author fanghui
 	 * @date 2017-10-07 09:42:29
 	 */
-	public Pagination<GoodsBrand> queryGoodsBrandList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<GoodsBrandVo> queryGoodsBrandList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据gbId删除商品品牌表
 	 * @param gbId

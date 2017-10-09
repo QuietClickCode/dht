@@ -7,8 +7,87 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
+
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
+
+    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
 </head>
 <body>
+<script type="text/plain" id="j_ueditorupload" style="height:5px;display:none;" ></script>
+<script>
+    //实例化编辑器
+    var o_ueditorupload = UE.getEditor('j_ueditorupload',
+        {
+            autoHeightEnabled:false
+        });
+    o_ueditorupload.ready(function ()
+    {
+
+        o_ueditorupload.hide();//隐藏编辑器
+
+        //监听图片上传
+        o_ueditorupload.addListener('beforeInsertImage', function (t,arg)
+        {
+            console.log(arg);
+            console.log(t);
+            $('#gbImgpath').val(arg[0].alt);
+            $('#logoImg')[0].src=arg[0].src;
+            $('#logoImg').show();
+            $('#logoImgSpan').hide();
+            $('#editGoodsClassification').modal('show');
+            //alert('这是图片地址：'+arg[0].src);
+        });
+
+        /* 文件上传监听
+         * 需要在ueditor.all.min.js文件中找到
+         * d.execCommand("insertHtml",l)
+         * 之后插入d.fireEvent('afterUpfile',b)
+         */
+        o_ueditorupload.addListener('afterUpfile', function (t, arg)
+        {
+            console.log(arg)
+            console.log(t)
+            alert('这是文件地址：'+arg[0].url);
+        });
+    });
+
+    //弹出图片上传的对话框
+    function upImage()
+    {
+
+        var myImage = o_ueditorupload.getDialog("insertimage");
+        myImage.open();
+        $('#edui_fixedlayer').css("z-index","10000000");
+    }
+    //弹出文件上传的对话框
+    function upFiles()
+    {
+        var myFiles = o_ueditorupload.getDialog("attachment");
+        myFiles.open();
+    }
+
+    //重写图片上传地址
+    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
+    UE.Editor.prototype.getActionUrl = function(action) {
+        //判断路径   这里是config.json 中设置执行上传的action名称
+        console.log(action)
+        if (action == 'uploadimage') {
+            //return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=true&isCompress=false';
+            return ueditorUploadUrl("goods",false,false);
+            //上传视频
+        } else if (action == 'uploadvideo') {
+            return '';
+        } else {
+            return this._bkGetActionUrl.call(this, action);
+        }
+    }
+</script>
+
 <div id="toolbar" class="form-inline">
     <ex:perm url="goods/addGoodsBrand">
         <button class="btn btn-primary" type="button" onclick="addGoodsBrand()">添加商品品牌</button>
@@ -55,7 +134,10 @@
                               <span class="input-group-addon">
                                 商品品牌logo:
                               </span>
-                                <input type="text" class="form-control" name="gbImgpath" id="gbImgpath">
+                                <input type="hidden" class="form-control" name="gbImgpath" id="gbImgpath">
+                                <img style="width: 50px;"src=""  id="logoImg"/>
+                                <span id="logoImgSpan">无图片</span>
+                                <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
                             </div>
                         </div>
                     </div>
@@ -99,10 +181,20 @@
             valign : 'middle'
         },
         {
-            field: 'gbImgpath',
+            field: 'imgUrl',
             title: 'logo',
             align : 'center',
             valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var flag =row.imgUrl.substring(row.imgUrl.length-4)=="null";
+                if(flag){
+                    html+='无图片';
+                }else{
+                    html+='<img style="width: 50px;height: 60px;;"src="'+row.imgUrl+'"  />';
+                }
+                return html;
+            }
         },
         {
             field: 'CreateTime',
@@ -202,14 +294,6 @@
                                 message: '商品品牌名称长度在1-30之间'
                             }
                         }
-                    },
-                    gbImgpath: {
-                        message: '商品品牌logo未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '商品品牌logo不能为空'
-                            }
-                        }
                     }
                 }
             });
@@ -292,13 +376,29 @@
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
             $("#editorGoodsBrandForm #gbId").val(rowData.gbId);
+            $("#editorGoodsBrandForm #version").val(rowData.version);
             $("#editorGoodsBrandForm #gbName").val(rowData.gbName);
             $("#editorGoodsBrandForm #gbImgpath").val(rowData.gbImgpath);
+            var flag =rowData.imgUrl.substring(rowData.imgUrl.length-4)=="null";
+
+            if(flag){
+                $("#editorGoodsBrandForm #logoImgSpan").show();
+                $("#editorGoodsBrandForm #logoImg").hide();
+                return;
+            }else{
+                $("#editorGoodsBrandForm #logoImg")[0].src=rowData.imgUrl;
+            }
+            $("#editorGoodsBrandForm #logoImg").show();
+            $("#editorGoodsBrandForm #logoImgSpan").hide();
 
         }else{
             $("#editorGoodsBrandForm #gbName").val('');
             $("#editorGoodsBrandForm #gbId").val('');
             $("#editorGoodsBrandForm #gbImgpath").val('');
+            $("#editorGoodsBrandForm #logoImg")[0].src='';
+            $("#editorGoodsBrandForm #logoImg").hide();
+            $("#editorGoodsBrandForm #logoImgSpan").show();
+
         }
     }
     /**
