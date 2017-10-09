@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <title>商品优惠</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
+    <link rel="stylesheet" href="<%=path%>/js/daterangepicker/daterangepicker.css">
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -95,17 +96,19 @@
                               <span class="input-group-addon">
                                 开始时间:
                               </span>
-                                <input type="text" class="form-control" name="gcpStartTimeStr" id="gcpStartTimeStr">
+                                <input type="hidden" name="gcpStartTimeStr" id="gcpStartTimeStr">
+                                <input type="hidden" name="gcpEndTimeStr" id="gcpEndTimeStr">
+                                <input type="text" class="form-control" name="gcpValidTime" id="gcpValidTime">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <%--<div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                   结束时间:
                               </span>
                                 <input type="text" class="form-control" id="gcpEndTimeStr" name="gcpEndTimeStr"/>
                             </div>
-                        </div>
+                        </div>--%>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -168,6 +171,8 @@
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<script type="text/javascript"  src="/js/daterangepicker/moment.js"></script>
+<script type="text/javascript"  src="/js/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -313,6 +318,33 @@
             });
         });
         formValidater();
+
+       $('#gcpValidTime').daterangepicker(
+            {
+//                minDate: moment(),    //最小时间
+                showDropdowns : true,
+                timePicker:true,
+                timePickerIncrement:30,
+                opens : 'right', //日期选择框的弹出位置
+                buttonClasses : [ 'btn btn-default' ],
+                applyClass : 'btn-small btn-primary blue',
+                cancelClass : 'btn-small',
+                locale : {
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    applyLabel : '确定',
+                    cancelLabel : '取消',
+                    fromLabel : '起始时间',
+                    toLabel : '结束时间',
+                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                    firstDay : 1
+                }
+            }, function(start, end, label) {
+               $("#editorGoodsCouponForm #gcpStartTimeStr").val(start.format('YYYY-MM-DD HH:mm:ss'));
+               $("#editorGoodsCouponForm #gcpEndTimeStr").val(end.format('YYYY-MM-DD HH:mm:ss'));
+               $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+           });
     });
     /**
      * form 校验
