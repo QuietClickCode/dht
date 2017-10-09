@@ -3,24 +3,24 @@
 <mapper namespace="com.retailers.dht.common.dao.GoodsCouponMapper">
 
 	<resultMap id="rm_goodsCoupon" type="com.retailers.dht.common.entity.GoodsCoupon">
-			<result property="gcpId" column="gcp_id"/>
-			<result property="gcpName" column="gcp_name"/>
-			<result property="gcpType" column="gcp_type"/>
-			<result property="gcpCondition" column="gcp_condition"/>
-			<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
-			<result property="gcpStartTime" column="gcp_start_time"/>
-			<result property="gcpCreateTime" column="gcp_create_time"/>
-			<result property="gcpEndTime" column="gcp_end_time"/>
-			<result property="gcpMoney" column="gcp_money"/>
-			<result property="cpDiscount" column="cp_discount"/>
-			<result property="isValid" column="is_valid"/>
-			<result property="isDelete" column="is_delete"/>
-			<result property="version" column="version"/>
+		<result property="gcpId" column="gcp_id"/>
+		<result property="gcpName" column="gcp_name"/>
+		<result property="gcpType" column="gcp_type"/>
+		<result property="gcpCondition" column="gcp_condition"/>
+		<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
+		<result property="gcpStartTime" column="gcp_start_time"/>
+		<result property="gcpEndTime" column="gcp_end_time"/>
+		<result property="gcpMoney" column="gcp_money"/>
+		<result property="gcpDiscount" column="gcp_discount"/>
+		<result property="gcpCreateTime" column="gcp_create_time"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCoupon_columns">
-		gcp_id,gcp_name,gcp_type,gcp_condition,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,cp_discount,is_valid,is_delete,version
+		gcp_id,gcp_name,gcp_type,gcp_condition,gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,gcp_create_time,is_valid,is_delete,version
 	</sql>
 	<!-- 根据商品优惠活动主键取得数据 -->
 	<select id="queryGoodsCouponByGcpId" resultMap="rm_goodsCoupon" parameterType="java.lang.Long">
@@ -66,8 +66,8 @@
 			<if test="null != params.gcpMoney">
 				AND gcp_money = #{params.gcpMoney}
 			</if>
-			<if test="null != params.cpDiscount">
-				AND cp_discount = #{params.cpDiscount}
+			<if test="null != params.gcpDiscount">
+				AND gcp_discount = #{params.gcpDiscount}
 			</if>
 			<if test="null != params.isValid">
 				AND is_valid = #{params.isValid}
@@ -89,10 +89,10 @@
 	<!--添加商品优惠活动 -->
 	<insert id="saveGoodsCoupon" parameterType="com.retailers.dht.common.entity.GoodsCoupon" useGeneratedKeys="true" keyProperty="gcpId">
 		INSERT INTO t_goods_coupon (
-			gcp_name,gcp_type,gcp_condition,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,cp_discount,is_valid,is_delete,version
+			gcp_name,gcp_type,gcp_condition,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,gcp_discount,is_valid,is_delete,version
 		) VALUES
 		(
-			#{gcpName,jdbcType=VARCHAR},#{gcpType,jdbcType=INTEGER},#{gcpCondition,jdbcType=BIGINT},#{gcpIsOverlapUse,jdbcType=INTEGER},#{gcpStartTime,jdbcType=TIMESTAMP},#{gcpCreateTime,jdbcType=TIMESTAMP},#{gcpEndTime,jdbcType=TIMESTAMP},#{gcpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=DECIMAL},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{gcpName,jdbcType=VARCHAR},#{gcpType,jdbcType=INTEGER},#{gcpCondition,jdbcType=BIGINT},#{gcpIsOverlapUse,jdbcType=INTEGER},#{gcpStartTime,jdbcType=TIMESTAMP},#{gcpCreateTime,jdbcType=TIMESTAMP},#{gcpEndTime,jdbcType=TIMESTAMP},#{gcpMoney,jdbcType=BIGINT},#{gcpDiscount,jdbcType=DECIMAL},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改商品优惠活动 -->
@@ -123,8 +123,8 @@
             <if test="null != gcpMoney">
                 gcp_money = #{gcpMoney},
             </if>
-            <if test="null != cpDiscount">
-                cp_discount = #{cpDiscount},
+            <if test="null != gcpDiscount">
+                gcp_discount = #{gcpDiscount},
             </if>
             <if test="null != isValid">
                 is_valid = #{isValid},

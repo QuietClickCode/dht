@@ -7,49 +7,36 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 20:54:20
+ * @date 2017-10-10 00:15:11
  */
 public class GoodsCoupon implements java.io.Serializable {
 
 	/**gcpId*/
-	@NotEmpty
 	private Long gcpId;
 	/**商品优惠活动名称*/
-	@NotEmpty
 	@Length(min = 1, max = 50)
 	private String gcpName;
 	/**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
-	@NotEmpty(message = "商品优惠活动类型不能为空")
 	private Integer gcpType;
 	/**商品优惠活动触发条件*/
-	@NotEmpty
 	private Long gcpCondition;
 	/**是否重叠使用*/
-	@NotEmpty
 	private Integer gcpIsOverlapUse;
 	/**商品优惠开始时间*/
-	@NotEmpty
 	private Date gcpStartTime;
-	/**创建时间*/
-	@NotEmpty
-	private Date gcpCreateTime;
 	/**商品优惠结束时间*/
-	@NotEmpty
 	private Date gcpEndTime;
 	/**优惠金额*/
-	@NotEmpty
 	private Long gcpMoney;
 	/**优惠折扣*/
-	@NotEmpty
-	private Long cpDiscount;
+	private Long gcpDiscount;
+	/**创建时间*/
+	private Date gcpCreateTime;
 	/**是否有效*/
-	@NotEmpty
 	private Integer isValid;
 	/**是否删除*/
-	@NotEmpty
 	private Integer isDelete;
 	/**数据版本*/
-	@NotEmpty
 	private Integer version;
 	//columns END
 
@@ -102,13 +89,6 @@ public class GoodsCoupon implements java.io.Serializable {
 	public Date getGcpStartTime() {
 		return this.gcpStartTime;
 	}
-	public void setGcpCreateTime(Date value) {
-		this.gcpCreateTime = value;
-	}
-
-	public Date getGcpCreateTime() {
-		return this.gcpCreateTime;
-	}
 	public void setGcpEndTime(Date value) {
 		this.gcpEndTime = value;
 	}
@@ -123,12 +103,19 @@ public class GoodsCoupon implements java.io.Serializable {
 	public Long getGcpMoney() {
 		return this.gcpMoney;
 	}
-	public void setCpDiscount(Long value) {
-		this.cpDiscount = value;
+	public void setGcpDiscount(Long value) {
+		this.gcpDiscount = value;
 	}
 
-	public Long getCpDiscount() {
-		return this.cpDiscount;
+	public Long getGcpDiscount() {
+		return this.gcpDiscount;
+	}
+	public void setGcpCreateTime(Date value) {
+		this.gcpCreateTime = value;
+	}
+
+	public Date getGcpCreateTime() {
+		return this.gcpCreateTime;
 	}
 	public void setIsValid(Integer value) {
 		this.isValid = value;

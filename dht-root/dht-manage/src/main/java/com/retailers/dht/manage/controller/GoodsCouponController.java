@@ -61,6 +61,7 @@ public class GoodsCouponController extends BaseController{
         params.put("gcpName",gcpName);
         params.put("gcpType",gcpType);
         params.put("isValid",isValid);
+        params.put("isDelete",0);
         Pagination<GoodsCoupon> pages= goodsCouponService.queryGoodsCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
     }
@@ -73,10 +74,12 @@ public class GoodsCouponController extends BaseController{
     @RequestMapping("addGoodsCoupon")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加商品优惠", description = "添加商品优惠", resourse = "goodsCoupon.addGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
+    @ResponseBody
     public BaseResp addGoodsCoupon(GoodsCoupon goodsCoupon){
         try{
             validateForm(goodsCoupon);
         }catch (Exception e){
+            e.printStackTrace();
             return errorForParam(e.getMessage());
         }
         if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_MONEY){
@@ -101,6 +104,7 @@ public class GoodsCouponController extends BaseController{
     @RequestMapping("delGoodsCoupon")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="删除商品优惠", description = "删除商品优惠", resourse = "goodsCoupon.delGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
+    @ResponseBody
     public BaseResp delGoodsCoupon(Long gcpId){
         if(ObjectUtils.isEmpty(gcpId)){
             return errorForParam("删除商品优惠id不能为空");

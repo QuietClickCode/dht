@@ -38,58 +38,7 @@
 <div>
     <table id="goodsCouponTables" ></table>
 </div>
-
-<div id="editorGoodsCoupon" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header bg-primary">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
-                <h4 class="modal-title">
-                    <i class="icon-pencil"></i>
-                    <span id="lblAddTitle" style="font-weight:bold">添加信息</span>
-                </h4>
-            </div>
-            <form class="form-horizontal form-bordered form-row-strippe" id="ffAdd" action="" data-toggle="validator" enctype="multipart/form-data">
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label col-md-2">父IDaab</label>
-                                <div class="col-md-10">
-                                    <select id="PID" name="PID" type="text" class="form-control select2" placeholder="父ID..." ></select>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label col-md-2">名称s</label>
-                                <div class="col-md-10">
-                                    <input id="Name" name="Name" type="text" class="form-control" placeholder="名称..." />
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                <label class="control-label col-md-2">备注</label>
-                                <div class="col-md-10">
-                                    <textarea id="Note" name="Note" class="form-control" placeholder="备注..."></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer bg-info">
-                    <input type="hidden" id="ID" name="ID" />
-                    <button type="submit" class="btn blue">确定</button>
-                    <button type="button" class="btn green" data-dismiss="modal">取消</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-
-<%--<div class="modal fade" id="editorGoodsCoupon" tabindex="-1" role="dialog" aria-labelledby="editorGoodsCoupon">
+<div class="modal fade" id="editorGoodsCoupon" tabindex="-1" role="dialog" aria-labelledby="editorGoodsCoupon">
     <div class="modal-dialog" role="document"  style="width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -114,8 +63,8 @@
                               <span class="input-group-addon">
                                   类型:
                               </span>
-                                <select id="gcpType" name="gcpType" class="form-control">
-                                    <option value="0" selected="selected">现金</option>
+                                <select id="gcpType" name="gcpType" class="form-control" onchange="gcpTypeChange()">
+                                    <option value="0">现金</option>
                                     <option value="1">折扣</option>
                                 </select>
                             </div>
@@ -130,14 +79,14 @@
                                 <input type="text" class="form-control" name="gcpCondition" id="gcpCondition">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <%--<div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                   职工姓名:
                               </span>
                                 <input type="text" class="form-control" id="uname" name="uname"/>
                             </div>
-                        </div>
+                        </div>--%>
                     </div>
 
                     <div class="row">
@@ -146,7 +95,7 @@
                               <span class="input-group-addon">
                                 开始时间:
                               </span>
-                                <input type="text" class="form-control" name="gcpStartTime" id="gcpStartTime">
+                                <input type="text" class="form-control" name="gcpStartTimeStr" id="gcpStartTimeStr">
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -154,7 +103,7 @@
                               <span class="input-group-addon">
                                   结束时间:
                               </span>
-                                <input type="text" class="form-control" id="gcpEndTime" name="gcpEndTime"/>
+                                <input type="text" class="form-control" id="gcpEndTimeStr" name="gcpEndTimeStr"/>
                             </div>
                         </div>
                     </div>
@@ -185,7 +134,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" id="gcpMoneyDiv">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 金额:
@@ -193,16 +142,15 @@
                                 <input type="text" class="form-control" name="gcpMoney" id="gcpMoney">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" id="gcpDiscountDiv">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                   折扣:
                               </span>
-                                <input type="text" class="form-control" id="cpDiscount" name="cpDiscount"/>
+                                <input type="text" class="form-control" id="gcpDiscount" name="gcpDiscount"/>
                             </div>
                         </div>
                     </div>
-                    <br>
                 </form>
             </div>
             <div class="modal-footer">
@@ -211,7 +159,7 @@
             </div>
         </div>
     </div>
-</div>--%>
+</div>
 <!-- 公用下拉择树 -->
 <div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
     <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
@@ -234,7 +182,14 @@
         },
         {
             field: 'gcpType',
-            title: '类型'
+            title: '类型',
+            formatter:function(value,row,index){
+                var html="现金";
+                if(value==1){
+                    html="折扣";
+                }
+                return html;
+            }
         },
         {
             field: 'gcpCondition',
@@ -258,11 +213,25 @@
         },
         {
             field: 'gcpIsOverlapUse',
-            title: '能否叠加使用'
+            title: '能否叠加使用',
+            formatter:function(value,row,index){
+                var html="允许";
+                if(value==1){
+                    html="不允许";
+                }
+                return html;
+            }
         },
         {
             field: 'isValid',
-            title: '状态'
+            title: '状态',
+            formatter:function(value,row,index){
+                var html="有效";
+                if(value==1){
+                    html="无效";
+                }
+                return html;
+            }
         },
         {
             field: 'CreateTime',
@@ -272,11 +241,11 @@
             width:240,
             formatter:function(value,row,index){
                 let html='';
-                <ex:perm url="sysUser/editorGoodsCoupon">
+                <ex:perm url="goodsCoupon/delGoodsCoupon">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorOrganization(\''+row.uid+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="sysUser/editorGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorOrganization(\''+row.uid+'\')"">删除</button>';
+                <ex:perm url="goodsCoupon/delGoodsCoupon">
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gcpId+'\')"">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -307,12 +276,18 @@
             var sendData=new Array();
             var formData=$("#editorGoodsCouponForm").serializeObject();
             var flag =$("#editorGoodsCouponForm #isValid").bootstrapSwitch("state");
+            var gcpIsOverlapUse =$("#editorGoodsCouponForm #gcpIsOverlapUse").bootstrapSwitch("state");
             if(flag){
                 formData["isValid"]=0;
             }else{
                 formData["isValid"]=1;
             }
-            let url="/sysUser/addSysUser";
+            if(gcpIsOverlapUse){
+                formData["gcpIsOverlapUse"]=0;
+            }else{
+                formData["gcpIsOverlapUse"]=1;
+            }
+            let url="/goodsCoupon/addGoodsCoupon";
             if(editorGoodsCouponType==1){
                 url="/sysUser/editorGoodsCoupon";
             }
@@ -406,24 +381,24 @@
         );
     }
     //删除确认框
-    function deleteData(uid){
+    function deleteData(gcpId){
         //询问框
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeSysUser(uid);
+            removeSysUser(gcpId);
         }, function(){
         });
     }
     /**
      * 删除部门
      **/
-    function removeSysUser(uid){
+    function removeSysUser(gcpId){
         $.ajax({
             type:"post",
-            url:'/sysUser/delSysUser',
+            url:'/goodsCoupon/delGoodsCoupon',
             dataType: "json",
-            data:{uid:uid},
+            data:{gcpId:gcpId},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");
@@ -471,6 +446,10 @@
             $("#editorGoodsCouponForm #isValid").bootstrapSwitch("state",flag);
             $("#editorGoodsCouponForm #orgIds").val(rowData.orgIds);
             $("#editorGoodsCouponForm #orgNms").val(rowData.orgNms);
+        }else{
+            $("#editorGoodsCouponForm #gcpType").val("0");
+            $("#editorGoodsCouponForm #gcpMoneyDiv").show();
+            $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
         }
     }
     /**
@@ -484,6 +463,17 @@
         $("#editorGoodsCouponTitle").text("添加商品优惠");
         $('#editorGoodsCoupon').modal("show")
     }
+    function gcpTypeChange(){
+        let selectValue = $("#editorGoodsCouponForm #gcpType").val();
+        if(parseInt(selectValue,10)==0){
+            $("#editorGoodsCouponForm #gcpMoneyDiv").show();
+            $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
+        }else{
+            $("#editorGoodsCouponForm #gcpMoneyDiv").hide();
+            $("#editorGoodsCouponForm #gcpDiscountDiv").show();
+        }
+    }
+
 </script>
 </body>
 </html>
