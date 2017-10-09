@@ -3,29 +3,20 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>职员管理</title>
+    <title>系统参数配置表</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
-    <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
-    <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
 </head>
 <body>
 <div id="toolbar" class="form-inline">
     <div class="form-group">
-        <input type="text" class="form-control" id="search_user_name" placeholder="请输入职员姓名">
+        <input type="text" class="form-control" id="search_user_name" placeholder="请输入常名称">
     </div>
-
-    <div class="form-group">
-        <input type="text" class="form-control" id="search_user_org" placeholder="请选择职员所在部门">
-    </div>
-    <ex:perm url="sysUser/querySysUserLists">
+    <ex:perm url="	sysUser/querySysUserLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
-    </ex:perm>
-    <ex:perm url="sysUser/addSysUser">
-        <button class="btn btn-default" type="button" onclick="addSysUser()">添加职员</button>
     </ex:perm>
 </div>
 <div>
-    <table id="sysUserTables" ></table>
+    <table id="sysParamTables" ></table>
 </div>
 <div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
     <div class="modal-dialog" role="document"  style="width: 800px;">
@@ -95,8 +86,6 @@
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
-<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
-<script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script type="text/javascript">
@@ -108,35 +97,24 @@
     var treeColumns=[
         {checkbox: true},
         {
-            field: 'uaccount',
-            title: '帐户'
+            field: 'parameterKey',
+            title: '参数key'
         },
         {
-            field: 'uname',
-            title: '姓名'
+            field: 'parameterName',
+            title: '参数名称'
         },
         {
-            field: 'orgNms',
-            title: '所在部门'
+            field: 'parameterValue',
+            title: '参数值'
         },
         {
-            field: 'ucreateTime',
+            field: 'parameterDes',
+            title: '参数描述'
+        },
+        {
+            field: 'parameterCreateTime',
             title: '创建时间'
-        },
-        {
-            field: 'isValid',
-            title: '状态',
-            align : 'center',
-            valign : 'middle',
-            width:120,
-            formatter:function(value,row,index){
-                rowDatas.set(row.uid,row);
-                if(value==0){
-                    return "启用";
-                }else if(value==1){
-                    return "停用";
-                }
-            }
         },
         {
             field: 'CreateTime',
@@ -149,23 +127,18 @@
                 <ex:perm url="sysUser/editorSysUser">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorOrganization(\''+row.uid+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="	sysUser/delSysUser">
-                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.uid+'\',this)">删除</button>';
-                </ex:perm>
                 return html;
             }
         }
     ]
 
     $(function () {
-        createTable("/sysUser/querySysUserLists","sysUserTables","orgId",treeColumns,queryParams)
+        createTable("/sysUser/querySysUserLists","sysParamTables","orgId",treeColumns,queryParams)
         //初始华开关选择器
         $("#editorSysUserForm #isValid").bootstrapSwitch();
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
-            //隐藏下拉菜单
-            hideOrgTree();
             clearFormValidation("editorSysUserForm",formValidater)
         });
 
@@ -219,43 +192,43 @@
      * */
     function formValidater(){
         $('#editorSysUserForm')
-                .bootstrapValidator({
-                    message: 'This value is not valid',
-                    //live: 'submitted',
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        uaccount: {
-                            message: '职工账号校验未通过',
-                            validators: {
-                                notEmpty: {
-                                    message: '职工登录账号不能为空'
-                                },
-                                stringLength: {
-                                    min: 1,
-                                    max: 30,
-                                    message: '职工登录账号长度在4-30之间'
-                                }
+            .bootstrapValidator({
+                message: 'This value is not valid',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    uaccount: {
+                        message: '职工账号校验未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '职工登录账号不能为空'
+                            },
+                            stringLength: {
+                                min: 1,
+                                max: 30,
+                                message: '职工登录账号长度在4-30之间'
                             }
-                        },
-                        uname: {
-                            message: '职工姓名校验未通过',
-                            validators: {
-                                notEmpty: {
-                                    message: '职工姓名不能为空'
-                                },
-                                stringLength: {
-                                    min: 2,
-                                    max: 10,
-                                    message: '职工姓名长度在2-10之间'
-                                }
+                        }
+                    },
+                    uname: {
+                        message: '职工姓名校验未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '职工姓名不能为空'
+                            },
+                            stringLength: {
+                                min: 2,
+                                max: 10,
+                                message: '职工姓名长度在2-10之间'
                             }
                         }
                     }
-                });
+                }
+            });
     }
     /**
      * 查询条件
@@ -272,7 +245,7 @@
      * 刷新表格数据
      **/
     function refreshTableData() {
-        $('#sysUserTables').bootstrapTable(
+        $('#sysParamTables').bootstrapTable(
             "refresh",
             {
                 url:"/sysUser/querySysUserLists"
@@ -313,7 +286,6 @@
     var zNodes;
     function editorOrganization(orgId){
         editorSysUserType=1;
-        reloadOrgTree(orgId);
         initFormData(orgId);
         $("#editorSysUserTitle").text("编辑职工");
         $('#editorSysUser').modal("show")
@@ -355,84 +327,10 @@
     function addSysUser(){
         editorSysUserType=0;
         let orgId,orgPid;
-        reloadOrgTree();
         initFormData();
         $("#editorSysUserForm #isValid").bootstrapSwitch("state",true);
         $("#editorSysUserTitle").text("添加职工");
         $('#editorSysUser').modal("show")
-    }
-    /**
-     * 重新加载树型结构
-     **/
-    function reloadOrgTree(uid){
-        $.fn.zTree.init($("#orgTree"), setting, zNodes);
-        var rowData=rowDatas.get(parseInt(uid,10));
-        let selectOrgIds="";
-        if(rowData){
-            selectOrgIds=rowData.orgIds
-        }
-        $.ajax({
-            type:"post",
-            url:'/org/reqOrgTree',
-            dataType: "json",
-            data:{selectOrgIds:selectOrgIds},
-            async:false,
-            success:function(data){
-                let nodeData=data.data;
-                var zTree=$.fn.zTree.init($("#orgTree"), setting, nodeData);
-            }
-        });
-    }
-
-    /***********************************************************************************/
-    var setting = {
-        check: {
-            enable: true,
-            chkboxType: { "Y" : "s", "N" : "s" }
-        },
-        view: {
-            dblClickExpand: false
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        },
-        callback: {
-            onCheck: onCheck
-        }
-    };
-
-    function onCheck(e, treeId, treeNode) {
-        var zTree = $.fn.zTree.getZTreeObj("orgTree"),
-                nodes = zTree.getCheckedNodes(),
-                v = "",vId="";
-        nodes.sort(function compare(a,b){return a.id-b.id;});
-        for (var i=0, l=nodes.length; i<l; i++) {
-            v += nodes[i].name+",";
-            vId += nodes[i].id+",";
-        }
-        var orgPname = $("#orgNms");
-        var orgPid_ = $("#orgIds");
-        orgPname.val(v);
-        orgPid_.val(vId);
-        //hideOrgTree();
-    }
-
-    function showOrgTree() {
-        var cityObj = $("#orgNms");
-        var cityOffset = $("#orgNms").offset();
-        $("#orgNodeContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-        $("body").bind("mousedown", onBodyDown);
-    }
-    function hideOrgTree() {
-        $("#orgNodeContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
-    }
-    function onBodyDown(event) {
-        if (!(event.target.id == "menuBtn" || event.target.id == "orgNodeContent" || $(event.target).parents("#orgNodeContent").length>0)) {
-            hideOrgTree();
-        }
     }
 </script>
 </body>
