@@ -36,7 +36,7 @@ public class GoodsCouponVo {
     @Digits(integer=10,fraction = 2,message = "优惠金额只允许在10位整数和2位小数范围内")
     private Double gcpMoney;
     /**优惠折扣*/
-    @Digits(integer=2,fraction = 2,message = "优惠折扣只允许在2位整数和2位小数范围内")
+    @Digits(integer=1,fraction = 2,message = "优惠折扣只允许在2位整数和2位小数范围内")
     private Double gcpDiscount;
     /**创建时间*/
     private Date gcpCreateTime;
