@@ -48,7 +48,7 @@
             </div>
             <div class="modal-body">
                 <form id="editorGoodsCouponForm">
-                    <input type="hidden" name="uid" id="uid">
+                    <input type="hidden" name="gcpId" id="gcpId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
                         <div class="col-lg-6">
@@ -67,48 +67,51 @@
                                 <select id="gcpType" name="gcpType" class="form-control" onchange="gcpTypeChange()">
                                     <option value="0">现金</option>
                                     <option value="1">折扣</option>
+                                    <option value="2">包邮</option>
                                 </select>
                             </div>
                         </div>
                     </div>
+                    <div class="form-group"style="width:430px;">
+                        <div class="input-group col-xs-12">
+                            <div class="input-group-addon">
+                                优惠条件:
+                            </div>
+                            <span class="form-control" style="width:40px;padding-right:0px;">满</span>
+                            <input type="text" class="form-control" name="gcpCondition" id="gcpCondition" placeholder="请输入优惠条件" style="width: 180px;">
+                                <select class="form-control" style="width: auto;" id="gcpUnits" name="gcpUnits">
+                                    <option value="0">元</option>
+                                    <option value="1">件</option>
+                                </select>
+                        </div>
+                    </div>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" id="gcpMoneyDiv">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                优惠条件:
+                                金额:
                               </span>
-                                <input type="text" class="form-control" name="gcpCondition" id="gcpCondition">
+                                <input type="text" class="form-control" name="gcpMoney" id="gcpMoney">
                             </div>
                         </div>
-                        <%--<div class="col-lg-6">
+                        <div class="col-lg-6" id="gcpDiscountDiv">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                  职工姓名:
+                                  折扣:
                               </span>
-                                <input type="text" class="form-control" id="uname" name="uname"/>
+                                <input type="text" class="form-control" id="gcpDiscount" name="gcpDiscount"/>
                             </div>
-                        </div>--%>
-                    </div>
-
-                    <div class="row">
+                        </div>
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 开始时间:
                               </span>
-                                <input type="hidden" name="gcpStartTimeStr" id="gcpStartTimeStr">
-                                <input type="hidden" name="gcpEndTimeStr" id="gcpEndTimeStr">
+                                <input type="hidden" name="gcpStartTime" id="gcpStartTime">
+                                <input type="hidden" name="gcpEndTime" id="gcpEndTime">
                                 <input type="text" class="form-control" name="gcpValidTime" id="gcpValidTime">
                             </div>
                         </div>
-                        <%--<div class="col-lg-6">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                  结束时间:
-                              </span>
-                                <input type="text" class="form-control" id="gcpEndTimeStr" name="gcpEndTimeStr"/>
-                            </div>
-                        </div>--%>
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
@@ -136,24 +139,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-lg-6" id="gcpMoneyDiv">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                金额:
-                              </span>
-                                <input type="text" class="form-control" name="gcpMoney" id="gcpMoney">
-                            </div>
-                        </div>
-                        <div class="col-lg-6" id="gcpDiscountDiv">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                  折扣:
-                              </span>
-                                <input type="text" class="form-control" id="gcpDiscount" name="gcpDiscount"/>
-                            </div>
-                        </div>
-                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
@@ -197,7 +183,7 @@
             }
         },
         {
-            field: 'gcpCondition',
+            field: 'gcpConditions',
             title: '优惠条件'
         },
         {
@@ -209,11 +195,11 @@
             title: '结束时间'
         },
         {
-            field: 'gcpMoney',
+            field: 'gcpMoneys',
             title: '优惠金额'
         },
         {
-            field: 'cpDiscount',
+            field: 'gcpDiscounts',
             title: '折扣'
         },
         {
@@ -318,63 +304,35 @@
             });
         });
         formValidater();
-        var cb = function(start, end, label) {
-            $('#gcpValidTime').html(start.format('YYYY-MM-DD HH:mm:ss'));
-        };
-
-
-        var optionSet1 = {
-            startDate: moment().subtract(29, 'days'),
-
-            showDropdowns: false,
-            showWeekNumbers: false,
-            timePicker: true,
-            timePickerIncrement: 1,
-            singleDatePicker: true,
-            timePicker24Hour: true,
-            locale: {
+       $('#gcpValidTime').daterangepicker(
+            {
+                startDate: moment(),
+                minDate : moment(),
+                showDropdowns : true,
+                timePicker:true,
+                timePickerIncrement:5,
+                timePicker24Hour:true,//24 小时制
+                opens : 'right', //日期选择框的弹出位置
+                buttonClasses : [ 'btn btn-default' ],
+                applyClass : 'btn-small btn-primary blue',
+                cancelClass : 'btn-small',
                 format: 'YYYY-MM-DD HH:mm:ss',
-                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
-                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-            },
-
-            opens: 'left',
-            buttonClasses: ['btn btn-default'],
-            applyClass: 'btn-small btn-primary',
-            cancelClass: 'btn-small',
-            format: 'YYYY-MM-DD HH:mm:ss',
-
-        };
-
-        $('#gcpValidTime').html(moment().subtract(29, 'days').format('YYYY-MM-DD HH:mm:ss'));
-        $('#gcpValidTime').daterangepicker(optionSet1, cb);
-//
-//       $('#gcpValidTime').daterangepicker(
-//            {
-////                minDate: moment(),    //最小时间
-//                showDropdowns : true,
-//                timePicker:true,
-//                timePickerIncrement:30,
-//                opens : 'right', //日期选择框的弹出位置
-//                buttonClasses : [ 'btn btn-default' ],
-//                applyClass : 'btn-small btn-primary blue',
-//                cancelClass : 'btn-small',
-//                locale : {
-//                    format: 'YYYY-MM-DD HH:mm:ss',
-//                    applyLabel : '确定',
-//                    cancelLabel : '取消',
-//                    fromLabel : '起始时间',
-//                    toLabel : '结束时间',
-//                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-//                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-//                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-//                    firstDay : 1
-//                }
-//            }, function(start, end, label) {
-//               $("#editorGoodsCouponForm #gcpStartTimeStr").val(start.format('YYYY-MM-DD HH:mm:ss'));
-//               $("#editorGoodsCouponForm #gcpEndTimeStr").val(end.format('YYYY-MM-DD HH:mm:ss'));
-//               $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-//           });
+                locale : {
+                    format: 'YYYY-MM-DD HH:mm:ss',
+                    applyLabel : '确定',
+                    cancelLabel : '取消',
+                    fromLabel : '起始时间',
+                    toLabel : '结束时间',
+                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+                    firstDay : 1
+                }
+            }, function(start, end, label) {
+               $("#editorGoodsCouponForm #gcpStartTime").val(start.format('YYYY-MM-DD HH:mm:ss'));
+               $("#editorGoodsCouponForm #gcpEndTime").val(end.format('YYYY-MM-DD HH:mm:ss'));
+               $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+           });
     });
     /**
      * form 校验
@@ -382,6 +340,9 @@
     function formValidater(){
         $('#editorGoodsCouponForm')
             .bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
                 message: 'This value is not valid',
                 //live: 'submitted',
                 feedbackIcons: {
@@ -390,29 +351,52 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    uaccount: {
-                        message: '职工账号校验未通过',
+                    gcpName: {
+                        message: '优惠名称不能为空',
                         validators: {
                             notEmpty: {
-                                message: '职工登录账号不能为空'
-                            },
-                            stringLength: {
-                                min: 1,
-                                max: 30,
-                                message: '职工登录账号长度在4-30之间'
-                            }
-                        }
-                    },
-                    uname: {
-                        message: '职工姓名校验未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '职工姓名不能为空'
+                                message: '优惠名称不能为空'
                             },
                             stringLength: {
                                 min: 2,
-                                max: 10,
-                                message: '职工姓名长度在2-10之间'
+                                max: 25,
+                                message: '优惠名称长度在4-30之间'
+                            }
+                        }
+                    },
+                    gcpCondition: {
+                        message: '优惠条件校验未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '优惠条件不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([1-9]\d*|0)(\.\d{1,2})?$/,
+                                message:'只能输入整数或两位小数'
+                            }
+                        }
+                    },
+                    gcpMoney: {
+                        message: '金额不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '金额不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([1-9]\d*|0)(\.\d{1,2})?$/,
+                                message:'只能输入整数或两位小数'
+                            }
+                        }
+                    },
+                    gcpDiscount: {
+                        message: '折扣不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '折扣不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([1-9]\d*|0)(\.\d{1,2})?$/,
+                                message:'只能输入整数或两位小数'
                             }
                         }
                     }
@@ -483,12 +467,15 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorGoodsCouponForm #uid").val("");
+        $("#editorGoodsCouponForm #gcpId").val("");
         $("#editorGoodsCouponForm #version").val("");
-        $("#editorGoodsCouponForm #uaccount").val("");
-        $("#editorGoodsCouponForm #uname").val("");
-        $("#editorGoodsCouponForm #orgIds").val("");
-        $("#editorGoodsCouponForm #isValid").val("");
+        $("#editorGoodsCouponForm #gcpName").val("");
+        $("#editorGoodsCouponForm #gcpCondition").val("");
+        $("#editorGoodsCouponForm #gcpStartTime").val("");
+        $("#editorGoodsCouponForm #gcpEndTime").val("");
+        $("#editorGoodsCouponForm #gcpValidTime").val("");
+        $("#editorGoodsCouponForm #gcpMoney").val("");
+        $("#editorGoodsCouponForm #gcpDiscount").val("");
     }
     /**
      * 清除form 表单数据
@@ -512,6 +499,7 @@
             $("#editorGoodsCouponForm #gcpType").val("0");
             $("#editorGoodsCouponForm #gcpMoneyDiv").show();
             $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
+            $("#editorGoodsCouponForm #gcpValidTime").val("");
         }
     }
     /**
@@ -530,9 +518,12 @@
         if(parseInt(selectValue,10)==0){
             $("#editorGoodsCouponForm #gcpMoneyDiv").show();
             $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
-        }else{
+        }else if(parseInt(selectValue,10)==1){
             $("#editorGoodsCouponForm #gcpMoneyDiv").hide();
             $("#editorGoodsCouponForm #gcpDiscountDiv").show();
+        }else if(parseInt(selectValue,10)==2){
+            $("#editorGoodsCouponForm #gcpMoneyDiv").hide();
+            $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
         }
     }
 

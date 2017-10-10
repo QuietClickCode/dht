@@ -1,5 +1,6 @@
 package com.retailers.dht.manage.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
@@ -8,11 +9,14 @@ import com.retailers.auth.vo.SysUserVo;
 import com.retailers.dht.common.constant.GoodsCouponConstant;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.GoodsCouponService;
+import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +79,7 @@ public class GoodsCouponController extends BaseController{
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加商品优惠", description = "添加商品优惠", resourse = "goodsCoupon.addGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
-    public BaseResp addGoodsCoupon(GoodsCoupon goodsCoupon){
+    public BaseResp addGoodsCoupon(GoodsCouponVo goodsCoupon, String gcpStartTimeStr, String gcpEndTimeStr){
         try{
             validateForm(goodsCoupon);
         }catch (Exception e){
@@ -86,13 +90,25 @@ public class GoodsCouponController extends BaseController{
             if(ObjectUtils.isEmpty(goodsCoupon.getGcpMoney())){
                 return errorForParam("优惠活动为代金卷时优惠金额不能为空");
             }
+            goodsCoupon.setGcpDiscount(null);
         }
         if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_DISCOUNT){
-            if(ObjectUtils.isEmpty(goodsCoupon.getGcpMoney())){
+            if(ObjectUtils.isEmpty(goodsCoupon.getGcpDiscount())){
                 return errorForParam("优惠活动为折扣卷时折扣额不能为空");
             }
+            goodsCoupon.setGcpMoney(null);
         }
-        boolean flag = goodsCouponService.saveGoodsCoupon(goodsCoupon);
+        //包邮时清除金额以及折扣卷值
+        if(goodsCoupon.getGcpType().intValue()==GoodsCouponConstant.GCP_TYPE_FREE_SHIPPING){
+            goodsCoupon.setGcpDiscount(null);
+            goodsCoupon.setGcpMoney(null);
+        }
+
+        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+        GoodsCoupon gcp = new GoodsCoupon();
+        BeanUtils.copyProperties(goodsCoupon,gcp);
+        System.out.println(JSON.toJSON(gcp));
+        boolean flag = goodsCouponService.saveGoodsCoupon(gcp);
         return success(flag);
     }
 

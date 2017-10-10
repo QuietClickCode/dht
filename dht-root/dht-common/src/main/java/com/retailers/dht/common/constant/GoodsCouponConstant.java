@@ -15,4 +15,8 @@ public class GoodsCouponConstant {
      * 商品优惠活动类型 折扣卷
      */
     public static final int GCP_TYPE_DISCOUNT=1;
+    /**
+     * 商品优惠活动类型 包邮
+     */
+    public static final int GCP_TYPE_FREE_SHIPPING=2;
 }

@@ -1,4 +1,7 @@
 package com.retailers.dht.common.entity;
+import com.alibaba.fastjson.annotation.JSONField;
+import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
@@ -19,7 +22,12 @@ public class GoodsCoupon implements java.io.Serializable {
 	/**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
 	private Integer gcpType;
 	/**商品优惠活动触发条件*/
+	@JSONField(serialize = false)
 	private Long gcpCondition;
+	/**
+	 * 优惠条件计量单位（0 元，1 件）
+	 */
+	private Long gcpUnits;
 	/**是否重叠使用*/
 	private Integer gcpIsOverlapUse;
 	/**商品优惠开始时间*/
@@ -27,8 +35,10 @@ public class GoodsCoupon implements java.io.Serializable {
 	/**商品优惠结束时间*/
 	private Date gcpEndTime;
 	/**优惠金额*/
+	@JSONField(serialize = false)
 	private Long gcpMoney;
 	/**优惠折扣*/
+	@JSONField(serialize = false)
 	private Long gcpDiscount;
 	/**创建时间*/
 	private Date gcpCreateTime;
@@ -75,6 +85,22 @@ public class GoodsCoupon implements java.io.Serializable {
 	public Long getGcpCondition() {
 		return this.gcpCondition;
 	}
+
+	public String getGcpConditions() {
+		if(ObjectUtils.isNotEmpty(gcpCondition)){
+			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpCondition),2);
+		}
+		return "0.00";
+	}
+
+	public Long getGcpUnits() {
+		return gcpUnits;
+	}
+
+	public void setGcpUnits(Long gcpUnits) {
+		this.gcpUnits = gcpUnits;
+	}
+
 	public void setGcpIsOverlapUse(Integer value) {
 		this.gcpIsOverlapUse = value;
 	}
@@ -103,12 +129,24 @@ public class GoodsCoupon implements java.io.Serializable {
 	public Long getGcpMoney() {
 		return this.gcpMoney;
 	}
+	public String getGcpMoneys() {
+		if(ObjectUtils.isNotEmpty(gcpMoney)){
+			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpMoney),2);
+		}
+		return null;
+	}
 	public void setGcpDiscount(Long value) {
 		this.gcpDiscount = value;
 	}
 
 	public Long getGcpDiscount() {
 		return this.gcpDiscount;
+	}
+	public String getGcpDiscounts() {
+		if(ObjectUtils.isNotEmpty(gcpDiscount)){
+			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpDiscount),2);
+		}
+		return null;
 	}
 	public void setGcpCreateTime(Date value) {
 		this.gcpCreateTime = value;
