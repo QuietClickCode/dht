@@ -72,26 +72,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group"style="width:430px;">
-                        <div class="input-group col-xs-12">
-                            <div class="input-group-addon">
-                                优惠条件:
-                            </div>
-                            <span class="form-control" style="width:40px;padding-right:0px;">满</span>
-                            <input type="text" class="form-control" name="gcpCondition" id="gcpCondition" placeholder="请输入优惠条件" style="width: 180px;">
-                                <select class="form-control" style="width: auto;" id="gcpUnits" name="gcpUnits">
-                                    <option value="0">元</option>
-                                    <option value="1">件</option>
-                                </select>
-                        </div>
-                    </div>
+
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="input-group col-xs-12">
+                                    <div class="input-group-addon">
+                                        优惠条件:
+                                    </div>
+                                    <span class="form-control" style="width:40px;padding-right:0px;">满</span>
+                                    <input type="text" class="form-control" name="gcpCondition" id="gcpCondition" placeholder="请输入优惠条件" style="width: 140px;padding-right: 2px;">
+                                    <select class="form-control" style="width: 60px;padding-right: 2px;" id="gcpUnits" name="gcpUnits">
+                                        <option value="0">元</option>
+                                        <option value="1">件</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-lg-6" id="gcpMoneyDiv">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 金额:
                               </span>
-                                <input type="text" class="form-control" name="gcpMoney" id="gcpMoney">
+                                <input type="text" class="form-control" name="gcpMoney" id="gcpMoney" placeholder="请输入优惠金额"/>
                             </div>
                         </div>
                         <div class="col-lg-6" id="gcpDiscountDiv">
@@ -99,9 +102,12 @@
                               <span class="input-group-addon">
                                   折扣:
                               </span>
-                                <input type="text" class="form-control" id="gcpDiscount" name="gcpDiscount"/>
+                                <input type="text" class="form-control" id="gcpDiscount" name="gcpDiscount"  placeholder="请输入优惠折扣，如98折输入 9.8"/>
                             </div>
                         </div>
+                    </div>
+
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
@@ -112,8 +118,6 @@
                                 <input type="text" class="form-control" name="gcpValidTime" id="gcpValidTime">
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
@@ -126,6 +130,8 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
@@ -139,7 +145,6 @@
                             </div>
                         </div>
                     </div>
-
                 </form>
             </div>
             <div class="modal-footer">
