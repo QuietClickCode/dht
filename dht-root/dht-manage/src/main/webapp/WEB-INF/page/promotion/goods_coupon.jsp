@@ -236,9 +236,10 @@
             valign : 'middle',
             width:240,
             formatter:function(value,row,index){
+                rowDatas.set(row.gcpId,row);
                 let html='';
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorOrganization(\''+row.uid+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCoupon(\''+row.gcpId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gcpId+'\')"">删除</button>';
@@ -285,7 +286,7 @@
             }
             let url="/goodsCoupon/addGoodsCoupon";
             if(editorGoodsCouponType==1){
-                url="/sysUser/editorGoodsCoupon";
+                url="/goodsCoupon/editorGoodsCoupon";
             }
             //取得form表单数据
             $.ajax({
@@ -462,9 +463,9 @@
     }
 
 
-    function editorOrganization(orgId){
+    function editorGoodsCoupon(gcpId){
         editorGoodsCouponType=1;
-        initFormData(orgId);
+        initFormData(gcpId);
         $("#editorGoodsCouponTitle").text("编辑职工");
         $('#editorGoodsCoupon').modal("show")
     }
@@ -488,18 +489,33 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorGoodsCouponForm #uid").val(rowData.uid);
+            $("#editorGoodsCouponForm #gcpId").val(rowData.gcpId);
             $("#editorGoodsCouponForm #version").val(rowData.version);
-            $("#editorGoodsCouponForm #uaccount").val(rowData.uaccount);
-            $("#editorGoodsCouponForm #uname").val(rowData.uname);
-            $("#editorGoodsCouponForm #orgIds").val(rowData.orgIds);
+            $("#editorGoodsCouponForm #gcpName").val(rowData.gcpName);
+            $("#editorGoodsCouponForm #gcpType").val(rowData.gcpType);
+            $("#editorGoodsCouponForm #gcpCondition").val(rowData.gcpConditions);
+            $("#editorGoodsCouponForm #gcpUnits").val(rowData.gcpUnits);
+            $("#editorGoodsCouponForm #gcpStartTime").val(rowData.gcpStartTime);
+            $("#editorGoodsCouponForm #gcpEndTime").val(rowData.gcpEndTime);
+            if(rowData.gcpStartTime){
+                $("#editorGoodsCouponForm #gcpValidTime").val(rowData.gcpStartTime+" - "+rowData.gcpEndTime);
+            }else{
+                $("#editorGoodsCouponForm #gcpValidTime").val("");
+            }
+            $("#editorGoodsCouponForm #gcpMoney").val(rowData.gcpMoneys);
+            $("#editorGoodsCouponForm #gcpDiscount").val(rowData.gcpDiscounts);
             var flag =false;
             if(rowData.isValid==0){
                 flag=true;
             }
             $("#editorGoodsCouponForm #isValid").bootstrapSwitch("state",flag);
-            $("#editorGoodsCouponForm #orgIds").val(rowData.orgIds);
-            $("#editorGoodsCouponForm #orgNms").val(rowData.orgNms);
+
+            var gcpIsOverlapUse =false;
+            if(rowData.gcpIsOverlapUse==0){
+                gcpIsOverlapUse=true;
+            }
+            $("#editorGoodsCouponForm #gcpIsOverlapUse").bootstrapSwitch("state",flag);
+            gcpTypeChange();
         }else{
             $("#editorGoodsCouponForm #gcpType").val("0");
             $("#editorGoodsCouponForm #gcpMoneyDiv").show();
@@ -523,12 +539,16 @@
         if(parseInt(selectValue,10)==0){
             $("#editorGoodsCouponForm #gcpMoneyDiv").show();
             $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
+            $("#editorGoodsCouponForm #gcpDiscount").val("");
         }else if(parseInt(selectValue,10)==1){
             $("#editorGoodsCouponForm #gcpMoneyDiv").hide();
             $("#editorGoodsCouponForm #gcpDiscountDiv").show();
+            $("#editorGoodsCouponForm #gcpMoney").val("");
         }else if(parseInt(selectValue,10)==2){
             $("#editorGoodsCouponForm #gcpMoneyDiv").hide();
             $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
+            $("#editorGoodsCouponForm #gcpDiscount").val("");
+            $("#editorGoodsCouponForm #gcpMoney").val("");
         }
     }
 

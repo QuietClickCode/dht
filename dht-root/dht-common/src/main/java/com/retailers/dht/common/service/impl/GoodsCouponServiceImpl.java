@@ -8,6 +8,8 @@ import com.retailers.dht.common.service.GoodsCouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * 描述：商品优惠活动Service
  * @author zhongp
@@ -42,6 +44,12 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	}
 	public boolean deleteGoodsCouponByGcpId(Long gcpId) {
 		int status = goodsCouponMapper.deleteGoodsCouponByGcpId(gcpId);
+		return status == 1 ? true : false;
+	}
+
+	@Transactional(rollbackFor = Exception.class)
+	public boolean editorGoodsCoupon(GoodsCoupon goodsCoupon) {
+		int status = goodsCouponMapper.updateGoodsCoupon(goodsCoupon);
 		return status == 1 ? true : false;
 	}
 }

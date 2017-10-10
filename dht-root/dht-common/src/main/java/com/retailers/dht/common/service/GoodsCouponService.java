@@ -55,6 +55,13 @@ public interface GoodsCouponService {
 	 */
 	public boolean deleteGoodsCouponByGcpId(Long gcpId);
 
+	/**
+	 * 编辑商品优惠
+	 * @param goodsCoupon
+	 * @return
+	 */
+	public boolean editorGoodsCoupon(GoodsCoupon goodsCoupon);
+
 }
 
 

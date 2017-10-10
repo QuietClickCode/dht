@@ -13,6 +13,7 @@ import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
@@ -79,22 +80,64 @@ public class GoodsCouponController extends BaseController{
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加商品优惠", description = "添加商品优惠", resourse = "goodsCoupon.addGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
-    public BaseResp addGoodsCoupon(GoodsCouponVo goodsCoupon, String gcpStartTimeStr, String gcpEndTimeStr){
+    public BaseResp addGoodsCoupon(GoodsCouponVo goodsCoupon){
         try{
-            validateForm(goodsCoupon);
-        }catch (Exception e){
-            e.printStackTrace();
+            validateParams(goodsCoupon);
+        }catch(Exception e){
             return errorForParam(e.getMessage());
         }
+        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+        GoodsCoupon gcp = new GoodsCoupon();
+        BeanUtils.copyProperties(goodsCoupon,gcp);
+        boolean flag = goodsCouponService.saveGoodsCoupon(gcp);
+        if(flag){
+            return success("商品优惠添加成功");
+        }else{
+            return success("商品优惠添加失败");
+        }
+    }
+    /**
+     * 添加商品优惠
+     * @param goodsCoupon 商品优惠数据
+     * @return
+     */
+    @RequestMapping("editorGoodsCoupon")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
+    @Function(label="编辑商品优惠", description = "编辑商品优惠", resourse = "goodsCoupon.editorGoodsCoupon",sort=3,parentRes="goodsCoupon.openGoodsCouponPage")
+    @ResponseBody
+    public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCoupon){
+        try{
+            validateParams(goodsCoupon);
+        }catch(Exception e){
+            return errorForParam(e.getMessage());
+        }
+        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+        GoodsCoupon gcp = new GoodsCoupon();
+        BeanUtils.copyProperties(goodsCoupon,gcp);
+        boolean flag = goodsCouponService.editorGoodsCoupon(gcp);
+        if(flag){
+            return success("商品优惠编辑成功");
+        }else{
+            return success("商品优惠编辑失败");
+        }
+    }
+
+    /**
+     * 校验传入参数
+     * @param goodsCoupon
+     * @throws AppException
+     */
+    private void validateParams(GoodsCouponVo goodsCoupon)throws AppException{
+        validateForm(goodsCoupon);
         if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_MONEY){
             if(ObjectUtils.isEmpty(goodsCoupon.getGcpMoney())){
-                return errorForParam("优惠活动为代金卷时优惠金额不能为空");
+                throw new AppException("优惠活动为代金卷时优惠金额不能为空");
             }
             goodsCoupon.setGcpDiscount(null);
         }
         if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_DISCOUNT){
             if(ObjectUtils.isEmpty(goodsCoupon.getGcpDiscount())){
-                return errorForParam("优惠活动为折扣卷时折扣额不能为空");
+                throw new AppException("优惠活动为折扣卷时折扣额不能为空");
             }
             goodsCoupon.setGcpMoney(null);
         }
@@ -103,13 +146,6 @@ public class GoodsCouponController extends BaseController{
             goodsCoupon.setGcpDiscount(null);
             goodsCoupon.setGcpMoney(null);
         }
-
-        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-        GoodsCoupon gcp = new GoodsCoupon();
-        BeanUtils.copyProperties(goodsCoupon,gcp);
-        System.out.println(JSON.toJSON(gcp));
-        boolean flag = goodsCouponService.saveGoodsCoupon(gcp);
-        return success(flag);
     }
 
     /**
