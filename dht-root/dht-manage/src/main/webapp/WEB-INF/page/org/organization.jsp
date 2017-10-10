@@ -274,7 +274,7 @@
 									message: '部门名称不能为空'
 								},
 								stringLength: {
-									min: 6,
+									min: 2,
 									max: 30,
 									message: '部门名称长度在6-30之间'
 								}
