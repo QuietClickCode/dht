@@ -5,6 +5,7 @@ import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Digits;
 import java.util.Date;
 
 /**
@@ -14,11 +15,12 @@ public class GoodsCouponVo {
     /**gcpId*/
     private Long gcpId;
     /**商品优惠活动名称*/
-    @Length(min = 1, max = 50)
+    @Length(min = 2, max = 50)
     private String gcpName;
     /**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
     private Integer gcpType;
     /**商品优惠活动触发条件*/
+    @Digits(integer=10,fraction = 2,message = "优惠条件只允许在10位整数和2位小数范围内")
     private Double gcpCondition;
     /**
      * 优惠条件计量单位（0 元，1 件）
@@ -31,8 +33,10 @@ public class GoodsCouponVo {
     /**商品优惠结束时间*/
     private String gcpEndTime;
     /**优惠金额*/
+    @Digits(integer=10,fraction = 2,message = "优惠金额只允许在10位整数和2位小数范围内")
     private Double gcpMoney;
     /**优惠折扣*/
+    @Digits(integer=2,fraction = 2,message = "优惠折扣只允许在2位整数和2位小数范围内")
     private Double gcpDiscount;
     /**创建时间*/
     private Date gcpCreateTime;
