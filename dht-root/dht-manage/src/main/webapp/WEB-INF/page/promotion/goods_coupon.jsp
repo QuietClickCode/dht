@@ -39,7 +39,7 @@
 <div>
     <table id="goodsCouponTables" ></table>
 </div>
-<div class="modal fade" id="editorGoodsCoupon" tabindex="-1" role="dialog" aria-labelledby="editorGoodsCoupon">
+<div class="modal fade" id="editorGoodsCoupon" role="dialog" aria-labelledby="editorGoodsCoupon">
     <div class="modal-dialog" role="document"  style="width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -318,33 +318,63 @@
             });
         });
         formValidater();
+        var cb = function(start, end, label) {
+            $('#gcpValidTime').html(start.format('YYYY-MM-DD HH:mm:ss'));
+        };
 
-       $('#gcpValidTime').daterangepicker(
-            {
-//                minDate: moment(),    //最小时间
-                showDropdowns : true,
-                timePicker:true,
-                timePickerIncrement:30,
-                opens : 'right', //日期选择框的弹出位置
-                buttonClasses : [ 'btn btn-default' ],
-                applyClass : 'btn-small btn-primary blue',
-                cancelClass : 'btn-small',
-                locale : {
-                    format: 'YYYY-MM-DD HH:mm:ss',
-                    applyLabel : '确定',
-                    cancelLabel : '取消',
-                    fromLabel : '起始时间',
-                    toLabel : '结束时间',
-                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                    firstDay : 1
-                }
-            }, function(start, end, label) {
-               $("#editorGoodsCouponForm #gcpStartTimeStr").val(start.format('YYYY-MM-DD HH:mm:ss'));
-               $("#editorGoodsCouponForm #gcpEndTimeStr").val(end.format('YYYY-MM-DD HH:mm:ss'));
-               $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-           });
+
+        var optionSet1 = {
+            startDate: moment().subtract(29, 'days'),
+
+            showDropdowns: false,
+            showWeekNumbers: false,
+            timePicker: true,
+            timePickerIncrement: 1,
+            singleDatePicker: true,
+            timePicker24Hour: true,
+            locale: {
+                format: 'YYYY-MM-DD HH:mm:ss',
+                daysOfWeek: ['日', '一', '二', '三', '四', '五', '六'],
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            },
+
+            opens: 'left',
+            buttonClasses: ['btn btn-default'],
+            applyClass: 'btn-small btn-primary',
+            cancelClass: 'btn-small',
+            format: 'YYYY-MM-DD HH:mm:ss',
+
+        };
+
+        $('#gcpValidTime').html(moment().subtract(29, 'days').format('YYYY-MM-DD HH:mm:ss'));
+        $('#gcpValidTime').daterangepicker(optionSet1, cb);
+//
+//       $('#gcpValidTime').daterangepicker(
+//            {
+////                minDate: moment(),    //最小时间
+//                showDropdowns : true,
+//                timePicker:true,
+//                timePickerIncrement:30,
+//                opens : 'right', //日期选择框的弹出位置
+//                buttonClasses : [ 'btn btn-default' ],
+//                applyClass : 'btn-small btn-primary blue',
+//                cancelClass : 'btn-small',
+//                locale : {
+//                    format: 'YYYY-MM-DD HH:mm:ss',
+//                    applyLabel : '确定',
+//                    cancelLabel : '取消',
+//                    fromLabel : '起始时间',
+//                    toLabel : '结束时间',
+//                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
+//                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
+//                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
+//                    firstDay : 1
+//                }
+//            }, function(start, end, label) {
+//               $("#editorGoodsCouponForm #gcpStartTimeStr").val(start.format('YYYY-MM-DD HH:mm:ss'));
+//               $("#editorGoodsCouponForm #gcpEndTimeStr").val(end.format('YYYY-MM-DD HH:mm:ss'));
+//               $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+//           });
     });
     /**
      * form 校验
