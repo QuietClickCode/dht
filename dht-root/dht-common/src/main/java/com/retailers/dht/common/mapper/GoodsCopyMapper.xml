@@ -27,6 +27,7 @@
 			<result property="gpickaddress" column="g_pickaddress"/>
 			<result property="ggoodsid" column="g_goodsid"/>
 			<result property="gdeposit" column="g_deposit"/>
+			<result property="gedt" column="g_edt"/>
 			<result property="isPutway" column="is_putway"/>
 			<result property="isChecked" column="is_checked"/>
 			<result property="isAllowsetdeliverytime" column="is_allowsetdeliverytime"/>
@@ -35,11 +36,12 @@
 			<result property="isCod" column="is_cod"/>
 			<result property="isMultiplebuy" column="is_multiplebuy"/>
 			<result property="isServicegoods" column="is_servicegoods"/>
+			<result property="isAdvancesale" column="is_advancesale"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCopy_columns">
-		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods
+		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,g_edt,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,is_advancesale
 	</sql>
 	<!-- 根据商品副本表主键取得数据 -->
 	<select id="queryGoodsCopyByGid" resultMap="rm_goodsCopy" parameterType="java.lang.Long">
@@ -127,6 +129,12 @@
 			<if test="null != params.gdeposit">
 				AND g_deposit = #{params.gdeposit}
 			</if>
+			<if test="null != params.gedtBegin">
+				AND g_edt &gt;= #{params.gedt}
+			</if>
+			<if test="null != params.gedtEnd">
+				AND g_edt &lt;= #{params.gedt}
+			</if>
 			<if test="null != params.isPutway">
 				AND is_putway = #{params.isPutway}
 			</if>
@@ -151,6 +159,9 @@
 			<if test="null != params.isServicegoods">
 				AND is_servicegoods = #{params.isServicegoods}
 			</if>
+			<if test="null != params.isAdvancesale">
+				AND is_advancesale = #{params.isAdvancesale}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
@@ -162,10 +173,10 @@
 	<!--添加商品副本表 -->
 	<insert id="saveGoodsCopy" parameterType="com.retailers.dht.common.entity.GoodsCopy" useGeneratedKeys="true" keyProperty="gid">
 		INSERT INTO t_goods_copy (
-			g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods
+			g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,g_edt,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,is_advancesale
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{gputawaytime,jdbcType=TIMESTAMP},#{gunshelvetime,jdbcType=TIMESTAMP},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gprofitability,jdbcType=DECIMAL},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=DECIMAL},#{gmaindirection,jdbcType=BIGINT},#{gunitname,jdbcType=VARCHAR},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gdescription,jdbcType=LONGVARBINARY},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{ggoodsid,jdbcType=BIGINT},#{gdeposit,jdbcType=DECIMAL},#{isPutway,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT}
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{gputawaytime,jdbcType=TIMESTAMP},#{gunshelvetime,jdbcType=TIMESTAMP},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gprofitability,jdbcType=DECIMAL},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gmaindirection,jdbcType=BIGINT},#{gunitname,jdbcType=VARCHAR},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gdescription,jdbcType=LONGVARBINARY},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{ggoodsid,jdbcType=BIGINT},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{isPutway,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT}
 		)
 	</insert>
 	<!--修改商品副本表 -->
@@ -241,6 +252,9 @@
             <if test="null != gdeposit">
                 g_deposit = #{gdeposit},
             </if>
+            <if test="null != gedt">
+                g_edt = #{gedt},
+            </if>
             <if test="null != isPutway">
                 is_putway = #{isPutway},
             </if>
@@ -264,6 +278,9 @@
             </if>
             <if test="null != isServicegoods">
                 is_servicegoods = #{isServicegoods},
+            </if>
+            <if test="null != isAdvancesale">
+                is_advancesale = #{isAdvancesale},
             </if>
 		</set>
 		WHERE g_id = #{gid}

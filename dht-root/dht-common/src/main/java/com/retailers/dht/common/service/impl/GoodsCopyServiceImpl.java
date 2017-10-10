@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 17:30:33
+ * @date 2017-10-10 17:54:32
  */
 @Service("goodscopyService")
 public class GoodsCopyServiceImpl implements GoodsCopyService {

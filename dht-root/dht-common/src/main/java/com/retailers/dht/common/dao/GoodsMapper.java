@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 17:29:36
+ * @date 2017-10-10 17:54:02
  */
 public interface GoodsMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsMapper {
 	 * @param goods
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:29:36
+	 * @date 2017-10-10 17:54:02
 	 */
 	public int saveGoods(Goods goods);
 	/**
@@ -24,7 +24,7 @@ public interface GoodsMapper {
 	 * @param goods
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:29:36
+	 * @date 2017-10-10 17:54:02
 	 */
 	public int updateGoods(Goods goods);
 	/**
@@ -32,7 +32,7 @@ public interface GoodsMapper {
 	 * @param gid
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:29:36
+	 * @date 2017-10-10 17:54:02
 	 */
 	public int deleteGoodsByGid(Long gid);
 	/**
@@ -40,7 +40,7 @@ public interface GoodsMapper {
 	 * @param gid
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:29:36
+	 * @date 2017-10-10 17:54:02
 	 */
 	public Goods queryGoodsByGid(Long gid);
 	/**
@@ -48,7 +48,7 @@ public interface GoodsMapper {
 	 * @param pagination 分页对象
 	 * @return  商品表列表
 	 * @author fanghui
-	 * @date 2017-10-09 17:29:36
+	 * @date 2017-10-10 17:54:02
 	 */
 	public List<Goods> queryGoodsList(Pagination<Goods> pagination);
 

@@ -141,8 +141,6 @@
 
 
                 <form id="editorGoodsLabelRelForm">
-                    <input type="hidden" name="glId" id="">
-                    <input type="hidden" name="version" id="">
 
                         <div class="row clearfix">
                             <div class="col-md-12 column">

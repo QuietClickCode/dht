@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 17:30:33
+ * @date 2017-10-10 17:54:32
  */
 public class GoodsCopy implements java.io.Serializable {
 
@@ -50,7 +50,7 @@ public class GoodsCopy implements java.io.Serializable {
 	private Long gsalesvolume;
 	/**运费*/
 	@NotEmpty
-	private Long gfreight;
+	private Float gfreight;
 	/**主推方向 0乡村 1城镇 2乡村和城镇*/
 	@NotEmpty
 	private Long gmaindirection;
@@ -88,7 +88,10 @@ public class GoodsCopy implements java.io.Serializable {
 	private Long ggoodsid;
 	/**定金*/
 	@NotEmpty
-	private Long gdeposit;
+	private Float gdeposit;
+	/**预计发货时间*/
+	@NotEmpty
+	private Date gedt;
 	/**是否上架 0未上架 1已上架 2已下架*/
 	@NotEmpty
 	private Long isPutway;
@@ -113,6 +116,9 @@ public class GoodsCopy implements java.io.Serializable {
 	/**是否是服务类商品 0不是 1是*/
 	@NotEmpty
 	private Long isServicegoods;
+	/**是否预售 0不是预售 1预售*/
+	@NotEmpty
+	private Long isAdvancesale;
 	//columns END
 
 	public GoodsCopy(){
@@ -206,11 +212,11 @@ public class GoodsCopy implements java.io.Serializable {
 	public Long getGsalesvolume() {
 		return this.gsalesvolume;
 	}
-	public void setGfreight(Long value) {
+	public void setGfreight(Float value) {
 		this.gfreight = value;
 	}
 
-	public Long getGfreight() {
+	public Float getGfreight() {
 		return this.gfreight;
 	}
 	public void setGmaindirection(Long value) {
@@ -283,12 +289,19 @@ public class GoodsCopy implements java.io.Serializable {
 	public Long getGgoodsid() {
 		return this.ggoodsid;
 	}
-	public void setGdeposit(Long value) {
+	public void setGdeposit(Float value) {
 		this.gdeposit = value;
 	}
 
-	public Long getGdeposit() {
+	public Float getGdeposit() {
 		return this.gdeposit;
+	}
+	public void setGedt(Date value) {
+		this.gedt = value;
+	}
+
+	public Date getGedt() {
+		return this.gedt;
 	}
 	public void setIsPutway(Long value) {
 		this.isPutway = value;
@@ -345,6 +358,13 @@ public class GoodsCopy implements java.io.Serializable {
 
 	public Long getIsServicegoods() {
 		return this.isServicegoods;
+	}
+	public void setIsAdvancesale(Long value) {
+		this.isAdvancesale = value;
+	}
+
+	public Long getIsAdvancesale() {
+		return this.isAdvancesale;
 	}
 
 

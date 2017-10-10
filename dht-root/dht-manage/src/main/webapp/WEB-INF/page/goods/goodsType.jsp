@@ -231,6 +231,7 @@
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch();
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch();
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch();
+
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();

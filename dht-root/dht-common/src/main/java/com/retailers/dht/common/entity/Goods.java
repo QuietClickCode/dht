@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 17:29:36
+ * @date 2017-10-10 17:54:02
  */
 public class Goods implements java.io.Serializable {
 
@@ -50,7 +50,7 @@ public class Goods implements java.io.Serializable {
 	private Long gsalesvolume;
 	/**运费*/
 	@NotEmpty
-	private Long gfreight;
+	private Float gfreight;
 	/**主推方向 0乡村 1城镇 2乡村和城镇*/
 	@NotEmpty
 	private Long gmaindirection;
@@ -85,10 +85,13 @@ public class Goods implements java.io.Serializable {
 	private String gpickaddress;
 	/**定金*/
 	@NotEmpty
-	private Long gdeposit;
+	private Float gdeposit;
 	/**copy的ID update前在copy中插入一条一样的数据 并且更新此字段*/
 	@NotEmpty
 	private Long gcopyid;
+	/**预计发货时间*/
+	@NotEmpty
+	private Date gedt;
 	/**是否上架 0未上架 1已上架 2已下架*/
 	@NotEmpty
 	private Long isPutway;
@@ -113,6 +116,12 @@ public class Goods implements java.io.Serializable {
 	/**是否是服务类商品 0不是 1是*/
 	@NotEmpty
 	private Long isServicegoods;
+	/**是否预售 0不预售 1预售*/
+	@NotEmpty
+	private Long isAdvancesale;
+	/**是否被删除 0没有删除 1已删除*/
+	@NotEmpty
+	private Long isDelete;
 	/**version*/
 	@NotEmpty
 	private Long version;
@@ -209,11 +218,11 @@ public class Goods implements java.io.Serializable {
 	public Long getGsalesvolume() {
 		return this.gsalesvolume;
 	}
-	public void setGfreight(Long value) {
+	public void setGfreight(Float value) {
 		this.gfreight = value;
 	}
 
-	public Long getGfreight() {
+	public Float getGfreight() {
 		return this.gfreight;
 	}
 	public void setGmaindirection(Long value) {
@@ -279,11 +288,11 @@ public class Goods implements java.io.Serializable {
 	public String getGpickaddress() {
 		return this.gpickaddress;
 	}
-	public void setGdeposit(Long value) {
+	public void setGdeposit(Float value) {
 		this.gdeposit = value;
 	}
 
-	public Long getGdeposit() {
+	public Float getGdeposit() {
 		return this.gdeposit;
 	}
 	public void setGcopyid(Long value) {
@@ -292,6 +301,13 @@ public class Goods implements java.io.Serializable {
 
 	public Long getGcopyid() {
 		return this.gcopyid;
+	}
+	public void setGedt(Date value) {
+		this.gedt = value;
+	}
+
+	public Date getGedt() {
+		return this.gedt;
 	}
 	public void setIsPutway(Long value) {
 		this.isPutway = value;
@@ -348,6 +364,20 @@ public class Goods implements java.io.Serializable {
 
 	public Long getIsServicegoods() {
 		return this.isServicegoods;
+	}
+	public void setIsAdvancesale(Long value) {
+		this.isAdvancesale = value;
+	}
+
+	public Long getIsAdvancesale() {
+		return this.isAdvancesale;
+	}
+	public void setIsDelete(Long value) {
+		this.isDelete = value;
+	}
+
+	public Long getIsDelete() {
+		return this.isDelete;
 	}
 	public void setVersion(Long value) {
 		this.version = value;

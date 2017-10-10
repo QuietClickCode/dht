@@ -8,7 +8,7 @@ import java.util.Map;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-09 17:30:33
+ * @date 2017-10-10 17:54:32
  */
 public interface GoodsCopyService {
 
@@ -17,7 +17,7 @@ public interface GoodsCopyService {
 	 * @param goodsCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:30:33
+	 * @date 2017-10-10 17:54:32
 	 */
 	public boolean saveGoodsCopy(GoodsCopy goodsCopy);
 	/**
@@ -33,7 +33,7 @@ public interface GoodsCopyService {
 	 * @param gid
 	 * @return goodsCopy
 	 * @author fanghui
-	 * @date 2017-10-09 17:30:33
+	 * @date 2017-10-10 17:54:32
 	 */
 	public GoodsCopy queryGoodsCopyByGid(Long gid);
 	/**
@@ -43,7 +43,7 @@ public interface GoodsCopyService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author fanghui
-	 * @date 2017-10-09 17:30:33
+	 * @date 2017-10-10 17:54:32
 	 */
 	public Pagination<GoodsCopy> queryGoodsCopyList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface GoodsCopyService {
 	 * @param gid
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-09 17:30:33
+	 * @date 2017-10-10 17:54:32
 	 */
 	public boolean deleteGoodsCopyByGid(Long gid);
 
