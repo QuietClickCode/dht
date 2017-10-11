@@ -11,7 +11,7 @@
 <div id="toolbar" class="form-inline">
     <div class="form-group">
         <sapn>优惠卷状态:</sapn>
-        <select id="search_is_valid" name="search_is_valid"  class="selectpicker">
+        <select id="search_is_valid" name="search_is_valid"  class="form-control" style="width: auto;">
             <option value="">--全部--</option>
             <option value="0" selected="selected">有效</option>
             <option value="1">失效</option>
@@ -19,7 +19,7 @@
     </div>
     <div class="form-group">
         <sapn>优惠卷类型:</sapn>
-        <select id="search_gcp_type" name="search_gcp_type">
+        <select id="search_gcp_type" name="search_gcp_type"  class="form-control" style="width: auto;">
             <option value="">--全部--</option>
             <option value="0">现金</option>
             <option value="1">折扣</option>
@@ -466,7 +466,7 @@
     function editorGoodsCoupon(gcpId){
         editorGoodsCouponType=1;
         initFormData(gcpId);
-        $("#editorGoodsCouponTitle").text("编辑职工");
+        $("#editorGoodsCouponTitle").text("编辑商品优惠");
         $('#editorGoodsCoupon').modal("show")
     }
     /**

@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CouponMapper">
+
+	<resultMap id="rm_coupon" type="com.retailers.dht.common.entity.Coupon">
+			<result property="cpId" column="cp_id"/>
+			<result property="cpName" column="cp_name"/>
+			<result property="cpCoinType" column="cp_coin_type"/>
+			<result property="cpType" column="cp_type"/>
+			<result property="cpLogo" column="cp_logo"/>
+			<result property="cpIsRestricted" column="cp_is_restricted"/>
+			<result property="cpReceiveCondition" column="cp_receive_condition"/>
+			<result property="cpUseCondition" column="cp_use_condition"/>
+			<result property="cpStartDate" column="cp_start_date"/>
+			<result property="cpEndDate" column="cp_end_date"/>
+			<result property="cpIsOverlapUse" column="cp_is_overlap_use"/>
+			<result property="cpIsFirst" column="cp_is_first"/>
+			<result property="cpSendWay" column="cp_send_way"/>
+			<result property="cpSendStartDate" column="cp_send_start_date"/>
+			<result property="cpSendEndDate" column="cp_send_end_date"/>
+			<result property="cpSendNum" column="cp_send_num"/>
+			<result property="cpNum" column="cp_num"/>
+			<result property="cpMoney" column="cp_money"/>
+			<result property="cpDiscount" column="cp_discount"/>
+			<result property="cpContext" column="cp_context"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="isValid" column="is_valid"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="coupon_columns">
+		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_send_num,cp_num,cp_money,cp_discount,cp_context,is_delete,is_valid,version
+	</sql>
+	<!-- 根据优惠卷主键取得数据 -->
+	<select id="queryCouponByCpId" resultMap="rm_coupon" parameterType="java.lang.Long">
+		SELECT <include refid="coupon_columns" />
+		FROM t_coupon WHERE cp_id = #{cpId}
+	</select>
+	<!-- 优惠卷查询条件组合 -->
+	<sql id="coupon_where">
+		<where>
+			<if test="null != params.cpId">
+				AND cp_id = #{params.cpId}
+			</if>
+			<if test="null != params.cpName and '' != params.cpName">
+				AND cp_name = #{params.cpName}
+			</if>
+			<if test="null != params.cpCoinType">
+				AND cp_coin_type = #{params.cpCoinType}
+			</if>
+			<if test="null != params.cpType">
+				AND cp_type = #{params.cpType}
+			</if>
+			<if test="null != params.cpLogo">
+				AND cp_logo = #{params.cpLogo}
+			</if>
+			<if test="null != params.cpIsRestricted">
+				AND cp_is_restricted = #{params.cpIsRestricted}
+			</if>
+			<if test="null != params.cpReceiveCondition and '' != params.cpReceiveCondition">
+				AND cp_receive_condition = #{params.cpReceiveCondition}
+			</if>
+			<if test="null != params.cpUseCondition">
+				AND cp_use_condition = #{params.cpUseCondition}
+			</if>
+			<if test="null != params.cpStartDateBegin">
+				AND cp_start_date &gt;= TO_DATE('${params.cpStartDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpStartDateEnd">
+				AND cp_start_date &lt;= TO_DATE('${params.cpStartDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpEndDateBegin">
+				AND cp_end_date &gt;= TO_DATE('${params.cpEndDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpEndDateEnd">
+				AND cp_end_date &lt;= TO_DATE('${params.cpEndDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpIsOverlapUse">
+				AND cp_is_overlap_use = #{params.cpIsOverlapUse}
+			</if>
+			<if test="null != params.cpIsFirst">
+				AND cp_is_first = #{params.cpIsFirst}
+			</if>
+			<if test="null != params.cpSendWay">
+				AND cp_send_way = #{params.cpSendWay}
+			</if>
+			<if test="null != params.cpSendStartDateBegin">
+				AND cp_send_start_date &gt;= TO_DATE('${params.cpSendStartDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpSendStartDateEnd">
+				AND cp_send_start_date &lt;= TO_DATE('${params.cpSendStartDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpSendEndDateBegin">
+				AND cp_send_end_date &gt;= TO_DATE('${params.cpSendEndDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpSendEndDateEnd">
+				AND cp_send_end_date &lt;= TO_DATE('${params.cpSendEndDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpSendNum">
+				AND cp_send_num = #{params.cpSendNum}
+			</if>
+			<if test="null != params.cpNum">
+				AND cp_num = #{params.cpNum}
+			</if>
+			<if test="null != params.cpMoney">
+				AND cp_money = #{params.cpMoney}
+			</if>
+			<if test="null != params.cpDiscount">
+				AND cp_discount = #{params.cpDiscount}
+			</if>
+			<if test="null != params.cpContext and '' != params.cpContext">
+				AND cp_context = #{params.cpContext}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCouponList" resultMap="rm_coupon" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="coupon_columns" />
+		FROM t_coupon
+		<include refid="coupon_where"/>
+	</select>
+	<!--添加优惠卷 -->
+	<insert id="saveCoupon" parameterType="com.retailers.dht.common.entity.Coupon" useGeneratedKeys="true" keyProperty="cpId">
+		INSERT INTO t_coupon (
+			cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_send_num,cp_num,cp_money,cp_discount,cp_context,is_delete,is_valid,version
+		) VALUES
+		(
+			#{cpName,jdbcType=VARCHAR},#{cpCoinType,jdbcType=INTEGER},#{cpType,jdbcType=INTEGER},#{cpLogo,jdbcType=BIGINT},#{cpIsRestricted,jdbcType=BIGINT},#{cpReceiveCondition,jdbcType=VARCHAR},#{cpUseCondition,jdbcType=BIGINT},#{cpStartDate,jdbcType=TIMESTAMP},#{cpEndDate,jdbcType=TIMESTAMP},#{cpIsOverlapUse,jdbcType=INTEGER},#{cpIsFirst,jdbcType=INTEGER},#{cpSendWay,jdbcType=INTEGER},#{cpSendStartDate,jdbcType=TIMESTAMP},#{cpSendEndDate,jdbcType=TIMESTAMP},#{cpSendNum,jdbcType=BIGINT},#{cpNum,jdbcType=BIGINT},#{cpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=DECIMAL},#{cpContext,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改优惠卷 -->
+	<update id="updateCoupon" parameterType="com.retailers.dht.common.entity.Coupon">
+		UPDATE t_coupon
+		<set>
+            <if test="null != cpName and '' != cpName">
+                cp_name = #{cpName},
+            </if>
+            <if test="null != cpCoinType">
+                cp_coin_type = #{cpCoinType},
+            </if>
+            <if test="null != cpType">
+                cp_type = #{cpType},
+            </if>
+            <if test="null != cpLogo">
+                cp_logo = #{cpLogo},
+            </if>
+            <if test="null != cpIsRestricted">
+                cp_is_restricted = #{cpIsRestricted},
+            </if>
+            <if test="null != cpReceiveCondition and '' != cpReceiveCondition">
+                cp_receive_condition = #{cpReceiveCondition},
+            </if>
+            <if test="null != cpUseCondition">
+                cp_use_condition = #{cpUseCondition},
+            </if>
+            <if test="null != cpStartDate">
+                cp_start_date = #{cpStartDate},
+            </if>
+            <if test="null != cpEndDate">
+                cp_end_date = #{cpEndDate},
+            </if>
+            <if test="null != cpIsOverlapUse">
+                cp_is_overlap_use = #{cpIsOverlapUse},
+            </if>
+            <if test="null != cpIsFirst">
+                cp_is_first = #{cpIsFirst},
+            </if>
+            <if test="null != cpSendWay">
+                cp_send_way = #{cpSendWay},
+            </if>
+            <if test="null != cpSendStartDate">
+                cp_send_start_date = #{cpSendStartDate},
+            </if>
+            <if test="null != cpSendEndDate">
+                cp_send_end_date = #{cpSendEndDate},
+            </if>
+            <if test="null != cpSendNum">
+                cp_send_num = #{cpSendNum},
+            </if>
+            <if test="null != cpNum">
+                cp_num = #{cpNum},
+            </if>
+            <if test="null != cpMoney">
+                cp_money = #{cpMoney},
+            </if>
+            <if test="null != cpDiscount">
+                cp_discount = #{cpDiscount},
+            </if>
+            <if test="null != cpContext and '' != cpContext">
+                cp_context = #{cpContext},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != isValid">
+                is_valid = #{isValid},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cp_id = #{cpId} and version = #{version}
+	</update>
+	<!--删除优惠卷 -->
+	<delete id="deleteCouponByCpId" parameterType="java.lang.Long">
+		DELETE FROM t_coupon WHERE cp_id = #{cpId}
+	</delete>
+</mapper>
