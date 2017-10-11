@@ -48,23 +48,23 @@
                 <h4 class="modal-title" id="editorCouponTitle"></h4>
             </div>
             <div class="modal-body" style="overflow-y:auto;height:100%;">
-                <form id="editorCouponForm">
-                    <input type="hidden" name="gcpId" id="gcpId">
-                    <input type="hidden" name="version" id="version">
+                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data" action="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods">
                     <div class="row">
                         <div class="col-lg-4" id="gcpMoneyDiv">
                             <div class="input-group form-group">
-                                <span class="input-group-addon">
-                                    优惠卷图片:
-                                </span>
-                                <form id="">
+                                    <span class="input-group-addon">
+                                        优惠卷图片:
+                                    </span>
                                     <input type="file" id="cpImages">
-                                </form>
-                                <%--<input type="text" class="form-control" name="gcpMoney" id="gcpMoney" placeholder="请输入优惠金额"/>--%>
                             </div>
                             <input id="cpLogo" name="cpLogo" type="hidden">
                         </div>
                     </div>
+                </form>
+                <form id="editorCouponForm">
+                    <input type="hidden" name="gcpId" id="gcpId">
+                    <input type="hidden" name="version" id="version">
+
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group form-group">
@@ -492,7 +492,7 @@
                 return this._bkGetActionUrl.call(this, action);
             }
         }
-        $('#editorCouponForm #cpImages').filestyle({
+        $('#cpImagesForm #cpImages').filestyle({
             btnClass : "btn-primary",
             text:"选择文件",
             onChange:function(){
