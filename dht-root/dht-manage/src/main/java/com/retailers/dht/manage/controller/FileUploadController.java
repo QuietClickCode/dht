@@ -63,6 +63,8 @@ public class FileUploadController extends BaseController{
         imgMap.put("state", "SUCCESS");
         imgMap.put("url", AttachmentConstant.IMAGE_SHOW_URL+rtn.get("savePath"));
         imgMap.put("title", upfile.getOriginalFilename());
+//        imgMap.put("title", upfile.getOriginalFilename());
+        imgMap.put("title", rtn.get("attachmentId"));
         imgMap.put("original", rtn.get("attachmentId"));
         logger.info("上传图片结束");
         return imgMap;

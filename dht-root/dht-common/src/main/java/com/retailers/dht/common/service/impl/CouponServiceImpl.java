@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.dao.CouponMapper;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -24,10 +25,16 @@ public class CouponServiceImpl implements CouponService {
 	@Autowired
 	private AttachmentService attachmentService;
 
-	public boolean saveCoupon(Coupon coupon) {
+	public boolean saveCoupon(Coupon coupon,String attIds) {
 		int status = couponMapper.saveCoupon(coupon);
 		List<Long> attachmentIds= new ArrayList<Long>();
 		attachmentIds.add(coupon.getCpLogo());
+		if(ObjectUtils.isNotEmpty(attIds)){
+			String[] aids=attIds.split(",");
+			for(String id:aids){
+				attachmentIds.add(Long.parseLong(id));
+			}
+		}
 		attachmentService.editorAttachment(attachmentIds);
 		return status == 1 ? true : false;
 	}

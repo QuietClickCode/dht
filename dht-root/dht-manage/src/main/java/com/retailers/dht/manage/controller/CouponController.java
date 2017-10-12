@@ -79,21 +79,26 @@ public class CouponController extends BaseController{
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加优惠卷", description = "添加优惠卷", resourse = "coupon.addCoupon",sort=2,parentRes="coupon.openCouponPage")
     @ResponseBody
-    public BaseResp addCoupon(CouponVo goodsCoupon){
+    public BaseResp addCoupon(CouponVo goodsCoupon,String attIds){
         try{
             validateParams(goodsCoupon);
         }catch(Exception e){
             return errorForParam(e.getMessage());
         }
-        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-        goodsCoupon.setCpCreate(new Date());
-        Coupon cp = new Coupon();
-        BeanUtils.copyProperties(goodsCoupon,cp);
-        boolean flag = couponService.saveCoupon(cp);
-        if(flag){
-            return success("优惠卷添加成功");
-        }else{
-            return success("优惠卷添加失败");
+        try{
+            goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+            goodsCoupon.setCpCreate(new Date());
+            Coupon cp = new Coupon();
+            BeanUtils.copyProperties(goodsCoupon,cp);
+            boolean flag = couponService.saveCoupon(cp,attIds);
+            if(flag){
+                return success("优惠卷添加成功");
+            }else{
+                return success("优惠卷添加失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
         }
     }
     private void validateParams(CouponVo couponVo)throws AppException{

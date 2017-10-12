@@ -442,8 +442,16 @@
                 url="/goodsCoupon/editorGoodsCoupon";
             }
             var context = UE.getEditor('cpContext').getContent();
-            console.log(context);
             formData["cpContext"]=context;
+            var attIds = new Array();
+            $(context).find("img").each(function(i){
+                if($(this).attr("title")){
+                    attIds.push($(this).attr("title"));
+                }
+            });
+            if(attIds){
+                formData["attIds"]=attIds.join(",");
+            }
             //取得form表单数据
             $.ajax({
                 type:"post",
@@ -757,7 +765,6 @@
     }
     let fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
     function cpImagesFormSummit(){
-        console.log("提交文件")
         var formData = new FormData($( "#cpImagesForm" )[0]);
         $.ajax({
             url: fileUpload,
@@ -769,8 +776,6 @@
             processData: false,
             dataType: "json",
             success: function (returndata) {
-                console.log(returndata);
-                console.log( typeof returndata)
                 if(returndata.state=="SUCCESS"){
                     $("#uploadImageDiv").show();
                     $("#uploadImage").attr("src",returndata.url);
