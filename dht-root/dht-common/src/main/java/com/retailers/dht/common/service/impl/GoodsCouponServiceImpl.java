@@ -1,9 +1,11 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.dao.GoodsCouponMapper;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;

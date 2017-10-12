@@ -1,9 +1,11 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.dao.CouponMapper;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,14 @@ import com.retailers.mybatis.pagination.Pagination;
 public class CouponServiceImpl implements CouponService {
 	@Autowired
 	private CouponMapper couponMapper;
+	@Autowired
+	private AttachmentService attachmentService;
+
 	public boolean saveCoupon(Coupon coupon) {
 		int status = couponMapper.saveCoupon(coupon);
+		List<Long> attachmentIds= new ArrayList<Long>();
+		attachmentIds.add(coupon.getCpLogo());
+		attachmentService.editorAttachment(attachmentIds);
 		return status == 1 ? true : false;
 	}
 	public boolean updateCoupon(Coupon coupon) {

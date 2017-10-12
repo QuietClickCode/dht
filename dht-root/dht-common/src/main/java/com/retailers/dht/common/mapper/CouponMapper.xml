@@ -18,11 +18,17 @@
 			<result property="cpSendWay" column="cp_send_way"/>
 			<result property="cpSendStartDate" column="cp_send_start_date"/>
 			<result property="cpSendEndDate" column="cp_send_end_date"/>
+			<result property="cpCycleSendType" column="cp_cycle_send_type"/>
 			<result property="cpSendNum" column="cp_send_num"/>
 			<result property="cpNum" column="cp_num"/>
 			<result property="cpMoney" column="cp_money"/>
 			<result property="cpDiscount" column="cp_discount"/>
+			<result property="cpTotalMoney" column="cp_total_money"/>
+			<result property="cpMinDiscount" column="cp_min_discount"/>
+			<result property="cpMaxDiscount" column="cp_max_discount"/>
 			<result property="cpContext" column="cp_context"/>
+			<result property="cpCreateSid" column="cp_create_s_id"/>
+			<result property="cpCreate" column="cp_create"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="isValid" column="is_valid"/>
 			<result property="version" column="version"/>
@@ -30,7 +36,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="coupon_columns">
-		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_send_num,cp_num,cp_money,cp_discount,cp_context,is_delete,is_valid,version
+		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,cp_context,cp_create_s_id,cp_create,is_delete,is_valid,version
 	</sql>
 	<!-- 根据优惠卷主键取得数据 -->
 	<select id="queryCouponByCpId" resultMap="rm_coupon" parameterType="java.lang.Long">
@@ -97,6 +103,9 @@
 			<if test="null != params.cpSendEndDateEnd">
 				AND cp_send_end_date &lt;= TO_DATE('${params.cpSendEndDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
+			<if test="null != params.cpCycleSendType">
+				AND cp_cycle_send_type = #{params.cpCycleSendType}
+			</if>
 			<if test="null != params.cpSendNum">
 				AND cp_send_num = #{params.cpSendNum}
 			</if>
@@ -109,8 +118,26 @@
 			<if test="null != params.cpDiscount">
 				AND cp_discount = #{params.cpDiscount}
 			</if>
+			<if test="null != params.cpTotalMoney">
+				AND cp_total_money = #{params.cpTotalMoney}
+			</if>
+			<if test="null != params.cpMinDiscount">
+				AND cp_min_discount = #{params.cpMinDiscount}
+			</if>
+			<if test="null != params.cpMaxDiscount">
+				AND cp_max_discount = #{params.cpMaxDiscount}
+			</if>
 			<if test="null != params.cpContext and '' != params.cpContext">
 				AND cp_context = #{params.cpContext}
+			</if>
+			<if test="null != params.cpCreateSid">
+				AND cp_create_s_id = #{params.cpCreateSid}
+			</if>
+			<if test="null != params.cpCreateBegin">
+				AND cp_create &gt;= TO_DATE('${params.cpCreateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpCreateEnd">
+				AND cp_create &lt;= TO_DATE('${params.cpCreateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
@@ -132,10 +159,10 @@
 	<!--添加优惠卷 -->
 	<insert id="saveCoupon" parameterType="com.retailers.dht.common.entity.Coupon" useGeneratedKeys="true" keyProperty="cpId">
 		INSERT INTO t_coupon (
-			cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_send_num,cp_num,cp_money,cp_discount,cp_context,is_delete,is_valid,version
+			cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,cp_context,cp_create_s_id,cp_create,is_delete,is_valid,version
 		) VALUES
 		(
-			#{cpName,jdbcType=VARCHAR},#{cpCoinType,jdbcType=INTEGER},#{cpType,jdbcType=INTEGER},#{cpLogo,jdbcType=BIGINT},#{cpIsRestricted,jdbcType=BIGINT},#{cpReceiveCondition,jdbcType=VARCHAR},#{cpUseCondition,jdbcType=BIGINT},#{cpStartDate,jdbcType=TIMESTAMP},#{cpEndDate,jdbcType=TIMESTAMP},#{cpIsOverlapUse,jdbcType=INTEGER},#{cpIsFirst,jdbcType=INTEGER},#{cpSendWay,jdbcType=INTEGER},#{cpSendStartDate,jdbcType=TIMESTAMP},#{cpSendEndDate,jdbcType=TIMESTAMP},#{cpSendNum,jdbcType=BIGINT},#{cpNum,jdbcType=BIGINT},#{cpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=DECIMAL},#{cpContext,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
+			#{cpName,jdbcType=VARCHAR},#{cpCoinType,jdbcType=INTEGER},#{cpType,jdbcType=INTEGER},#{cpLogo,jdbcType=BIGINT},#{cpIsRestricted,jdbcType=BIGINT},#{cpReceiveCondition,jdbcType=VARCHAR},#{cpUseCondition,jdbcType=BIGINT},#{cpStartDate,jdbcType=TIMESTAMP},#{cpEndDate,jdbcType=TIMESTAMP},#{cpIsOverlapUse,jdbcType=INTEGER},#{cpIsFirst,jdbcType=INTEGER},#{cpSendWay,jdbcType=INTEGER},#{cpSendStartDate,jdbcType=TIMESTAMP},#{cpSendEndDate,jdbcType=TIMESTAMP},#{cpCycleSendType,jdbcType=INTEGER},#{cpSendNum,jdbcType=BIGINT},#{cpNum,jdbcType=BIGINT},#{cpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=BIGINT},#{cpTotalMoney,jdbcType=BIGINT},#{cpMinDiscount,jdbcType=BIGINT},#{cpMaxDiscount,jdbcType=BIGINT},#{cpContext,jdbcType=VARCHAR},#{cpCreateSid,jdbcType=BIGINT},#{cpCreate,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改优惠卷 -->
@@ -184,6 +211,9 @@
             <if test="null != cpSendEndDate">
                 cp_send_end_date = #{cpSendEndDate},
             </if>
+            <if test="null != cpCycleSendType">
+                cp_cycle_send_type = #{cpCycleSendType},
+            </if>
             <if test="null != cpSendNum">
                 cp_send_num = #{cpSendNum},
             </if>
@@ -196,8 +226,23 @@
             <if test="null != cpDiscount">
                 cp_discount = #{cpDiscount},
             </if>
+            <if test="null != cpTotalMoney">
+                cp_total_money = #{cpTotalMoney},
+            </if>
+            <if test="null != cpMinDiscount">
+                cp_min_discount = #{cpMinDiscount},
+            </if>
+            <if test="null != cpMaxDiscount">
+                cp_max_discount = #{cpMaxDiscount},
+            </if>
             <if test="null != cpContext and '' != cpContext">
                 cp_context = #{cpContext},
+            </if>
+            <if test="null != cpCreateSid">
+                cp_create_s_id = #{cpCreateSid},
+            </if>
+            <if test="null != cpCreate">
+                cp_create = #{cpCreate},
             </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
