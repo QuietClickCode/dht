@@ -3,56 +3,44 @@
 <mapper namespace="com.retailers.dht.common.dao.GoodsCopyMapper">
 
 	<resultMap id="rm_goodsCopy" type="com.retailers.dht.common.entity.GoodsCopy">
-			<result property="gid" column="g_id"/>
+			<result property="gcId" column="gc_id"/>
 			<result property="gname" column="g_name"/>
 			<result property="gvender" column="g_vender"/>
 			<result property="gshop" column="g_shop"/>
 			<result property="gclassification" column="g_classification"/>
 			<result property="gbrand" column="g_brand"/>
-			<result property="gputawaytime" column="g_putawaytime"/>
-			<result property="gunshelvetime" column="g_unshelvetime"/>
 			<result property="garea" column="g_area"/>
 			<result property="gsalescope" column="g_salescope"/>
-			<result property="gprofitability" column="g_profitability"/>
-			<result property="gsalesvolume" column="g_salesvolume"/>
-			<result property="gfreight" column="g_freight"/>
 			<result property="gmaindirection" column="g_maindirection"/>
-			<result property="gunitname" column="g_unitname"/>
-			<result property="gstartbuy" column="g_startbuy"/>
-			<result property="gendbuy" column="g_endbuy"/>
 			<result property="gdescription" column="g_description"/>
 			<result property="gproductioninperson" column="g_productioninperson"/>
 			<result property="gproductioninaddress" column="g_productioninaddress"/>
 			<result property="gpickperson" column="g_pickperson"/>
 			<result property="gpickaddress" column="g_pickaddress"/>
-			<result property="ggoodsid" column="g_goodsid"/>
-			<result property="gdeposit" column="g_deposit"/>
-			<result property="gedt" column="g_edt"/>
-			<result property="isPutway" column="is_putway"/>
+			<result property="gid" column="g_id"/>
+			<result property="gprice" column="g_price"/>
+			<result property="gcheckperson" column="g_checkperson"/>
+			<result property="gcheckmessage" column="g_checkmessage"/>
+			<result property="gunitname" column="g_unitname"/>
 			<result property="isChecked" column="is_checked"/>
-			<result property="isAllowsetdeliverytime" column="is_allowsetdeliverytime"/>
-			<result property="isShowsalesvolume" column="is_showsalesvolume"/>
-			<result property="isMenberdiscount" column="is_menberdiscount"/>
-			<result property="isCod" column="is_cod"/>
-			<result property="isMultiplebuy" column="is_multiplebuy"/>
-			<result property="isServicegoods" column="is_servicegoods"/>
-			<result property="isAdvancesale" column="is_advancesale"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCopy_columns">
-		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,g_edt,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,is_advancesale
+		gc_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
 	</sql>
 	<!-- 根据商品副本表主键取得数据 -->
-	<select id="queryGoodsCopyByGid" resultMap="rm_goodsCopy" parameterType="java.lang.Long">
+	<select id="queryGoodsCopyByGcId" resultMap="rm_goodsCopy" parameterType="java.lang.Long">
 		SELECT <include refid="goodsCopy_columns" />
-		FROM t_goods_copy WHERE g_id = #{gid}
+		FROM t_goods_copy WHERE gc_id = #{gcId}
 	</select>
 	<!-- 商品副本表查询条件组合 -->
 	<sql id="goodsCopy_where">
 		<where>
-			<if test="null != params.gid">
-				AND g_id = #{params.gid}
+			<if test="null != params.gcId">
+				AND gc_id = #{params.gcId}
 			</if>
 			<if test="null != params.gname and '' != params.gname">
 				AND g_name = #{params.gname}
@@ -69,46 +57,16 @@
 			<if test="null != params.gbrand">
 				AND g_brand = #{params.gbrand}
 			</if>
-			<if test="null != params.gputawaytimeBegin">
-				AND g_putawaytime &gt;= #{params.gputawaytime}
-			</if>
-			<if test="null != params.gputawaytimeEnd">
-				AND g_putawaytime &lt;= #{params.gputawaytime}
-			</if>
-			<if test="null != params.gunshelvetimeBegin">
-				AND g_unshelvetime &gt;= #{params.gunshelvetime}
-			</if>
-			<if test="null != params.gunshelvetimeEnd">
-				AND g_unshelvetime &lt;= #{params.gunshelvetime}
-			</if>
 			<if test="null != params.garea">
 				AND g_area = #{params.garea}
 			</if>
 			<if test="null != params.gsalescope">
 				AND g_salescope = #{params.gsalescope}
 			</if>
-			<if test="null != params.gprofitability">
-				AND g_profitability = #{params.gprofitability}
-			</if>
-			<if test="null != params.gsalesvolume">
-				AND g_salesvolume = #{params.gsalesvolume}
-			</if>
-			<if test="null != params.gfreight">
-				AND g_freight = #{params.gfreight}
-			</if>
 			<if test="null != params.gmaindirection">
 				AND g_maindirection = #{params.gmaindirection}
 			</if>
-			<if test="null != params.gunitname and '' != params.gunitname">
-				AND g_unitname = #{params.gunitname}
-			</if>
-			<if test="null != params.gstartbuy">
-				AND g_startbuy = #{params.gstartbuy}
-			</if>
-			<if test="null != params.gendbuy">
-				AND g_endbuy = #{params.gendbuy}
-			</if>
-			<if test="null != params.gdescription">
+			<if test="null != params.gdescription and '' != params.gdescription">
 				AND g_description = #{params.gdescription}
 			</if>
 			<if test="null != params.gproductioninperson and '' != params.gproductioninperson">
@@ -123,44 +81,29 @@
 			<if test="null != params.gpickaddress and '' != params.gpickaddress">
 				AND g_pickaddress = #{params.gpickaddress}
 			</if>
-			<if test="null != params.ggoodsid">
-				AND g_goodsid = #{params.ggoodsid}
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
 			</if>
-			<if test="null != params.gdeposit">
-				AND g_deposit = #{params.gdeposit}
+			<if test="null != params.gprice">
+				AND g_price = #{params.gprice}
 			</if>
-			<if test="null != params.gedtBegin">
-				AND g_edt &gt;= #{params.gedt}
+			<if test="null != params.gcheckperson">
+				AND g_checkperson = #{params.gcheckperson}
 			</if>
-			<if test="null != params.gedtEnd">
-				AND g_edt &lt;= #{params.gedt}
+			<if test="null != params.gcheckmessage and '' != params.gcheckmessage">
+				AND g_checkmessage = #{params.gcheckmessage}
 			</if>
-			<if test="null != params.isPutway">
-				AND is_putway = #{params.isPutway}
+			<if test="null != params.gunitname and '' != params.gunitname">
+				AND g_unitname = #{params.gunitname}
 			</if>
 			<if test="null != params.isChecked">
 				AND is_checked = #{params.isChecked}
 			</if>
-			<if test="null != params.isAllowsetdeliverytime">
-				AND is_allowsetdeliverytime = #{params.isAllowsetdeliverytime}
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
 			</if>
-			<if test="null != params.isShowsalesvolume">
-				AND is_showsalesvolume = #{params.isShowsalesvolume}
-			</if>
-			<if test="null != params.isMenberdiscount">
-				AND is_menberdiscount = #{params.isMenberdiscount}
-			</if>
-			<if test="null != params.isCod">
-				AND is_cod = #{params.isCod}
-			</if>
-			<if test="null != params.isMultiplebuy">
-				AND is_multiplebuy = #{params.isMultiplebuy}
-			</if>
-			<if test="null != params.isServicegoods">
-				AND is_servicegoods = #{params.isServicegoods}
-			</if>
-			<if test="null != params.isAdvancesale">
-				AND is_advancesale = #{params.isAdvancesale}
+			<if test="null != params.version">
+				AND version = #{params.version}
 			</if>
 		</where>
 	</sql>
@@ -171,12 +114,12 @@
 		<include refid="goodsCopy_where"/>
 	</select>
 	<!--添加商品副本表 -->
-	<insert id="saveGoodsCopy" parameterType="com.retailers.dht.common.entity.GoodsCopy" useGeneratedKeys="true" keyProperty="gid">
+	<insert id="saveGoodsCopy" parameterType="com.retailers.dht.common.entity.GoodsCopy" useGeneratedKeys="true" keyProperty="gcId">
 		INSERT INTO t_goods_copy (
-			g_name,g_vender,g_shop,g_classification,g_brand,g_putawaytime,g_unshelvetime,g_area,g_salescope,g_profitability,g_salesvolume,g_freight,g_maindirection,g_unitname,g_startbuy,g_endbuy,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_goodsid,g_deposit,g_edt,is_putway,is_checked,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_multiplebuy,is_servicegoods,is_advancesale
+			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{gputawaytime,jdbcType=TIMESTAMP},#{gunshelvetime,jdbcType=TIMESTAMP},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gprofitability,jdbcType=DECIMAL},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gmaindirection,jdbcType=BIGINT},#{gunitname,jdbcType=VARCHAR},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gdescription,jdbcType=LONGVARBINARY},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{ggoodsid,jdbcType=BIGINT},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{isPutway,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT}
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gid,jdbcType=BIGINT},#{gprice,jdbcType=REAL},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品副本表 -->
@@ -198,40 +141,16 @@
             <if test="null != gbrand">
                 g_brand = #{gbrand},
             </if>
-            <if test="null != gputawaytime">
-                g_putawaytime = #{gputawaytime},
-            </if>
-            <if test="null != gunshelvetime">
-                g_unshelvetime = #{gunshelvetime},
-            </if>
             <if test="null != garea">
                 g_area = #{garea},
             </if>
             <if test="null != gsalescope">
                 g_salescope = #{gsalescope},
             </if>
-            <if test="null != gprofitability">
-                g_profitability = #{gprofitability},
-            </if>
-            <if test="null != gsalesvolume">
-                g_salesvolume = #{gsalesvolume},
-            </if>
-            <if test="null != gfreight">
-                g_freight = #{gfreight},
-            </if>
             <if test="null != gmaindirection">
                 g_maindirection = #{gmaindirection},
             </if>
-            <if test="null != gunitname and '' != gunitname">
-                g_unitname = #{gunitname},
-            </if>
-            <if test="null != gstartbuy">
-                g_startbuy = #{gstartbuy},
-            </if>
-            <if test="null != gendbuy">
-                g_endbuy = #{gendbuy},
-            </if>
-            <if test="null != gdescription">
+            <if test="null != gdescription and '' != gdescription">
                 g_description = #{gdescription},
             </if>
             <if test="null != gproductioninperson and '' != gproductioninperson">
@@ -246,47 +165,35 @@
             <if test="null != gpickaddress and '' != gpickaddress">
                 g_pickaddress = #{gpickaddress},
             </if>
-            <if test="null != ggoodsid">
-                g_goodsid = #{ggoodsid},
+            <if test="null != gid">
+                g_id = #{gid},
             </if>
-            <if test="null != gdeposit">
-                g_deposit = #{gdeposit},
+            <if test="null != gprice">
+                g_price = #{gprice},
             </if>
-            <if test="null != gedt">
-                g_edt = #{gedt},
+            <if test="null != gcheckperson">
+                g_checkperson = #{gcheckperson},
             </if>
-            <if test="null != isPutway">
-                is_putway = #{isPutway},
+            <if test="null != gcheckmessage and '' != gcheckmessage">
+                g_checkmessage = #{gcheckmessage},
+            </if>
+            <if test="null != gunitname and '' != gunitname">
+                g_unitname = #{gunitname},
             </if>
             <if test="null != isChecked">
                 is_checked = #{isChecked},
             </if>
-            <if test="null != isAllowsetdeliverytime">
-                is_allowsetdeliverytime = #{isAllowsetdeliverytime},
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
             </if>
-            <if test="null != isShowsalesvolume">
-                is_showsalesvolume = #{isShowsalesvolume},
-            </if>
-            <if test="null != isMenberdiscount">
-                is_menberdiscount = #{isMenberdiscount},
-            </if>
-            <if test="null != isCod">
-                is_cod = #{isCod},
-            </if>
-            <if test="null != isMultiplebuy">
-                is_multiplebuy = #{isMultiplebuy},
-            </if>
-            <if test="null != isServicegoods">
-                is_servicegoods = #{isServicegoods},
-            </if>
-            <if test="null != isAdvancesale">
-                is_advancesale = #{isAdvancesale},
+            <if test="null != version">
+                version = version+1,
             </if>
 		</set>
-		WHERE g_id = #{gid}
+		WHERE gc_id = #{gcId} and version = #{version}
 	</update>
 	<!--删除商品副本表 -->
-	<delete id="deleteGoodsCopyByGid" parameterType="java.lang.Long">
-		DELETE FROM t_goods_copy WHERE g_id = #{gid}
+	<delete id="deleteGoodsCopyByGcId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_copy WHERE gc_id = #{gcId}
 	</delete>
 </mapper>

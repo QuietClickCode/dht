@@ -61,7 +61,6 @@
 
         var myImage = o_ueditorupload.getDialog("insertimage");
         myImage.open();
-        $('#edui_fixedlayer').css("z-index","10000000");
     }
     //弹出文件上传的对话框
     function upFiles()
@@ -122,12 +121,12 @@
                     <div class="row clearfix">
                         <div class="col-md-12 column">
                             <div class="tabbable" id="tabs-44711">
-                                <ul class="nav nav-tabs">
-                                    <li class="active">
-                                        <a href="#panel-961258" data-toggle="tab">基本信息</a>
+                                <ul class="nav nav-tabs" >
+                                    <li class="active" id="navfirstli">
+                                        <a href="#panel-961258" data-toggle="tab" id="navfirsta">基本信息</a>
                                     </li>
                                     <li>
-                                        <a href="#panel-694947" data-toggle="tab">Section 2</a>
+                                        <a href="#panel-694947" data-toggle="tab" onclick="initGoodsConfigForm()">商品配置</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
@@ -136,8 +135,9 @@
                                             <form id="editorGoodsForm">
                                                 <input type="hidden" name="gid" id="gid">
                                                 <input type="hidden" name="version" id="version">
+                                                <input type="hidden" name="isDelete" id="isDelete">
                                                 <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品导入:
@@ -146,22 +146,10 @@
                                                             <button class="btn btn-default" id="importGoodsBtn">导入</button>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            是否是服务类商品:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isServicegoods" name="isServicegoods" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品名称:
@@ -169,7 +157,7 @@
                                                             <input type="text" class="form-control" name="gname" id="gname">
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               商品分类:
@@ -181,103 +169,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            利润率:
-                                                          </span>
-                                                            <input type="text" class="form-control" name="gprofitability" id="gprofitability" style="width: 60%">%
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6" id="allowsettimediv">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon" id="allowsettimespen">
-                                                              允许用户设置发货时间:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isAllowsetdeliverytime" name="isAllowsetdeliverytime" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            是否显示销量:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isShowsalesvolume" name="isShowsalesvolume" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6" id="gsalesvolumediv">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              销量:
-                                                          </span>
-                                                            <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            会员是否打折:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isMenberdiscount" name="isMenberdiscount" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              是否上架:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isPutway" name="isPutway" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row" id="isadvancesalediv">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            是否预售:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isAdvancesale" name="isAdvancesale" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6" id="gedtdiv">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              预计发货时间:
-                                                          </span>
-                                                            <input id="gedt" name="gedt" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             所属仓库/地区:
@@ -286,7 +178,7 @@
                                                             <input id="gareaName" name="gareaName" type="text" class="form-control" />
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               可售范围:
@@ -297,34 +189,34 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6" id="gfreightdiv">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
-                                                            运费:
+                                                            商品价格（原价）:
                                                           </span>
-                                                            <input id="gfreight" name="gfreight" type="text" class="form-control"/>
+                                                            <input id="gprice" name="gprice" type="text" class="form-control" placeholder="单位：元"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               主推方向:
                                                           </span>
                                                             <input id="gmaindirection" name="gmaindirection" type="hidden" />
-                                                            <div class="radio " style="display: inline-block;">
-                                                                <input type="radio" name="mainType" id="maincity" value="0" checked>
-                                                                <label for="maincity">
-                                                                    城市
-                                                                </label>
-                                                            </div>
-                                                            <div class="radio" style="display: inline-block;margin-left: 30px">
-                                                                <input type="radio" name="mainType" id="maincomtrayside" value="1" >
+                                                                <div class="radio " style="display: inline-block;">
+                                                                    <input type="radio" name="mainType" id="maincomtrayside" value="0" checked>
+                                                                    <label for="maincomtrayside">
+                                                                        乡村
+                                                                    </label>
+                                                                </div>
+                                                            <div class="radio " style="display: inline-block;margin-left: 30px;">
+                                                                <input type="radio" name="mainType" id="maincity" value="1" style="">
                                                                 <label for="maincomtrayside">
-                                                                    乡村
+                                                                    城镇
                                                                 </label>
                                                             </div>
-                                                            <div class="radio" style="display: inline-block;margin-left: 30px">
-                                                                <input type="radio" name="mainType" id="maincityandcom" value="2" >
+                                                            <div class="radio " style="display: inline-block;margin-left: 30px">
+                                                                <input type="radio" name="mainType" id="maincityandcom" value="0" checked>
                                                                 <label for="maincityandcom">
                                                                     乡村和城市
                                                                 </label>
@@ -334,7 +226,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             计件单位:
@@ -342,47 +234,10 @@
                                                             <input id="gunitname" name="gunitname" type="text" class="form-control"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              能否货到付款:
-                                                          </span>
-                                                            <div class="controls">
-                                                                <div class="switch" tabindex="0">
-                                                                    <input id="isCod" name="isCod" type="checkbox" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            起售数量:
-                                                          </span>
-                                                            <input id="gstartbuy" name="gstartbuy" type="text" class="form-control"style="width: 80%"/>
-                                                            <div class="checkbox checkbox-info" style="display: inline-block">
-                                                                <input id="isMultiplebuy" class="styled" type="checkbox" name="isMultiplebuy">
-                                                                <label for="isMultiplebuy">
-                                                                    倍数购买
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              限购量:
-                                                          </span>
-                                                            <input id="gendbuy" name="gendbuy" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             生产地信息:
@@ -390,7 +245,7 @@
                                                             <input id="gproductioninaddress" name="gproductioninaddress" type="text" class="form-control"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               生产人姓名:
@@ -401,7 +256,7 @@
                                                 </div>
 
                                                 <div class="row">
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             收集人地址:
@@ -409,7 +264,7 @@
                                                             <input id="gpickaddress" name="gpickaddress" type="text" class="form-control"/>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               收集人姓名:
@@ -421,15 +276,7 @@
 
                                                 <!--定金 详情描述-->
                                                 <div class="row">
-                                                    <div class="col-lg-6" id="gdepositdiv">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            定金:
-                                                          </span>
-                                                            <input id="gdeposit" name="gdeposit" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
+                                                    <div class="col-lg-12">
                                                         <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             详情描述:
@@ -445,9 +292,186 @@
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="panel-694947">
-                                        <p>
-                                            Howdy, I'm in Section 2.
-                                        </p>
+                                            <div class="modal-body">
+                                                <form id="editorGoodsConfigForm">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            是否是服务类商品:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isServicegoods" name="isServicegoods" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            利润率:
+                                                          </span>
+                                                                <input type="text" class="form-control" name="gprofitability" id="gprofitability" style="width: 60%">%
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12" id="allowsettimediv">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon" id="allowsettimespen">
+                                                              允许用户设置发货时间:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isAllowsetdeliverytime" name="isAllowsetdeliverytime" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            是否显示销量:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isShowsalesvolume" name="isShowsalesvolume" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12" id="gsalesvolumediv">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              销量:
+                                                          </span>
+                                                                <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            会员是否打折:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isMenberdiscount" name="isMenberdiscount" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              是否上架:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isPutway" name="isPutway" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row" id="isadvancesalediv">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            是否预售:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isAdvancesale" name="isAdvancesale" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12" id="gedtdiv">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              预计发货时间:
+                                                          </span>
+                                                                <input id="gedt" name="gedt" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12" id="gfreightdiv">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            运费:
+                                                          </span>
+                                                                <input id="gfreight" name="gfreight" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              能否货到付款:
+                                                          </span>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="isCod" name="isCod" type="checkbox" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            起售数量:
+                                                          </span>
+                                                                <input id="gstartbuy" name="gstartbuy" type="text" class="form-control"style="width: 80%"/>
+                                                                <div class="checkbox checkbox-info" style="display: inline-block">
+                                                                    <input id="isMultiplebuy" class="styled" type="checkbox" name="isMultiplebuy">
+                                                                    <label for="isMultiplebuy">
+                                                                        倍数购买
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              限购量:
+                                                          </span>
+                                                                <input id="gendbuy" name="gendbuy" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <!--定金 详情描述-->
+                                                    <div class="row">
+                                                        <div class="col-lg-12" id="gdepositdiv">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            定金:
+                                                          </span>
+                                                                <input id="gdeposit" name="gdeposit" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+
                                     </div>
                                 </div>
                             </div>
@@ -468,6 +492,27 @@
 <div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
     <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
+
+<!--删除提示框-->
+<div class="modal fade" id="delcfmModel">
+    <div class="modal-dialog">
+        <div class="modal-content message_align">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                <h4 class="modal-title">提示信息</h4>
+            </div>
+            <div class="modal-body">
+                <p>您确认要删除吗？</p>
+            </div>
+            <div class="modal-footer">
+                <input type="hidden" id="url"/>
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <a  onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
@@ -532,12 +577,6 @@
             }
         },
         {
-            field: 'gputawaytime',
-            title: '上架时间',
-            align : 'center',
-            valign : 'middle'
-        },
-        {
             field: 'CreateTime',
             title: '操作',
             align : 'center',
@@ -575,19 +614,18 @@
         createTable("/goods/queryGoodsLists","GoodsTables","gbId",treeColumns,queryParams);
 
         //初始华开关选择器
-        $("#editorGoodsForm #isServicegoods").bootstrapSwitch();
-        $("#editorGoodsForm #isAllowsetdeliverytime").bootstrapSwitch();
-        $("#editorGoodsForm #isShowsalesvolume").bootstrapSwitch();
-        $("#editorGoodsForm #isMenberdiscount").bootstrapSwitch();
-        $("#editorGoodsForm #isPutway").bootstrapSwitch();
-        $("#editorGoodsForm #isCod").bootstrapSwitch();
-        $("#editorGoodsForm #isAdvancesale").bootstrapSwitch();
+        $("#isServicegoods").bootstrapSwitch();
+        $("#isAllowsetdeliverytime").bootstrapSwitch();
+        $("#isShowsalesvolume").bootstrapSwitch();
+        $("#isMenberdiscount").bootstrapSwitch();
+        $("#isPutway").bootstrapSwitch();
+        $("#isCod").bootstrapSwitch();
+        $("#isAdvancesale").bootstrapSwitch();
 
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
             //隐藏下拉菜单
-            hideOrgTree();
             clearFormValidation("editorGoodsForm",formValidater)
         });
 
@@ -599,15 +637,19 @@
             if(!$('#editorGoodsForm').data('bootstrapValidator').isValid()){
                 return;
             }
+
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
             var formData=$("#editorGoodsForm").serializeObject();
 
+            formData["gmaindirection"]=$("input[name='mainType']:checked").val();
+
             let url="/goods/addGoods";
             if(editorGoodsType==1){
                 url="/goods/editGoods";
             }
+
             //取得form表单数据
             $.ajax({
                 type:"post",
@@ -621,8 +663,6 @@
                         layer.msg(data.msg);
                         //刷新数据
                         refreshTableData();
-                        //关闭弹窗
-                        $('#editorSysUser').modal('hide')
                     }else{
                         layer.msg(data.msg);
                     }
@@ -682,25 +722,26 @@
             }
         );
     }
+    var topGid;
+
     //删除确认框
-    function deleteData(gtId){
-        //询问框
-        layer.confirm('确定要删除选中的数据吗？', {
-            btn: ['确认','取消'] //按钮
-        }, function(){
-            removeGoods(gtId);
-        }, function(){
-        });
+    function deleteData(gid){
+        $('#delcfmModel').modal();
+        topGid=gid;
     }
+    function urlSubmit() {
+        removeGoods(topGid);
+    }
+
     /**
      * 删除商品大类
      **/
-    function removeGoods(gbId){
+    function removeGoods(gid){
         $.ajax({
             type:"post",
             url:'/goods/removeGoods',
             dataType: "json",
-            data:{gbId:gbId},
+            data:{gid:gid},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");
@@ -714,139 +755,104 @@
 
 
     var zNodes;
-    function editorGoods(orgId){
+    function editorGoods(gid){
         editorGoodsType=1;
-        reloadOrgTree(orgId);
-        initFormData(orgId);
+        initFormData(gid);
         $("#editorSysUserTitle").text("编辑商品");
     }
     /**
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorGoodsForm #uid").val("");
-        $("#editorGoodsForm #version").val("");
-        $("#editorGoodsForm #uaccount").val("");
-        $("#editorGoodsForm #uname").val("");
-        $("#editorGoodsForm #orgIds").val("");
-        $("#editorGoodsForm #isValid").val("");
+        $("#gid").val('');
+        $("#version").val('');
+        $("#isDelete").val('0');
+        $("#gname").val('');
+        $("#gclassification").val('');
+        $("#gclassificationName").val('');
+        $("#garea").val('');
+        $("#gareaName").val('');
+        $("#gsalescope").val('');
+        $("#gprice").val('');
+        $("#gunitname").val('');
+        $("#gproductioninaddress").val('');
+        $("#gproductioninperson").val('');
+        $("#gpickaddress").val('');
+        $("#gpickperson").val('');
+        $("#gmaindirection").val('0');
+        $('#maincomtrayside').get(0).checked=true;
+        $("#ueditor_1").find("body").html('');
+
+        $("#gfreight").val('');
+        $("#gstartbuy").val('');
+        $("#gendbuy").val('');
+        $("#gsalesvolume").val('');
+        $("#gedt").val('');
+        $("#gprofitability").val('');
+        $("#gdeposit").val('');
+
+        $("#isServicegoods").val('');
+        $("#isServicegoods").bootstrapSwitch("state",false);
+
+        $("#isAllowsetdeliverytime").val('');
+        $("#isAllowsetdeliverytime").bootstrapSwitch("state",false);
+
+        $("#isShowsalesvolume").val('');
+        $("#isShowsalesvolume").bootstrapSwitch("state",false);
+
+        $("#isMenberdiscount").val('');
+        $("#isMenberdiscount").bootstrapSwitch("state",true);
+
+        $("#isPutway").val('');
+        $("#isPutway").bootstrapSwitch("state",true);
+
+        $("#isAdvancesale").val('');
+        $("#isAdvancesale").bootstrapSwitch("state",false);
+
+        $("#isCod").val('');
+        $("#isCod").bootstrapSwitch("state",false);
+
+        $("#isMultiplebuy").val('');
+        $('#isMultiplebuy').removeAttr('checked');
+
     }
     /**
      * 清除form 表单数据
      * */
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
+        document.getElementById("navfirsta").click();
         if(rowData){
-            $("#editorGoodsForm #gid").val(rowData.gid);
-            $("#editorGoodsForm #version").val(rowData.version);
-            $("#editorGoodsForm #gname").val(rowData.gname);
-            $("#editorGoodsForm #gclassification").val(rowData.gclassification);
-            $("#editorGoodsForm #gclassificationName").val(rowData.gclassificationName);
-            $("#editorGoodsForm #gprofitability").val(rowData.gprofitability);
-            $("#editorGoodsForm #gsalesvolume").val(rowData.gsalesvolume);
-            $("#editorGoodsForm #gedt").val(rowData.gedt);
-            $("#editorGoodsForm #garea").val(rowData.garea);
-            $("#editorGoodsForm #gareaName").val(rowData.gareaName);
-            $("#editorGoodsForm #gsalescope").val(rowData.gsalescope);
-            $("#editorGoodsForm #gfreight").val(rowData.gfreight);
-            $("#editorGoodsForm #gunitname").val(rowData.gunitname);
-            $("#editorGoodsForm #gstartbuy").val(rowData.gstartbuy);
-            $("#editorGoodsForm #gendbuy").val(rowData.gendbuy);
-            $("#editorGoodsForm #gproductioninaddress").val(rowData.gproductioninaddress);
-            $("#editorGoodsForm #gproductioninperson").val(rowData.gproductioninperson);
-            $("#editorGoodsForm #gpickaddress").val(rowData.gpickaddress);
-            $("#editorGoodsForm #gpickperson").val(rowData.gpickperson);
-            $("#ueditor_1").find("body").html(rowData.gdescription);
-
-            var flag;
-
-            flag = false;
-            $("#editorGoodsForm #isServicegoods").val(rowData.isServicegoods);
-            if(rowData.isServicegoods==1){
-                flag = true;
-                $('#allowsettimediv').hide();
-                $('#isadvancesalediv').hide();
-                $('#gfreightdiv').hide();
-                $('#gdepositdiv').show();
-            }else{
-                $('#allowsettimediv').show();
-                $('#isadvancesalediv').show();
-                $('#gfreightdiv').show();
-                $('#gdepositdiv').hide();
-            }
-            $("#editorGoodsForm #isServicegoods").bootstrapSwitch("state",flag);
-
-            flag = false;
-            $("#editorGoodsForm #isAllowsetdeliverytime").val(rowData.isAllowsetdeliverytime);
-            if(rowData.isAllowsetdeliverytime==1){
-                flag = true;
-            }
-            $("#editorGoodsForm #isAllowsetdeliverytime").bootstrapSwitch("state",flag);
-
-            flag = false;
-            $("#editorGoodsForm #isShowsalesvolume").val(rowData.isShowsalesvolume);
-            if(rowData.isShowsalesvolume==1){
-                flag = true;
-                $('#gsalesvolumediv').show();
-            }else{
-                $('#gsalesvolumediv').hide();
-            }
-            $("#editorGoodsForm #isShowsalesvolume").bootstrapSwitch("state",flag);
-
-            flag = false;
-            $("#editorGoodsForm #isMenberdiscount").val(rowData.isMenberdiscount);
-            if(rowData.isMenberdiscount==1){
-                flag = true;
-            }
-            $("#editorGoodsForm #isMenberdiscount").bootstrapSwitch("state",flag);
-
-            flag = false;
-            $("#editorGoodsForm #isPutway").val(rowData.isPutway);
-            if(rowData.isPutway==1){
-                flag = true;
-            }
-            $("#editorGoodsForm #isPutway").bootstrapSwitch("state",flag);
-
-            flag = false;
-            $("#editorGoodsForm #isAdvancesale").val(rowData.isAdvancesale);
-            if(rowData.isAdvancesale==1){
-                flag = true;
-                $('#gedtdiv').show();
-            }else{
-                $('#gedtdiv').hide();
-            }
-            $("#editorGoodsForm #isAdvancesale").bootstrapSwitch("state",flag);
-
-            $("#editorGoodsForm #gmaindirection").val(rowData.gmaindirection);
+            alert(rowData.gmaindirection);
+            $("#gid").val(rowData.gid);
+            $("#version").val(rowData.version);
+            $("#isDelete").val(rowData.isDelete);
+            $("#gname").val(rowData.gname);
+            $("#gclassification").val(rowData.gclassification);
+            $("#gclassificationName").val(rowData.gclassificationName);
+            $("#garea").val(rowData.garea);
+            $("#gareaName").val(rowData.gareaName);
+            $("#gsalescope").val(rowData.gsalescope);
+            $("#gprice").val(rowData.gprice);
+            $("#gunitname").val(rowData.gunitname);
+            $("#gproductioninaddress").val(rowData.gproductioninaddress);
+            $("#gproductioninperson").val(rowData.gproductioninperson);
+            $("#gpickaddress").val(rowData.gpickaddress);
+            $("#gpickperson").val(rowData.gpickperson);
+            $('#gmaindirection').val(rowData.gmaindirection);
             if(rowData.gmaindirection==0){
-                $('#maincity').attr('checked','checked');
-            }else if(rowData.gmaindirection==1){
-                $('#maincomtrayside').attr('checked','checked');
-            }else{
-                $('#maincityandcom').attr('checked','checked');
+                $('#maincomtrayside').get(0).checked=true;
             }
-
-            flag = false;
-            $("#editorGoodsForm #isCod").val(rowData.isCod);
-            if(rowData.isCod==1){
-                flag = true;
+            if(rowData.gmaindirection==1){
+                $('#maincity').get(0).checked=true;
             }
-            $("#editorGoodsForm #isCod").bootstrapSwitch("state",flag);
-
-
-            $("#editorGoodsForm #isMultiplebuy").val(rowData.isMultiplebuy);
-            if(rowData.isMultiplebuy==1){
-                $('#isMultiplebuy').attr('checked','checked');
-            }else{
-                $('#isMultiplebuy').removeAttr('checked');
+            if(rowData.gmaindirection==2){
+                $('#maincityandcom').get(0).checked=true;
             }
-
-
-
+            $("#ueditor_1").find("body").html(rowData.gdescription);
         }else{
-            $("#editorGoodsForm #gbName").val('');
-            $("#editorGoodsForm #gbId").val('');
-            $("#editorGoodsForm #gbImgpath").val('');
+            clearFormData();
+
 
         }
     }
@@ -855,85 +861,10 @@
      **/
     function addGoods(){
         editorGoodsType=0;
-        let orgId,orgPid;
-        reloadOrgTree();
-        initFormData();
-
+        initFormData(-1);
         $("#editorSysUserTitle").text("添加商品");
     }
-    /**
-     * 重新加载树型结构
-     **/
-    function reloadOrgTree(uid){
-        $.fn.zTree.init($("#orgTree"), setting, zNodes);
-        var rowData=rowDatas.get(parseInt(uid,10));
-        let selectOrgIds="";
-        if(rowData){
-            selectOrgIds=rowData.orgIds
-        }
-        $.ajax({
-            type:"post",
-            url:'/org/reqOrgTree',
-            dataType: "json",
-            data:{selectOrgIds:selectOrgIds},
-            async:false,
-            success:function(data){
-                let nodeData=data.data;
-                var zTree=$.fn.zTree.init($("#orgTree"), setting, nodeData);
-            }
-        });
-    }
 
-    /***********************************************************************************/
-    var setting = {
-        check: {
-            enable: true,
-            chkboxType: { "Y" : "s", "N" : "s" }
-        },
-        view: {
-            dblClickExpand: false
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        },
-        callback: {
-            onCheck: onCheck
-        }
-    };
-
-    function onCheck(e, treeId, treeNode) {
-        var zTree = $.fn.zTree.getZTreeObj("orgTree"),
-            nodes = zTree.getCheckedNodes(),
-            v = "",vId="";
-        nodes.sort(function compare(a,b){return a.id-b.id;});
-        for (var i=0, l=nodes.length; i<l; i++) {
-            v += nodes[i].name+",";
-            vId += nodes[i].id+",";
-        }
-        var orgPname = $("#orgNms");
-        var orgPid_ = $("#orgIds");
-        orgPname.val(v);
-        orgPid_.val(vId);
-        //hideOrgTree();
-    }
-
-    function showOrgTree() {
-        var cityObj = $("#orgNms");
-        var cityOffset = $("#orgNms").offset();
-        $("#orgNodeContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-        $("body").bind("mousedown", onBodyDown);
-    }
-    function hideOrgTree() {
-        $("#orgNodeContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
-    }
-    function onBodyDown(event) {
-        if (!(event.target.id == "menuBtn" || event.target.id == "orgNodeContent" || $(event.target).parents("#orgNodeContent").length>0)) {
-            hideOrgTree();
-        }
-    }
     
     function deleteGoodsList() {
         var objs = $('#GoodsTables') .bootstrapTable('getAllSelections');
@@ -963,7 +894,7 @@
 
     $(function () {
         $('#isServicegoods').siblings().click(function () {
-            var flag = $("#editorGoodsForm #isServicegoods").bootstrapSwitch("state");
+            var flag = $("#isServicegoods").bootstrapSwitch("state");
             if(flag){
                 $('#allowsettimediv').hide();
                 $('#isadvancesalediv').hide();
@@ -979,7 +910,7 @@
         });
 
         $('#isShowsalesvolume').siblings().click(function () {
-            var flag = $("#editorGoodsForm #isShowsalesvolume").bootstrapSwitch("state");
+            var flag = $("#isShowsalesvolume").bootstrapSwitch("state");
             if(flag){
                 $('#gsalesvolumediv').show();
             }else{
@@ -988,7 +919,7 @@
         });
 
         $('#isAdvancesale').siblings().click(function () {
-            var flag = $("#editorGoodsForm #isAdvancesale").bootstrapSwitch("state");
+            var flag = $("#isAdvancesale").bootstrapSwitch("state");
             if(flag){
                 $('#gedtdiv').show();
             }else{
@@ -998,6 +929,138 @@
 
     });
 
+    function initGoodsConfigForm() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            return;
+        }
+        $.ajax({
+            type:"post",
+            url:'/goods/queryGoodsConfigBygid',
+            dataType: "json",
+            data:{gid:gid,pageSize:1,pageNo:1},
+            async:false,
+            success:function(data){
+                var goodsConfig = data.goodsConfig;
+                alert(goodsConfig);
+                if(goodsConfig==null){
+                    $("#gfreight").val('');
+                    $("#gstartbuy").val('');
+                    $("#gendbuy").val('');
+                    $("#gsalesvolume").val('');
+                    $("#gedt").val('');
+                    $("#gprofitability").val('');
+                    $("#gdeposit").val('');
+
+                    $("#isServicegoods").val('');
+                    $("#isServicegoods").bootstrapSwitch("state",false);
+
+                    $("#isAllowsetdeliverytime").val('');
+                    $("#isAllowsetdeliverytime").bootstrapSwitch("state",false);
+
+                    $("#isShowsalesvolume").val('');
+                    $("#isShowsalesvolume").bootstrapSwitch("state",false);
+
+                    $("#isMenberdiscount").val('');
+                    $("#isMenberdiscount").bootstrapSwitch("state",true);
+
+                    $("#isPutway").val('');
+                    $("#isPutway").bootstrapSwitch("state",true);
+
+                    $("#isAdvancesale").val('');
+                    $("#isAdvancesale").bootstrapSwitch("state",false);
+
+                    $("#isCod").val('');
+                    $("#isCod").bootstrapSwitch("state",false);
+
+                    $("#isMultiplebuy").val('');
+                    $('#isMultiplebuy').removeAttr('checked');
+                }else{
+                    $("#gfreight").val(goodsConfig.gfreight);
+                    $("#gstartbuy").val(goodsConfig.gstartbuy);
+                    $("#gendbuy").val(goodsConfig.gendbuy);
+                    $("#gsalesvolume").val(goodsConfig.gsalesvolume);
+                    $("#gedt").val(goodsConfig.gedt);
+                    $("#gprofitability").val(goodsConfig.gprofitability);
+                    $("#gdeposit").val(goodsConfig.gdeposit);
+
+                    var flag;
+
+                    flag = false;
+                    $("#isServicegoods").val(goodsConfig.isServicegoods);
+                    if(goodsConfig.isServicegoods==1){
+                        flag = true;
+                        $('#allowsettimediv').hide();
+                        $('#isadvancesalediv').hide();
+                        $('#gfreightdiv').hide();
+                        $('#gdepositdiv').show();
+                    }else{
+                        $('#allowsettimediv').show();
+                        $('#isadvancesalediv').show();
+                        $('#gfreightdiv').show();
+                        $('#gdepositdiv').hide();
+                    }
+                    $("#isServicegoods").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isAllowsetdeliverytime").val(goodsConfig.isAllowsetdeliverytime);
+                    if(goodsConfig.isAllowsetdeliverytime==1){
+                        flag = true;
+                    }
+                    $("#isAllowsetdeliverytime").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isShowsalesvolume").val(goodsConfig.isShowsalesvolume);
+                    if(goodsConfig.isShowsalesvolume==1){
+                        flag = true;
+                        $('#gsalesvolumediv').show();
+                    }else{
+                        $('#gsalesvolumediv').hide();
+                    }
+                    $("#isShowsalesvolume").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isMenberdiscount").val(goodsConfig.isMenberdiscount);
+                    if(goodsConfig.isMenberdiscount==1){
+                        flag = true;
+                    }
+                    $("#isMenberdiscount").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isPutway").val(goodsConfig.isPutway);
+                    if(goodsConfig.isPutway==1){
+                        flag = true;
+                    }
+                    $("#isPutway").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isAdvancesale").val(goodsConfig.isAdvancesale);
+                    if(goodsConfig.isAdvancesale==1){
+                        flag = true;
+                        $('#gedtdiv').show();
+                    }else{
+                        $('#gedtdiv').hide();
+                    }
+                    $("#isAdvancesale").bootstrapSwitch("state",flag);
+
+                    flag = false;
+                    $("#isCod").val(goodsConfig.isCod);
+                    if(goodsConfig.isCod==1){
+                        flag = true;
+                    }
+                    $("#isCod").bootstrapSwitch("state",flag);
+
+                    $("#isMultiplebuy").val(goodsConfig.isMultiplebuy);
+                    if(goodsConfig.isMultiplebuy==1){
+                        $('#isMultiplebuy').attr('checked','checked');
+                    }else{
+                        $('#isMultiplebuy').removeAttr('checked');
+                    }
+                }
+
+            }
+        });
+    }
 </script>
 </body>
 </html>

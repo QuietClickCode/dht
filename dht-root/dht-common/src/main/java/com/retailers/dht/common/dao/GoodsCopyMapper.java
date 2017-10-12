@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-10 17:54:32
+ * @date 2017-10-12 17:30:11
  */
 public interface GoodsCopyMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsCopyMapper {
 	 * @param goodsCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-10 17:54:32
+	 * @date 2017-10-12 17:30:11
 	 */
 	public int saveGoodsCopy(GoodsCopy goodsCopy);
 	/**
@@ -24,31 +24,31 @@ public interface GoodsCopyMapper {
 	 * @param goodsCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-10 17:54:32
+	 * @date 2017-10-12 17:30:11
 	 */
 	public int updateGoodsCopy(GoodsCopy goodsCopy);
 	/**
-	 * 根据Gid删除商品副本表
-	 * @param gid
+	 * 根据GcId删除商品副本表
+	 * @param gcId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-10 17:54:32
+	 * @date 2017-10-12 17:30:11
 	 */
-	public int deleteGoodsCopyByGid(Long gid);
+	public int deleteGoodsCopyByGcId(Long gcId);
 	/**
-	 * 根据Gid查询商品副本表
-	 * @param gid
+	 * 根据GcId查询商品副本表
+	 * @param gcId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-10 17:54:32
+	 * @date 2017-10-12 17:30:11
 	 */
-	public GoodsCopy queryGoodsCopyByGid(Long gid);
+	public GoodsCopy queryGoodsCopyByGcId(Long gcId);
 	/**
 	 * 查询商品副本表列表
 	 * @param pagination 分页对象
 	 * @return  商品副本表列表
 	 * @author fanghui
-	 * @date 2017-10-10 17:54:32
+	 * @date 2017-10-12 17:30:11
 	 */
 	public List<GoodsCopy> queryGoodsCopyList(Pagination<GoodsCopy> pagination);
 

@@ -109,7 +109,7 @@
                     <input type="hidden" name="ggId" id="ggId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 商品子类名称:
@@ -118,7 +118,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否为顶级元素:
@@ -133,7 +133,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6"  id="parentNmElement">
+                        <div class="col-lg-12"  id="parentNmElement">
                             <br>
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -148,7 +148,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 所属商品大类:
@@ -164,7 +164,7 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 图片:
@@ -175,7 +175,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 排序:

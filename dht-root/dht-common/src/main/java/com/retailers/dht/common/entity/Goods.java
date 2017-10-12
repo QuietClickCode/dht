@@ -7,14 +7,14 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-10 17:54:02
+ * @date 2017-10-12 17:29:40
  */
 public class Goods implements java.io.Serializable {
 
-	/**商品ID*/
+	/**商品副本ID*/
 	@NotEmpty
 	private Long gid;
-	/**商品名称*/
+	/**商品副本名称*/
 	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String gname;
@@ -30,43 +30,19 @@ public class Goods implements java.io.Serializable {
 	/**所属品牌*/
 	@NotEmpty
 	private Long gbrand;
-	/**上架时间*/
-	@NotEmpty
-	private Date gputawaytime;
-	/**下架时间*/
-	@NotEmpty
-	private Date gunshelvetime;
 	/**所属地区*/
 	@NotEmpty
 	private Long garea;
 	/**可售范围 以km为单位*/
 	@NotEmpty
 	private Long gsalescope;
-	/**利润率*/
-	@NotEmpty
-	private Long gprofitability;
-	/**销量*/
-	@NotEmpty
-	private Long gsalesvolume;
-	/**运费*/
-	@NotEmpty
-	private Float gfreight;
 	/**主推方向 0乡村 1城镇 2乡村和城镇*/
 	@NotEmpty
 	private Long gmaindirection;
-	/**计件单位*/
-	@NotEmpty
-	@Length(min = 1, max = 20)
-	private String gunitname;
-	/**起售数量*/
-	@NotEmpty
-	private Long gstartbuy;
-	/**限购量*/
-	@NotEmpty
-	private Long gendbuy;
 	/**商品描述*/
 	@NotEmpty
-	private byte[] gdescription;
+	@Length(min = 1, max = 20000)
+	private String gdescription;
 	/**生产人姓名*/
 	@NotEmpty
 	@Length(min = 1, max = 255)
@@ -83,42 +59,26 @@ public class Goods implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 255)
 	private String gpickaddress;
-	/**定金*/
-	@NotEmpty
-	private Float gdeposit;
 	/**copy的ID update前在copy中插入一条一样的数据 并且更新此字段*/
 	@NotEmpty
 	private Long gcopyid;
-	/**预计发货时间*/
+	/**商品原价*/
 	@NotEmpty
-	private Date gedt;
-	/**是否上架 0未上架 1已上架 2已下架*/
+	private Float gprice;
+	/**审核人*/
 	@NotEmpty
-	private Long isPutway;
+	private Long gcheckperson;
+	/**审查信息*/
+	@NotEmpty
+	@Length(min = 1, max = 200)
+	private String gcheckmessage;
+	/**计件单位*/
+	@NotEmpty
+	@Length(min = 1, max = 20)
+	private String gunitname;
 	/**是否通过审核 0未审核 1已审核 2未通过审核*/
 	@NotEmpty
 	private Long isChecked;
-	/**是否允许用户设置发货时间 0不允许 1允许*/
-	@NotEmpty
-	private Long isAllowsetdeliverytime;
-	/**是否显示销量 0不显示 1显示*/
-	@NotEmpty
-	private Long isShowsalesvolume;
-	/**会员是否打折 0不打折 1打折*/
-	@NotEmpty
-	private Long isMenberdiscount;
-	/**能否货到付款 0不能 1能*/
-	@NotEmpty
-	private Long isCod;
-	/**是否倍数购买*/
-	@NotEmpty
-	private Long isMultiplebuy;
-	/**是否是服务类商品 0不是 1是*/
-	@NotEmpty
-	private Long isServicegoods;
-	/**是否预售 0不预售 1预售*/
-	@NotEmpty
-	private Long isAdvancesale;
 	/**是否被删除 0没有删除 1已删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -176,20 +136,6 @@ public class Goods implements java.io.Serializable {
 	public Long getGbrand() {
 		return this.gbrand;
 	}
-	public void setGputawaytime(Date value) {
-		this.gputawaytime = value;
-	}
-
-	public Date getGputawaytime() {
-		return this.gputawaytime;
-	}
-	public void setGunshelvetime(Date value) {
-		this.gunshelvetime = value;
-	}
-
-	public Date getGunshelvetime() {
-		return this.gunshelvetime;
-	}
 	public void setGarea(Long value) {
 		this.garea = value;
 	}
@@ -204,27 +150,6 @@ public class Goods implements java.io.Serializable {
 	public Long getGsalescope() {
 		return this.gsalescope;
 	}
-	public void setGprofitability(Long value) {
-		this.gprofitability = value;
-	}
-
-	public Long getGprofitability() {
-		return this.gprofitability;
-	}
-	public void setGsalesvolume(Long value) {
-		this.gsalesvolume = value;
-	}
-
-	public Long getGsalesvolume() {
-		return this.gsalesvolume;
-	}
-	public void setGfreight(Float value) {
-		this.gfreight = value;
-	}
-
-	public Float getGfreight() {
-		return this.gfreight;
-	}
 	public void setGmaindirection(Long value) {
 		this.gmaindirection = value;
 	}
@@ -232,32 +157,11 @@ public class Goods implements java.io.Serializable {
 	public Long getGmaindirection() {
 		return this.gmaindirection;
 	}
-	public void setGunitname(String value) {
-		this.gunitname = value;
-	}
-
-	public String getGunitname() {
-		return this.gunitname;
-	}
-	public void setGstartbuy(Long value) {
-		this.gstartbuy = value;
-	}
-
-	public Long getGstartbuy() {
-		return this.gstartbuy;
-	}
-	public void setGendbuy(Long value) {
-		this.gendbuy = value;
-	}
-
-	public Long getGendbuy() {
-		return this.gendbuy;
-	}
-	public void setGdescription(byte[] value) {
+	public void setGdescription(String value) {
 		this.gdescription = value;
 	}
 
-	public byte[] getGdescription() {
+	public String getGdescription() {
 		return this.gdescription;
 	}
 	public void setGproductioninperson(String value) {
@@ -288,13 +192,6 @@ public class Goods implements java.io.Serializable {
 	public String getGpickaddress() {
 		return this.gpickaddress;
 	}
-	public void setGdeposit(Float value) {
-		this.gdeposit = value;
-	}
-
-	public Float getGdeposit() {
-		return this.gdeposit;
-	}
 	public void setGcopyid(Long value) {
 		this.gcopyid = value;
 	}
@@ -302,19 +199,33 @@ public class Goods implements java.io.Serializable {
 	public Long getGcopyid() {
 		return this.gcopyid;
 	}
-	public void setGedt(Date value) {
-		this.gedt = value;
+	public void setGprice(Float value) {
+		this.gprice = value;
 	}
 
-	public Date getGedt() {
-		return this.gedt;
+	public Float getGprice() {
+		return this.gprice;
 	}
-	public void setIsPutway(Long value) {
-		this.isPutway = value;
+	public void setGcheckperson(Long value) {
+		this.gcheckperson = value;
 	}
 
-	public Long getIsPutway() {
-		return this.isPutway;
+	public Long getGcheckperson() {
+		return this.gcheckperson;
+	}
+	public void setGcheckmessage(String value) {
+		this.gcheckmessage = value;
+	}
+
+	public String getGcheckmessage() {
+		return this.gcheckmessage;
+	}
+	public void setGunitname(String value) {
+		this.gunitname = value;
+	}
+
+	public String getGunitname() {
+		return this.gunitname;
 	}
 	public void setIsChecked(Long value) {
 		this.isChecked = value;
@@ -322,55 +233,6 @@ public class Goods implements java.io.Serializable {
 
 	public Long getIsChecked() {
 		return this.isChecked;
-	}
-	public void setIsAllowsetdeliverytime(Long value) {
-		this.isAllowsetdeliverytime = value;
-	}
-
-	public Long getIsAllowsetdeliverytime() {
-		return this.isAllowsetdeliverytime;
-	}
-	public void setIsShowsalesvolume(Long value) {
-		this.isShowsalesvolume = value;
-	}
-
-	public Long getIsShowsalesvolume() {
-		return this.isShowsalesvolume;
-	}
-	public void setIsMenberdiscount(Long value) {
-		this.isMenberdiscount = value;
-	}
-
-	public Long getIsMenberdiscount() {
-		return this.isMenberdiscount;
-	}
-	public void setIsCod(Long value) {
-		this.isCod = value;
-	}
-
-	public Long getIsCod() {
-		return this.isCod;
-	}
-	public void setIsMultiplebuy(Long value) {
-		this.isMultiplebuy = value;
-	}
-
-	public Long getIsMultiplebuy() {
-		return this.isMultiplebuy;
-	}
-	public void setIsServicegoods(Long value) {
-		this.isServicegoods = value;
-	}
-
-	public Long getIsServicegoods() {
-		return this.isServicegoods;
-	}
-	public void setIsAdvancesale(Long value) {
-		this.isAdvancesale = value;
-	}
-
-	public Long getIsAdvancesale() {
-		return this.isAdvancesale;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

@@ -3,111 +3,28 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>商品品牌管理</title>
+    <title>商品规格管理</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
-
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
-
-    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
-    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
 </head>
 <body>
-<script type="text/plain" id="j_ueditorupload" style="height:5px;display:none;" ></script>
-<script>
-    //实例化编辑器
-    var o_ueditorupload = UE.getEditor('j_ueditorupload',
-        {
-            autoHeightEnabled:false
-        });
-    o_ueditorupload.ready(function ()
-    {
-
-        o_ueditorupload.hide();//隐藏编辑器
-
-        //监听图片上传
-        o_ueditorupload.addListener('beforeInsertImage', function (t,arg)
-        {
-            console.log(arg);
-            console.log(t);
-            $('#gbImgpath').val(arg[0].alt);
-            $('#logoImg')[0].src=arg[0].src;
-            $('#logoImg').show();
-            $('#logoImgSpan').hide();
-            $('#editGoodsClassification').modal('show');
-            //alert('这是图片地址：'+arg[0].src);
-        });
-
-        /* 文件上传监听
-         * 需要在ueditor.all.min.js文件中找到
-         * d.execCommand("insertHtml",l)
-         * 之后插入d.fireEvent('afterUpfile',b)
-         */
-        o_ueditorupload.addListener('afterUpfile', function (t, arg)
-        {
-            console.log(arg)
-            console.log(t)
-            alert('这是文件地址：'+arg[0].url);
-        });
-    });
-
-    //弹出图片上传的对话框
-    function upImage()
-    {
-
-        var myImage = o_ueditorupload.getDialog("insertimage");
-        myImage.open();
-        $('#edui_fixedlayer').css("z-index","10000000");
-    }
-    //弹出文件上传的对话框
-    function upFiles()
-    {
-        var myFiles = o_ueditorupload.getDialog("attachment");
-        myFiles.open();
-    }
-
-    //重写图片上传地址
-    UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
-    UE.Editor.prototype.getActionUrl = function(action) {
-        //判断路径   这里是config.json 中设置执行上传的action名称
-        console.log(action)
-        if (action == 'uploadimage') {
-            //return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=true&isCompress=false';
-            return ueditorUploadUrl("goods",false,false);
-            //上传视频
-        } else if (action == 'uploadvideo') {
-            return '';
-        } else {
-            return this._bkGetActionUrl.call(this, action);
-        }
-    }
-</script>
-
 <div id="toolbar" class="form-inline">
-    <ex:perm url="goods/addGoodsBrand">
-        <button class="btn btn-primary" type="button" onclick="addGoodsBrand()">添加商品品牌</button>
+    <ex:perm url="goods/addGoodsSpecification">
+        <button class="btn btn-primary" type="button" onclick="addGoodsSpecification()" style="margin-bottom: 5px">添加商品规格</button>
     </ex:perm>
-    <ex:perm url="goods/addGoodsBrand">
-        <button class="btn btn-default" type="button" onclick="deleteGoodsBrandList()">删除</button>
-    </ex:perm>
-
     <br>
-    <div class="form-group" style="margin-top: 5px">
-        <input type="text" class="form-control" id="search_GoodsBrand_name" placeholder="请输入商品品牌名称">
+    <div class="form-group" >
+        <input type="text" class="form-control" id="search_GoodsSpecification_name" placeholder="请输入商品规格名称">
     </div>
 
-    <ex:perm url="goods/queryGoodsBrandLists">
+    <ex:perm url="goods/queryGoodsSpecificationLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
 
 </div>
 <div>
-    <table id="GoodsBrandTables" ></table>
+    <table id="GoodsSpecificationTables" ></table>
 </div>
 <div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
     <div class="modal-dialog" role="document"  style="width: 800px;">
@@ -117,32 +34,38 @@
                 <h4 class="modal-title" id="editorSysUserTitle"></h4>
             </div>
             <div class="modal-body">
-                <form id="editorGoodsBrandForm">
-                    <input type="hidden" name="gbId" id="gbId">
+                <form id="editorGoodsSpecificationForm">
+                    <input type="hidden" name="gtId" id="gtId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                商品品牌名称:
+                                商品规格名称:
                               </span>
-                                <input type="text" class="form-control" name="gbName" id="gbName">
+                                <input type="text" class="form-control" name="gsName" id="gsName">
                             </div>
                         </div>
                         <div class="col-lg-12">
-                            <div class="input-group form-group">
+                            <div class="input-group">
                               <span class="input-group-addon">
-                                商品品牌logo:
+                                添加商品规格值:
                               </span>
-                                <input type="hidden" class="form-control" name="gbImgpath" id="gbImgpath">
-                                <img style="width: 50px;"src=""  id="logoImg"/>
-                                <span id="logoImgSpan">无图片</span>
-                                <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
+                                <button class="btn btn-default">+</button>
                             </div>
                         </div>
                     </div>
                     <br>
 
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group">
+                              <input class="form-control" type="text" placeholder="请输入规格值">
+                            </div>
+                        </div>
+                        <br>
+
+                    </div>
 
                 </form>
             </div>
@@ -167,7 +90,7 @@
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
-    var editorGoodsBrandType=0;
+    var editorGoodsSpecificationType=0;
     var orgPermissionTreeObj;
     var treeColumns=[
         {   checkbox: true,
@@ -175,26 +98,10 @@
             valign : 'middle'
         },
         {
-            field: 'gbName',
-            title: '商品品牌名称',
+            field: 'gsName',
+            title: '商品规格名称',
             align : 'center',
             valign : 'middle'
-        },
-        {
-            field: 'imgUrl',
-            title: 'logo',
-            align : 'center',
-            valign : 'middle',
-            formatter:function(value,row,index){
-                let html='';
-                var flag =row.imgUrl.substring(row.imgUrl.length-4)=="null";
-                if(flag){
-                    html+='无图片';
-                }else{
-                    html+='<img style="width: 50px;height: 60px;;"src="'+row.imgUrl+'"  />';
-                }
-                return html;
-            }
         },
         {
             field: 'CreateTime',
@@ -203,13 +110,13 @@
             valign : 'middle',
             width:240,
             formatter:function(value,row,index){
-                rowDatas.set(row.gbId,row);
+                rowDatas.set(row.gsId,row);
                 let html='';
-                <ex:perm url="goods/editGoodsBrand">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsBrand(\''+row.gbId+'\')"">编辑</button>&nbsp;';
+                <ex:perm url="goods/editGoodsSpecification">
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsSpecification(\''+row.gsId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="goods/removeGoodsBrand">
-                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gbId+'\',this)">删除</button>';
+                <ex:perm url="goods/removeGoodsSpecification">
+                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gsId+'\',this)">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -217,33 +124,62 @@
     ]
 
     $(function () {
-        createTable("/goods/queryGoodsBrandLists","GoodsBrandTables","gbId",treeColumns,queryParams)
+        createTable("/goods/queryGoodsSpecificationLists","GoodsSpecificationTables","gtId",treeColumns,queryParams)
         //初始华开关选择器
+        $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch();
+        $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch();
+        $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch();
+        $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch();
 
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
             //隐藏下拉菜单
             hideOrgTree();
-            clearFormValidation("editorGoodsBrandForm",formValidater)
+            clearFormValidation("editorGoodsSpecificationForm",formValidater)
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
             //开启校验
-            $('#editorGoodsBrandForm').data('bootstrapValidator').validate();
+            $('#editorGoodsSpecificationForm').data('bootstrapValidator').validate();
             //判断校验是否通过
-            if(!$('#editorGoodsBrandForm').data('bootstrapValidator').isValid()){
+            if(!$('#editorGoodsSpecificationForm').data('bootstrapValidator').isValid()){
                 return;
             }
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
-            var formData=$("#editorGoodsBrandForm").serializeObject();
+            var formData=$("#editorGoodsSpecificationForm").serializeObject();
+            var flag =$("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state");
+            if(flag){
+                formData["isParams"]=1;
+            }else{
+                formData["isParams"]=0;
+            }
+            var flag =$("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state");
+            if(flag){
+                formData["isTrademark"]=1;
+            }else{
+                formData["isTrademark"]=0;
+            }
+            var flag =$("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state");
+            if(flag){
+                formData["isSpecification"]=1;
+            }else{
+                formData["isSpecification"]=0;
+            }
+            var flag =$("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state");
+            if(flag){
+                formData["isShow"]=1;
+            }else{
+                formData["isShow"]=0;
+            }
 
-            let url="/goods/addGoodsBrand";
-            if(editorGoodsBrandType==1){
-                url="/goods/editGoodsBrand";
+
+            let url="/goods/addGoodsSpecification";
+            if(editorGoodsSpecificationType==1){
+                url="/goods/editGoodsSpecification";
             }
             //取得form表单数据
             $.ajax({
@@ -272,7 +208,7 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editorGoodsBrandForm')
+        $('#editorGoodsSpecificationForm')
             .bootstrapValidator({
                 message: 'This value is not valid',
                 //live: 'submitted',
@@ -282,16 +218,16 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    gbName: {
-                        message: '商品品牌名称未通过',
+                    gtName: {
+                        message: '商品规格名称未通过',
                         validators: {
                             notEmpty: {
-                                message: '商品品牌名称不能为空'
+                                message: '商品规格名称不能为空'
                             },
                             stringLength: {
                                 min: 1,
                                 max: 30,
-                                message: '商品品牌名称长度在1-30之间'
+                                message: '商品规格名称长度在1-30之间'
                             }
                         }
                     }
@@ -305,17 +241,17 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gbName: $("#search_GoodsBrand_name").val(),
+            gtName: $("#search_GoodsSpecification_name").val(),
         };
     }
     /**
      * 刷新表格数据
      **/
     function refreshTableData() {
-        $('#GoodsBrandTables').bootstrapTable(
+        $('#GoodsSpecificationTables').bootstrapTable(
             "refresh",
             {
-                url:"/goods/queryGoodsBrandLists"
+                url:"/goods/queryGoodsSpecificationLists"
             }
         );
     }
@@ -325,19 +261,19 @@
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeGoodsBrand(gtId);
+            removeGoodsSpecification(gtId);
         }, function(){
         });
     }
     /**
-     * 删除商品大类
+     * 删除商品规格
      **/
-    function removeGoodsBrand(gbId){
+    function removeGoodsSpecification(gtId){
         $.ajax({
             type:"post",
-            url:'/goods/removeGoodsBrand',
+            url:'/goods/removeGoodsSpecification',
             dataType: "json",
-            data:{gbId:gbId},
+            data:{gtId:gtId},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");
@@ -351,23 +287,23 @@
 
 
     var zNodes;
-    function editorGoodsBrand(orgId){
-        editorGoodsBrandType=1;
+    function editorGoodsSpecification(orgId){
+        editorGoodsSpecificationType=1;
         reloadOrgTree(orgId);
         initFormData(orgId);
-        $("#editorSysUserTitle").text("编辑商品品牌");
+        $("#editorSysUserTitle").text("编辑商品规格");
         $('#editorSysUser').modal("show")
     }
     /**
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorGoodsBrandForm #uid").val("");
-        $("#editorGoodsBrandForm #version").val("");
-        $("#editorGoodsBrandForm #uaccount").val("");
-        $("#editorGoodsBrandForm #uname").val("");
-        $("#editorGoodsBrandForm #orgIds").val("");
-        $("#editorGoodsBrandForm #isValid").val("");
+        $("#editorGoodsSpecificationForm #uid").val("");
+        $("#editorGoodsSpecificationForm #version").val("");
+        $("#editorGoodsSpecificationForm #uaccount").val("");
+        $("#editorGoodsSpecificationForm #uname").val("");
+        $("#editorGoodsSpecificationForm #orgIds").val("");
+        $("#editorGoodsSpecificationForm #isValid").val("");
     }
     /**
      * 清除form 表单数据
@@ -375,42 +311,55 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorGoodsBrandForm #gbId").val(rowData.gbId);
-            $("#editorGoodsBrandForm #version").val(rowData.version);
-            $("#editorGoodsBrandForm #gbName").val(rowData.gbName);
-            $("#editorGoodsBrandForm #gbImgpath").val(rowData.gbImgpath);
-            var flag =rowData.imgUrl.substring(rowData.imgUrl.length-4)=="null";
-
-            if(flag){
-                $("#editorGoodsBrandForm #logoImgSpan").show();
-                $("#editorGoodsBrandForm #logoImg").hide();
-                return;
-            }else{
-                $("#editorGoodsBrandForm #logoImg")[0].src=rowData.imgUrl;
+            $("#editorGoodsSpecificationForm #gtName").val(rowData.gtName);
+            $("#editorGoodsSpecificationForm #gtId").val(rowData.gtId);
+            $("#editorGoodsSpecificationForm #version").val(rowData.version);
+            var flag =false;
+            if(rowData.isParams==1){
+                flag=true;
             }
-            $("#editorGoodsBrandForm #logoImg").show();
-            $("#editorGoodsBrandForm #logoImgSpan").hide();
+            $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",flag);
+
+            flag =false;
+            if(rowData.isSpecification==1){
+                flag=true;
+            }
+            $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",flag);
+
+            var flag =false;
+            if(rowData.isTrademark==1){
+                flag=true;
+            }
+            $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",flag);
+
+            var flag =false;
+            if(rowData.isShow==1){
+                flag=true;
+            }
+            $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",flag);
 
         }else{
-            $("#editorGoodsBrandForm #gbName").val('');
-            $("#editorGoodsBrandForm #gbId").val('');
-            $("#editorGoodsBrandForm #gbImgpath").val('');
-            $("#editorGoodsBrandForm #logoImg")[0].src='';
-            $("#editorGoodsBrandForm #logoImg").hide();
-            $("#editorGoodsBrandForm #logoImgSpan").show();
-
+            $("#editorGoodsSpecificationForm #gtName").val('');
+            $("#editorGoodsSpecificationForm #gtId").val('');
+            $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",true);
+            $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",true);
+            $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",true);
+            $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",true);
         }
     }
     /**
-     * 添加商品大类
+     * 添加商品规格
      **/
-    function addGoodsBrand(){
-        editorGoodsBrandType=0;
+    function addGoodsSpecification(){
+        editorGoodsSpecificationType=0;
         let orgId,orgPid;
         reloadOrgTree();
         initFormData();
-
-        $("#editorSysUserTitle").text("添加商品品牌");
+        $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",true);
+        $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",true);
+        $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",true);
+        $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",true);
+        $("#editorSysUserTitle").text("添加商品规格");
         $('#editorSysUser').modal("show")
     }
     /**
@@ -484,22 +433,6 @@
     function onBodyDown(event) {
         if (!(event.target.id == "menuBtn" || event.target.id == "orgNodeContent" || $(event.target).parents("#orgNodeContent").length>0)) {
             hideOrgTree();
-        }
-    }
-    
-    function deleteGoodsBrandList() {
-        var objs = $('#GoodsBrandTables') .bootstrapTable('getAllSelections');
-        if(objs.length>0){
-            layer.confirm('确定要删除选中的数据吗？', {
-                btn: ['确认','取消'] //按钮
-            }, function(){
-                for(var i=0;i<objs.length;i++){
-                    removeGoodsBrand(objs[i].gbId);
-                }
-            }, function(){
-            });
-        }else{
-            layer.msg("请选择需要删除的品牌！");
         }
     }
 </script>

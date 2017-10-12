@@ -54,7 +54,7 @@
                     <input type="hidden" name="glId" id="glId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 商品标签名称:
@@ -62,7 +62,7 @@
                                 <input type="text" class="form-control" name="glName" id="glName">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                  商品标签有效时间:
@@ -79,7 +79,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 标签类型:
@@ -99,7 +99,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span id="goodsBtn" class="input-group-addon" style="cursor: pointer">
                                  选择商品

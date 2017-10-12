@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGsvalMapper">
+
+	<resultMap id="rm_goodsGsval" type="com.retailers.dht.common.entity.GoodsGsval">
+			<result property="gsvId" column="gsv_id"/>
+			<result property="gsId" column="gs_id"/>
+			<result property="gsvVal" column="gsv_val"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGsval_columns">
+		gsv_id,gs_id,gsv_val
+	</sql>
+	<!-- 根据商品规格值表主键取得数据 -->
+	<select id="queryGoodsGsvalByGsvId" resultMap="rm_goodsGsval" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGsval_columns" />
+		FROM t_goods_gsval WHERE gsv_id = #{gsvId}
+	</select>
+	<!-- 商品规格值表查询条件组合 -->
+	<sql id="goodsGsval_where">
+		<where>
+			<if test="null != params.gsvId">
+				AND gsv_id = #{params.gsvId}
+			</if>
+			<if test="null != params.gsId">
+				AND gs_id = #{params.gsId}
+			</if>
+			<if test="null != params.gsvVal and '' != params.gsvVal">
+				AND gsv_val = #{params.gsvVal}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGsvalList" resultMap="rm_goodsGsval" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGsval_columns" />
+		FROM t_goods_gsval
+		<include refid="goodsGsval_where"/>
+	</select>
+	<!--添加商品规格值表 -->
+	<insert id="saveGoodsGsval" parameterType="com.retailers.dht.common.entity.GoodsGsval" useGeneratedKeys="true" keyProperty="gsvId">
+		INSERT INTO t_goods_gsval (
+			gs_id,gsv_val
+		) VALUES
+		(
+			#{gsId,jdbcType=BIGINT},#{gsvVal,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改商品规格值表 -->
+	<update id="updateGoodsGsval" parameterType="com.retailers.dht.common.entity.GoodsGsval">
+		UPDATE t_goods_gsval
+		<set>
+            <if test="null != gsId">
+                gs_id = #{gsId},
+            </if>
+            <if test="null != gsvVal and '' != gsvVal">
+                gsv_val = #{gsvVal},
+            </if>
+		</set>
+		WHERE gsv_id = #{gsvId}
+	</update>
+	<!--删除商品规格值表 -->
+	<delete id="deleteGoodsGsvalByGsvId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_gsval WHERE gsv_id = #{gsvId}
+	</delete>
+</mapper>

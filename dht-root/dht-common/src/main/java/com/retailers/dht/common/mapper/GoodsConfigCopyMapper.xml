@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsConfigCopyMapper">
+
+	<resultMap id="rm_goodsConfigCopy" type="com.retailers.dht.common.entity.GoodsConfigCopy">
+			<result property="gccId" column="gcc_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gsalesvolume" column="g_salesvolume"/>
+			<result property="gfreight" column="g_freight"/>
+			<result property="gdeposit" column="g_deposit"/>
+			<result property="gedt" column="g_edt"/>
+			<result property="gprofitability" column="g_profitability"/>
+			<result property="gstartbuy" column="g_startbuy"/>
+			<result property="gendbuy" column="g_endbuy"/>
+			<result property="gcId" column="gc_id"/>
+			<result property="isPutway" column="is_putway"/>
+			<result property="isAllowsetdeliverytime" column="is_allowsetdeliverytime"/>
+			<result property="isShowsalesvolume" column="is_showsalesvolume"/>
+			<result property="isMenberdiscount" column="is_menberdiscount"/>
+			<result property="isCod" column="is_cod"/>
+			<result property="isServicegoods" column="is_servicegoods"/>
+			<result property="isMultiplebuy" column="is_multiplebuy"/>
+			<result property="isAdvancesale" column="is_advancesale"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsConfigCopy_columns">
+		gcc_id,g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+	</sql>
+	<!-- 根据商品配置副本表主键取得数据 -->
+	<select id="queryGoodsConfigCopyByGccId" resultMap="rm_goodsConfigCopy" parameterType="java.lang.Long">
+		SELECT <include refid="goodsConfigCopy_columns" />
+		FROM t_goods_config_copy WHERE gcc_id = #{gccId}
+	</select>
+	<!-- 商品配置副本表查询条件组合 -->
+	<sql id="goodsConfigCopy_where">
+		<where>
+			<if test="null != params.gccId">
+				AND gcc_id = #{params.gccId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gsalesvolume">
+				AND g_salesvolume = #{params.gsalesvolume}
+			</if>
+			<if test="null != params.gfreight">
+				AND g_freight = #{params.gfreight}
+			</if>
+			<if test="null != params.gdeposit">
+				AND g_deposit = #{params.gdeposit}
+			</if>
+			<if test="null != params.gedtBegin">
+				AND g_edt &gt;= #{params.gedt}
+			</if>
+			<if test="null != params.gedtEnd">
+				AND g_edt &lt;= #{params.gedt}
+			</if>
+			<if test="null != params.gprofitability">
+				AND g_profitability = #{params.gprofitability}
+			</if>
+			<if test="null != params.gstartbuy">
+				AND g_startbuy = #{params.gstartbuy}
+			</if>
+			<if test="null != params.gendbuy">
+				AND g_endbuy = #{params.gendbuy}
+			</if>
+			<if test="null != params.gcId">
+				AND gc_id = #{params.gcId}
+			</if>
+			<if test="null != params.isPutway">
+				AND is_putway = #{params.isPutway}
+			</if>
+			<if test="null != params.isAllowsetdeliverytime">
+				AND is_allowsetdeliverytime = #{params.isAllowsetdeliverytime}
+			</if>
+			<if test="null != params.isShowsalesvolume">
+				AND is_showsalesvolume = #{params.isShowsalesvolume}
+			</if>
+			<if test="null != params.isMenberdiscount">
+				AND is_menberdiscount = #{params.isMenberdiscount}
+			</if>
+			<if test="null != params.isCod">
+				AND is_cod = #{params.isCod}
+			</if>
+			<if test="null != params.isServicegoods">
+				AND is_servicegoods = #{params.isServicegoods}
+			</if>
+			<if test="null != params.isMultiplebuy">
+				AND is_multiplebuy = #{params.isMultiplebuy}
+			</if>
+			<if test="null != params.isAdvancesale">
+				AND is_advancesale = #{params.isAdvancesale}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsConfigCopyList" resultMap="rm_goodsConfigCopy" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsConfigCopy_columns" />
+		FROM t_goods_config_copy
+		<include refid="goodsConfigCopy_where"/>
+	</select>
+	<!--添加商品配置副本表 -->
+	<insert id="saveGoodsConfigCopy" parameterType="com.retailers.dht.common.entity.GoodsConfigCopy" useGeneratedKeys="true" keyProperty="gccId">
+		INSERT INTO t_goods_config_copy (
+			g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{gprofitability,jdbcType=REAL},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品配置副本表 -->
+	<update id="updateGoodsConfigCopy" parameterType="com.retailers.dht.common.entity.GoodsConfigCopy">
+		UPDATE t_goods_config_copy
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gsalesvolume">
+                g_salesvolume = #{gsalesvolume},
+            </if>
+            <if test="null != gfreight">
+                g_freight = #{gfreight},
+            </if>
+            <if test="null != gdeposit">
+                g_deposit = #{gdeposit},
+            </if>
+            <if test="null != gedt">
+                g_edt = #{gedt},
+            </if>
+            <if test="null != gprofitability">
+                g_profitability = #{gprofitability},
+            </if>
+            <if test="null != gstartbuy">
+                g_startbuy = #{gstartbuy},
+            </if>
+            <if test="null != gendbuy">
+                g_endbuy = #{gendbuy},
+            </if>
+            <if test="null != gcId">
+                gc_id = #{gcId},
+            </if>
+            <if test="null != isPutway">
+                is_putway = #{isPutway},
+            </if>
+            <if test="null != isAllowsetdeliverytime">
+                is_allowsetdeliverytime = #{isAllowsetdeliverytime},
+            </if>
+            <if test="null != isShowsalesvolume">
+                is_showsalesvolume = #{isShowsalesvolume},
+            </if>
+            <if test="null != isMenberdiscount">
+                is_menberdiscount = #{isMenberdiscount},
+            </if>
+            <if test="null != isCod">
+                is_cod = #{isCod},
+            </if>
+            <if test="null != isServicegoods">
+                is_servicegoods = #{isServicegoods},
+            </if>
+            <if test="null != isMultiplebuy">
+                is_multiplebuy = #{isMultiplebuy},
+            </if>
+            <if test="null != isAdvancesale">
+                is_advancesale = #{isAdvancesale},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gcc_id = #{gccId} and version = #{version}
+	</update>
+	<!--删除商品配置副本表 -->
+	<delete id="deleteGoodsConfigCopyByGccId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_config_copy WHERE gcc_id = #{gccId}
+	</delete>
+</mapper>

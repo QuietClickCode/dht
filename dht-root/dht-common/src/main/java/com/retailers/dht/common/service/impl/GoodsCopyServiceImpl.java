@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-10 17:54:32
+ * @date 2017-10-12 17:30:11
  */
 @Service("goodscopyService")
 public class GoodsCopyServiceImpl implements GoodsCopyService {
@@ -27,8 +27,8 @@ public class GoodsCopyServiceImpl implements GoodsCopyService {
 		int status = goodsCopyMapper.updateGoodsCopy(goodsCopy);
 		return status == 1 ? true : false;
 	}
-	public GoodsCopy queryGoodsCopyByGid(Long gid) {
-		return goodsCopyMapper.queryGoodsCopyByGid(gid);
+	public GoodsCopy queryGoodsCopyByGcId(Long gcId) {
+		return goodsCopyMapper.queryGoodsCopyByGcId(gcId);
 	}
 
 	public Pagination<GoodsCopy> queryGoodsCopyList(Map<String, Object> params,int pageNo,int pageSize) {
@@ -40,8 +40,8 @@ public class GoodsCopyServiceImpl implements GoodsCopyService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteGoodsCopyByGid(Long gid) {
-		int status = goodsCopyMapper.deleteGoodsCopyByGid(gid);
+	public boolean deleteGoodsCopyByGcId(Long gcId) {
+		int status = goodsCopyMapper.deleteGoodsCopyByGcId(gcId);
 		return status == 1 ? true : false;
 	}
 }
