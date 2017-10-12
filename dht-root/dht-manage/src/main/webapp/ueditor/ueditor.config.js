@@ -46,7 +46,7 @@
             'horizontal',  'spechars', 'inserttable', 'deletetable', '|',
             'print', 'preview', 'searchreplace', 'help', 'drafts'
         ]]
-        ,zIndex : 900     //编辑器层级的基数,默认是900
+        ,zIndex : 99999     //编辑器层级的基数,默认是900
         //autoFloatEnabled
         //是否保持toolbar的位置不动,默认true
         ,autoFloatEnabled:false
