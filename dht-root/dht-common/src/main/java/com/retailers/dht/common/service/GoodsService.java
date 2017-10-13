@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Goods;
 import java.util.Map;
@@ -19,7 +20,7 @@ public interface GoodsService {
 	 * @author fanghui
 	 * @date 2017-10-12 17:29:40
 	 */
-	public boolean saveGoods(Goods goods);
+	public Goods saveGoods(Goods goods);
 	/**
 	 * 编辑商品表
 	 * @param goods
@@ -45,7 +46,7 @@ public interface GoodsService {
 	 * @author fanghui
 	 * @date 2017-10-12 17:29:40
 	 */
-	public Pagination<Goods> queryGoodsList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<GoodsVo> queryGoodsList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据gid删除商品表
 	 * @param gid

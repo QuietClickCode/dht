@@ -38,7 +38,6 @@ public class GoodsBrandController extends BaseController {
 
     @RequestMapping("editGoodsBrand")
     @Function(label = "编辑商品品牌",parentRes = "goods.openGoodsBrand",resourse = "goods.editGoodsBrand",description = "编辑商品品牌",sort = 2)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editGoodsBrand(GoodsBrand GoodsBrand){
         boolean flag = goodsBrandService.updateGoodsBrand(GoodsBrand);
@@ -51,7 +50,6 @@ public class GoodsBrandController extends BaseController {
 
     @RequestMapping("/removeGoodsBrand")
     @Function(label="删除商品品牌", description = "删除商品品牌", resourse = "goods.removeGoodsBrand",sort=3,parentRes="goods.openGoodsBrand")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeGoodsBrand(Long gbId){
         boolean flag=goodsBrandService.deleteGoodsBrandByGbId(gbId);
@@ -60,7 +58,6 @@ public class GoodsBrandController extends BaseController {
 
     @RequestMapping("/queryGoodsBrandLists")
     @Function(label="商品品牌列表", description = "所有商品品牌列表", resourse = "goods.queryGoodsBrandLists",sort=1,parentRes="goods.openGoodsBrand")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public  Map<String,Object> queryGoodsBrandLists(String gbName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -74,7 +71,6 @@ public class GoodsBrandController extends BaseController {
 
     @RequestMapping("/addGoodsBrand")
     @Function(label="增加商品品牌", description = "增加商品品牌", resourse = "goods.addGoodsBrand",parentRes="goods.openGoodsBrand")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addGoodsBrand(GoodsBrand GoodsBrand){
         boolean flag=goodsBrandService.saveGoodsBrand(GoodsBrand);

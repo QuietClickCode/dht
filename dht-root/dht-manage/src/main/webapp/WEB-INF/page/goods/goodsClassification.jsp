@@ -108,6 +108,7 @@
                 <form id="editGoodsClassificationForm">
                     <input type="hidden" name="ggId" id="ggId">
                     <input type="hidden" name="version" id="version">
+                    <input type="hidden" name="idDelete" id="idDelete" value="0">
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group">
@@ -133,7 +134,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-12"  id="parentNmElement">
+                        <div class="col-lg-12"  id="parentNmElement" style="display: none">
                             <br>
                             <div class="input-group">
                               <span class="input-group-addon">

@@ -35,7 +35,6 @@ public class GoodsClassificationController extends BaseController {
 
     @RequestMapping("editGoodsClassification")
     @Function(label = "编辑商品子类",parentRes = "goods.openGoodsClassification",resourse = "goods.editGoodsClassification",description = "编辑商品子类",sort = 2)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editGoodsClassification(GoodsClassification goodsClassification){
         boolean flag = goodsClassificationService.updateGoodsClassification(goodsClassification);
@@ -48,7 +47,6 @@ public class GoodsClassificationController extends BaseController {
 
     @RequestMapping("/removeGoodsClassification")
     @Function(label="删除商品子类", description = "删除商品子类", resourse = "goods.removeGoodsClassification",sort=3,parentRes="goods.openGoodsClassification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeGoodsClassification(Long ggId){
         boolean flag=goodsClassificationService.deleteGoodsClassificationByGgId(ggId);
@@ -59,7 +57,6 @@ public class GoodsClassificationController extends BaseController {
 
     @RequestMapping("/queryGoodsClassificationLists")
     @Function(label="商品子类列表", description = "所有商品子类列表", resourse = "goods.queryGoodsClassificationLists",sort=1,parentRes="goods.openGoodsClassification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public Map<String,Object> queryGoodsClassificationLists(){
         List<GoodsClassificationVo> goodsClassificationList = goodsClassificationService.queryGoodsClassificationTree();
@@ -69,7 +66,6 @@ public class GoodsClassificationController extends BaseController {
         return gtm;
     }
     @RequestMapping("queryGoodsClassificationNode")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp queryGoodsClassificationNode(Long ggId){
         List<GoodsClassificationVo> goodsClassificationVoList =  goodsClassificationService.queryGoodsClassificationNode(ggId);
@@ -78,7 +74,6 @@ public class GoodsClassificationController extends BaseController {
 
     @RequestMapping("/addGoodsClassification")
     @Function(label="增加商品子类", description = "增加商品子类", resourse = "goods.addGoodsClassification",parentRes="goods.openGoodsClassification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addGoodsClassification(GoodsClassification goodsClassification){
         boolean flag=goodsClassificationService.saveGoodsClassification(goodsClassification);

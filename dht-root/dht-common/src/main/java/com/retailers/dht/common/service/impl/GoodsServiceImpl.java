@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -19,9 +20,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private GoodsMapper goodsMapper;
-	public boolean saveGoods(Goods goods) {
+	public Goods saveGoods(Goods goods) {
 		int status = goodsMapper.saveGoods(goods);
-		return status == 1 ? true : false;
+		return status == 1 ? goods : null;
 	}
 	public boolean updateGoods(Goods goods) {
 		int status = goodsMapper.updateGoods(goods);
@@ -31,12 +32,12 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.queryGoodsByGid(gid);
 	}
 
-	public Pagination<Goods> queryGoodsList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<Goods> page = new Pagination<Goods>();
+	public Pagination<GoodsVo> queryGoodsList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<Goods> list = goodsMapper.queryGoodsList(page);
+		List<GoodsVo> list = goodsMapper.queryGoodsList(page);
 		page.setData(list);
 		return page;
 	}

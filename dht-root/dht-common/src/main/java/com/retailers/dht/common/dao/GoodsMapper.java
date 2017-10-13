@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Goods;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface GoodsMapper {
 	 * @author fanghui
 	 * @date 2017-10-12 17:29:40
 	 */
-	public List<Goods> queryGoodsList(Pagination<Goods> pagination);
+	public List<GoodsVo> queryGoodsList(Pagination<GoodsVo> pagination);
 
 }

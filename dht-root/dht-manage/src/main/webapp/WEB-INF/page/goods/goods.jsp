@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
 
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
@@ -19,6 +20,7 @@
     <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
+
 </head>
 <body>
 <script type="text/plain" id="j_ueditorupload" style="height:5px;display:none;" ></script>
@@ -126,172 +128,165 @@
                                         <a href="#panel-961258" data-toggle="tab" id="navfirsta">基本信息</a>
                                     </li>
                                     <li>
-                                        <a href="#panel-694947" data-toggle="tab" onclick="initGoodsConfigForm()">商品配置</a>
+                                        <a href="#panel-694947" data-toggle="tab" onclick="initGoodsConfigForm(this);">商品配置</a>
                                     </li>
                                 </ul>
-                                <div class="tab-content">
-                                    <div class="tab-pane active" id="panel-961258">
-                                        <div class="modal-body">
-                                            <form id="editorGoodsForm">
-                                                <input type="hidden" name="gid" id="gid">
-                                                <input type="hidden" name="version" id="version">
-                                                <input type="hidden" name="isDelete" id="isDelete">
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            商品导入:
-                                                          </span>
-                                                            <input type="text" class="form-control" name="importGoodsAddress" id="importGoodsAddress" style="width: 60%">
-                                                            <button class="btn btn-default" id="importGoodsBtn">导入</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="panel-961258">
+                                            <div class="modal-body" style="position: relative">
+                                                <form id="editorGoodsForm">
+                                                    <input type="hidden" name="gid" id="gid">
+                                                    <input type="hidden" name="version" id="version">
+                                                    <input type="hidden" name="isDelete" id="isDelete">
 
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品名称:
                                                           </span>
-                                                            <input type="text" class="form-control" name="gname" id="gname">
+                                                                <input type="text" class="form-control" name="gname" id="gname">
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               商品分类:
                                                           </span>
-                                                            <input id="gclassification" name="gclassification" type="hidden" />
-                                                            <input id="gclassificationName" name="gclassificationName" type="text" class="form-control"/>
+                                                                <input id="gclassification" name="gclassification" type="hidden" />
+                                                                <input id="gclassificationName" name="gclassificationName" type="text" class="form-control" onclick="showMenu(); return false;"/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             所属仓库/地区:
                                                           </span>
-                                                            <input id="garea" name="garea" type="hidden" class="form-control" />
-                                                            <input id="gareaName" name="gareaName" type="text" class="form-control" />
+                                                                <input id="garea" name="garea" type="hidden" class="form-control" />
+                                                                <input id="gareaName" name="gareaName" type="text" class="form-control" />
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               可售范围:
                                                           </span>
-                                                            <input id="gsalescope" name="gsalescope" type="text" class="form-control" placeholder="以千米为单位"/>
+                                                                <input id="gsalescope" name="gsalescope" type="text" class="form-control" placeholder="以千米为单位"/>
+                                                            </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品价格（原价）:
                                                           </span>
-                                                            <input id="gprice" name="gprice" type="text" class="form-control" placeholder="单位：元"/>
+                                                                <input id="gprice" name="gprice" type="text" class="form-control" placeholder="单位：元"/>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               主推方向:
                                                           </span>
-                                                            <input id="gmaindirection" name="gmaindirection" type="hidden" />
+                                                                <input id="gmaindirection" name="gmaindirection" type="hidden" />
                                                                 <div class="radio " style="display: inline-block;">
                                                                     <input type="radio" name="mainType" id="maincomtrayside" value="0" checked>
                                                                     <label for="maincomtrayside">
                                                                         乡村
                                                                     </label>
                                                                 </div>
-                                                            <div class="radio " style="display: inline-block;margin-left: 30px;">
-                                                                <input type="radio" name="mainType" id="maincity" value="1" style="">
-                                                                <label for="maincomtrayside">
-                                                                    城镇
-                                                                </label>
-                                                            </div>
-                                                            <div class="radio " style="display: inline-block;margin-left: 30px">
-                                                                <input type="radio" name="mainType" id="maincityandcom" value="0" checked>
-                                                                <label for="maincityandcom">
-                                                                    乡村和城市
-                                                                </label>
+                                                                <div class="radio " style="display: inline-block;margin-left: 30px;">
+                                                                    <input type="radio" name="mainType" id="maincity" value="1" style="">
+                                                                    <label for="maincomtrayside">
+                                                                        城镇
+                                                                    </label>
+                                                                </div>
+                                                                <div class="radio " style="display: inline-block;margin-left: 30px">
+                                                                    <input type="radio" name="mainType" id="maincityandcom" value="0" checked>
+                                                                    <label for="maincityandcom">
+                                                                        乡村和城市
+                                                                    </label>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             计件单位:
                                                           </span>
-                                                            <input id="gunitname" name="gunitname" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            生产地信息:
-                                                          </span>
-                                                            <input id="gproductioninaddress" name="gproductioninaddress" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              生产人姓名:
-                                                          </span>
-                                                            <input id="gproductioninperson" name="gproductioninperson" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            收集人地址:
-                                                          </span>
-                                                            <input id="gpickaddress" name="gpickaddress" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              收集人姓名:
-                                                          </span>
-                                                            <input id="gpickperson" name="gpickperson" type="text" class="form-control"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <!--定金 详情描述-->
-                                                <div class="row">
-                                                    <div class="col-lg-12">
-                                                        <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            详情描述:
-                                                          </span>
-                                                            <input id="gdescription" name="gdescription" type="hidden">
-                                                            <div style="width: 100%">
-                                                                <script id="editor" type="text/plain" style="width:100%;height:500px;"></script>
+                                                                <input id="gunitname" name="gunitname" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </form>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            生产地信息:
+                                                          </span>
+                                                                <input id="gproductioninaddress" name="gproductioninaddress" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              生产人姓名:
+                                                          </span>
+                                                                <input id="gproductioninperson" name="gproductioninperson" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            收集人地址:
+                                                          </span>
+                                                                <input id="gpickaddress" name="gpickaddress" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              收集人姓名:
+                                                          </span>
+                                                                <input id="gpickperson" name="gpickperson" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!--定金 详情描述-->
+                                                    <div class="row">
+                                                        <div class="col-lg-12">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            详情描述:
+                                                          </span>
+                                                                <input id="gdescription" name="gdescription" type="hidden">
+                                                                <div style="width: 100%">
+                                                                    <script id="editor" type="text/plain" style="width:100%;height:500px;"></script>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <center>
+                                                    <button id="editSubmit" class="btn btn-success" >保存</button>
+                                                </center>
+
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="tab-pane" id="panel-694947">
+                                        <div class="tab-pane" id="panel-694947">
                                             <div class="modal-body">
                                                 <form id="editorGoodsConfigForm">
                                                     <div class="row">
@@ -416,7 +411,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
+                                                    <div class="row" id="iscoddiv">
                                                         <div class="col-lg-12">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
@@ -455,9 +450,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-
-
-
                                                     <!--定金 详情描述-->
                                                     <div class="row">
                                                         <div class="col-lg-12" id="gdepositdiv">
@@ -470,27 +462,32 @@
                                                         </div>
                                                     </div>
                                                 </form>
+                                                <center>
+                                                    <button id="editGoodsConfigSubmit" class="btn btn-success" >保存</button>
+                                                </center>
                                             </div>
 
+                                        </div>
                                     </div>
-                                </div>
+
+
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" id="editSubmit">确认</button>
-                </div>
+                <%--<div class="modal-footer">--%>
+                    <%--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--%>
+                    <%--<button type="button" class="btn btn-primary" id="editSubmit">确认</button>--%>
+                <%--</div>--%>
             </div>
         </div>
     </div>
 </div>
 
 <!-- 公用下拉择树 -->
-<div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 
 <!--删除提示框-->
@@ -513,12 +510,15 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
+
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<script src="/js/toast/js/toastr.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -626,17 +626,12 @@
             //清除数据
             clearFormData();
             //隐藏下拉菜单
-            clearFormValidation("editorGoodsForm",formValidater)
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
             //开启校验
-            $('#editorGoodsForm').data('bootstrapValidator').validate();
-            //判断校验是否通过
-            if(!$('#editorGoodsForm').data('bootstrapValidator').isValid()){
-                return;
-            }
+
 
             var editSubmitIndex = layer.load(2);
 
@@ -644,6 +639,7 @@
             var formData=$("#editorGoodsForm").serializeObject();
 
             formData["gmaindirection"]=$("input[name='mainType']:checked").val();
+            formData["gdescription"]=UE.getEditor('editor').getContent();
 
             let url="/goods/addGoods";
             if(editorGoodsType==1){
@@ -658,14 +654,18 @@
                 data:formData,
                 success:function(data){
                     layer.close(editSubmitIndex);
-                    if(data.status==0){
-                        //显示提示
-                        layer.msg(data.msg);
-                        //刷新数据
-                        refreshTableData();
+
+                    var goods = data.goods;
+
+                    if(goods==null){
+                        toastr.error("操作失败！");
                     }else{
-                        layer.msg(data.msg);
+                        toastr.success("操作成功！");
+                        $('#gid').val(goods.gid);
+                        refreshTableData();
                     }
+
+
                 }
             });
         });
@@ -744,10 +744,10 @@
             data:{gid:gid},
             success:function(data){
                 if(data.status==0){
-                    layer.msg("删除成功");
+                    toastr.success("删除成功！");
                     refreshTableData();
                 }else{
-                    layer.msg(data.msg);
+                    toastr.error("删除失败！");
                 }
             }
         });
@@ -823,7 +823,6 @@
         var rowData=rowDatas.get(parseInt(key,10));
         document.getElementById("navfirsta").click();
         if(rowData){
-            alert(rowData.gmaindirection);
             $("#gid").val(rowData.gid);
             $("#version").val(rowData.version);
             $("#isDelete").val(rowData.isDelete);
@@ -849,11 +848,9 @@
             if(rowData.gmaindirection==2){
                 $('#maincityandcom').get(0).checked=true;
             }
-            $("#ueditor_1").find("body").html(rowData.gdescription);
+            UE.getEditor('editor').setContent(rowData.gdescription, false);
         }else{
             clearFormData();
-
-
         }
     }
     /**
@@ -891,7 +888,6 @@
 
 <!--自定义-->
 <script>
-
     $(function () {
         $('#isServicegoods').siblings().click(function () {
             var flag = $("#isServicegoods").bootstrapSwitch("state");
@@ -901,20 +897,13 @@
                 $('#gfreightdiv').hide();
                 $('#gdepositdiv').show();
                 $('#maincomtrayside').attr('checked','checked');
+                $('#iscoddiv').hide();
             }else{
                 $('#allowsettimediv').show();
                 $('#isadvancesalediv').show();
                 $('#gfreightdiv').show();
                 $('#gdepositdiv').hide();
-            }
-        });
-
-        $('#isShowsalesvolume').siblings().click(function () {
-            var flag = $("#isShowsalesvolume").bootstrapSwitch("state");
-            if(flag){
-                $('#gsalesvolumediv').show();
-            }else{
-                $('#gsalesvolumediv').hide();
+                $('#iscoddiv').show();
             }
         });
 
@@ -926,14 +915,102 @@
                 $('#gedtdiv').hide();
             }
         });
+        
+        <!--提交商品配置-->
+        $('#editGoodsConfigSubmit').click(function () {
+            var formData=$("#editorGoodsConfigForm").serializeObject();
+
+            var gid = $('#gid').val();
+            if(gid==null || gid==''){
+                toastr.warning('请保存商品基本信息！');
+                document.getElementById('navfirsta').click();
+                return;
+            }else{
+                formData["gid"]=gid;
+            }
+
+            var flag = $("#isServicegoods").bootstrapSwitch("state");
+            if(flag){
+                formData["isAllowsetdeliverytime"]=1;
+                formData["isAdvancesale"]=0;
+                formData["gedt"]=null;
+                formData["gfreight"]=null;
+                formData["isCod"]=null;
+            }else{
+                flag = $("#isAllowsetdeliverytime").bootstrapSwitch("state");
+                if(flag){
+                    formData["isAllowsetdeliverytime"]=1;
+                }else{
+                    formData["isAllowsetdeliverytime"]=0;
+                }
+
+                flag = $("#isAdvancesale").bootstrapSwitch("state");
+                if(flag){
+                    formData["isAdvancesale"]=1;
+                }else{
+                    formData["isAdvancesale"]=0;
+                    formData["gedt"]=null;
+                }
+
+                formData["gdeposit"]=null;
+
+            }
+
+            flag = $("#isShowsalesvolume").bootstrapSwitch("state");
+            if(flag){
+                formData["isShowsalesvolume"]=1;
+            }else{
+                formData["isShowsalesvolume"]=0;
+            }
+
+            flag = $("#isMenberdiscount").bootstrapSwitch("state");
+            if(flag){
+                formData["isMenberdiscount"]=1;
+            }else{
+                formData["isMenberdiscount"]=0;
+            }
+
+            flag = $("#isPutway").bootstrapSwitch("state");
+            if(flag){
+                formData["isPutway"]=1;
+            }else{
+                formData["isPutway"]=0;
+            }
+
+            flag = $("#isMultiplebuy").is(':checked');
+            if(flag){
+                formData["isMultiplebuy"]=1;
+            }else{
+                formData["isMultiplebuy"]=0;
+            }
+
+            $.ajax({
+                type:"post",
+                url:"/goods/editGoodsConfig",
+                dataType: "json",
+                data:formData,
+                success:function(data){
+                    if(data.status==0){
+                        //显示提示
+                        toastr.success('操作成功！');
+                    }else{
+                        toastr.error('操作失败！');
+                    }
+                }
+            });
+
+
+        });
 
     });
 
-    function initGoodsConfigForm() {
+    <!--初始化商品配置信息-->
+    function initGoodsConfigForm(e) {
         var gid = $('#gid').val();
-        if(gid==''){
-            return;
+        if(gid=='' || gid==null ){
+            return ;
         }
+
         $.ajax({
             type:"post",
             url:'/goods/queryGoodsConfigBygid',
@@ -942,7 +1019,6 @@
             async:false,
             success:function(data){
                 var goodsConfig = data.goodsConfig;
-                alert(goodsConfig);
                 if(goodsConfig==null){
                     $("#gfreight").val('');
                     $("#gstartbuy").val('');
@@ -1061,6 +1137,108 @@
             }
         });
     }
+</script>
+
+<!--商品子类选择-->
+<script>
+
+        var setting = {
+            view: {
+                dblClickExpand: false
+            },
+            data: {
+                simpleData: {
+                    enable: true
+                }
+            },
+            callback: {
+                beforeClick: beforeClick,
+                onClick: onClick
+            }
+        };
+
+        function beforeClick(treeId, treeNode) {
+            return true;
+        }
+
+        function onClick(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+                nodes = zTree.getSelectedNodes(),
+                v = "",vId="";
+            nodes.sort(function compare(a,b){return a.id-b.id;});
+            for (var i=0, l=nodes.length; i<l; i++) {
+                v += nodes[i].name;
+                vId += nodes[i].id;
+            }
+            var gclassificationName = $("#gclassificationName");
+            var gclassification = $("#gclassification");
+            gclassificationName.val(v);
+            gclassification.val(vId);
+        }
+
+        var zNodes;
+        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        $.ajax({
+            type:"post",
+            url:'/goods/queryGoodsClassificationNode',
+            dataType: "json",
+            data:{ggId:-1,pageSize:1000,pageNo:1},
+            async:false,
+            success:function(data){
+                let d=data.data;
+                var nodeData=new Array();
+                for(row of d){
+                    let treeRow=new Object();
+                    treeRow.id=row.ggId;
+                    treeRow.pId=row.parentId;
+                    treeRow.name=row.ggName;
+                    nodeData.push(treeRow);
+                }
+                var zTree=$.fn.zTree.init($("#treeDemo"), setting, nodeData);
+                var node = zTree.getNodeByParam("id",parentId);
+                if(node){
+                    zTree.selectNode(node);
+                }
+            }
+        });
+
+        function showMenu() {
+            var cityObj = $("#gclassificationName");
+            var cityOffset = $("#gclassificationName").offset();
+            $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+            $("body").bind("mousedown", onBodyDown);
+        }
+        function hideMenu() {
+            $("#menuContent").fadeOut("fast");
+            $("body").unbind("mousedown", onBodyDown);
+        }
+        function onBodyDown(event) {
+            if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+                hideMenu();
+            }
+        }
+
+
+</script>
+
+<!--弹出框-->
+<script>
+    toastr.options = {
+
+        closeButton: false,
+        debug: false,
+        progressBar: false,
+        positionClass: "toast-bottom-center",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "2000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
 </script>
 </body>
 </html>

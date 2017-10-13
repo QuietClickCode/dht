@@ -36,7 +36,6 @@ public class GoodsTypeController extends BaseController {
 
     @RequestMapping("editGoodsType")
     @Function(label = "编辑商品大类",parentRes = "goods.openGoodsType",resourse = "goods.editGoodstype",description = "编辑商品大类",sort = 2)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editGoodsType(GoodsType goodsType){
         boolean flag = goodsTypeService.updateGoodsType(goodsType);
@@ -49,7 +48,6 @@ public class GoodsTypeController extends BaseController {
 
     @RequestMapping("/removeGoodsType")
     @Function(label="删除商品大类", description = "删除商品大类", resourse = "goods.removeGoodstype",sort=3,parentRes="goods.openGoodsType")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeGoodsType(Long gtId){
         boolean flag=goodsTypeService.deleteGoodsTypeByGtId(gtId);
@@ -58,7 +56,6 @@ public class GoodsTypeController extends BaseController {
 
     @RequestMapping("/queryGoodsTypeLists")
     @Function(label="商品大类列表", description = "所有商品大类列表", resourse = "goods.queryGoodsTypeLists",sort=1,parentRes="goods.openGoodsType")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public  Map<String,Object> queryGoodsTypeLists(String gtName,Long isShow, PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -73,7 +70,6 @@ public class GoodsTypeController extends BaseController {
 
     @RequestMapping("/addGoodsType")
     @Function(label="增加商品大类", description = "增加商品大类", resourse = "goods.addGoodsType",parentRes="goods.openGoodsType")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addGoodsType(GoodsType goodsType){
         boolean flag=goodsTypeService.saveGoodsType(goodsType);

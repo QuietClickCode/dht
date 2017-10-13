@@ -36,7 +36,6 @@ public class GoodsSpecificationController extends BaseController {
 
     @RequestMapping("editGoodsSpecification")
     @Function(label = "编辑商品规格",parentRes = "goods.openGoodsSpecification",resourse = "goods.editGoodsSpecification",description = "编辑商品规格",sort = 2)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editGoodsSpecification(GoodsSpecification GoodsSpecification){
         boolean flag = goodsSpecificationService.updateGoodsSpecification(GoodsSpecification);
@@ -49,7 +48,6 @@ public class GoodsSpecificationController extends BaseController {
 
     @RequestMapping("/removeGoodsSpecification")
     @Function(label="删除商品规格", description = "删除商品规格", resourse = "goods.removeGoodsSpecification",sort=3,parentRes="goods.openGoodsSpecification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeGoodsSpecification(Long gsId){
         boolean flag=goodsSpecificationService.deleteGoodsSpecificationByGsId(gsId);
@@ -58,7 +56,6 @@ public class GoodsSpecificationController extends BaseController {
 
     @RequestMapping("/queryGoodsSpecificationLists")
     @Function(label="商品规格列表", description = "所有商品规格列表", resourse = "goods.queryGoodsSpecificationLists",sort=1,parentRes="goods.openGoodsSpecification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public  Map<String,Object> queryGoodsSpecificationLists(String gsName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -72,7 +69,6 @@ public class GoodsSpecificationController extends BaseController {
 
     @RequestMapping("/addGoodsSpecification")
     @Function(label="增加商品规格", description = "增加商品规格", resourse = "goods.addGoodsSpecification",parentRes="goods.openGoodsSpecification")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addGoodsSpecification(GoodsSpecification GoodsSpecification){
         boolean flag=goodsSpecificationService.saveGoodsSpecification(GoodsSpecification);
