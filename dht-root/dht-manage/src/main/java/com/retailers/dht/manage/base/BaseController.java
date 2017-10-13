@@ -35,6 +35,20 @@ public class BaseController extends BaseWrite {
         return sysUser;
     }
     /**
+     * 取得当前登陆用户 id
+     * @param request
+     * @return
+     */
+    protected Long getCurLoginUserId(HttpServletRequest request){
+        Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        SysUser sysUser=null;
+        if(ObjectUtils.isNotEmpty(obj)){
+            sysUser=(SysUser)obj;
+            return sysUser.getUid();
+        }
+        return null;
+    }
+    /**
      * 取得当前登陆用户
      * @param request
      * @return

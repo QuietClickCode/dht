@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.entity.SysUser;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
@@ -24,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -78,7 +80,7 @@ public class CouponController extends BaseController{
     @RequestMapping("addCoupon")
     @Function(label="添加优惠卷", description = "添加优惠卷", resourse = "coupon.addCoupon",sort=2,parentRes="coupon.openCouponPage")
     @ResponseBody
-    public BaseResp addCoupon(CouponVo goodsCoupon){
+    public BaseResp addCoupon(HttpServletRequest request,CouponVo goodsCoupon){
         try{
             validateParams(goodsCoupon);
         }catch(Exception e){
@@ -89,6 +91,7 @@ public class CouponController extends BaseController{
             goodsCoupon.setCpCreate(new Date());
             Coupon cp = new Coupon();
             BeanUtils.copyProperties(goodsCoupon,cp);
+            cp.setCpCreateSid(getCurLoginUserId(request));
             boolean flag = couponService.saveCoupon(cp);
             if(flag){
                 return success("优惠卷添加成功");
@@ -108,7 +111,7 @@ public class CouponController extends BaseController{
     @RequestMapping("editorCoupon")
     @Function(label="编辑优惠卷", description = "编辑优惠卷", resourse = "coupon.editorCoupon",sort=3,parentRes="coupon.openCouponPage")
     @ResponseBody
-    public BaseResp editorCoupon(CouponVo goodsCoupon){
+    public BaseResp editorCoupon(HttpServletRequest request,CouponVo goodsCoupon){
         try{
             validateParams(goodsCoupon);
         }catch(Exception e){
@@ -117,6 +120,7 @@ public class CouponController extends BaseController{
         try{
             Coupon cp = new Coupon();
             BeanUtils.copyProperties(goodsCoupon,cp);
+            cp.setCpCreateSid(getCurLoginUserId(request));
             boolean flag = couponService.updateCoupon(cp);
             if(flag){
                 return success("编辑优惠成功");
@@ -128,7 +132,6 @@ public class CouponController extends BaseController{
             return errorForSystem(e.getMessage());
         }
     }
-
 
     /**
      * 校验传入参数 是否合法
