@@ -1,19 +1,22 @@
 package com.retailers.dht.common.vo;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.dao.AttachmentMapper;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 
 import javax.validation.constraints.Digits;
 import java.util.Date;
 
 /**
- * 优惠卷 页面编辑
+ * 优惠卷 页面展示
  * @author zhongp
  * @version 1.0.1
  * @data 2017/10/12
  */
-public class CouponVo {
+public class CouponShowVo {
     /**cpId*/
     private Long cpId;
     /**优惠卷名称*/
@@ -24,21 +27,18 @@ public class CouponVo {
     private Integer cpType;
     /**卡券图片（关联附件id）*/
     private Long cpLogo;
-    /**
-     * 卡卷图片地址
-     */
+    /**卡卷图片地址*/
     private String cpLogoUrl;
     /**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
     private Long cpIsRestricted;
     /**领取条件*/
     private String cpReceiveCondition;
     /**使用条件（直减/直折的时候可填写-1或者不填）*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷使用条件只允许在10位整数和2位小数范围内")
-    private Double cpUseCondition;
+    private Long cpUseCondition;
     /**优惠卷 有效时间开始*/
-    private String cpStartDate;
+    private Date cpStartDate;
     /**优惠卷 有效时间结束*/
-    private String cpEndDate;
+    private Date cpEndDate;
     /**能否叠加使用（0 可以叠加使用，1 不可叠加使用）*/
     private Integer cpIsOverlapUse;
     /**是否优先使用(0 优先使用，1 不是优先使用）*/
@@ -46,9 +46,9 @@ public class CouponVo {
     /**发放方式（0 及时发送，1 定时发送，2 周期发送）*/
     private Integer cpSendWay;
     /**发放开始时间*/
-    private String cpSendStartDate;
+    private Date cpSendStartDate;
     /**发放结束时间*/
-    private String cpSendEndDate;
+    private Date cpSendEndDate;
     /**周期发送类型（0 按年，1 按季，2 按月，3按周，4 按天）*/
     private Integer cpCycleSendType;
     /**周期发送次数次数*/
@@ -56,24 +56,21 @@ public class CouponVo {
     /**发送优惠卷张数*/
     private Long cpNum;
     /**金额*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷金额只允许在10位整数和2位小数范围内")
-    private Double cpMoney;
+    private Long cpMoney;
     /**折扣*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷折扣只允许在1位整数和2位小数范围内")
-    private Double cpDiscount;
+    private Long cpDiscount;
     /**发送优惠卷总金额（拼手气优惠卷 代金卷）*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷发送优惠卷总金额只允许在10位整数和2位小数范围内")
-    private Double cpTotalMoney;
+    private Long cpTotalMoney;
     /**拼手气折扣浮动最小值*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷拼手气折扣浮动最小值只允许在10位整数和2位小数范围内")
-    private Double cpMinDiscount;
+    private Long cpMinDiscount;
     /**拼手气折扣浮动最大值*/
-    @Digits(integer=10,fraction = 2,message = "优惠卷拼手气折扣浮动最大值只允许在10位整数和2位小数范围内")
-    private Double cpMaxDiscount;
+    private Long cpMaxDiscount;
     /**卡券领取与使用规则*/
     private String cpContext;
     /**优惠卷创建时间*/
     private Date cpCreate;
+    //创建人
+    private Long cpCreateSid;
     /**是否删除（0 未删作，1 删除）*/
     private Integer isDelete;
     /**是否有效（0 有效，1 无效）*/
@@ -122,7 +119,11 @@ public class CouponVo {
     }
 
     public String getCpLogoUrl() {
+        if(cpLogoUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&cpLogoUrl.indexOf("http://")==-1){
+            return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,cpLogoUrl);
+        }
         return cpLogoUrl;
+
     }
 
     public void setCpLogoUrl(String cpLogoUrl) {
@@ -145,27 +146,27 @@ public class CouponVo {
         this.cpReceiveCondition = cpReceiveCondition;
     }
 
-    public Long getCpUseCondition() {
-        return formateNumber(cpUseCondition);
+    public String getCpUseCondition() {
+        return NumberUtils.formaterNumberLong(cpUseCondition,2);
     }
 
-    public void setCpUseCondition(Double cpUseCondition) {
+    public void setCpUseCondition(Long cpUseCondition) {
         this.cpUseCondition = cpUseCondition;
     }
 
     public Date getCpStartDate() {
-        return formateDate(cpStartDate);
+        return cpStartDate;
     }
 
-    public void setCpStartDate(String cpStartDate) {
+    public void setCpStartDate(Date cpStartDate) {
         this.cpStartDate = cpStartDate;
     }
 
     public Date getCpEndDate() {
-        return formateDate(cpEndDate);
+        return cpEndDate;
     }
 
-    public void setCpEndDate(String cpEndDate) {
+    public void setCpEndDate(Date cpEndDate) {
         this.cpEndDate = cpEndDate;
     }
 
@@ -194,18 +195,18 @@ public class CouponVo {
     }
 
     public Date getCpSendStartDate() {
-        return formateDate(cpSendStartDate);
+        return cpSendStartDate;
     }
 
-    public void setCpSendStartDate(String cpSendStartDate) {
+    public void setCpSendStartDate(Date cpSendStartDate) {
         this.cpSendStartDate = cpSendStartDate;
     }
 
     public Date getCpSendEndDate() {
-        return formateDate(cpSendEndDate);
+        return cpSendEndDate;
     }
 
-    public void setCpSendEndDate(String cpSendEndDate) {
+    public void setCpSendEndDate(Date cpSendEndDate) {
         this.cpSendEndDate = cpSendEndDate;
     }
 
@@ -224,52 +225,48 @@ public class CouponVo {
     public void setCpSendNum(Long cpSendNum) {
         this.cpSendNum = cpSendNum;
     }
-
     public Long getCpNum() {
         return cpNum;
     }
-
     public void setCpNum(Long cpNum) {
         this.cpNum = cpNum;
     }
-
-    public Long getCpMoney() {
-        return formateNumber(cpMoney);
+    public String getCpMoney() {
+        return NumberUtils.formaterNumberLong(cpMoney,2,true);
     }
-
-    public void setCpMoney(Double cpMoney) {
+    public void setCpMoney(Long cpMoney) {
         this.cpMoney = cpMoney;
     }
 
-    public Long getCpDiscount() {
-        return formateNumber(cpDiscount);
+    public String getCpDiscount() {
+        return NumberUtils.formaterNumberLong(cpDiscount,2,true);
     }
 
-    public void setCpDiscount(Double cpDiscount) {
+    public void setCpDiscount(Long cpDiscount) {
         this.cpDiscount = cpDiscount;
     }
 
-    public Long getCpTotalMoney() {
-        return formateNumber(cpTotalMoney);
+    public String getCpTotalMoney() {
+        return NumberUtils.formaterNumberLong(cpTotalMoney,2,true);
     }
 
-    public void setCpTotalMoney(Double cpTotalMoney) {
+    public void setCpTotalMoney(Long cpTotalMoney) {
         this.cpTotalMoney = cpTotalMoney;
     }
 
-    public Long getCpMinDiscount() {
-        return formateNumber(cpMinDiscount);
+    public String getCpMinDiscount() {
+        return NumberUtils.formaterNumberLong(cpMinDiscount,2,true);
     }
 
-    public void setCpMinDiscount(Double cpMinDiscount) {
+    public void setCpMinDiscount(Long cpMinDiscount) {
         this.cpMinDiscount = cpMinDiscount;
     }
 
-    public Long getCpMaxDiscount() {
-        return formateNumber(cpMaxDiscount);
+    public String getCpMaxDiscount() {
+        return NumberUtils.formaterNumberLong(cpMaxDiscount,2,true);
     }
 
-    public void setCpMaxDiscount(Double cpMaxDiscount) {
+    public void setCpMaxDiscount(Long cpMaxDiscount) {
         this.cpMaxDiscount = cpMaxDiscount;
     }
 
@@ -287,6 +284,14 @@ public class CouponVo {
 
     public void setCpCreate(Date cpCreate) {
         this.cpCreate = cpCreate;
+    }
+
+    public Long getCpCreateSid() {
+        return cpCreateSid;
+    }
+
+    public void setCpCreateSid(Long cpCreateSid) {
+        this.cpCreateSid = cpCreateSid;
     }
 
     public Integer getIsDelete() {
@@ -311,18 +316,5 @@ public class CouponVo {
 
     public void setVersion(Integer version) {
         this.version = version;
-    }
-
-    private  Long formateNumber(Double num) {
-        if(ObjectUtils.isNotEmpty(num)){
-            return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(num,2));
-        }
-        return null;
-    }
-    private Date formateDate(String date){
-        if(ObjectUtils.isNotEmpty(date)){
-            return DateUtil.stringToDate(date,DateUtil.DATE_WITHSECOND_FORMAT);
-        }
-        return null;
     }
 }

@@ -7,6 +7,8 @@ import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.dao.CouponMapper;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
+import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,14 +27,14 @@ public class CouponServiceImpl implements CouponService {
 	@Autowired
 	private AttachmentService attachmentService;
 
-	public boolean saveCoupon(Coupon coupon,String attIds) {
+	public boolean saveCoupon(Coupon coupon) {
 		int status = couponMapper.saveCoupon(coupon);
 		List<Long> attachmentIds= new ArrayList<Long>();
 		attachmentIds.add(coupon.getCpLogo());
-		if(ObjectUtils.isNotEmpty(attIds)){
-			String[] aids=attIds.split(",");
-			for(String id:aids){
-				attachmentIds.add(Long.parseLong(id));
+		Map<Long,Long> atts= AttachmentUploadImageUtils.findUploadImages(coupon.getCpContext());
+		if(!atts.isEmpty()){
+			for(Long id:atts.keySet()){
+				attachmentIds.add(id);
 			}
 		}
 		attachmentService.editorAttachment(attachmentIds);
@@ -46,12 +48,12 @@ public class CouponServiceImpl implements CouponService {
 		return couponMapper.queryCouponByCpId(cpId);
 	}
 
-	public Pagination<Coupon> queryCouponList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<Coupon> page = new Pagination<Coupon>();
+	public Pagination<CouponShowVo> queryCouponList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<CouponShowVo> page = new Pagination<CouponShowVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<Coupon> list = couponMapper.queryCouponList(page);
+		List<CouponShowVo> list = couponMapper.queryCouponList(page);
 		page.setData(list);
 		return page;
 	}

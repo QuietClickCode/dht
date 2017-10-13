@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
 import java.util.Map;
@@ -19,7 +20,7 @@ public interface CouponService {
 	 * @author zhongp
 	 * @date 2017-10-11 20:34:20
 	 */
-	public boolean saveCoupon(Coupon coupon,String attIds);
+	public boolean saveCoupon(Coupon coupon);
 	/**
 	 * 编辑优惠卷
 	 * @param coupon
@@ -45,7 +46,7 @@ public interface CouponService {
 	 * @author zhongp
 	 * @date 2017-10-11 20:34:20
 	 */
-	public Pagination<Coupon> queryCouponList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<CouponShowVo> queryCouponList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据cpId删除优惠卷
 	 * @param cpId

@@ -87,10 +87,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 
 	public String getGcpConditions() {
-		if(ObjectUtils.isNotEmpty(gcpCondition)){
-			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpCondition),2);
-		}
-		return "0.00";
+		return NumberUtils.formaterNumberLong(gcpCondition,2);
 	}
 
 	public Long getGcpUnits() {
@@ -131,7 +128,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 	public String getGcpMoneys() {
 		if(ObjectUtils.isNotEmpty(gcpMoney)){
-			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpMoney),2);
+			return NumberUtils.formaterNumberLong(gcpMoney,2);
 		}
 		return null;
 	}
@@ -144,7 +141,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 	public String getGcpDiscounts() {
 		if(ObjectUtils.isNotEmpty(gcpDiscount)){
-			return NumberUtils.formaterNumberrStr(NumberUtils.priceChangeYuan(gcpDiscount),2);
+			return NumberUtils.formaterNumberLong(gcpDiscount,2);
 		}
 		return null;
 	}

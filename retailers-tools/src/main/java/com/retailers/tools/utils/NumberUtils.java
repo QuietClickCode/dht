@@ -154,115 +154,6 @@ public class NumberUtils {
 	}
 
 	/**
-	 * 将元转换成万元
-	 * @param d
-	 * @return
-	 */
-	public static String numberEnlarge(double d){
-		if(ObjectUtils.isNotEmpty(d)){
-			BigDecimal b = new BigDecimal(d/10000);
-			return b.toPlainString();
-		}else{
-			return "";
-		}
-
-	}
-
-	/**
-	 * 将元转换成万元
-	 * @param d
-	 * @return
-	 */
-	public static String numberEnlarge(Double d){
-		if(ObjectUtils.isNotEmpty(d)){
-			BigDecimal b = new BigDecimal(d/10000);
-			return b.toPlainString();
-		}else{
-			return "";
-		}
-
-	}
-	/**
-	 * 将元转换成万元
-	 * @param d
-	 * @return
-	 */
-	public static String numberEnlarge(BigDecimal d){
-		if(ObjectUtils.isNotEmpty(d)){
-			return d.movePointLeft(4).toPlainString();
-		}else{
-			return "";
-		}
-	}
-	/**
-	 *将万元转成元
-	 * @param d
-	 * @return
-	 */
-	public static Double numberMicrify(double d){
-		if(ObjectUtils.isNotEmpty(d)){
-			return d*10000;
-		}else{
-			return null;
-		}
-	}
-	/**
-	 *将万元转成元
-	 * @param d
-	 * @return
-	 */
-	public static Double numberMicrify(Double d){
-		if(ObjectUtils.isNotEmpty(d)){
-			return d*10000;
-		}else{
-			return null;
-		}
-	}
-	/**
-	 *将万元转成元
-	 * @param d
-	 * @return
-	 */
-	public static Double numberMicrify(BigDecimal d){
-		if(ObjectUtils.isNotEmpty(d)){
-			return d.movePointRight(4).doubleValue();
-		}else{
-			return null;
-		}
-
-	}
-	public static double numForm(Double num){
-		String str="";
-		BigDecimal bigDecimal = new BigDecimal(num);
-		if(ObjectUtils.isNotEmpty(num)){
-			str = bigDecimal.toString();
-		}else{
-			str="0.000";
-		}
-		if(ObjectUtils.isNotEmpty(str)&&str.indexOf(".")>0){
-			String[] strs= str.split("[.]");
-			String q=strs[1];
-			if(q.length()>=2){
-				q = q.substring(0,2);
-			}
-			str=strs[0]+"."+q;
-		}
-		return Double.parseDouble(str);
-	}
-
-//	/**
-//	 * 价格元换成分为单位
-//	 * @param price
-//	 * @return
-//	 */
-//	public static long priceChangeFen(Double price){
-//		if(ObjectUtils.isNotEmpty(price)){
-//			return (long)(formaterNumber(price*100,2));
-//		}else{
-//			return 0;
-//		}
-//	}
-	/**
 	 * 价格元换成分为单位
 	 * @param price
 	 * @return
@@ -329,6 +220,12 @@ public class NumberUtils {
 		}
 		return 0;
 	}
+
+	/**
+	 * 小数收取第三位
+	 * @param number
+	 * @return
+	 */
 	public static double formaterNumberr(double number) {
 		if (ObjectUtils.isNotEmpty(number)) {
 			BigDecimal bigDecimal = new BigDecimal(number+"");
@@ -344,20 +241,27 @@ public class NumberUtils {
 		return  df.format(number);
 	}
 
-	public static String formaterNumberrStr(double number,int len) {
+	public static String formaterNumberrDoulbe(Double number,int len) {
 		String STR_FORMAT = "##0.00";
 		number=formaterNumber(number,len);
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		return  df.format(number);
 	}
 
-	public static String formaterNumberrStr(long number,int len) {
+	public static String formaterNumberLong(Long number,int len) {
+		return formaterNumberLong(number,len,false);
+	}
+	public static String formaterNumberLong(Long number,int len,boolean isNull) {
+		if(isNull){
+			if(ObjectUtils.isEmpty(number)){
+				return null;
+			}
+		}
 		String STR_FORMAT = "##0.00";
 		double d=formaterNumber(priceChangeYuan(number),len);
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		return  df.format(d);
 	}
-
 	public static String formaterRandNumberr(int randNum) {
 		String STR_FORMAT = "000";
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
@@ -373,47 +277,10 @@ public class NumberUtils {
 	}
 
 	/**
-	 * 格式化数据（取传入值 的一个区间）
-	 * @param number
-	 * @param percentage
+	 * 比较传入参数的大小值
+	 * @param prices
 	 * @return
 	 */
-	public static Long[] formaterNumberr(Long number,double percentage,Long curPrice){
-		if(number>curPrice){
-			number=curPrice;
-		}
-
-		Long[] rtn = new Long[2];
-		Long startNumber =(long)((number/2)*(1-percentage));
-		if(startNumber.longValue()<0){
-			startNumber=0l;
-		}
-		Long endNumber = (long)((number*2)*(1+percentage));
-//		if(endNumber.longValue()>curPrice.longValue()){
-//			endNumber= curPrice;
-//		}
-		rtn[0]=startNumber;
-		rtn[1]=endNumber;
-		return rtn;
-	}
-
-    /**
-     * 格式化数据（取传入值 的一个区间）
-     * @param number
-     * @param percentage
-     * @return
-     */
-    public static Long[] formaterNumberr(Long number,double percentage){
-        Long[] rtn = new Long[2];
-        Long startNumber =(long)((number/2)*(1-percentage));
-        if(startNumber.longValue()<0){
-            startNumber=0l;
-        }
-        Long endNumber = (long)((number*2)*(1+percentage));
-        rtn[0]=startNumber;
-        rtn[1]=endNumber;
-        return rtn;
-    }
 	public static Double compareNumber(Double...prices){
 		double len=0.0;
 		if(ObjectUtils.isNotEmpty(prices)){
@@ -443,28 +310,12 @@ public class NumberUtils {
 	}
 
 	/**
-	 * 传入值大于比较值时返回比较值
-	 * @param num 传入值
-	 * @param comNum 比较值
-	 * @return
-	 */
-	public static long getMaxNumber(Long num,long comNum){
-		if(ObjectUtils.isNotEmpty(num)){
-			if(comNum>0&&num.intValue()>comNum){
-				return comNum;
-			}
-			return num;
-		}
-		return 0;
-	}
-
-	/**
 	 * 取得随机值
 	 * @param maxNum 随机值最大值
 	 * @param min 随机值最小值
 	 * @return
 	 */
-	public static int randomNumber(int maxNum,int min){
+	public static int randomNumber(int min,int maxNum){
 		if(maxNum==min||maxNum-min==1){
 			return maxNum;
 		}
@@ -496,7 +347,7 @@ public class NumberUtils {
 	}
 
 	/**
-	 * 取得几个数的最大值
+	 * 求合
 	 * @param num
 	 * @return
 	 */
@@ -550,7 +401,9 @@ public class NumberUtils {
 //			System.out.println(randomNumber(10,2));
 //		}
 //		System.out.println(getMaxNumber(null,5));
-		System.out.println(getMaxNum(10l,2l,5l,1l,null));
-		System.out.println(getMinNum(10l,2l,5l,-1l));
+//		System.out.println(getMaxNum(10l,2l,5l,1l,null));
+//		System.out.println(getMinNum(10l,2l,5l,-1l));
+		Long num=null;
+		System.out.println(formaterNumberLong(num,2));
 	}
 }

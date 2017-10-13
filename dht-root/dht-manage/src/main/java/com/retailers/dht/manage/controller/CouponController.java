@@ -7,6 +7,7 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
@@ -41,7 +42,6 @@ public class CouponController extends BaseController{
     private CouponService couponService;
 
     @RequestMapping("openCouponPage")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录")
     @Menu(label = "优惠卷管理",resourse = "coupon.openCouponPage",parentRes = "sys.manager.promotion",sort = 1)
     public String openCouponPage(){
         return "promotion/coupon";
@@ -65,7 +65,7 @@ public class CouponController extends BaseController{
         params.put("cpCoinType",coupouType);
         params.put("cpName",name);
         params.put("isDelete",0);
-        Pagination<Coupon> pages= couponService.queryCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<CouponShowVo> pages= couponService.queryCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
     }
 
@@ -76,10 +76,9 @@ public class CouponController extends BaseController{
      * @return
      */
     @RequestMapping("addCoupon")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加优惠卷", description = "添加优惠卷", resourse = "coupon.addCoupon",sort=2,parentRes="coupon.openCouponPage")
     @ResponseBody
-    public BaseResp addCoupon(CouponVo goodsCoupon,String attIds){
+    public BaseResp addCoupon(CouponVo goodsCoupon){
         try{
             validateParams(goodsCoupon);
         }catch(Exception e){
@@ -90,7 +89,7 @@ public class CouponController extends BaseController{
             goodsCoupon.setCpCreate(new Date());
             Coupon cp = new Coupon();
             BeanUtils.copyProperties(goodsCoupon,cp);
-            boolean flag = couponService.saveCoupon(cp,attIds);
+            boolean flag = couponService.saveCoupon(cp);
             if(flag){
                 return success("优惠卷添加成功");
             }else{
@@ -101,6 +100,41 @@ public class CouponController extends BaseController{
             return errorForSystem(e.getMessage());
         }
     }
+    /**
+     * 添加商品优惠
+     * @param goodsCoupon 商品优惠数据
+     * @return
+     */
+    @RequestMapping("editorCoupon")
+    @Function(label="编辑优惠卷", description = "编辑优惠卷", resourse = "coupon.editorCoupon",sort=3,parentRes="coupon.openCouponPage")
+    @ResponseBody
+    public BaseResp editorCoupon(CouponVo goodsCoupon){
+        try{
+            validateParams(goodsCoupon);
+        }catch(Exception e){
+            return errorForParam(e.getMessage());
+        }
+        try{
+            Coupon cp = new Coupon();
+            BeanUtils.copyProperties(goodsCoupon,cp);
+            boolean flag = couponService.updateCoupon(cp);
+            if(flag){
+                return success("编辑优惠成功");
+            }else{
+                return success("编辑优惠失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
+    }
+
+
+    /**
+     * 校验传入参数 是否合法
+     * @param couponVo
+     * @throws AppException
+     */
     private void validateParams(CouponVo couponVo)throws AppException{
 
     }

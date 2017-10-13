@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Coupon;
+import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface CouponMapper {
 	 * @author zhongp
 	 * @date 2017-10-11 20:34:20
 	 */
-	public List<Coupon> queryCouponList(Pagination<Coupon> pagination);
+	public List<CouponShowVo> queryCouponList(Pagination<CouponShowVo> pagination);
 
 }

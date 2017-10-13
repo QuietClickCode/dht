@@ -40,7 +40,7 @@
 <div>
     <table id="goodsCouponTables" class="table table-hover" ></table>
 </div>
-<div class="modal fade" id="editorGoodsCoupon" role="dialog" aria-labelledby="editorGoodsCoupon">
+<div class="modal fade" id="editorCoupon" role="dialog" aria-labelledby="editorCoupon">
     <div class="modal-dialog" role="document"  style="width: 80%; height: 70%;">
         <div class="modal-content">
             <div class="modal-header">
@@ -56,6 +56,14 @@
                                         优惠卷图片:
                                     </span>
                                     <input type="file" id="dht_image_upload" name="dht_image_upload">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="clearCpLogoDiv">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                        优惠卷图片:
+                                    </span>
+                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
                             </div>
                         </div>
                         <div class="col-lg-4" id="uploadImageDiv">
@@ -166,11 +174,74 @@
                                 <span class="input-group-addon">
                                 发放方式:
                                 </span>
-                                <select id="cpSendWay" name="cpSendWay" class="form-control">
+                                <select id="cpSendWay" name="cpSendWay" class="form-control" onchange="cpSendWayChange()">
                                     <option value="0">及时发放</option>
                                     <option value="1">定时发送</option>
                                     <option value="2">周期发送</option>
                                 </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-4" id="cpSendEndDateDiv">
+                            <div class="form-group">
+                                <div class="input-group col-xs-12">
+                                    <span class="input-group-addon">
+                                        领取结束时间:
+                                    </span>
+                                    <input type="text" class="form-control" name="cpSendEndDateValid" id="cpSendEndDateValid">
+                                </div>
+                            </div>
+                        </div>
+                        <!-- 定时发送时间范围-->
+                        <div class="col-lg-4" id="cpSendTimingDateDiv">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    领取时间范围:
+                                </span>
+                                <input type="hidden" name="cpSendStartDate" id="cpSendStartDate">
+                                <input type="hidden" name="cpSendEndDate" id="cpSendEndDate">
+                                <input type="text" class="form-control" name="cpSendTimingDateValid" id="cpSendTimingDateValid">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="cpSendCycleDateDiv1">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    开始发送时间:
+                                </span>
+                                <input type="text" class="form-control" name="cpSendCycleDateValid" id="cpSendCycleDateValid">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="cpSendCycleDateDiv2">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    发送周期:
+                                </span>
+                                <div class="form-control">
+                                    <label class="radio-inline">
+                                        <input type="radio" name="cpCycleSendType" id="cpCycleSendTypeYear" value="0" checked> 年
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="cpCycleSendType" id="cpCycleSendTypeQuarter"  value="1">季
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="cpCycleSendType" id="cpCycleSendTypeMonth" value="2" checked> 月
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="cpCycleSendType" id="cpCycleSendTypeWeek"  value="3">周
+                                    </label>
+                                    <label class="radio-inline">
+                                        <input type="radio" name="cpCycleSendType" id="cpCycleSendTypeDay"  value="3">日
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="cpSendCycleDateDiv3">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    发送次数:
+                                </span>
+                                <input type="text" class="form-control" name="cpSendNum" id="cpSendNum">
                             </div>
                         </div>
                     </div>
@@ -265,7 +336,7 @@
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
-    var editorGoodsCouponType=0;
+    var editorCouponType=0;
     var editSubmitIndex;
     var treeColumns=[
         {checkbox: true},
@@ -384,7 +455,7 @@
                 rowDatas.set(row.cpId,row);
                 let html='';
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCoupon(\''+row.cpId+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorCoupon(\''+row.cpId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.cpId+'\')"">删除</button>';
@@ -400,7 +471,7 @@
         $("#editorCouponForm #isValid").bootstrapSwitch();
         $("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch();
         $("#editorCouponForm #cpIsFirst").bootstrapSwitch();
-        $('#editorGoodsCoupon').on('hide.bs.modal', function () {
+        $('#editorCoupon').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
             clearFormValidation("editorCouponForm",formValidater)
@@ -438,20 +509,11 @@
             }
 
             let url="/coupon/addCoupon";
-            if(editorGoodsCouponType==1){
-                url="/goodsCoupon/editorGoodsCoupon";
+            if(editorCouponType==1){
+                url="/coupon/editorCoupon";
             }
             var context = UE.getEditor('cpContext').getContent();
             formData["cpContext"]=context;
-            var attIds = new Array();
-            $(context).find("img").each(function(i){
-                if($(this).attr("title")){
-                    attIds.push($(this).attr("title"));
-                }
-            });
-            if(attIds){
-                formData["attIds"]=attIds.join(",");
-            }
             //取得form表单数据
             $.ajax({
                 type:"post",
@@ -466,7 +528,7 @@
                         //刷新数据
                         refreshTableData();
                         //关闭弹窗
-                        $('#editorGoodsCoupon').modal('hide')
+                        $('#editorCoupon').modal('hide')
                     }else{
                         layer.msg(data.msg);
                     }
@@ -474,35 +536,10 @@
             });
         });
         formValidater();
-        $('#cpValidDate').daterangepicker(
-            {
-                startDate: moment(),
-                minDate : moment(),
-                showDropdowns : true,
-                timePicker:true,
-                timePickerIncrement:5,
-                timePicker24Hour:true,//24 小时制
-                opens : 'right', //日期选择框的弹出位置
-                buttonClasses : [ 'btn btn-default' ],
-                applyClass : 'btn-small btn-primary blue',
-                cancelClass : 'btn-small',
-                format: 'YYYY-MM-DD HH:mm:ss',
-                locale : {
-                    format: 'YYYY-MM-DD HH:mm:ss',
-                    applyLabel : '确定',
-                    cancelLabel : '取消',
-                    fromLabel : '起始时间',
-                    toLabel : '结束时间',
-                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                    firstDay : 1
-                }
-            }, function(start, end, label) {
-                $("#editorCouponForm #cpStartDate").val(start.format('YYYY-MM-DD HH:mm:ss'));
-                $("#editorCouponForm #cpEndDate").val(end.format('YYYY-MM-DD HH:mm:ss'));
-                $("#editorCouponForm #cpValidDate").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-            });
+        dateTools("#cpValidDate","#editorCouponForm #cpStartDate","#editorCouponForm #cpEndDate","#editorCouponForm #cpValidDate",false);
+        dateTools("#cpSendEndDateValid","","#editorCouponForm #cpSendEndDate","#editorCouponForm #cpSendEndDateValid",true);
+        dateTools("#cpSendTimingDateValid","#editorCouponForm #cpSendStartDate","#editorCouponForm #cpSendEndDate","#editorCouponForm #cpSendTimingDateValid",false);
+        dateTools("#cpSendCycleDateValid","#editorCouponForm #cpSendStartDate","","#editorCouponForm #cpSendCycleDateValid",true);
         //创建富文本编辑器
         var ue = UE.getEditor('cpContext');
         //重写图片上传地址
@@ -650,11 +687,11 @@
     }
 
 
-    function editorGoodsCoupon(cpId){
-        editorGoodsCouponType=1;
+    function editorCoupon(cpId){
+        editorCouponType=1;
         initFormData(cpId);
         $("#editorCouponTitle").text("编辑优惠卷");
-        $('#editorGoodsCoupon').modal("show")
+        $('#editorCoupon').modal("show")
     }
     /**
      * 清除form 表单数据
@@ -669,59 +706,103 @@
         $("#editorCouponForm #cpValidDate").val("");
         $("#editorCouponForm #gcpMoney").val("");
         $("#editorCouponForm #gcpDiscount").val("");
+        //清空富文本内容
+        UE.getEditor('cpContext').setContent('');
+        //清空上传内容
+        $('#cpImagesForm #dht_image_upload').filestyle('clear');
+        $("#cpImagesForm #uploadImageDiv").hide();
+        $("#cpImagesForm #gcpMoneyDiv").show();
+        $("#cpImagesForm #clearCpLogoDiv").hide();
     }
     /**
      * 清除form 表单数据
      * */
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
+        console.log(rowData)
         if(rowData){
             $("#editorCouponForm #cpId").val(rowData.cpId);
             $("#editorCouponForm #version").val(rowData.version);
             $("#editorCouponForm #cpName").val(rowData.cpName);
+            $("#editorCouponForm #cpLogo").val(rowData.cpLogo);
+            if(rowData.cpLogo){
+                $("#cpImagesForm #uploadImageDiv").show();
+                $("#cpImagesForm #gcpMoneyDiv").hide();
+                $("#cpImagesForm #clearCpLogoDiv").show();
+                $("#cpImagesForm #uploadImage").attr("src",rowData.cpLogoUrl);
+            }else{
+                $("#cpImagesForm #uploadImageDiv").hide();
+                $("#cpImagesForm #gcpMoneyDiv").show();
+                $("#cpImagesForm #clearCpLogoDiv").hide();
+            }
+            $("#editorCouponForm #cpCoinType").val(rowData.cpCoinType);
             $("#editorCouponForm #cpType").val(rowData.cpType);
-            $("#editorCouponForm #cpUseCondition").val(rowData.cpUseConditions);
-            $("#editorCouponForm #gcpUnits").val(rowData.gcpUnits);
+            $("#editorCouponForm #cpIsRestricted").val(rowData.cpIsRestricted);
+            $("#editorCouponForm #cpUseCondition").val(rowData.cpUseCondition);
+
             $("#editorCouponForm #cpStartDate").val(rowData.cpStartDate);
             $("#editorCouponForm #cpEndDate").val(rowData.cpEndDate);
+            $("#editorCouponForm #cpSendStartDate").val(rowData.cpSendStartDate);
+            $("#editorCouponForm #cpSendEndDate").val(rowData.cpSendEndDate);
             if(rowData.cpStartDate){
                 $("#editorCouponForm #cpValidDate").val(rowData.cpStartDate+" - "+rowData.cpEndDate);
             }else{
                 $("#editorCouponForm #cpValidDate").val("");
             }
-            $("#editorCouponForm #gcpMoney").val(rowData.gcpMoneys);
-            $("#editorCouponForm #gcpDiscount").val(rowData.gcpDiscounts);
-            var flag =false;
-            if(rowData.isValid==0){
-                flag=true;
-            }
-            $("#editorCouponForm #isValid").bootstrapSwitch("state",flag);
-
+            //能否叠加使用
             var cpIsOverlapUse =false;
             if(rowData.cpIsOverlapUse==0){
                 cpIsOverlapUse=true;
             }
-            $("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch("state",flag);
+            $("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch("state",cpIsOverlapUse);
+            //是否优先使用
+            var cpIsFirst =false;
+            if(rowData.cpIsFirst==0){
+                cpIsFirst=true;
+            }
+            $("#editorCouponForm #cpIsFirst").bootstrapSwitch("state",cpIsFirst);
+            //发放方式
+            $("#editorCouponForm #cpSendWay").val(rowData.cpSendWay);
+            //周期发送类型
+            $("#editorCouponForm input[name='cpCycleSendType'][value='"+rowData.cpCycleSendType+"']").attr("checked",true);
+            $("#editorCouponForm #cpSendNum").val(rowData.cpSendNum);
+            if(rowData.cpSendStartDate){
+                $("#editorCouponForm #cpSendTimingDateValid").val(rowData.cpSendStartDate+" - "+rowData.cpSendEndDate);
+            }else{
+                $("#editorCouponForm #cpSendTimingDateValid").val("");
+            }
+            $("#editorCouponForm #cpNum").val(rowData.cpNum);
+            $("#editorCouponForm #cpMoney").val(rowData.cpMoney);
+            $("#editorCouponForm #cpDiscount").val(rowData.cpDiscount);
+            $("#editorCouponForm #cpTotalMoney").val(rowData.cpTotalMoney);
+            $("#editorCouponForm #cpMinDiscount").val(rowData.cpMinDiscount);
+            $("#editorCouponForm #cpMaxDiscount").val(rowData.cpMaxDiscount);
+            UE.getEditor('cpContext').setContent(rowData.cpContext);
         }else{
             $("#editorCouponForm #cpType").val("0");
             $("#editorCouponForm #gcpMoneyDiv").show();
             $("#editorCouponForm #gcpDiscountDiv").hide();
             $("#editorCouponForm #cpValidDate").val("");
+            $("#editorCouponForm #cpSendEndDateValid").val("");
+            $("#editorCouponForm #cpSendTimingDateValid").val("");
+            $("#editorCouponForm #cpSendWay").val(0);
+            $("#cpImagesForm #gcpMoneyDiv").show();
+            $("#cpImagesForm #clearCpLogoDiv").hide();
         }
         cpCoinTypeChange();
+        cpSendWayChange();
     }
     /**
      * 编辑部门
      **/
     function addCoupon(){
-        editorGoodsCouponType=0;
+        editorCouponType=0;
         let orgId,orgPid;
         initFormData();
         $("#uploadImageDiv").hide();
         $("#editorCouponForm #isValid").bootstrapSwitch("state",true);
         $("#editorCouponTitle").text("添加优惠卷");
-        $('#editorGoodsCoupon').modal("show")
-//        $("#edui_fixedlayer").css("z-index","999999");
+        $('#editorCoupon').modal("show")
     }
     function cpCoinTypeChange(){
         let selectCpCoinType=$("#editorCouponForm #cpCoinType").val();
@@ -778,6 +859,8 @@
             success: function (returndata) {
                 if(returndata.state=="SUCCESS"){
                     $("#uploadImageDiv").show();
+                    $("#gcpMoneyDiv").hide();
+                    $("#clearCpLogoDiv").show();
                     $("#uploadImage").attr("src",returndata.url);
                     $("#editorCouponForm #cpLogo").val(returndata.original);
                 }
@@ -788,7 +871,91 @@
             }
         });
     }
-
+    /**
+     * 初始化晶期空间
+     * @param id
+     * @param startDate
+     * @param endDate
+     * @param showDate
+     * @param singleDate
+     */
+    function dateTools(id,startDate,endDate,showDate,singleDate){
+        let daterConfig={};
+        daterConfig.startDate= moment();
+        daterConfig.minDate= moment();
+        daterConfig.showDropdowns= true;
+        daterConfig.timePicker=true;
+        daterConfig.timePickerIncrement= 5;
+        daterConfig.timePicker24Hour=24; //24 小时制
+        daterConfig.opens= 'right'; //日期选择框的弹出位置
+        daterConfig.singleDatePicker=singleDate; //设置成单日历
+        daterConfig.applyClass= 'btn-small btn-primary blue';
+        daterConfig.cancelClass= 'btn-small';
+        daterConfig.format= 'YYYY-MM-DD HH:mm:ss';
+        let locale={};
+        locale.format='YYYY-MM-DD HH:mm:ss';
+        locale.applyLabel='确定';
+        locale.cancelLabel='取消';
+        locale.fromLabel='起始时间';
+        locale.toLabel='结束时间';
+        locale.daysOfWeek= [ '日', '一', '二', '三', '四', '五', '六' ];
+        locale.monthNames=[ '一月', '二月', '三月', '四月', '五月', '六月',
+            '七月', '八月', '九月', '十月', '十一月', '十二月' ];
+        locale.firstDay=1;
+        daterConfig.locale=locale;
+        $(id).daterangepicker(
+            daterConfig, function(start, end, label) {
+                if(!singleDate){
+                    $(startDate).val(start.format('YYYY-MM-DD HH:mm:ss'));
+                    $(endDate).val(end.format('YYYY-MM-DD HH:mm:ss'));
+                    $(showDate).val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
+                }else{
+                    if(startDate){
+                        $(startDate).val(start.format('YYYY-MM-DD HH:mm:ss'));
+                        $(endDate).val('');
+                    }
+                    if(endDate){
+                        $(startDate).val('');
+                        $(endDate).val(start.format('YYYY-MM-DD HH:mm:ss'));
+                    }
+                    $(showDate).val(start.format('YYYY-MM-DD HH:mm:ss'));
+                }
+            });
+    }
+    
+    function cpSendWayChange() {
+        let sendWaySelectVal=$("#editorCouponForm #cpSendWay").val();
+        $("#editorCouponForm #cpSendEndDateDiv").hide();
+        $("#editorCouponForm #cpSendTimingDateDiv").hide();
+        $("#editorCouponForm #cpSendCycleDateDiv1").hide();
+        $("#editorCouponForm #cpSendCycleDateDiv2").hide();
+        $("#editorCouponForm #cpSendCycleDateDiv3").hide();
+        if(parseInt(sendWaySelectVal,10)==0){
+            $("#editorCouponForm #cpSendEndDateDiv").show();
+            $("#editorCouponForm #cpSendStartDate").val('');
+            $("#editorCouponForm #cpSendTimingDateValid").val('');
+            $("#editorCouponForm #cpSendCycleDateValid").val('');
+        }else if(parseInt(sendWaySelectVal,10)==1){
+            $("#editorCouponForm #cpSendTimingDateDiv").show();
+            $("#editorCouponForm #cpSendEndDateValid").val('');
+            $("#editorCouponForm #cpSendCycleDateValid").val('');
+        }else if(parseInt(sendWaySelectVal,10)==2){
+            $("#editorCouponForm #cpSendCycleDateDiv1").show();
+            $("#editorCouponForm #cpSendCycleDateDiv2").show();
+            $("#editorCouponForm #cpSendCycleDateDiv3").show();
+            $("#editorCouponForm #cpSendEndDateValid").val('');
+            $("#editorCouponForm #cpSendTimingDateValid").val('');
+            $("#editorCouponForm #cpSendEndDate").val('');
+        }
+    }
+    //清除文件
+    function clearCpLogo(){
+        $('#cpImagesForm #dht_image_upload').filestyle('clear');
+        $("#cpImagesForm #uploadImageDiv").hide();
+        $("#cpImagesForm #gcpMoneyDiv").show();
+        $("#cpImagesForm #clearCpLogoDiv").hide();
+        $("#editorCouponForm #cpLogo").val('');
+    }
 </script>
 </body>
 </html>

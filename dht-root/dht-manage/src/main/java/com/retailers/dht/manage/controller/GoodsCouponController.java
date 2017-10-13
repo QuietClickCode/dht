@@ -1,7 +1,6 @@
 package com.retailers.dht.manage.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
@@ -44,7 +43,6 @@ public class GoodsCouponController extends BaseController{
      */
     @RequestMapping("openGoodsCouponPage")
     @Menu(resourse = "goodsCoupon.openGoodsCouponPage",parentRes = "sys.manager.promotion",label = "商品优惠",sort = 4)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     public String openGoodsCouponPage(){
         return "promotion/goods_coupon";
     }
@@ -59,7 +57,6 @@ public class GoodsCouponController extends BaseController{
      */
     @RequestMapping("queryGoodsCoupons")
     @Function(label="取得职员列表", description = "取得职员列表", resourse = "goodsCoupon.queryGoodsCoupons",sort=1,parentRes="goodsCoupon.openGoodsCouponPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登录，请重新登录")
     @ResponseBody
     public Map<String,Object> queryGoodsCoupons(String gcpName, Long gcpType,Long isValid,PageUtils pageForm){
         Map<String,Object> params=new HashMap<String, Object>();
@@ -77,7 +74,6 @@ public class GoodsCouponController extends BaseController{
      * @return
      */
     @RequestMapping("addGoodsCoupon")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加商品优惠", description = "添加商品优惠", resourse = "goodsCoupon.addGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
     public BaseResp addGoodsCoupon(GoodsCouponVo goodsCoupon){
@@ -102,7 +98,6 @@ public class GoodsCouponController extends BaseController{
      * @return
      */
     @RequestMapping("editorGoodsCoupon")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="编辑商品优惠", description = "编辑商品优惠", resourse = "goodsCoupon.editorGoodsCoupon",sort=3,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
     public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCoupon){
@@ -154,7 +149,6 @@ public class GoodsCouponController extends BaseController{
      * @return
      */
     @RequestMapping("delGoodsCoupon")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="删除商品优惠", description = "删除商品优惠", resourse = "goodsCoupon.delGoodsCoupon",sort=2,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
     public BaseResp delGoodsCoupon(Long gcpId){
