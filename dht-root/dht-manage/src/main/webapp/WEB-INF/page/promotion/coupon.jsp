@@ -48,23 +48,27 @@
                 <h4 class="modal-title" id="editorCouponTitle"></h4>
             </div>
             <div class="modal-body" style="overflow-y:auto;height:100%;">
-                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data" action="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods">
+                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
                     <div class="row">
                         <div class="col-lg-4" id="gcpMoneyDiv">
                             <div class="input-group form-group">
                                     <span class="input-group-addon">
                                         优惠卷图片:
                                     </span>
-                                    <input type="file" id="cpImages">
+                                    <input type="file" id="dht_image_upload" name="dht_image_upload">
                             </div>
-                            <input id="cpLogo" name="cpLogo" type="hidden">
+                        </div>
+                        <div class="col-lg-4" id="uploadImageDiv">
+                            <div class="input-group form-group">
+                                <img src="" id="uploadImage" width="96px;" height="48px;">
+                            </div>
                         </div>
                     </div>
                 </form>
                 <form id="editorCouponForm">
-                    <input type="hidden" name="gcpId" id="gcpId">
+                    <input type="hidden" name="cpId" id="cpId">
                     <input type="hidden" name="version" id="version">
-
+                    <input id="cpLogo" name="cpLogo" type="hidden">
                     <div class="row">
                         <div class="col-lg-4">
                             <div class="input-group form-group">
@@ -105,7 +109,7 @@
                                         使用条件:
                                     </div>
                                     <span class="form-control" style="width:40px;padding-right:0px;">满</span>
-                                    <input type="text" class="form-control" name="cpTypecpUseCondition" id="cpTypecpUseCondition" placeholder="请输入优惠条件" style="width: 140px;padding-right: 2px;">
+                                    <input type="text" class="form-control" name="cpUseCondition" id="cpUseCondition" placeholder="请输入优惠条件" style="width: 140px;padding-right: 2px;">
                                 </div>
                             </div>
                         </div>
@@ -200,7 +204,7 @@
                                 <span class="input-group-addon">
                                     总金额:
                                 </span>
-                                <input type="text" class="form-control" name="totalCoin" id="totalCoin">
+                                <input type="text" class="form-control" name="cpTotalMoney" id="cpTotalMoney">
                             </div>
                         </div>
                         <div class="col-lg-4" id="psqzzkDiv">
@@ -216,12 +220,9 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="cpContextEditor" class="control-label">卡券领取与使用规则:</label>
-                        <input type="hidden" id="cpContext" name="cpContext">
-                        <script type="text/plain" id="cpContextEditor" name="cpContextEditor" style="height:300px;">
+                        <label for="cpContext" class="control-label">卡券领取与使用规则:</label>
+                        <script type="text/plain" id="cpContext" name="cpContext" style="height:300px;">
                         </script>
-<%--
-                        <textarea class="form-control" id="orgDes" name="orgDes"></textarea>--%>
                     </div>
                     <%--<div class="row">
                         <div class="col-lg-6">
@@ -265,7 +266,7 @@
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
     var editorGoodsCouponType=0;
-    var orgPermissionTreeObj;
+    var editSubmitIndex;
     var treeColumns=[
         {checkbox: true},
         {
@@ -274,18 +275,25 @@
         },
         {
             field: 'cpType',
-            title: '类型'
+            title: '类型',
+            formatter:function(value,row,index){
+                var html="现金卷";
+                if(value==1){
+                    html="折扣卷";
+                }
+                return html;
+            }
         },
         {
             field: 'cpName',
             title: '卡券图片'
         },
-        {
+/*        {
             field: 'cpName',
             title: '领取条件'
-        },
+        },*/
         {
-            field: 'cpName',
+            field: 'cpUseCondition',
             title: '使用条件'
         },
         {
@@ -293,39 +301,39 @@
             title: '使用范围'
         },
         {
-            field: 'cpName',
+            field: 'cpStartDate',
             title: '开始时间'
         },
         {
-            field: 'cpName',
+            field: 'cpEndDate',
             title: '结束时间'
         },
         {
-            field: 'cpName',
+            field: 'cpSendStartDate',
             title: '发放开始时间'
         },
         {
-            field: 'cpName',
+            field: 'cpSendEndDate',
             title: '发放结束时间'
         },
         {
-            field: 'cpName',
+            field: 'cpSendWay',
             title: '发放方式'
         },
         {
-            field: 'cpName',
+            field: 'cpNum',
             title: '总张数'
         },
         {
-            field: 'cpName',
+            field: 'cpMoney',
             title: '金额'
         },
         {
-            field: 'cpName',
+            field: 'cpDiscount',
             title: '折扣'
         },
         {
-            field: 'cpName',
+            field: 'cpIsOverlapUse',
             title: '能否叠加使用'
         },
         {
@@ -373,13 +381,13 @@
             valign : 'middle',
             width:240,
             formatter:function(value,row,index){
-                rowDatas.set(row.gcpId,row);
+                rowDatas.set(row.cpId,row);
                 let html='';
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCoupon(\''+row.gcpId+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCoupon(\''+row.cpId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gcpId+'\')"">删除</button>';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.cpId+'\')"">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -406,12 +414,13 @@
             if(!$('#editorCouponForm').data('bootstrapValidator').isValid()){
                 return;
             }
-            var editSubmitIndex = layer.load(2);
+            editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
             var formData=$("#editorCouponForm").serializeObject();
             var flag =$("#editorCouponForm #isValid").bootstrapSwitch("state");
             var cpIsOverlapUse =$("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch("state");
+            var cpIsFirst =$("#editorCouponForm #cpIsFirst").bootstrapSwitch("state");
             if(flag){
                 formData["isValid"]=0;
             }else{
@@ -422,9 +431,26 @@
             }else{
                 formData["cpIsOverlapUse"]=1;
             }
-            let url="/goodsCoupon/addCoupon";
+            if(cpIsFirst){
+                formData["cpIsFirst"]=0;
+            }else{
+                formData["cpIsFirst"]=1;
+            }
+
+            let url="/coupon/addCoupon";
             if(editorGoodsCouponType==1){
                 url="/goodsCoupon/editorGoodsCoupon";
+            }
+            var context = UE.getEditor('cpContext').getContent();
+            formData["cpContext"]=context;
+            var attIds = new Array();
+            $(context).find("img").each(function(i){
+                if($(this).attr("title")){
+                    attIds.push($(this).attr("title"));
+                }
+            });
+            if(attIds){
+                formData["attIds"]=attIds.join(",");
             }
             //取得form表单数据
             $.ajax({
@@ -478,7 +504,7 @@
                 $("#editorCouponForm #cpValidDate").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
             });
         //创建富文本编辑器
-        var ue = UE.getEditor('cpContextEditor');
+        var ue = UE.getEditor('cpContext');
         //重写图片上传地址
         UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
         UE.Editor.prototype.getActionUrl = function(action) {
@@ -492,11 +518,12 @@
                 return this._bkGetActionUrl.call(this, action);
             }
         }
-        $('#cpImagesForm #cpImages').filestyle({
+        $('#cpImagesForm #dht_image_upload').filestyle({
             btnClass : "btn-primary",
             text:"选择文件",
             onChange:function(){
-                console.log("选择了文件--------------------------》》》：")
+                editSubmitIndex = layer.load(2);
+                cpImagesFormSummit();
             }
         });
     });
@@ -530,7 +557,7 @@
                             }
                         }
                     },
-                    cpTypecpUseCondition: {
+                    cpUseCondition: {
                         message: '优惠条件校验未通过',
                         validators: {
                             notEmpty: {
@@ -593,24 +620,24 @@
         );
     }
     //删除确认框
-    function deleteData(gcpId){
+    function deleteData(cpId){
         //询问框
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeSysUser(gcpId);
+            removeSysUser(cpId);
         }, function(){
         });
     }
     /**
      * 删除部门
      **/
-    function removeSysUser(gcpId){
+    function removeSysUser(cpId){
         $.ajax({
             type:"post",
             url:'/goodsCoupon/delGoodsCoupon',
             dataType: "json",
-            data:{gcpId:gcpId},
+            data:{cpId:cpId},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");
@@ -623,9 +650,9 @@
     }
 
 
-    function editorGoodsCoupon(gcpId){
+    function editorGoodsCoupon(cpId){
         editorGoodsCouponType=1;
-        initFormData(gcpId);
+        initFormData(cpId);
         $("#editorCouponTitle").text("编辑优惠卷");
         $('#editorGoodsCoupon').modal("show")
     }
@@ -633,10 +660,10 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorCouponForm #gcpId").val("");
+        $("#editorCouponForm #cpId").val("");
         $("#editorCouponForm #version").val("");
         $("#editorCouponForm #cpName").val("");
-        $("#editorCouponForm #cpTypecpUseCondition").val("");
+        $("#editorCouponForm #cpUseCondition").val("");
         $("#editorCouponForm #cpStartDate").val("");
         $("#editorCouponForm #cpEndDate").val("");
         $("#editorCouponForm #cpValidDate").val("");
@@ -649,11 +676,11 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorCouponForm #gcpId").val(rowData.gcpId);
+            $("#editorCouponForm #cpId").val(rowData.cpId);
             $("#editorCouponForm #version").val(rowData.version);
             $("#editorCouponForm #cpName").val(rowData.cpName);
             $("#editorCouponForm #cpType").val(rowData.cpType);
-            $("#editorCouponForm #cpTypecpUseCondition").val(rowData.cpTypecpUseConditions);
+            $("#editorCouponForm #cpUseCondition").val(rowData.cpUseConditions);
             $("#editorCouponForm #gcpUnits").val(rowData.gcpUnits);
             $("#editorCouponForm #cpStartDate").val(rowData.cpStartDate);
             $("#editorCouponForm #cpEndDate").val(rowData.cpEndDate);
@@ -690,6 +717,7 @@
         editorGoodsCouponType=0;
         let orgId,orgPid;
         initFormData();
+        $("#uploadImageDiv").hide();
         $("#editorCouponForm #isValid").bootstrapSwitch("state",true);
         $("#editorCouponTitle").text("添加优惠卷");
         $('#editorGoodsCoupon').modal("show")
@@ -734,6 +762,31 @@
                 $("#editorCouponForm #totalCoin").val("");
             }
         }
+    }
+    let fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
+    function cpImagesFormSummit(){
+        var formData = new FormData($( "#cpImagesForm" )[0]);
+        $.ajax({
+            url: fileUpload,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (returndata) {
+                if(returndata.state=="SUCCESS"){
+                    $("#uploadImageDiv").show();
+                    $("#uploadImage").attr("src",returndata.url);
+                    $("#editorCouponForm #cpLogo").val(returndata.original);
+                }
+                layer.close(editSubmitIndex);
+            },
+            error: function (returndata) {
+                layer.close(editSubmitIndex);
+            }
+        });
     }
 
 </script>

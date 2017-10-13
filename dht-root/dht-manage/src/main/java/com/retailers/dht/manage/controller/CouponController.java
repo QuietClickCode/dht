@@ -7,10 +7,12 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
 import org.hibernate.validator.constraints.br.CNPJ;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -76,7 +79,29 @@ public class CouponController extends BaseController{
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请重新登录")
     @Function(label="添加优惠卷", description = "添加优惠卷", resourse = "coupon.addCoupon",sort=2,parentRes="coupon.openCouponPage")
     @ResponseBody
-    public BaseResp addCoupon(GoodsCouponVo goodsCoupon){
-        return success(null);
+    public BaseResp addCoupon(CouponVo goodsCoupon,String attIds){
+        try{
+            validateParams(goodsCoupon);
+        }catch(Exception e){
+            return errorForParam(e.getMessage());
+        }
+        try{
+            goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+            goodsCoupon.setCpCreate(new Date());
+            Coupon cp = new Coupon();
+            BeanUtils.copyProperties(goodsCoupon,cp);
+            boolean flag = couponService.saveCoupon(cp,attIds);
+            if(flag){
+                return success("优惠卷添加成功");
+            }else{
+                return success("优惠卷添加失败");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
+    }
+    private void validateParams(CouponVo couponVo)throws AppException{
+
     }
 }

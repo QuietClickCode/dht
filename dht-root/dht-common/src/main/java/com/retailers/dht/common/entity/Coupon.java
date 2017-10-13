@@ -7,7 +7,7 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-10-11 21:36:45
+ * @date 2017-10-12 23:08:44
  */
 public class Coupon implements java.io.Serializable {
 
@@ -58,10 +58,13 @@ public class Coupon implements java.io.Serializable {
 	/**发放结束时间*/
 	@NotEmpty
 	private Date cpSendEndDate;
+	/**周期发送类型（0 按年，1 按季，2 按月，3按周，4 按天）*/
+	@NotEmpty
+	private Integer cpCycleSendType;
 	/**周期发送次数次数*/
 	@NotEmpty
 	private Long cpSendNum;
-	/**总张数*/
+	/**发送优惠卷张数*/
 	@NotEmpty
 	private Long cpNum;
 	/**金额*/
@@ -70,10 +73,25 @@ public class Coupon implements java.io.Serializable {
 	/**折扣*/
 	@NotEmpty
 	private Long cpDiscount;
+	/**发送优惠卷总金额（拼手机优惠卷 代金卷）*/
+	@NotEmpty
+	private Long cpTotalMoney;
+	/**拼手机折扣浮动最小值*/
+	@NotEmpty
+	private Long cpMinDiscount;
+	/**拼手机折扣浮动最大值*/
+	@NotEmpty
+	private Long cpMaxDiscount;
 	/**卡券领取与使用规则*/
 	@NotEmpty
 	@Length(min = 1, max = 1000)
 	private String cpContext;
+	/**优惠卷创建用户*/
+	@NotEmpty
+	private Long cpCreateSid;
+	/**优惠卷创建时间*/
+	@NotEmpty
+	private Date cpCreate;
 	/**是否删除（0 未删作，1 删除）*/
 	@NotEmpty
 	private Integer isDelete;
@@ -197,6 +215,13 @@ public class Coupon implements java.io.Serializable {
 	public Date getCpSendEndDate() {
 		return this.cpSendEndDate;
 	}
+	public void setCpCycleSendType(Integer value) {
+		this.cpCycleSendType = value;
+	}
+
+	public Integer getCpCycleSendType() {
+		return this.cpCycleSendType;
+	}
 	public void setCpSendNum(Long value) {
 		this.cpSendNum = value;
 	}
@@ -225,12 +250,47 @@ public class Coupon implements java.io.Serializable {
 	public Long getCpDiscount() {
 		return this.cpDiscount;
 	}
+	public void setCpTotalMoney(Long value) {
+		this.cpTotalMoney = value;
+	}
+
+	public Long getCpTotalMoney() {
+		return this.cpTotalMoney;
+	}
+	public void setCpMinDiscount(Long value) {
+		this.cpMinDiscount = value;
+	}
+
+	public Long getCpMinDiscount() {
+		return this.cpMinDiscount;
+	}
+	public void setCpMaxDiscount(Long value) {
+		this.cpMaxDiscount = value;
+	}
+
+	public Long getCpMaxDiscount() {
+		return this.cpMaxDiscount;
+	}
 	public void setCpContext(String value) {
 		this.cpContext = value;
 	}
 
 	public String getCpContext() {
 		return this.cpContext;
+	}
+	public void setCpCreateSid(Long value) {
+		this.cpCreateSid = value;
+	}
+
+	public Long getCpCreateSid() {
+		return this.cpCreateSid;
+	}
+	public void setCpCreate(Date value) {
+		this.cpCreate = value;
+	}
+
+	public Date getCpCreate() {
+		return this.cpCreate;
 	}
 	public void setIsDelete(Integer value) {
 		this.isDelete = value;

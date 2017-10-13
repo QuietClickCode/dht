@@ -19,7 +19,7 @@ public interface CouponService {
 	 * @author zhongp
 	 * @date 2017-10-11 20:34:20
 	 */
-	public boolean saveCoupon(Coupon coupon);
+	public boolean saveCoupon(Coupon coupon,String attIds);
 	/**
 	 * 编辑优惠卷
 	 * @param coupon
