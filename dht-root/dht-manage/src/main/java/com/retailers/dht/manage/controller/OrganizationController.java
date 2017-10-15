@@ -136,7 +136,7 @@ public class OrganizationController extends BaseController {
     }
 
     /**
-     * 取得部门下的所有权限
+     * 编辑部门权限
      * @param orgId 部门id
      * @return
      */
