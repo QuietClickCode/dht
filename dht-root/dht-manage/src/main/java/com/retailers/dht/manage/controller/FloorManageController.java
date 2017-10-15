@@ -45,19 +45,23 @@ public class FloorManageController extends BaseController {
     @RequestMapping("/updateFloor")
     @Function(label = "编辑楼层",parentRes = "floorManage.floorManageMapping",resourse = "goods.UpdateFloor",description = "编辑楼层",sort = 2)
     @ResponseBody
-    public BaseResp UpdateFloor(FloorManage manage){
+    public BaseResp UpdateFloor(FloorManage floorManage){
+        FloorManage manage = floorManageService.queryFloorManageByFlId(floorManage.getFlId());
+        manage.setFlName(floorManage.getFlName());
+        manage.setFlOrder(floorManage.getFlOrder());
+        manage.setIsShow(floorManage.getIsShow());
         boolean flag = floorManageService.updateFloorManage(manage);
         if (flag)
-            return success("修改楼层[" + manage.getFlName() + "]失败");
+            return success("修改楼层[" + floorManage.getFlName() + "]成功");
         else
-            return errorForSystem("修改楼层[" + manage.getFlName() + "]失败");
+            return errorForSystem("修改楼层[" + floorManage.getFlName() + "]失败");
     }
 
     @RequestMapping("/deleteFloor")
     @Function(label = "删除楼层",parentRes = "floorManage.floorManageMapping",resourse = "goods.deleteFloor",description = "删除楼层",sort = 2)
     @ResponseBody
-    public BaseResp deleteFloor(Long fl_id){
-        boolean flag = floorManageService.deleteFloorManageByFlId(fl_id);
+    public BaseResp deleteFloor(Long flId){
+        boolean flag = floorManageService.deleteFloorManageByFlId(flId);
         return success(flag);
     }
 
@@ -71,6 +75,4 @@ public class FloorManageController extends BaseController {
         rtn.put("rows",floorManageVos);
         return rtn;
     }
-
-
 }

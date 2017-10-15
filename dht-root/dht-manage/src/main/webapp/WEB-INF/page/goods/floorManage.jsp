@@ -124,17 +124,11 @@ UE.Editor.prototype.getActionUrl = function(action) {
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group dropdown">
                         <label for="" class="col-sm-3 control-label">上级分类</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="" placeholder="上级分类">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-3 control-label">所属商品大类</label>
-                        <div class="col-sm-9">
-                            <input type="text" class="form-control" id="" placeholder="上级分类">
+                            <input type="hidden" id="parentId" name="parentId"/>
+                            <input type="text" class="form-control" aria-label="..." id="parentNm" name="parentNm" onclick="showMenu(); return false;"/>
                         </div>
                     </div>
 
@@ -181,10 +175,10 @@ UE.Editor.prototype.getActionUrl = function(action) {
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" class="isShow" value="1">显示
+                                <input type="radio" name="isShow" class="isShow" value="1">显示
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" class="isShow" value="0">不显示
+                                <input type="radio" name="isShow" class="isShow" value="0">不显示
                             </label>
                         </div>
                     </div>
@@ -196,9 +190,26 @@ UE.Editor.prototype.getActionUrl = function(action) {
             </div>
         </div>
     </div>
-
-
 </div>
+
+    <%--删除确认框--%>
+    <div class="modal fade" id="removeThisFloor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="">确认删除</h4>
+                </div>
+                <div class="modal-body">
+                    <p>你确定删除选中的商品子类吗，删除后不可在恢复</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="deleteFloor()">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 <div id="GoodsClassificationContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
     <ul id="GoodsClassificationDemo" class="ztree" style="margin-top:0; width:320px;">
@@ -298,7 +309,13 @@ UE.Editor.prototype.getActionUrl = function(action) {
                 formatter:function (value,row,index) {
                     rowDatas.set(row.flId,row);
                     let html='';
-                    html+='<p>显示</p>'
+                    let show = row.isShow;
+                    let isShow;
+                    if(show == 1)
+                        isShow = "显示";
+                    else
+                        isShow = "不显示"
+                    html+='<p>'+isShow+'</p>'
                     return html;
                 }
             },
@@ -311,7 +328,7 @@ UE.Editor.prototype.getActionUrl = function(action) {
                     rowDatas.set(row.flId,row);
                     let html='';
                     <ex:perm url="floorManage/updateFloor">
-                    html+='<button class="btn btn-primary" onclick="event.stopPropagation();updateData(\''+row.flId+'\')" style="margin-right: 6px">编辑</button>' +
+                    html+='<button class="btn btn-primary" onclick="event.stopPropagation();updateData(\''+row.flId+'\',\''+row.flName+'\',\''+row.flOrder+'\',\''+row.isShow+'\')" style="margin-right: 6px">编辑</button>' +
                         '<button class="btn btn-primary" onclick="event.stopPropagation();deleteData(\''+row.flId+'\')">删除</button>'
                     </ex:perm>
                     return html;
@@ -378,15 +395,86 @@ UE.Editor.prototype.getActionUrl = function(action) {
 
     var flid;
 
+    function showParentMenu() {
+        layer.msg("Test");
+    }
+
+    /*
+    * 显示删除楼层的模态框
+    * */
     function deleteData(id) {
-        layer.msg(id);
-    }
-    
-    function updateData(id) {
-        $("#updateFloors").modal('toggle');
         flid = id;
+        $("#removeThisFloor").modal('toggle');
     }
-    
+
+
+    /*
+    * 删除楼层
+    * */
+    function deleteFloor() {
+        $.ajax({
+            url:"/floorManage/deleteFloor",
+            method:"post",
+            dataType:"json",
+            data:{
+                flId:flid
+            },
+            success:function (data) {
+                refreshTableData();
+                bootbox.alert("删除成功");
+            },
+            error:function () {
+                
+            }
+        });
+    }
+
+    /*
+    * 调用编辑楼层的模态框
+    * */
+    function updateData(id,name,order,isShow) {
+        flid = id;
+        $("#thisFloorTitle").val(name);
+        $("#thisFloorOrder").val(order);
+        if(isShow == 1)
+            $(".isShow")[0].checked = true;
+        else
+            $(".isShow")[1].checked = true;
+        $("#updateFloors").modal('toggle');
+    }
+
+    /*
+    * 编辑楼层
+    * */
+    function subupdateFloors() {
+        let title = $("#thisFloorTitle").val();
+        let order = $("#thisFloorOrder").val();
+        let show = $(".isShow:checked").val();
+        $.ajax({
+            url:"/floorManage/updateFloor",
+            method:"post",
+            data:{
+                flId:flid,
+                flName:title,
+                flOrder:order,
+                isShow:show,
+                version:1
+            },
+            dataType:"json",
+            success:function (data) {
+                layer.msg(data.msg);
+                refreshTableData();
+            },
+            error:function () {
+
+            }
+        });
+    }
+
+
+    /*
+    * 显示新增楼层的模态框
+    * */
     function  saveFloor(flid,parentId) {
         layer.msg(flid + " " + parentId);
         $("#addFloors").modal("toggle");
@@ -396,19 +484,12 @@ UE.Editor.prototype.getActionUrl = function(action) {
         $('#goodsClassificationTable').bootstrapTable(
             "refresh",
             {
-                url:"/floorManage/queryFloorsListsTest"
+                url:"/floorManage/queryFloorsLists"
             }
         );
     }
 
-    /*function subupdateFloors() {
-        let title = $("#thisFloorTitle").val();
-        let order = $("#thisFloorOrder").val();
-        let show = $(".isShow:checked").val();
-        $.ajax({
-            url:""
-        });
-    }*/
+
 
     /***********************************************************************************/
     var setting = {

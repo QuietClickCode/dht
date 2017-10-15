@@ -1,8 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.auth.constant.MenuConstant;
-import com.retailers.auth.vo.MenuVo;
 import com.retailers.dht.common.dao.FloorManageMapper;
 import com.retailers.dht.common.entity.FloorManage;
 import com.retailers.dht.common.service.FloorManageService;
@@ -49,7 +47,9 @@ public class FloorManageServiceImpl implements FloorManageService {
 		return page;
 	}
 	public boolean deleteFloorManageByFlId(Long flId) {
-		int status = floorManageMapper.deleteFloorManageByFlId(flId);
+		FloorManage manage = floorManageMapper.queryFloorManageByFlId(flId);
+		manage.setIsDelete(new Long(1));
+		int status = floorManageMapper.updateFloorManage(manage);
 		return status == 1 ? true : false;
 	}
 
