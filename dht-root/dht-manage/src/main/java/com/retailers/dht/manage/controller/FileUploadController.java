@@ -5,6 +5,7 @@ import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.upload.FileUploader;
 import com.retailers.dht.common.upload.UploadFacatory;
 import com.retailers.dht.manage.base.BaseController;
+import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,8 +37,8 @@ public class FileUploadController extends BaseController{
      * 上传图片 元水印
      * @return
      */
-    @ResponseBody
     @RequestMapping("/imageUpload")
+    @ResponseBody
     public Map<String,String> imageUpload(@RequestParam("dht_image_upload") CommonsMultipartFile upfile,@RequestParam("imageUse")String type,@RequestParam("isWatermark")Boolean isWatermark,@RequestParam("isCompress")Boolean isCompress ){
         logger.info("进入图片上传，取得传入参数,图片类型：{}，是否添加水印：{}，是否压缩：{}",type,isWatermark,isCompress);
         return uploadImage(upfile,type,isWatermark,isCompress);
@@ -61,8 +62,11 @@ public class FileUploadController extends BaseController{
         Map<String,String> rtn = uploader.upload(stream, type,upfile.getOriginalFilename(),isCompress,isWatermark);
         Map<String,String> imgMap = new HashMap();
         imgMap.put("state", "SUCCESS");
-        imgMap.put("url", AttachmentConstant.IMAGE_SHOW_URL+rtn.get("savePath"));
-        imgMap.put("title", upfile.getOriginalFilename());
+//        imgMap.put("url", AttachmentConstant.IMAGE_SHOW_URL+rtn.get("savePath"));
+        imgMap.put("url", StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,rtn.get("savePath"),"?random=",rtn.get("attachmentId")));
+//        imgMap.put("url", StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,rtn.get("savePath")));
+//        imgMap.put("title", upfile.getOriginalFilename());
+        imgMap.put("title", rtn.get("attachmentId"));
         imgMap.put("original", rtn.get("attachmentId"));
         logger.info("上传图片结束");
         return imgMap;

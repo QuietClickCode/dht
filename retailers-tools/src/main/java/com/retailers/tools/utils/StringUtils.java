@@ -5013,6 +5013,21 @@ public class StringUtils {
 		return str;
 	}
 
+	/**
+	 * 字符串连接
+	 * @param strs
+	 * @return
+	 */
+	public static String concat(String... strs){
+		String rtn="";
+		if(ObjectUtils.isNotEmpty(strs)){
+			for(String str:strs){
+				rtn+=str;
+			}
+		}
+		return rtn;
+	}
+
 	public static void main(String[] args) {
 		//System.out.println(JSON.toJSONString(urlParams("https://steamcommunity.com/tradeoffer/new/?partner=169636179&token=zjW5UBX8")));
 		//System.out.println(mobileHide("18623325918"));

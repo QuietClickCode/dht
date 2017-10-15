@@ -38,7 +38,7 @@
                     <input type="hidden" name="gtId" id="gtId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 商品大类名称:
@@ -46,7 +46,7 @@
                                 <input type="text" class="form-control" name="gtName" id="gtName">
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否关联参数:
@@ -61,7 +61,7 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否关联品牌:
@@ -74,7 +74,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否关联规格:
@@ -89,7 +89,7 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否显示:
@@ -231,6 +231,7 @@
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch();
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch();
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch();
+
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();

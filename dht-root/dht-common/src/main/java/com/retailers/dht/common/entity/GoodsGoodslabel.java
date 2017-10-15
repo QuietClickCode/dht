@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-07 12:04:20
+ * @date 2017-10-09 13:43:52
  */
 public class GoodsGoodslabel implements java.io.Serializable {
 
@@ -20,9 +20,6 @@ public class GoodsGoodslabel implements java.io.Serializable {
 	/**商品标签ID*/
 	@NotEmpty
 	private Long glId;
-	/**是否是分类标签   0 不是  1 是*/
-	@NotEmpty
-	private Long isClassification;
 	/**version*/
 	@NotEmpty
 	private Long version;
@@ -55,13 +52,6 @@ public class GoodsGoodslabel implements java.io.Serializable {
 
 	public Long getGlId() {
 		return this.glId;
-	}
-	public void setIsClassification(Long value) {
-		this.isClassification = value;
-	}
-
-	public Long getIsClassification() {
-		return this.isClassification;
 	}
 	public void setVersion(Long value) {
 		this.version = value;

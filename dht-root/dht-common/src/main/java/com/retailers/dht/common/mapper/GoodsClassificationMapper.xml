@@ -28,6 +28,7 @@
 		<result property="version" column="version"/>
 		<result property="parentName" column="parent_name"/>
 		<result property="homeName" column="home_name"/>
+		<result property="imgUrl" column="img_url"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -82,13 +83,11 @@
 	</select>
 	<!--树形商品子类查询-->
 	<select id="queryGoodsClassificationTree" resultMap="rm_goodsClassification_vo">
-		select t1.*,t2.gt_name home_name from
-			 (select t1.*,t2.gg_name parent_name
-					from t_goods_classification t1 LEFT JOIN t_goods_classification t2
-					ON t1.is_delete!=1 and t1.parent_Id=t2.gg_id
-					) t1,
-			 t_goods_type t2
-		 where t1.gg_home=t2.gt_id ORDER BY t1.parent_id asc ,t1.gg_order asc
+		select t1.*,t2.gg_name parent_name,t3.gt_name home_name,t4.show_url img_url
+					from t_goods_classification t1
+				LEFT JOIN t_goods_classification t2 ON t1.is_delete!=1 and t1.parent_Id=t2.gg_id
+				LEFT JOIN t_goods_type t3 on t1.gg_home=t3.gt_id
+				LEFT JOIN t_attachment t4 on t1.gg_imgpath=t4.id ORDER BY t1.parent_id asc ,t1.gg_order asc
 	</select>
 	<select id="queryGoodsClassificationNode" resultMap="rm_goodsClassification_vo">
 		SELECT <include refid="goodsClassification_columns" />

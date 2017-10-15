@@ -17,10 +17,10 @@
     <div class="form-group">
         <input type="text" class="form-control" id="search_user_org" placeholder="请选择职员所在部门">
     </div>
-    <ex:perm url="	sysUser/querySysUserLists">
+    <ex:perm url="sysUser/querySysUserLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
-    <ex:perm url="	sysUser/addSysUser">
+    <ex:perm url="sysUser/addSysUser">
         <button class="btn btn-default" type="button" onclick="addSysUser()">添加职员</button>
     </ex:perm>
 </div>

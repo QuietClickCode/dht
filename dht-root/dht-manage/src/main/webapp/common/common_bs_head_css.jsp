@@ -13,3 +13,9 @@
 <script type="text/javascript">
 	var base_path_url="<%=path%>/";
 </script>
+<style>
+	.dropdown-menu li{
+		list-style: none;
+		font-size:14px;
+	}
+</style>

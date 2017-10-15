@@ -11,4 +11,9 @@ public interface SysUserResPermissionService {
      * @param userId
      */
     public void loadUserResPermission(Long userId);
+
+    /**
+     * 重新加载当前登陆用户权限
+     */
+    public void loadUserResPermission();
 }

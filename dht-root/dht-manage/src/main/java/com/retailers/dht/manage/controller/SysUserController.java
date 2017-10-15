@@ -80,8 +80,13 @@ public class SysUserController extends BaseController {
         }catch(AppException e){
             return errorForSystem(e.getMessage());
         }
-        sysUserService.addSysUser(sysUserVo);
-        return success("添加职工成功");
+        try{
+            sysUserService.addSysUser(sysUserVo);
+            return success("添加职工成功");
+        }catch(Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.Map;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-07 12:03:22
+ * @date 2017-10-09 13:44:22
  */
 public interface GoodsLabelService {
 
@@ -17,7 +17,7 @@ public interface GoodsLabelService {
 	 * @param goodsLabel
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:03:22
+	 * @date 2017-10-09 13:44:22
 	 */
 	public boolean saveGoodsLabel(GoodsLabel goodsLabel);
 	/**
@@ -33,7 +33,7 @@ public interface GoodsLabelService {
 	 * @param glId
 	 * @return goodsLabel
 	 * @author fanghui
-	 * @date 2017-10-07 12:03:22
+	 * @date 2017-10-09 13:44:22
 	 */
 	public GoodsLabel queryGoodsLabelByGlId(Long glId);
 	/**
@@ -43,7 +43,7 @@ public interface GoodsLabelService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author fanghui
-	 * @date 2017-10-07 12:03:22
+	 * @date 2017-10-09 13:44:22
 	 */
 	public Pagination<GoodsLabel> queryGoodsLabelList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface GoodsLabelService {
 	 * @param glId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-07 12:03:22
+	 * @date 2017-10-09 13:44:22
 	 */
 	public boolean deleteGoodsLabelByGlId(Long glId);
 

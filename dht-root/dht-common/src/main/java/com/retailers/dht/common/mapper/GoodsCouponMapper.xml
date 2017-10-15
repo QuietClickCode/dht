@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsCouponMapper">
+
+	<resultMap id="rm_goodsCoupon" type="com.retailers.dht.common.entity.GoodsCoupon">
+		<result property="gcpId" column="gcp_id"/>
+		<result property="gcpName" column="gcp_name"/>
+		<result property="gcpType" column="gcp_type"/>
+		<result property="gcpCondition" column="gcp_condition"/>
+		<result property="gcpUnits" column="gcp_units"/>
+		<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
+		<result property="gcpStartTime" column="gcp_start_time"/>
+		<result property="gcpEndTime" column="gcp_end_time"/>
+		<result property="gcpMoney" column="gcp_money"/>
+		<result property="gcpDiscount" column="gcp_discount"/>
+		<result property="gcpCreateTime" column="gcp_create_time"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsCoupon_columns">
+		gcp_id,gcp_name,gcp_type,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,gcp_create_time,is_valid,is_delete,version
+	</sql>
+	<!-- 根据商品优惠活动主键取得数据 -->
+	<select id="queryGoodsCouponByGcpId" resultMap="rm_goodsCoupon" parameterType="java.lang.Long">
+		SELECT <include refid="goodsCoupon_columns" />
+		FROM t_goods_coupon WHERE gcp_id = #{gcpId}
+	</select>
+	<!-- 商品优惠活动查询条件组合 -->
+	<sql id="goodsCoupon_where">
+		<where>
+			<if test="null != params.gcpId">
+				AND gcp_id = #{params.gcpId}
+			</if>
+			<if test="null != params.gcpName and '' != params.gcpName">
+				AND gcp_name like  concat('%', #{params.gcpName}, '%')
+			</if>
+			<if test="null != params.gcpType">
+				AND gcp_type = #{params.gcpType}
+			</if>
+			<if test="null != params.gcpCondition">
+				AND gcp_condition = #{params.gcpCondition}
+			</if>
+			<if test="null != params.gcpIsOverlapUse">
+				AND gcp_is_overlap_use = #{params.gcpIsOverlapUse}
+			</if>
+			<if test="null != params.gcpStartTimeBegin">
+				AND gcp_start_time &gt;= TO_DATE('${params.gcpStartTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpStartTimeEnd">
+				AND gcp_start_time &lt;= TO_DATE('${params.gcpStartTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpCreateTimeBegin">
+				AND gcp_create_time &gt;= TO_DATE('${params.gcpCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpCreateTimeEnd">
+				AND gcp_create_time &lt;= TO_DATE('${params.gcpCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpEndTimeBegin">
+				AND gcp_end_time &gt;= TO_DATE('${params.gcpEndTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpEndTimeEnd">
+				AND gcp_end_time &lt;= TO_DATE('${params.gcpEndTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.gcpMoney">
+				AND gcp_money = #{params.gcpMoney}
+			</if>
+			<if test="null != params.gcpDiscount">
+				AND gcp_discount = #{params.gcpDiscount}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsCouponList" resultMap="rm_goodsCoupon" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsCoupon_columns" />
+		FROM t_goods_coupon
+		<include refid="goodsCoupon_where"/>
+	</select>
+	<!--添加商品优惠活动 -->
+	<insert id="saveGoodsCoupon" parameterType="com.retailers.dht.common.entity.GoodsCoupon" useGeneratedKeys="true" keyProperty="gcpId">
+		INSERT INTO t_goods_coupon (
+			gcp_name,gcp_type,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,gcp_discount,is_valid,is_delete,version
+		) VALUES
+		(
+			#{gcpName,jdbcType=VARCHAR},#{gcpType,jdbcType=INTEGER},#{gcpCondition,jdbcType=BIGINT},#{gcpUnits,jdbcType=BIGINT},#{gcpIsOverlapUse,jdbcType=INTEGER},#{gcpStartTime,jdbcType=TIMESTAMP},#{gcpCreateTime,jdbcType=TIMESTAMP},#{gcpEndTime,jdbcType=TIMESTAMP},#{gcpMoney,jdbcType=BIGINT},#{gcpDiscount,jdbcType=DECIMAL},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改商品优惠活动 -->
+	<update id="updateGoodsCoupon" parameterType="com.retailers.dht.common.entity.GoodsCoupon">
+		UPDATE t_goods_coupon
+		<set>
+            <if test="null != gcpName and '' != gcpName">
+                gcp_name = #{gcpName},
+            </if>
+            <if test="null != gcpType">
+                gcp_type = #{gcpType},
+            </if>
+            <if test="null != gcpCondition">
+                gcp_condition = #{gcpCondition},
+            </if>
+            <if test="null != gcpIsOverlapUse">
+                gcp_is_overlap_use = #{gcpIsOverlapUse},
+            </if>
+            <if test="null != gcpStartTime">
+                gcp_start_time = #{gcpStartTime},
+            </if>
+            <if test="null != gcpCreateTime">
+                gcp_create_time = #{gcpCreateTime},
+            </if>
+            <if test="null != gcpEndTime">
+                gcp_end_time = #{gcpEndTime},
+            </if>
+            <if test="null != gcpMoney">
+                gcp_money = #{gcpMoney},
+            </if>
+            <if test="null != gcpDiscount">
+                gcp_discount = #{gcpDiscount},
+            </if>
+            <if test="null != isValid">
+                is_valid = #{isValid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gcp_id = #{gcpId} and version = #{version}
+	</update>
+	<!--删除商品优惠活动 -->
+	<update id="deleteGoodsCouponByGcpId" parameterType="java.lang.Long">
+		UPDATE t_goods_coupon set is_delete =1,version = version+1  WHERE gcp_id = #{gcpId}
+	</update>
+</mapper>

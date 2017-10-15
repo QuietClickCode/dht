@@ -1,8 +1,10 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsClassificationMapper;
 import com.retailers.dht.common.entity.GoodsClassification;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
@@ -26,6 +28,8 @@ import java.util.Map;
 public class GoodsClassificationServiceImpl implements GoodsClassificationService {
 	@Autowired
 	private GoodsClassificationMapper goodsClassificationMapper;
+	@Autowired
+	private AttachmentService attachmentService;
 	public boolean saveGoodsClassification(GoodsClassification goodsClassification) {
 		Long parentId = goodsClassification.getParentId();
 		Long isTop = goodsClassification.getIsTop();
@@ -34,6 +38,9 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		}
 
 		int status = goodsClassificationMapper.saveGoodsClassification(goodsClassification);
+		if(status==1 && goodsClassification.getGgImgpath()!=null && !goodsClassification.getGgImgpath().equals("")){
+			attachmentService.editorAttachment(Long.parseLong(goodsClassification.getGgImgpath()));
+		}
 		return status == 1 ? true : false;
 	}
 	public boolean updateGoodsClassification(GoodsClassification goodsClassification) {
@@ -46,7 +53,15 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				return false;
 			}
 		}
+		GoodsClassification g = goodsClassificationMapper.queryGoodsClassificationByGgId(goodsClassification.getGgId());
+		if(!g.getGgImgpath().equals(goodsClassification.getGgImgpath())){
+			attachmentService.editorAttachment(Long.parseLong(g.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
+		}
+
 		int status = goodsClassificationMapper.updateGoodsClassification(goodsClassification);
+		if(status==1 && goodsClassification.getGgImgpath()!=null && !goodsClassification.getGgImgpath().equals("")){
+			attachmentService.editorAttachment(Long.parseLong(goodsClassification.getGgImgpath()));
+		}
 		return status == 1 ? true : false;
 	}
 	public GoodsClassification queryGoodsClassificationByGgId(Long ggId) {
@@ -63,6 +78,10 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return page;
 	}
 	public boolean deleteGoodsClassificationByGgId(Long ggId) {
+		GoodsClassification goodsClassification = goodsClassificationMapper.queryGoodsClassificationByGgId(ggId);
+		if(ObjectUtils.isEmpty(goodsClassification.getGgImgpath())){
+			attachmentService.editorAttachment(Long.parseLong(goodsClassification.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
+		}
 		int status = goodsClassificationMapper.deleteGoodsClassificationByGgId(ggId);
 		return status == 1 ? true : false;
 	}
@@ -85,6 +104,13 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 			}
 		}
 		queryGoodsClassificationNode(1L);
+
+		if(!ObjectUtils.isEmpty(rntList)){
+			for (int i=0; i<rntList.size(); i++){
+				GoodsClassificationVo g = rntList.get(i);
+				g.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+g.getImgUrl());
+			}
+		}
 		return rntList;
 	}
 

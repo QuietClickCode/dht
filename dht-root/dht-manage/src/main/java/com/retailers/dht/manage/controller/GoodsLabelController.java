@@ -23,7 +23,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("goods")
-public class GoodsLabelontroller extends BaseController {
+public class GoodsLabelController extends BaseController {
 
     @Autowired
     GoodsLabelService goodsLabelService;
@@ -36,7 +36,6 @@ public class GoodsLabelontroller extends BaseController {
 
     @RequestMapping("editGoodsLabel")
     @Function(label = "编辑商品标签",parentRes = "goods.openGoodsLabel",resourse = "goods.editGoodsLabel",description = "编辑商品标签",sort = 2)
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editGoodsLabel(GoodsLabel GoodsLabel){
         boolean flag = goodsLabelService.updateGoodsLabel(GoodsLabel);
@@ -49,7 +48,6 @@ public class GoodsLabelontroller extends BaseController {
 
     @RequestMapping("/removeGoodsLabel")
     @Function(label="删除商品品牌", description = "删除商品品牌", resourse = "goods.removeGoodsLabel",sort=3,parentRes="goods.openGoodsLabel")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeGoodsLabel(Long glId){
         boolean flag=goodsLabelService.deleteGoodsLabelByGlId(glId);
@@ -58,7 +56,6 @@ public class GoodsLabelontroller extends BaseController {
 
     @RequestMapping("/queryGoodsLabelLists")
     @Function(label="商品标签列表", description = "所有商品标签列表", resourse = "goods.queryGoodsLabelLists",sort=1,parentRes="goods.openGoodsLabel")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public  Map<String,Object> queryGoodsLabelLists(String gbName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -72,7 +69,6 @@ public class GoodsLabelontroller extends BaseController {
 
     @RequestMapping("/addGoodsLabel")
     @Function(label="增加商品标签", description = "增加商品标签", resourse = "goods.addGoodsLabel",parentRes="goods.openGoodsLabel")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addGoodsLabel(GoodsLabel GoodsLabel){
         boolean flag=goodsLabelService.saveGoodsLabel(GoodsLabel);

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsMapper">
+
+	<resultMap id="rm_goods" type="com.retailers.dht.common.entity.Goods">
+			<result property="gid" column="g_id"/>
+			<result property="gname" column="g_name"/>
+			<result property="gvender" column="g_vender"/>
+			<result property="gshop" column="g_shop"/>
+			<result property="gclassification" column="g_classification"/>
+			<result property="gbrand" column="g_brand"/>
+			<result property="garea" column="g_area"/>
+			<result property="gsalescope" column="g_salescope"/>
+			<result property="gmaindirection" column="g_maindirection"/>
+			<result property="gdescription" column="g_description"/>
+			<result property="gproductioninperson" column="g_productioninperson"/>
+			<result property="gproductioninaddress" column="g_productioninaddress"/>
+			<result property="gpickperson" column="g_pickperson"/>
+			<result property="gpickaddress" column="g_pickaddress"/>
+			<result property="gcopyid" column="g_copyid"/>
+			<result property="gprice" column="g_price"/>
+			<result property="gcheckperson" column="g_checkperson"/>
+			<result property="gcheckmessage" column="g_checkmessage"/>
+			<result property="gunitname" column="g_unitname"/>
+			<result property="isChecked" column="is_checked"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_goods_vo" type="com.retailers.dht.common.vo.GoodsVo">
+		<result property="gid" column="g_id"/>
+		<result property="gname" column="g_name"/>
+		<result property="gvender" column="g_vender"/>
+		<result property="gshop" column="g_shop"/>
+		<result property="gclassification" column="g_classification"/>
+		<result property="gbrand" column="g_brand"/>
+		<result property="garea" column="g_area"/>
+		<result property="gsalescope" column="g_salescope"/>
+		<result property="gmaindirection" column="g_maindirection"/>
+		<result property="gdescription" column="g_description"/>
+		<result property="gproductioninperson" column="g_productioninperson"/>
+		<result property="gproductioninaddress" column="g_productioninaddress"/>
+		<result property="gpickperson" column="g_pickperson"/>
+		<result property="gpickaddress" column="g_pickaddress"/>
+		<result property="gcopyid" column="g_copyid"/>
+		<result property="gprice" column="g_price"/>
+		<result property="gcheckperson" column="g_checkperson"/>
+		<result property="gcheckmessage" column="g_checkmessage"/>
+		<result property="gunitname" column="g_unitname"/>
+		<result property="isChecked" column="is_checked"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gclassificationName" column="gg_name"/>
+		<result property="gareaName" column="a_name"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goods_columns">
+		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+	</sql>
+	<!-- 根据商品表主键取得数据 -->
+	<select id="queryGoodsByGid" resultMap="rm_goods" parameterType="java.lang.Long">
+		SELECT <include refid="goods_columns" />
+		FROM t_goods WHERE g_id = #{gid}
+	</select>
+	<!-- 商品表查询条件组合 -->
+	<sql id="goods_where">
+		<where>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gname and '' != params.gname">
+				AND g_name = #{params.gname}
+			</if>
+			<if test="null != params.gvender">
+				AND g_vender = #{params.gvender}
+			</if>
+			<if test="null != params.gshop">
+				AND g_shop = #{params.gshop}
+			</if>
+			<if test="null != params.gclassification">
+				AND g_classification = #{params.gclassification}
+			</if>
+			<if test="null != params.gbrand">
+				AND g_brand = #{params.gbrand}
+			</if>
+			<if test="null != params.garea">
+				AND g_area = #{params.garea}
+			</if>
+			<if test="null != params.gsalescope">
+				AND g_salescope = #{params.gsalescope}
+			</if>
+			<if test="null != params.gmaindirection">
+				AND g_maindirection = #{params.gmaindirection}
+			</if>
+			<if test="null != params.gdescription and '' != params.gdescription">
+				AND g_description = #{params.gdescription}
+			</if>
+			<if test="null != params.gproductioninperson and '' != params.gproductioninperson">
+				AND g_productioninperson = #{params.gproductioninperson}
+			</if>
+			<if test="null != params.gproductioninaddress and '' != params.gproductioninaddress">
+				AND g_productioninaddress = #{params.gproductioninaddress}
+			</if>
+			<if test="null != params.gpickperson and '' != params.gpickperson">
+				AND g_pickperson = #{params.gpickperson}
+			</if>
+			<if test="null != params.gpickaddress and '' != params.gpickaddress">
+				AND g_pickaddress = #{params.gpickaddress}
+			</if>
+			<if test="null != params.gcopyid">
+				AND g_copyid = #{params.gcopyid}
+			</if>
+			<if test="null != params.gprice">
+				AND g_price = #{params.gprice}
+			</if>
+			<if test="null != params.gcheckperson">
+				AND g_checkperson = #{params.gcheckperson}
+			</if>
+			<if test="null != params.gcheckmessage and '' != params.gcheckmessage">
+				AND g_checkmessage = #{params.gcheckmessage}
+			</if>
+			<if test="null != params.gunitname and '' != params.gunitname">
+				AND g_unitname = #{params.gunitname}
+			</if>
+			<if test="null != params.isChecked">
+				AND is_checked = #{params.isChecked}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsList" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		select t1.*,t2.a_name,t3.gg_name from t_goods t1 LEFT JOIN t_area t2 ON
+		t1.g_area=t2.a_id
+		LEFT JOIN t_goods_classification t3
+		ON t1.g_classification=t3.gg_id
+		<include refid="goods_where"/>
+	</select>
+	<!--添加商品表 -->
+	<insert id="saveGoods" parameterType="com.retailers.dht.common.entity.Goods" useGeneratedKeys="true" keyProperty="gid">
+		INSERT INTO t_goods (
+			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+		) VALUES
+		(
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=REAL},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品表 -->
+	<update id="updateGoods" parameterType="com.retailers.dht.common.entity.Goods">
+		UPDATE t_goods
+		<set>
+            <if test="null != gname and '' != gname">
+                g_name = #{gname},
+            </if>
+            <if test="null != gvender">
+                g_vender = #{gvender},
+            </if>
+            <if test="null != gshop">
+                g_shop = #{gshop},
+            </if>
+            <if test="null != gclassification">
+                g_classification = #{gclassification},
+            </if>
+            <if test="null != gbrand">
+                g_brand = #{gbrand},
+            </if>
+            <if test="null != garea">
+                g_area = #{garea},
+            </if>
+            <if test="null != gsalescope">
+                g_salescope = #{gsalescope},
+            </if>
+            <if test="null != gmaindirection">
+                g_maindirection = #{gmaindirection},
+            </if>
+            <if test="null != gdescription and '' != gdescription">
+                g_description = #{gdescription},
+            </if>
+            <if test="null != gproductioninperson and '' != gproductioninperson">
+                g_productioninperson = #{gproductioninperson},
+            </if>
+            <if test="null != gproductioninaddress and '' != gproductioninaddress">
+                g_productioninaddress = #{gproductioninaddress},
+            </if>
+            <if test="null != gpickperson and '' != gpickperson">
+                g_pickperson = #{gpickperson},
+            </if>
+            <if test="null != gpickaddress and '' != gpickaddress">
+                g_pickaddress = #{gpickaddress},
+            </if>
+            <if test="null != gcopyid">
+                g_copyid = #{gcopyid},
+            </if>
+            <if test="null != gprice">
+                g_price = #{gprice},
+            </if>
+            <if test="null != gcheckperson">
+                g_checkperson = #{gcheckperson},
+            </if>
+            <if test="null != gcheckmessage and '' != gcheckmessage">
+                g_checkmessage = #{gcheckmessage},
+            </if>
+            <if test="null != gunitname and '' != gunitname">
+                g_unitname = #{gunitname},
+            </if>
+            <if test="null != isChecked">
+                is_checked = #{isChecked},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE g_id = #{gid} and version = #{version}
+	</update>
+	<!--删除商品表 -->
+	<delete id="deleteGoodsByGid" parameterType="java.lang.Long">
+		DELETE FROM t_goods WHERE g_id = #{gid}
+	</delete>
+</mapper>

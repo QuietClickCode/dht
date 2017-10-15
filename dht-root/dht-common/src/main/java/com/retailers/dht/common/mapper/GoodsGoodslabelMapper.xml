@@ -6,13 +6,12 @@
 			<result property="glrId" column="glr_id"/>
 			<result property="gid" column="g_id"/>
 			<result property="glId" column="gl_id"/>
-			<result property="isClassification" column="is_classification"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGoodslabel_columns">
-		glr_id,g_id,gl_id,is_classification,version
+		glr_id,g_id,gl_id,version
 	</sql>
 	<!-- 根据商品与标签关系表主键取得数据 -->
 	<select id="queryGoodsGoodslabelByGlrId" resultMap="rm_goodsGoodslabel" parameterType="java.lang.Long">
@@ -31,9 +30,6 @@
 			<if test="null != params.glId">
 				AND gl_id = #{params.glId}
 			</if>
-			<if test="null != params.isClassification">
-				AND is_classification = #{params.isClassification}
-			</if>
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
@@ -48,10 +44,10 @@
 	<!--添加商品与标签关系表 -->
 	<insert id="saveGoodsGoodslabel" parameterType="com.retailers.dht.common.entity.GoodsGoodslabel" useGeneratedKeys="true" keyProperty="glrId">
 		INSERT INTO t_goods_goodslabel (
-			g_id,gl_id,is_classification,version
+			g_id,gl_id,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{glId,jdbcType=BIGINT},#{isClassification,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{glId,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品与标签关系表 -->
@@ -63,9 +59,6 @@
             </if>
             <if test="null != glId">
                 gl_id = #{glId},
-            </if>
-            <if test="null != isClassification">
-                is_classification = #{isClassification},
             </if>
             <if test="null != version">
                 version = version+1,

@@ -108,8 +108,9 @@
                 <form id="editGoodsClassificationForm">
                     <input type="hidden" name="ggId" id="ggId">
                     <input type="hidden" name="version" id="version">
+                    <input type="hidden" name="idDelete" id="idDelete" value="0">
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 商品子类名称:
@@ -118,7 +119,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否为顶级元素:
@@ -133,7 +134,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-6"  id="parentNmElement">
+                        <div class="col-lg-12"  id="parentNmElement" style="display: none">
                             <br>
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -148,7 +149,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 所属商品大类:
@@ -164,22 +165,18 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 图片:
                               </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
                                         <input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>
-                                        <img style="width: 50px;height: 50px;line-height: 100%"src="" id="goodsClassificationImg" />
+                                        <img style="width: 50px;"src="" id="goodsClassificationImg" />
                                         <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-6">
+                        <div class="col-lg-12">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 排序:
@@ -316,6 +313,10 @@
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
+            var myResult=myValidate();
+            if(!myResult){
+                return ;
+            }
             var formData=$("#editGoodsClassificationForm").serializeObject();
 
             var flag =$("#editGoodsClassificationForm #isTop").bootstrapSwitch("state");
@@ -330,6 +331,7 @@
             }else{
                 url='/goods/editGoodsClassification';
             }
+
 
             //取得form表单数据
             $.ajax({
@@ -497,7 +499,7 @@
             type:"post",
             url:'/goods/queryGoodsTypeLists',
             dataType: "json",
-            data:{pageSize:1000,pageNo:0},
+            data:{pageSize:1000,pageNo:0,isShow:1},
             async:false,
             success:function(data){
                 var html='';
@@ -527,8 +529,9 @@
             $("#editGoodsClassificationForm #ggName").val(rowData.ggName);
             $("#editGoodsClassificationForm #ggOrder").val(rowData.ggOrder);
             $("#editGoodsClassificationForm #ggImgpath").val(rowData.ggImgpath);
-            $("#editGoodsClassificationForm #goodsClassificationImg")[0].src=rowData.ggImgpath;
+            $("#editGoodsClassificationForm #goodsClassificationImg")[0].src=rowData.imgUrl;
             $("#editGoodsClassificationForm #ggHomeNm").val(rowData.homeName);
+            $("#editGoodsClassificationForm #ggHome").val(rowData.ggHome);
 
             var flag =false;
             if(rowData.isTop==1){
@@ -547,7 +550,7 @@
 
             }
         }else{
-            $("#editGoodsClassificationForm #isTop").bootstrapSwitch("state",false);
+            $("#editGoodsClassificationForm #isTop").bootstrapSwitch("state",true);
             $("#editGoodsClassificationForm #ggName").val('');
             $("#editGoodsClassificationForm #ggHomeNm").val('');
             $("#editGoodsClassificationForm #parentNm").val('');
@@ -687,7 +690,39 @@
                 }
             });
     }
+    function  myValidate() {
+        var ggName=$("#ggName").val();
+        var ggHome=$("#ggHome").val();
+        var ggOrder=$("#ggOrder").val();
+        var flag=$("#editGoodsClassificationForm #isTop").bootstrapSwitch("state");
+        var parentId=$("#parentId").val();
 
+        if(ggName==null || ggName==""){
+            layer.msg("名称不能为空！");
+            return false;
+        }
+        if(ggHome==null || ggHome==""){
+            layer.msg("所属大类不能为空！");
+            return false;
+        }
+        if(ggOrder==null || ggOrder==""){
+            layer.msg("排序不能为空！");
+            return false;
+        }
+        if(flag){
+
+        }else {
+            if(ggOrder==null || ggOrder==""){
+                layer.msg("排序不能为空！");
+                return false;
+            }
+        }
+        return true;
+
+
+
+
+    }
 </script>
 <script>
     $(function () {
