@@ -56,7 +56,7 @@ public class GoodsCouponController extends BaseController{
      * @return
      */
     @RequestMapping("queryGoodsCoupons")
-    @Function(label="取得职员列表", description = "取得职员列表", resourse = "goodsCoupon.queryGoodsCoupons",sort=1,parentRes="goodsCoupon.openGoodsCouponPage")
+    @Function(label="商品优惠列表", description = "商品优惠列表", resourse = "goodsCoupon.queryGoodsCoupons",sort=1,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
     public Map<String,Object> queryGoodsCoupons(String gcpName, Long gcpType,Long isValid,PageUtils pageForm){
         Map<String,Object> params=new HashMap<String, Object>();

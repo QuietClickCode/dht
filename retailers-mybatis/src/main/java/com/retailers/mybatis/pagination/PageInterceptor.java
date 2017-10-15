@@ -22,7 +22,7 @@ import java.util.Properties;
 * @Description 通过拦截StatementHandler的prepare方法，重写sql语句实现物理分页
 */
 @Intercepts( {
-        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class}) })
+        @Signature(method = "prepare", type = StatementHandler.class, args = {Connection.class,Integer.class}) })
 public class PageInterceptor implements Interceptor {
 
     private String databaseType;//数据库类型，不同的数据库有不同的分页方法
