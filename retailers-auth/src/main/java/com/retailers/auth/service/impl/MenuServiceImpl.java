@@ -168,7 +168,6 @@ public class MenuServiceImpl implements MenuService {
 		return -1;
 	}
 
-	@SystemAopLog(name="sss")
 	public List<Menu> queryUserMenu(Long userId){
 		List<MenuVo> list = new ArrayList<MenuVo>();
 		if(userId.intValue()==-1){
@@ -189,6 +188,7 @@ public class MenuServiceImpl implements MenuService {
 		sysUserResPermissionService.loadUserResPermission(userId);
 		return rtnList;
 	}
+
 
 	/**
 	 * 取得树形结构的资源列表

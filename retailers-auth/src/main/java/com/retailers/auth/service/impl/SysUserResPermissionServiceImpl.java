@@ -13,10 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by zpapj on 2017/9/26.
@@ -45,5 +42,14 @@ public class SysUserResPermissionServiceImpl implements SysUserResPermissionServ
         }
         logger.info("加载用户权限结束,用户id：[{}]，执行时间：[{}],用户权限列表:[{}]",userId,(System.currentTimeMillis()-time), JSON.toJSON(allowMenuUrl));
         CheckUserPermissionUtils.permUrl.put(userId,allowMenuUrl);
+    }
+    @Async
+    public void loadUserResPermission() {
+        logger.info("重新加载当前登陆人的权限开始");
+        Iterator<Long> users= CheckUserPermissionUtils.permUrl.keySet().iterator();
+        while (users.hasNext()){
+            loadUserResPermission(users.next());
+        }
+        logger.info("重新加载当前登陆人的权限结束");
     }
 }

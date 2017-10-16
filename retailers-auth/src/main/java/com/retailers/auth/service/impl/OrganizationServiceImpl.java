@@ -7,6 +7,7 @@ import com.retailers.auth.dao.OrganizationMapper;
 import com.retailers.auth.entity.OrgMenuPermission;
 import com.retailers.auth.entity.Organization;
 import com.retailers.auth.service.OrganizationService;
+import com.retailers.auth.service.SysUserResPermissionService;
 import com.retailers.auth.vo.OrganizationVo;
 import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.mybatis.pagination.Pagination;
@@ -34,6 +35,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 	private OrganizationMapper organizationMapper;
 	@Autowired
 	private OrgMenuPermissionMapper orgMenuPermissionMapper;
+	@Autowired
+	private SysUserResPermissionService sysUserResPermissionService;
 
 	public boolean saveOrganization(Organization organization) {
 		int status = organizationMapper.saveOrganization(organization);
@@ -270,6 +273,8 @@ public class OrganizationServiceImpl implements OrganizationService {
 			orgMenuPermissionMapper.saveOrgMenuPermissions(list);
 		}
 		//取得所有部门权限
+		//重新加载当前登陆用户权限
+		sysUserResPermissionService.loadUserResPermission();
 		return false;
 	}
 }
