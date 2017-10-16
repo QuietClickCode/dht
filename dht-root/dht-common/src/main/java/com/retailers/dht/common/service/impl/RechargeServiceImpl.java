@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.dht.common.entity.Recharge;
 import com.retailers.dht.common.dao.RechargeMapper;
 import com.retailers.dht.common.service.RechargeService;
+import com.retailers.dht.common.vo.RechargeVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -31,12 +32,12 @@ public class RechargeServiceImpl implements RechargeService {
 		return rechargeMapper.queryRechargeByRid(rid);
 	}
 
-	public Pagination<Recharge> queryRechargeList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<Recharge> page = new Pagination<Recharge>();
+	public Pagination<RechargeVo> queryRechargeList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<RechargeVo> page = new Pagination<RechargeVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<Recharge> list = rechargeMapper.queryRechargeList(page);
+		List<RechargeVo> list = rechargeMapper.queryRechargeList(page);
 		page.setData(list);
 		return page;
 	}

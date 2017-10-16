@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Recharge;
 import java.util.Map;
@@ -45,7 +46,7 @@ public interface RechargeService {
 	 * @author zhongp
 	 * @date 2017-10-15 23:56:18
 	 */
-	public Pagination<Recharge> queryRechargeList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<RechargeVo> queryRechargeList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据rid删除充值管理
 	 * @param rid

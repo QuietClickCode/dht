@@ -16,7 +16,21 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_recharge_vo" type="com.retailers.dht.common.vo.RechargeVo">
+		<result property="rid" column="r_id"/>
+		<result property="rname" column="r_name"/>
+		<result property="rlogo" column="r_logo"/>
+		<result property="rlogoUrl" column="r_logo_url"/>
+		<result property="rprice" column="r_price"/>
+		<result property="rdiscount" column="r_discount"/>
+		<result property="rcashback" column="r_cashback"/>
+		<result property="rcreateDate" column="r_create_date"/>
+		<result property="rcreateSid" column="r_create_sid"/>
+		<result property="rsnapshot" column="r_snapshot"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="recharge_columns">
 		r_id,r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
@@ -71,10 +85,22 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryRechargeList" resultMap="rm_recharge" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="recharge_columns" />
-		FROM t_recharge
-		<include refid="recharge_where"/>
+	<select id="queryRechargeList" resultMap="rm_recharge_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT r.*,a.show_url r_logo_url FROM t_recharge r LEFT JOIN t_attachment a on r.r_logo=a.id
+		<where>
+			<if test="null != params.rName and '' != params.rName">
+				AND r.r_name = #{params.rName}
+			</if>
+			<if test="null != params.rcashback">
+				AND r.r_cashback = #{params.rcashback}
+			</if>
+			<if test="null != params.isValid">
+				AND r.is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+		</where>
 	</select>
 	<!--添加充值管理 -->
 	<insert id="saveRecharge" parameterType="com.retailers.dht.common.entity.Recharge" useGeneratedKeys="true" keyProperty="rid">

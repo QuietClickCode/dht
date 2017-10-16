@@ -5,7 +5,6 @@
     <meta charset="utf-8">
     <title>充值管理</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
-    <link rel="stylesheet" href="<%=path%>/js/daterangepicker/daterangepicker.css">
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -51,6 +50,7 @@
                     <input type="hidden" name="rid" id="rid">
                     <input type="hidden" name="version" id="version">
                     <input type="hidden" name="rsnapshot" id="rsnapshot">
+                    <input type="hidden" name="rlogo" id="rlogo">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
@@ -81,16 +81,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6" id="gcpMoneyDiv">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                会员卡图片:
-                              </span>
-                                <input type="text" class="form-control" name="gcpMoney" id="gcpMoney" placeholder="请输入优惠金额"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
@@ -103,6 +93,9 @@
                                 </div>
                             </div>
                         </div>
+
+                    </div>
+                    <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
@@ -113,6 +106,31 @@
                                         <input id="isValid" name="isValid" type="checkbox" />
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <form id="rlogoImageForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-4" id="rlogoDiv">
+                            <div class="input-group form-group">
+                                    <span class="input-group-addon">
+                                        会员卡图片:
+                                    </span>
+                                <input type="file" id="dht_image_upload" name="dht_image_upload">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="clearrlogoDiv">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                        会员卡图片:
+                                    </span>
+                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="uploadImageDiv">
+                            <div class="input-group form-group">
+                                <img src="" id="uploadImage" width="96px;" height="48px;">
                             </div>
                         </div>
                     </div>
@@ -133,23 +151,33 @@
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
-<script type="text/javascript"  src="/js/daterangepicker/moment.js"></script>
-<script type="text/javascript"  src="/js/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="<%=path%>/js/filestyle/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
     var editorRechargeType=0;
-    var orgPermissionTreeObj;
+
     var treeColumns=[
         {checkbox: true},
         {
-            field: 'rprice',
+            field: 'rpriceFormater',
             title: '金额'
         },
         {
-            field: 'rdiscount',
+            field: 'rdiscountFormater',
             title: '享受折扣（折）'
+        },
+        {
+            field: 'rlogoUrl',
+            title: '会员卡图片',
+            formatter:function(value,row,index){
+                var html="";
+                if(value){
+                    html ='<img src="'+value+'" width="96px;" height="48px;">';
+                }
+                return html;
+            }
         },
         {
             field: 'rname',
@@ -184,13 +212,13 @@
             valign : 'middle',
             width:240,
             formatter:function(value,row,index){
-                rowDatas.set(row.gcpId,row);
+                rowDatas.set(row.rid,row);
                 let html='';
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorRecharge(\''+row.gcpId+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorRecharge(\''+row.rid+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gcpId+'\')"">删除</button>';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.rid+'\')"">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -258,35 +286,14 @@
             });
         });
         formValidater();
-        $('#gcpValidTime').daterangepicker(
-            {
-                startDate: moment(),
-                minDate : moment(),
-                showDropdowns : true,
-                timePicker:true,
-                timePickerIncrement:5,
-                timePicker24Hour:true,//24 小时制
-                opens : 'right', //日期选择框的弹出位置
-                buttonClasses : [ 'btn btn-default' ],
-                applyClass : 'btn-small btn-primary blue',
-                cancelClass : 'btn-small',
-                format: 'YYYY-MM-DD HH:mm:ss',
-                locale : {
-                    format: 'YYYY-MM-DD HH:mm:ss',
-                    applyLabel : '确定',
-                    cancelLabel : '取消',
-                    fromLabel : '起始时间',
-                    toLabel : '结束时间',
-                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                    firstDay : 1
-                }
-            }, function(start, end, label) {
-                $("#editorRechargeForm #gcpStartTime").val(start.format('YYYY-MM-DD HH:mm:ss'));
-                $("#editorRechargeForm #gcpEndTime").val(end.format('YYYY-MM-DD HH:mm:ss'));
-                $("#editorRechargeForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
-            });
+        $('#rlogoImageForm #dht_image_upload').filestyle({
+            btnClass : "btn-primary",
+            text:"选择文件",
+            onChange:function(){
+                editSubmitIndex = layer.load(2);
+                imagesFormSummit();
+            }
+        });
     });
     /**
      * form 校验
@@ -305,52 +312,27 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    gcpName: {
-                        message: '优惠名称不能为空',
+                    rprice: {
+                        message: '充值金额校验',
                         validators: {
                             notEmpty: {
-                                message: '优惠名称不能为空'
-                            },
-                            stringLength: {
-                                min: 2,
-                                max: 25,
-                                message: '优惠名称长度在4-30之间'
-                            }
-                        }
-                    },
-                    gcpCondition: {
-                        message: '优惠条件校验未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '优惠条件不能为空'
+                                message: '充值金额不能为空'
                             },
                             regexp:{
                                 regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                                message:'优惠条件只允许在10位整数和2位小数范围内'
+                                message:'充值金额只允许在2位整数和2位小数范围内'
                             }
                         }
                     },
-                    gcpMoney: {
-                        message: '金额不能为空',
+                    rdiscount: {
+                        message: '享受折扣校验',
                         validators: {
                             notEmpty: {
-                                message: '金额不能为空'
-                            },
-                            regexp:{
-                                regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                                message:'优惠金额只允许在10位整数和2位小数范围内'
-                            }
-                        }
-                    },
-                    gcpDiscount: {
-                        message: '折扣不能为空',
-                        validators: {
-                            notEmpty: {
-                                message: '折扣不能为空'
+                                message: '享受折扣不能为空'
                             },
                             regexp:{
                                 regexp:/^([1-9]{1}|0)(\.\d{1,2})?$/,
-                                message:'优惠折扣只允许在2位整数和2位小数范围内'
+                                message:'享受折扣只允许在2位整数和2位小数范围内'
                             }
                         }
                     }
@@ -421,15 +403,18 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorRechargeForm #gcpId").val("");
+        $("#editorRechargeForm #rid").val("");
         $("#editorRechargeForm #version").val("");
-        $("#editorRechargeForm #gcpName").val("");
-        $("#editorRechargeForm #gcpCondition").val("");
-        $("#editorRechargeForm #gcpStartTime").val("");
-        $("#editorRechargeForm #gcpEndTime").val("");
-        $("#editorRechargeForm #gcpValidTime").val("");
-        $("#editorRechargeForm #gcpMoney").val("");
-        $("#editorRechargeForm #gcpDiscount").val("");
+        $("#editorRechargeForm #rsnapshot").val("");
+        $("#editorRechargeForm #rlogo").val("");
+        $("#editorRechargeForm #rprice").val("");
+        $("#editorRechargeForm #rdiscount").val("");
+        $("#editorRechargeForm #rname").val("");
+        $("#editorRechargeForm #rcashback").bootstrapSwitch("state",false);
+        $("#editorRechargeForm #isValid").bootstrapSwitch("state",true);
+        //清空上传内容
+        $('#rlogoImageForm #dht_image_upload').filestyle('clear');
+        initRlogoForm();
     }
     /**
      * 清除form 表单数据
@@ -437,38 +422,26 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorRechargeForm #gcpId").val(rowData.gcpId);
+            $("#editorRechargeForm #rid").val(rowData.rid);
             $("#editorRechargeForm #version").val(rowData.version);
-            $("#editorRechargeForm #gcpName").val(rowData.gcpName);
-            $("#editorRechargeForm #gcpType").val(rowData.gcpType);
-            $("#editorRechargeForm #gcpCondition").val(rowData.gcpConditions);
-            $("#editorRechargeForm #gcpUnits").val(rowData.gcpUnits);
-            $("#editorRechargeForm #gcpStartTime").val(rowData.gcpStartTime);
-            $("#editorRechargeForm #gcpEndTime").val(rowData.gcpEndTime);
-            if(rowData.gcpStartTime){
-                $("#editorRechargeForm #gcpValidTime").val(rowData.gcpStartTime+" - "+rowData.gcpEndTime);
-            }else{
-                $("#editorRechargeForm #gcpValidTime").val("");
-            }
-            $("#editorRechargeForm #gcpMoney").val(rowData.gcpMoneys);
-            $("#editorRechargeForm #gcpDiscount").val(rowData.gcpDiscounts);
-            var flag =false;
-            if(rowData.isValid==0){
+            $("#editorRechargeForm #rsnapshot").val(rowData.rsnapshot);
+            $("#editorRechargeForm #rlogo").val(rowData.rlogo);
+            $("#editorRechargeForm #rprice").val(rowData.rpriceFormater);
+            $("#editorRechargeForm #rdiscount").val(rowData.rdiscountFormater);
+            $("#editorRechargeForm #rname").val(rowData.rname);
+            initRlogoForm(rowData.rlogo,rowData.rlogoUrl);
+            var rcashback =false;
+            if(rowData.rcashback==0){
                 flag=true;
             }
-            $("#editorRechargeForm #isValid").bootstrapSwitch("state",flag);
-
-            var gcpIsOverlapUse =false;
-            if(rowData.gcpIsOverlapUse==0){
-                gcpIsOverlapUse=true;
+            $("#editorRechargeForm #rcashback").bootstrapSwitch("state",rcashback);
+            var isValid =false;
+            if(rowData.isValid==0){
+                isValid=true;
             }
-            $("#editorRechargeForm #gcpIsOverlapUse").bootstrapSwitch("state",flag);
-            gcpTypeChange();
+            $("#editorRechargeForm #isValid").bootstrapSwitch("state",isValid);
         }else{
-            $("#editorRechargeForm #gcpType").val("0");
-            $("#editorRechargeForm #gcpMoneyDiv").show();
-            $("#editorRechargeForm #gcpDiscountDiv").hide();
-            $("#editorRechargeForm #gcpValidTime").val("");
+            clearFormData();
         }
     }
     /**
@@ -482,24 +455,50 @@
         $("#editorRechargeTitle").text("添加充值金额");
         $('#editorRecharge').modal("show")
     }
-    function gcpTypeChange(){
-        let selectValue = $("#editorRechargeForm #gcpType").val();
-        if(parseInt(selectValue,10)==0){
-            $("#editorRechargeForm #gcpMoneyDiv").show();
-            $("#editorRechargeForm #gcpDiscountDiv").hide();
-            $("#editorRechargeForm #gcpDiscount").val("");
-        }else if(parseInt(selectValue,10)==1){
-            $("#editorRechargeForm #gcpMoneyDiv").hide();
-            $("#editorRechargeForm #gcpDiscountDiv").show();
-            $("#editorRechargeForm #gcpMoney").val("");
-        }else if(parseInt(selectValue,10)==2){
-            $("#editorRechargeForm #gcpMoneyDiv").hide();
-            $("#editorRechargeForm #gcpDiscountDiv").hide();
-            $("#editorRechargeForm #gcpDiscount").val("");
-            $("#editorRechargeForm #gcpMoney").val("");
+    let fileUpload=ueditorUploadUrl("goods",false,false);
+    /**
+     * 图片上传
+     */
+    function imagesFormSummit(){
+        var formData = new FormData($( "#rlogoImageForm" )[0]);
+        $.ajax({
+            url: fileUpload,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (returndata) {
+                if(returndata.state=="SUCCESS"){
+                    initRlogoForm(returndata.original,returndata.url);
+                }
+                layer.close(editSubmitIndex);
+            },
+            error: function (returndata) {
+                layer.close(editSubmitIndex);
+            }
+        });
+    }
+    /**
+     * 初始化会员卡表单
+     * @param rLogo 表单id
+     * @param showImageUrl 显示图片
+     */
+    function initRlogoForm(rLogo,showImageUrl){
+        if(rLogo){
+            $("#rlogoImageForm #uploadImageDiv").show();
+            $("#rlogoImageForm #rlogoDiv").hide();
+            $("#rlogoImageForm #clearrlogoDiv").show();
+            $("#rlogoImageForm #uploadImage").attr("src",showImageUrl);
+            $("#editorRechargeForm #rlogo").val(rLogo);
+        }else{
+            $("#rlogoImageForm #uploadImageDiv").hide();
+            $("#rlogoImageForm #rlogoDiv").show();
+            $("#rlogoImageForm #clearrlogoDiv").hide();
         }
     }
-
 </script>
 </body>
 </html>

@@ -16,7 +16,7 @@ public class Recharge implements java.io.Serializable {
 	private Long rid;
 	/**等级名称*/
 	@NotEmpty
-	@Length(min = 1, max = 24)
+	@Length(min = 0, max = 24)
 	private String rname;
 	/**会员卡图片*/
 	@NotEmpty

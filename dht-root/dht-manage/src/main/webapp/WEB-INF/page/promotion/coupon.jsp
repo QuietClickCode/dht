@@ -50,7 +50,7 @@
             <div class="modal-body" style="overflow-y:auto;height:100%;">
                 <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
                     <div class="row">
-                        <div class="col-lg-4" id="gcpMoneyDiv">
+                        <div class="col-lg-4" id="cpLogoDiv">
                             <div class="input-group form-group">
                                     <span class="input-group-addon">
                                         优惠卷图片:
@@ -727,7 +727,7 @@
         //清空上传内容
         $('#cpImagesForm #dht_image_upload').filestyle('clear');
         $("#cpImagesForm #uploadImageDiv").hide();
-        $("#cpImagesForm #gcpMoneyDiv").show();
+        $("#cpImagesForm #cpLogoDiv").show();
         $("#cpImagesForm #clearCpLogoDiv").hide();
     }
     /**
@@ -743,12 +743,12 @@
             $("#editorCouponForm #cpLogo").val(rowData.cpLogo);
             if(rowData.cpLogo){
                 $("#cpImagesForm #uploadImageDiv").show();
-                $("#cpImagesForm #gcpMoneyDiv").hide();
+                $("#cpImagesForm #cpLogoDiv").hide();
                 $("#cpImagesForm #clearCpLogoDiv").show();
                 $("#cpImagesForm #uploadImage").attr("src",rowData.cpLogoUrl);
             }else{
                 $("#cpImagesForm #uploadImageDiv").hide();
-                $("#cpImagesForm #gcpMoneyDiv").show();
+                $("#cpImagesForm #cpLogoDiv").show();
                 $("#cpImagesForm #clearCpLogoDiv").hide();
             }
             $("#editorCouponForm #cpCoinType").val(rowData.cpCoinType);
@@ -796,13 +796,13 @@
             UE.getEditor('cpContext').setContent(rowData.cpContext);
         }else{
             $("#editorCouponForm #cpType").val("0");
-            $("#editorCouponForm #gcpMoneyDiv").show();
+            $("#editorCouponForm #cpLogoDiv").show();
             $("#editorCouponForm #gcpDiscountDiv").hide();
             $("#editorCouponForm #cpValidDate").val("");
             $("#editorCouponForm #cpSendEndDateValid").val("");
             $("#editorCouponForm #cpSendTimingDateValid").val("");
             $("#editorCouponForm #cpSendWay").val(0);
-            $("#cpImagesForm #gcpMoneyDiv").show();
+            $("#cpImagesForm #cpLogoDiv").show();
             $("#cpImagesForm #clearCpLogoDiv").hide();
         }
         cpCoinTypeChange();
@@ -875,7 +875,7 @@
             success: function (returndata) {
                 if(returndata.state=="SUCCESS"){
                     $("#uploadImageDiv").show();
-                    $("#gcpMoneyDiv").hide();
+                    $("#cpLogoDiv").hide();
                     $("#clearCpLogoDiv").show();
                     $("#uploadImage").attr("src",returndata.url);
                     $("#editorCouponForm #cpLogo").val(returndata.original);
@@ -968,7 +968,7 @@
     function clearCpLogo(){
         $('#cpImagesForm #dht_image_upload').filestyle('clear');
         $("#cpImagesForm #uploadImageDiv").hide();
-        $("#cpImagesForm #gcpMoneyDiv").show();
+        $("#cpImagesForm #cpLogoDiv").show();
         $("#cpImagesForm #clearCpLogoDiv").hide();
         $("#editorCouponForm #cpLogo").val('');
     }

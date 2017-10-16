@@ -3,10 +3,12 @@ package com.retailers.dht.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.entity.Recharge;
 import com.retailers.dht.common.service.RechargeService;
 import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -55,30 +58,58 @@ public class RechargeController extends BaseController {
         params.put("rcashback",rcashback);
         params.put("isValid",isValid);
         params.put("isDelete",0);
-        Pagination<Recharge> pages= rechargeService.queryRechargeList(params,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<RechargeVo> pages= rechargeService.queryRechargeList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
     }
 
     /**
      * 添加充值金额
-     * @param recharge 充值金额数据
+     * @param rechargeVo 充值金额数据
      * @return
      */
     @RequestMapping("addRecharge")
     @Function(label="添加充值金额", description = "添加充值金额", resourse = "recharge.addRecharge",parentRes="recharge.openRechargePage",sort=2)
     @ResponseBody
-    public BaseResp addRecharge(Recharge recharge){
-//        try{
-//            validateParams(goodsCoupon);
-//        }catch(Exception e){
-//            return errorForParam(e.getMessage());
-//        }
-        recharge.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+    public BaseResp addRecharge(HttpServletRequest request,RechargeVo rechargeVo){
+        try{
+            validateForm(rechargeVo);
+        }catch(Exception e){
+            return errorForParam(e.getMessage());
+        }
+        rechargeVo.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+        Recharge recharge = new Recharge();
+        BeanUtils.copyProperties(rechargeVo,recharge);
+        recharge.setRcreateSid(getCurLoginUserId(request));
         boolean flag = rechargeService.saveRecharge(recharge);
         if(flag){
             return success("添加充值金额成功");
         }else{
             return errorForSystem("添加充值金额失败");
+        }
+    }
+
+    /**
+     * 添加充值金额
+     * @param rechargeVo 充值金额数据
+     * @return
+     */
+    @RequestMapping("editorRecharge")
+    @Function(label="编辑充值金额", description = "编辑充值金额", resourse = "recharge.editorRecharge",parentRes="recharge.openRechargePage",sort=3)
+    @ResponseBody
+    public BaseResp editorRecharge(HttpServletRequest request,RechargeVo rechargeVo){
+        try{
+            validateForm(rechargeVo);
+        }catch(Exception e){
+            return errorForParam(e.getMessage());
+        }
+        Recharge recharge = new Recharge();
+        BeanUtils.copyProperties(rechargeVo,recharge);
+        recharge.setRcreateSid(getCurLoginUserId(request));
+        boolean flag = rechargeService.updateRecharge(recharge);
+        if(flag){
+            return success("编辑充值成功");
+        }else{
+            return errorForSystem("编辑充值金额失败");
         }
     }
 }
