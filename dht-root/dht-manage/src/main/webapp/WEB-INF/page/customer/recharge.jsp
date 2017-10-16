@@ -380,7 +380,7 @@
             type:"post",
             url:'/recharge/delRecharge',
             dataType: "json",
-            data:{gcpId:gcpId},
+            data:{rid:rid},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");

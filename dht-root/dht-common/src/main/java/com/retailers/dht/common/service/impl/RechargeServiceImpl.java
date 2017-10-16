@@ -7,6 +7,7 @@ import com.retailers.dht.common.dao.RechargeMapper;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.RechargeService;
 import com.retailers.dht.common.vo.RechargeVo;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -26,7 +27,9 @@ public class RechargeServiceImpl implements RechargeService {
 
 	public boolean saveRecharge(Recharge recharge) {
 		int status = rechargeMapper.saveRecharge(recharge);
-		attachmentService.editorAttachment(recharge.getRlogo());
+		if(ObjectUtils.isNotEmpty(recharge.getRlogo())){
+            attachmentService.editorAttachment(recharge.getRlogo());
+        }
 		return status == 1 ? true : false;
 	}
 	public boolean updateRecharge(Recharge recharge) {
