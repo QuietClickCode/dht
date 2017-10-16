@@ -61,6 +61,7 @@ public class GoodsTypeController extends BaseController {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gtName",gtName);
         map.put("isShow",isShow);
+        map.put("isDelete",0);
         Pagination<GoodsType> goodsTypePagination = goodsTypeService.queryGoodsTypeList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",goodsTypePagination.getTotalCount());
@@ -72,6 +73,7 @@ public class GoodsTypeController extends BaseController {
     @Function(label="增加商品大类", description = "增加商品大类", resourse = "goods.addGoodsType",parentRes="goods.openGoodsType")
     @ResponseBody
     public BaseResp addGoodsType(GoodsType goodsType){
+        goodsType.setIsDelete(0L);
         boolean flag=goodsTypeService.saveGoodsType(goodsType);
         return success(flag);
     }

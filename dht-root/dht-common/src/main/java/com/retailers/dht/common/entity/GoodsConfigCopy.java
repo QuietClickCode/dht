@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 10:37:11
+ * @date 2017-10-16 17:33:04
  */
 public class GoodsConfigCopy implements java.io.Serializable {
 
@@ -41,6 +41,9 @@ public class GoodsConfigCopy implements java.io.Serializable {
 	/**商品配置id*/
 	@NotEmpty
 	private Long gcId;
+	/**操作人ID*/
+	@NotEmpty
+	private Long gcUploadperson;
 	/**是否生效 0生效 1未生效*/
 	@NotEmpty
 	private Long isPutway;
@@ -149,6 +152,13 @@ public class GoodsConfigCopy implements java.io.Serializable {
 
 	public Long getGcId() {
 		return this.gcId;
+	}
+	public void setGcUploadperson(Long value) {
+		this.gcUploadperson = value;
+	}
+
+	public Long getGcUploadperson() {
+		return this.gcUploadperson;
 	}
 	public void setIsPutway(Long value) {
 		this.isPutway = value;

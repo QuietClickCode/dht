@@ -8,12 +8,17 @@ import com.retailers.dht.common.service.GoodsConfigService;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -27,11 +32,22 @@ public class GoodsConfigController extends BaseController {
     @Autowired
     GoodsConfigService goodsConfigService;
 
-    @RequestMapping("editGoodsConfig")
-    @Function(label = "编辑商品配置",parentRes = "goods.openGoods",resourse = "goodsConfig.editGoodsConfig",description = "编辑商品",sort = 2)
+    @RequestMapping("/editGoodsConfig")
+    @Function(label = "编辑商品配置",parentRes = "goods.openGoods",resourse = "goodsConfig.editGoodsConfig",description = "编辑商品配置",sort = 2)
     @ResponseBody
-    public BaseResp editGoodsConfig(GoodsConfig GoodsConfig){
-        boolean flag = goodsConfigService.updateGoodsConfig(GoodsConfig);
+    public BaseResp editGoodsConfig(GoodsConfig goodsConfig,String gedts){
+        if(!ObjectUtils.isEmpty(gedts)){
+            SimpleDateFormat sdf = new SimpleDateFormat();
+            Date gedt = null;
+            try {
+                gedt = sdf.parse(gedts);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            goodsConfig.setGedt(gedt);
+        }
+
+        boolean flag = goodsConfigService.updateGoodsConfig(goodsConfig);
         if(flag){
             return success("修改商品配置成功");
         }else{
@@ -55,7 +71,6 @@ public class GoodsConfigController extends BaseController {
         map.put("gid",gid);
         Pagination<GoodsConfig> goodsConfigPagination = goodsConfigService.queryGoodsConfigList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        System.out.println(goodsConfigPagination.getData().size());
         gtm.put("goodsConfig",goodsConfigPagination.getData().get(0));
         return gtm;
     }

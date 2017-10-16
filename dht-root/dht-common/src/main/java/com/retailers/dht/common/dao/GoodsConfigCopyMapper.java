@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 10:37:11
+ * @date 2017-10-16 17:33:04
  */
 public interface GoodsConfigCopyMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsConfigCopyMapper {
 	 * @param goodsConfigCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public int saveGoodsConfigCopy(GoodsConfigCopy goodsConfigCopy);
 	/**
@@ -24,7 +24,7 @@ public interface GoodsConfigCopyMapper {
 	 * @param goodsConfigCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public int updateGoodsConfigCopy(GoodsConfigCopy goodsConfigCopy);
 	/**
@@ -32,7 +32,7 @@ public interface GoodsConfigCopyMapper {
 	 * @param gccId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public int deleteGoodsConfigCopyByGccId(Long gccId);
 	/**
@@ -40,7 +40,7 @@ public interface GoodsConfigCopyMapper {
 	 * @param gccId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public GoodsConfigCopy queryGoodsConfigCopyByGccId(Long gccId);
 	/**
@@ -48,7 +48,7 @@ public interface GoodsConfigCopyMapper {
 	 * @param pagination 分页对象
 	 * @return  商品配置副本表列表
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public List<GoodsConfigCopy> queryGoodsConfigCopyList(Pagination<GoodsConfigCopy> pagination);
 

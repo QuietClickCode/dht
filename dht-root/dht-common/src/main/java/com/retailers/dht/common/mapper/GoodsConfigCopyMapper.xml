@@ -13,6 +13,7 @@
 			<result property="gstartbuy" column="g_startbuy"/>
 			<result property="gendbuy" column="g_endbuy"/>
 			<result property="gcId" column="gc_id"/>
+			<result property="gcUploadperson" column="gc_uploadperson"/>
 			<result property="isPutway" column="is_putway"/>
 			<result property="isAllowsetdeliverytime" column="is_allowsetdeliverytime"/>
 			<result property="isShowsalesvolume" column="is_showsalesvolume"/>
@@ -27,7 +28,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsConfigCopy_columns">
-		gcc_id,g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+		gcc_id,g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,gc_uploadperson,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
 	</sql>
 	<!-- 根据商品配置副本表主键取得数据 -->
 	<select id="queryGoodsConfigCopyByGccId" resultMap="rm_goodsConfigCopy" parameterType="java.lang.Long">
@@ -70,6 +71,9 @@
 			<if test="null != params.gcId">
 				AND gc_id = #{params.gcId}
 			</if>
+			<if test="null != params.gcUploadperson">
+				AND gc_uploadperson = #{params.gcUploadperson}
+			</if>
 			<if test="null != params.isPutway">
 				AND is_putway = #{params.isPutway}
 			</if>
@@ -111,10 +115,10 @@
 	<!--添加商品配置副本表 -->
 	<insert id="saveGoodsConfigCopy" parameterType="com.retailers.dht.common.entity.GoodsConfigCopy" useGeneratedKeys="true" keyProperty="gccId">
 		INSERT INTO t_goods_config_copy (
-			g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+			g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_id,gc_uploadperson,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{gprofitability,jdbcType=REAL},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{gprofitability,jdbcType=REAL},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{gcUploadperson,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品配置副本表 -->
@@ -147,6 +151,9 @@
             </if>
             <if test="null != gcId">
                 gc_id = #{gcId},
+            </if>
+            <if test="null != gcUploadperson">
+                gc_uploadperson = #{gcUploadperson},
             </if>
             <if test="null != isPutway">
                 is_putway = #{isPutway},

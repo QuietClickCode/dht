@@ -29,23 +29,23 @@
 	</select>
 	<!-- 商品品牌表查询条件组合 -->
 	<sql id="goodsBrand_where">
-
+		<where>
 			<if test="null != params.gbId">
-				AND gb_id = #{params.gbId}
+				AND t1.gb_id = #{params.gbId}
 			</if>
 			<if test="null != params.gbName and '' != params.gbName">
-				AND gb_name = #{params.gbName}
+				AND t1.gb_name = #{params.gbName}
 			</if>
 			<if test="null != params.gbImgpath and '' != params.gbImgpath">
-				AND gb_imgpath = #{params.gbImgpath}
+				AND t1.gb_imgpath = #{params.gbImgpath}
 			</if>
 			<if test="null != params.isDelete">
-				AND is_delete = #{params.isDelete}
+				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
-				AND version = #{params.version}
+				AND t1.version = #{params.version}
 			</if>
-
+		</where>
 	</sql>
 	<!--分页查询 -->
 	<select id="queryGoodsBrandList" resultMap="rm_goodsBrandVo" parameterType="com.retailers.mybatis.pagination.Pagination">

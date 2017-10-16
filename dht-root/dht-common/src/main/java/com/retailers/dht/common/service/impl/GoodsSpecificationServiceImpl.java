@@ -41,7 +41,9 @@ public class GoodsSpecificationServiceImpl implements GoodsSpecificationService 
 		return page;
 	}
 	public boolean deleteGoodsSpecificationByGsId(Long gsId) {
-		int status = goodsSpecificationMapper.deleteGoodsSpecificationByGsId(gsId);
+		GoodsSpecification goodsSpecification = goodsSpecificationMapper.queryGoodsSpecificationByGsId(gsId);
+		goodsSpecification.setIsDelete(1L);
+		int status = goodsSpecificationMapper.updateGoodsSpecification(goodsSpecification);
 		return status == 1 ? true : false;
 	}
 }

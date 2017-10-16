@@ -8,19 +8,20 @@
 			<result property="glStarttime" column="gl_starttime"/>
 			<result property="glEndtime" column="gl_endtime"/>
 			<result property="isGoodslabel" column="is_goodslabel"/>
+			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsLabel_columns">
-		gl_id,gl_name,gl_starttime,gl_endtime,is_goodslabel,version
+		gl_id,gl_name,gl_starttime,gl_endtime,is_goodslabel,is_delete,version
 	</sql>
-	<!-- 根据商品标签表主键取得数据 -->
+	<!-- 根据商品图片表主键取得数据 -->
 	<select id="queryGoodsLabelByGlId" resultMap="rm_goodsLabel" parameterType="java.lang.Long">
 		SELECT <include refid="goodsLabel_columns" />
 		FROM t_goods_label WHERE gl_id = #{glId}
 	</select>
-	<!-- 商品标签表查询条件组合 -->
+	<!-- 商品图片表查询条件组合 -->
 	<sql id="goodsLabel_where">
 		<where>
 			<if test="null != params.glId">
@@ -44,6 +45,9 @@
 			<if test="null != params.isGoodslabel">
 				AND is_goodslabel = #{params.isGoodslabel}
 			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
@@ -55,16 +59,16 @@
 		FROM t_goods_label
 		<include refid="goodsLabel_where"/>
 	</select>
-	<!--添加商品标签表 -->
+	<!--添加商品图片表 -->
 	<insert id="saveGoodsLabel" parameterType="com.retailers.dht.common.entity.GoodsLabel" useGeneratedKeys="true" keyProperty="glId">
 		INSERT INTO t_goods_label (
-			gl_name,gl_starttime,gl_endtime,is_goodslabel,version
+			gl_name,gl_starttime,gl_endtime,is_goodslabel,is_delete,version
 		) VALUES
 		(
-			#{glName,jdbcType=VARCHAR},#{glStarttime,jdbcType=TIMESTAMP},#{glEndtime,jdbcType=TIMESTAMP},#{isGoodslabel,jdbcType=BIGINT},0
+			#{glName,jdbcType=VARCHAR},#{glStarttime,jdbcType=TIMESTAMP},#{glEndtime,jdbcType=TIMESTAMP},#{isGoodslabel,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改商品标签表 -->
+	<!--修改商品图片表 -->
 	<update id="updateGoodsLabel" parameterType="com.retailers.dht.common.entity.GoodsLabel">
 		UPDATE t_goods_label
 		<set>
@@ -80,13 +84,16 @@
             <if test="null != isGoodslabel">
                 is_goodslabel = #{isGoodslabel},
             </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
             <if test="null != version">
                 version = version+1,
             </if>
 		</set>
 		WHERE gl_id = #{glId} and version = #{version}
 	</update>
-	<!--删除商品标签表 -->
+	<!--删除商品图片表 -->
 	<delete id="deleteGoodsLabelByGlId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_label WHERE gl_id = #{glId}
 	</delete>

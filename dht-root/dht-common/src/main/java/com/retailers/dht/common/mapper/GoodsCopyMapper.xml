@@ -22,6 +22,7 @@
 			<result property="gcheckperson" column="g_checkperson"/>
 			<result property="gcheckmessage" column="g_checkmessage"/>
 			<result property="gunitname" column="g_unitname"/>
+			<result property="guploadperson" column="g_uploadperson"/>
 			<result property="isChecked" column="is_checked"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -29,7 +30,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCopy_columns">
-		gc_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+		gc_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,g_uploadperson,is_checked,is_delete,version
 	</sql>
 	<!-- 根据商品副本表主键取得数据 -->
 	<select id="queryGoodsCopyByGcId" resultMap="rm_goodsCopy" parameterType="java.lang.Long">
@@ -96,6 +97,9 @@
 			<if test="null != params.gunitname and '' != params.gunitname">
 				AND g_unitname = #{params.gunitname}
 			</if>
+			<if test="null != params.guploadperson">
+				AND g_uploadperson = #{params.guploadperson}
+			</if>
 			<if test="null != params.isChecked">
 				AND is_checked = #{params.isChecked}
 			</if>
@@ -116,10 +120,10 @@
 	<!--添加商品副本表 -->
 	<insert id="saveGoodsCopy" parameterType="com.retailers.dht.common.entity.GoodsCopy" useGeneratedKeys="true" keyProperty="gcId">
 		INSERT INTO t_goods_copy (
-			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_id,g_price,g_checkperson,g_checkmessage,g_unitname,g_uploadperson,is_checked,is_delete,version
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gid,jdbcType=BIGINT},#{gprice,jdbcType=REAL},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gid,jdbcType=BIGINT},#{gprice,jdbcType=REAL},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{guploadperson,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品副本表 -->
@@ -179,6 +183,9 @@
             </if>
             <if test="null != gunitname and '' != gunitname">
                 g_unitname = #{gunitname},
+            </if>
+            <if test="null != guploadperson">
+                g_uploadperson = #{guploadperson},
             </if>
             <if test="null != isChecked">
                 is_checked = #{isChecked},

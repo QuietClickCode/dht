@@ -1,11 +1,17 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.dao.GoodsMapper;
+import com.retailers.dht.common.entity.GoodsCopy;
+import com.retailers.dht.common.service.GoodsCopyService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsVo;
+import org.apache.ibatis.ognl.IntHashMap;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -20,7 +26,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private GoodsMapper goodsMapper;
-	public Goods saveGoods(Goods goods) {
+	@Autowired
+	private GoodsCopyService goodsCopyService;
+	public Goods saveGoods(Goods goods,Long uploadpersonId) {
 		int status = goodsMapper.saveGoods(goods);
 		return status == 1 ? goods : null;
 	}
@@ -42,8 +50,17 @@ public class GoodsServiceImpl implements GoodsService {
 		return page;
 	}
 	public boolean deleteGoodsByGid(Long gid) {
-		int status = goodsMapper.deleteGoodsByGid(gid);
+		Goods goods = goodsMapper.queryGoodsByGid(gid);
+		goods.setIsDelete(1L);
+		int status = goodsMapper.updateGoods(goods);
 		return status == 1 ? true : false;
+	}
+
+	public void copyGoods(Goods goods,Long uploadpersonId){
+		GoodsCopy gc = new GoodsCopy();
+		BeanUtils.copyProperties(gc,goods);
+
+		gc.setGuploadperson(uploadpersonId);
 	}
 }
 

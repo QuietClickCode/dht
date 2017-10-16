@@ -53,8 +53,9 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				return false;
 			}
 		}
+
 		GoodsClassification g = goodsClassificationMapper.queryGoodsClassificationByGgId(goodsClassification.getGgId());
-		if(!g.getGgImgpath().equals(goodsClassification.getGgImgpath())){
+		if(!g.getGgImgpath().equals(goodsClassification.getGgImgpath()) && !ObjectUtils.isEmpty(g.getGgImgpath())){
 			attachmentService.editorAttachment(Long.parseLong(g.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
 
@@ -73,6 +74,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
+		System.out.println(params.get("isDelete"));
 		List<GoodsClassification> list = goodsClassificationMapper.queryGoodsClassificationList(page);
 		page.setData(list);
 		return page;
@@ -82,7 +84,8 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		if(ObjectUtils.isEmpty(goodsClassification.getGgImgpath())){
 			attachmentService.editorAttachment(Long.parseLong(goodsClassification.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
-		int status = goodsClassificationMapper.deleteGoodsClassificationByGgId(ggId);
+		goodsClassification.setIsDelete(1L);
+		int status = goodsClassificationMapper.updateGoodsClassification(goodsClassification);
 		return status == 1 ? true : false;
 	}
 	public List<GoodsClassificationVo> queryGoodsClassificationTree() {

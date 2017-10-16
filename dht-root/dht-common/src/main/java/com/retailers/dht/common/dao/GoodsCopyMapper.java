@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 17:30:11
+ * @date 2017-10-16 17:32:08
  */
 public interface GoodsCopyMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsCopyMapper {
 	 * @param goodsCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 17:30:11
+	 * @date 2017-10-16 17:32:08
 	 */
 	public int saveGoodsCopy(GoodsCopy goodsCopy);
 	/**
@@ -24,7 +24,7 @@ public interface GoodsCopyMapper {
 	 * @param goodsCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 17:30:11
+	 * @date 2017-10-16 17:32:08
 	 */
 	public int updateGoodsCopy(GoodsCopy goodsCopy);
 	/**
@@ -32,7 +32,7 @@ public interface GoodsCopyMapper {
 	 * @param gcId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 17:30:11
+	 * @date 2017-10-16 17:32:08
 	 */
 	public int deleteGoodsCopyByGcId(Long gcId);
 	/**
@@ -40,7 +40,7 @@ public interface GoodsCopyMapper {
 	 * @param gcId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 17:30:11
+	 * @date 2017-10-16 17:32:08
 	 */
 	public GoodsCopy queryGoodsCopyByGcId(Long gcId);
 	/**
@@ -48,7 +48,7 @@ public interface GoodsCopyMapper {
 	 * @param pagination 分页对象
 	 * @return  商品副本表列表
 	 * @author fanghui
-	 * @date 2017-10-12 17:30:11
+	 * @date 2017-10-16 17:32:08
 	 */
 	public List<GoodsCopy> queryGoodsCopyList(Pagination<GoodsCopy> pagination);
 

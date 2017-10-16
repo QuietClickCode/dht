@@ -76,8 +76,8 @@ public class GoodsClassificationController extends BaseController {
     @Function(label="增加商品子类", description = "增加商品子类", resourse = "goods.addGoodsClassification",parentRes="goods.openGoodsClassification")
     @ResponseBody
     public BaseResp addGoodsClassification(GoodsClassification goodsClassification){
+        goodsClassification.setIsDelete(0L);
         boolean flag=goodsClassificationService.saveGoodsClassification(goodsClassification);
-
         if(flag){
             return success("新增商品子类成功");
         }else{

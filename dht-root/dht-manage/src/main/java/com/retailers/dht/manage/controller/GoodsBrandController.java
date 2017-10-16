@@ -62,6 +62,7 @@ public class GoodsBrandController extends BaseController {
     public  Map<String,Object> queryGoodsBrandLists(String gbName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gbName",gbName);
+        map.put("isDelete",0);
         Pagination<GoodsBrandVo> GoodsBrandPagination = goodsBrandService.queryGoodsBrandList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsBrandPagination.getTotalCount());
@@ -72,8 +73,9 @@ public class GoodsBrandController extends BaseController {
     @RequestMapping("/addGoodsBrand")
     @Function(label="增加商品品牌", description = "增加商品品牌", resourse = "goods.addGoodsBrand",parentRes="goods.openGoodsBrand")
     @ResponseBody
-    public BaseResp addGoodsBrand(GoodsBrand GoodsBrand){
-        boolean flag=goodsBrandService.saveGoodsBrand(GoodsBrand);
+    public BaseResp addGoodsBrand(GoodsBrand goodsBrand){
+        goodsBrand.setIsDelete(0L);
+        boolean flag=goodsBrandService.saveGoodsBrand(goodsBrand);
         return success(flag);
     }
 
