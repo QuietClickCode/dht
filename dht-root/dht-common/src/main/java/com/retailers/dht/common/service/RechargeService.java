@@ -50,11 +50,12 @@ public interface RechargeService {
 	/**
 	 * 根据rid删除充值管理
 	 * @param rid
+	 * @param sId 操作人员
 	 * @return
 	 * @author zhongp
 	 * @date 2017-10-15 23:56:18
 	 */
-	public boolean deleteRechargeByRid(Long rid);
+	public boolean deleteRechargeByRid(Long rid,Long sId);
 
 }
 

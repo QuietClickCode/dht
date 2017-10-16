@@ -12,6 +12,7 @@ import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,5 +112,21 @@ public class RechargeController extends BaseController {
         }else{
             return errorForSystem("编辑充值金额失败");
         }
+    }
+    /**
+     * 删除充值金额
+     * @param rid
+     * @return
+     */
+    @RequestMapping("delRecharge")
+    @Function(label="删除充值金额", description = "删除充值金额", resourse = "recharge.delRecharge",parentRes="recharge.openRechargePage",sort=4)
+    @ResponseBody
+    public BaseResp delRecharge(HttpServletRequest request,Long rid){
+        if(ObjectUtils.isEmpty(rid)){
+            return errorForParam("删除充值金额id不能为空");
+        }
+        long sid=getCurLoginUserId(request);
+        boolean flag = rechargeService.deleteRechargeByRid(rid,sid);
+        return success(flag);
     }
 }

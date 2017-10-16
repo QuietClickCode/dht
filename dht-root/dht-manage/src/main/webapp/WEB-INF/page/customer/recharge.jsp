@@ -262,7 +262,7 @@
             }
             let url="/recharge/addRecharge";
             if(editorRechargeType==1){
-                url="/goodsCoupon/editorRecharge";
+                url="/recharge/editorRecharge";
             }
             //取得form表单数据
             $.ajax({
@@ -363,22 +363,22 @@
         );
     }
     //删除确认框
-    function deleteData(gcpId){
+    function deleteData(rid){
         //询问框
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeRecharge(gcpId);
+            removeRecharge(rid);
         }, function(){
         });
     }
     /**
      * 删除充值金额
      **/
-    function removeRecharge(gcpId){
+    function removeRecharge(rid){
         $.ajax({
             type:"post",
-            url:'/goodsCoupon/delGoodsCoupon',
+            url:'/recharge/delRecharge',
             dataType: "json",
             data:{gcpId:gcpId},
             success:function(data){

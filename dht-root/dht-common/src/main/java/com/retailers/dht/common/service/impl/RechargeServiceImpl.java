@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.Recharge;
 import com.retailers.dht.common.dao.RechargeMapper;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.RechargeService;
 import com.retailers.dht.common.vo.RechargeVo;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,12 @@ import com.retailers.mybatis.pagination.Pagination;
 public class RechargeServiceImpl implements RechargeService {
 	@Autowired
 	private RechargeMapper rechargeMapper;
+	@Autowired
+	private AttachmentService attachmentService;
+
 	public boolean saveRecharge(Recharge recharge) {
 		int status = rechargeMapper.saveRecharge(recharge);
+		attachmentService.editorAttachment(recharge.getRlogo());
 		return status == 1 ? true : false;
 	}
 	public boolean updateRecharge(Recharge recharge) {
@@ -41,7 +46,7 @@ public class RechargeServiceImpl implements RechargeService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteRechargeByRid(Long rid) {
+	public boolean deleteRechargeByRid(Long rid,Long sid) {
 		int status = rechargeMapper.deleteRechargeByRid(rid);
 		return status == 1 ? true : false;
 	}
