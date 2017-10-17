@@ -3,6 +3,8 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Recharge;
+import com.retailers.tools.exception.AppException;
+
 import java.util.Map;
 /**
  * 描述：充值管理Service
@@ -20,7 +22,7 @@ public interface RechargeService {
 	 * @author zhongp
 	 * @date 2017-10-15 23:56:18
 	 */
-	public boolean saveRecharge(Recharge recharge);
+	public boolean saveRecharge(Recharge recharge)throws AppException;
 	/**
 	 * 编辑充值管理
 	 * @param recharge
@@ -28,7 +30,7 @@ public interface RechargeService {
 	 * @author zhongp
 	 * @date
 	 */
-	public boolean updateRecharge(Recharge recharge);
+	public boolean updateRecharge(Recharge recharge)throws AppException;
 	/**
 	 * 根据id查询充值管理
 	 * @param rid

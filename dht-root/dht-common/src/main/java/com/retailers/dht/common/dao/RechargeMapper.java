@@ -20,6 +20,13 @@ public interface RechargeMapper {
 	 * @date 2017-10-15 23:56:18
 	 */
 	public int saveRecharge(Recharge recharge);
+
+	/**
+	 * 添加快照
+	 * @param recharge
+	 * @return
+	 */
+	public int saveRechargeSnapshot(Recharge recharge);
 	/**
 	 * 编辑充值管理
 	 * @param recharge

@@ -12,6 +12,7 @@ import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.BeanUtils;
@@ -81,10 +82,11 @@ public class RechargeController extends BaseController {
         Recharge recharge = new Recharge();
         BeanUtils.copyProperties(rechargeVo,recharge);
         recharge.setRcreateSid(getCurLoginUserId(request));
-        boolean flag = rechargeService.saveRecharge(recharge);
-        if(flag){
+        try{
+            boolean flag = rechargeService.saveRecharge(recharge);
             return success("添加充值金额成功");
-        }else{
+        }catch (AppException e){
+            e.printStackTrace();
             return errorForSystem("添加充值金额失败");
         }
     }
@@ -106,12 +108,18 @@ public class RechargeController extends BaseController {
         Recharge recharge = new Recharge();
         BeanUtils.copyProperties(rechargeVo,recharge);
         recharge.setRcreateSid(getCurLoginUserId(request));
-        boolean flag = rechargeService.updateRecharge(recharge);
-        if(flag){
-            return success("编辑充值成功");
-        }else{
-            return errorForSystem("编辑充值金额失败");
+        try{
+            boolean flag = rechargeService.updateRecharge(recharge);
+            if(flag){
+                return success("编辑充值成功");
+            }else{
+                return errorForSystem("编辑充值金额失败");
+            }
+        }catch (AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
         }
+
     }
     /**
      * 删除充值金额

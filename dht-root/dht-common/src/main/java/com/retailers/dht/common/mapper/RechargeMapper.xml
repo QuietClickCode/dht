@@ -108,7 +108,19 @@
 			r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
 		) VALUES
 		(
-			#{rname,jdbcType=VARCHAR},#{rlogo,jdbcType=BIGINT},#{rprice,jdbcType=BIGINT},#{rdiscount,jdbcType=BIGINT},#{rcashback,jdbcType=INTEGER},#{rcreateDate,jdbcType=TIMESTAMP},#{rcreateSid,jdbcType=BIGINT},#{rsnapshot,jdbcType=VARCHAR},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{rname,jdbcType=VARCHAR},#{rlogo,jdbcType=BIGINT},#{rprice,jdbcType=BIGINT},
+			#{rdiscount,jdbcType=BIGINT},#{rcashback,jdbcType=INTEGER},#{rcreateDate,jdbcType=TIMESTAMP},
+			#{rcreateSid,jdbcType=BIGINT},#{rsnapshot,jdbcType=VARCHAR},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{version,jdbcType=INTEGER}
+		)
+	</insert>
+	<insert id="saveRechargeSnapshot" parameterType="com.retailers.dht.common.entity.Recharge">
+		INSERT INTO t_recharge (
+		r_id,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
+		) VALUES
+		(
+		#{rid,jdbcType=BIGINT},#{rname,jdbcType=VARCHAR},#{rlogo,jdbcType=BIGINT},#{rprice,jdbcType=BIGINT},
+		#{rdiscount,jdbcType=BIGINT},#{rcashback,jdbcType=INTEGER},#{rcreateDate,jdbcType=TIMESTAMP},
+		#{rcreateSid,jdbcType=BIGINT},#{rsnapshot,jdbcType=VARCHAR},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{version,jdbcType=INTEGER}
 		)
 	</insert>
 	<!--修改充值管理 -->
