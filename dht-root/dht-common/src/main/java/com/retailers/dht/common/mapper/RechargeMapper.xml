@@ -114,8 +114,8 @@
 		)
 	</insert>
 	<insert id="saveRechargeSnapshot" parameterType="com.retailers.dht.common.entity.Recharge">
-		INSERT INTO t_recharge (
-		r_id,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
+		INSERT INTO t_recharge_history (
+		  r_id,r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
 		) VALUES
 		(
 		#{rid,jdbcType=BIGINT},#{rname,jdbcType=VARCHAR},#{rlogo,jdbcType=BIGINT},#{rprice,jdbcType=BIGINT},

@@ -57,7 +57,7 @@ public interface RechargeService {
 	 * @author zhongp
 	 * @date 2017-10-15 23:56:18
 	 */
-	public boolean deleteRechargeByRid(Long rid,Long sId);
+	public boolean deleteRechargeByRid(Long rid,Long sId)throws AppException;
 
 }
 

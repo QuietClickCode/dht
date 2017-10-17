@@ -87,6 +87,9 @@ public class RechargeController extends BaseController {
             return success("添加充值金额成功");
         }catch (AppException e){
             e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
             return errorForSystem("添加充值金额失败");
         }
     }
@@ -118,6 +121,9 @@ public class RechargeController extends BaseController {
         }catch (AppException e){
             e.printStackTrace();
             return errorForSystem(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
+            return errorForSystem("编辑充值金额失败");
         }
 
     }
@@ -134,7 +140,16 @@ public class RechargeController extends BaseController {
             return errorForParam("删除充值金额id不能为空");
         }
         long sid=getCurLoginUserId(request);
-        boolean flag = rechargeService.deleteRechargeByRid(rid,sid);
-        return success(flag);
+
+        try{
+            boolean flag = rechargeService.deleteRechargeByRid(rid,sid);
+            return success("删除充值金额成功");
+        }catch (AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem("删除充值金额失败");
+        }
     }
 }
