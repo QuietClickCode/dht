@@ -252,30 +252,18 @@ public class URLResourceInterceptor implements BeanPostProcessor,
 				throw new RuntimeException("上级资源["+str+"]不存在");
 			}
 		}
+//		try{
+		long time = System.currentTimeMillis();
 		//注册节点菜单
-		for(ResourseBean resourseBean:resourseBeans){
-			logger.info("注册菜单节点:" + resourseBean.getResourse() + ",资源显示名称:"
-					+ resourseBean.getLabel() + "---->开始");
-			menuService.registerMenuNode(resourseBean);
-			logger.info("注册菜单节点:" + resourseBean.getResourse() + ",资源显示名称:"
-					+ resourseBean.getLabel() + "---->注册成功!");
-		}
+		Map<String,Integer> resParseIds = menuService.registerMenuNode(resourseBeans);
 		//注册节点菜单
-		for(MenuBean menuBean:menus){
-			logger.info("注册菜单:" + menuBean.getResourse() + ",资源显示名称:"
-					+ menuBean.getLabel() + "，访问路径："+menuBean.getUrl()+"---->开始!");
-			menuService.registerMenu(menuBean);
-			logger.info("注册菜单:" + menuBean.getResourse() + ",资源显示名称:"
-					+ menuBean.getLabel() + "，访问路径："+menuBean.getUrl()+"---->注册成功!");
-		}
+		Map<String,Integer> menuParseIds=menuService.registerMenu(menus,resParseIds);
 		//功能按钮注册
-		for(FunctionBean functionBean:functions){
-			logger.info("注册功能按钮:" + functionBean.getResourse() + ",资源显示名称:"
-					+ functionBean.getLabel() + "，访问路径："+functionBean.getUrl()+"---->开始!");
-			menuService.registerFunction(functionBean);
-			logger.info("注册功能按钮:" + functionBean.getResourse() + ",资源显示名称:"
-					+ functionBean.getLabel() + "，访问路径："+functionBean.getUrl()+"---->注册成功!");
-		}
+		menuService.registerFunction(functions,menuParseIds);
+		logger.info("菜单注册完毕耗时：{}",(System.currentTimeMillis()-time));
+//		}catch (Exception e){
+//			e.printStackTrace();
+//		}
 	}
 
 	/**

@@ -20,12 +20,26 @@ public interface MenuMapper {
 	 * @date 2016-06-07
 	 */
 	public int saveMenu(Menu menu);
+
+	/**
+	 * 批量添加菜单
+	 * @param menu
+	 * @return
+	 */
+	public int saveMenus(List<Menu> menu);
 	/**
 	 * 编辑Menu
 	 * @author zhongp
 	 * @date 2016-06-07
 	 */
 	public int updateMenu(Menu menu);
+
+	/**
+	 * 批量修改资源
+	 * @param menus
+	 * @return
+	 */
+	public int updateMenus(@Param("menus") List<Menu> menus);
 	/**
 	 * 根据Id删除Menu
 	 * @author zhongp
@@ -111,5 +125,13 @@ public interface MenuMapper {
 	 * @return
 	 */
 	public List<MenuVo> queryAllMenu(@Param("all") Boolean all);
+
+	/**
+	 * 根据资类类型和资源resources 取得菜单
+	 * @param resType
+	 * @param resources
+	 * @return
+	 */
+	public List<Menu> queryMenuByResources(@Param("resType")Integer resType,@Param("resources")List<String> resources);
 
 }

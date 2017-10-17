@@ -84,6 +84,25 @@
 		,#{sort,jdbcType=INTEGER}
 		)
 	</insert>
+	<!--添加Menu -->
+	<insert id="saveMenus" parameterType="com.retailers.auth.entity.Menu" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_menu (
+		parent_id ,type ,resourse ,url ,label ,icon ,is_valid ,description ,sort
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.parentId,jdbcType=INTEGER} ,
+				#{item.type,jdbcType=INTEGER},
+				#{item.resourse,jdbcType=CHAR},
+				#{item.url,jdbcType=CHAR},
+				#{item.label,jdbcType=CHAR},
+				#{item.icon,jdbcType=CHAR},
+				#{item.isValid,jdbcType=INTEGER} ,
+				#{item.description,jdbcType=CHAR},
+				#{item.sort,jdbcType=INTEGER}
+			)
+		</foreach>
+	</insert>
 	<!--修改Menu -->
 	<update id="updateMenu" parameterType="com.retailers.auth.entity.Menu">
 		UPDATE t_menu
@@ -117,6 +136,63 @@
 			</if>
 		</set>
 		WHERE id = #{id}
+	</update>
+
+	<!--修改Menu -->
+	<update id="updateMenus" parameterType="com.retailers.auth.entity.Menu">
+		UPDATE t_menu
+		<set>
+			parent_id = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.parentId}
+			</foreach> end,
+
+			type = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.type}
+			</foreach> end,
+			resourse = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.resourse}
+			</foreach> end,
+			url = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.url}
+			</foreach> end,
+			label = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.label}
+			</foreach> end,
+			icon = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.icon}
+			</foreach> end,
+			is_valid = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.isValid}
+			</foreach> end,
+			description = CASE
+			<foreach collection="menus" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				#{item.description}
+			</foreach> end,
+				sort = CASE
+				<foreach collection="menus" item="item" index="index" >
+					WHEN  id=#{item.id} THEN
+					#{item.sort}
+				</foreach> end,
+		</set>
+		WHERE id in
+		<foreach collection="menus" item="item" index="index" separator="," open="(" close=")" >
+			#{item.id}
+		</foreach>
 	</update>
 	<!--删除Menu -->
 	<delete id="deleteMenuById" parameterType="java.lang.Integer">
@@ -191,7 +267,6 @@
     	</where>
     </sql>
 
-
 	<select id="queryMenuTree" resultMap="rm_menu_tree_vo">
 		SELECT * FROM t_menu where is_delete=0 ORDER BY parent_id asc,sort ASC
 	</select>
@@ -261,6 +336,23 @@
 			AND m.type!=2
 		</if>
 		order by parent_id asc
+	</select>
+
+	<select id="queryMenuByResources" resultMap="rm_menu">
+		SELECT
+		<include refid="menu_columns" />
+		FROM t_menu
+		<where>
+			<if test="null!=resType and ''!=resType">
+				and type=#{resType}
+			</if>
+			<if test="null != resources and resources.size>0">
+				AND resourse IN
+				<foreach collection="resources" item="item" index="index" separator="," open="(" close=")" >
+					#{item}
+				</foreach>
+			</if>
+		</where>
 	</select>
 </mapper>
 

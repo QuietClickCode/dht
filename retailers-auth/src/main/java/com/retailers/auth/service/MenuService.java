@@ -8,32 +8,34 @@ import com.retailers.auth.entity.Menu;
 import com.retailers.auth.vo.MenuVo;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface MenuService {
 
 	/**
 	 * 注册菜单节点
 	 *
-	 * @param resourseBean
+	 * @param resourseBeans
 	 * @return
 	 */
-	public int registerMenuNode(ResourseBean resourseBean);
+	public Map<String,Integer> registerMenuNode(Set<ResourseBean> resourseBeans);
 
 	/**
 	 * 注册菜单
 	 *
-	 * @param menuBean
+	 * @param menuBeans
 	 * @return
 	 */
-	public int registerMenu(MenuBean menuBean);
+	public Map<String,Integer> registerMenu(Set<MenuBean> menuBeans,Map<String,Integer> parseId);
 
 	/**
 	 * 注册菜单下功能按钮（用于页面操作权限控制）
 	 *
-	 * @param functionBean
+	 * @param functions
 	 * @return
 	 */
-	public int registerFunction(FunctionBean functionBean);
+	public Map<String,Integer> registerFunction(Set<FunctionBean> functions,Map<String,Integer> parseId);
 
 	/**
 	 *  取得用户拥有的权限菜单

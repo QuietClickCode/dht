@@ -28,146 +28,233 @@ public class MenuServiceImpl implements MenuService {
 	private MenuMapper menuMapper;
 	@Autowired
 	private SysUserResPermissionService sysUserResPermissionService;
-	public int registerMenuNode(ResourseBean bean) {
-		boolean isAdd=false;
-
-		if(ObjectUtils.isNotEmpty(bean)){
-			Map<String,Object> map=queryRes(bean.getChangeRes(),bean.getResourse());
-			Menu menu = (Menu) map.get("menu");
-			isAdd= Boolean.parseBoolean(map.get("add")+"");
-			if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()== MenuConstant.MENU_IS_CHANGE_YES){
-				menu.setIsValid(bean.getIsValid());
-				menu.setLabel(bean.getLabel());
-				menu.setSort(bean.getSort());
-				menu.setDescription(bean.getDescription());
-				menu.setIcon(bean.getIcon());
-				//判断是否存在上级
-				if(ObjectUtils.isNotEmpty(bean.getParentRes())) {
-					Integer parseInt = queryParseInt(bean.getParentRes());
-					menu.setParentId(parseInt);
-				}
-			}
-			menu.setResourse(bean.getResourse());
-			menu.setType(MenuConstant.MENU_TYPE_RES);
-			if(isAdd){
-				menuMapper.saveMenu(menu);
-			}else{
-				menuMapper.updateMenu(menu);
-			}
-			return menu.getId();
-		}
-
-		return -1;
-	}
-
-	private Map<String,Object> queryRes(String changeRes,String resourse){
-		Menu menu=null;
-		boolean isAdd=false;
-		//判断是否切换过资源
-		if(ObjectUtils.isNotEmpty(changeRes)){
-			//判断被切换的资源是否存在
-			menu = menuMapper.queryMenuByRes(changeRes);
-			//被切换的资源己不存在
-			if(ObjectUtils.isEmpty(menu)){
-				//判断新资源是否己存在
-				menu = menuMapper.queryMenuByRes(resourse);
-				if(ObjectUtils.isEmpty(menu)){
-					menu = new Menu();
-					isAdd =true;
-				}
-			}
-		}else{
-			menu = menuMapper.queryMenuByRes(resourse);
-			if(ObjectUtils.isEmpty(menu)){
-				menu = new Menu();
-				isAdd =true;
-			}
-		}
-		Map<String,Object> rtn=new HashMap<String,Object>();
-		rtn.put("menu",menu);
-		rtn.put("add",isAdd);
-		return rtn;
-	}
-
 
 	/**
-	 * 取得上级资源
-	 * @param parentRes 父级资源resouce(唯一值)
+	 * 注册资上级资源
+	 * @param resourseBeans
 	 * @return
 	 */
-	private Integer queryParseInt(String parentRes){
-		Menu parseMenu = menuMapper.queryMenuByRes(parentRes);
-		if(ObjectUtils.isEmpty(parseMenu)){
-			parseMenu = new Menu();
-			parseMenu.setResourse(parentRes);
-			menuMapper.saveMenu(parseMenu);
+	public Map<String,Integer> registerMenuNode(Set<ResourseBean> resourseBeans) {
+		List<String> resources=new ArrayList<String>();
+		//添加的资源res
+		Set<String> res=new HashSet<String>();
+		//变更次源res
+		Map<String,String> changeRes=new HashMap<String, String>();
+		//资源对应的 资源id
+		Map<String,Integer> pidMap=new HashMap<String, Integer>();
+		//菜单资源
+		Map<String,ResourseBean> mapBeans= new HashMap<String, ResourseBean>();
+		Map<String,Integer> rtnMap=new HashMap<String, Integer>();
+		for(ResourseBean bean:resourseBeans){
+			resources.add(bean.getResourse());
+			if(ObjectUtils.isNotEmpty(bean.getChangeRes())){
+				resources.add(bean.getChangeRes());
+				changeRes.put(bean.getChangeRes(),bean.getResourse());
+			}
+			res.add(bean.getResourse());
+			mapBeans.put(bean.getResourse(),bean);
 		}
-		return  parseMenu.getId();
-	}
-
-	public int registerMenu(MenuBean bean) {
-		boolean isAdd=false;
-		if(ObjectUtils.isNotEmpty(bean)){
-			Map<String,Object> map=queryRes(bean.getChangeRes(),bean.getResourse());
-			Menu menu = (Menu) map.get("menu");
-			isAdd= Boolean.parseBoolean(map.get("add")+"");
-			if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()==MenuConstant.MENU_IS_CHANGE_YES){
-				menu.setDescription(bean.getDescription());
-				menu.setIcon(bean.getIcon());
-				menu.setIsValid(bean.getIsValid());
-				menu.setLabel(bean.getLabel());
-				menu.setSort(bean.getSort());
-				//判断是否存在上级
-				if(ObjectUtils.isNotEmpty(bean.getParentRes())) {
-					Integer parseInt = queryParseInt(bean.getParentRes());
-					menu.setParentId(parseInt);
+		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()){
+			List<Menu> listMenus=menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_RES,resources);
+			Map<String,Menu> czMenu=new HashMap<String, Menu>();
+			if(ObjectUtils.isNotEmpty(listMenus)&&!listMenus.isEmpty()){
+				for(Menu menu:listMenus){
+					czMenu.put(menu.getResourse(),menu);
+					pidMap.put(menu.getResourse(),menu.getId());
+					res.remove(menu.getResourse());
+					if(changeRes.containsKey(menu.getResourse())){
+						pidMap.put(changeRes.get(menu.getResourse()),menu.getId());
+						res.remove(changeRes.get(menu.getResourse()));
+					}
 				}
 			}
-			menu.setResourse(bean.getResourse());
-			menu.setType(MenuConstant.MENU_TYPE_MENU);
-			menu.setUrl(bean.getUrl());
-			if(isAdd){
-				menuMapper.saveMenu(menu);
-			}else{
-				menuMapper.updateMenu(menu);
-			}
-			return menu.getId();
-		}
-
-		return -1;
-	}
-	public int registerFunction(FunctionBean bean) {
-		boolean isAdd=false;
-		if(ObjectUtils.isNotEmpty(bean)){
-			Map<String,Object> map=queryRes(bean.getChangeRes(),bean.getResourse());
-			Menu menu = (Menu) map.get("menu");
-			isAdd= Boolean.parseBoolean(map.get("add")+"");
-			if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()==MenuConstant.MENU_IS_CHANGE_YES){
-				menu.setIcon(bean.getIcon());
-				menu.setIsValid(bean.getIsValid());
-				menu.setLabel(bean.getLabel());
-				menu.setSort(bean.getSort());
-				menu.setDescription(bean.getDescription());
-				//判断是否存在上级
-				if(ObjectUtils.isNotEmpty(bean.getParentRes())) {
-					Integer parseInt = queryParseInt(bean.getParentRes());
-					menu.setParentId(parseInt);
+			if(!res.isEmpty()){
+				List<Menu> menus = new ArrayList<Menu>();
+				for(String str:res){
+					Menu m= new Menu();
+					copyResourse(mapBeans.get(str),m,MenuConstant.MENU_TYPE_RES);
+					menus.add(m);
+				}
+				//批量添加
+				menuMapper.saveMenus(menus);
+				for(Menu menu:menus){
+					czMenu.put(menu.getResourse(),menu);
+					pidMap.put(menu.getResourse(),menu.getId());
 				}
 			}
-			menu.setResourse(bean.getResourse());
-			menu.setType(MenuConstant.MENU_TYPE_FUNCTION);
-			menu.setUrl(bean.getUrl());
-			if(isAdd){
-				menuMapper.saveMenu(menu);
-			}else{
-				menuMapper.updateMenu(menu);
+			List<Menu> eidtor=new ArrayList<Menu>();
+			for(ResourseBean bean:resourseBeans){
+				Menu menu=czMenu.get(bean.getResourse());
+				if(ObjectUtils.isEmpty(menu)){
+					menu=czMenu.get(bean.getChangeRes());
+				}
+				copyResourse(bean,menu,MenuConstant.MENU_TYPE_RES);
+				menu.setParentId(pidMap.get(bean.getParentRes()));
+				eidtor.add(menu);
+				rtnMap.put(menu.getResourse(),menu.getId());
 			}
-			return menu.getId();
+			menuMapper.updateMenus(eidtor);
 		}
-
-		return -1;
+		return rtnMap;
 	}
 
+	/**
+	 * 设置menu值
+	 * @param bean
+	 * @param menu
+	 */
+	private void copyResourse(ResourseBean bean,Menu menu,Integer type){
+		if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()== MenuConstant.MENU_IS_CHANGE_YES){
+			menu.setIsValid(bean.getIsValid());
+			menu.setLabel(bean.getLabel());
+			menu.setSort(bean.getSort());
+			menu.setDescription(bean.getDescription());
+			menu.setIcon(bean.getIcon());
+		}
+		menu.setResourse(bean.getResourse());
+		menu.setType(type);
+	}
+	public Map<String,Integer> registerMenu(Set<MenuBean> menuBeans,Map<String,Integer> parseId) {
+		Map<String,Integer> rtn=new HashMap<String, Integer>();
+		List<String> resources=new ArrayList<String>();
+		//变更次源res
+		Map<String,String> changeRes=new HashMap<String, String>();
+		Map<String,MenuBean> map=new HashMap<String, MenuBean>();
+		Map<String,Menu> editorMenus=new HashMap<String, Menu>();
+		for(MenuBean bean:menuBeans){
+			resources.add(bean.getResourse());
+			if(ObjectUtils.isNotEmpty(bean.getChangeRes())){
+				resources.add(bean.getChangeRes());
+				changeRes.put(bean.getChangeRes(),bean.getResourse());
+			}
+			map.put(bean.getResourse(),bean);
+		}
+		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()) {
+			List<Menu> listMenus = menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_MENU, resources);
+			if(ObjectUtils.isNotEmpty(listMenus)){
+				for(Menu menu:listMenus){
+					if(changeRes.containsKey(menu.getResourse())){
+						map.remove(changeRes.get(menu.getResourse()));
+					}
+					map.remove(menu.getResourse());
+					editorMenus.put(menu.getResourse(),menu);
+				}
+			}
+			List<Menu> addMenus=new ArrayList<Menu>();
+			if(ObjectUtils.isNotEmpty(map)&&!map.isEmpty()){
+				for(String key:map.keySet()){
+					Menu menu = new Menu();
+					copyMenu(map.get(key),menu,MenuConstant.MENU_TYPE_MENU);
+					addMenus.add(menu);
+				}
+				menuMapper.saveMenus(addMenus);
+				for(Menu menu:addMenus){
+					editorMenus.put(menu.getResourse(),menu);
+				}
+			}
+			List<Menu> editorList=new ArrayList<Menu>();
+			for(MenuBean bean:menuBeans){
+				Menu menu=editorMenus.get(bean.getResourse());
+				if(ObjectUtils.isEmpty(menu)){
+					menu=editorMenus.get(bean.getChangeRes());
+				}
+				copyMenu(bean,menu,MenuConstant.MENU_TYPE_MENU);
+				menu.setParentId(parseId.get(bean.getParentRes()));
+				editorList.add(menu);
+				rtn.put(menu.getResourse(),menu.getId());
+			}
+			menuMapper.updateMenus(editorList);
+		}
+		return rtn;
+	}
+	/**
+	 * 设置menu值
+	 * @param bean
+	 * @param menu
+	 */
+	private void copyMenu(MenuBean bean,Menu menu,Integer type){
+		if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()== MenuConstant.MENU_IS_CHANGE_YES){
+			menu.setDescription(bean.getDescription());
+			menu.setIsValid(bean.getIsValid());
+			menu.setLabel(bean.getLabel());
+			menu.setSort(bean.getSort());
+			menu.setIcon(bean.getIcon());
+		}
+		menu.setResourse(bean.getResourse());
+		menu.setUrl(bean.getUrl());
+		menu.setType(type);
+	}
+
+	public Map<String,Integer> registerFunction(Set<FunctionBean> functions,Map<String,Integer> parseId){
+		Map<String,Integer> rtn=new HashMap<String, Integer>();
+		List<String> resources=new ArrayList<String>();
+		//变更次源res
+		Map<String,String> changeRes=new HashMap<String, String>();
+		Map<String,FunctionBean> map=new HashMap<String, FunctionBean>();
+		Map<String,Menu> editorMenus=new HashMap<String, Menu>();
+		for(FunctionBean bean:functions){
+			resources.add(bean.getResourse());
+			if(ObjectUtils.isNotEmpty(bean.getChangeRes())){
+				resources.add(bean.getChangeRes());
+				changeRes.put(bean.getChangeRes(),bean.getResourse());
+			}
+			map.put(bean.getResourse(),bean);
+		}
+		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()) {
+			List<Menu> funs = menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_FUNCTION, resources);
+			if(ObjectUtils.isNotEmpty(funs)){
+				for(Menu menu:funs){
+					map.remove(menu.getResourse());
+					editorMenus.put(menu.getResourse(),menu);
+					if(changeRes.containsKey(menu.getResourse())){
+						map.remove(changeRes.get(menu.getResourse()));
+					}
+				}
+			}
+			List<Menu> addMenus=new ArrayList<Menu>();
+			if(ObjectUtils.isNotEmpty(map)&&!map.isEmpty()){
+				for(String key:map.keySet()){
+					Menu menu = new Menu();
+					copyFunction(map.get(key),menu,MenuConstant.MENU_TYPE_FUNCTION);
+					addMenus.add(menu);
+				}
+				menuMapper.saveMenus(addMenus);
+				for(Menu menu:addMenus){
+					editorMenus.put(menu.getResourse(),menu);
+				}
+			}
+			List<Menu> editorList=new ArrayList<Menu>();
+			for(FunctionBean bean:functions){
+				Menu menu=editorMenus.get(bean.getResourse());
+				if(ObjectUtils.isEmpty(menu)){
+					menu=editorMenus.get(bean.getChangeRes());
+				}
+				copyFunction(bean,menu,MenuConstant.MENU_TYPE_FUNCTION);
+				menu.setParentId(parseId.get(bean.getParentRes()));
+				editorList.add(menu);
+				rtn.put(menu.getResourse(),menu.getId());
+			}
+			menuMapper.updateMenus(editorList);
+		}
+		return rtn;
+	}
+	/**
+	 * 设置function值
+	 * @param bean
+	 * @param menu
+	 */
+	private void copyFunction(FunctionBean bean,Menu menu,Integer type){
+		if(ObjectUtils.isEmpty(menu.getIsChange())||menu.getIsChange().intValue()== MenuConstant.MENU_IS_CHANGE_YES){
+			menu.setDescription(bean.getDescription());
+			menu.setSort(bean.getSort());
+			menu.setIcon(bean.getIcon());
+			menu.setIsValid(bean.getIsValid());
+			menu.setLabel(bean.getLabel());
+		}
+		menu.setResourse(bean.getResourse());
+		menu.setUrl(bean.getUrl());
+		menu.setType(type);
+	}
 	public List<Menu> queryUserMenu(Long userId){
 		List<MenuVo> list = new ArrayList<MenuVo>();
 		if(userId.intValue()==-1){
