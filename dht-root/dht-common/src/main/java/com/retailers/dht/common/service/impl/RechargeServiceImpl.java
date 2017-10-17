@@ -13,6 +13,8 @@ import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.UUIDUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -28,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Service("rechargeService")
 public class RechargeServiceImpl implements RechargeService {
+    Logger logger= LoggerFactory.getLogger(RechargeServiceImpl.class);
 	@Autowired
 	private RechargeMapper rechargeMapper;
 	@Autowired
@@ -53,6 +56,7 @@ public class RechargeServiceImpl implements RechargeService {
 	}
 	@Transactional(rollbackFor = Exception.class)
 	public boolean updateRecharge(Recharge recharge)throws AppException {
+        logger.info("进入充值金额编辑功能");
 	    Date curDate = new Date();
 		Recharge r = rechargeMapper.queryRechargeByRid(recharge.getRid());
 		if(ObjectUtils.isEmpty(r)){
@@ -80,6 +84,7 @@ public class RechargeServiceImpl implements RechargeService {
 		}
 		//删除原有数据
         status = rechargeMapper.deleteRechargeByRid(r.getRid());
+        logger.info("充值金额编辑功能完成，执行时间:{}",(System.currentTimeMillis()-curDate.getTime()));
 		return status == 1 ? true : false;
 	}
 	public Recharge queryRechargeByRid(Long rid) {
