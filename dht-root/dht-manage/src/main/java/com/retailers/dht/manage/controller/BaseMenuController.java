@@ -43,5 +43,6 @@ public class BaseMenuController {
     @Resourse(resourse = "sys.manager.promotion",label = "促销方式",sort =2)
     public String promotion;
 
-
+    @Resourse(resourse = "sys.manager.floorManage",label = "导航/广告设置",sort = 5)
+    public String floorManage;
 }

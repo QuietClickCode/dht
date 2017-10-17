@@ -8,6 +8,10 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
+    <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
 
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
@@ -107,50 +111,50 @@ UE.Editor.prototype.getActionUrl = function(action) {
                 <h4 class="modal-title" id="myFloorModalLabel">添加子楼层</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="addFloorFrom">
                     <div class="form-group">
-                        <label for="FloorTiele" class="col-sm-3 control-label">楼层名称</label>
+                        <label for="FloorTitle" class="col-sm-3 control-label">楼层名称</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="FloorTiele" placeholder="楼层名称">
+                            <input type="text" class="form-control" id="FloorTitle" placeholder="楼层名称">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="" class="col-sm-3 control-label">是否成为顶级元素</label>
                         <div class="col-sm-9">
                             <label class="checkbox-inline">
-                                <input type="checkbox" id="inlineCheckbox1" value="option1">
+                                <input type="checkbox" id="inlineCheckbox" onclick="toggleClassify('#inlineCheckbox','#classify')" value="option1">
                                 <span>选中上级分类将消失</span>
                             </label>
                         </div>
                     </div>
 
-                    <div class="form-group dropdown">
+                    <div class="form-group" id="classify">
                         <label for="" class="col-sm-3 control-label">上级分类</label>
                         <div class="col-sm-9">
-                            <input type="hidden" id="parentId" name="parentId"/>
-                            <input type="text" class="form-control" aria-label="..." id="parentNm" name="parentNm" onclick="showMenu(); return false;"/>
+                            <input id="floorClassify" name="floorClassify" type="hidden" />
+                            <input id="floorClassifyName" name="floorClassifyName" type="text" class="form-control" onclick="showMenu('#floorClassify','#floorClassifyName'); return false;"/>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-3 control-label">排序</label>
+                        <label for="addFloorOrder" class="col-sm-3 control-label">排序</label>
                         <div class="col-sm-9">
-                            <input type="text" class="form-control" id="" placeholder="排序">
+                            <input type="text" class="form-control" id="addFloorOrder" placeholder="排序">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary" onclick="subAddFloor()">确定</button>
             </div>
         </div>
     </div>
 </div>
 
 <%--编辑该楼层--%>
-<div class="modal fade" id="updateFloors" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+<div class="modal fade bs-example-modal-lg" id="updateFloors" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -162,6 +166,24 @@ UE.Editor.prototype.getActionUrl = function(action) {
                         <label for="thisFloorTitle" class="col-sm-2 control-label">楼层标题</label>
                         <div class="col-sm-10">
                             <input type="text"  class="form-control" id="thisFloorTitle" placeholder="更改楼层标题">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">成为顶级元素</label>
+                        <div class="col-sm-10">
+                            <label class="checkbox-inline">
+                                <input type="checkbox" id="chooseClassifyBox" onclick="toggleClassify('#chooseClassifyBox','#chooseClassifyLabel')" value="option1">
+                                <span>选中上级分类将消失</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="chooseClassifyLabel">
+                        <label for="chooseClassify" class="col-sm-2 control-label">选择分类</label>
+                        <div class="col-sm-10">
+                            <input id="chooseClassify" name="floorClassify" type="hidden" />
+                            <input id="chooseClassifyName" name="floorClassifyName" type="text" class="form-control" onclick="showMenu('#chooseClassify','#chooseClassifyName'); return false;"/>
                         </div>
                     </div>
 
@@ -211,15 +233,9 @@ UE.Editor.prototype.getActionUrl = function(action) {
         </div>
     </div>
 
-<div id="GoodsClassificationContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="GoodsClassificationDemo" class="ztree" style="margin-top:0; width:320px;">
-        <li style="margin-top: 5px" onclick="initGoodsClassification(id)">
-            <a>
-                <span>aaa</span>
-            </a>
-        </li>
-        <li style="margin-top: 5px">2</li>
-    </ul>
+<!-- 公用下拉择树 -->
+<div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <!-- 图标选择器-->
@@ -228,6 +244,10 @@ UE.Editor.prototype.getActionUrl = function(action) {
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/jquery.treegrid.extension.js"></script>
+<script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
+<script type="text/javascript" src="/js/common/form.js"></script>
+<script src="/js/toast/js/toastr.js"></script>
 <script type="text/javascript">
     $.fn.serializeObject = function()
     {
@@ -290,7 +310,7 @@ UE.Editor.prototype.getActionUrl = function(action) {
 
             },{
                 field: 'flName',
-                align : 'center',
+                align : 'left',
                 valign : 'middle',
                 title: '名称'
 
@@ -333,58 +353,8 @@ UE.Editor.prototype.getActionUrl = function(action) {
                     </ex:perm>
                     return html;
                 }
-
             }]
         });
-
-        //初始化选择器开关
-        $("#editGoodsClassificationForm #isTop").bootstrapSwitch();
-
-
-        //编辑按钮提交操作
-        $("#editSubmit").click("click",function(e){
-            var formData=$("#editGoodsClassificationForm").serializeObject();
-
-            var flag =$("#editGoodsClassificationForm #isTop").bootstrapSwitch("state");
-            if(flag){
-                formData["isTop"]=1;
-            }else{
-                formData["isTop"]=0;
-            }
-            var url='';
-            if(editorGoodsClassificationType==0){
-                url='/goods/addGoodsClassification'
-            }else{
-                url='/goods/editGoodsClassification';
-            }
-
-            //取得form表单数据
-            $.ajax({
-                type:"post",
-                url:url,
-                dataType: "json",
-                data:formData,
-                success:function(data){
-                    if(data.status==0){
-                        //显示提示
-                        layer.msg(data.msg);
-                        //刷新数据
-                        refreshTableData();
-                        //关闭弹窗
-                        $('#editGoodsClassification').modal('hide')
-                    }
-                }
-            });
-            clearFormValidation("editGoodsClassificationForm",formValidater);
-        });
-        //初始华开关选择器
-        $("#editGoodsClassificationForm #isValid").bootstrapSwitch();
-        $('#editGoodsClassification').on('hide.bs.modal', function () {
-            //清除数据
-            //clearFormData();
-        })
-
-        formValidater();
     });
 
     /*/!**
@@ -450,12 +420,14 @@ UE.Editor.prototype.getActionUrl = function(action) {
         let title = $("#thisFloorTitle").val();
         let order = $("#thisFloorOrder").val();
         let show = $(".isShow:checked").val();
+        let parentId = $("#chooseClassify").val();
         $.ajax({
             url:"/floorManage/updateFloor",
             method:"post",
             data:{
                 flId:flid,
                 flName:title,
+                parentId:parentId,
                 flOrder:order,
                 isShow:show,
                 version:1
@@ -464,6 +436,8 @@ UE.Editor.prototype.getActionUrl = function(action) {
             success:function (data) {
                 layer.msg(data.msg);
                 refreshTableData();
+                $("#treeDemo").html("");
+                initMenuContent();
             },
             error:function () {
 
@@ -488,10 +462,62 @@ UE.Editor.prototype.getActionUrl = function(action) {
             }
         );
     }
+    
+    function toggleClassify(checkBoxName,classifyLabel) {
+        let flag = $(checkBoxName).is(":checked");
+        if(flag)
+            $(classifyLabel).css("display","none");
+        else
+            $(classifyLabel).css("display","block");
+    }
 
+    function subAddFloor() {
+        let parentId = $("#floorClassify").val();
+        let flName = $("#FloorTitle").val();
+        let flOrder = $("#addFloorOrder").val();
+        if(flName == ""){
+            layer.msg("楼层名称不能为空");
+            return;
+        }
 
+        if(flOrder == ""){
+            layer.msg("排序不能为空");
+            return;
+        }
 
-    /***********************************************************************************/
+        $.ajax({
+            url:"/floorManage/addFloor",
+            method:"post",
+            data:{
+                flName:flName,
+                parentId:parentId,
+                isShow:1,
+                version:0,
+                flOrder:flOrder,
+                isDelete:0
+            },
+            dataType:"json",
+            success:function (data) {
+                layer.msg(data.msg);
+                refreshTableData();
+                $("#addFloorModal").modal('hide');
+                $("#floorClassify").val("");
+                $("#FloorTitle").val("");
+                $("#addFloorOrder").val("");
+            },
+            error:function () {
+
+            }
+        });
+    }
+
+</script>
+
+<script>
+
+    let Classify;
+    let ClassifyName;
+
     var setting = {
         view: {
             dblClickExpand: false
@@ -520,15 +546,69 @@ UE.Editor.prototype.getActionUrl = function(action) {
             v += nodes[i].name;
             vId += nodes[i].id;
         }
-        var parentNm = $("#parentNm");
-        var parentId_ = $("#parentId");
-        parentNm.val(v);
-        parentId_.val(vId);
+        var floorClassifyName = $(ClassifyName);
+        var floorClassify = $(Classify);
+        floorClassifyName.val(v);
+        floorClassify.val(vId);
     }
 
-    function showMenu() {
-        var cityObj = $("#parentNm");
-        var cityOffset = $("#parentNm").offset();
+    var zNodes;
+    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    $.ajax({
+        type:"post",
+        url:'/floorManage/queryFloorManageNode',
+        dataType: "json",
+        data:{flId:-1,pageSize:1000,pageNo:1},
+        async:false,
+        success:function(data){
+            let d=data.data;
+            var nodeData=new Array();
+            for(row of d){
+                let treeRow=new Object();
+                treeRow.id=row.flId;
+                treeRow.pId=row.parentId;
+                treeRow.name=row.flName;
+                nodeData.push(treeRow);
+            }
+            var zTree=$.fn.zTree.init($("#treeDemo"), setting, nodeData);
+            var node = zTree.getNodeByParam("id",parentId);
+            if(node){
+                zTree.selectNode(node);
+            }
+        }
+    });
+    
+    function initMenuContent() {
+        $.ajax({
+            type:"post",
+            url:'/floorManage/queryFloorManageNode',
+            dataType: "json",
+            data:{flId:-1,pageSize:1000,pageNo:1},
+            async:false,
+            success:function(data){
+                let d=data.data;
+                var nodeData=new Array();
+                for(row of d){
+                    let treeRow=new Object();
+                    treeRow.id=row.flId;
+                    treeRow.pId=row.parentId;
+                    treeRow.name=row.flName;
+                    nodeData.push(treeRow);
+                }
+                var zTree=$.fn.zTree.init($("#treeDemo"), setting, nodeData);
+                var node = zTree.getNodeByParam("id",parentId);
+                if(node){
+                    zTree.selectNode(node);
+                }
+            }
+        });
+    }
+    
+    function showMenu(floorClassify,floorClassifyName) {
+        Classify = floorClassify;
+        ClassifyName = floorClassifyName;
+        var cityObj = $(floorClassifyName);
+        var cityOffset = $(floorClassifyName).offset();
         $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
         $("body").bind("mousedown", onBodyDown);
     }
@@ -536,44 +616,33 @@ UE.Editor.prototype.getActionUrl = function(action) {
         $("#menuContent").fadeOut("fast");
         $("body").unbind("mousedown", onBodyDown);
     }
-
-    function showGoodsClassification() {
-        var cityObj = $("#ggHomeNm");
-        var cityOffset = $("#ggHomeNm").offset();
-        $("#GoodsClassificationContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-        $("body").bind("mousedown", onBodyDown);
-    }
-    function hideGoodsClassification() {
-        $("#GoodsClassificationContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
-    }
-
     function onBodyDown(event) {
         if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
             hideMenu();
         }
-
-        if (!(event.target.id == "menuBtn" || event.target.id == "GoodsClassificationContent" || $(event.target).parents("#GoodsClassificationContent").length>0)) {
-            hideGoodsClassification();
-        }
     }
 
+
 </script>
+
 <script>
-    $(function () {
-        $("#isTopSwitch span").click(function () {
+    toastr.options = {
 
-            var flag =$("#editGoodsClassificationForm #isTop").bootstrapSwitch("state");
-
-            if(flag){
-                $("#parentNmElement").hide();
-            }else{
-                $("#parentNmElement").show();
-            }
-        });
-    });
+        closeButton: false,
+        debug: false,
+        progressBar: false,
+        positionClass: "toast-bottom-center",
+        onclick: null,
+        showDuration: "300",
+        hideDuration: "1000",
+        timeOut: "2000",
+        extendedTimeOut: "1000",
+        showEasing: "swing",
+        hideEasing: "linear",
+        showMethod: "fadeIn",
+        hideMethod: "fadeOut"
+    };
 </script>
-
 
 </body>
 </html>

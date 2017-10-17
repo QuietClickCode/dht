@@ -26,30 +26,31 @@ public class FloorManageController extends BaseController {
     FloorManageService floorManageService;
 
     @RequestMapping("/floorManageMapping")
-    @Menu(parentRes = "sys.manager.goods",resourse = "floorManage.floorManageMapping",description = "首页楼层管理",label = "楼层管理")
+    @Menu(parentRes = "sys.manager.floorManage",resourse = "floorManage.floorManageMapping",description = "首页楼层管理",label = "楼层管理")
     public String floorManage(){
-        return "goods/floorManage";
+        return "navigation/floorManage";
     }
 
     @RequestMapping("/addFloor")
-    @Function(label = "添加楼层",description = "添加楼层",resourse = "goods.addFloor",sort = 3,parentRes = "floorManage.floorManageMapping")
+    @Function(label = "添加楼层",description = "添加楼层",resourse = "floorManage.addFloor",sort = 3,parentRes = "floorManage.floorManageMapping")
     @ResponseBody
-    public BaseResp addFloor(){
-        FloorManage manage = new FloorManage();
-        manage.setFlName("新鲜水果");
-        manage.setFlOrder(new Long(2));
-        boolean b = floorManageService.saveFloorManage(manage);
-        return success(b);
+    public BaseResp addFloor(FloorManage floorManage){
+        boolean flag = floorManageService.saveFloorManage(floorManage);
+        if (flag)
+            return success("新增楼层成功");
+        else
+            return success("新增楼层失败");
     }
 
     @RequestMapping("/updateFloor")
-    @Function(label = "编辑楼层",parentRes = "floorManage.floorManageMapping",resourse = "goods.UpdateFloor",description = "编辑楼层",sort = 2)
+    @Function(label = "编辑楼层",parentRes = "floorManage.floorManageMapping",resourse = "floorManage.UpdateFloor",description = "编辑楼层",sort = 2)
     @ResponseBody
     public BaseResp UpdateFloor(FloorManage floorManage){
         FloorManage manage = floorManageService.queryFloorManageByFlId(floorManage.getFlId());
         manage.setFlName(floorManage.getFlName());
         manage.setFlOrder(floorManage.getFlOrder());
         manage.setIsShow(floorManage.getIsShow());
+        manage.setParentId(floorManage.getParentId());
         boolean flag = floorManageService.updateFloorManage(manage);
         if (flag)
             return success("修改楼层[" + floorManage.getFlName() + "]成功");
@@ -58,7 +59,7 @@ public class FloorManageController extends BaseController {
     }
 
     @RequestMapping("/deleteFloor")
-    @Function(label = "删除楼层",parentRes = "floorManage.floorManageMapping",resourse = "goods.deleteFloor",description = "删除楼层",sort = 2)
+    @Function(label = "删除楼层",parentRes = "floorManage.floorManageMapping",resourse = "floorManage.deleteFloor",description = "删除楼层",sort = 2)
     @ResponseBody
     public BaseResp deleteFloor(Long flId){
         boolean flag = floorManageService.deleteFloorManageByFlId(flId);
@@ -66,7 +67,7 @@ public class FloorManageController extends BaseController {
     }
 
     @RequestMapping("/queryFloorsLists")
-    @Function(label = "查询所有楼层",parentRes = "floorManage.floorManageMapping",resourse = "goods.queryFloorsLists",description = "查询所有楼层",sort = 2)
+    @Function(label = "查询所有楼层",parentRes = "floorManage.floorManageMapping",resourse = "floorManage.queryFloorsLists",description = "查询所有楼层",sort = 2)
     @ResponseBody
     public Map<String,Object> queryFloorsListsTest(){
         List<FloorManageVo> floorManageVos = floorManageService.queryFloorTree();
@@ -74,5 +75,12 @@ public class FloorManageController extends BaseController {
         rtn.put("total",1000);
         rtn.put("rows",floorManageVos);
         return rtn;
+    }
+
+    @RequestMapping("/queryFloorManageNode")
+    @ResponseBody
+    public BaseResp queryFloorManageNode(Long flId){
+        List<FloorManageVo> floors = floorManageService.queryFloorNode(flId);
+        return success(floors);
     }
 }
