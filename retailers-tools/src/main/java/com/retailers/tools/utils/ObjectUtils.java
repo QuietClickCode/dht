@@ -1,6 +1,6 @@
 package com.retailers.tools.utils;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -8,6 +8,10 @@ public class ObjectUtils {
 
 
 	public static void main(String[] p) {
+		List<String> list =new ArrayList<String>();
+		Map map =new HashMap();
+		 map =new TreeMap();
+		Set set=new HashSet();
 	}
 
 	public static boolean isEquals(Object object1, Object object2) {
@@ -55,11 +59,15 @@ public class ObjectUtils {
 	public static boolean isEmpty(Object obj) {
 		if (obj == null)
 			return true;
-
 		if (obj instanceof Collection) {
 			return ((Collection<?>) obj).isEmpty();
 		}
-
+		if (obj instanceof HashMap) {
+			return ((HashMap<?,?>) obj).isEmpty();
+		}
+		if (obj instanceof TreeMap) {
+			return ((TreeMap<?,?>) obj).isEmpty();
+		}
 		if (obj instanceof String) {
 			return ((String) obj).equalsIgnoreCase("null") | ((String) obj).trim().isEmpty();
 		}

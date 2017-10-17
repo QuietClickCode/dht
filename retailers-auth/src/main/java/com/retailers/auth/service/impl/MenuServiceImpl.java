@@ -54,10 +54,10 @@ public class MenuServiceImpl implements MenuService {
 			res.add(bean.getResourse());
 			mapBeans.put(bean.getResourse(),bean);
 		}
-		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()){
+		if(ObjectUtils.isNotEmpty(resources)){
 			List<Menu> listMenus=menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_RES,resources);
 			Map<String,Menu> czMenu=new HashMap<String, Menu>();
-			if(ObjectUtils.isNotEmpty(listMenus)&&!listMenus.isEmpty()){
+			if(ObjectUtils.isNotEmpty(listMenus)){
 				for(Menu menu:listMenus){
 					czMenu.put(menu.getResourse(),menu);
 					pidMap.put(menu.getResourse(),menu.getId());
@@ -68,7 +68,7 @@ public class MenuServiceImpl implements MenuService {
 					}
 				}
 			}
-			if(!res.isEmpty()){
+			if(ObjectUtils.isNotEmpty(res)){
 				List<Menu> menus = new ArrayList<Menu>();
 				for(String str:res){
 					Menu m= new Menu();
@@ -129,7 +129,7 @@ public class MenuServiceImpl implements MenuService {
 			}
 			map.put(bean.getResourse(),bean);
 		}
-		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()) {
+		if(ObjectUtils.isNotEmpty(resources)) {
 			List<Menu> listMenus = menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_MENU, resources);
 			if(ObjectUtils.isNotEmpty(listMenus)){
 				for(Menu menu:listMenus){
@@ -141,7 +141,7 @@ public class MenuServiceImpl implements MenuService {
 				}
 			}
 			List<Menu> addMenus=new ArrayList<Menu>();
-			if(ObjectUtils.isNotEmpty(map)&&!map.isEmpty()){
+			if(ObjectUtils.isNotEmpty(map)){
 				for(String key:map.keySet()){
 					Menu menu = new Menu();
 					copyMenu(map.get(key),menu,MenuConstant.MENU_TYPE_MENU);
@@ -200,7 +200,7 @@ public class MenuServiceImpl implements MenuService {
 			}
 			map.put(bean.getResourse(),bean);
 		}
-		if(ObjectUtils.isNotEmpty(resources)&&!resources.isEmpty()) {
+		if(ObjectUtils.isNotEmpty(resources)) {
 			List<Menu> funs = menuMapper.queryMenuByResources(MenuConstant.MENU_TYPE_FUNCTION, resources);
 			if(ObjectUtils.isNotEmpty(funs)){
 				for(Menu menu:funs){
@@ -212,7 +212,7 @@ public class MenuServiceImpl implements MenuService {
 				}
 			}
 			List<Menu> addMenus=new ArrayList<Menu>();
-			if(ObjectUtils.isNotEmpty(map)&&!map.isEmpty()){
+			if(ObjectUtils.isNotEmpty(map)){
 				for(String key:map.keySet()){
 					Menu menu = new Menu();
 					copyFunction(map.get(key),menu,MenuConstant.MENU_TYPE_FUNCTION);
