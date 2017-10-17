@@ -2,34 +2,34 @@ package com.retailers.dht.common.entity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
- * 描述：主页楼层表对象
+ * 描述：主页导航表对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 14:20:57
+ * @date 2017-10-17 11:56:31
  */
 public class FloorManage implements java.io.Serializable {
 
-	/**flId*/
+	/**楼层ID*/
 	@NotEmpty
 	private Long flId;
-	/**flName*/
+	/**楼层名称*/
 	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String flName;
-	/**parentId*/
+	/**父类ID*/
 	@NotEmpty
 	private Long parentId;
-	/**flOrder*/
+	/**排序*/
 	@NotEmpty
 	private Long flOrder;
-	/**isShow*/
+	/**是否显示（0代表不显示，1代表显示）默认为1*/
 	@NotEmpty
 	private Long isShow;
-	/**isDelete*/
+	/**是否删除（0代表不删除，1代表删除）默认为0*/
 	@NotEmpty
 	private Long isDelete;
-	/**version*/
+	/**版本号*/
 	@NotEmpty
 	private Long version;
 	//columns END

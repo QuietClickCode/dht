@@ -48,9 +48,9 @@ public class HomeNavigationController extends BaseController {
     public BaseResp updateNavigatorBar(HomeNavigation navigation){
         boolean flag = homeNavigationService.updateHomeNavigation(navigation);
         if(flag)
-            return success("修改首页导航[" + navigation.getHnName() + "]成功");
+            return success("修改首页导航[" + navigation.getHnMianTitle() + "]成功");
         else
-            return errorForSystem("修改首页导航[" + navigation.getHnName() + "]失败");
+            return errorForSystem("修改首页导航[" + navigation.getHnMianTitle() + "]失败");
     }
 
     @RequestMapping("/removeNavigatorBar")

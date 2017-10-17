@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.HomeNavigationMapper">
+
+	<resultMap id="rm_homeNavigation" type="com.retailers.dht.common.entity.HomeNavigation">
+			<result property="hnId" column="hn_id"/>
+			<result property="hnName" column="hn_name"/>
+			<result property="hnMianTitle" column="hn_mian_title"/>
+			<result property="hnSubTitle" column="hn_subTitle"/>
+			<result property="hnStyle" column="hn_style"/>
+			<result property="hnClient" column="hn_client"/>
+			<result property="hnUrl" column="hn_url"/>
+			<result property="hnImgpath" column="hn_imgpath"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+			<result property="isShow" column="is_show"/>
+			<result property="hnOrder" column="hn_order"/>
+			<result property="hnCountry" column="hn_country"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="homeNavigation_columns">
+		hn_id,hn_name,hn_mian_title,hn_subTitle,hn_style,hn_client,hn_url,hn_imgpath,is_delete,version,is_show,hn_order,hn_country
+	</sql>
+	<!-- 根据主页导航表主键取得数据 -->
+	<select id="queryHomeNavigationByHnId" resultMap="rm_homeNavigation" parameterType="java.lang.Long">
+		SELECT <include refid="homeNavigation_columns" />
+		FROM t_home_navigation WHERE hn_id = #{hnId}
+	</select>
+	<!-- 主页导航表查询条件组合 -->
+	<sql id="homeNavigation_where">
+		<where>
+			<if test="null != params.hnId">
+				AND hn_id = #{params.hnId}
+			</if>
+			<if test="null != params.hnName and '' != params.hnName">
+				AND hn_name = #{params.hnName}
+			</if>
+			<if test="null != params.hnMianTitle and '' != params.hnMianTitle">
+				AND hn_mian_title = #{params.hnMianTitle}
+			</if>
+			<if test="null != params.hnSubTitle and '' != params.hnSubTitle">
+				AND hn_subTitle = #{params.hnSubTitle}
+			</if>
+			<if test="null != params.hnStyle">
+				AND hn_style = #{params.hnStyle}
+			</if>
+			<if test="null != params.hnClient">
+				AND hn_client = #{params.hnClient}
+			</if>
+			<if test="null != params.hnUrl and '' != params.hnUrl">
+				AND hn_url = #{params.hnUrl}
+			</if>
+			<if test="null != params.hnImgpath">
+				AND hn_imgpath = #{params.hnImgpath}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.hnOrder">
+				AND hn_order = #{params.hnOrder}
+			</if>
+			<if test="null != params.hnCountry">
+				AND hn_country = #{params.hnCountry}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryHomeNavigationList" resultMap="rm_homeNavigation" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="homeNavigation_columns" />
+		FROM t_home_navigation
+		<include refid="homeNavigation_where"/>
+	</select>
+	<!--添加主页导航表 -->
+	<insert id="saveHomeNavigation" parameterType="com.retailers.dht.common.entity.HomeNavigation" useGeneratedKeys="true" keyProperty="hnId">
+		INSERT INTO t_home_navigation (
+			hn_name,hn_mian_title,hn_subTitle,hn_style,hn_client,hn_url,hn_imgpath,is_delete,version,is_show,hn_order,hn_country
+		) VALUES
+		(
+			#{hnName,jdbcType=VARCHAR},#{hnMianTitle,jdbcType=VARCHAR},#{hnSubTitle,jdbcType=VARCHAR},#{hnStyle,jdbcType=BIGINT},#{hnClient,jdbcType=BIGINT},#{hnUrl,jdbcType=VARCHAR},#{hnImgpath,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0,#{isShow,jdbcType=BIGINT},#{hnOrder,jdbcType=BIGINT},#{hnCountry,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改主页导航表 -->
+	<update id="updateHomeNavigation" parameterType="com.retailers.dht.common.entity.HomeNavigation">
+		UPDATE t_home_navigation
+		<set>
+            <if test="null != hnName and '' != hnName">
+                hn_name = #{hnName},
+            </if>
+            <if test="null != hnMianTitle and '' != hnMianTitle">
+                hn_mian_title = #{hnMianTitle},
+            </if>
+            <if test="null != hnSubTitle and '' != hnSubTitle">
+                hn_subTitle = #{hnSubTitle},
+            </if>
+            <if test="null != hnStyle">
+                hn_style = #{hnStyle},
+            </if>
+            <if test="null != hnClient">
+                hn_client = #{hnClient},
+            </if>
+            <if test="null != hnUrl and '' != hnUrl">
+                hn_url = #{hnUrl},
+            </if>
+            <if test="null != hnImgpath">
+                hn_imgpath = #{hnImgpath},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != hnOrder">
+                hn_order = #{hnOrder},
+            </if>
+            <if test="null != hnCountry">
+                hn_country = #{hnCountry},
+            </if>
+		</set>
+		WHERE hn_id = #{hnId} and version = #{version}
+	</update>
+	<!--删除主页导航表 -->
+	<delete id="deleteHomeNavigationByHnId" parameterType="java.lang.Long">
+		DELETE FROM t_home_navigation WHERE hn_id = #{hnId}
+	</delete>
+</mapper>
