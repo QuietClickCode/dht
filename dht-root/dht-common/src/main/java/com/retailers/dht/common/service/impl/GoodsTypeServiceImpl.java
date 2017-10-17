@@ -44,7 +44,9 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 		return page;
 	}
 	public boolean deleteGoodsTypeByGtId(Long gtId) {
-		int status = goodsTypeMapper.deleteGoodsTypeByGtId(gtId);
+		GoodsType goodsType = goodsTypeMapper.queryGoodsTypeByGtId(gtId);
+		goodsType.setIsDelete(1L);
+		int status = goodsTypeMapper.updateGoodsType(goodsType);
 		return status == 1 ? true : false;
 	}
 }

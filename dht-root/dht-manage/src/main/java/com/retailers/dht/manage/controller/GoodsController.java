@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,7 +41,6 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public BaseResp editGoods(Goods goods){
         boolean flag = goodsService.updateGoods(goods);
-        System.out.println(goods.getGmaindirection());
         if(flag){
             return success("修改商品["+goods.getGname()+"]成功");
         }else{
@@ -62,6 +62,7 @@ public class GoodsController extends BaseController {
     public  Map<String,Object> queryGoodsLists(String gname,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gname",gname);
+        map.put("isDelete",0);
         Pagination<GoodsVo> GoodsPagination = goodsService.queryGoodsList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsPagination.getTotalCount());
@@ -72,15 +73,16 @@ public class GoodsController extends BaseController {
     @RequestMapping("/addGoods")
     @Function(label="增加商品", description = "增加商品", resourse = "goods.addGoods",parentRes="goods.openGoods")
     @ResponseBody
-    public Map<String,Object> addGoods(Goods goods){
-        Goods returnGoods=goodsService.saveGoods(goods);
+    public Map<String,Object> addGoods(Goods goods, HttpServletRequest request){
+        goods.setIsDelete(0L);
+        goods.setIsChecked(0L);
+        Goods returnGoods=goodsService.saveGoods(goods,getCurLoginUserId(request));
         Map<String,Object> gtm = new HashMap<String,Object>();
         if (returnGoods==null){
             gtm.put("error","新增失败！");
         }else {
             gtm.put("goods",returnGoods);
         }
-        System.out.println(returnGoods.getGid());
         return gtm;
     }
 

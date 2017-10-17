@@ -41,7 +41,9 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 		return page;
 	}
 	public boolean deleteGoodsLabelByGlId(Long glId) {
-		int status = goodsLabelMapper.deleteGoodsLabelByGlId(glId);
+		GoodsLabel goodsLabel = goodsLabelMapper.queryGoodsLabelByGlId(glId);
+		goodsLabel.setIsDelete(1L);
+		int status = goodsLabelMapper.updateGoodsLabel(goodsLabel);
 		return status == 1 ? true : false;
 	}
 }

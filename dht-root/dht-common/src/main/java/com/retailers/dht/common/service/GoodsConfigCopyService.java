@@ -8,7 +8,7 @@ import java.util.Map;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 10:37:11
+ * @date 2017-10-16 17:33:04
  */
 public interface GoodsConfigCopyService {
 
@@ -17,7 +17,7 @@ public interface GoodsConfigCopyService {
 	 * @param goodsConfigCopy
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public boolean saveGoodsConfigCopy(GoodsConfigCopy goodsConfigCopy);
 	/**
@@ -33,7 +33,7 @@ public interface GoodsConfigCopyService {
 	 * @param gccId
 	 * @return goodsConfigCopy
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public GoodsConfigCopy queryGoodsConfigCopyByGccId(Long gccId);
 	/**
@@ -43,7 +43,7 @@ public interface GoodsConfigCopyService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public Pagination<GoodsConfigCopy> queryGoodsConfigCopyList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface GoodsConfigCopyService {
 	 * @param gccId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 10:37:11
+	 * @date 2017-10-16 17:33:04
 	 */
 	public boolean deleteGoodsConfigCopyByGccId(Long gccId);
 

@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 17:30:11
+ * @date 2017-10-16 17:32:08
  */
 public class GoodsCopy implements java.io.Serializable {
 
@@ -76,6 +76,9 @@ public class GoodsCopy implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 20)
 	private String gunitname;
+	/**操作人ID*/
+	@NotEmpty
+	private Long guploadperson;
 	/**是否通过审核 0未审核 1已审核 2未通过审核*/
 	@NotEmpty
 	private Long isChecked;
@@ -226,6 +229,13 @@ public class GoodsCopy implements java.io.Serializable {
 
 	public String getGunitname() {
 		return this.gunitname;
+	}
+	public void setGuploadperson(Long value) {
+		this.guploadperson = value;
+	}
+
+	public Long getGuploadperson() {
+		return this.guploadperson;
 	}
 	public void setIsChecked(Long value) {
 		this.isChecked = value;

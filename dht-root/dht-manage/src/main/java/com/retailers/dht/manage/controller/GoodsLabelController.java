@@ -60,6 +60,7 @@ public class GoodsLabelController extends BaseController {
     public  Map<String,Object> queryGoodsLabelLists(String gbName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gbName",gbName);
+        map.put("isDelete",0);
         Pagination<GoodsLabel> GoodsLabelPagination = goodsLabelService.queryGoodsLabelList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsLabelPagination.getTotalCount());

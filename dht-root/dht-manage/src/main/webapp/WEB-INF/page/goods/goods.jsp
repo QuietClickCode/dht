@@ -21,6 +21,7 @@
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
 
+
 </head>
 <body>
 <script type="text/plain" id="j_ueditorupload" style="height:5px;display:none;" ></script>
@@ -40,6 +41,16 @@
         {
             console.log(arg);
             console.log(t);
+
+            for(var i=0; i<arg.length; i++){
+                var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+                                '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
+                                '<div onclick="deleteGoodsImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+                                '</div>';
+                $('#uploadImgBtn').before(imgdiv);
+                newImgArr.push(arg[i].alt);
+            }
+
 
             //alert('这是图片地址：'+arg[0].src);
         });
@@ -125,14 +136,17 @@
                             <div class="tabbable" id="tabs-44711">
                                 <ul class="nav nav-tabs" >
                                     <li class="active" id="navfirstli">
-                                        <a href="#panel-961258" data-toggle="tab" id="navfirsta">基本信息</a>
+                                        <a href="#goodsPane" data-toggle="tab" id="nava1">基本信息</a>
                                     </li>
                                     <li>
-                                        <a href="#panel-694947" data-toggle="tab" onclick="initGoodsConfigForm(this);">商品配置</a>
+                                        <a href="#goodsConfigPane" data-toggle="tab" onclick="initGoodsConfigForm(this);" id="nava2">商品配置</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsImagePane" data-toggle="tab" onclick="initGoodsImages();" id="nava3">商品图片</a>
                                     </li>
                                 </ul>
                                     <div class="tab-content">
-                                        <div class="tab-pane active" id="panel-961258">
+                                        <div class="tab-pane active" id="goodsPane">
                                             <div class="modal-body" style="position: relative">
                                                 <form id="editorGoodsForm">
                                                     <input type="hidden" name="gid" id="gid">
@@ -286,9 +300,12 @@
 
                                             </div>
                                         </div>
-                                        <div class="tab-pane" id="panel-694947">
+                                        <div class="tab-pane" id="goodsConfigPane">
                                             <div class="modal-body">
                                                 <form id="editorGoodsConfigForm">
+                                                    <input id="gcId" name="gcId" type="hidden">
+                                                    <input id="gcgid" name="gid" type="hidden">
+                                                    <input id="configversion" name="configversion" type="hidden">
                                                     <div class="row">
                                                         <div class="col-lg-12">
                                                             <div class="input-group form-group">
@@ -395,7 +412,7 @@
                                                           <span class="input-group-addon">
                                                               预计发货时间:
                                                           </span>
-                                                                <input id="gedt" name="gedt" type="text" class="form-control"/>
+                                                                <input id="gedt" name="gedts" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -468,9 +485,31 @@
                                             </div>
 
                                         </div>
+                                        <div class="tab-pane" id="goodsImagePane">
+                                            <div class="modal-body">
+                                                <form id="editorGoodsImageForm">
+                                                    <input id="giId" name="giId" type="hidden">
+                                                    <input id="giversion" name="giversion" type="hidden">
+                                                    <div class="row">
+                                                        <div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <img src="" style="width: 100%;height: 100%;" >
+                                                            <div onclick="deleteGoodsImage(this,goodsImageId)" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>
+                                                        </div>
+
+                                                        <div id="uploadImgBtn"  style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <center>
+                                                                <button onclick="upImage();return false;" class="btn btn-default" style="margin: 0 auto;margin-top: 33px">+</button>
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <center>
+                                                    <button id="editGoodsImageSubmit" class="btn btn-success" >保存</button>
+                                                </center>
+                                            </div>
+                                        </div>
+
                                     </div>
-
-
                             </div>
                         </div>
                     </div>
@@ -655,15 +694,24 @@
                 success:function(data){
                     layer.close(editSubmitIndex);
 
-                    var goods = data.goods;
-
-                    if(goods==null){
-                        toastr.error("操作失败！");
+                    if(url=='/goods/addGoods'){
+                        var goods = data.goods;
+                        if(goods==null){
+                            toastr.error("操作失败！");
+                        }else{
+                            toastr.success("操作成功！");
+                            $('#gid').val(goods.gid);
+                            refreshTableData();
+                        }
                     }else{
-                        toastr.success("操作成功！");
-                        $('#gid').val(goods.gid);
-                        refreshTableData();
+                        if(data.status==0){
+                            toastr.success("操作成功！");
+                            $('#version').val(parseInt($('#version').val()) +1);
+                        }else{
+                            toastr.error("操作失败！");
+                        }
                     }
+
 
 
                 }
@@ -765,7 +813,7 @@
      * */
     function clearFormData(){
         $("#gid").val('');
-        $("#version").val('');
+        $("#version").val('0');
         $("#isDelete").val('0');
         $("#gname").val('');
         $("#gclassification").val('');
@@ -781,8 +829,10 @@
         $("#gpickperson").val('');
         $("#gmaindirection").val('0');
         $('#maincomtrayside').get(0).checked=true;
-        $("#ueditor_1").find("body").html('');
+        UE.getEditor('editor').setContent('', false);
 
+        $('#gcId').val('');
+        $('#configversion').val('0s');
         $("#gfreight").val('');
         $("#gstartbuy").val('');
         $("#gendbuy").val('');
@@ -821,7 +871,7 @@
      * */
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
-        document.getElementById("navfirsta").click();
+        document.getElementById("nava1").click();
         if(rowData){
             $("#gid").val(rowData.gid);
             $("#version").val(rowData.version);
@@ -883,10 +933,9 @@
 <!--百度编辑器-->
 <script>
     var ue = UE.getEditor('editor');
-
 </script>
 
-<!--自定义-->
+<!--商品配置-->
 <script>
     $(function () {
         $('#isServicegoods').siblings().click(function () {
@@ -920,10 +969,11 @@
         $('#editGoodsConfigSubmit').click(function () {
             var formData=$("#editorGoodsConfigForm").serializeObject();
 
+            formData["version"]=$('#configversion').val();
             var gid = $('#gid').val();
             if(gid==null || gid==''){
                 toastr.warning('请保存商品基本信息！');
-                document.getElementById('navfirsta').click();
+                document.getElementById('nava1').click();
                 return;
             }else{
                 formData["gid"]=gid;
@@ -931,12 +981,16 @@
 
             var flag = $("#isServicegoods").bootstrapSwitch("state");
             if(flag){
+                formData["isServicegoods"]=1;
                 formData["isAllowsetdeliverytime"]=1;
                 formData["isAdvancesale"]=0;
-                formData["gedt"]=null;
+                formData["gedts"]='';
                 formData["gfreight"]=null;
                 formData["isCod"]=null;
             }else{
+                formData["isServicegoods"]=0;
+                formData["gedts"]=$('#gedt').val();
+
                 flag = $("#isAllowsetdeliverytime").bootstrapSwitch("state");
                 if(flag){
                     formData["isAllowsetdeliverytime"]=1;
@@ -949,10 +1003,10 @@
                     formData["isAdvancesale"]=1;
                 }else{
                     formData["isAdvancesale"]=0;
-                    formData["gedt"]=null;
+                    formData["gedt"]='';
                 }
 
-                formData["gdeposit"]=null;
+                formData["gdeposit"]='';
 
             }
 
@@ -993,6 +1047,7 @@
                     if(data.status==0){
                         //显示提示
                         toastr.success('操作成功！');
+                        document.getElementById('nava2').click();
                     }else{
                         toastr.error('操作失败！');
                     }
@@ -1020,6 +1075,10 @@
             success:function(data){
                 var goodsConfig = data.goodsConfig;
                 if(goodsConfig==null){
+
+                    $('#gcId').val('');
+                    $('#gcgid').val();
+                    $('#configversion').val('');
                     $("#gfreight").val('');
                     $("#gstartbuy").val('');
                     $("#gendbuy").val('');
@@ -1052,6 +1111,8 @@
                     $("#isMultiplebuy").val('');
                     $('#isMultiplebuy').removeAttr('checked');
                 }else{
+                    $('#gcId').val(goodsConfig.gcId);
+                    $('#gcgid').val(goodsConfig.gid);
                     $("#gfreight").val(goodsConfig.gfreight);
                     $("#gstartbuy").val(goodsConfig.gstartbuy);
                     $("#gendbuy").val(goodsConfig.gendbuy);
@@ -1059,6 +1120,7 @@
                     $("#gedt").val(goodsConfig.gedt);
                     $("#gprofitability").val(goodsConfig.gprofitability);
                     $("#gdeposit").val(goodsConfig.gdeposit);
+                    $('#configversion').val(goodsConfig.version);
 
                     var flag;
 
@@ -1089,9 +1151,6 @@
                     $("#isShowsalesvolume").val(goodsConfig.isShowsalesvolume);
                     if(goodsConfig.isShowsalesvolume==1){
                         flag = true;
-                        $('#gsalesvolumediv').show();
-                    }else{
-                        $('#gsalesvolumediv').hide();
                     }
                     $("#isShowsalesvolume").bootstrapSwitch("state",flag);
 
@@ -1136,6 +1195,122 @@
 
             }
         });
+    }
+</script>
+
+<!--商品图片-->
+<script>
+
+    function initGoodsImages() {
+        $('#uploadImgBtn').prevAll().remove();
+
+        var gid = $('#gid').val();
+        if(gid=='' || gid==null){
+            return;
+        }
+
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsImages",
+            dataType: "json",
+            data:{gid:gid,pageNo:1,pageSize:100},
+            success:function(data){
+                var goodsImages = data.goodsImages;
+                if(goodsImages!=null && goodsImages.length>0){
+                    for(var i=0; i<goodsImages.length; i++){
+                        var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+                            '<img src="'+goodsImages[i].imgUrl+'" style="width: 100%;height: 100%;" >'+
+                            '<div onclick="deleteGoodsImage(this,'+goodsImages[i].giId+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+                            '</div>';
+                        $('#uploadImgBtn').before(imgdiv);
+                    }
+                }
+            }
+        });
+    }
+
+    $('#editGoodsImageSubmit').click(function () {
+        if(deleteArr.length>0 && newImgArr.length>0){
+            for (var i=0; i<deleteArr.length; i++){
+                for(var j=0; j<newImgArr.length; j++){
+                    if(deleteArr[i]==newImgArr[j]){
+                        newImgArr.remove(j);
+                        deleteArr.remove(i);
+                    }
+                }
+            }
+        }else if(deleteArr.length==0 && newImgArr.length==0){
+            toastr.warning('您不存在修改操作！');
+        }
+
+        var gid = $('#gid').val();
+        if(gid==null || gid==''){
+            toastr.warning('请保存商品基本信息！');
+            document.getElementById('nava1').click();
+            return;
+        }
+
+        <!--新增商品图片-->
+        if (newImgArr.length>0){
+            for(var i=0; i<newImgArr.length; i++){
+                $.ajax({
+                    type:"post",
+                    url:"/goods/addGoodsImage",
+                    dataType: "json",
+                    data:{gid:gid,giId:newImgArr[i]},
+                    success:function(data){
+                        if(data.status==0){
+                            //显示提示
+                            toastr.success('操作成功！');
+                        }else{
+                            toastr.error('操作失败！');
+                        }
+                    }
+                });
+            }
+        }
+
+        <!--删除商品图片-->
+        if(deleteArr.length>0){
+            for(var i=0; i<deleteArr.length; i++){
+                $.ajax({
+                    type:"post",
+                    url:"/goods/removeGoodsImage",
+                    dataType: "json",
+                    data:{giId:deleteArr[i]},
+                    success:function(data){
+                        if(data.status==0){
+                            //显示提示
+                            toastr.success('操作成功！');
+                        }else{
+                            toastr.error('操作失败！');
+                        }
+                    }
+                });
+            }
+
+        }
+
+        deleteArr=[];
+        newImgArr=[];
+    });
+
+    var deleteArr = new Array();
+    var newImgArr = new Array();
+
+    <!--点击删除按钮-->
+    function deleteGoodsImage(obj,goodsImgId) {
+        $(obj).parent().hide();
+        deleteArr.push(goodsImgId);
+    }
+
+    <!--显示商品删除按钮-->
+    function showDeleteImage(obj) {
+        $(obj).find('div').show();
+    }
+    <!--隐藏商品删除按钮-->
+    function hideDeleteImage(obj) {
+        $(obj).find('div').hide();
     }
 </script>
 
@@ -1232,7 +1407,7 @@
         onclick: null,
         showDuration: "300",
         hideDuration: "1000",
-        timeOut: "2000",
+        timeOut: "4000",
         extendedTimeOut: "1000",
         showEasing: "swing",
         hideEasing: "linear",

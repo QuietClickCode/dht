@@ -124,27 +124,24 @@
             <if test="null != gid">
                 g_id = #{gid},
             </if>
-            <if test="null != gsalesvolume">
+
                 g_salesvolume = #{gsalesvolume},
-            </if>
-            <if test="null != gfreight">
+
                 g_freight = #{gfreight},
-            </if>
-            <if test="null != gdeposit">
+
                 g_deposit = #{gdeposit},
-            </if>
+
             <if test="null != gedt">
                 g_edt = #{gedt},
             </if>
             <if test="null != gprofitability">
                 g_profitability = #{gprofitability},
             </if>
-            <if test="null != gstartbuy">
+
                 g_startbuy = #{gstartbuy},
-            </if>
-            <if test="null != gendbuy">
+
                 g_endbuy = #{gendbuy},
-            </if>
+
             <if test="null != gcCopyid">
                 gc_copyid = #{gcCopyid},
             </if>
@@ -179,7 +176,7 @@
                 version = version+1,
             </if>
 		</set>
-		WHERE gc_id = #{gcId} and version = #{version}
+		WHERE g_id = #{gid} and version = #{version}
 	</update>
 	<!--删除商品配置表 -->
 	<delete id="deleteGoodsConfigByGcId" parameterType="java.lang.Long">

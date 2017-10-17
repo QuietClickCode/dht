@@ -59,7 +59,6 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<GoodsBrandVo> list = goodsBrandMapper.queryGoodsBrandList(page);
-		System.out.println(list.get(0).getImgUrl());
 		if(!ObjectUtils.isEmpty(list)){
 			for (int i=0; i<list.size(); i++){
 				GoodsBrandVo g = list.get(i);
@@ -75,7 +74,8 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
 		if(!ObjectUtils.isEmpty(goodsBrand.getGbImgpath())){
 			attachmentService.editorAttachment(Long.parseLong(goodsBrand.getGbImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
-		int status = goodsBrandMapper.deleteGoodsBrandByGbId(gbId);
+		goodsBrand.setIsDelete(1L);
+		int status = goodsBrandMapper.updateGoodsBrand(goodsBrand);
 		return status == 1 ? true : false;
 	}
 }

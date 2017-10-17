@@ -20,7 +20,7 @@ public interface GoodsService {
 	 * @author fanghui
 	 * @date 2017-10-12 17:29:40
 	 */
-	public Goods saveGoods(Goods goods);
+	public Goods saveGoods(Goods goods,Long uploadpersonId);
 	/**
 	 * 编辑商品表
 	 * @param goods

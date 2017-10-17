@@ -60,6 +60,7 @@ public class GoodsSpecificationController extends BaseController {
     public  Map<String,Object> queryGoodsSpecificationLists(String gsName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gsName",gsName);
+        map.put("isDelete",0);
         Pagination<GoodsSpecification> GoodsSpecificationPagination = goodsSpecificationService.queryGoodsSpecificationList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsSpecificationPagination.getTotalCount());

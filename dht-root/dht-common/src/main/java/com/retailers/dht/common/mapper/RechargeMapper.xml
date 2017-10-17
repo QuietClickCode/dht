@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.RechargeMapper">
+
+	<resultMap id="rm_recharge" type="com.retailers.dht.common.entity.Recharge">
+			<result property="rid" column="r_id"/>
+			<result property="rname" column="r_name"/>
+			<result property="rlogo" column="r_logo"/>
+			<result property="rprice" column="r_price"/>
+			<result property="rdiscount" column="r_discount"/>
+			<result property="rcashback" column="r_cashback"/>
+			<result property="rcreateDate" column="r_create_date"/>
+			<result property="rcreateSid" column="r_create_sid"/>
+			<result property="rsnapshot" column="r_snapshot"/>
+			<result property="isValid" column="is_valid"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_recharge_vo" type="com.retailers.dht.common.vo.RechargeVo">
+		<result property="rid" column="r_id"/>
+		<result property="rname" column="r_name"/>
+		<result property="rlogo" column="r_logo"/>
+		<result property="rlogoUrl" column="r_logo_url"/>
+		<result property="rprice" column="r_price"/>
+		<result property="rdiscount" column="r_discount"/>
+		<result property="rcashback" column="r_cashback"/>
+		<result property="rcreateDate" column="r_create_date"/>
+		<result property="rcreateSid" column="r_create_sid"/>
+		<result property="rsnapshot" column="r_snapshot"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="recharge_columns">
+		r_id,r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
+	</sql>
+	<!-- 根据充值管理主键取得数据 -->
+	<select id="queryRechargeByRid" resultMap="rm_recharge" parameterType="java.lang.Long">
+		SELECT <include refid="recharge_columns" />
+		FROM t_recharge WHERE r_id = #{rid}
+	</select>
+	<!-- 充值管理查询条件组合 -->
+	<sql id="recharge_where">
+		<where>
+			<if test="null != params.rid">
+				AND r_id = #{params.rid}
+			</if>
+			<if test="null != params.rname and '' != params.rname">
+				AND r_name = #{params.rname}
+			</if>
+			<if test="null != params.rlogo">
+				AND r_logo = #{params.rlogo}
+			</if>
+			<if test="null != params.rprice">
+				AND r_price = #{params.rprice}
+			</if>
+			<if test="null != params.rdiscount">
+				AND r_discount = #{params.rdiscount}
+			</if>
+			<if test="null != params.rcashback">
+				AND r_cashback = #{params.rcashback}
+			</if>
+			<if test="null != params.rcreateDateBegin">
+				AND r_create_date &gt;= TO_DATE('${params.rcreateDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.rcreateDateEnd">
+				AND r_create_date &lt;= TO_DATE('${params.rcreateDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.rcreateSid">
+				AND r_create_sid = #{params.rcreateSid}
+			</if>
+			<if test="null != params.rsnapshot and '' != params.rsnapshot">
+				AND r_snapshot = #{params.rsnapshot}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryRechargeList" resultMap="rm_recharge_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT r.*,a.show_url r_logo_url FROM t_recharge r LEFT JOIN t_attachment a on r.r_logo=a.id
+		<where>
+			<if test="null != params.rName and '' != params.rName">
+				AND r.r_name = #{params.rName}
+			</if>
+			<if test="null != params.rcashback">
+				AND r.r_cashback = #{params.rcashback}
+			</if>
+			<if test="null != params.isValid">
+				AND r.is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+		</where>
+	</select>
+	<!--添加充值管理 -->
+	<insert id="saveRecharge" parameterType="com.retailers.dht.common.entity.Recharge" useGeneratedKeys="true" keyProperty="rid">
+		INSERT INTO t_recharge (
+			r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
+		) VALUES
+		(
+			#{rname,jdbcType=VARCHAR},#{rlogo,jdbcType=BIGINT},#{rprice,jdbcType=BIGINT},#{rdiscount,jdbcType=BIGINT},#{rcashback,jdbcType=INTEGER},#{rcreateDate,jdbcType=TIMESTAMP},#{rcreateSid,jdbcType=BIGINT},#{rsnapshot,jdbcType=VARCHAR},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改充值管理 -->
+	<update id="updateRecharge" parameterType="com.retailers.dht.common.entity.Recharge">
+		UPDATE t_recharge
+		<set>
+            <if test="null != rname and '' != rname">
+                r_name = #{rname},
+            </if>
+            <if test="null != rlogo">
+                r_logo = #{rlogo},
+            </if>
+            <if test="null != rprice">
+                r_price = #{rprice},
+            </if>
+            <if test="null != rdiscount">
+                r_discount = #{rdiscount},
+            </if>
+            <if test="null != rcashback">
+                r_cashback = #{rcashback},
+            </if>
+            <if test="null != rcreateDate">
+                r_create_date = #{rcreateDate},
+            </if>
+            <if test="null != rcreateSid">
+                r_create_sid = #{rcreateSid},
+            </if>
+            <if test="null != rsnapshot and '' != rsnapshot">
+                r_snapshot = #{rsnapshot},
+            </if>
+            <if test="null != isValid">
+                is_valid = #{isValid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE r_id = #{rid} and version = #{version}
+	</update>
+	<!--删除充值管理 -->
+	<delete id="deleteRechargeByRid" parameterType="java.lang.Long">
+		DELETE FROM t_recharge WHERE r_id = #{rid}
+	</delete>
+</mapper>

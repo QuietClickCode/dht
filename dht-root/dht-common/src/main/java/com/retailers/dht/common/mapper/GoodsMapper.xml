@@ -67,70 +67,70 @@
 	<sql id="goods_where">
 		<where>
 			<if test="null != params.gid">
-				AND g_id = #{params.gid}
+				AND t1.g_id = #{params.gid}
 			</if>
 			<if test="null != params.gname and '' != params.gname">
-				AND g_name = #{params.gname}
+				AND t1.g_name = #{params.gname}
 			</if>
 			<if test="null != params.gvender">
-				AND g_vender = #{params.gvender}
+				AND t1.g_vender = #{params.gvender}
 			</if>
 			<if test="null != params.gshop">
-				AND g_shop = #{params.gshop}
+				AND t1.g_shop = #{params.gshop}
 			</if>
 			<if test="null != params.gclassification">
-				AND g_classification = #{params.gclassification}
+				AND t1.g_classification = #{params.gclassification}
 			</if>
 			<if test="null != params.gbrand">
-				AND g_brand = #{params.gbrand}
+				AND t1.g_brand = #{params.gbrand}
 			</if>
 			<if test="null != params.garea">
-				AND g_area = #{params.garea}
+				AND t1.g_area = #{params.garea}
 			</if>
 			<if test="null != params.gsalescope">
-				AND g_salescope = #{params.gsalescope}
+				AND t1.g_salescope = #{params.gsalescope}
 			</if>
 			<if test="null != params.gmaindirection">
-				AND g_maindirection = #{params.gmaindirection}
+				AND t1.g_maindirection = #{params.gmaindirection}
 			</if>
 			<if test="null != params.gdescription and '' != params.gdescription">
-				AND g_description = #{params.gdescription}
+				AND t1.g_description = #{params.gdescription}
 			</if>
 			<if test="null != params.gproductioninperson and '' != params.gproductioninperson">
-				AND g_productioninperson = #{params.gproductioninperson}
+				AND t1.g_productioninperson = #{params.gproductioninperson}
 			</if>
 			<if test="null != params.gproductioninaddress and '' != params.gproductioninaddress">
-				AND g_productioninaddress = #{params.gproductioninaddress}
+				AND t1.g_productioninaddress = #{params.gproductioninaddress}
 			</if>
 			<if test="null != params.gpickperson and '' != params.gpickperson">
-				AND g_pickperson = #{params.gpickperson}
+				AND t1.g_pickperson = #{params.gpickperson}
 			</if>
 			<if test="null != params.gpickaddress and '' != params.gpickaddress">
-				AND g_pickaddress = #{params.gpickaddress}
+				AND t1.g_pickaddress = #{params.gpickaddress}
 			</if>
 			<if test="null != params.gcopyid">
-				AND g_copyid = #{params.gcopyid}
+				AND t1.g_copyid = #{params.gcopyid}
 			</if>
 			<if test="null != params.gprice">
-				AND g_price = #{params.gprice}
+				AND t1.g_price = #{params.gprice}
 			</if>
 			<if test="null != params.gcheckperson">
-				AND g_checkperson = #{params.gcheckperson}
+				AND t1.g_checkperson = #{params.gcheckperson}
 			</if>
 			<if test="null != params.gcheckmessage and '' != params.gcheckmessage">
-				AND g_checkmessage = #{params.gcheckmessage}
+				AND t1.g_checkmessage = #{params.gcheckmessage}
 			</if>
 			<if test="null != params.gunitname and '' != params.gunitname">
-				AND g_unitname = #{params.gunitname}
+				AND t1.g_unitname = #{params.gunitname}
 			</if>
 			<if test="null != params.isChecked">
-				AND is_checked = #{params.isChecked}
+				AND t1.is_checked = #{params.isChecked}
 			</if>
 			<if test="null != params.isDelete">
-				AND is_delete = #{params.isDelete}
+				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
-				AND version = #{params.version}
+				AND t1.version = #{params.version}
 			</if>
 		</where>
 	</sql>
@@ -167,33 +167,31 @@
             <if test="null != gclassification">
                 g_classification = #{gclassification},
             </if>
-            <if test="null != gbrand">
+
                 g_brand = #{gbrand},
-            </if>
-            <if test="null != garea">
+
                 g_area = #{garea},
-            </if>
-            <if test="null != gsalescope">
+
                 g_salescope = #{gsalescope},
-            </if>
+
             <if test="null != gmaindirection">
                 g_maindirection = #{gmaindirection},
             </if>
-            <if test="null != gdescription and '' != gdescription">
+
                 g_description = #{gdescription},
-            </if>
-            <if test="null != gproductioninperson and '' != gproductioninperson">
+
+
                 g_productioninperson = #{gproductioninperson},
-            </if>
-            <if test="null != gproductioninaddress and '' != gproductioninaddress">
+
+
                 g_productioninaddress = #{gproductioninaddress},
-            </if>
-            <if test="null != gpickperson and '' != gpickperson">
+
+
                 g_pickperson = #{gpickperson},
-            </if>
-            <if test="null != gpickaddress and '' != gpickaddress">
+
+
                 g_pickaddress = #{gpickaddress},
-            </if>
+
             <if test="null != gcopyid">
                 g_copyid = #{gcopyid},
             </if>

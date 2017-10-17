@@ -5,11 +5,13 @@
 	<resultMap id="rm_goodsSpecification" type="com.retailers.dht.common.entity.GoodsSpecification">
 			<result property="gsId" column="gs_id"/>
 			<result property="gsName" column="gs_name"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsSpecification_columns">
-		gs_id,gs_name
+		gs_id,gs_name,is_delete,version
 	</sql>
 	<!-- 根据商品规格表主键取得数据 -->
 	<select id="queryGoodsSpecificationByGsId" resultMap="rm_goodsSpecification" parameterType="java.lang.Long">
@@ -25,6 +27,12 @@
 			<if test="null != params.gsName and '' != params.gsName">
 				AND gs_name = #{params.gsName}
 			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
@@ -36,10 +44,10 @@
 	<!--添加商品规格表 -->
 	<insert id="saveGoodsSpecification" parameterType="com.retailers.dht.common.entity.GoodsSpecification" useGeneratedKeys="true" keyProperty="gsId">
 		INSERT INTO t_goods_specification (
-			gs_name
+			gs_name,is_delete,version
 		) VALUES
 		(
-			#{gsName,jdbcType=VARCHAR}
+			#{gsName,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品规格表 -->
@@ -49,8 +57,14 @@
             <if test="null != gsName and '' != gsName">
                 gs_name = #{gsName},
             </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
 		</set>
-		WHERE gs_id = #{gsId}
+		WHERE gs_id = #{gsId} and version = #{version}
 	</update>
 	<!--删除商品规格表 -->
 	<delete id="deleteGoodsSpecificationByGsId" parameterType="java.lang.Long">

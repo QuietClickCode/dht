@@ -40,6 +40,8 @@
             $('#ggImgpath').val(arg[0].alt);
             $('#goodsClassificationImg')[0].src=arg[0].src;
             $('#editGoodsClassification').modal('show');
+            $('#goodsClassificationImg').show();
+            $('#goodsClassificationImgSpan').hide();
             //alert('这是图片地址：'+arg[0].src);
         });
 
@@ -170,9 +172,23 @@
                               <span class="input-group-addon">
                                 图片:
                               </span>
-                                        <input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>
-                                        <img style="width: 50px;"src="" id="goodsClassificationImg" />
-                                        <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
+                                <input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>
+                                <img style="width: 50px;"src="" id="goodsClassificationImg" />
+                                <span id="goodsClassificationImgSpan" style="display: none;">无图片</span>
+                                <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="col-lg-12">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                是否显示:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0" id="isShowSwitch">
+                                        <input id="isShow" name="isTop" type="checkbox" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -284,9 +300,20 @@
                 title: '所属大类'
 
             },{
+                field: 'isShow',
+                title: '是否显示',
+                formatter:function(value,row,index){
+                    let html='';
+                    if(row.isShow==0){
+                        html += '隐藏';
+                    }else{
+                        html += '显示';
+                    }
+                    return html;
+                }
+            },{
                 field: 'ggOrder',
                 title: '显示顺序'
-
             },{
                 field: 'CreateTime',
                 title: '操作',
@@ -309,7 +336,7 @@
 
         //初始化选择器开关
         $("#editGoodsClassificationForm #isTop").bootstrapSwitch();
-
+        $("#editGoodsClassificationForm #isShow").bootstrapSwitch();
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
@@ -324,6 +351,12 @@
                 formData["isTop"]=1;
             }else{
                 formData["isTop"]=0;
+            }
+            flag =$("#editGoodsClassificationForm #isShow").bootstrapSwitch("state");
+            if(flag){
+                formData["isShow"]=1;
+            }else{
+                formData["isShow"]=0;
             }
             var url='';
             if(editorGoodsClassificationType==0){
@@ -346,7 +379,9 @@
                         //刷新数据
                         refreshTableData();
                         //关闭弹窗
-                        $('#editGoodsClassification').modal('hide')
+                        $('#editGoodsClassification').modal('hide');
+                    }else{
+                        layer.msg(data.msg);
                     }
                 }
             });
@@ -529,15 +564,32 @@
             $("#editGoodsClassificationForm #ggName").val(rowData.ggName);
             $("#editGoodsClassificationForm #ggOrder").val(rowData.ggOrder);
             $("#editGoodsClassificationForm #ggImgpath").val(rowData.ggImgpath);
-            $("#editGoodsClassificationForm #goodsClassificationImg")[0].src=rowData.imgUrl;
             $("#editGoodsClassificationForm #ggHomeNm").val(rowData.homeName);
             $("#editGoodsClassificationForm #ggHome").val(rowData.ggHome);
 
-            var flag =false;
+            var index = rowData.imgUrl.substring(rowData.imgUrl.length-4);
+            alert(index);
+            alert(rowData.imgUrl);
+            if(index=='' || index==null || index=='null'){
+                $("#editGoodsClassificationForm #goodsClassificationImg").hide();
+                $("#editGoodsClassificationForm #goodsClassificationImgSpan").show();
+            }else{
+                $("#editGoodsClassificationForm #goodsClassificationImg")[0].src=rowData.imgUrl;
+                $("#editGoodsClassificationForm #goodsClassificationImg").show();
+                $("#editGoodsClassificationForm #goodsClassificationImgSpan").hide();
+            }
+
+            var flag = false;
             if(rowData.isTop==1){
                 flag=true;
             }
             $("#editGoodsClassificationForm #isTop").bootstrapSwitch("state",flag);
+
+            flag = false;
+            if(rowData.isShow==1){
+                flag=true;
+            }
+            $("#editGoodsClassificationForm #isShow").bootstrapSwitch("state",flag);
 
             if(rowData.isTop==0){
                 $("#editGoodsClassificationForm #parentId").val(rowData.parentId);
@@ -551,6 +603,7 @@
             }
         }else{
             $("#editGoodsClassificationForm #isTop").bootstrapSwitch("state",true);
+            $("#editGoodsClassificationForm #isShow").bootstrapSwitch("state",true);
             $("#editGoodsClassificationForm #ggName").val('');
             $("#editGoodsClassificationForm #ggHomeNm").val('');
             $("#editGoodsClassificationForm #parentNm").val('');

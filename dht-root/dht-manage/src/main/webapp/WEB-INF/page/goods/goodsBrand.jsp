@@ -230,12 +230,7 @@
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
-            //开启校验
-            $('#editorGoodsBrandForm').data('bootstrapValidator').validate();
-            //判断校验是否通过
-            if(!$('#editorGoodsBrandForm').data('bootstrapValidator').isValid()){
-                return;
-            }
+
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
