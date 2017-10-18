@@ -99,4 +99,16 @@
         <!--<task:scheduled ref="mTaskJob" method="stcokEarlyWarning" cron="0 0 0/1 * * ?"/>-->
     </task:scheduled-tasks>
     <context:component-scan base-package="com.retailers.dht.manage.job" />
+    <mvc:interceptors>
+        <!-- 接口请求拦截器 -->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <!--<mvc:mapping path="/user/**"/>-->
+            <!--<mvc:mapping path="/bank/**"/>-->
+            <!--<mvc:mapping path="/version/**"/>-->
+            <!--<mvc:mapping path="/shop/**"/>-->
+            <!--<mvc:mapping path="/userShipping/**"/>-->
+            <bean id="reqInterceptor" class="com.retailers.dht.manage.filter.ReqInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
 </beans>

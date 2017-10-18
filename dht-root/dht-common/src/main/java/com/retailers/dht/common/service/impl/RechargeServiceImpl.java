@@ -71,7 +71,7 @@ public class RechargeServiceImpl implements RechargeService {
 		recharge.setVersion(recharge.getVersion()+1);
         recharge.setRcreateDate(r.getRcreateDate());
         if(ObjectUtils.isEmpty(recharge.getIsDelete())){
-            recharge.setIsDelete(SystemConstant.SYS_IS_DELETE_YES);
+            recharge.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
         }
 		int status = rechargeMapper.saveRecharge(recharge);
 		if(ObjectUtils.isNotEmpty(recharge.getRlogo())){

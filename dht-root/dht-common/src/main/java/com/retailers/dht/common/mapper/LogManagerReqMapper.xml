@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.LogManagerReqMapper">
+
+	<resultMap id="rm_logManagerReq" type="com.retailers.dht.common.entity.LogManagerReq">
+			<result property="id" column="id"/>
+			<result property="url" column="url"/>
+			<result property="params" column="params"/>
+			<result property="isError" column="is_error"/>
+			<result property="reqIp" column="req_ip"/>
+			<result property="executeTime" column="execute_time"/>
+			<result property="context" column="context"/>
+			<result property="createTime" column="create_time"/>
+			<result property="reqUser" column="req_user"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="logManagerReq_columns">
+		id,url,params,is_error,req_ip,execute_time,context,create_time,req_user
+	</sql>
+	<!-- 根据后台请求日志主键取得数据 -->
+	<select id="queryLogManagerReqById" resultMap="rm_logManagerReq" parameterType="java.lang.Long">
+		SELECT <include refid="logManagerReq_columns" />
+		FROM t_log_manager_req WHERE id = #{id}
+	</select>
+	<!-- 后台请求日志查询条件组合 -->
+	<sql id="logManagerReq_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.url and '' != params.url">
+				AND url = #{params.url}
+			</if>
+			<if test="null != params.params and '' != params.params">
+				AND params = #{params.params}
+			</if>
+			<if test="null != params.isError">
+				AND is_error = #{params.isError}
+			</if>
+			<if test="null != params.reqIp and '' != params.reqIp">
+				AND req_ip = #{params.reqIp}
+			</if>
+			<if test="null != params.executeTime">
+				AND execute_time = #{params.executeTime}
+			</if>
+			<if test="null != params.context and '' != params.context">
+				AND context = #{params.context}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= #{params.createTime}
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= #{params.createTime}
+			</if>
+			<if test="null != params.reqUser">
+				AND req_user = #{params.reqUser}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryLogManagerReqList" resultMap="rm_logManagerReq" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="logManagerReq_columns" />
+		FROM t_log_manager_req
+		<include refid="logManagerReq_where"/>
+	</select>
+	<!--添加后台请求日志 -->
+	<insert id="saveLogManagerReq" parameterType="com.retailers.dht.common.entity.LogManagerReq" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_log_manager_req (
+			url,params,is_error,req_ip,execute_time,context,create_time,req_user
+		) VALUES
+		(
+			#{url,jdbcType=VARCHAR},#{params,jdbcType=LONGVARCHAR},#{isError,jdbcType=BIGINT},#{reqIp,jdbcType=VARCHAR},#{executeTime,jdbcType=BIGINT},#{context,jdbcType=LONGVARCHAR},#{createTime,jdbcType=TIMESTAMP},#{reqUser,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改后台请求日志 -->
+	<update id="updateLogManagerReq" parameterType="com.retailers.dht.common.entity.LogManagerReq">
+		UPDATE t_log_manager_req
+		<set>
+            <if test="null != url and '' != url">
+                url = #{url},
+            </if>
+            <if test="null != params and '' != params">
+                params = #{params},
+            </if>
+            <if test="null != isError">
+                is_error = #{isError},
+            </if>
+            <if test="null != reqIp and '' != reqIp">
+                req_ip = #{reqIp},
+            </if>
+            <if test="null != executeTime">
+                execute_time = #{executeTime},
+            </if>
+            <if test="null != context and '' != context">
+                context = #{context},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != reqUser">
+                req_user = #{reqUser},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除后台请求日志 -->
+	<delete id="deleteLogManagerReqById" parameterType="java.lang.Long">
+		DELETE FROM t_log_manager_req WHERE id = #{id}
+	</delete>
+</mapper>
