@@ -27,7 +27,6 @@ import java.util.Map;
  * @date 2016/12/08
  */
 public class ReqInterceptor implements HandlerInterceptor {
-    Logger reqLog = LoggerFactory.getLogger(ReqInterceptor.class);
     Logger logger = LoggerFactory.getLogger(ReqInterceptor.class);
     @Autowired
     private LogManagerReqService logManagerReqService;
@@ -61,7 +60,7 @@ public class ReqInterceptor implements HandlerInterceptor {
         Date reqTime = (Date) req.getAttribute("sysManagerReqTime");
         Date respTime = new Date();
         long actionTime = respTime.getTime() - reqTime.getTime();
-        reqLog.info("请求地址：[{}],请求时间:[{}],响应时间：:[{}],执行时间::[{}],请求参数：[{}]",req.getRequestURI(),
+        logger.info("请求地址：[{}],请求时间:[{}],响应时间：:[{}],执行时间::[{}],请求参数：[{}]",req.getRequestURI(),
                 DateUtil.dateToString(reqTime,"YYYY-MM-dd HH:mm:ss:SSS"), DateUtil.dateToString(respTime,"YYYY-MM-dd HH:mm:ss:SSS"),actionTime,JSON.toJSONString(parms));
         long isError=0;
         LogManagerReq log=new LogManagerReq();

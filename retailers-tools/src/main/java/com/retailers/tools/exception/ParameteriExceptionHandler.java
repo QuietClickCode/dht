@@ -33,7 +33,6 @@ public class ParameteriExceptionHandler {
         errorMsg += "错误类型：【" + "参数类型不匹配,参数" + ex.getPropertyName() + "类型应该为" + ex.getRequiredType() + "，参数值：" + ex.getValue() + "】\r\n";
         String msg= "错误类型：【" + "参数类型不匹配,参数" + ex.getPropertyName() + "类型应该为" + ex.getRequiredType() + "，参数值：" + ex.getValue() + "】\r\n";
         logger.info(errorMsg);
-        ex.printStackTrace();
         JSONObject json = new JSONObject();
         json.put("status", "-1");
         json.put("msg", "请求参数错误\r\n"+msg);
