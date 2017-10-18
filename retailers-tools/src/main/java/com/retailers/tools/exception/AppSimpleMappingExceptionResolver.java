@@ -23,11 +23,10 @@ import java.util.*;
  * @date 2015-07-06
  */
 public class AppSimpleMappingExceptionResolver extends SimpleMappingExceptionResolver {
-    private Logger appLog = Logger.getLogger("appLog");
-    private Logger reqLog = Logger.getLogger("reqLog");
+    private Logger logger = Logger.getLogger(AppSimpleMappingExceptionResolver.class);
 
     public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
-        writeLog(request);
+//        writeLog(request);
         String basePath = "";
         String upath = getRemoteAddrIp(request);
         if (ex instanceof AppException) {
@@ -47,7 +46,7 @@ public class AppSimpleMappingExceptionResolver extends SimpleMappingExceptionRes
         ip.append("服务器:").append(basePath).append("-用户:").append(upath);
         MDC.put("ip", ip.toString());
         String message =  ex.getMessage() +"\n" +"接口："+request.getRequestURI()+ ",参数：" + getRequestParam(request);
-        appLog.error(message, ex);
+        logger.error(message, ex);
         //返回json
         WriteData.systemError(response);
         return null;
