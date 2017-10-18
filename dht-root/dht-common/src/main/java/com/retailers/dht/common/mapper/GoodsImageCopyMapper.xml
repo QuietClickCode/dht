@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsImageCopyMapper">
+
+	<resultMap id="rm_goodsImageCopy" type="com.retailers.dht.common.entity.GoodsImageCopy">
+			<result property="gicId" column="gic_id"/>
+			<result property="giId" column="gi_id"/>
+			<result property="giUploadpersonid" column="gi_uploadpersonid"/>
+			<result property="creattime" column="creattime"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsImageCopy_columns">
+		gic_id,gi_id,gi_uploadpersonid,creattime,is_delete,version
+	</sql>
+	<!-- 根据商品图片副本表主键取得数据 -->
+	<select id="queryGoodsImageCopyByGicId" resultMap="rm_goodsImageCopy" parameterType="java.lang.Long">
+		SELECT <include refid="goodsImageCopy_columns" />
+		FROM t_goods_image_copy WHERE gic_id = #{gicId}
+	</select>
+	<!-- 商品图片副本表查询条件组合 -->
+	<sql id="goodsImageCopy_where">
+		<where>
+			<if test="null != params.gicId">
+				AND gic_id = #{params.gicId}
+			</if>
+			<if test="null != params.giId">
+				AND gi_id = #{params.giId}
+			</if>
+			<if test="null != params.giUploadpersonid">
+				AND gi_uploadpersonid = #{params.giUploadpersonid}
+			</if>
+			<if test="null != params.creattimeBegin">
+				AND creattime &gt;= #{params.creattime}
+			</if>
+			<if test="null != params.creattimeEnd">
+				AND creattime &lt;= #{params.creattime}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsImageCopyList" resultMap="rm_goodsImageCopy" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsImageCopy_columns" />
+		FROM t_goods_image_copy
+		<include refid="goodsImageCopy_where"/>
+	</select>
+	<!--添加商品图片副本表 -->
+	<insert id="saveGoodsImageCopy" parameterType="com.retailers.dht.common.entity.GoodsImageCopy" useGeneratedKeys="true" keyProperty="gicId">
+		INSERT INTO t_goods_image_copy (
+			gi_id,gi_uploadpersonid,is_delete,version
+		) VALUES
+		(
+			#{giId,jdbcType=BIGINT},#{giUploadpersonid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品图片副本表 -->
+	<update id="updateGoodsImageCopy" parameterType="com.retailers.dht.common.entity.GoodsImageCopy">
+		UPDATE t_goods_image_copy
+		<set>
+            <if test="null != giId">
+                gi_id = #{giId},
+            </if>
+            <if test="null != giUploadpersonid">
+                gi_uploadpersonid = #{giUploadpersonid},
+            </if>
+            <if test="null != creattime">
+                creattime = #{creattime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gic_id = #{gicId} and version = #{version}
+	</update>
+	<!--删除商品图片副本表 -->
+	<delete id="deleteGoodsImageCopyByGicId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_image_copy WHERE gic_id = #{gicId}
+	</delete>
+</mapper>

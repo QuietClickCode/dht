@@ -28,7 +28,7 @@ public interface GoodsService {
 	 * @author fanghui
 	 * @date
 	 */
-	public boolean updateGoods(Goods goods);
+	public boolean updateGoods(Goods goods,Long uploadpersonId);
 	/**
 	 * 根据id查询商品表
 	 * @param gid
@@ -54,7 +54,7 @@ public interface GoodsService {
 	 * @author fanghui
 	 * @date 2017-10-12 17:29:40
 	 */
-	public boolean deleteGoodsByGid(Long gid);
+	public boolean deleteGoodsByGid(Long gid,Long uploadpersonId);
 
 }
 

@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 09:25:26
+ * @date 2017-10-18 09:46:10
  */
 public class GoodsGsval implements java.io.Serializable {
 
@@ -21,6 +21,12 @@ public class GoodsGsval implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 255)
 	private String gsvVal;
+	/**isDelete*/
+	@NotEmpty
+	private Long isDelete;
+	/**version*/
+	@NotEmpty
+	private Long version;
 	//columns END
 
 	public GoodsGsval(){
@@ -50,6 +56,20 @@ public class GoodsGsval implements java.io.Serializable {
 
 	public String getGsvVal() {
 		return this.gsvVal;
+	}
+	public void setIsDelete(Long value) {
+		this.isDelete = value;
+	}
+
+	public Long getIsDelete() {
+		return this.isDelete;
+	}
+	public void setVersion(Long value) {
+		this.version = value;
+	}
+
+	public Long getVersion() {
+		return this.version;
 	}
 
 

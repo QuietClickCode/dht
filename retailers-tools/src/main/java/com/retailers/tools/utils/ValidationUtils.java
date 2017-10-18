@@ -34,4 +34,5 @@ public class ValidationUtils {
             throw new AppException("0001", String.format("参数校验失败:%s", constraintViolations.iterator().next().getMessage()));
         }
     }
+
 }

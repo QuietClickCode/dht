@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 09:25:26
+ * @date 2017-10-18 09:46:10
  */
 @Service("goodsgsvalService")
 public class GoodsGsvalServiceImpl implements GoodsGsvalService {
@@ -41,7 +41,9 @@ public class GoodsGsvalServiceImpl implements GoodsGsvalService {
 		return page;
 	}
 	public boolean deleteGoodsGsvalByGsvId(Long gsvId) {
-		int status = goodsGsvalMapper.deleteGoodsGsvalByGsvId(gsvId);
+		GoodsGsval goodsGsval = goodsGsvalMapper.queryGoodsGsvalByGsvId(gsvId);
+		goodsGsval.setIsDelete(1L);
+		int status = goodsGsvalMapper.updateGoodsGsval(goodsGsval);
 		return status == 1 ? true : false;
 	}
 }

@@ -46,20 +46,20 @@
                                 <input type="text" class="form-control" name="gtName" id="gtName">
                             </div>
                         </div>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                是否关联参数:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isParams" name="isParams" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <%--<div class="col-lg-12">--%>
+                            <%--<div class="input-group">--%>
+                              <%--<span class="input-group-addon">--%>
+                                <%--是否关联参数:--%>
+                              <%--</span>--%>
+                                <%--<div class="controls">--%>
+                                    <%--<div class="switch" tabindex="0">--%>
+                                        <%--<input id="isParams" name="isParams" type="checkbox" />--%>
+                                    <%--</div>--%>
+                                <%--</div>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
                     </div>
-                    <br>
+
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="input-group">
@@ -73,6 +73,8 @@
                                 </div>
                             </div>
                         </div>
+                        <br>
+                        <br>
                         <br>
                         <div class="col-lg-12">
                             <div class="input-group">
@@ -112,6 +114,95 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorSysUserTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <form id="editorGtgbForm">
+                    <input type="hidden" name="gtId" id="gtId">
+                    <input type="hidden" name="version" id="version">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                商品大类名称:
+                              </span>
+                                <input type="text" class="form-control" name="gtName" id="gtName">
+                            </div>
+                        </div>
+                        <%--<div class="col-lg-12">--%>
+                        <%--<div class="input-group">--%>
+                        <%--<span class="input-group-addon">--%>
+                        <%--是否关联参数:--%>
+                        <%--</span>--%>
+                        <%--<div class="controls">--%>
+                        <%--<div class="switch" tabindex="0">--%>
+                        <%--<input id="isParams" name="isParams" type="checkbox" />--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                        <%--</div>--%>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                是否关联品牌:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="isTrademark" name="isTrademark" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <br>
+                        <br>
+                        <div class="col-lg-12">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                是否关联规格:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="isSpecification" name="isSpecification" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                是否显示:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="isShow" name="isShow" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editSubmit">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 公用下拉择树 -->
 <div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
     <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
@@ -138,23 +229,6 @@
             title: '商品大类名称',
             align : 'center',
             valign : 'middle'
-        },
-        {
-            field: 'isParams',
-            title: '是否关联参数',
-            align : 'center',
-            valign : 'middle',
-            formatter:function(value,row,index){
-                if(value==0){
-                    return "无";
-                }else if(value==1){
-                    let html='';
-                    <ex:perm url="goods/editGoodsType">
-                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsType(\''+row.uid+'\')"">编辑</button>&nbsp;';
-                    </ex:perm>
-                    return html;
-                }
-            }
         },
         {
             field: 'isTrademark',
@@ -227,7 +301,7 @@
     $(function () {
         createTable("/goods/queryGoodsTypeLists","goodsTypeTables","gtId",treeColumns,queryParams)
         //初始华开关选择器
-        $("#editorGoodsTypeForm #isParams").bootstrapSwitch();
+//        $("#editorGoodsTypeForm #isParams").bootstrapSwitch();
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch();
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch();
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch();
@@ -244,20 +318,20 @@
         $("#editSubmit").click("click",function(e){
             //开启校验
             $('#editorGoodsTypeForm').data('bootstrapValidator').validate();
-            //判断校验是否通过
             if(!$('#editorGoodsTypeForm').data('bootstrapValidator').isValid()){
                 return;
             }
+
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
             var formData=$("#editorGoodsTypeForm").serializeObject();
-            var flag =$("#editorGoodsTypeForm #isParams").bootstrapSwitch("state");
-            if(flag){
-                formData["isParams"]=1;
-            }else{
-                formData["isParams"]=0;
-            }
+//            var flag =$("#editorGoodsTypeForm #isParams").bootstrapSwitch("state");
+//            if(flag){
+//                formData["isParams"]=1;
+//            }else{
+//                formData["isParams"]=0;
+//            }
             var flag =$("#editorGoodsTypeForm #isTrademark").bootstrapSwitch("state");
             if(flag){
                 formData["isTrademark"]=1;
@@ -309,31 +383,34 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editorGoodsTypeForm')
-            .bootstrapValidator({
-                message: 'This value is not valid',
-                //live: 'submitted',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    gtName: {
-                        message: '商品大类名称未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '商品大类名称不能为空'
-                            },
-                            stringLength: {
-                                min: 1,
-                                max: 30,
-                                message: '商品大类名称长度在1-30之间'
-                            }
+        $('#editorGoodsTypeForm').bootstrapValidator({
+            container: 'tooltip',
+            //不能编辑 隐藏 不可见的不做校验
+            excluded: [':disabled', ':hidden', ':not(:visible)'],
+            message: 'This value is not valid',
+            //live: 'submitted',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                gtName: {
+                    message: '商品大类名称未通过',
+                    validators: {
+                        notEmpty: {
+                            message: '商品大类名称不能为空'
+                        },
+                        stringLength: {
+                            min: 1,
+                            max: 30,
+                            message: '商品大类名称长度在1-30之间'
                         }
                     }
                 }
-            });
+            }
+        });
+
     }
     /**
      * 查询条件
@@ -416,10 +493,10 @@
             $("#editorGoodsTypeForm #gtId").val(rowData.gtId);
             $("#editorGoodsTypeForm #version").val(rowData.version);
             var flag =false;
-            if(rowData.isParams==1){
-                flag=true;
-            }
-            $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",flag);
+//            if(rowData.isParams==1){
+//                flag=true;
+//            }
+//            $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",flag);
 
             flag =false;
             if(rowData.isSpecification==1){
@@ -442,7 +519,7 @@
         }else{
             $("#editorGoodsTypeForm #gtName").val('');
             $("#editorGoodsTypeForm #gtId").val('');
-            $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",true);
+//            $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",true);
             $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch("state",true);
             $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch("state",true);
             $("#editorGoodsTypeForm #isShow").bootstrapSwitch("state",true);
@@ -459,7 +536,7 @@
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch("state",true);
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch("state",true);
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch("state",true);
-        $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",true);
+//        $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",true);
         $("#editorSysUserTitle").text("添加商品大类");
         $('#editorSysUser').modal("show")
     }
@@ -537,5 +614,7 @@
         }
     }
 </script>
+
+
 </body>
 </html>

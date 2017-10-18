@@ -7,7 +7,7 @@ import java.util.List;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 09:25:26
+ * @date 2017-10-18 09:46:10
  */
 public interface GoodsGsvalMapper {
 
@@ -16,7 +16,7 @@ public interface GoodsGsvalMapper {
 	 * @param goodsGsval
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 09:25:26
+	 * @date 2017-10-18 09:46:10
 	 */
 	public int saveGoodsGsval(GoodsGsval goodsGsval);
 	/**
@@ -24,7 +24,7 @@ public interface GoodsGsvalMapper {
 	 * @param goodsGsval
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 09:25:26
+	 * @date 2017-10-18 09:46:10
 	 */
 	public int updateGoodsGsval(GoodsGsval goodsGsval);
 	/**
@@ -32,7 +32,7 @@ public interface GoodsGsvalMapper {
 	 * @param gsvId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 09:25:26
+	 * @date 2017-10-18 09:46:10
 	 */
 	public int deleteGoodsGsvalByGsvId(Long gsvId);
 	/**
@@ -40,7 +40,7 @@ public interface GoodsGsvalMapper {
 	 * @param gsvId
 	 * @return
 	 * @author fanghui
-	 * @date 2017-10-12 09:25:26
+	 * @date 2017-10-18 09:46:10
 	 */
 	public GoodsGsval queryGoodsGsvalByGsvId(Long gsvId);
 	/**
@@ -48,7 +48,7 @@ public interface GoodsGsvalMapper {
 	 * @param pagination 分页对象
 	 * @return  商品规格值表列表
 	 * @author fanghui
-	 * @date 2017-10-12 09:25:26
+	 * @date 2017-10-18 09:46:10
 	 */
 	public List<GoodsGsval> queryGoodsGsvalList(Pagination<GoodsGsval> pagination);
 

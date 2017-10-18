@@ -35,7 +35,7 @@
             </div>
             <div class="modal-body">
                 <form id="editorGoodsSpecificationForm">
-                    <input type="hidden" name="gtId" id="gtId">
+                    <input type="hidden" name="gsId" id="gsId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
                         <div class="col-lg-12">
@@ -51,26 +51,25 @@
                               <span class="input-group-addon">
                                 添加商品规格值:
                               </span>
-                                <button class="btn btn-default">+</button>
+                                <button class="btn btn-default" onclick="addvalues()">+</button>
                             </div>
                         </div>
                     </div>
                     <br>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                              <input class="form-control" type="text" placeholder="请输入规格值">
+                    <div class="row" id="gsvaldiv">
+                        <div class="col-lg-3" style="color: red;">
+                            <div class="input-group form-group">
+                            <input class="form-control" type="text" placeholder="请输入规格值" style="float: left;width: 70%">
+                            <span  style="float: left;margin-left:3px;margin-top: 5px; display: block">删除</span>
                             </div>
                         </div>
-                        <br>
-
                     </div>
 
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="close">关闭</button>
                 <button type="button" class="btn btn-primary" id="editSubmit">确认</button>
             </div>
         </div>
@@ -126,10 +125,7 @@
     $(function () {
         createTable("/goods/queryGoodsSpecificationLists","GoodsSpecificationTables","gtId",treeColumns,queryParams)
         //初始华开关选择器
-        $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch();
-        $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch();
-        $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch();
-        $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch();
+
 
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
@@ -147,40 +143,28 @@
             if(!$('#editorGoodsSpecificationForm').data('bootstrapValidator').isValid()){
                 return;
             }
+            var gsvals = $("input[name='gsval']");
+            var flag = 0;
+            for(var i=0; i<gsvals.length; i++){
+                if(gsvals[i].value==''){
+                    flag =1;
+                }
+            }
+            if(flag == 1){
+                layer.msg('请将数据填写完整！');
+                return;
+            }
+
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
             var formData=$("#editorGoodsSpecificationForm").serializeObject();
-            var flag =$("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state");
-            if(flag){
-                formData["isParams"]=1;
-            }else{
-                formData["isParams"]=0;
-            }
-            var flag =$("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state");
-            if(flag){
-                formData["isTrademark"]=1;
-            }else{
-                formData["isTrademark"]=0;
-            }
-            var flag =$("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state");
-            if(flag){
-                formData["isSpecification"]=1;
-            }else{
-                formData["isSpecification"]=0;
-            }
-            var flag =$("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state");
-            if(flag){
-                formData["isShow"]=1;
-            }else{
-                formData["isShow"]=0;
-            }
-
 
             let url="/goods/addGoodsSpecification";
             if(editorGoodsSpecificationType==1){
                 url="/goods/editGoodsSpecification";
             }
+
             //取得form表单数据
             $.ajax({
                 type:"post",
@@ -189,15 +173,22 @@
                 data:formData,
                 success:function(data){
                     layer.close(editSubmitIndex);
-                    if(data.status==0){
+                    var goodsSpecification = data.goodsSpecification;
+                    if(goodsSpecification!=null){
                         //显示提示
-                        layer.msg(data.msg);
+                        layer.msg("操作成功！");
                         //刷新数据
                         refreshTableData();
                         //关闭弹窗
-                        $('#editorSysUser').modal('hide')
+                        $('#editorSysUser').modal('hide');
+
+                        if(url=='/goods/addGoodsSpecification'){
+                            formData["gsId"]=goodsSpecification.gsId;
+                        }
+
+                        uploadgsvs(formData["gsId"]);
                     }else{
-                        layer.msg(data.msg);
+                        layer.msg("操作失败！");
                     }
                 }
             });
@@ -210,6 +201,9 @@
     function formValidater(){
         $('#editorGoodsSpecificationForm')
             .bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
                 message: 'This value is not valid',
                 //live: 'submitted',
                 feedbackIcons: {
@@ -218,7 +212,7 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    gtName: {
+                    gsName: {
                         message: '商品规格名称未通过',
                         validators: {
                             notEmpty: {
@@ -228,6 +222,19 @@
                                 min: 1,
                                 max: 30,
                                 message: '商品规格名称长度在1-30之间'
+                            }
+                        }
+                    },
+                    gsval: {
+                        message: '商品规格值未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '商品规格值不能为空'
+                            },
+                            stringLength: {
+                                min: 1,
+                                max: 30,
+                                message: '商品规格值长度在1-30之间'
                             }
                         }
                     }
@@ -241,7 +248,7 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gtName: $("#search_GoodsSpecification_name").val(),
+            gsName: $("#search_GoodsSpecification_name").val(),
         };
     }
     /**
@@ -268,12 +275,12 @@
     /**
      * 删除商品规格
      **/
-    function removeGoodsSpecification(gtId){
+    function removeGoodsSpecification(gsId){
         $.ajax({
             type:"post",
             url:'/goods/removeGoodsSpecification',
             dataType: "json",
-            data:{gtId:gtId},
+            data:{gsId:gsId},
             success:function(data){
                 if(data.status==0){
                     layer.msg("删除成功");
@@ -289,7 +296,6 @@
     var zNodes;
     function editorGoodsSpecification(orgId){
         editorGoodsSpecificationType=1;
-        reloadOrgTree(orgId);
         initFormData(orgId);
         $("#editorSysUserTitle").text("编辑商品规格");
         $('#editorSysUser').modal("show")
@@ -298,12 +304,10 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorGoodsSpecificationForm #uid").val("");
+        $("#editorGoodsSpecificationForm #gsName").val("");
+        $("#gsId").val("");
         $("#editorGoodsSpecificationForm #version").val("");
-        $("#editorGoodsSpecificationForm #uaccount").val("");
-        $("#editorGoodsSpecificationForm #uname").val("");
-        $("#editorGoodsSpecificationForm #orgIds").val("");
-        $("#editorGoodsSpecificationForm #isValid").val("");
+        $('#gsvaldiv').html('');
     }
     /**
      * 清除form 表单数据
@@ -311,40 +315,36 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorGoodsSpecificationForm #gtName").val(rowData.gtName);
-            $("#editorGoodsSpecificationForm #gtId").val(rowData.gtId);
-            $("#editorGoodsSpecificationForm #version").val(rowData.version);
-            var flag =false;
-            if(rowData.isParams==1){
-                flag=true;
-            }
-            $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",flag);
+            clearFormData();
+            $('#gsId').val(rowData.gsId);
+            $('#version').val(rowData.version);
+            $('#gsName').val(rowData.gsName);
+            $.ajax({
+                type:"post",
+                url:'/goods/queryGoodsGsvalLists',
+                dataType: "json",
+                data:{gsId:rowData.gsId,PageNo:1,pageSize:100},
+                success:function(data){
+                    var gsvals = data.rows;
+                    var gsvaldiv = $('#gsvaldiv');
+                    if(gsvals!=null){
+                        for(var i=0; i<gsvals.length; i++){
+                            var html = '<div class="col-lg-3" style="color: red;">'+
+                                '<div class="input-group form-group">' +
+                                '<input value="'+gsvals[i].gsvId+'" type="hidden">'+
+                                '<input class="form-control" onfocus="focusgsval(this)" onblur="blurgsval(this)" value="'+gsvals[i].gsvVal+'" type="text" name="gsval" placeholder="请输入规格值" style="float: left;width: 70%">'+
+                                '<span onclick="deletegsval(this)"  style="float: left;margin-left:3px;margin-top: 5px; display: block;cursor: pointer">删除</span>'+
+                                '</div>'+
+                                '</div>';
+                            gsvaldiv.prepend(html);
+                        }
+                    }
+                }
+            });
 
-            flag =false;
-            if(rowData.isSpecification==1){
-                flag=true;
-            }
-            $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",flag);
-
-            var flag =false;
-            if(rowData.isTrademark==1){
-                flag=true;
-            }
-            $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",flag);
-
-            var flag =false;
-            if(rowData.isShow==1){
-                flag=true;
-            }
-            $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",flag);
 
         }else{
-            $("#editorGoodsSpecificationForm #gtName").val('');
-            $("#editorGoodsSpecificationForm #gtId").val('');
-            $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",true);
-            $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",true);
-            $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",true);
-            $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",true);
+            clearFormData();
         }
     }
     /**
@@ -352,38 +352,140 @@
      **/
     function addGoodsSpecification(){
         editorGoodsSpecificationType=0;
-        let orgId,orgPid;
-        reloadOrgTree();
-        initFormData();
-        $("#editorGoodsSpecificationForm #isShow").bootstrapSwitch("state",true);
-        $("#editorGoodsSpecificationForm #isSpecification").bootstrapSwitch("state",true);
-        $("#editorGoodsSpecificationForm #isTrademark").bootstrapSwitch("state",true);
-        $("#editorGoodsSpecificationForm #isParams").bootstrapSwitch("state",true);
+        initFormData(-1);
+
         $("#editorSysUserTitle").text("添加商品规格");
         $('#editorSysUser').modal("show")
     }
+
+    var newArr = new Array();
+    var delArr = new Array();
+    var updArr = new Array();
+    var gsvindex = '';
     /**
-     * 重新加载树型结构
-     **/
-    function reloadOrgTree(uid){
-        $.fn.zTree.init($("#orgTree"), setting, zNodes);
-        var rowData=rowDatas.get(parseInt(uid,10));
-        let selectOrgIds="";
-        if(rowData){
-            selectOrgIds=rowData.orgIds
-        }
-        $.ajax({
-            type:"post",
-            url:'/org/reqOrgTree',
-            dataType: "json",
-            data:{selectOrgIds:selectOrgIds},
-            async:false,
-            success:function(data){
-                let nodeData=data.data;
-                var zTree=$.fn.zTree.init($("#orgTree"), setting, nodeData);
-            }
-        });
+     * 添加规格值输入框
+     */
+    function addvalues() {
+        var gsvaldiv = $('#gsvaldiv');
+        var html = '<div class="col-lg-3" style="color: red;">'+
+            '<div class="input-group form-group">'+
+            '<input class="form-control newval" onfocus="focusgsval(this)" onblur="blurgsval(this)" type="text" name="gsval" placeholder="请输入规格值" style="float: left;width: 70%">'+
+            '<span onclick="deletegsval(this)"  style="float: left;margin-left:3px;margin-top: 5px; display: block;cursor: pointer">删除</span>'+
+            '</div>'+
+            '</div>';
+        gsvaldiv.prepend(html);
+        var firstchild = gsvaldiv.children('div').get(0);
+        newArr.push($($(firstchild).children().get(0)).children().get(0));
     }
+    /**
+     * 刪除规格值输入框
+     */
+    function deletegsval(obj) {
+        var flag = 0;
+        var delparent = $(obj).parent().parent();
+        for(var i=0; i<newArr.length; i++){
+            if(delparent.is($(newArr[i]))){
+                $(newArr).splice(i,1);
+                flag = 1;
+            }
+        }
+        if(flag == 0){
+            delArr.push($(obj).prevAll("[type=hidden]")[0]);
+        }
+        $(obj).parent().parent().remove();
+
+    }
+
+    function focusgsval(obj) {
+        gsvindex = $(obj).val();
+    }
+    function blurgsval(obj) {
+        if(gsvindex!=$(obj).val()){
+            var myflag = 0;
+            for(var i=0; i<newArr.length; i++){
+                if($(obj).is($(newArr[i]))){
+                    myflag = 1;
+                }
+            }
+            if(myflag == 0){
+                updArr.push(obj);
+            }
+
+        }
+    }
+
+    function uploadgsvs(gsId) {
+//        alert("刪除數組"+delArr.length);
+//        alert("新增數組"+$('.newval').length);
+//        alert("更新數組"+updArr.length);
+
+        <!--新增-->
+        savegsvs(gsId);
+        <!--刪除-->
+        deletegsvs();
+        <!--修改-->
+        updategsvs(gsId);
+
+        delArr=[];
+        newArr=[];
+        updArr=[];
+    }
+
+    function savegsvs(gsId) {
+        for(var i=0; i<newArr.length; i++){
+            $.ajax({
+                type:"post",
+                url:'/goods/addGoodsGsval',
+                dataType: "json",
+                data:{gsId:gsId,gsvVal:newArr[i].value},
+                success:function(data){
+
+                }
+            });
+        }
+
+
+    }
+    function deletegsvs() {
+        for(var i=0; i<delArr.length; i++){
+            $.ajax({
+                type:"post",
+                url:'/goods/removeGoodsGsval',
+                dataType: "json",
+                data:{gsvId:delArr[i].value},
+                success:function(data){
+
+                }
+            });
+        }
+    }
+    function updategsvs(gsId) {
+        for(var i=0; i<updArr.length; i++){
+            console.log(updArr);
+            var nowobj = $(updArr[i]);
+            var hideobj = nowobj.prevAll("[type=hidden]").get(0);
+            $.ajax({
+                type:"post",
+                url:'/goods/editGoodsGsval',
+                dataType: "json",
+                data:{gsvId:hideobj.value,gsvVal:nowobj.val(),gsId:gsId,isDelete:0},
+                success:function(data){
+
+                }
+            });
+        }
+    }
+
+
+    $('#close').click(function () {
+        delArr=[];
+        newArr=[];
+        updArr=[];
+    });
+</script>
+
+
+<script>
 
     /***********************************************************************************/
     var setting = {

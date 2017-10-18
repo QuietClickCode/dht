@@ -4,12 +4,17 @@ import java.util.List;
 import java.util.Map;
 
 import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.dao.GoodsImageCopyMapper;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsImage;
 import com.retailers.dht.common.dao.GoodsImageMapper;
+import com.retailers.dht.common.entity.GoodsImageCopy;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsImageService;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsImageVo;
 import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -26,14 +31,20 @@ public class GoodsImageServiceImpl implements GoodsImageService {
 	private GoodsImageMapper goodsImageMapper;
 	@Autowired
 	private AttachmentService attachmentService;
-	public boolean saveGoodsImage(GoodsImage goodsImage) {
+	@Autowired
+	private GoodsImageCopyMapper goodsImageCopyMapper;
+	@Autowired
+	private GoodsService goodsService;
+
+	public boolean saveGoodsImage(GoodsImage goodsImage,Long uploadpersonId) {
 		int status = goodsImageMapper.saveGoodsImage(goodsImage);
 		if(status==1){
 			attachmentService.editorAttachment(goodsImage.getGiId());
+			copyGoodsImage(goodsImage,uploadpersonId);
 		}
 		return status == 1 ? true : false;
 	}
-	public boolean updateGoodsImage(GoodsImage goodsImage) {
+	public boolean updateGoodsImage(GoodsImage goodsImage,Long uploadpersonId) {
 		int status = goodsImageMapper.updateGoodsImage(goodsImage);
 		return status == 1 ? true : false;
 	}
@@ -55,11 +66,29 @@ public class GoodsImageServiceImpl implements GoodsImageService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteGoodsImageByGiId(Long giId) {
+	public boolean deleteGoodsImageByGiId(Long giId,Long uploadpersonId) {
 		GoodsImage goodsImage = goodsImageMapper.queryGoodsImageByGiId(giId);
 		goodsImage.setIsDelete(1L);
 		int status = goodsImageMapper.updateGoodsImage(goodsImage);
+		if(status==1){
+			copyGoodsImage(goodsImage,uploadpersonId);
+		}
 		return status == 1 ? true : false;
+	}
+
+	public void copyGoodsImage(GoodsImage goodsImage,Long uploadpersonId){
+		GoodsImageCopy gic = new GoodsImageCopy();
+		BeanUtils.copyProperties(goodsImage,gic);
+		gic.setGiUploadpersonid(uploadpersonId);
+		goodsImageCopyMapper.saveGoodsImageCopy(gic);
+
+		goodsImage = goodsImageMapper.queryGoodsImageByGiId(goodsImage.getGiId());
+		goodsImage.setCopyid(gic.getGicId());
+		goodsImageMapper.updateGoodsImage(goodsImage);
+		//把商品改为未审核状态
+		Goods goods = goodsService.queryGoodsByGid(goodsImage.getGid());
+		goods.setIsChecked(0L);
+		goodsService.updateGoods(goods,uploadpersonId);
 	}
 }
 

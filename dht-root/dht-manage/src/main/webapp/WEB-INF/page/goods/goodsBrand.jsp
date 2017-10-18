@@ -231,6 +231,11 @@
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
 
+            $('#editorGoodsBrandForm').data('bootstrapValidator').validate();
+            if(!$('#editorGoodsBrandForm').data('bootstrapValidator').isValid()){
+                return;
+            }
+
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
@@ -269,6 +274,9 @@
     function formValidater(){
         $('#editorGoodsBrandForm')
             .bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
                 message: 'This value is not valid',
                 //live: 'submitted',
                 feedbackIcons: {
@@ -278,18 +286,18 @@
                 },
                 fields: {
                     gbName: {
-                        message: '商品品牌名称未通过',
+                        message: '品牌名称未通过',
                         validators: {
                             notEmpty: {
-                                message: '商品品牌名称不能为空'
+                                message: '品牌名称不能为空'
                             },
                             stringLength: {
                                 min: 1,
                                 max: 30,
-                                message: '商品品牌名称长度在1-30之间'
+                                message: '品牌名称长度在1-30之间'
                             }
                         }
-                    }
+                    },
                 }
             });
     }

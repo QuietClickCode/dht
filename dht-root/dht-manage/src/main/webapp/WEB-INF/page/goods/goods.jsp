@@ -110,10 +110,24 @@
     <br>
     <div class="form-group" style="margin-top: 5px">
         <input type="text" class="form-control" id="search_Goods_name" placeholder="请输入商品名称">
+        <input onclick="showMenu2();" type="text" class="form-control" id="search_Goods_typeNm" placeholder="请选择商品类型">
+        <input id="search_Goods_type" type="hidden">
+        <select id="search_Goods_gmaindirection" class="form-control">
+            <option value="">主推方向</option>
+            <option value="0">乡村</option>
+            <option value="1">城镇</option>
+            <option value="1">乡村和城镇</option>
+        </select>
+        <select id="search_Goods_check" class="form-control">
+            <option value="">审核状态</option>
+            <option value="0">未审核</option>
+            <option value="1">已审核</option>
+            <option value="2">未通过审核</option>
+        </select>
     </div>
 
     <ex:perm url="goods/queryGoodsLists">
-        <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+        <button class="btn btn-default" style="margin-top: 5px" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
 
 </div>
@@ -174,15 +188,15 @@
                                                     </div>
 
                                                     <div class="row">
-                                                        <div class="col-lg-12">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            所属仓库/地区:
-                                                          </span>
-                                                                <input id="garea" name="garea" type="hidden" class="form-control" />
-                                                                <input id="gareaName" name="gareaName" type="text" class="form-control" />
-                                                            </div>
-                                                        </div>
+                                                        <%--<div class="col-lg-12">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                            <%--所属仓库/地区:--%>
+                                                          <%--</span>--%>
+                                                                <%--<input id="garea" name="garea" type="hidden" class="form-control" />--%>
+                                                                <%--<input id="gareaName" name="gareaName" type="text" class="form-control" />--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
                                                         <div class="col-lg-12">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
@@ -221,7 +235,7 @@
                                                                     </label>
                                                                 </div>
                                                                 <div class="radio " style="display: inline-block;margin-left: 30px">
-                                                                    <input type="radio" name="mainType" id="maincityandcom" value="0" checked>
+                                                                    <input type="radio" name="mainType" id="maincityandcom" value="2" checked>
                                                                     <label for="maincityandcom">
                                                                         乡村和城市
                                                                     </label>
@@ -362,7 +376,7 @@
                                                           <span class="input-group-addon">
                                                               销量:
                                                           </span>
-                                                                <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control"/>
+                                                                <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control" value="0"/>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -582,16 +596,18 @@
             valign : 'middle'
         },
         {
-            field: 'isPutway',
-            title: '商品状态',
+            field: 'gmaindirection',
+            title: '主推方向',
             align : 'center',
             valign : 'middle',
             formatter:function(value,row,index){
                 let html='';
-                if(row.isPutway==1){
-                    html+='<span style="color:green;">已上架</span>';
+                if(row.gmaindirection==0){
+                    html+='乡村';
+                }else if(row.gmaindirection==1){
+                    html+='城镇';
                 }else{
-                    html+='<span style="color:red;">未上架</span>';
+                    html+='乡村和城镇';
                 }
                 return html;
             }
@@ -636,20 +652,6 @@
     ]
 
     $(function () {
-//        $('#GoodsTables').bootstrapTable({
-//            method: 'get',
-//            contentType: "application/x-www-form-urlencoded",//必须要有！！！！
-//            url:"/goods/queryGoodsLists",
-//            columns:treeColumns,
-//            queryParams:queryParams,
-//            toolbar:'#toolbar',
-//            pageNumber: 1, //初始化加载第一页，默认第一页
-//            pageSize:10,//单页记录数
-//            pageList:[5,10,20,30],//分页步进值
-//            locale:'zh-CN',//中文支持,
-//        });
-
-
         createTable("/goods/queryGoodsLists","GoodsTables","gbId",treeColumns,queryParams);
 
         //初始华开关选择器
@@ -661,25 +663,25 @@
         $("#isCod").bootstrapSwitch();
         $("#isAdvancesale").bootstrapSwitch();
 
-        $('#editorSysUser').on('hide.bs.modal', function () {
-            //清除数据
-            clearFormData();
-            //隐藏下拉菜单
+
+        $("input[name='mainType']").click(function () {
+             $('#gmaindirection').val($(this).val());
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
             //开启校验
-
+            $('#editorGoodsForm').data('bootstrapValidator').validate();
+            if(!$('#editorGoodsForm').data('bootstrapValidator').isValid()){
+                return;
+            }
 
             var editSubmitIndex = layer.load(2);
 
             var sendData=new Array();
             var formData=$("#editorGoodsForm").serializeObject();
-
-            formData["gmaindirection"]=$("input[name='mainType']:checked").val();
             formData["gdescription"]=UE.getEditor('editor').getContent();
-
+            formData["garea"]=1;
             let url="/goods/addGoods";
             if(editorGoodsType==1){
                 url="/goods/editGoods";
@@ -701,12 +703,14 @@
                         }else{
                             toastr.success("操作成功！");
                             $('#gid').val(goods.gid);
+                            $('#version').val(1);
+                            editorGoodsType=1;
                             refreshTableData();
                         }
                     }else{
                         if(data.status==0){
                             toastr.success("操作成功！");
-                            $('#version').val(parseInt($('#version').val()) +1);
+                            $('#version').val(parseInt($('#version').val()) +2);
                         }else{
                             toastr.error("操作失败！");
                         }
@@ -723,8 +727,10 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editorGoodsForm')
-            .bootstrapValidator({
+        $('#editorGoodsForm').bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
                 message: 'This value is not valid',
                 //live: 'submitted',
                 feedbackIcons: {
@@ -733,21 +739,92 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    gbName: {
-                        message: '商品名称未通过',
+                    gname: {
+                        message: '商品名称不能为空',
                         validators: {
                             notEmpty: {
                                 message: '商品名称不能为空'
                             },
                             stringLength: {
-                                min: 1,
-                                max: 30,
-                                message: '商品名称长度在1-30之间'
+                                min: 2,
+                                max: 25,
+                                message: '商品名称长度在4-30之间'
+                            }
+                        }
+                    },
+                    gclassificationName: {
+                        message: '商品分类校验未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '商品分类不能为空'
+                            }
+                        }
+                    },
+                    gunitname: {
+                        message: '计件单位校验未通过',
+                        validators: {
+                            notEmpty: {
+                                message: '计件单位不能为空'
+                            }
+                        }
+                    },
+                    gprice: {
+                        message: '商品价格为空',
+                        validators: {
+                            notEmpty: {
+                                message: '商品价格不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                                message:'优惠金额只允许在10位整数和2位小数范围内'
                             }
                         }
                     }
                 }
             });
+
+        $('#editorGoodsConfigForm').bootstrapValidator({
+            container: 'tooltip',
+            //不能编辑 隐藏 不可见的不做校验
+            excluded: [':disabled', ':hidden', ':not(:visible)'],
+            message: 'This value is not valid',
+            //live: 'submitted',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                gclassificationName: {
+                    message: '商品分类校验未通过',
+                    validators: {
+                        notEmpty: {
+                            message: '商品分类不能为空'
+                        }
+                    }
+                },
+                gsalesvolume: {
+                    message: '销量校验未通过',
+                    validators: {
+                        notEmpty: {
+                            message: '销量不能为空'
+                        }
+                    }
+                },
+                gprofitability: {
+                    message: '利润率为空',
+                    validators: {
+                        notEmpty: {
+                            message: '利润率不能为空'
+                        },
+                        regexp:{
+                            regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                            message:'利润率只允许在10位整数和2位小数范围内'
+                        }
+                    }
+                }
+            }
+        });
     }
     /**
      * 查询条件
@@ -756,13 +833,19 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gbName: $("#search_Goods_name").val(),
+            gname: $("#search_Goods_name").val(),
+            gclassification: $("#search_Goods_type").val(),
+            gmaindirection: $("#search_Goods_gmaindirection").val(),
+            isChecked: $("#search_Goods_check").val(),
         };
     }
     /**
      * 刷新表格数据
      **/
     function refreshTableData() {
+        if($('#search_Goods_typeNm').val()==''){
+            $('#search_Goods_type').val('');
+        }
         $('#GoodsTables').bootstrapTable(
             "refresh",
             {
@@ -865,6 +948,8 @@
         $("#isMultiplebuy").val('');
         $('#isMultiplebuy').removeAttr('checked');
 
+
+
     }
     /**
      * 清除form 表单数据
@@ -872,6 +957,7 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         document.getElementById("nava1").click();
+        clearFormValidation("editorGoodsForm",formValidater);
         if(rowData){
             $("#gid").val(rowData.gid);
             $("#version").val(rowData.version);
@@ -967,6 +1053,10 @@
         
         <!--提交商品配置-->
         $('#editGoodsConfigSubmit').click(function () {
+            $('#editorGoodsConfigForm').data('bootstrapValidator').validate();
+            if(!$('#editorGoodsConfigForm').data('bootstrapValidator').isValid()){
+                return;
+            }
             var formData=$("#editorGoodsConfigForm").serializeObject();
 
             formData["version"]=$('#configversion').val();
@@ -1003,7 +1093,7 @@
                     formData["isAdvancesale"]=1;
                 }else{
                     formData["isAdvancesale"]=0;
-                    formData["gedt"]='';
+                    formData["gedts"]='';
                 }
 
                 formData["gdeposit"]='';
@@ -1048,6 +1138,13 @@
                         //显示提示
                         toastr.success('操作成功！');
                         document.getElementById('nava2').click();
+//                        var gcId = $('#gcId').val();
+//                        if(gcId=='' || gcId==null){
+//                            $('#configversion').val(1);
+//                        }else{
+//                            var configversion = $('#configversion').val();
+//                            $('#configversion').val(parseInt(configversion)+2);
+//                        }
                     }else{
                         toastr.error('操作失败！');
                     }
@@ -1228,19 +1325,14 @@
             }
         });
     }
+    var deleteArr = new Array();
+    var newImgArr = new Array();
 
     $('#editGoodsImageSubmit').click(function () {
-        if(deleteArr.length>0 && newImgArr.length>0){
-            for (var i=0; i<deleteArr.length; i++){
-                for(var j=0; j<newImgArr.length; j++){
-                    if(deleteArr[i]==newImgArr[j]){
-                        newImgArr.remove(j);
-                        deleteArr.remove(i);
-                    }
-                }
-            }
-        }else if(deleteArr.length==0 && newImgArr.length==0){
+
+        if(deleteArr.length==0 && newImgArr.length==0){
             toastr.warning('您不存在修改操作！');
+            return;
         }
 
         var gid = $('#gid').val();
@@ -1295,13 +1387,20 @@
         newImgArr=[];
     });
 
-    var deleteArr = new Array();
-    var newImgArr = new Array();
-
     <!--点击删除按钮-->
     function deleteGoodsImage(obj,goodsImgId) {
         $(obj).parent().hide();
-        deleteArr.push(goodsImgId);
+        var index = 0;
+        for(var i=0; i<newImgArr.length; i++){
+            if(newImgArr[i]==goodsImgId){
+                newImgArr.splice(i,1);
+                index = 1;
+            }
+        }
+        if(index==0){
+            deleteArr.push(goodsImgId);
+        }
+
     }
 
     <!--显示商品删除按钮-->
@@ -1314,7 +1413,7 @@
     }
 </script>
 
-<!--商品子类选择-->
+<!--商品子类选择1-->
 <script>
 
         var setting = {
@@ -1392,6 +1491,87 @@
                 hideMenu();
             }
         }
+
+
+</script>
+<!--商品子类选择2-->
+<script>
+
+    var setting = {
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeClick: beforeClick,
+            onClick: onClick
+        }
+    };
+
+    function beforeClick(treeId, treeNode) {
+        return true;
+    }
+
+    function onClick(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getSelectedNodes(),
+            v = "",vId="";
+        nodes.sort(function compare(a,b){return a.id-b.id;});
+        for (var i=0, l=nodes.length; i<l; i++) {
+            v += nodes[i].name;
+            vId += nodes[i].id;
+        }
+        var search_Goods_typeNm = $("#search_Goods_typeNm");
+        var search_Goods_type = $("#search_Goods_type");
+        search_Goods_typeNm.val(v);
+        search_Goods_type.val(vId);
+    }
+
+    var zNodes;
+    $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+    $.ajax({
+        type:"post",
+        url:'/goods/queryGoodsClassificationNode',
+        dataType: "json",
+        data:{ggId:-1,pageSize:1000,pageNo:1},
+        async:false,
+        success:function(data){
+            let d=data.data;
+            var nodeData=new Array();
+            for(row of d){
+                let treeRow=new Object();
+                treeRow.id=row.ggId;
+                treeRow.pId=row.parentId;
+                treeRow.name=row.ggName;
+                nodeData.push(treeRow);
+            }
+            var zTree=$.fn.zTree.init($("#treeDemo"), setting, nodeData);
+            var node = zTree.getNodeByParam("id",parentId);
+            if(node){
+                zTree.selectNode(node);
+            }
+        }
+    });
+
+    function showMenu2() {
+        var cityObj = $("#search_Goods_typeNm");
+        var cityOffset = $("#search_Goods_typeNm").offset();
+        $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+        $("body").bind("mousedown", onBodyDown);
+    }
+    function hideMenu() {
+        $("#menuContent").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+            hideMenu();
+        }
+    }
 
 
 </script>

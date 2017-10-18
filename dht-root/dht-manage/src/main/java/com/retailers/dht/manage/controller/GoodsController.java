@@ -39,8 +39,8 @@ public class GoodsController extends BaseController {
     @RequestMapping("editGoods")
     @Function(label = "编辑商品",parentRes = "goods.openGoods",resourse = "goods.editGoods",description = "编辑商品",sort = 2)
     @ResponseBody
-    public BaseResp editGoods(Goods goods){
-        boolean flag = goodsService.updateGoods(goods);
+    public BaseResp editGoods(Goods goods,HttpServletRequest request){
+        boolean flag = goodsService.updateGoods(goods,getCurLoginUserId(request));
         if(flag){
             return success("修改商品["+goods.getGname()+"]成功");
         }else{
@@ -51,17 +51,20 @@ public class GoodsController extends BaseController {
     @RequestMapping("/removeGoods")
     @Function(label="删除商品", description = "删除商品", resourse = "goods.removeGoods",sort=3,parentRes="goods.openGoods")
     @ResponseBody
-    public BaseResp removeGoods(Long gid){
-        boolean flag=goodsService.deleteGoodsByGid(gid);
+    public BaseResp removeGoods(Long gid,HttpServletRequest request){
+        boolean flag=goodsService.deleteGoodsByGid(gid,getCurLoginUserId(request));
         return success(flag);
     }
 
     @RequestMapping("/queryGoodsLists")
     @Function(label="商品列表", description = "所有商品列表", resourse = "goods.queryGoodsLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
-    public  Map<String,Object> queryGoodsLists(String gname,PageUtils pageForm){
+    public  Map<String,Object> queryGoodsLists(String gname,Long gclassification,Long gmaindirection,Long isChecked,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gname",gname);
+        map.put("gclassification",gclassification);
+        map.put("gmaindirection",gmaindirection);
+        map.put("isChecked",isChecked);
         map.put("isDelete",0);
         Pagination<GoodsVo> GoodsPagination = goodsService.queryGoodsList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
