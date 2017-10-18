@@ -24,7 +24,7 @@
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <button class="btn btn-primary" type="button" onclick="addNavigationBar()" style="margin-bottom: 5px">新增首页导航</button>
+    <button class="btn btn-primary" type="button" onclick="addNavigationBar()" style="margin-bottom: 5px">新增首页广告</button>
     <div id="Client">
         <button class="btn btn-primary" data-clientValue="0">移动端</button>
         <button class="btn btn-primary" data-clientValue="1">PC端</button>
@@ -46,21 +46,22 @@
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">导航名称</label>
+                        <label for="" class="col-sm-2 control-label">商品名称</label>
                         <div class="col-sm-10">
                             <input type="text" id="" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">选择样式</label>
+                        <label for="" class="col-sm-2 control-label">选择样式</label>
                         <div class="col-sm-10">
                             <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">样式选择<span class="caret"></span>
+                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择推送区域<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" id="chooseStyle" aria-labelledby="dropdownMenu1">
-                                    <li><a style="cursor: pointer" data-styleValue="0">带副标题的样式</a></li>
-                                    <li><a style="cursor: pointer" data-styleValue="1">不带副标题的样式</a></li>
+                                    <li><a style="cursor: pointer" data-styleValue="0">顶部区域</a></li>
+                                    <li><a style="cursor: pointer" data-styleValue="1">中间区域</a></li>
+                                    <li><a style="cursor: pointer" data-styleValue="1">底部区域</a></li>
                                 </ul>
                                 <input id="styleText" style="display: none">
                             </div>
@@ -68,13 +69,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">推送对象</label>
+                        <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
                             <div class="dropdown">
                                 <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择推送对象<span class="caret"></span>
                                 </button>
                                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <li><a style="cursor: pointer" data-CountryValue="0">农村</a></li>
+                                    <li><a style="cursor: pointer" data-CountryValue="0">乡村</a></li>
                                     <li><a style="cursor: pointer" data-CountryValue="1">城市</a></li>
                                 </ul>
                                 <input id="countryText" style="display: none">
@@ -99,25 +100,8 @@
                     </div>
 
 
-
-                    <div class="form-group">
-                        <label for="mainTitle" class="col-sm-2 control-label">主标题</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="mainTitle" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="subTitle" class="col-sm-2 control-label">副标题</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="subTitle" class="form-control">
-                        </div>
-                    </div>
-
-
-
                     <div class="form-group" id="">
-                        <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
+                        <label for="" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
                             <input type="text" id="" class="form-control">
                         </div>
@@ -126,12 +110,12 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-default">上传图片</button>
+                            <input type="file" id="">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviOrder" class="col-sm-2 control-label">链接</label>
+                        <label for="" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
                             <input type="text" id="" class="form-control">
                         </div>
@@ -149,42 +133,40 @@
 
 
 <%--编辑导航--%>
-<div class="modal fade" id="saveHomeNavigation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="saveAdvertising" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">编辑该导航栏</h4>
+                <h4 class="modal-title" id="">编辑该广告</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal">
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">推送对象</label>
-                        <div class="col-sm-10" id="chooseCountry">
-                            <input class="btn btn-default" data-Country="0" type="button" value="农村">
-                            <input class="btn btn-default" data-Country="1" type="button" value="城市">
-                            <input id="countryValue" style="display: none">
+                        <label for="" class="col-sm-2 control-label">商品名称</label>
+                        <div class="col-sm-10" id="">
+                            <input type="text" id="" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">导航名称</label>
+                        <label for="" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" id="NaviName" class="form-control">
+                            <input type="text" id="" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group" id="chooseClassifyLabel">
-                        <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
+                        <label for="" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input type="text" id="NaviOrder" class="form-control">
+                            <input type="file" id="exampleInputFile">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">图片</label>
+                        <label for="" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <button class="btn btn-default">上传图片</button>
+                            <input type="text" id="" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -208,31 +190,6 @@
     </div>
 </div>
 
-
-<form method="post" enctype="multipart/form-data" action="/file/imageUpload">
-    <div class="form-group">
-        <label for="exampleInputFile">File input</label>
-        <input name="dht_image_upload" type="file" id="exampleInputFile">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">图片类型</label>
-        <input type="text" class="form-control" name="imageUse" id="exampleInputEmail1" placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否添加水印</label>
-        <input type="text" class="form-control" name="isWatermark"  placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否压缩</label>
-        <input type="text" class="form-control" name="isCompress"  placeholder="Email">
-    </div>
-
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
-
-
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
@@ -251,24 +208,13 @@
             valign : 'middle'
         },
         {
-            field: 'hnName',
-            title: '导航名称',
+            field: 'haName',
+            title: '广告名称',
             align : 'center',
             valign : 'middle'
         },
         {
-            field: 'hnImgpath',
-            title: '图片',
-            align : 'center',
-            valign : 'middle',
-            formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
-                let html='';
-                return html;
-            }
-        },
-        {
-            field: 'hnOrder',
+            field: 'haOrder',
             title: '排序',
             align : 'center',
             valign : 'middle'
@@ -292,17 +238,24 @@
             }
         },
         {
+            field: 'url',
+            title: '链接',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
             title: '编辑',
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveNavigatorModal()">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal()">编辑</button>'
                 return html;
             }
         },
         {
+            field: 'hnCountry',
             title: '删除',
             align : 'center',
             valign : 'middle',
@@ -316,7 +269,7 @@
     ]
 
     $(function () {
-        createTable("/openHomeNavigation/queryNavigationLists","goodsTypeTables","hnId",treeColumns,queryParams)
+        createTable("/openHomeAdvertising/queryAdvertisingLists","goodsTypeTables","haId",treeColumns,queryParams)
     });
     /**
      * 查询条件
@@ -346,8 +299,8 @@
         $(this).addClass("btn-success").siblings().removeClass("btn-success");
     });
 
-    function openSaveNavigatorModal() {
-        $("#saveHomeNavigation").modal("show");
+    function openSaveAdvertisingModal() {
+        $("#saveAdvertising").modal("show");
     }
 
     $("#chooseCountry input").click(function () {
@@ -367,8 +320,8 @@
     }
 
     /*
-    * 新增首页导航
-    * */
+     * 新增首页导航
+     * */
     function addNavigationBar() {
         $("#addHomeNavigationBar").modal("show");
     }

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.HomeAdvertisingMapper">
+
+	<resultMap id="rm_homeAdvertising" type="com.retailers.dht.common.entity.HomeAdvertising">
+			<result property="haId" column="ha_id"/>
+			<result property="haName" column="ha_name"/>
+			<result property="haOrder" column="ha_order"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="url" column="url"/>
+			<result property="imagePath" column="image_path"/>
+			<result property="haClient" column="ha_client"/>
+			<result property="haCountry" column="ha_country"/>
+			<result property="haType" column="ha_type"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="homeAdvertising_columns">
+		ha_id,ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_type
+	</sql>
+	<!-- 根据首页广告设置表主键取得数据 -->
+	<select id="queryHomeAdvertisingByHaId" resultMap="rm_homeAdvertising" parameterType="java.lang.Long">
+		SELECT <include refid="homeAdvertising_columns" />
+		FROM t_home_advertising WHERE ha_id = #{haId}
+	</select>
+	<!-- 首页广告设置表查询条件组合 -->
+	<sql id="homeAdvertising_where">
+		<where>
+			<if test="null != params.haId">
+				AND ha_id = #{params.haId}
+			</if>
+			<if test="null != params.haName and '' != params.haName">
+				AND ha_name = #{params.haName}
+			</if>
+			<if test="null != params.haOrder">
+				AND ha_order = #{params.haOrder}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.url and '' != params.url">
+				AND url = #{params.url}
+			</if>
+			<if test="null != params.imagePath and '' != params.imagePath">
+				AND image_path = #{params.imagePath}
+			</if>
+			<if test="null != params.haClient">
+				AND ha_client = #{params.haClient}
+			</if>
+			<if test="null != params.haCountry">
+				AND ha_country = #{params.haCountry}
+			</if>
+			<if test="null != params.haType">
+				AND ha_type = #{params.haType}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="homeAdvertising_columns" />
+		FROM t_home_advertising
+		<include refid="homeAdvertising_where"/>
+	</select>
+	<!--添加首页广告设置表 -->
+	<insert id="saveHomeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising" useGeneratedKeys="true" keyProperty="haId">
+		INSERT INTO t_home_advertising (
+			ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_type
+		) VALUES
+		(
+			#{haName,jdbcType=VARCHAR},#{haOrder,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{imagePath,jdbcType=VARCHAR},#{haClient,jdbcType=BIGINT},#{haCountry,jdbcType=BIGINT},#{haType,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改首页广告设置表 -->
+	<update id="updateHomeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising">
+		UPDATE t_home_advertising
+		<set>
+            <if test="null != haName and '' != haName">
+                ha_name = #{haName},
+            </if>
+            <if test="null != haOrder">
+                ha_order = #{haOrder},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != url and '' != url">
+                url = #{url},
+            </if>
+            <if test="null != imagePath and '' != imagePath">
+                image_path = #{imagePath},
+            </if>
+            <if test="null != haClient">
+                ha_client = #{haClient},
+            </if>
+            <if test="null != haCountry">
+                ha_country = #{haCountry},
+            </if>
+            <if test="null != haType">
+                ha_type = #{haType},
+            </if>
+		</set>
+		WHERE ha_id = #{haId}
+	</update>
+	<!--删除首页广告设置表 -->
+	<delete id="deleteHomeAdvertisingByHaId" parameterType="java.lang.Long">
+		DELETE FROM t_home_advertising WHERE ha_id = #{haId}
+	</delete>
+</mapper>
