@@ -19,9 +19,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsSpecificationServiceImpl implements GoodsSpecificationService {
 	@Autowired
 	private GoodsSpecificationMapper goodsSpecificationMapper;
-	public boolean saveGoodsSpecification(GoodsSpecification goodsSpecification) {
+	public GoodsSpecification saveGoodsSpecification(GoodsSpecification goodsSpecification) {
 		int status = goodsSpecificationMapper.saveGoodsSpecification(goodsSpecification);
-		return status == 1 ? true : false;
+		return status == 1 ? goodsSpecification : null;
 	}
 	public boolean updateGoodsSpecification(GoodsSpecification goodsSpecification) {
 		int status = goodsSpecificationMapper.updateGoodsSpecification(goodsSpecification);

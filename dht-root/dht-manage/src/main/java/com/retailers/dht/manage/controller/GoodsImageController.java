@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,10 +33,10 @@ public class GoodsImageController extends BaseController {
     @RequestMapping("/editGoodsImage")
     @Function(label = "编辑商品图片",parentRes = "goods.openGoods",resourse = "GoodsImage.editGoodsImage",description = "编辑商品图片",sort = 2)
     @ResponseBody
-    public BaseResp editGoodsImage(GoodsImage GoodsImage,String gedts){
+    public BaseResp editGoodsImage(GoodsImage GoodsImage,String gedts,HttpServletRequest request){
 
 
-        boolean flag = goodsImageService.updateGoodsImage(GoodsImage);
+        boolean flag = goodsImageService.updateGoodsImage(GoodsImage,getCurLoginUserId(request));
         if(flag){
             return success("修改商品图片成功");
         }else{
@@ -46,8 +47,8 @@ public class GoodsImageController extends BaseController {
     @RequestMapping("/removeGoodsImage")
     @Function(label="删除商品图片", description = "删除商品图片", resourse = "GoodsImage.removeGoodsImage",sort=3,parentRes = "goods.openGoods")
     @ResponseBody
-    public BaseResp removeGoodsImage(Long giId){
-        boolean flag=goodsImageService.deleteGoodsImageByGiId(giId);
+    public BaseResp removeGoodsImage(Long giId,HttpServletRequest request){
+        boolean flag=goodsImageService.deleteGoodsImageByGiId(giId,getCurLoginUserId(request));
         return success(flag);
     }
 
@@ -68,9 +69,9 @@ public class GoodsImageController extends BaseController {
     @RequestMapping("/addGoodsImage")
     @Function(label="增加商品图片", description = "增加商品图片", resourse = "GoodsImage.addGoodsImage",parentRes = "goods.openGoods")
     @ResponseBody
-    public BaseResp addGoodsImage(GoodsImage goodsImage){
+    public BaseResp addGoodsImage(GoodsImage goodsImage, HttpServletRequest request){
         goodsImage.setIsDelete(0L);
-        boolean flag=goodsImageService.saveGoodsImage(goodsImage);
+        boolean flag=goodsImageService.saveGoodsImage(goodsImage,getCurLoginUserId(request));
         return success(flag);
     }
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGtgbrelMapper">
+
+	<resultMap id="rm_goodsGtgbrel" type="com.retailers.dht.common.entity.GoodsGtgbrel">
+			<result property="gtgbId" column="gtgb_id"/>
+			<result property="gtId" column="gt_id"/>
+			<result property="gbId" column="gb_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGtgbrel_columns">
+		gtgb_id,gt_id,gb_id,is_delete,version
+	</sql>
+	<!-- 根据大类与规格关系表主键取得数据 -->
+	<select id="queryGoodsGtgbrelByGtgbId" resultMap="rm_goodsGtgbrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGtgbrel_columns" />
+		FROM t_goods_gtgbrel WHERE gtgb_id = #{gtgbId}
+	</select>
+	<!-- 大类与规格关系表查询条件组合 -->
+	<sql id="goodsGtgbrel_where">
+		<where>
+			<if test="null != params.gtgbId">
+				AND gtgb_id = #{params.gtgbId}
+			</if>
+			<if test="null != params.gtId">
+				AND gt_id = #{params.gtId}
+			</if>
+			<if test="null != params.gbId">
+				AND gb_id = #{params.gbId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGtgbrelList" resultMap="rm_goodsGtgbrel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGtgbrel_columns" />
+		FROM t_goods_gtgbrel
+		<include refid="goodsGtgbrel_where"/>
+	</select>
+	<!--添加大类与规格关系表 -->
+	<insert id="saveGoodsGtgbrel" parameterType="com.retailers.dht.common.entity.GoodsGtgbrel" useGeneratedKeys="true" keyProperty="gtgbId">
+		INSERT INTO t_goods_gtgbrel (
+			gt_id,gb_id,is_delete,version
+		) VALUES
+		(
+			#{gtId,jdbcType=BIGINT},#{gbId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改大类与规格关系表 -->
+	<update id="updateGoodsGtgbrel" parameterType="com.retailers.dht.common.entity.GoodsGtgbrel">
+		UPDATE t_goods_gtgbrel
+		<set>
+            <if test="null != gtId">
+                gt_id = #{gtId},
+            </if>
+            <if test="null != gbId">
+                gb_id = #{gbId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gtgb_id = #{gtgbId} and version = #{version}
+	</update>
+	<!--删除大类与规格关系表 -->
+	<delete id="deleteGoodsGtgbrelByGtgbId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_gtgbrel WHERE gtgb_id = #{gtgbId}
+	</delete>
+</mapper>

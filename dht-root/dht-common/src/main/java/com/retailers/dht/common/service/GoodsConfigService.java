@@ -27,7 +27,7 @@ public interface GoodsConfigService {
 	 * @author fanghui
 	 * @date
 	 */
-	public boolean updateGoodsConfig(GoodsConfig goodsConfig);
+	public boolean updateGoodsConfig(GoodsConfig goodsConfig,Long uploadpersonId);
 	/**
 	 * 根据id查询商品配置表
 	 * @param gcId

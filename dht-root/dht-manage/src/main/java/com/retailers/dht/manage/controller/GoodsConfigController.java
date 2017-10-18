@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +36,7 @@ public class GoodsConfigController extends BaseController {
     @RequestMapping("/editGoodsConfig")
     @Function(label = "编辑商品配置",parentRes = "goods.openGoods",resourse = "goodsConfig.editGoodsConfig",description = "编辑商品配置",sort = 2)
     @ResponseBody
-    public BaseResp editGoodsConfig(GoodsConfig goodsConfig,String gedts){
+    public BaseResp editGoodsConfig(GoodsConfig goodsConfig,String gedts,HttpServletRequest request){
         if(!ObjectUtils.isEmpty(gedts)){
             SimpleDateFormat sdf = new SimpleDateFormat();
             Date gedt = null;
@@ -45,9 +46,11 @@ public class GoodsConfigController extends BaseController {
                 e.printStackTrace();
             }
             goodsConfig.setGedt(gedt);
+        }else{
+            goodsConfig.setGedt(null);
         }
 
-        boolean flag = goodsConfigService.updateGoodsConfig(goodsConfig);
+        boolean flag = goodsConfigService.updateGoodsConfig(goodsConfig,getCurLoginUserId(request));
         if(flag){
             return success("修改商品配置成功");
         }else{

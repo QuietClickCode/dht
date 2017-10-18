@@ -37,12 +37,12 @@ public class GoodsSpecificationController extends BaseController {
     @RequestMapping("editGoodsSpecification")
     @Function(label = "编辑商品规格",parentRes = "goods.openGoodsSpecification",resourse = "goods.editGoodsSpecification",description = "编辑商品规格",sort = 2)
     @ResponseBody
-    public BaseResp editGoodsSpecification(GoodsSpecification GoodsSpecification){
-        boolean flag = goodsSpecificationService.updateGoodsSpecification(GoodsSpecification);
+    public BaseResp editGoodsSpecification(GoodsSpecification goodsSpecification){
+        boolean flag = goodsSpecificationService.updateGoodsSpecification(goodsSpecification);
         if(flag){
-            return success("修改商品大类["+GoodsSpecification.getGsName()+"]成功");
+            return success("修改商品大类["+goodsSpecification.getGsName()+"]成功");
         }else{
-            return errorForSystem("修改商品大类["+GoodsSpecification.getGsName()+"]失败");
+            return errorForSystem("修改商品大类["+goodsSpecification.getGsName()+"]失败");
         }
     }
 
@@ -71,9 +71,12 @@ public class GoodsSpecificationController extends BaseController {
     @RequestMapping("/addGoodsSpecification")
     @Function(label="增加商品规格", description = "增加商品规格", resourse = "goods.addGoodsSpecification",parentRes="goods.openGoodsSpecification")
     @ResponseBody
-    public BaseResp addGoodsSpecification(GoodsSpecification GoodsSpecification){
-        boolean flag=goodsSpecificationService.saveGoodsSpecification(GoodsSpecification);
-        return success(flag);
+    public Map<String,Object> addGoodsSpecification(GoodsSpecification goodsSpecification){
+        goodsSpecification.setIsDelete(0L);
+        goodsSpecification = goodsSpecificationService.saveGoodsSpecification(goodsSpecification);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("goodsSpecification",goodsSpecification);
+        return gtm;
     }
 
 }

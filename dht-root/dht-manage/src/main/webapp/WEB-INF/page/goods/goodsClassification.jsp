@@ -568,8 +568,7 @@
             $("#editGoodsClassificationForm #ggHome").val(rowData.ggHome);
 
             var index = rowData.imgUrl.substring(rowData.imgUrl.length-4);
-            alert(index);
-            alert(rowData.imgUrl);
+
             if(index=='' || index==null || index=='null'){
                 $("#editGoodsClassificationForm #goodsClassificationImg").hide();
                 $("#editGoodsClassificationForm #goodsClassificationImgSpan").show();
@@ -691,56 +690,8 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editGoodsClassificationForm')
-            .bootstrapValidator({
-                message: 'This value is not valid',
-                //live: 'submitted',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    ggName: {
-                        message: '商品子类名称未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '商品子类名称不能为空'
-                            },
-                            stringLength: {
-                                min: 1,
-                                max: 30,
-                                message: '商品子类名称长度在1-30之间'
-                            }
-                        }
-                    },
-//                    parentId: {
-//                        message: '上级分类名称未通过',
-//                        validators: {
-//                            notEmpty: {
-//                                message: '上级分类名称不能为空'
-//                            },
-//                            stringLength: {
-//                                min: 1,
-//                                max: 30,
-//                                message: '上级分类名称长度在1-30之间'
-//                            }
-//                        }
-//                    },
-//                    ggHome: {
-//                        message: '所属大类未通过',
-//                        validators: {
-//                            notEmpty: {
-//                                message: '所属大类不能为空'
-//                            },
-//                            stringLength: {
-//                                min: 1,
-//                                max: 30,
-//                                message: '上级分类名称长度在1-30之间'
-//                            }
-//                        }
-//                    }
-                }
+        $('#editGoodsClassificationForm').bootstrapValidator({
+
             });
     }
     function  myValidate() {

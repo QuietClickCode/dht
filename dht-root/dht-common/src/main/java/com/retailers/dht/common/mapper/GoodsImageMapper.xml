@@ -64,6 +64,9 @@
             <if test="null != gid">
                 g_id = #{gid},
             </if>
+			<if test="null != copyid">
+				copyid = #{copyid},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>

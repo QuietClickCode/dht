@@ -3,6 +3,8 @@ package com.retailers.dht.common.service.impl;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.GoodsCopy;
@@ -27,13 +29,22 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private GoodsMapper goodsMapper;
 	@Autowired
-	private GoodsCopyService goodsCopyService;
+	private GoodsCopyMapper goodsCopyMapper;
 	public Goods saveGoods(Goods goods,Long uploadpersonId) {
 		int status = goodsMapper.saveGoods(goods);
+		if(status==1){
+			copyGoods(goods,uploadpersonId);
+		}
+		goods.setVersion(1L);
 		return status == 1 ? goods : null;
 	}
-	public boolean updateGoods(Goods goods) {
+	public boolean updateGoods(Goods goods,Long uploadpersonId) {
+		goods.setIsChecked(0L);
 		int status = goodsMapper.updateGoods(goods);
+		if(status==1){
+			goods.setVersion(goods.getVersion()+1);
+			copyGoods(goods,uploadpersonId);
+		}
 		return status == 1 ? true : false;
 	}
 	public Goods queryGoodsByGid(Long gid) {
@@ -49,18 +60,21 @@ public class GoodsServiceImpl implements GoodsService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteGoodsByGid(Long gid) {
+	public boolean deleteGoodsByGid(Long gid,Long uploadpersonId) {
 		Goods goods = goodsMapper.queryGoodsByGid(gid);
 		goods.setIsDelete(1L);
-		int status = goodsMapper.updateGoods(goods);
-		return status == 1 ? true : false;
+		return updateGoods(goods,uploadpersonId);
 	}
 
 	public void copyGoods(Goods goods,Long uploadpersonId){
-		GoodsCopy gc = new GoodsCopy();
-		BeanUtils.copyProperties(gc,goods);
+		GoodsCopy goodsCopy = new GoodsCopy();
+		BeanUtils.copyProperties(goods,goodsCopy);
+		goodsCopy.setGuploadperson(uploadpersonId);
+		goodsCopyMapper.saveGoodsCopy(goodsCopy);
 
-		gc.setGuploadperson(uploadpersonId);
+		goods.setGcopyid(goodsCopy.getGcId());
+		goodsMapper.updateGoods(goods);
+
 	}
 }
 

@@ -19,7 +19,7 @@ public interface GoodsSpecificationService {
 	 * @author fanghui
 	 * @date 2017-10-11 22:19:21
 	 */
-	public boolean saveGoodsSpecification(GoodsSpecification goodsSpecification);
+	public GoodsSpecification saveGoodsSpecification(GoodsSpecification goodsSpecification);
 	/**
 	 * 编辑商品规格表
 	 * @param goodsSpecification

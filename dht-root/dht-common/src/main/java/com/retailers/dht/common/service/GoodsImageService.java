@@ -20,7 +20,7 @@ public interface GoodsImageService {
 	 * @author fanghui
 	 * @date 2017-10-15 11:48:27
 	 */
-	public boolean saveGoodsImage(GoodsImage goodsImage);
+	public boolean saveGoodsImage(GoodsImage goodsImage,Long uploadpersonId);
 	/**
 	 * 编辑商品图片表
 	 * @param goodsImage
@@ -28,7 +28,7 @@ public interface GoodsImageService {
 	 * @author fanghui
 	 * @date
 	 */
-	public boolean updateGoodsImage(GoodsImage goodsImage);
+	public boolean updateGoodsImage(GoodsImage goodsImage,Long uploadpersonId);
 	/**
 	 * 根据id查询商品图片表
 	 * @param giId
@@ -54,7 +54,7 @@ public interface GoodsImageService {
 	 * @author fanghui
 	 * @date 2017-10-15 11:48:27
 	 */
-	public boolean deleteGoodsImageByGiId(Long giId);
+	public boolean deleteGoodsImageByGiId(Long giId,Long uploadpersonId);
 
 }
 
