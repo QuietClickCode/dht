@@ -119,8 +119,10 @@ public class CouponShowVo {
     }
 
     public String getCpLogoUrl() {
-        if(cpLogoUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&cpLogoUrl.indexOf("http://")==-1){
-            return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,cpLogoUrl);
+        if(ObjectUtils.isNotEmpty(cpLogoUrl)){
+            if(cpLogoUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&cpLogoUrl.indexOf("http://")==-1){
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,cpLogoUrl);
+            }
         }
         return cpLogoUrl;
 

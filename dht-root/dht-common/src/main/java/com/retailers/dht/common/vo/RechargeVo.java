@@ -3,6 +3,7 @@ package com.retailers.dht.common.vo;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -160,8 +161,10 @@ public class RechargeVo {
         this.rlogoUrl = rlogoUrl;
     }
     public String getRlogoUrl() {
-        if(rlogoUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&rlogoUrl.indexOf("http://")==-1){
-            return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,rlogoUrl);
+        if(ObjectUtils.isNotEmpty(rlogoUrl)){
+            if(rlogoUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&rlogoUrl.indexOf("http://")==-1){
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,rlogoUrl);
+            }
         }
         return rlogoUrl;
 
