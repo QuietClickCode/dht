@@ -2,7 +2,9 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.HomeNavigation;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeNavigationService;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -25,6 +27,9 @@ public class HomeNavigationController extends BaseController {
     @Autowired
     HomeNavigationService homeNavigationService;
 
+    @Autowired
+    AttachmentService attachmentService;
+
     @RequestMapping("/homeNavigationMapping")
     @Menu(parentRes = "sys.manager.floorManage",resourse = "openHomeNavigation.homeNavigationMapping",description = "首页导航栏",label = "首页导航栏")
     public String openHomeNavigation(){
@@ -46,15 +51,21 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "修改首页导航",description = "修改首页导航",resourse = "openHomeNavigation.updateNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp updateNavigatorBar(HomeNavigation navigation){
+        HomeNavigation homeNavigation = homeNavigationService.queryHomeNavigationByHnId(navigation.getHnId());
+        if(homeNavigation.getHnImgpath().compareTo(navigation.getHnImgpath()) != 0) {
+            attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+            attachmentService.editorAttachment(navigation.getHnImgpath());
+        }
+        navigation.setVersion(homeNavigation.getVersion());
         boolean flag = homeNavigationService.updateHomeNavigation(navigation);
         if(flag)
-            return success("修改首页导航[" + navigation.getHnMianTitle() + "]成功");
+            return success("修改首页导航[" + navigation.getHnName() + "]成功");
         else
-            return errorForSystem("修改首页导航[" + navigation.getHnMianTitle() + "]失败");
+            return errorForSystem("修改首页导航[" + navigation.getHnName() + "]失败");
     }
 
     @RequestMapping("/removeNavigatorBar")
-    @Function(label = "修改首页导航",description = "修改首页导航",resourse = "openHomeNavigation.removeNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
+    @Function(label = "删除首页导航",description = "删除首页导航",resourse = "openHomeNavigation.removeNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp removeNavigatorBar(Long hnId){
         boolean flag = homeNavigationService.deleteHomeNavigationByHnId(hnId);
