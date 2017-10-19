@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGgsvalMapper">
+
+	<resultMap id="rm_goodsGgsval" type="com.retailers.dht.common.entity.GoodsGgsval">
+			<result property="ggsId" column="ggs_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gsId" column="gs_id"/>
+			<result property="gsvId" column="gsv_id"/>
+			<result property="ggsPrice" column="ggs_price"/>
+			<result property="ggsCostprice" column="ggs_costprice"/>
+			<result property="ggsInventory" column="ggs_inventory"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGgsval_columns">
+		ggs_id,g_id,gs_id,gsv_id,ggs_price,ggs_costprice,ggs_inventory,is_delete,version
+	</sql>
+	<!-- 根据商品与规格值关系表主键取得数据 -->
+	<select id="queryGoodsGgsvalByGgsId" resultMap="rm_goodsGgsval" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGgsval_columns" />
+		FROM t_goods_ggsval WHERE ggs_id = #{ggsId}
+	</select>
+	<!-- 商品与规格值关系表查询条件组合 -->
+	<sql id="goodsGgsval_where">
+		<where>
+			<if test="null != params.ggsId">
+				AND ggs_id = #{params.ggsId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gsId">
+				AND gs_id = #{params.gsId}
+			</if>
+			<if test="null != params.gsvId">
+				AND gsv_id = #{params.gsvId}
+			</if>
+			<if test="null != params.ggsPrice">
+				AND ggs_price = #{params.ggsPrice}
+			</if>
+			<if test="null != params.ggsCostprice">
+				AND ggs_costprice = #{params.ggsCostprice}
+			</if>
+			<if test="null != params.ggsInventory">
+				AND ggs_inventory = #{params.ggsInventory}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGgsvalList" resultMap="rm_goodsGgsval" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGgsval_columns" />
+		FROM t_goods_ggsval
+		<include refid="goodsGgsval_where"/>
+	</select>
+	<!--添加商品与规格值关系表 -->
+	<insert id="saveGoodsGgsval" parameterType="com.retailers.dht.common.entity.GoodsGgsval" useGeneratedKeys="true" keyProperty="ggsId">
+		INSERT INTO t_goods_ggsval (
+			g_id,gs_id,gsv_id,ggs_price,ggs_costprice,ggs_inventory,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gsId,jdbcType=BIGINT},#{gsvId,jdbcType=BIGINT},#{ggsPrice,jdbcType=REAL},#{ggsCostprice,jdbcType=REAL},#{ggsInventory,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与规格值关系表 -->
+	<update id="updateGoodsGgsval" parameterType="com.retailers.dht.common.entity.GoodsGgsval">
+		UPDATE t_goods_ggsval
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gsId">
+                gs_id = #{gsId},
+            </if>
+            <if test="null != gsvId">
+                gsv_id = #{gsvId},
+            </if>
+            <if test="null != ggsPrice">
+                ggs_price = #{ggsPrice},
+            </if>
+            <if test="null != ggsCostprice">
+                ggs_costprice = #{ggsCostprice},
+            </if>
+            <if test="null != ggsInventory">
+                ggs_inventory = #{ggsInventory},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggs_id = #{ggsId} and version = #{version}
+	</update>
+	<!--删除商品与规格值关系表 -->
+	<delete id="deleteGoodsGgsvalByGgsId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_ggsval WHERE ggs_id = #{ggsId}
+	</delete>
+</mapper>

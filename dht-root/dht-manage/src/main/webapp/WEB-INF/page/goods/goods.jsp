@@ -158,6 +158,9 @@
                                     <li>
                                         <a href="#goodsImagePane" data-toggle="tab" onclick="initGoodsImages();" id="nava3">商品图片</a>
                                     </li>
+                                    <li>
+                                        <a href="#goodsSpecificatioPane" data-toggle="tab" onclick="initGoodsSpecification();" id="nava4">商品规格</a>
+                                    </li>
                                 </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="goodsPane">
@@ -522,7 +525,29 @@
                                                 </center>
                                             </div>
                                         </div>
+                                        <div class="tab-pane" id="goodsSpecificatioPane">
+                                            <div class="modal-body">
+                                                <form id="editorGoodsImageForm">
+                                                    <input id="giId" name="giId" type="hidden">
+                                                    <input id="giversion" name="giversion" type="hidden">
+                                                    <div class="row">
+                                                        <div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <img src="" style="width: 100%;height: 100%;" >
+                                                            <div onclick="deleteGoodsImage(this,goodsImageId)" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>
+                                                        </div>
 
+                                                        <div id="uploadImgBtn"  style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <center>
+                                                                <button onclick="upImage();return false;" class="btn btn-default" style="margin: 0 auto;margin-top: 33px">+</button>
+                                                            </center>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                                <center>
+                                                    <button id="editGoodsImageSubmit" class="btn btn-success" >保存</button>
+                                                </center>
+                                            </div>
+                                        </div>
                                     </div>
                             </div>
                         </div>
@@ -562,8 +587,6 @@
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-
 
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
