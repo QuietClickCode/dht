@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-18 16:32:55
+ * @date 2017-10-20 17:07:09
  */
 public class HomeAdvertising implements java.io.Serializable {
 
@@ -32,8 +32,7 @@ public class HomeAdvertising implements java.io.Serializable {
 	private String url;
 	/**图片地址*/
 	@NotEmpty
-	@Length(min = 1, max = 500)
-	private String imagePath;
+	private Long imagePath;
 	/**选择推送的客户端（0代表移动端，1代表PC端，2代表小程序，默认为0）*/
 	@NotEmpty
 	private Long haClient;
@@ -42,7 +41,10 @@ public class HomeAdvertising implements java.io.Serializable {
 	private Long haCountry;
 	/**选择推送广告的类型（0代表向上区域的广告，1代表中间区域的广告，2代表底部区域的广告）*/
 	@NotEmpty
-	private Long haType;
+	private Long haRegion;
+	/**版本号*/
+	@NotEmpty
+	private Long version;
 	//columns END
 
 	public HomeAdvertising(){
@@ -94,11 +96,11 @@ public class HomeAdvertising implements java.io.Serializable {
 	public String getUrl() {
 		return this.url;
 	}
-	public void setImagePath(String value) {
+	public void setImagePath(Long value) {
 		this.imagePath = value;
 	}
 
-	public String getImagePath() {
+	public Long getImagePath() {
 		return this.imagePath;
 	}
 	public void setHaClient(Long value) {
@@ -115,12 +117,19 @@ public class HomeAdvertising implements java.io.Serializable {
 	public Long getHaCountry() {
 		return this.haCountry;
 	}
-	public void setHaType(Long value) {
-		this.haType = value;
+	public void setHaRegion(Long value) {
+		this.haRegion = value;
 	}
 
-	public Long getHaType() {
-		return this.haType;
+	public Long getHaRegion() {
+		return this.haRegion;
+	}
+	public void setVersion(Long value) {
+		this.version = value;
+	}
+
+	public Long getVersion() {
+		return this.version;
 	}
 
 

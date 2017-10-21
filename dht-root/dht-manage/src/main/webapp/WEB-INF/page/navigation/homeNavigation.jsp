@@ -24,13 +24,34 @@
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <button class="btn btn-primary" type="button" onclick="addNavigationBar()" style="margin-bottom: 5px">新增首页导航</button>
-    <div id="Client">
+    <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
+    <div id="Client" style="display: inline-block">
         <button class="btn btn-success" data-clientValue="0">移动端</button>
         <button class="btn" data-clientValue="1" disabled="disabled">PC端</button>
         <button class="btn" data-clientValue="2" disabled="disabled">小程序</button>
         <input id="clientValue" style="display: none" value="0">
     </div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            主推样式 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">带副标题的样式</a></li>
+            <li><a href="#">不带副标题的样式</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            推送对象 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">乡村</a></li>
+            <li><a href="#">城市</a></li>
+        </ul>
+    </div>
+
+    <button class="btn btn-default">查询</button>
 </div>
 <div>
     <table id="goodsTypeTables" ></table>
@@ -46,9 +67,9 @@
             <div class="modal-body">
                 <form class="form-horizontal" id="addHomeNavigation">
                     <div class="form-group">
-                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
+                        <label for="addImagePath" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="" name="dht_image_upload" type="file"/>
+                            <input id="addImagePath"  name="dht_image_upload" type="file"/>
                         </div>
                     </div>
 
@@ -98,14 +119,14 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" >
                         <label for="mainTitle" class="col-sm-2 control-label">主标题</label>
                         <div class="col-sm-10">
                             <input type="text" id="mainTitle" class="form-control">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="subTitleModal">
                         <label for="subTitle" class="col-sm-2 control-label">副标题</label>
                         <div class="col-sm-10">
                             <input type="text" id="subTitle" class="form-control">
@@ -153,6 +174,7 @@
                         <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
                             <input id="uploadImage" name="dht_image_upload" type="file"/>
+                            <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
@@ -260,6 +282,18 @@
         {
             field: 'hnOrder',
             title: '排序',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'hnMianTitle',
+            title: '主标题',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'hnSubTitle',
+            title: '副标题',
             align : 'center',
             valign : 'middle'
         },
@@ -439,6 +473,15 @@
     });
 
 
+    $(".setStyle").click(function () {
+        let style = $(".setStyle:checked").val();
+        if(style == 0)
+            $("#subTitleModal").hide();
+        else
+            $("#subTitleModal").show();
+    });
+
+
     function deleteHomeNavigation(id) {
         $.ajax({
             url:"/openHomeNavigation/removeNavigatorBar",
@@ -471,13 +514,74 @@
         let name = $("#NavigationName").val();
         let client = $(".client:checked").val();
         let country = $(".country:checked").val();
-        let style = $(".setStyle:checked");
+        let style = $(".setStyle:checked").val();
         let maintitle = $("#mainTitle").val();
         let subtitle = $("#subTitle").val();
         let order = $("#hnOrder").val();
         let url = $("#hnUrl").val();
 
+        if($("#addImagePath").val() == "") {
+            layer.msg("请上传图片");
+            return;
+        }
 
+        if(name == "") {
+            layer.msg("请输入导航名称");
+            return;
+        }
+
+        if(maintitle == ""){
+            layer.msg("请输入主标题");
+            return;
+        }
+
+        if(url == ""){
+            layer.msg("请输入链接");
+            return;
+        }
+
+
+        var fd = new FormData($("#addHomeNavigation")[0]);
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                var imagepath = JSON.parse(data).original;
+                alert(imagepath);
+                $.ajax({
+                    url:"/openHomeNavigation/addNavigatorBar",
+                    method:"post",
+                    dataType:"json",
+                    data:{
+                        hnName:name,
+                        hnOrder:order,
+                        hnImgpath:imagepath,
+                        hnCountry:country,
+                        hnStyle:style,
+                        hnUrl:url,
+                        hnClient:client,
+                        hnMianTitle:maintitle,
+                        hnSubTitle:subtitle,
+                        isDelete:0,
+                        isShow:1
+                    },
+                    success:function (data) {
+                        bootbox.alert(data.msg);
+                        refreshTableData();
+                        $("#addHomeNavigationBar").modal("hide");
+                    }
+                });
+            },
+            error:function(){
+
+            }
+        });
 
     }
 </script>

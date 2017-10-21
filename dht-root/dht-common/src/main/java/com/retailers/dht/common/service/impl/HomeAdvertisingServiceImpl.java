@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-18 16:32:55
+ * @date 2017-10-20 17:07:09
  */
 @Service("homeadvertisingService")
 public class HomeAdvertisingServiceImpl implements HomeAdvertisingService {

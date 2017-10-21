@@ -24,15 +24,39 @@
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <button class="btn btn-primary" type="button" onclick="addNavigationBar()" style="margin-bottom: 5px">新增首页广告</button>
-    <div id="Client">
-        <button class="btn btn-primary" data-clientValue="0">移动端</button>
-        <button class="btn btn-primary" data-clientValue="1">PC端</button>
-        <button class="btn btn-primary" data-clientValue="2">小程序</button>
-        <input id="clientValue" style="display: none" value="">
+    <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            客户端 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">移动端</a></li>
+            <li><a href="#">PC端</a></li>
+            <li><a href="#">小程序</a></li>
+        </ul>
     </div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            主推样式 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">带副标题的样式</a></li>
+            <li><a href="#">不带副标题的样式</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            推送对象 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">乡村</a></li>
+            <li><a href="#">城市</a></li>
+        </ul>
+    </div>
+
+    <button class="btn btn-default">查询</button>
 </div>
-<div>
     <table id="goodsTypeTables" ></table>
 </div>
 <%--新增首页导航--%>
@@ -44,80 +68,75 @@
                 <h4 class="modal-title" id="">编辑该导航栏</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="saveHomeAdvertising">
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">商品名称</label>
+                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
+                            <input id="saveImage" name="dht_image_upload" type="file"/>
+                            <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">选择样式</label>
+                        <label for="" class="col-sm-2 control-label">商品名称</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择推送区域<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" id="chooseStyle" aria-labelledby="dropdownMenu1">
-                                    <li><a style="cursor: pointer" data-styleValue="0">顶部区域</a></li>
-                                    <li><a style="cursor: pointer" data-styleValue="1">中间区域</a></li>
-                                    <li><a style="cursor: pointer" data-styleValue="1">底部区域</a></li>
-                                </ul>
-                                <input id="styleText" style="display: none">
-                            </div>
+                            <input type="text" id="saveName" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">推送区域</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="area" class="area" value="1">顶部区域
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="area" class="area" value="0">中间区域
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="area" class="area" value="0">底部区域
+                            </label>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择推送对象<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <li><a style="cursor: pointer" data-CountryValue="0">乡村</a></li>
-                                    <li><a style="cursor: pointer" data-CountryValue="1">城市</a></li>
-                                </ul>
-                                <input id="countryText" style="display: none">
-                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="setCountry" class="setCountry" value="1">乡村
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setCountry" class="setCountry" value="0">城市
+                            </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">客户端</label>
+                        <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择客户端<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <li><a style="cursor: pointer" data-clientValue="0">移动端</a></li>
-                                    <li class="disabled"><a  data-clientValue="1">PC端</a></li>
-                                    <li class="disabled"><a  data-clientValue="2">小程序</a></li>
-                                </ul>
-                                <input id="clientText" style="display: none">
-                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="setClient" checked class="setClient" value="1">移动端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setClient" disabled="disabled" class="setClient" value="0">PC端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setClient" disabled="disabled" class="setClient" value="0">小程序
+                            </label>
                         </div>
                     </div>
 
-
-                    <div class="form-group" id="">
+                    <div class="form-group">
                         <label for="" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">图片</label>
-                        <div class="col-sm-10">
-                            <input type="file" id="">
+                            <input type="text" id="saveOrder" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
+                            <input type="text" id="saveUrl" class="form-control">
                         </div>
                     </div>
 
@@ -125,7 +144,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary" onclick="updateNavigator()">确定</button>
+                <button type="submit" class="btn btn-primary" onclick="saveAdvertising()">确定</button>
             </div>
         </div>
     </div>
@@ -141,34 +160,64 @@
                 <h4 class="modal-title" id="">编辑该广告</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="updateHomeAdvertising">
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">商品名称</label>
-                        <div class="col-sm-10" id="">
-                            <input type="text" id="" class="form-control">
+                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
+                        <div class="col-sm-10">
+                            <input id="uploadImage" name="dht_image_upload" type="file"/>
+                            <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">链接</label>
+                        <label for="" class="col-sm-2 control-label">广告名称</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="chooseClassifyLabel">
-                        <label for="" class="col-sm-2 control-label">图片</label>
-                        <div class="col-sm-10">
-                            <input type="file" id="exampleInputFile">
+                            <input type="text" name="setName" id="setAdvName" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">排序</label>
+                        <label for="" class="col-sm-2 control-label">推送区域</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
+                            <label class="radio-inline">
+                                <input type="radio" name="region" class="region" value="1">顶部区域
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="region" class="region" value="0">中间区域
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="region" class="region" value="0">底部区域
+                            </label>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">推送对象</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="updateCountry" class="updateCountry" value="1">乡村
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="updateCountry" class="updateCountry" value="0">城市
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">客户端</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="updateClient" checked class="updateClient" value="1">移动端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">PC端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">小程序
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
@@ -180,11 +229,27 @@
                             </label>
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">链接</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="setUrl" id="setAdvertUrl" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="setOrder" id="setAdvertOrder" class="form-control">
+                        </div>
+                    </div>
+
+
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary" onclick="updateNavigator()">确定</button>
+                <button type="submit" class="btn btn-primary" onclick="subHomeAdvertisingChange()">确定</button>
             </div>
         </div>
     </div>
@@ -250,7 +315,7 @@
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal()">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal(\''+row.haId+'\',\''+row.imagePath+'\')">编辑</button>'
                 return html;
             }
         },
@@ -288,7 +353,7 @@
         $('#goodsTypeTables').bootstrapTable(
             "refresh",
             {
-                url:"/goods/queryGoodsTypeLists"
+                url:"/openHomeAdvertising/queryAdvertisingLists"
             }
         );
     }
@@ -298,8 +363,11 @@
         $("#clientValue").attr("value",clientValue);
         $(this).addClass("btn-success").siblings().removeClass("btn-success");
     });
-
-    function openSaveAdvertisingModal() {
+    var haId;
+    var imgpath;
+    function openSaveAdvertisingModal(id,path) {
+        haId = id;
+        imgpath = path;
         $("#saveAdvertising").modal("show");
     }
 
@@ -310,21 +378,166 @@
     });
 
 
-    function updateNavigator() {
-        let clientValue = $("#clientValue").val();
-        let countryValue = $("#countryValue").val();
-        let naviName = $("#NaviName").val();
-        $("#NaviOrder").val();
-        /*alert(clientValue+" "+countryValue);*/
-        layer.msg(clientValue +" "+ countryValue);
-    }
-
     /*
      * 新增首页导航
      * */
     function addNavigationBar() {
         $("#addHomeNavigationBar").modal("show");
     }
+
+    function subHomeAdvertisingChange() {
+        let name = $("#setAdvName").val();
+        let region = $(".region:checked").val();
+        let country = $(".updateCountry:checked").val();
+        let client = $(".updateClient:checked").val();
+        let isshow = $(".isShow:checked").val();
+        let url = $("#setAdvertUrl").val();
+        let order = $("#setAdvertOrder").val();
+        let imageVal = $("#uploadImage").val();
+
+        if(imageVal != ""){
+            var fd = new FormData($("#updateHomeAdvertising")[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    var imagepath = JSON.parse(data).original;
+                    $.ajax({
+                        url:"/openHomeAdvertising/updateAdvertising",
+                        method:"post",
+                        dataType:"json",
+                        data:{
+                            haId:haId,
+                            haName:name,
+                            haOrder:order,
+                            isShow:isshow,
+                            url:url,
+                            imagePath:imagepath,
+                            haClient:client,
+                            haCountry:country,
+                            haRegion:region,
+                        },
+                        success:function (data) {
+                            layer.msg(data.msg);
+                            refreshTableData();
+                            $("#saveAdvertising").modal("hide");
+                        }
+                    });
+                }
+            });
+        }else{
+            $.ajax({
+                url:"/openHomeAdvertising/updateAdvertising",
+                method:"post",
+                dataType:"json",
+                data:{
+                    haId:haId,
+                    haName:name,
+                    haOrder:order,
+                    isShow:isshow,
+                    url:url,
+                    imagePath:imgpath,
+                    haClient:client,
+                    haCountry:country,
+                    haRegion:region,
+                },
+                success:function (data) {
+                    layer.msg(data.msg);
+                    refreshTableData();
+                    $("#saveAdvertising").modal("hide");
+                }
+            });
+        }
+    }
+    
+    function saveAdvertising() {
+        let name = $("#saveName").val();
+        let area = $(".area:checked").val();
+        let country = $("#setCountry:checked").val();
+        let client = $("#setClient:checked").val();
+        let order = $("#saveOrder").val();
+        let url = $("#saveUrl").val();
+
+        let path = $("#saveImage").val();
+        if(path != ""){
+            var fd = new FormData($("#saveHomeAdvertising")[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    var imagepath = JSON.parse(data).original;
+                    $.ajax({
+                        url:"/openHomeAdvertising/addAdvertising",
+                        method:"post",
+                        dataType:"json",
+                        data:{
+                            haName:name,
+                            haOrder:order,
+                            url:url,
+                            imagePath:imagepath,
+                            haClient:client,
+                            haCountry:country,
+                            haRegion:area,
+                            isShow:1,
+                            isDelete:0
+                        },
+                        success:function (data) {
+                            layer.msg(data.msg);
+                            refreshTableData();
+                            $("#addHomeNavigationBar").modal("hide");
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    /*$(function () {
+        $('#updateHomeAdvertising').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                setName: {
+                    message: '广告名验证失败',
+                    validators: {
+                        notEmpty: {
+                            message: '用户名不能为空'
+                        }
+                    }
+                },
+                setUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                setOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });*/
 </script>
 
 </body>

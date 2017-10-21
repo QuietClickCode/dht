@@ -40,6 +40,8 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "添加首页导航",description = "添加首页导航",resourse = "openHomeNavigation.addNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp addNavigatorBar(HomeNavigation navigation){
+        System.out.println(navigation.getHnName());
+        attachmentService.editorAttachment(navigation.getHnImgpath());
         boolean flag = homeNavigationService.saveHomeNavigation(navigation);
         if(flag)
             return success("新增楼层成功");
@@ -51,6 +53,7 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "修改首页导航",description = "修改首页导航",resourse = "openHomeNavigation.updateNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp updateNavigatorBar(HomeNavigation navigation){
+        System.out.println(navigation.getHnName());
         HomeNavigation homeNavigation = homeNavigationService.queryHomeNavigationByHnId(navigation.getHnId());
         if(homeNavigation.getHnImgpath().compareTo(navigation.getHnImgpath()) != 0) {
             attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
