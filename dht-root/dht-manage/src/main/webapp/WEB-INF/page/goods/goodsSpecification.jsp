@@ -56,7 +56,7 @@
                         </div>
                     </div>
                     <br>
-
+                </form>
                     <div class="row" id="gsvaldiv">
                         <div class="col-lg-3" style="color: red;">
                             <div class="input-group form-group">
@@ -66,7 +66,6 @@
                         </div>
                     </div>
 
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="close">关闭</button>
@@ -174,22 +173,36 @@
                 success:function(data){
                     layer.close(editSubmitIndex);
                     var goodsSpecification = data.goodsSpecification;
-                    if(goodsSpecification!=null){
-                        //显示提示
-                        layer.msg("操作成功！");
-                        //刷新数据
-                        refreshTableData();
-                        //关闭弹窗
-                        $('#editorSysUser').modal('hide');
+                    if(url == '/goods/addGoodsSpecification'){
+                        if(goodsSpecification!=null){
+                            //显示提示
+                            layer.msg("操作成功！");
+                            //刷新数据
+                            refreshTableData();
+                            //关闭弹窗
+                            $('#editorSysUser').modal('hide');
 
-                        if(url=='/goods/addGoodsSpecification'){
-                            formData["gsId"]=goodsSpecification.gsId;
+                            if(url=='/goods/addGoodsSpecification'){
+                                formData["gsId"]=goodsSpecification.gsId;
+                            }
+
+                            uploadgsvs(formData["gsId"]);
+                            refreshTableData();
+                            $('#editorSysUser').modal("hide");
+                        }else{
+                            layer.msg("操作失败！");
                         }
-
-                        uploadgsvs(formData["gsId"]);
-                    }else{
-                        layer.msg("操作失败！");
+                    }else {
+                        if (data.status ==0){
+                            uploadgsvs(formData["gsId"]);
+                            layer.msg("操作成功！");
+                            refreshTableData();
+                            $('#editorSysUser').modal("hide");
+                        }else {
+                            layer.msg("操作失败！");
+                        }
                     }
+
                 }
             });
         });

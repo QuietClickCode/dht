@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsDetailMapper">
+
+	<resultMap id="rm_goodsDetail" type="com.retailers.dht.common.entity.GoodsDetail">
+	<result property="gdId" column="gd_id"/>
+	<result property="gid" column="g_id"/>
+	<result property="gdPrice" column="gd_price"/>
+	<result property="gdCostprice" column="gd_costprice"/>
+	<result property="gdInventory" column="gd_inventory"/>
+	<result property="gdResidueinventory" column="gd_residueinventory"/>
+	<result property="gdImgid" column="gd_imgid"/>
+	<result property="isDelete" column="is_delete"/>
+	<result property="version" column="version"/>
+</resultMap>
+	<resultMap id="rm_goodsDetail_vo" type="com.retailers.dht.common.vo.GoodsDetailVo">
+		<result property="gdId" column="gd_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="gdPrice" column="gd_price"/>
+		<result property="gdCostprice" column="gd_costprice"/>
+		<result property="gdInventory" column="gd_inventory"/>
+		<result property="gdResidueinventory" column="gd_residueinventory"/>
+		<result property="gdImgid" column="gd_imgid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="imgUrl" column="img_url"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsDetail_columns">
+		gd_id,g_id,gd_price,gd_costprice,gd_inventory,gd_residueinventory,gd_imgid,is_delete,version
+	</sql>
+	<!-- 根据商品详情表主键取得数据 -->
+	<select id="queryGoodsDetailByGdId" resultMap="rm_goodsDetail_vo" parameterType="java.lang.Long">
+		SELECT t1.*,t2.show_url img_url from t_goods_detail t1
+		LEFT JOIN t_attachment t2 ON t1.gd_imgid=t2.id
+		WHERE t1.gd_id = #{gdId}
+	</select>
+	<!-- 商品详情表查询条件组合 -->
+	<sql id="goodsDetail_where">
+		<where>
+			<if test="null != params.gdId">
+				AND gd_id = #{params.gdId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gdPrice">
+				AND gd_price = #{params.gdPrice}
+			</if>
+			<if test="null != params.gdCostprice">
+				AND gd_costprice = #{params.gdCostprice}
+			</if>
+			<if test="null != params.gdInventory">
+				AND gd_inventory = #{params.gdInventory}
+			</if>
+			<if test="null != params.gdResidueinventory">
+				AND gd_residueinventory = #{params.gdResidueinventory}
+			</if>
+			<if test="null != params.gdImgid">
+				AND gd_imgid = #{params.gdImgid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsDetailList" resultMap="rm_goodsDetail" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsDetail_columns" />
+		FROM t_goods_detail
+		<include refid="goodsDetail_where"/>
+	</select>
+	<!--添加商品详情表 -->
+	<insert id="saveGoodsDetail" parameterType="com.retailers.dht.common.entity.GoodsDetail" useGeneratedKeys="true" keyProperty="gdId">
+		INSERT INTO t_goods_detail (
+			g_id,gd_price,gd_costprice,gd_inventory,gd_residueinventory,gd_imgid,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gdPrice,jdbcType=REAL},#{gdCostprice,jdbcType=REAL},#{gdInventory,jdbcType=BIGINT},#{gdResidueinventory,jdbcType=BIGINT},#{gdImgid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品详情表 -->
+	<update id="updateGoodsDetail" parameterType="com.retailers.dht.common.entity.GoodsDetail">
+		UPDATE t_goods_detail
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gdPrice">
+                gd_price = #{gdPrice},
+            </if>
+            <if test="null != gdCostprice">
+                gd_costprice = #{gdCostprice},
+            </if>
+            <if test="null != gdInventory">
+                gd_inventory = #{gdInventory},
+            </if>
+            <if test="null != gdResidueinventory">
+                gd_residueinventory = #{gdResidueinventory},
+            </if>
+            <if test="null != gdImgid">
+                gd_imgid = #{gdImgid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gd_id = #{gdId} and version = #{version}
+	</update>
+	<!--删除商品详情表 -->
+	<delete id="deleteGoodsDetailByGdId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_detail WHERE gd_id = #{gdId}
+	</delete>
+</mapper>

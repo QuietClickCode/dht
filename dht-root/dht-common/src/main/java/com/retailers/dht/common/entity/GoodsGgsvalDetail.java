@@ -3,17 +3,17 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品与规格值关系表对象
+ * 描述：商品与规格值详情表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-20 09:54:38
+ * @date 2017-10-20 09:52:11
  */
-public class GoodsGgsval implements java.io.Serializable {
+public class GoodsGgsvalDetail implements java.io.Serializable {
 
-	/**商品规格值ID*/
+	/**规格值与商品关系细节ID*/
 	@NotEmpty
-	private Long ggsId;
+	private Long ggdId;
 	/**商品ID*/
 	@NotEmpty
 	private Long gid;
@@ -23,6 +23,9 @@ public class GoodsGgsval implements java.io.Serializable {
 	/**商品规格值*/
 	@NotEmpty
 	private Long gsvId;
+	/**商品详情ID*/
+	@NotEmpty
+	private Long gdId;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -31,19 +34,19 @@ public class GoodsGgsval implements java.io.Serializable {
 	private Long version;
 	//columns END
 
-	public GoodsGgsval(){
+	public GoodsGgsvalDetail(){
 	}
 
-	public GoodsGgsval( Long ggsId){
-		this.ggsId = ggsId;
+	public GoodsGgsvalDetail( Long ggdId){
+		this.ggdId = ggdId;
 	}
 
-	public void setGgsId(Long value) {
-		this.ggsId = value;
+	public void setGgdId(Long value) {
+		this.ggdId = value;
 	}
 
-	public Long getGgsId() {
-		return this.ggsId;
+	public Long getGgdId() {
+		return this.ggdId;
 	}
 	public void setGid(Long value) {
 		this.gid = value;
@@ -65,6 +68,13 @@ public class GoodsGgsval implements java.io.Serializable {
 
 	public Long getGsvId() {
 		return this.gsvId;
+	}
+	public void setGdId(Long value) {
+		this.gdId = value;
+	}
+
+	public Long getGdId() {
+		return this.gdId;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

@@ -7,16 +7,13 @@
 			<result property="gid" column="g_id"/>
 			<result property="gsId" column="gs_id"/>
 			<result property="gsvId" column="gsv_id"/>
-			<result property="ggsPrice" column="ggs_price"/>
-			<result property="ggsCostprice" column="ggs_costprice"/>
-			<result property="ggsInventory" column="ggs_inventory"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGgsval_columns">
-		ggs_id,g_id,gs_id,gsv_id,ggs_price,ggs_costprice,ggs_inventory,is_delete,version
+		ggs_id,g_id,gs_id,gsv_id,is_delete,version
 	</sql>
 	<!-- 根据商品与规格值关系表主键取得数据 -->
 	<select id="queryGoodsGgsvalByGgsId" resultMap="rm_goodsGgsval" parameterType="java.lang.Long">
@@ -38,15 +35,6 @@
 			<if test="null != params.gsvId">
 				AND gsv_id = #{params.gsvId}
 			</if>
-			<if test="null != params.ggsPrice">
-				AND ggs_price = #{params.ggsPrice}
-			</if>
-			<if test="null != params.ggsCostprice">
-				AND ggs_costprice = #{params.ggsCostprice}
-			</if>
-			<if test="null != params.ggsInventory">
-				AND ggs_inventory = #{params.ggsInventory}
-			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
 			</if>
@@ -61,13 +49,14 @@
 		FROM t_goods_ggsval
 		<include refid="goodsGgsval_where"/>
 	</select>
+
 	<!--添加商品与规格值关系表 -->
 	<insert id="saveGoodsGgsval" parameterType="com.retailers.dht.common.entity.GoodsGgsval" useGeneratedKeys="true" keyProperty="ggsId">
 		INSERT INTO t_goods_ggsval (
-			g_id,gs_id,gsv_id,ggs_price,ggs_costprice,ggs_inventory,is_delete,version
+			g_id,gs_id,gsv_id,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gsId,jdbcType=BIGINT},#{gsvId,jdbcType=BIGINT},#{ggsPrice,jdbcType=REAL},#{ggsCostprice,jdbcType=REAL},#{ggsInventory,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gsId,jdbcType=BIGINT},#{gsvId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品与规格值关系表 -->
@@ -82,15 +71,6 @@
             </if>
             <if test="null != gsvId">
                 gsv_id = #{gsvId},
-            </if>
-            <if test="null != ggsPrice">
-                ggs_price = #{ggsPrice},
-            </if>
-            <if test="null != ggsCostprice">
-                ggs_costprice = #{ggsCostprice},
-            </if>
-            <if test="null != ggsInventory">
-                ggs_inventory = #{ggsInventory},
             </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},

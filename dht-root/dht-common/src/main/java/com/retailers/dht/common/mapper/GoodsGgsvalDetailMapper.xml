@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGgsvalDetailMapper">
+
+	<resultMap id="rm_goodsGgsvalDetail" type="com.retailers.dht.common.entity.GoodsGgsvalDetail">
+			<result property="ggdId" column="ggd_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gsId" column="gs_id"/>
+			<result property="gsvId" column="gsv_id"/>
+			<result property="gdId" column="gd_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGgsvalDetail_columns">
+		ggd_id,g_id,gs_id,gsv_id,gd_id,is_delete,version
+	</sql>
+	<!-- 根据商品与规格值详情表主键取得数据 -->
+	<select id="queryGoodsGgsvalDetailByGgdId" resultMap="rm_goodsGgsvalDetail" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGgsvalDetail_columns" />
+		FROM t_goods_ggsval_detail WHERE ggd_id = #{ggdId}
+	</select>
+	<!-- 商品与规格值详情表查询条件组合 -->
+	<sql id="goodsGgsvalDetail_where">
+		<where>
+			<if test="null != params.ggdId">
+				AND ggd_id = #{params.ggdId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.gsId">
+				AND gs_id = #{params.gsId}
+			</if>
+			<if test="null != params.gsvId">
+				AND gsv_id = #{params.gsvId}
+			</if>
+			<if test="null != params.gdId">
+				AND gd_id = #{params.gdId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGgsvalDetailList" resultMap="rm_goodsGgsvalDetail" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGgsvalDetail_columns" />
+		FROM t_goods_ggsval_detail
+		<include refid="goodsGgsvalDetail_where"/>
+	</select>
+	<!--添加商品与规格值详情表 -->
+	<insert id="saveGoodsGgsvalDetail" parameterType="com.retailers.dht.common.entity.GoodsGgsvalDetail" useGeneratedKeys="true" keyProperty="ggdId">
+		INSERT INTO t_goods_ggsval_detail (
+			g_id,gs_id,gsv_id,gd_id,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gsId,jdbcType=BIGINT},#{gsvId,jdbcType=BIGINT},#{gdId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与规格值详情表 -->
+	<update id="updateGoodsGgsvalDetail" parameterType="com.retailers.dht.common.entity.GoodsGgsvalDetail">
+		UPDATE t_goods_ggsval_detail
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gsId">
+                gs_id = #{gsId},
+            </if>
+            <if test="null != gsvId">
+                gsv_id = #{gsvId},
+            </if>
+            <if test="null != gdId">
+                gd_id = #{gdId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggd_id = #{ggdId} and version = #{version}
+	</update>
+	<!--删除商品与规格值详情表 -->
+	<delete id="deleteGoodsGgsvalDetailByGgdId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_ggsval_detail WHERE ggd_id = #{ggdId}
+	</delete>
+</mapper>
