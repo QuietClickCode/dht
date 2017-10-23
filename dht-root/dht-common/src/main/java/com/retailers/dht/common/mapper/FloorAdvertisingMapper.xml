@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.FloorAdvertisingMapper">
+
+	<resultMap id="rm_floorAdvertising" type="com.retailers.dht.common.entity.FloorAdvertising">
+			<result property="faId" column="fa_id"/>
+			<result property="parentId" column="parent_id"/>
+			<result property="imageId" column="image_id"/>
+			<result property="url" column="url"/>
+			<result property="faName" column="fa_name"/>
+			<result property="faOrder" column="fa_order"/>
+			<result property="faCountry" column="fa_country"/>
+			<result property="faClient" column="fa_client"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="floorAdvertisingVo" type="com.retailers.dht.common.vo.FloorAdvertisingVo">
+		<result property="faId" column="fa_id"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="faName" column="fa_name"/>
+		<result property="isShow" column="is_show"/>
+		<result property="faOrder" column="fa_order"/>
+		<result property="version" column="version"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="imageId" column="image_id"/>
+	</resultMap>
+		
+	<select id="queryGoodsClassificationList" resultMap="floorAdvertisingVo">
+		select t1.gg_id fa_id,t1.gg_name fa_name,t1.parent_Id parent_id,t1.gg_order fa_order,t1.is_show,t1.version,t1.is_delete,t1.gg_imgpath image_id
+			from t_goods_classification t1 WHERE t1.parent_Id is NULL AND t1.is_delete = 0
+	</select>
+
+	<select id="queryFloorAdvertisingVo" resultMap="floorAdvertisingVo">
+		SELECT t2.fa_id,t2.fa_name,t2.parent_id,t2.fa_order,t2.is_show,t2.version,t2.is_delete,t2.image_id
+			from t_floor_advertising t2 WHERE t2.is_delete = 0
+	</select>
+	
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="floorAdvertising_columns">
+		fa_id,parent_id,image_id,url,fa_name,fa_order,fa_country,fa_client,is_show,is_delete,version
+	</sql>
+	<!-- 根据楼层广告设置主键取得数据 -->
+	<select id="queryFloorAdvertisingByFaId" resultMap="rm_floorAdvertising" parameterType="java.lang.Long">
+		SELECT <include refid="floorAdvertising_columns" />
+		FROM t_floor_advertising WHERE fa_id = #{faId}
+	</select>
+	<!-- 楼层广告设置查询条件组合 -->
+	<sql id="floorAdvertising_where">
+		<where>
+			<if test="null != params.faId">
+				AND fa_id = #{params.faId}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+			<if test="null != params.imageId">
+				AND image_id = #{params.imageId}
+			</if>
+			<if test="null != params.url and '' != params.url">
+				AND url = #{params.url}
+			</if>
+			<if test="null != params.faName and '' != params.faName">
+				AND fa_name = #{params.faName}
+			</if>
+			<if test="null != params.faOrder">
+				AND fa_order = #{params.faOrder}
+			</if>
+			<if test="null != params.faCountry">
+				AND fa_country = #{params.faCountry}
+			</if>
+			<if test="null != params.faClient">
+				AND fa_client = #{params.faClient}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryFloorAdvertisingList" resultMap="rm_floorAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="floorAdvertising_columns" />
+		FROM t_floor_advertising
+		<include refid="floorAdvertising_where"/>
+	</select>
+	<!--添加楼层广告设置 -->
+	<insert id="saveFloorAdvertising" parameterType="com.retailers.dht.common.entity.FloorAdvertising" useGeneratedKeys="true" keyProperty="faId">
+		INSERT INTO t_floor_advertising (
+			parent_id,image_id,url,fa_name,fa_order,fa_country,fa_client,is_show,is_delete,version
+		) VALUES
+		(
+			#{parentId,jdbcType=BIGINT},#{imageId,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{faName,jdbcType=VARCHAR},#{faOrder,jdbcType=BIGINT},#{faCountry,jdbcType=BIGINT},#{faClient,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改楼层广告设置 -->
+	<update id="updateFloorAdvertising" parameterType="com.retailers.dht.common.entity.FloorAdvertising">
+		UPDATE t_floor_advertising
+		<set>
+            <if test="null != parentId">
+                parent_id = #{parentId},
+            </if>
+            <if test="null != imageId">
+                image_id = #{imageId},
+            </if>
+            <if test="null != url and '' != url">
+                url = #{url},
+            </if>
+            <if test="null != faName and '' != faName">
+                fa_name = #{faName},
+            </if>
+            <if test="null != faOrder">
+                fa_order = #{faOrder},
+            </if>
+            <if test="null != faCountry">
+                fa_country = #{faCountry},
+            </if>
+            <if test="null != faClient">
+                fa_client = #{faClient},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE fa_id = #{faId} and version = #{version}
+	</update>
+	<!--删除楼层广告设置 -->
+	<delete id="deleteFloorAdvertisingByFaId" parameterType="java.lang.Long">
+		DELETE FROM t_floor_advertising WHERE fa_id = #{faId}
+	</delete>
+</mapper>

@@ -57,6 +57,8 @@
 
     <button class="btn btn-default">查询</button>
 </div>
+
+</div>
     <table id="goodsTypeTables" ></table>
 </div>
 <%--新增首页导航--%>
@@ -394,7 +396,6 @@
         let url = $("#setAdvertUrl").val();
         let order = $("#setAdvertOrder").val();
         let imageVal = $("#uploadImage").val();
-
         if(imageVal != ""){
             var fd = new FormData($("#updateHomeAdvertising")[0]);
             fd.append("imageUse","image/jpeg");
@@ -407,6 +408,7 @@
                 processData : false,
                 contentType : false,
                 success:function (data) {
+
                     var imagepath = JSON.parse(data).original;
                     $.ajax({
                         url:"/openHomeAdvertising/updateAdvertising",
@@ -503,6 +505,8 @@
             });
         }
     }
+
+
 
     /*$(function () {
         $('#updateHomeAdvertising').bootstrapValidator({
