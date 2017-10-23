@@ -74,8 +74,7 @@
 	<!--分页查询 -->
 	<select id="queryHomeNavigationList" resultMap="rm_homeNavigation" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="homeNavigation_columns" />
-		FROM t_home_navigation
-		<include refid="homeNavigation_where"/>
+		FROM t_home_navigation WHERE is_delete = 0 ORDER BY hn_order
 	</select>
 	<!--添加主页导航表 -->
 	<insert id="saveHomeNavigation" parameterType="com.retailers.dht.common.entity.HomeNavigation" useGeneratedKeys="true" keyProperty="hnId">

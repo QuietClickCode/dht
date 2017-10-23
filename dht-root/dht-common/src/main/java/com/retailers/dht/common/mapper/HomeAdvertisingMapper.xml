@@ -12,12 +12,13 @@
 			<result property="imagePath" column="image_path"/>
 			<result property="haClient" column="ha_client"/>
 			<result property="haCountry" column="ha_country"/>
-			<result property="haType" column="ha_type"/>
+			<result property="haRegion" column="ha_region"/>
+			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="homeAdvertising_columns">
-		ha_id,ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_type
+		ha_id,ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_region,version
 	</sql>
 	<!-- 根据首页广告设置表主键取得数据 -->
 	<select id="queryHomeAdvertisingByHaId" resultMap="rm_homeAdvertising" parameterType="java.lang.Long">
@@ -45,7 +46,7 @@
 			<if test="null != params.url and '' != params.url">
 				AND url = #{params.url}
 			</if>
-			<if test="null != params.imagePath and '' != params.imagePath">
+			<if test="null != params.imagePath">
 				AND image_path = #{params.imagePath}
 			</if>
 			<if test="null != params.haClient">
@@ -54,24 +55,26 @@
 			<if test="null != params.haCountry">
 				AND ha_country = #{params.haCountry}
 			</if>
-			<if test="null != params.haType">
-				AND ha_type = #{params.haType}
+			<if test="null != params.haRegion">
+				AND ha_region = #{params.haRegion}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
 			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
 	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="homeAdvertising_columns" />
-		FROM t_home_advertising
-		<include refid="homeAdvertising_where"/>
+		FROM t_home_advertising WHERE is_delete = 0 ORDER BY ha_order
 	</select>
 	<!--添加首页广告设置表 -->
 	<insert id="saveHomeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising" useGeneratedKeys="true" keyProperty="haId">
 		INSERT INTO t_home_advertising (
-			ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_type
+			ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_region,version
 		) VALUES
 		(
-			#{haName,jdbcType=VARCHAR},#{haOrder,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{imagePath,jdbcType=VARCHAR},#{haClient,jdbcType=BIGINT},#{haCountry,jdbcType=BIGINT},#{haType,jdbcType=BIGINT}
+			#{haName,jdbcType=VARCHAR},#{haOrder,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{imagePath,jdbcType=BIGINT},#{haClient,jdbcType=BIGINT},#{haCountry,jdbcType=BIGINT},#{haRegion,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改首页广告设置表 -->
@@ -93,7 +96,7 @@
             <if test="null != url and '' != url">
                 url = #{url},
             </if>
-            <if test="null != imagePath and '' != imagePath">
+            <if test="null != imagePath">
                 image_path = #{imagePath},
             </if>
             <if test="null != haClient">
@@ -102,11 +105,14 @@
             <if test="null != haCountry">
                 ha_country = #{haCountry},
             </if>
-            <if test="null != haType">
-                ha_type = #{haType},
+            <if test="null != haRegion">
+                ha_region = #{haRegion},
+            </if>
+            <if test="null != version">
+                version = version+1,
             </if>
 		</set>
-		WHERE ha_id = #{haId}
+		WHERE ha_id = #{haId} and version = #{version}
 	</update>
 	<!--删除首页广告设置表 -->
 	<delete id="deleteHomeAdvertisingByHaId" parameterType="java.lang.Long">

@@ -7,7 +7,7 @@ import java.util.List;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-18 16:32:55
+ * @date 2017-10-20 17:07:09
  */
 public interface HomeAdvertisingMapper {
 
@@ -16,7 +16,7 @@ public interface HomeAdvertisingMapper {
 	 * @param homeAdvertising
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public int saveHomeAdvertising(HomeAdvertising homeAdvertising);
 	/**
@@ -24,7 +24,7 @@ public interface HomeAdvertisingMapper {
 	 * @param homeAdvertising
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public int updateHomeAdvertising(HomeAdvertising homeAdvertising);
 	/**
@@ -32,7 +32,7 @@ public interface HomeAdvertisingMapper {
 	 * @param haId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public int deleteHomeAdvertisingByHaId(Long haId);
 	/**
@@ -40,7 +40,7 @@ public interface HomeAdvertisingMapper {
 	 * @param haId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public HomeAdvertising queryHomeAdvertisingByHaId(Long haId);
 	/**
@@ -48,7 +48,7 @@ public interface HomeAdvertisingMapper {
 	 * @param pagination 分页对象
 	 * @return  首页广告设置表列表
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public List<HomeAdvertising> queryHomeAdvertisingList(Pagination<HomeAdvertising> pagination);
 

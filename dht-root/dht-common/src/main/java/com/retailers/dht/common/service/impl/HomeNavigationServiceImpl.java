@@ -41,7 +41,9 @@ public class HomeNavigationServiceImpl implements HomeNavigationService {
 		return page;
 	}
 	public boolean deleteHomeNavigationByHnId(Long hnId) {
-		int status = homeNavigationMapper.deleteHomeNavigationByHnId(hnId);
+		HomeNavigation homeNavigation = homeNavigationMapper.queryHomeNavigationByHnId(hnId);
+		homeNavigation.setIsDelete(1L);
+		int status = homeNavigationMapper.updateHomeNavigation(homeNavigation);
 		return status == 1 ? true : false;
 	}
 }

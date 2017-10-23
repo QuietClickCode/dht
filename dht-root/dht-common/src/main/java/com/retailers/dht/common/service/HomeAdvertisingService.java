@@ -8,7 +8,7 @@ import java.util.Map;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-18 16:32:55
+ * @date 2017-10-20 17:07:09
  */
 public interface HomeAdvertisingService {
 
@@ -17,7 +17,7 @@ public interface HomeAdvertisingService {
 	 * @param homeAdvertising
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public boolean saveHomeAdvertising(HomeAdvertising homeAdvertising);
 	/**
@@ -33,7 +33,7 @@ public interface HomeAdvertisingService {
 	 * @param haId
 	 * @return homeAdvertising
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public HomeAdvertising queryHomeAdvertisingByHaId(Long haId);
 	/**
@@ -43,7 +43,7 @@ public interface HomeAdvertisingService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public Pagination<HomeAdvertising> queryHomeAdvertisingList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface HomeAdvertisingService {
 	 * @param haId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-18 16:32:55
+	 * @date 2017-10-20 17:07:09
 	 */
 	public boolean deleteHomeAdvertisingByHaId(Long haId);
 

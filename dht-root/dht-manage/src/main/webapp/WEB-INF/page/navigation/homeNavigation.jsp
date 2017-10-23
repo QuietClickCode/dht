@@ -24,13 +24,34 @@
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <button class="btn btn-primary" type="button" onclick="addNavigationBar()" style="margin-bottom: 5px">新增首页导航</button>
-    <div id="Client">
-        <button class="btn btn-primary" data-clientValue="0">移动端</button>
-        <button class="btn btn-primary" data-clientValue="1">PC端</button>
-        <button class="btn btn-primary" data-clientValue="2">小程序</button>
-        <input id="clientValue" style="display: none" value="">
+    <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
+    <div id="Client" style="display: inline-block">
+        <button class="btn btn-success" data-clientValue="0">移动端</button>
+        <button class="btn" data-clientValue="1" disabled="disabled">PC端</button>
+        <button class="btn" data-clientValue="2" disabled="disabled">小程序</button>
+        <input id="clientValue" style="display: none" value="0">
     </div>
+
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            主推样式 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">带副标题的样式</a></li>
+            <li><a href="#">不带副标题的样式</a></li>
+        </ul>
+    </div>
+    <div class="btn-group">
+        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            推送对象 <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu">
+            <li><a href="#">乡村</a></li>
+            <li><a href="#">城市</a></li>
+        </ul>
+    </div>
+
+    <button class="btn btn-default">查询</button>
 </div>
 <div>
     <table id="goodsTypeTables" ></table>
@@ -44,70 +65,68 @@
                 <h4 class="modal-title" id="">编辑该导航栏</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="addHomeNavigation">
+                    <div class="form-group">
+                        <label for="addImagePath" class="col-sm-2 control-label">图片</label>
+                        <div class="col-sm-10">
+                            <input id="addImagePath"  name="dht_image_upload" type="file"/>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">导航名称</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
+                            <input type="text" id="NavigationName" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">选择样式</label>
+                        <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">样式选择<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" id="chooseStyle" aria-labelledby="dropdownMenu1">
-                                    <li><a style="cursor: pointer" data-styleValue="0">带副标题的样式</a></li>
-                                    <li><a style="cursor: pointer" data-styleValue="1">不带副标题的样式</a></li>
-                                </ul>
-                                <input id="styleText" style="display: none">
-                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="client" checked class="client" value="0">移动端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="client" disabled="disabled" class="client" value="1">PC端
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="client" disabled="disabled" class="client" value="2">小程序
+                            </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">推送对象</label>
+                        <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择推送对象<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                    <li><a style="cursor: pointer" data-CountryValue="0">农村</a></li>
-                                    <li><a style="cursor: pointer" data-CountryValue="1">城市</a></li>
-                                </ul>
-                                <input id="countryText" style="display: none">
-                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="country" class="country" value="0">乡村
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="country" class="country" value="1">城市
+                            </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviName" class="col-sm-2 control-label">客户端</label>
+                        <label for="" class="col-sm-2 control-label">样式</label>
                         <div class="col-sm-10">
-                            <div class="dropdown">
-                                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu3" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">选择客户端<span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu" aria-labelledby="dropdownMenu3">
-                                    <li><a style="cursor: pointer" data-clientValue="0">移动端</a></li>
-                                    <li class="disabled"><a  data-clientValue="1">PC端</a></li>
-                                    <li class="disabled"><a  data-clientValue="2">小程序</a></li>
-                                </ul>
-                                <input id="clientText" style="display: none">
-                            </div>
+                            <label class="radio-inline">
+                                <input type="radio" name="setStyle" class="setStyle" value="1">带副标题的样式
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="setStyle" class="setStyle" value="0">不带副标题的样式
+                            </label>
                         </div>
                     </div>
 
-
-
-                    <div class="form-group">
+                    <div class="form-group" >
                         <label for="mainTitle" class="col-sm-2 control-label">主标题</label>
                         <div class="col-sm-10">
                             <input type="text" id="mainTitle" class="form-control">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group" id="subTitleModal">
                         <label for="subTitle" class="col-sm-2 control-label">副标题</label>
                         <div class="col-sm-10">
                             <input type="text" id="subTitle" class="form-control">
@@ -119,21 +138,14 @@
                     <div class="form-group" id="">
                         <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">图片</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-default">上传图片</button>
+                            <input type="text" id="hnOrder" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="NaviOrder" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" id="" class="form-control">
+                            <input type="text" id="hnUrl" class="form-control">
                         </div>
                     </div>
 
@@ -141,7 +153,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary" onclick="updateNavigator()">确定</button>
+                <button type="submit" class="btn btn-primary" onclick="addHomeNavigation()">确定</button>
             </div>
         </div>
     </div>
@@ -157,11 +169,19 @@
                 <h4 class="modal-title" id="">编辑该导航栏</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal">
+                <form class="form-horizontal" id="updateNavigationInfo">
+                    <div class="form-group">
+                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
+                        <div class="col-sm-10">
+                            <input id="uploadImage" name="dht_image_upload" type="file"/>
+                            <p class="help-block">不更改就不上传图片</p>
+                        </div>
+                    </div>
+
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10" id="chooseCountry">
-                            <input class="btn btn-default" data-Country="0" type="button" value="农村">
+                            <input class="btn btn-default" data-Country="0" type="button" value="乡村">
                             <input class="btn btn-default" data-Country="1" type="button" value="城市">
                             <input id="countryValue" style="display: none">
                         </div>
@@ -174,6 +194,40 @@
                         </div>
                     </div>
 
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">样式</label>
+                        <div class="col-sm-10">
+                            <label class="radio-inline">
+                                <input type="radio" name="style" class="style" value="1">带副标题的样式
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="style" class="style" value="0">不带副标题的样式
+                            </label>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">主标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputMainTitle" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="updateSubtitle">
+                        <label for="" class="col-sm-2 control-label">副标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputSubTitle" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">链接</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="imageUrl" class="form-control">
+                        </div>
+                    </div>
+
                     <div class="form-group" id="chooseClassifyLabel">
                         <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
@@ -181,12 +235,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">图片</label>
-                        <div class="col-sm-10">
-                            <button class="btn btn-default">上传图片</button>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
@@ -207,31 +255,6 @@
         </div>
     </div>
 </div>
-
-
-<form method="post" enctype="multipart/form-data" action="/file/imageUpload">
-    <div class="form-group">
-        <label for="exampleInputFile">File input</label>
-        <input name="dht_image_upload" type="file" id="exampleInputFile">
-    </div>
-    <div class="form-group">
-        <label for="exampleInputEmail1">图片类型</label>
-        <input type="text" class="form-control" name="imageUse" id="exampleInputEmail1" placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否添加水印</label>
-        <input type="text" class="form-control" name="isWatermark"  placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否压缩</label>
-        <input type="text" class="form-control" name="isCompress"  placeholder="Email">
-    </div>
-
-    <button type="submit" class="btn btn-default">Submit</button>
-</form>
-
 
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -257,19 +280,20 @@
             valign : 'middle'
         },
         {
-            field: 'hnImgpath',
-            title: '图片',
-            align : 'center',
-            valign : 'middle',
-            formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
-                let html='';
-                return html;
-            }
-        },
-        {
             field: 'hnOrder',
             title: '排序',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'hnMianTitle',
+            title: '主标题',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'hnSubTitle',
+            title: '副标题',
             align : 'center',
             valign : 'middle'
         },
@@ -298,7 +322,7 @@
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveNavigatorModal()">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveNavigatorModal(\''+row.hnId+'\',\''+row.hnImgpath+'\')">编辑</button>'
                 return html;
             }
         },
@@ -309,7 +333,7 @@
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">删除</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();deleteHomeNavigation(\''+row.hnId+'\')">删除</button>'
                 return html;
             }
         }
@@ -318,6 +342,8 @@
     $(function () {
         createTable("/openHomeNavigation/queryNavigationLists","goodsTypeTables","hnId",treeColumns,queryParams)
     });
+    var hnid;
+    var pathid;
     /**
      * 查询条件
      **/
@@ -328,17 +354,7 @@
             gtName: $("#search_goodsType_name").val(),
         };
     }
-    /**
-     * 刷新表格数据
-     **/
-    function refreshTableData() {
-        $('#goodsTypeTables').bootstrapTable(
-            "refresh",
-            {
-                url:"/goods/queryGoodsTypeLists"
-            }
-        );
-    }
+
 
     $("#Client button").click(function () {
         let clientValue = $(this).attr("data-clientValue");
@@ -346,7 +362,9 @@
         $(this).addClass("btn-success").siblings().removeClass("btn-success");
     });
 
-    function openSaveNavigatorModal() {
+    function openSaveNavigatorModal(id,imagePath) {
+        hnid = id;
+        pathid = imagePath;
         $("#saveHomeNavigation").modal("show");
     }
 
@@ -361,9 +379,75 @@
         let clientValue = $("#clientValue").val();
         let countryValue = $("#countryValue").val();
         let naviName = $("#NaviName").val();
-        $("#NaviOrder").val();
-        /*alert(clientValue+" "+countryValue);*/
-        layer.msg(clientValue +" "+ countryValue);
+        let navOrder = $("#NaviOrder").val();
+        let show = $(".isShow:checked").val();
+        let imagePath = $("#uploadImage").val();
+        let style = $(".style:checked").val();
+        let mainTitle = $("#inputMainTitle").val();
+        let subTitle = $("#subTitle").val()
+        let url = $("#imageUrl").val();
+        if(imagePath != ""){
+            var fd = new FormData($("#updateNavigationInfo")[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    var imagepath = JSON.parse(data).original;
+                    $.ajax({
+                        url:"/openHomeNavigation/updateNavigatorBar",
+                        method:"post",
+                        dataType:"json",
+                        data:{
+                            hnId:hnid,
+                            hnClient:clientValue,
+                            hnName:naviName,
+                            hnOrder:navOrder,
+                            isShow:show,
+                            hnImgpath:imagepath,
+                            hnCountry:countryValue,
+                            hnStyle:style,
+                            hnUrl:url,
+                            hnMianTitle:mainTitle,
+                            hnSubTitle:subTitle
+                        },
+                        success:function (data) {
+                            refreshTableData();
+                            $("#saveHomeNavigation").modal("hide");
+                        }
+                    });
+                }
+            });
+        }else{
+            $.ajax({
+                url:"/openHomeNavigation/updateNavigatorBar",
+                method:"post",
+                dataType:"json",
+                data:{
+                    hnId:hnid,
+                    hnClient:clientValue,
+                    hnName:naviName,
+                    hnOrder:navOrder,
+                    isShow:show,
+                    hnImgpath:pathid,
+                    hnCountry:countryValue,
+                    hnStyle:style,
+                    hnUrl:url,
+                    hnMianTitle:mainTitle,
+                    hnSubTitle:subTitle
+                },
+                success:function (data) {
+                    refreshTableData();
+                    $("#saveHomeNavigation").modal("hide");
+                }
+            });
+        }
+
     }
 
     /*
@@ -371,6 +455,134 @@
     * */
     function addNavigationBar() {
         $("#addHomeNavigationBar").modal("show");
+    }
+
+    /*
+    * 上传图片
+    * */
+    function ajaxUploadFile(fromId,num) {
+
+    }
+
+    $(".style").click(function () {
+        let style = $(".style:checked").val();
+        if(style == 0)
+            $("#updateSubtitle").hide();
+        else
+            $("#updateSubtitle").show();
+    });
+
+
+    $(".setStyle").click(function () {
+        let style = $(".setStyle:checked").val();
+        if(style == 0)
+            $("#subTitleModal").hide();
+        else
+            $("#subTitleModal").show();
+    });
+
+
+    function deleteHomeNavigation(id) {
+        $.ajax({
+            url:"/openHomeNavigation/removeNavigatorBar",
+            method:"post",
+            dataType:"json",
+            data:{
+                hnId:id
+            },
+            success:function(data){
+                refreshTableData();
+                bootbox.alert("删除成功");
+            }
+        });
+    }
+
+    /**
+     * 刷新表格数据
+     **/
+    function refreshTableData() {
+        $('#goodsTypeTables').bootstrapTable(
+            "refresh",
+            {
+                url:"/openHomeNavigation/queryNavigationLists"
+            }
+        );
+    }
+    
+    function addHomeNavigation() {
+        var fd = new FormData($("#addHomeNavigation")[0]);
+        let name = $("#NavigationName").val();
+        let client = $(".client:checked").val();
+        let country = $(".country:checked").val();
+        let style = $(".setStyle:checked").val();
+        let maintitle = $("#mainTitle").val();
+        let subtitle = $("#subTitle").val();
+        let order = $("#hnOrder").val();
+        let url = $("#hnUrl").val();
+
+        if($("#addImagePath").val() == "") {
+            layer.msg("请上传图片");
+            return;
+        }
+
+        if(name == "") {
+            layer.msg("请输入导航名称");
+            return;
+        }
+
+        if(maintitle == ""){
+            layer.msg("请输入主标题");
+            return;
+        }
+
+        if(url == ""){
+            layer.msg("请输入链接");
+            return;
+        }
+
+
+        var fd = new FormData($("#addHomeNavigation")[0]);
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                var imagepath = JSON.parse(data).original;
+                alert(imagepath);
+                $.ajax({
+                    url:"/openHomeNavigation/addNavigatorBar",
+                    method:"post",
+                    dataType:"json",
+                    data:{
+                        hnName:name,
+                        hnOrder:order,
+                        hnImgpath:imagepath,
+                        hnCountry:country,
+                        hnStyle:style,
+                        hnUrl:url,
+                        hnClient:client,
+                        hnMianTitle:maintitle,
+                        hnSubTitle:subtitle,
+                        isDelete:0,
+                        isShow:1
+                    },
+                    success:function (data) {
+                        bootbox.alert(data.msg);
+                        refreshTableData();
+                        $("#addHomeNavigationBar").modal("hide");
+                    }
+                });
+            },
+            error:function(){
+
+            }
+        });
+
     }
 </script>
 

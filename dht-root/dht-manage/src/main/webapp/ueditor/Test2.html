@@ -8,32 +8,25 @@
 <body>
 <form method="post" id="uploadFile" enctype="multipart/form-data" action="/file/imageUpload">
     <div class="form-group">
+        <label for="">File input</label>
+        <input name="imageUse" type="text" value="image" id="">
+    </div>
+    <div class="form-group">
         <label for="exampleInputFile">File input</label>
         <input name="dht_image_upload" type="file" id="exampleInputFile">
     </div>
-    <!--<div class="form-group">
-        <label for="exampleInputEmail1">图片类型</label>
-        <input type="text" class="form-control" name="imageUse" id="exampleInputEmail1" placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否添加水印</label>
-        <input type="text" class="form-control" name="isWatermark"  placeholder="Email">
-    </div>
-
-    <div class="form-group">
-        <label for="">是否压缩</label>
-        <input type="text" class="form-control" name="isCompress"  placeholder="Email">
-    </div>-->
-
-    <button type="submit" class="btn btn-default">Submit</button>
 </form>
 
+
+    <button type="button" class="btn btn-default" onclick="test()">Submit</button>
+
     <script type="text/javascript">
-        let uploadFile = document.getElementById("uploadFile");
+        /*let uploadFile = document.getElementById("uploadFile");
         uploadFile.addEventListener('submit',function (event) {
+            let exampleInputFile = document.getElementById("exampleInputFile");
+            alert(exampleInputFile.value)
             let oData = new FormData(uploadFile);
-            oData.append("imageUse","image");
+            oData.append("imageUse","image/jpeg");
             oData.append("isWatermark","false");
             oData.append("isCompress", "false");
             let req = new XMLHttpRequest();
@@ -46,25 +39,32 @@
             }
             req.send(oData);
             event.preventDefault();
-        },false);
+        },false);*/
 
-        /*var uploadFile = document.getElementById("uploadFile");
+/*        let uploadFile = document.getElementById("uploadFile");*/
 
-        var fd = new FormData(uploadFile);
-        fd.append("imageUse","image");
-        fd.append("isWatermark","false");
-        fd.append("isCompress", "false");
 
-        function ajaxUploadFile() {
+        function test() {
+            alert(ajaxUploadFile('#uploadFile',0));
+        }
+
+
+        function ajaxUploadFile(fromId,num) {
+            var fd = new FormData($(fromId)[num]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
             $.ajax({
                 url:"/file/imageUpload",
                 type:"post",
                 data: fd,
+                processData : false,
+                contentType : false,
                 success:function (data) {
-                    alert(data);
+                    return JSON.parse(data).original;
                 }
             });
-        }*/
+        }
     </script>
 </body>
 </html>
