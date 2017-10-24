@@ -53,7 +53,6 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "修改首页导航",description = "修改首页导航",resourse = "openHomeNavigation.updateNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp updateNavigatorBar(HomeNavigation navigation){
-        System.out.println(navigation.getHnName());
         HomeNavigation homeNavigation = homeNavigationService.queryHomeNavigationByHnId(navigation.getHnId());
         if(homeNavigation.getHnImgpath().compareTo(navigation.getHnImgpath()) != 0) {
             attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);

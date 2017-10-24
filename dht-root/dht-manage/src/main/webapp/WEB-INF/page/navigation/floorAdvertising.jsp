@@ -61,19 +61,19 @@
                 <h4 class="modal-title" id="">新增楼层广告</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="">
+                <form class="form-horizontal" id="addFloorAdv">
                     <div class="form-group">
-                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
+                        <label for="img" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="" name="dht_image_upload" type="file"/>
+                            <input id="img" name="dht_image_upload" type="file"/>
                             <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">广告名称</label>
+                        <label for="AdvName" class="col-sm-2 control-label">广告名称</label>
                         <div class="col-sm-10">
-                            <input type="text" name="setName" id="setAdvName" class="form-control">
+                            <input type="text" name="AdvName" id="AdvName" class="form-control">
                         </div>
                     </div>
 
@@ -81,10 +81,10 @@
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="1">乡村
+                                <input type="radio" name="country" class="country" value="0">乡村
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="0">城市
+                                <input type="radio" name="country" class="country" value="1">城市
                             </label>
                         </div>
                     </div>
@@ -93,47 +93,35 @@
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" checked class="updateClient" value="1">移动端
+                                <input type="radio" name="client" checked class="client" value="0">移动端
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">PC端
+                                <input type="radio" name="client" disabled="disabled" class="client" value="1">PC端
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">小程序
+                                <input type="radio" name="client" disabled="disabled" class="client" value="2">小程序
                             </label>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">状态</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="1">显示
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="0">不显示
-                            </label>
-                        </div>
-                    </div>
-
+                    
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" name="setUrl" id="" class="form-control">
+                            <input type="text" name="url" id="url" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <input type="text" name="setOrder" id="" class="form-control">
+                            <input type="text" name="order" id="order" class="form-control">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="submit" class="btn btn-primary" onclick="">确定</button>
+                <button type="submit" class="btn btn-primary" onclick="saveFloorAdv()">确定</button>
             </div>
         </div>
     </div>
@@ -169,10 +157,10 @@
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="1">乡村
+                                <input type="radio" name="updateCountry" class="updateCountry" value="0">乡村
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="0">城市
+                                <input type="radio" name="updateCountry" class="updateCountry" value="1">城市
                             </label>
                         </div>
                     </div>
@@ -181,13 +169,13 @@
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" checked class="updateClient" value="1">移动端
+                                <input type="radio" name="updateClient" checked class="updateClient" value="0">移动端
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">PC端
+                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="1">PC端
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">小程序
+                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="2">小程序
                             </label>
                         </div>
                     </div>
@@ -334,7 +322,7 @@
                     let html='';
                     let parentId = row.parentId;
                     if(parentId == null)
-                        html+='<button class="btn btn-default" type="button" onclick="event.stopPropagation();addFloorAdvertising()">添加子项</button>'
+                        html+='<button class="btn btn-default addSubitem" type="button"  onclick="event.stopPropagation();addFloorAdvertising(\''+row.faId+'\')">添加子项</button>'
                     else
                         html + "";
                     return html;
@@ -360,7 +348,7 @@
                     let html;
                     let parentId = row.parentId;
                     if(parentId != null)
-                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();">删除</button>';
+                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();deleteFloorAdv(\''+row.faId+'\')">删除</button>';
                     return html;
                 }
             }
@@ -383,7 +371,7 @@
         let name = $("#AdvertisingName").val();
         let country = $(".updateCountry:checked").val();
         let client = $(".updateClient:checked").val();
-        let isShow = $(".isShow:checked").val();
+        let show = $(".isShow:checked").val();
         let url = $("#setAdvertUrl").val();
         let order = $("#setAdvertOrder").val();
         if(imgPath != ""){
@@ -405,24 +393,125 @@
                         dataType:"json",
                         data:{
                             faId:faid,
-
+                            imageId:imagepath,
+                            url:url,
+                            faName:name,
+                            faOrder:order,
+                            isShow:show,
+                            faCountry:country,
+                            faClient:client
                         },
-                        success:function () {
-
+                        success:function (data) {
+                            $("#updateAdvertising").modal("hide");
+                            refreshTableData();
+                            layer.msg(data.msg);
                         }
                     });
+                }
+            });
+        }else{
+            $.ajax({
+                url:"/floorAdvertising/updateFloorAdvertising",
+                method:"post",
+                dataType:"json",
+                data:{
+                    faId:faid,
+                    imageId:imageId,
+                    url:url,
+                    faName:name,
+                    faOrder:order,
+                    isShow:show,
+                    faCountry:country,
+                    faClient:client
+                },
+                success:function (data) {
+                    $("#updateAdvertising").modal("hide");
+                    refreshTableData();
+                    layer.msg(data.msg);
                 }
             });
         }
 
     }
 
+    var parentId;
     /*打开新增楼层广告模态框*/
-    function addFloorAdvertising() {
+    function addFloorAdvertising(id) {
+        parentId = id / 100000;
         $("#saveFloorAdvertising").modal("show");
     }
 
 
+    function refreshTableData() {
+        $('#goodsClassificationTable').bootstrapTable(
+            "refresh",
+            {
+                url:"/floorAdvertising/queryFloorAdvertisingList"
+            }
+        );
+    }
+    
+    function saveFloorAdv() {
+        let img = $("#img").val();
+        let name = $("#AdvName").val();
+        let country = $(".country:checked").val();
+        let client = $(".client:checked").val();
+        let url = $("#url").val();
+        let order = $("#order").val();
+        if(img != ""){
+            var fd = new FormData($("#addFloorAdv")[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    var imagepath = JSON.parse(data).original;
+                    $.ajax({
+                        url:"/floorAdvertising/addFloorAdvertising",
+                        method:"post",
+                        dataType:"json",
+                        data:{
+                            parentId:parentId,
+                            imageId:imagepath,
+                            url:url,
+                            faName:name,
+                            faOrder:order,
+                            faCountry:country,
+                            faClient:client,
+                            version:0,
+                            isShow:1,
+                            isDelete:0
+                        },
+                        success:function (data) {
+                            $("#saveFloorAdvertising").modal("hide");
+                            refreshTableData();
+                            layer.msg(data.msg);
+                        }
+                    });
+                }
+            });
+        }
+    }
+
+    function deleteFloorAdv(id) {
+        $.ajax({
+            url:"/floorAdvertising/deleteFloorAdvertising",
+            method:"post",
+            dataType:"json",
+            data:{
+                faId:id
+            },
+            success:function (data) {
+                refreshTableData();
+                layer.msg(data.msg)
+            }
+        });
+    }
 
 </script>
 

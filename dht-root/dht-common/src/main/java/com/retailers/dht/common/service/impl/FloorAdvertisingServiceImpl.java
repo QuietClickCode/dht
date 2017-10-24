@@ -1,11 +1,12 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.FloorAdvertisingMapper;
 import com.retailers.dht.common.entity.FloorAdvertising;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.FloorAdvertisingService;
 import com.retailers.dht.common.vo.FloorAdvertisingVo;
-import com.retailers.dht.common.vo.FloorManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ import java.util.Map;
 public class FloorAdvertisingServiceImpl implements FloorAdvertisingService {
 	@Autowired
 	private FloorAdvertisingMapper floorAdvertisingMapper;
+
+	@Autowired
+	AttachmentService attachmentService;
 	public boolean saveFloorAdvertising(FloorAdvertising floorAdvertising) {
 		int status = floorAdvertisingMapper.saveFloorAdvertising(floorAdvertising);
 		return status == 1 ? true : false;
@@ -48,7 +52,10 @@ public class FloorAdvertisingServiceImpl implements FloorAdvertisingService {
 		return page;
 	}
 	public boolean deleteFloorAdvertisingByFaId(Long faId) {
-		int status = floorAdvertisingMapper.deleteFloorAdvertisingByFaId(faId);
+		FloorAdvertising advertising = floorAdvertisingMapper.queryFloorAdvertisingByFaId(faId);
+		advertising.setIsDelete(1L);
+		attachmentService.editorAttachment(advertising.getImageId(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+		int status = floorAdvertisingMapper.updateFloorAdvertising(advertising);
 		return status == 1 ? true : false;
 	}
 
