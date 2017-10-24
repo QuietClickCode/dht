@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGtgbrel;
+import com.retailers.dht.common.vo.GoodsGtgbrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface GoodsGtgbrelMapper {
 	 * @author fanghui
 	 * @date 2017-10-18 17:46:58
 	 */
-	public List<GoodsGtgbrel> queryGoodsGtgbrelList(Pagination<GoodsGtgbrel> pagination);
+	public List<GoodsGtgbrelVo> queryGoodsGtgbrelList(Pagination<GoodsGtgbrelVo> pagination);
 
 }

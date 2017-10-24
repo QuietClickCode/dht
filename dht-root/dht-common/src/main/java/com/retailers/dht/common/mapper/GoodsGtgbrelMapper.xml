@@ -9,6 +9,14 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_goodsGtgbrel_vo" type="com.retailers.dht.common.vo.GoodsGtgbrelVo">
+		<result property="gtgbId" column="gtgb_id"/>
+		<result property="gtId" column="gt_id"/>
+		<result property="gbId" column="gb_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="brandname" column="brandname"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGtgbrel_columns">
@@ -23,26 +31,26 @@
 	<sql id="goodsGtgbrel_where">
 		<where>
 			<if test="null != params.gtgbId">
-				AND gtgb_id = #{params.gtgbId}
+				AND t1.gtgb_id = #{params.gtgbId}
 			</if>
 			<if test="null != params.gtId">
-				AND gt_id = #{params.gtId}
+				AND t1.gt_id = #{params.gtId}
 			</if>
 			<if test="null != params.gbId">
-				AND gb_id = #{params.gbId}
+				AND t1.gb_id = #{params.gbId}
 			</if>
 			<if test="null != params.isDelete">
-				AND is_delete = #{params.isDelete}
+				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
-				AND version = #{params.version}
+				AND t1.version = #{params.version}
 			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryGoodsGtgbrelList" resultMap="rm_goodsGtgbrel" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="goodsGtgbrel_columns" />
-		FROM t_goods_gtgbrel
+	<select id="queryGoodsGtgbrelList" resultMap="rm_goodsGtgbrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.gb_name brandname from t_goods_gtgbrel t1
+		LEFT JOIN t_goods_brand t2 on t1.gb_id=t2.gb_id
 		<include refid="goodsGtgbrel_where"/>
 	</select>
 	<!--添加大类与规格关系表 -->

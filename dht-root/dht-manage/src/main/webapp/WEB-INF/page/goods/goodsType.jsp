@@ -7,10 +7,21 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
+    <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
+    <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
+    <style>
+        #editorGtGb tr{
+            border: 1px #dddddd solid;
+        }
+        #editorGtGb td{
+            border: 1px #dddddd solid;
+        }
+    </style>
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <ex:perm url="goods/addGoodsType">
+    <ex:perm url="/goods/addGoodsType">
         <button class="btn btn-primary" type="button" onclick="addGoodsType()" style="margin-bottom: 5px">添加商品大类</button>
     </ex:perm>
     <br>
@@ -18,7 +29,7 @@
         <input type="text" class="form-control" id="search_goodsType_name" placeholder="请输入商品大类名称">
     </div>
 
-    <ex:perm url="goods/queryGoodsTypeLists">
+    <ex:perm url="/goods/queryGoodsTypeLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
 
@@ -114,92 +125,136 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
+<div class="modal fade" id="editorGtGb" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
     <div class="modal-dialog" role="document"  style="width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editorSysUserTitle"></h4>
+                <h4 class="modal-title" id="editorgtgbTitle"></h4>
             </div>
             <div class="modal-body">
-                <form id="editorGtgbForm">
-                    <input type="hidden" name="gtId" id="gtId">
-                    <input type="hidden" name="version" id="version">
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                商品大类名称:
-                              </span>
-                                <input type="text" class="form-control" name="gtName" id="gtName">
-                            </div>
-                        </div>
-                        <%--<div class="col-lg-12">--%>
-                        <%--<div class="input-group">--%>
-                        <%--<span class="input-group-addon">--%>
-                        <%--是否关联参数:--%>
-                        <%--</span>--%>
-                        <%--<div class="controls">--%>
-                        <%--<div class="switch" tabindex="0">--%>
-                        <%--<input id="isParams" name="isParams" type="checkbox" />--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
-                        <%--</div>--%>
+                <center>
+                    <div class="form-group" style="margin-top: 5px;">
+                        <input type="text" class="form-control" id="search_GoodsBrand_name" placeholder="请输入品牌名称">
                     </div>
+                    <ex:perm url="/goods/queryGoodsBrandLists">
+                        <button class="btn btn-default" type="button" onclick="searchbrands()">查询</button>
+                    </ex:perm>
 
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                是否关联品牌:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isTrademark" name="isTrademark" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <br>
-                        <br>
-                        <br>
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                是否关联规格:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isSpecification" name="isSpecification" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-12">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                是否显示:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isShow" name="isShow" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                </center>
+                <ex:perm url="/goods/addGoodsGtgbrel">
+                    <button class="btn btn-default" type="button" onclick="addgtgbrel()" id="addgtgbrelbtn">新增</button>
+                </ex:perm>
+                <ex:perm url="/goods/removeGoodsGtgbrel">
+                    <button class="btn btn-default" type="button" onclick="deletegtgbrel()" id="deletegtgbrelbtn">删除</button>
+                </ex:perm>
+                <ex:perm url="/goods/queryGoodsGtgbrelLists">
+                    <button class="btn btn-primary" type="button" onclick="refreshmyTbody()" style="float: right">刷新</button>
+                </ex:perm>
+                    <div class="row clearfix" style="margin-top: 5px">
+                        <div class="col-md-12 column">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th style="width: 30px">
+                                        &nbsp;
+                                    </th>
+                                    <th style="text-align: center;" id="topbrandname">
+                                        品牌名称（已有）
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody id="myTbody">
+                                <tr>
+                                    <td>
+                                        <div class="checkbox checkbox-info">
+                                            <input id="checkbox1" class="styled" type="checkbox" value="">
+                                            <label for="checkbox1">
+                                            </label>
+                                        </div>
+                                    </td>
+                                    <td style="text-align: center;display:table-cell; vertical-align:bottom;">
+                                        <span style="line-height: 100%">TB - Monthly</span>
+                                    </td>
+                                </tr>
 
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="editSubmit">确认</button>
+                <button type="button" class="btn btn-primary" id="editGtGbSubmit">确认</button>
             </div>
         </div>
+
+        </div>
+    </div>
+<div class="modal fade" id="editorGtGs" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorgtgsTitle"></h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="form-group" style="margin-top: 5px;">
+                        <input type="text" class="form-control" id="search_GoodsSpecification_name" placeholder="请输入规格名称">
+                    </div>
+                    <ex:perm url="/goods/queryGoodsBrandLists">
+                        <button class="btn btn-default" type="button" onclick="searchspecifications()">查询</button>
+                    </ex:perm>
+
+                </center>
+                <ex:perm url="/goods/addGoodsGtgsrel">
+                    <button class="btn btn-default" type="button" onclick="addgtgsrel()" id="addgtgsrelbtn">新增</button>
+                </ex:perm>
+                <ex:perm url="/goods/removeGoodsGtgsrel">
+                    <button class="btn btn-default" type="button" onclick="deletegtgsrel()" id="deletegtgsrelbtn">删除</button>
+                </ex:perm>
+                <ex:perm url="/goods/queryGoodsGtgsrelLists">
+                    <button class="btn btn-primary" type="button" onclick="refreshmygtgsTbody()" style="float: right">刷新</button>
+                </ex:perm>
+                <div class="row clearfix" style="margin-top: 5px">
+                    <div class="col-md-12 column">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center;" id="topspecificationname">
+                                    品牌名称（已有）
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="mygtgsTbody">
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="checkbox10" class="styled" type="checkbox" value="">
+                                        <label for="checkbox10">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;display:table-cell; vertical-align:bottom;">
+                                    <span style="line-height: 100%">TB - Monthly</span>
+                                </td>
+                            </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editGtGsSubmit">确认</button>
+            </div>
+        </div>
+
     </div>
 </div>
 
@@ -213,6 +268,7 @@
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<!--商品大类-->
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -241,7 +297,7 @@
                 }else if(value==1){
                     let html='';
                     <ex:perm url="goods/editGoodsType">
-                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsType(\''+row.uid+'\')"">编辑</button>&nbsp;';
+                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editGtGb(\''+row.gtId+'\')"">编辑</button>&nbsp;';
                     </ex:perm>
                     return html;
                 }
@@ -258,7 +314,7 @@
                 }else if(value==1){
                     let html='';
                     <ex:perm url="goods/editGoodsType">
-                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsType(\''+row.uid+'\')"">编辑</button>&nbsp;';
+                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editGtGs(\''+row.gtId+'\')"">编辑</button>&nbsp;';
                     </ex:perm>
                     return html;
                 }
@@ -614,7 +670,382 @@
         }
     }
 </script>
+<!--大类与品牌关联关系-->
+<script type="text/javascript">
+    var initdataArr = new Array();
+    $(function () {
+
+        $('#editorGtGb').on('hide.bs.modal', function () {
+            //清除数据
+            cleargtgbFormData();
+        });
+
+        //编辑按钮提交操作
+        $("#editGtGbSubmit").click("click",function(e){
+            $('#editorGtGb').modal('hide');
+        });
+    });
 
 
+    function cleargtgbFormData(){
+
+    }
+
+    function refreshmyTbody() {
+        var gtId = $('#gtId').val();
+        initgtgbFormData(gtId);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initgtgbFormData(gtId){
+        $('#topbrandname').html('品牌名称（已有）');
+        initdataArr = [];
+        $('#addgtgbrelbtn').hide();
+        $('#deletegtgbrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGtgbrelLists",
+            dataType: "json",
+            data:{gtId:gtId,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                         html   +=  '<tr>'+
+                                    '<td>'+
+                                    '<div class="checkbox checkbox-info">'+
+                                    '<input id="checkbox'+i+'" name="gtgbcheckbox" class="styled" type="checkbox" value="'+rows[i].gtgbId+'">'+
+                                    '<label for="checkbox'+i+'">'+
+                                    '</label>'+
+                                    '</div>'+
+                                    '</td>'+
+                                    '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                    '<span style="line-height: 100%">'+rows[i].brandname+'</span>'+
+                                    '</td>'+
+                                    '</tr>';
+                        initdataArr.push(rows[i].gbId);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定品牌</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#myTbody').html(html);
+            }
+        });
+    }
+
+    function editGtGb(gtId){
+        $('#gtId').val(gtId);
+        initgtgbFormData(gtId);
+        $("#editorgtgbTitle").text("编辑大类与品牌关系");
+        $('#editorGtGb').modal("show")
+    }
+
+    function searchbrands() {
+        var gbName = $('#search_GoodsBrand_name').val();
+        $('#topbrandname').html('品牌名称');
+        $('#addgtgbrelbtn').show();
+        $('#deletegtgbrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsBrandLists",
+            dataType: "json",
+            data: {gbName: gbName, pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    console.log(initdataArr);
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initdataArr.length>0){
+                            for (var j=0; j<initdataArr.length; j++){
+                                if (rows[i].gbId==initdataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+                        if(flag == 0){
+                            html   +=  '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="gtgbcheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gbId+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gbName+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                    if(html == ''){
+                        html += '<tr>'+
+                            '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%;color:red;">没有找到符合要求的品牌</span>'+
+                            '</td>'+
+                            '</tr>';
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的品牌</span>'+
+                        '</td>'+
+                        '</tr>';
+                }
+                $('#myTbody').html(html);
+            }
+        });
+    }
+
+    function addgtgbrel() {
+        var checkboxs = $('input:checkbox[name="gtgbcheckbox"]:checked');
+        var addgtgb = "";
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addgtgb += ","+checkboxs[i].value;
+                }
+            }
+            var gtId = $('#gtId').val();
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGtgbrel",
+                dataType: "json",
+                data: {gbIds: addgtgb,gtId:gtId},
+                success: function (data) {
+                    layer.msg('新增成功');
+                    refreshmyTbody();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据');
+        }
+
+    }
+
+    function deletegtgbrel() {
+        var checkboxs = $('input:checkbox[name="gtgbcheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var gtgsIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    gtgsIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGtgbrel",
+                dataType: "json",
+                data: {gtgbIds: gtgsIds},
+                success: function (data) {
+                    layer.msg('删除成功');
+                    refreshmyTbody();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据');
+        }
+
+    }
+
+</script>
+<!--大类与规格关联关系-->
+<script type="text/javascript">
+    var initgtgsArr = new Array();
+    $(function () {
+
+        $('#editorGtGs').on('hide.bs.modal', function () {
+            //清除数据
+        });
+
+        //编辑按钮提交操作
+        $("#editGtGsSubmit").click("click",function(e){
+            $('#editorGtGs').modal('hide');
+        });
+    });
+
+
+
+
+    function refreshmygtgsTbody() {
+        var gtId = $('#gtId').val();
+        initgtgsFormData(gtId);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initgtgsFormData(gtId){
+
+        $('#topspecificationname').html('规格名称（已有）');
+        initgtgsArr = [];
+        $('#addgtgsrelbtn').hide();
+        $('#deletegtgsrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGtgsrelLists",
+            dataType: "json",
+            data:{gtId:gtId,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input name="gtgscheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gtgsId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gsname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgtgsArr.push(rows[i].gsId);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定规格</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#mygtgsTbody').html(html);
+            }
+        });
+    }
+
+    function editGtGs(gtId){
+        $('#gtId').val(gtId);
+        initgtgsFormData(gtId);
+        $("#editorgtgsTitle").text("编辑大类与规格关系");
+        $('#editorGtGs').modal("show")
+    }
+
+    function searchspecifications() {
+        var gsName = $('#search_GoodsSpecification_name').val();
+        $('#topspecificationname').html('规格名称');
+        $('#addgtgsrelbtn').show();
+        $('#deletegtgsrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsSpecificationLists",
+            dataType: "json",
+            data: {gsName: gsName, pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgtgsArr.length>0){
+                            for (var j=0; j<initgtgsArr.length; j++){
+                                if (rows[i].gsId==initgtgsArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+                        if(flag == 0){
+                            html   +=  '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="gtgscheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gsId+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gsName+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                    if(html == ''){
+                        html += '<tr>'+
+                            '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%;color:red;">没有找到符合要求的规格</span>'+
+                            '</td>'+
+                            '</tr>';
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的品牌</span>'+
+                        '</td>'+
+                        '</tr>';
+                }
+                $('#mygtgsTbody').html(html);
+            }
+        });
+    }
+
+    function addgtgsrel() {
+        var checkboxs = $('input:checkbox[name=gtgscheckbox]:checked');
+
+        if(checkboxs.length > 0){
+            var addgtgs = '';
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addgtgs += ','+checkboxs[i].value;
+                }
+            }
+            var gtId = $('#gtId').val();
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGtgsrel",
+                dataType: "json",
+                data: {gsIds: addgtgs,gtId:gtId},
+                success: function (data) {
+                    layer.msg('新增成功');
+                    refreshmygtgsTbody();
+                }
+            });
+        }else{
+            layer.msg('请选择您想操作的数据');
+        }
+
+    }
+
+    function deletegtgsrel() {
+        var checkboxs = $('input:checkbox[name=gtgscheckbox]:checked');
+        var delgtgs = '';
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    delgtgs += checkboxs[i].value + ',';
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGtgsrel",
+                dataType: "json",
+                data: {gtgsIds: delgtgs},
+                success: function (data) {
+                    layer.msg('删除成功');
+                    refreshmygtgsTbody();
+                }
+            });
+        }else{
+            layer.msg('请选择您想操作的数据');
+        }
+
+    }
+
+</script>
 </body>
 </html>

@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsGtgbrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGtgbrel;
 import java.util.Map;
@@ -14,12 +15,12 @@ public interface GoodsGtgbrelService {
 
 	/**
 	 * 添加大类与规格关系表
-	 * @param goodsGtgbrel
+	 * @param gbIds,gtId
 	 * @return
 	 * @author fanghui
 	 * @date 2017-10-18 17:46:58
 	 */
-	public boolean saveGoodsGtgbrel(GoodsGtgbrel goodsGtgbrel);
+	public boolean saveGoodsGtgbrel(String gbIds,Long gtId);
 	/**
 	 * 编辑大类与规格关系表
 	 * @param goodsGtgbrel
@@ -45,15 +46,15 @@ public interface GoodsGtgbrelService {
 	 * @author fanghui
 	 * @date 2017-10-18 17:46:58
 	 */
-	public Pagination<GoodsGtgbrel> queryGoodsGtgbrelList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<GoodsGtgbrelVo> queryGoodsGtgbrelList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据gtgbId删除大类与规格关系表
-	 * @param gtgbId
+	 * @param gtgbIds
 	 * @return
 	 * @author fanghui
 	 * @date 2017-10-18 17:46:58
 	 */
-	public boolean deleteGoodsGtgbrelByGtgbId(Long gtgbId);
+	public boolean deleteGoodsGtgbrelByGtgbId(String gtgbIds);
 
 }
 

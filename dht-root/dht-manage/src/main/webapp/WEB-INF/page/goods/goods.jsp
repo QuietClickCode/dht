@@ -116,7 +116,7 @@
             <option value="">主推方向</option>
             <option value="0">乡村</option>
             <option value="1">城镇</option>
-            <option value="1">乡村和城镇</option>
+            <option value="2">乡村和城镇</option>
         </select>
         <select id="search_Goods_check" class="form-control">
             <option value="">审核状态</option>
@@ -157,6 +157,9 @@
                                     </li>
                                     <li>
                                         <a href="#goodsImagePane" data-toggle="tab" onclick="initGoodsImages();" id="nava3">商品图片</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsSpecificatioPane" data-toggle="tab"  onclick="initGoodsSpecification()" id="nava4">商品规格</a>
                                     </li>
                                 </ul>
                                     <div class="tab-content">
@@ -522,23 +525,39 @@
                                                 </center>
                                             </div>
                                         </div>
+                                        <div class="tab-pane" id="goodsSpecificatioPane">
+                                            <div class="modal-body" >
+                                                <div id="goodsSpecificatiodiv">
 
+                                                </div>
+                                                <div id="gstabeldiv" class="row clearfix" style="margin-top: 5px">
+                                                    <div class="col-md-12 column">
+                                                        <table class="table table-bordered" id="gstabel">
+
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <center>
+                                                    <button id="editGoodsSpecificatioSubmit" class="btn btn-success" >保存</button>
+                                                </center>
+                                            </div>
+                                        </div>
                                     </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <%--<div class="modal-footer">--%>
-                    <%--<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>--%>
-                    <%--<button type="button" class="btn btn-primary" id="editSubmit">确认</button>--%>
-                <%--</div>--%>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 公用下拉择树 -->
+<!-- 公用下拉择树1 -->
+<div id="menuContent1" class="menuContent" style="display:none; position: absolute;z-index:1059">
+    <ul id="treeDemo1" class="ztree" style="margin-top:0; width:320px;"></ul>
+</div>
+<!-- 公用下拉择树1 -->
 <div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
     <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
@@ -563,8 +582,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-
-
+<img style="width: 200px;height: 200px;display: none;position: absolute" src="" id="mybigimg">
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
@@ -711,6 +729,7 @@
                         if(data.status==0){
                             toastr.success("操作成功！");
                             $('#version').val(parseInt($('#version').val()) +2);
+                            refreshTableData();
                         }else{
                             toastr.error("操作失败！");
                         }
@@ -884,8 +903,6 @@
         });
     }
 
-
-    var zNodes;
     function editorGoods(gid){
         editorGoodsType=1;
         initFormData(gid);
@@ -1413,10 +1430,618 @@
     }
 </script>
 
+<!--商品规格-->
+<script>
+    var uploadimgindex = 0;
+    var imglength = 0;
+    $(function () {
+        $('#editGoodsSpecificatioSubmit').click(function () {
+            var index = 0;
+            var inputs = $('#gstabel').find('input[type!=file]');
+            for(var i=0; i<inputs.length; i++){
+                if(inputs[i].value == ''){
+                    index ++;
+                }
+            }
+            if(index != 0){
+                toastr.warning('请把数据填写完整!');
+                return;
+            }
+            var gid = $('#gid').val();
+            clearggsdata(gid);
+
+        });
+
+
+    });
+
+    <!--初始化规格-->
+    function initGoodsSpecification() {
+        var ggId = $('#gclassification').val();
+        var gid = $('#gid').val();
+        if(gid == ''){
+            toastr.warning('请先保存商品!');
+            return;
+        }
+        if(gclassification == ''){
+            toastr.warning('请先选择商品分类!');
+            return;
+        }
+        getggHome(ggId);
+
+
+    }
+
+    function getggHome(ggId) {
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsClassificationById",
+            dataType: "json",
+            data:{ggId:ggId,pageNo:1,pageSize:2},
+            success:function(data){
+                var goodsClassification = data.goodsClassification;
+                if(goodsClassification!=null){
+                    loadSpecifications(data.goodsClassification.ggHome);
+                }
+            }
+        });
+    }
+
+    function loadSpecifications(gtId) {
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGtgsrelLists",
+            dataType: "json",
+            data:{gtId:gtId,pageNo:1,pageSize:100},
+            success:function(data){
+                var gtgsrels = data.rows;
+                var html = '';
+                if(gtgsrels != null && gtgsrels.length>0){
+                    for(var i=0; i<gtgsrels.length; i++){
+                        html += '<div class="row">'+
+                            '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
+                            '<input type="hidden" name="specificationId" value="'+gtgsrels[i].gsId+'">'+
+                        '<span >'+gtgsrels[i].gsname+'</span>'+
+                        '</div>'+
+                        '<div class="col-lg-11">'+
+                        '<div class="row">'+
+                        '</div>'+
+                        '</div>'+
+                        '</div>';
+                    }
+                    $('#goodsSpecificatiodiv').html(html);
+                    loadgsvals();
+                }
+            }
+        });
+    }
+    <!--加载规格值-->
+    function loadgsvals() {
+        var gsIds = $('input[name="specificationId"]');
+        if(gsIds!=null && gsIds.length>0){
+            for(var i=0; i<gsIds.length; i++){
+                loadgsval(gsIds[i],i,gsIds.length-1);
+            }
+        }
+    }
+    function loadgsval(obj,x,y) {
+        var showobj = $($(obj).parent().next().children().get(0));
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGsvalLists",
+            dataType: "json",
+            async:false,
+            data:{gsId:$(obj).val(),pageNo:1,pageSize:100},
+            success:function(data){
+                var html = '';
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html += '<div class="col-lg-2">'+
+                                '<div class="checkbox checkbox-info" style="display: block">'+
+                                '<input onclick="createtabel();" id="gsvalId'+i+rows[i].gsvVal+'" class="styled" name="gsvalId" type="checkbox" value="'+rows[i].gsvId+'">'+
+                                '<label for="gsvalId'+i+rows[i].gsvVal+'">'+ rows[i].gsvVal+'</label>'+
+                                '</div>'+
+                                '</div>';
+                    }
+                    showobj.html(html);
+                    if(x==y){
+                        var gid = $('#gid').val();
+                        inithavegsandcreatetabel(gid);
+                    }
+                }
+            }
+        });
+    }
+    <!--创建表格-->
+    function createtabel() {
+        var gsIds = new Array();
+        var gsNames = new Array();
+        var gsvalId = $('input[name="gsvalId"]:checked');
+        var index = 0;
+        var a = 0;
+        for(var i=0; i<gsvalId.length; i++){
+            var parentdiv = $($(gsvalId[i]).parent().parent().parent().parent().prevAll().get(0));
+            var gsid = $(parentdiv.find('input').get(0));
+            if(gsIds.length==0){
+                gsIds.push(gsid);
+                gsNames.push($(parentdiv.find('span').get(0)));
+            }else{
+                var flag = false;
+                for (var j=0; j<gsIds.length; j++){
+                    if(gsid.val() == gsIds[j].val()){
+                        flag = true;
+                    }
+                }
+                if(!flag){
+                    gsIds.push(gsid);
+                    gsNames.push($(parentdiv.find('span').get(0)));
+                }
+            }
+
+        }
+
+        index = gsIds.length;
+        if(index == 0){
+            $('#gstabeldiv').hide();
+        }else{
+                var html = '<thead><tr>';
+
+                for(var i=0; i<gsNames.length; i++){
+                    html += '<th > <input type="hidden" value="'+gsIds[i].val()+'">'+gsNames[i].html()+'</th>';
+                }
+                html += '<th >'+
+                        '售价'+
+                        '</th>'+
+                        '<th >'+
+                        '成本'+
+                        '</th>'+
+                        '<th >'+
+                        '库存'+
+                        '</th>'+
+                        '<th >'+
+                        '剩余库存'+
+                        '</th>'+
+                        '<th >'+
+                        '图片'+
+                        '</th>'+
+                        '<th >'+
+                        '操作'+
+                        '</th>'+
+                        '</tr>'+
+                        '</thead>'+
+                        '<tbody id="ggsvaldetailTbody">';
+                if(index == 1){
+                    var tabelIdArr = new Array();
+                    var tabelNameArr = new Array();
+                    for(var i=0; i<gsvalId.length; i++){
+                        tabelIdArr[i] = gsvalId[i].value;
+                        tabelNameArr[i] = $(gsvalId[i]).next().html();
+                    }
+                    for(var i=0; i<tabelIdArr.length; i++){
+                        html += '<tr>'+
+                            '<td> <input type="hidden" value="'+tabelIdArr[i]+'"> '+tabelNameArr[i]+' </td>'+
+                            '<td> <input class="form-control" type="text" placeholder="售价"> </td>'+
+                            '<td> <input class="form-control" type="text" placeholder="成本"> </td>'+
+                            '<td> <input class="form-control" type="text" placeholder="库存"> </td>'+
+                            '<td> <input class="form-control" type="text" placeholder="剩余库存"> </td>'+
+                            '<td> <form>' +
+                            '<input type="hidden" value="-1"> ' +
+                            '<img style="display: none;width: 20px;height: 20px;margin-top:5px;float:left" onmouseover="showbigimg(this)" onmouseleave="hidebigimg()"/>' +
+                            '<input name="dht_image_upload" style="margin-left:20px;" type="file" placeholder="上传图片"> ' +
+                            '</form> </td>'+
+                            '<td> <button class="btn btn-primary" onclick="deleterow(this);">删除</button> </td>'+
+                            '</tr>';
+
+                    }
+                }
+                if(index == 2){
+                    var gsvalNamesArr1 = new Array();
+                    var gsvalNamesArr2 = new Array();
+
+                     var gsvalIdsArr1 = gsIds[0].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        gsvalNamesArr1.push($(gsvalIdsArr1[i]).next());
+                    }
+
+                     var gsvalIdsArr2 = gsIds[1].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr2.length; i++){
+                        gsvalNamesArr2.push($(gsvalIdsArr2[i]).next());
+                    }
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        for(var j=0; j<gsvalIdsArr2.length; j++){
+                            html += '<tr>'+
+                                '<td> <input type="hidden" value="'+gsvalIdsArr1[i].value+'"> '+gsvalNamesArr1[i].html()+' </td>'+
+                                '<td> <input type="hidden" value="'+gsvalIdsArr2[j].value+'"> '+gsvalNamesArr2[j].html()+' </td>'+
+                                '<td> <input class="form-control" type="text" placeholder="售价"> </td>'+
+                                '<td> <input class="form-control" type="text" placeholder="成本"> </td>'+
+                                '<td> <input class="form-control" type="text" placeholder="库存"> </td>'+
+                                '<td> <input class="form-control" type="text" placeholder="剩余库存"> </td>'+
+                                '<td> <form>' +
+                                '<input type="hidden" value="-1"> ' +
+                                '<img style="display: none;width: 20px;height: 20px;margin-top:5px;float:left" onmouseover="showbigimg(this)" onmouseleave="hidebigimg()"/>' +
+                                '<input name="dht_image_upload" style="margin-left:20px;" type="file" placeholder="上传图片"> ' +
+                                '</form> </td>'+
+                                '<td> <button class="btn btn-primary" onclick="deleterow(this);">删除</button> </td>'+
+                                '</tr>';
+                        }
+                    }
+                }
+                if(index == 3){
+                    var gsvalNamesArr1 = new Array();
+                    var gsvalNamesArr2 = new Array();
+                    var gsvalNamesArr3 = new Array();
+
+                    var gsvalIdsArr1 = gsIds[0].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        gsvalNamesArr1.push($(gsvalIdsArr1[i]).next());
+                    }
+
+                    var gsvalIdsArr2 = gsIds[1].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr2.length; i++){
+                        gsvalNamesArr2.push($(gsvalIdsArr2[i]).next());
+                    }
+
+                    var gsvalIdsArr3 = gsIds[2].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr3.length; i++){
+                        gsvalNamesArr3.push($(gsvalIdsArr3[i]).next());
+                    }
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        for(var j=0; j<gsvalIdsArr2.length; j++){
+                            for(var x=0; x<gsvalIdsArr3.length; x++){
+                                html += '<tr>'+
+                                    '<td> <input type="hidden" value="'+gsvalIdsArr1[i].value+'"> '+gsvalNamesArr1[i].html()+' </td>'+
+                                    '<td> <input type="hidden" value="'+gsvalIdsArr2[j].value+'"> '+gsvalNamesArr2[j].html()+' </td>'+
+                                    '<td> <input type="hidden" value="'+gsvalIdsArr3[x].value+'"> '+gsvalNamesArr3[x].html()+' </td>'+
+                                    '<td> <input class="form-control" type="text" placeholder="售价"> </td>'+
+                                    '<td> <input class="form-control" type="text" placeholder="成本"> </td>'+
+                                    '<td> <input class="form-control" type="text" placeholder="库存"> </td>'+
+                                    '<td> <input class="form-control" type="text" placeholder="剩余库存"> </td>'+
+                                    '<td> <form>' +
+                                    '<input type="hidden" value="-1"> ' +
+                                    '<img style="display: none;width: 20px;height: 20px;margin-top:5px;float:left" onmouseover="showbigimg(this)" onmouseleave="hidebigimg()"/>' +
+                                    '<input name="dht_image_upload" style="margin-left:20px;" type="file" placeholder="上传图片"> ' +
+                                    '</form> </td>'+
+                                    '<td> <button class="btn btn-primary" onclick="deleterow(this);">删除</button> </td>'+
+                                    '</tr>';
+                            }
+                        }
+                    }
+                }
+                if(index == 4){
+                    var gsvalNamesArr1 = new Array();
+                    var gsvalNamesArr2 = new Array();
+                    var gsvalNamesArr3 = new Array();
+                    var gsvalNamesArr4 = new Array();
+
+                    var gsvalIdsArr1 = gsIds[0].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        gsvalNamesArr1.push($(gsvalIdsArr1[i]).next());
+                    }
+
+                    var gsvalIdsArr2 = gsIds[1].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr2.length; i++){
+                        gsvalNamesArr2.push($(gsvalIdsArr2[i]).next());
+                    }
+
+                    var gsvalIdsArr3 = gsIds[2].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr3.length; i++){
+                        gsvalNamesArr3.push($(gsvalIdsArr3[i]).next());
+                    }
+
+                    var gsvalIdsArr4 = gsIds[3].parent().next().find('input:checked');
+
+                    for(var i=0; i<gsvalIdsArr4.length; i++){
+                        gsvalNamesArr4.push($(gsvalIdsArr4[i]).next());
+                    }
+
+                    for(var i=0; i<gsvalIdsArr1.length; i++){
+                        for(var j=0; j<gsvalIdsArr2.length; j++){
+                            for(var x=0; x<gsvalIdsArr3.length; x++){
+                                for(var y=0; y<gsvalIdsArr4.length; y++){
+                                    html += '<tr>'+
+                                        '<td> <input type="hidden" value="'+gsvalIdsArr1[i].value+'"> '+gsvalNamesArr1[i].html()+' </td>'+
+                                        '<td> <input type="hidden" value="'+gsvalIdsArr2[j].value+'"> '+gsvalNamesArr2[j].html()+' </td>'+
+                                        '<td> <input type="hidden" value="'+gsvalIdsArr3[x].value+'"> '+gsvalNamesArr3[x].html()+' </td>'+
+                                        '<td> <input type="hidden" value="'+gsvalIdsArr4[y].value+'"> '+gsvalNamesArr4[y].html()+' </td>'+
+                                        '<td> <input class="form-control" type="text" placeholder="售价"> </td>'+
+                                        '<td> <input class="form-control" type="text" placeholder="成本"> </td>'+
+                                        '<td> <input class="form-control" type="text" placeholder="库存"> </td>'+
+                                        '<td> <input class="form-control" type="text" placeholder="剩余库存"> </td>'+
+                                        '<td> <form>' +
+                                        '<input type="hidden" value="-1"> ' +
+                                        '<img style="display: none;width: 20px;height: 20px;margin-top:5px;float:left" onmouseover="showbigimg(this)" onmouseleave="hidebigimg()"/>' +
+                                        '<input name="dht_image_upload" style="margin-left:20px;" type="file" placeholder="上传图片"> ' +
+                                        '</form> </td>'+
+                                        '<td> <button class="btn btn-primary" onclick="deleterow(this);">删除</button> </td>'+
+                                        '</tr>';
+                                }
+                            }
+                        }
+                    }
+                }
+
+                html += '</tbody>';
+                $('#gstabel').html(html);
+
+
+
+
+
+            $('#gstabeldiv').show();
+        }
+    }
+    <!--清除所有关系-->
+    function clearggsdata(gid) {
+        $.ajax({
+            type:"post",
+            url:"/goods/clearAllGgsrel",
+            dataType: "json",
+            data:{gid:gid},
+            success:function(data){
+                var imgs = $('#gstabel').find('input[type="file"]');
+                imglength = imgs.length;
+                uploadimgindex = 0;
+
+                var index = 0;
+                for(var i=0; i<imgs.length; i++){
+                    if(imgs[i].value!='' && imgs[i].value!=null){
+                        index ++;
+                    }
+                }
+
+                if(index==0 || index==imglength){
+                    if(index != 0){
+                        for(var i=0; i<imgs.length; i++){
+                            uploadimgfunction(imgs[i]);
+                        }
+                    }else{
+                        submitggsvaldetaildata();
+                    }
+                }else{
+                    toastr.warning("请将图片上传完整！");
+                }
+            }
+        });
+    }
+    <!--删除行-->
+    function deleterow(obj) {
+        $(obj).parent().parent().remove();
+    }
+    
+    function uploadimgfunction(obj) {
+            var fd = new FormData($(obj).parent()[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                type:"post",
+                url:"/file/imageUpload",
+                dataType: "json",
+                data:fd,
+                processData : false,
+                contentType : false,
+                success:function(data){
+                    var original = data.original;
+                    $(obj).parent().children().get(0).value = original;
+                    uploadimgindex++;
+                    if(uploadimgindex == imglength){
+                        submitggsvaldetaildata();
+                    }
+                }
+            });
+
+
+
+
+    }
+
+    function submitggsvaldetaildata() {
+           var ggsvaldetailTtrs = $('#ggsvaldetailTbody').children();
+           var gid = $('#gid').val();
+           if(ggsvaldetailTtrs!=null && ggsvaldetailTtrs.length>0){
+
+               for(var i=0; i<ggsvaldetailTtrs.length;i++){
+                   var ggsvaldetailTtds = $(ggsvaldetailTtrs[i]).children();
+
+                   var gdImgid = $(ggsvaldetailTtds[ggsvaldetailTtds.length-2]).find('input').get(0).value;
+                   var gdResidueinventory = $(ggsvaldetailTtds[ggsvaldetailTtds.length-3]).find('input').get(0).value;
+                   var gdInventory = $(ggsvaldetailTtds[ggsvaldetailTtds.length-4]).find('input').get(0).value;
+                   var gdCostprice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-5]).find('input').get(0).value;
+                   var gdPrice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-6]).find('input').get(0).value;
+
+                   $.ajax({
+                       type:"post",
+                       url:"/goods/addGoodsDetail",
+                       dataType: "json",
+                       async :false,
+                       data:{gdImgid:gdImgid,gdResidueinventory:gdResidueinventory,gdInventory:gdInventory,gdCostprice:gdCostprice,gdPrice:gdPrice,gid:gid},
+                       success:function(data){
+                            for(var j=0; j<ggsvaldetailTtds.length-6;j++){
+                                var gsId = $($($('#gstabel').find('tr').get(0)).find('th').get(j)).find('input').get(0).value;
+
+                                var gdId = data.goodsDetail.gdId;
+                                var gsvId = $(ggsvaldetailTtds[j]).find('input').get(0).value;
+                                $.ajax({
+                                    type:"post",
+                                    url:"/goods/addGoodsGgsvalDetail",
+                                    dataType: "json",
+                                    data:{gsId:gsId,gid:gid,gdId:gdId,gsvId:gsvId},
+                                    success:function(data){
+
+                                    }
+                                });
+                            }
+                       }
+                   });
+               }
+
+               var gsvIds = $('#goodsSpecificatiodiv').find('input:checked');
+               if(gsvIds!=null && gsvIds.length>0){
+                   for(var i=0; i<gsvIds.length; i++){
+                       var gsvId = gsvIds[i].value;
+                       var gsId = $($(gsvIds[i]).parent().parent().parent().parent().prevAll().get(0)).find('input').get(0).value;
+                       $.ajax({
+                           type:"post",
+                           url:"/goods/addGoodsGgsval",
+                           dataType: "json",
+                           data:{gsId:gsId,gid:gid,gsvId:gsvId},
+                           success:function(data){
+
+                           }
+                       });
+                   }
+               }
+           }
+            toastr.success("操作成功！");
+    }
+
+    function inithavegsandcreatetabel(gid) {
+        var allgscheckbox = $('#goodsSpecificatiodiv').find('input[type=checkbox]');
+
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGgsrelLists",
+            dataType: "json",
+            data:{gid:gid,pageNo:1,pageSize:1000},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    for (var i=0; i<rows.length; i++){
+                        for(var j=0; j<allgscheckbox.length; j++){
+                            if(rows[i].gsvId == allgscheckbox[j].value){
+                                $(allgscheckbox[j]).attr('checked','checked');
+                            }
+                        }
+                    }
+                    createtabel();
+                    loadgsdata();
+                }
+            }
+        });
+    }
+
+    function loadgsdata() {
+        var ggsvaldetailtrs = $('#ggsvaldetailTbody').children();
+        var gid = $('#gid').val();
+        if(ggsvaldetailtrs!=null && ggsvaldetailtrs.length>0){
+            for(var i=0;i<ggsvaldetailtrs.length; i++){
+                var ggsvaldetailtds = $(ggsvaldetailtrs[i]).children();
+                var gdIds = new Array();
+                for(var j=0; j<ggsvaldetailtds.length-6; j++){
+                    var gsvId = $(ggsvaldetailtds[j]).find('input').get(0).value;
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/queryGoodsGgsvalDetailLists",
+                        dataType: "json",
+                        async:false,
+                        data:{gid:gid,gsvId:gsvId,pageNo:1,pageSize:100},
+                        success:function(data){
+                            var rows = data.rows;
+                            if(rows!=null && rows.length>0) {
+                                for (var k = 0; k < rows.length; k++) {
+                                    gdIds.push(rows[k].gdId);
+                                }
+
+                            }
+                        }
+                    });
+                }
+
+                var gdId = getMostTimes(gdIds);
+
+                if(gdId == null){
+                    $(ggsvaldetailtrs[i]).remove();
+                }else{
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/queryGoodsDetailById",
+                        dataType: "json",
+                        async:false,
+                        data:{gdId:gdId},
+                        success:function(data){
+                            var goodsDetail = data.goodsDetail;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-6]).find('input').get(0).value = goodsDetail.gdPrice;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-5]).find('input').get(0).value = goodsDetail.gdCostprice;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-4]).find('input').get(0).value = goodsDetail.gdInventory;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-3]).find('input').get(0).value = goodsDetail.gdResidueinventory;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('input').get(0).value = goodsDetail.gdImgid;
+                            if(goodsDetail.imgUrl.substring(goodsDetail.imgUrl.length-4)!="null"){
+                                $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('img').get(0).src = goodsDetail.imgUrl;
+                                $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('img').show();
+                            }
+                        }
+                    });
+                }
+
+            }
+        }
+
+    }
+
+    function getMostTimes(arr) {
+        if(arr!=null && arr.length>0){
+            var MostTimeObj = null;
+            var times = new Array();
+            for(var i=0; i<arr.length;i++){
+                var index = 0;
+                for(var j=0; j<arr.length;j++){
+                    if(arr[i]==arr[j]){
+                        index ++;
+                    }
+                }
+                times.push(index);
+            }
+            var largst = 0;
+            for(var i=0; i<times.length;i++){
+                if(times[i]>largst){
+                    largst = times[i];
+                }
+            }
+
+            if(largst==1 && arr.length>1){
+                return null;
+            }
+
+            var flag;
+            for(var i=0; i<times.length;i++){
+                if(times[i]==largst){
+                    flag = arr[i];
+                    break;
+                }
+            }
+            return flag;
+
+        }
+    }
+
+    function showbigimg(obj) {
+        $('#mybigimg')[0].src = obj.src;
+        var top =$(obj).offset().top;
+        var left = $(obj).offset().left - 200;
+        $('#mybigimg').css('top',top+"px");
+        $('#mybigimg').css('left',left+"px");
+        $('#mybigimg').show();
+    }
+    function hidebigimg() {
+        $('#mybigimg').hide();
+    }
+</script>
+
 <!--商品子类选择1-->
 <script>
 
-        var setting = {
+        var setting1 = {
             view: {
                 dblClickExpand: false
             },
@@ -1426,17 +2051,17 @@
                 }
             },
             callback: {
-                beforeClick: beforeClick,
-                onClick: onClick
+                beforeClick: beforeClick1,
+                onClick: onClick1
             }
         };
 
-        function beforeClick(treeId, treeNode) {
+        function beforeClick1(treeId, treeNode) {
             return true;
         }
 
-        function onClick(e, treeId, treeNode) {
-            var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+        function onClick1(e, treeId, treeNode) {
+            var zTree = $.fn.zTree.getZTreeObj("treeDemo1"),
                 nodes = zTree.getSelectedNodes(),
                 v = "",vId="";
             nodes.sort(function compare(a,b){return a.id-b.id;});
@@ -1450,8 +2075,8 @@
             gclassification.val(vId);
         }
 
-        var zNodes;
-        $.fn.zTree.init($("#treeDemo"), setting, zNodes);
+        var zNodes1;
+        $.fn.zTree.init($("#treeDemo1"), setting1, zNodes1);
         $.ajax({
             type:"post",
             url:'/goods/queryGoodsClassificationNode',
@@ -1468,7 +2093,7 @@
                     treeRow.name=row.ggName;
                     nodeData.push(treeRow);
                 }
-                var zTree=$.fn.zTree.init($("#treeDemo"), setting, nodeData);
+                var zTree=$.fn.zTree.init($("#treeDemo1"), setting1, nodeData);
                 var node = zTree.getNodeByParam("id",parentId);
                 if(node){
                     zTree.selectNode(node);
@@ -1479,15 +2104,15 @@
         function showMenu() {
             var cityObj = $("#gclassificationName");
             var cityOffset = $("#gclassificationName").offset();
-            $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-            $("body").bind("mousedown", onBodyDown);
+            $("#menuContent1").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+            $("body").bind("mousedown", onBodyDown1);
         }
         function hideMenu() {
-            $("#menuContent").fadeOut("fast");
-            $("body").unbind("mousedown", onBodyDown);
+            $("#menuContent1").fadeOut("fast");
+            $("body").unbind("mousedown", onBodyDown1);
         }
-        function onBodyDown(event) {
-            if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
+        function onBodyDown1(event) {
+            if (!(event.target.id == "menuBtn" || event.target.id == "menuContent1" || $(event.target).parents("#menuContent1").length>0)) {
                 hideMenu();
             }
         }
@@ -1563,13 +2188,13 @@
         $("#menuContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
         $("body").bind("mousedown", onBodyDown);
     }
-    function hideMenu() {
+    function hideMenu2() {
         $("#menuContent").fadeOut("fast");
         $("body").unbind("mousedown", onBodyDown);
     }
     function onBodyDown(event) {
         if (!(event.target.id == "menuBtn" || event.target.id == "menuContent" || $(event.target).parents("#menuContent").length>0)) {
-            hideMenu();
+            hideMenu2();
         }
     }
 

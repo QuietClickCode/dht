@@ -81,7 +81,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	}
 	public boolean deleteGoodsClassificationByGgId(Long ggId) {
 		GoodsClassification goodsClassification = goodsClassificationMapper.queryGoodsClassificationByGgId(ggId);
-		if(ObjectUtils.isEmpty(goodsClassification.getGgImgpath())){
+		if(!ObjectUtils.isEmpty(goodsClassification.getGgImgpath())){
 			attachmentService.editorAttachment(Long.parseLong(goodsClassification.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
 		goodsClassification.setIsDelete(1L);

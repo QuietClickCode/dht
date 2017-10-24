@@ -83,6 +83,15 @@ public class GoodsClassificationController extends BaseController {
         }else{
             return success("新增商品子类失败");
         }
+    }
 
+    @RequestMapping("/queryGoodsClassificationById")
+    @Function(label="商品子类", description = "商品子类", resourse = "goods.queryGoodsClassificationById",sort=1,parentRes="goods.openGoodsClassification")
+    @ResponseBody
+    public Map<String,Object> queryGoodsClassificationById(Long ggId){
+        GoodsClassification goodsClassification = goodsClassificationService.queryGoodsClassificationByGgId(ggId);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("goodsClassification",goodsClassification);
+        return gtm;
     }
 }
