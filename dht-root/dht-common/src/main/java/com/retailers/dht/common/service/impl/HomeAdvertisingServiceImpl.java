@@ -1,13 +1,17 @@
 
 package com.retailers.dht.common.service.impl;
+
+import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.dao.HomeAdvertisingMapper;
+import com.retailers.dht.common.entity.HomeAdvertising;
+import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.HomeAdvertisingService;
+import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
-import com.retailers.dht.common.entity.HomeAdvertising;
-import com.retailers.dht.common.dao.HomeAdvertisingMapper;
-import com.retailers.dht.common.service.HomeAdvertisingService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
 /**
  * 描述：首页广告设置表Service
  * @author wangjue
@@ -19,6 +23,10 @@ import com.retailers.mybatis.pagination.Pagination;
 public class HomeAdvertisingServiceImpl implements HomeAdvertisingService {
 	@Autowired
 	private HomeAdvertisingMapper homeAdvertisingMapper;
+
+	@Autowired
+	private AttachmentService attachmentService;
+
 	public boolean saveHomeAdvertising(HomeAdvertising homeAdvertising) {
 		int status = homeAdvertisingMapper.saveHomeAdvertising(homeAdvertising);
 		return status == 1 ? true : false;
@@ -41,7 +49,10 @@ public class HomeAdvertisingServiceImpl implements HomeAdvertisingService {
 		return page;
 	}
 	public boolean deleteHomeAdvertisingByHaId(Long haId) {
-		int status = homeAdvertisingMapper.deleteHomeAdvertisingByHaId(haId);
+		HomeAdvertising advertising = homeAdvertisingMapper.queryHomeAdvertisingByHaId(haId);
+		attachmentService.editorAttachment(advertising.getImagePath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+		advertising.setIsDelete(1L);
+		int status = homeAdvertisingMapper.updateHomeAdvertising(advertising);
 		return status == 1 ? true : false;
 	}
 }

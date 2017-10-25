@@ -2,7 +2,9 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.FloorAdvertising;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.FloorAdvertisingService;
 import com.retailers.dht.common.vo.FloorAdvertisingVo;
 import com.retailers.dht.manage.base.BaseController;
@@ -25,6 +27,9 @@ public class FloorAdvertisingController extends BaseController {
     @Autowired
     FloorAdvertisingService advertisingService;
 
+    @Autowired
+    AttachmentService attachmentService;
+
     @RequestMapping("/floorAdvertisingMapping")
     @Menu(parentRes = "sys.manager.floorManage",resourse = "floorAdvertising.floorAdvertisingMapping",description = "楼层广告设置",label = "楼层广告设置")
     public String floorManage(){
@@ -35,6 +40,7 @@ public class FloorAdvertisingController extends BaseController {
     @Function(label = "添加楼层",description = "添加楼层",resourse = "floorAdvertising.addFloorAdvertising",sort = 3,parentRes = "floorAdvertising.floorAdvertisingMapping")
     @ResponseBody
     public BaseResp addFloorAdvertising(FloorAdvertising advertising){
+        attachmentService.editorAttachment(advertising.getImageId());
         boolean flag = advertisingService.saveFloorAdvertising(advertising);
         if (flag)
             return success("新增楼层成功");
@@ -46,6 +52,12 @@ public class FloorAdvertisingController extends BaseController {
     @Function(label = "编辑楼层",parentRes = "floorAdvertising.floorAdvertisingMapping",resourse = "floorAdvertising.updateFloorAdvertising",description = "编辑楼层",sort = 2)
     @ResponseBody
     public BaseResp updateFloorAdvertising(FloorAdvertising advertising){
+        FloorAdvertising floorAdvertising = advertisingService.queryFloorAdvertisingByFaId(advertising.getFaId());
+        if(floorAdvertising.getImageId().compareTo(advertising.getImageId()) != 0) {
+            attachmentService.editorAttachment(floorAdvertising.getImageId(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+            attachmentService.editorAttachment(advertising.getImageId());
+        }
+        advertising.setVersion(floorAdvertising.getVersion());
         boolean flag = advertisingService.updateFloorAdvertising(advertising);
         if (flag)
             return success("修改楼层[" + advertising.getFaName() + "]成功");
@@ -57,9 +69,6 @@ public class FloorAdvertisingController extends BaseController {
     @Function(label = "删除楼层",parentRes = "floorAdvertising.floorAdvertisingMapping",resourse = "floorAdvertising.deleteFloorAdvertising",description = "删除楼层",sort = 2)
     @ResponseBody
     public BaseResp deleteFloorAdvertising(Long faId){
-        List<FloorAdvertisingVo> floorAdvertisingVos = advertisingService.queryFloorAdvertisingTree();
-        for(FloorAdvertisingVo vo:floorAdvertisingVos)
-            System.out.println(vo.getFaId()+" "+vo.getParentId()+" "+vo.getFaName());
         boolean flag = advertisingService.deleteFloorAdvertisingByFaId(faId);
         return success(flag);
     }
@@ -73,5 +82,12 @@ public class FloorAdvertisingController extends BaseController {
         rtn.put("total",1000);
         rtn.put("rows",floorAdvertisingVos);
         return rtn;
+    }
+
+    @RequestMapping("/queryFloorAdvertisingVo")
+    @Function(label = "查询子楼层",parentRes = "floorAdvertising.floorAdvertisingMapping",resourse = "floorAdvertising.queryFloorAdvertisingVo",description = "查询子楼层",sort = 2)
+    @ResponseBody
+    public List<FloorAdvertisingVo> queryFloorAdvertisingVo(){
+        return  advertisingService.queryFloorAdvertisingVo();
     }
 }

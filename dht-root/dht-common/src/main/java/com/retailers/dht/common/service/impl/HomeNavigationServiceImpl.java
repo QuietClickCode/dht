@@ -2,8 +2,11 @@
 package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.HomeNavigation;
 import com.retailers.dht.common.dao.HomeNavigationMapper;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeNavigationService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +22,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class HomeNavigationServiceImpl implements HomeNavigationService {
 	@Autowired
 	private HomeNavigationMapper homeNavigationMapper;
+	@Autowired
+	AttachmentService attachmentService;
+
 	public boolean saveHomeNavigation(HomeNavigation homeNavigation) {
 		int status = homeNavigationMapper.saveHomeNavigation(homeNavigation);
 		return status == 1 ? true : false;
@@ -42,6 +48,7 @@ public class HomeNavigationServiceImpl implements HomeNavigationService {
 	}
 	public boolean deleteHomeNavigationByHnId(Long hnId) {
 		HomeNavigation homeNavigation = homeNavigationMapper.queryHomeNavigationByHnId(hnId);
+		attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
 		homeNavigation.setIsDelete(1L);
 		int status = homeNavigationMapper.updateHomeNavigation(homeNavigation);
 		return status == 1 ? true : false;

@@ -329,7 +329,7 @@
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">删除</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();deleteHomeAdv(\''+row.haId+'\')">删除</button>'
                 return html;
             }
         }
@@ -506,6 +506,20 @@
         }
     }
 
+    function deleteHomeAdv(id) {
+        $.ajax({
+            url:"/openHomeAdvertising/removeAdvertising",
+            method:"post",
+            dataType:"json",
+            data:{
+                haId:id
+            },
+            success:function (data) {
+                layer.msg(data.msg);
+                refreshTableData();
+            }
+        });
+    }
 
 
     /*$(function () {
