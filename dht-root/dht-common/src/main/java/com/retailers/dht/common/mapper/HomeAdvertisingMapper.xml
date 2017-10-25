@@ -71,7 +71,7 @@
 	<!--分页查询 -->
 	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="homeAdvertising_columns" />
-		FROM t_home_advertising <include refid="homeAdvertising_where"/>
+		FROM t_home_advertising <include refid="homeAdvertising_where"/> ORDER BY ha_order
 	</select>
 	
 

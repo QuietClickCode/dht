@@ -47,4 +47,7 @@ public class BaseMenuController {
 
     @Resourse(resourse = "sys.manager.floorManage",label = "导航/广告设置",sort = 5)
     public String floorManage;
+
+    @Resourse(resourse = "sys.manager.articleManage",label = "文章管理",sort = 6)
+    public String articleManage;
 }
