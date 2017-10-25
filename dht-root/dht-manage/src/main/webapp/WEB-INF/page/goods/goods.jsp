@@ -161,6 +161,18 @@
                                     <li>
                                         <a href="#goodsSpecificatioPane" data-toggle="tab"  onclick="initGoodsSpecification()" id="nava4">商品规格</a>
                                     </li>
+                                    <li>
+                                        <a href="#goodsBrandPane" data-toggle="tab"  onclick="refreshmygbTbody()" id="nava5">商品品牌</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsLabelPane" data-toggle="tab"  onclick="refreshmyglTbody()" id="nava6">商品标签</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsLabelPane" data-toggle="tab"  onclick="refreshmyglTbody()" id="nava7">评论标签</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsLabelPane" data-toggle="tab"  onclick="refreshmyglTbody()" id="nava8">商品优惠</a>
+                                    </li>
                                 </ul>
                                     <div class="tab-content">
                                         <div class="tab-pane active" id="goodsPane">
@@ -540,6 +552,62 @@
                                                 <center>
                                                     <button id="editGoodsSpecificatioSubmit" class="btn btn-success" >保存</button>
                                                 </center>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="goodsBrandPane">
+                                            <div class="modal-body">
+                                                <center>
+                                                    <div class="form-group" style="margin-top: 5px;">
+                                                        <select id="brandselect" class="form-control">
+                                                            <option>请选择品牌</option>
+                                                        </select>
+                                                    </div>
+                                                    <ex:perm url="/goods/addGoodsGgbrel">
+                                                        <button class="btn btn-default" type="button" onclick="addggbrel()">确定</button>
+                                                    </ex:perm>
+                                                </center>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="goodsLabelPane">
+                                            <div class="modal-body">
+                                                <center>
+                                                    <div class="form-group" style="margin-top: 5px;">
+                                                        <input type="text" class="form-control" id="search_GoodsLabel_name" placeholder="请输入标签名称">
+                                                    </div>
+                                                    <ex:perm url="/goods/queryGoodsLabelLists">
+                                                        <button class="btn btn-default" type="button" onclick="searchlabels()">查询</button>
+                                                    </ex:perm>
+
+                                                </center>
+                                                <ex:perm url="/goods/addGoodsGglrel">
+                                                    <button class="btn btn-default" type="button" onclick="addgglrel()" id="addgglrelbtn">新增</button>
+                                                </ex:perm>
+                                                <ex:perm url="/goods/removeGoodsGglrel">
+                                                    <button class="btn btn-default" type="button" onclick="deletegglrel()" id="deletegglrelbtn">删除</button>
+                                                </ex:perm>
+                                                <ex:perm url="/goods/queryGoodsGglrelLists">
+                                                    <button class="btn btn-primary" type="button" onclick="refreshmyglTbody()" style="float: right">刷新</button>
+                                                </ex:perm>
+                                                <div class="row clearfix" style="margin-top: 5px">
+                                                    <div class="col-md-12 column">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width: 30px">
+                                                                    &nbsp;
+                                                                </th>
+                                                                <th style="text-align: center;" id="toplabelname">
+                                                                    品牌名称（已有）
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="myglTbody">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -1436,6 +1504,12 @@
     var imglength = 0;
     $(function () {
         $('#editGoodsSpecificatioSubmit').click(function () {
+            if($('#gid').val()=='' || $('#gclassification').val()==''){
+                toastr.warning('请先保存商品!');
+                document.getElementById("nava1").click();
+                return;
+            }
+
             var index = 0;
             var inputs = $('#gstabel').find('input[type!=file]');
             for(var i=0; i<inputs.length; i++){
@@ -1457,6 +1531,7 @@
 
     <!--初始化规格-->
     function initGoodsSpecification() {
+        clearggsdatas();
         var ggId = $('#gclassification').val();
         var gid = $('#gid').val();
         if(gid == ''){
@@ -2009,7 +2084,30 @@
                 }
             }
 
-            if(largst==1 && arr.length>1){
+            var gsIds = new Array();
+            var gsvalId = $('input[name="gsvalId"]:checked');
+            var index = 0;
+            var a = 0;
+            for(var i=0; i<gsvalId.length; i++){
+                var parentdiv = $($(gsvalId[i]).parent().parent().parent().parent().prevAll().get(0));
+                var gsid = $(parentdiv.find('input').get(0));
+                if(gsIds.length==0){
+                    gsIds.push(gsid);
+                }else{
+                    var flag = false;
+                    for (var j=0; j<gsIds.length; j++){
+                        if(gsid.val() == gsIds[j].val()){
+                            flag = true;
+                        }
+                    }
+                    if(!flag){
+                        gsIds.push(gsid);
+                    }
+                }
+
+            }
+
+            if(largst==1 && (arr.length>1 && gsIds.length>0)){
                 return null;
             }
 
@@ -2035,6 +2133,259 @@
     }
     function hidebigimg() {
         $('#mybigimg').hide();
+    }
+    
+    function clearggsdatas() {
+        $('#goodsSpecificatiodiv').html('');
+        $('#gstabel').html('');
+    }
+</script>
+
+<!--商品与品牌关系-->
+<script>
+    var initdataArr = new Array();
+
+    function refreshmygbTbody() {
+        var gid = $('#gid').val();
+        searchbrands();
+    }
+
+
+    function searchbrands() {
+        var ggId = $('#gclassification').val();
+        if(ggId == ''){
+            toastr.warning('请先保存商品!');
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsGtgbrelLists",
+            dataType: "json",
+            data: {ggId:ggId, pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '<option>请选择品牌</option>';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        html += '<option value="'+rows[i].gbId+'">'+rows[i].brandname+'</option>';
+                    }
+                }
+                $('#brandselect').html(html);
+
+
+                $.ajax({
+                    type: "post",
+                    url: "/goods/queryGoodsGgbrelLists",
+                    dataType: "json",
+                    data: {gid:$('#gid').val(), pageNo: 1, pageSize: 100},
+                    success: function (data) {
+                        var rows = data.rows;
+                        if(rows!=null){
+                            var brandselectchildren = $('#brandselect').children();
+                            for(var x=0; x<brandselectchildren.length; x++){
+                                if(brandselectchildren[x].value==rows[0].gbId){
+                                    $(brandselectchildren[x]).attr('selected','selected');
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    function addggbrel() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var brandselectval = $('#brandselect').val();
+        var addggb = ","+brandselectval;
+        $.ajax({
+            type: "post",
+            url: "/goods/addGoodsGgbrel",
+            dataType: "json",
+            data: {gbIds: addggb,gid:gid},
+            success: function (data) {
+                toastr.success('操作成功!');
+            }
+        });
+    }
+
+</script>
+
+<!--商品与标签关系-->
+<script>
+    var initgldataArr = new Array();
+
+    function refreshmyglTbody() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            return;
+        }
+        initgglFormData(gid);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initgglFormData(gid){
+        $('#toplabelname').html('标签名称（已有）');
+        initgldataArr = [];
+        $('#addgglrelbtn').hide();
+        $('#deletegglrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGglrelLists",
+            dataType: "json",
+            data:{gid:gid,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="checkbox'+i+'" name="gglcheckbox" class="styled" type="checkbox" value="'+rows[i].gglId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].labelname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgldataArr.push(rows[i].glId);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定标签</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#myglTbody').html(html);
+            }
+        });
+    }
+
+    function searchlabels() {
+        var glName = $('#search_GoodsLabel_name').val();
+
+        $('#toplabelname').html('标签名称');
+        $('#addgglrelbtn').show();
+        $('#deletegglrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsLabelLists",
+            dataType: "json",
+            data: {glName: glName,pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgldataArr.length>0){
+                            for (var j=0; j<initgldataArr.length; j++){
+                                if (rows[i].glId==initgldataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+
+                        if(flag == 0){
+                            html += '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="gglcheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].glId+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].glName+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                }
+
+                if(html == ''){
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的品牌</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#myglTbody').html(html);
+            }
+        });
+    }
+
+    function addgglrel() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
+        var addggb = "";
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addggb += ","+checkboxs[i].value;
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGglrel",
+                dataType: "json",
+                data: {glIds: addggb,gid:gid},
+                success: function (data) {
+                    toastr.success('新增成功!');
+                    refreshmyglTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
+    }
+
+    function deletegglrel() {
+        var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var gglIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    gglIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGglrel",
+                dataType: "json",
+                data: {gglIds: gglIds},
+                success: function (data) {
+                    toastr.success('删除成功!');
+                    refreshmyglTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
     }
 </script>
 

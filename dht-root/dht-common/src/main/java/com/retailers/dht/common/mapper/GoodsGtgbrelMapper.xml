@@ -45,6 +45,9 @@
 			<if test="null != params.version">
 				AND t1.version = #{params.version}
 			</if>
+			<if test="null != params.gbName and ''!=params.gbName">
+				AND t2.gb_name = #{params.gbName}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->

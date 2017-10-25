@@ -34,7 +34,7 @@
 				AND t1.gb_id = #{params.gbId}
 			</if>
 			<if test="null != params.gbName and '' != params.gbName">
-				AND t1.gb_name = #{params.gbName}
+				AND t1.gb_name like  concat('%', #{params.gbName}, '%')
 			</if>
 			<if test="null != params.gbImgpath and '' != params.gbImgpath">
 				AND t1.gb_imgpath = #{params.gbImgpath}

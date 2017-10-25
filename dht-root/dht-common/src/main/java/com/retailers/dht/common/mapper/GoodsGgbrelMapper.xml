@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGgbrelMapper">
+
+	<resultMap id="rm_goodsGgbrel" type="com.retailers.dht.common.entity.GoodsGgbrel">
+			<result property="ggbId" column="ggb_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gbId" column="gb_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goodsGgbrel_vo" type="com.retailers.dht.common.vo.GoodsGgbrelVo">
+		<result property="ggbId" column="ggb_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="gbId" column="gb_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="brandname" column="brandname"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGgbrel_columns">
+		ggb_id,g_id,gb_id,is_delete,version
+	</sql>
+	<!-- 根据商品与品牌关系表主键取得数据 -->
+	<select id="queryGoodsGgbrelByGgbId" resultMap="rm_goodsGgbrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGgbrel_columns" />
+		FROM t_goods_ggbrel WHERE ggb_id = #{ggbId}
+	</select>
+	<!-- 商品与品牌关系表查询条件组合 -->
+	<sql id="goodsGgbrel_where">
+		<where>
+			<if test="null != params.ggbId">
+				AND t1.ggb_id = #{params.ggbId}
+			</if>
+			<if test="null != params.gid">
+				AND t1.g_id = #{params.gid}
+			</if>
+			<if test="null != params.gbId">
+				AND t1.gb_id = #{params.gbId}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGgbrelList" resultMap="rm_goodsGgbrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.gb_name brandname from t_goods_ggbrel t1
+		LEFT JOIN t_goods_brand t2 ON t1.gb_id=t2.gb_id
+		<include refid="goodsGgbrel_where"/>
+	</select>
+	<!--添加商品与品牌关系表 -->
+	<insert id="saveGoodsGgbrel" parameterType="com.retailers.dht.common.entity.GoodsGgbrel" useGeneratedKeys="true" keyProperty="ggbId">
+		INSERT INTO t_goods_ggbrel (
+			g_id,gb_id,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gbId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与品牌关系表 -->
+	<update id="updateGoodsGgbrel" parameterType="com.retailers.dht.common.entity.GoodsGgbrel">
+		UPDATE t_goods_ggbrel
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gbId">
+                gb_id = #{gbId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggb_id = #{ggbId} and version = #{version}
+	</update>
+	<!--删除商品与品牌关系表 -->
+	<delete id="deleteGoodsGgbrelByGgbId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_ggbrel WHERE ggb_id = #{ggbId}
+	</delete>
+</mapper>

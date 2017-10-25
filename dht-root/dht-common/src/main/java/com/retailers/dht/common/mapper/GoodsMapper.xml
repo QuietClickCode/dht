@@ -70,7 +70,7 @@
 				AND t1.g_id = #{params.gid}
 			</if>
 			<if test="null != params.gname and '' != params.gname">
-				AND t1.g_name = #{params.gname}
+				AND t1.g_name like  concat('%', #{params.gname}, '%')
 			</if>
 			<if test="null != params.gvender">
 				AND t1.g_vender = #{params.gvender}

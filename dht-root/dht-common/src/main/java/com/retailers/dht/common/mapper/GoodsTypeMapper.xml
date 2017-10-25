@@ -29,7 +29,7 @@
 				AND gt_id = #{params.gtId}
 			</if>
 			<if test="null != params.gtName and '' != params.gtName">
-				AND gt_name = #{params.gtName}
+				AND gt_name like  concat('%', #{params.gtName}, '%')
 			</if>
 			<if test="null != params.isParams">
 				AND is_params = #{params.isParams}

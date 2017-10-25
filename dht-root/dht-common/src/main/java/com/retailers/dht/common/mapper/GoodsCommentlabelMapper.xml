@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsCommentlabelMapper">
+
+	<resultMap id="rm_goodsCommentlabel" type="com.retailers.dht.common.entity.GoodsCommentlabel">
+			<result property="gclId" column="gcl_id"/>
+			<result property="gclName" column="gcl_name"/>
+			<result property="gclStatus" column="gcl_status"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsCommentlabel_columns">
+		gcl_id,gcl_name,gcl_status,is_delete,version
+	</sql>
+	<!-- 根据商品评论标签表主键取得数据 -->
+	<select id="queryGoodsCommentlabelByGclId" resultMap="rm_goodsCommentlabel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsCommentlabel_columns" />
+		FROM t_goods_commentlabel WHERE gcl_id = #{gclId}
+	</select>
+	<!-- 商品评论标签表查询条件组合 -->
+	<sql id="goodsCommentlabel_where">
+		<where>
+			<if test="null != params.gclId">
+				AND gcl_id = #{params.gclId}
+			</if>
+			<if test="null != params.gclName and '' != params.gclName">
+				AND gcl_name = #{params.gclName}
+			</if>
+			<if test="null != params.gclStatus">
+				AND gcl_status = #{params.gclStatus}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsCommentlabelList" resultMap="rm_goodsCommentlabel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsCommentlabel_columns" />
+		FROM t_goods_commentlabel
+		<include refid="goodsCommentlabel_where"/>
+	</select>
+	<!--添加商品评论标签表 -->
+	<insert id="saveGoodsCommentlabel" parameterType="com.retailers.dht.common.entity.GoodsCommentlabel" useGeneratedKeys="true" keyProperty="gclId">
+		INSERT INTO t_goods_commentlabel (
+			gcl_name,gcl_status,is_delete,version
+		) VALUES
+		(
+			#{gclName,jdbcType=VARCHAR},#{gclStatus,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品评论标签表 -->
+	<update id="updateGoodsCommentlabel" parameterType="com.retailers.dht.common.entity.GoodsCommentlabel">
+		UPDATE t_goods_commentlabel
+		<set>
+            <if test="null != gclName and '' != gclName">
+                gcl_name = #{gclName},
+            </if>
+            <if test="null != gclStatus">
+                gcl_status = #{gclStatus},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gcl_id = #{gclId} and version = #{version}
+	</update>
+	<!--删除商品评论标签表 -->
+	<delete id="deleteGoodsCommentlabelByGclId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_commentlabel WHERE gcl_id = #{gclId}
+	</delete>
+</mapper>
