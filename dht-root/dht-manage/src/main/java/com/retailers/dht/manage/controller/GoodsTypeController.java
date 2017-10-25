@@ -69,6 +69,15 @@ public class GoodsTypeController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/queryGoodsTypeById")
+    @Function(label="商品大类", description = "商品大类", resourse = "goods.queryGoodsTypeById",sort=1,parentRes="goods.openGoodsType")
+    @ResponseBody
+    public  Map<String,Object> queryGoodsTypeById(Long gtId){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("goodsType",goodsTypeService.queryGoodsTypeByGtId(gtId));
+        return  map;
+    }
+
     @RequestMapping("/addGoodsType")
     @Function(label="增加商品大类", description = "增加商品大类", resourse = "goods.addGoodsType",parentRes="goods.openGoodsType")
     @ResponseBody

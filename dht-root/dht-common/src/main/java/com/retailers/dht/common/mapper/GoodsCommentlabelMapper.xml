@@ -26,7 +26,7 @@
 				AND gcl_id = #{params.gclId}
 			</if>
 			<if test="null != params.gclName and '' != params.gclName">
-				AND gcl_name = #{params.gclName}
+				AND gcl_name like  concat('%', #{params.gclName}, '%')
 			</if>
 			<if test="null != params.gclStatus">
 				AND gcl_status = #{params.gclStatus}

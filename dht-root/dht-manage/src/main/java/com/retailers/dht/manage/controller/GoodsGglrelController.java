@@ -27,7 +27,7 @@ public class GoodsGglrelController extends BaseController {
     GoodsGglrelService goodsGglrelService;
 
     @RequestMapping("/removeGoodsGglrel")
-    @Function(label="删除商品与标签关系", description = "删除商品大类与标签关系", resourse = "goods.removeGoodsGglrel",sort=3,parentRes="goods.openGoods")
+    @Function(label="删除商品与品牌关系", description = "删除商品与品牌关系", resourse = "goods.removeGoodsGglrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGglrel(String gglIds, HttpServletRequest request){
         boolean flag=goodsGglrelService.deleteGoodsGglrelByGglId(gglIds,getCurLoginUserId(request));
@@ -35,7 +35,7 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGglrelLists")
-    @Function(label="商品大类与品牌关系列表", description = "商品大类与品牌关系列表", resourse = "goods.queryGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
+    @Function(label="商品与品牌关系列表", description = "商品与品牌关系列表", resourse = "goods.queryGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGglrelLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -49,7 +49,7 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGglrel")
-    @Function(label="增加商品大类与品牌关系", description = "增加商品大类与品牌关系", resourse = "goods.addGoodsGglrel",parentRes="goods.openGoods")
+    @Function(label="增加商品与品牌关系", description = "增加商品与品牌关系", resourse = "goods.addGoodsGglrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGglrel(String glIds,Long gid,HttpServletRequest request){
         boolean flag=goodsGglrelService.saveGoodsGglrel(glIds,gid,getCurLoginUserId(request));

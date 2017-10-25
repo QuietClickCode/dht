@@ -3,8 +3,10 @@ package com.retailers.dht.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.GoodsGtgbrel;
+import com.retailers.dht.common.entity.GoodsType;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsGtgbrelService;
+import com.retailers.dht.common.service.GoodsTypeService;
 import com.retailers.dht.common.vo.GoodsGtgbrelVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -31,6 +33,8 @@ public class GoodsGtgbrelController extends BaseController {
     GoodsGtgbrelService goodsGtgbrelService;
     @Autowired
     GoodsClassificationService goodsClassificationService;
+    @Autowired
+    GoodsTypeService goodsTypeService;
 
     @RequestMapping("/removeGoodsGtgbrel")
     @Function(label="删除商品大类与品牌关系", description = "删除商品大类与品牌关系", resourse = "goods.removeGoodsGtgbrel",sort=3,parentRes="goods.openGoodsType")
@@ -47,7 +51,14 @@ public class GoodsGtgbrelController extends BaseController {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gbName",gbName);
         if (!ObjectUtils.isEmpty(ggId)){
-            map.put("gtId",goodsClassificationService.queryGoodsClassificationByGgId(ggId).getGgHome());
+            gtId = goodsClassificationService.queryGoodsClassificationByGgId(ggId).getGgHome();
+            GoodsType goodsType = goodsTypeService.queryGoodsTypeByGtId(gtId);
+            if (goodsType.getIsTrademark()==0) {
+                Map<String,Object> gtm = new HashMap<String,Object>();
+                gtm.put("rows",null);
+                return gtm;
+            }
+            map.put("gtId",gtId);
         }else{
             map.put("gtId",gtId);
         }

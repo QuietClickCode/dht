@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGgclrelMapper">
+
+	<resultMap id="rm_goodsGgclrel" type="com.retailers.dht.common.entity.GoodsGgclrel">
+			<result property="ggclId" column="ggcl_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gclId" column="gcl_id"/>
+			<result property="gclLevel" column="gcl_level"/>
+			<result property="gclCount" column="gcl_count"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goodsGgclrel_vo" type="com.retailers.dht.common.vo.GoodsGgclrelVo">
+		<result property="ggclId" column="ggcl_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="gclId" column="gcl_id"/>
+		<result property="gclLevel" column="gcl_level"/>
+		<result property="gclCount" column="gcl_count"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gclname" column="gclname"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGgclrel_columns">
+		ggcl_id,g_id,gcl_id,gcl_level,gcl_count,is_delete,version
+	</sql>
+	<!-- 根据商品与商品评论关系表主键取得数据 -->
+	<select id="queryGoodsGgclrelByGgclId" resultMap="rm_goodsGgclrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGgclrel_columns" />
+		FROM t_goods_ggclrel WHERE ggcl_id = #{ggclId}
+	</select>
+	<!-- 商品与商品评论关系表查询条件组合 -->
+	<sql id="goodsGgclrel_where">
+		<where>
+			<if test="null != params.ggclId">
+				AND t1.ggcl_id = #{params.ggclId}
+			</if>
+			<if test="null != params.gid">
+				AND t1.g_id = #{params.gid}
+			</if>
+			<if test="null != params.gclId">
+				AND t1.gcl_id = #{params.gclId}
+			</if>
+			<if test="null != params.gclLevel">
+				AND t1.gcl_level = #{params.gclLevel}
+			</if>
+			<if test="null != params.gclCount">
+				AND t1.gcl_count = #{params.gclCount}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGgclrelList" resultMap="rm_goodsGgclrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.gcl_name gclname from t_goods_ggclrel t1
+		LEFT JOIN t_goods_commentlabel t2 on t1.gcl_id =t2.gcl_id
+		<include refid="goodsGgclrel_where"/>
+	</select>
+	<!--添加商品与商品评论关系表 -->
+	<insert id="saveGoodsGgclrel" parameterType="com.retailers.dht.common.entity.GoodsGgclrel" useGeneratedKeys="true" keyProperty="ggclId">
+		INSERT INTO t_goods_ggclrel (
+			g_id,gcl_id,gcl_level,gcl_count,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gclId,jdbcType=BIGINT},#{gclLevel,jdbcType=BIGINT},#{gclCount,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与商品评论关系表 -->
+	<update id="updateGoodsGgclrel" parameterType="com.retailers.dht.common.entity.GoodsGgclrel">
+		UPDATE t_goods_ggclrel
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gclId">
+                gcl_id = #{gclId},
+            </if>
+            <if test="null != gclLevel">
+                gcl_level = #{gclLevel},
+            </if>
+            <if test="null != gclCount">
+                gcl_count = #{gclCount},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggcl_id = #{ggclId} and version = #{version}
+	</update>
+	<!--删除商品与商品评论关系表 -->
+	<delete id="deleteGoodsGgclrelByGgclId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_ggclrel WHERE ggcl_id = #{ggclId}
+	</delete>
+</mapper>

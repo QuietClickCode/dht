@@ -76,5 +76,10 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsMapper.updateGoods(goods);
 
 	}
+
+	public  boolean checkGoods(Goods goods){
+		int status = goodsMapper.updateGoods(goods);
+		return status==1 ? true:false;
+	}
 }
 
