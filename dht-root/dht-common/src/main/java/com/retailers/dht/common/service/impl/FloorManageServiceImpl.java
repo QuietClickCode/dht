@@ -30,6 +30,8 @@ public class FloorManageServiceImpl implements FloorManageService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateFloorManage(FloorManage floorManage) {
+		FloorManage manage = floorManageMapper.queryFloorManageByFlId(floorManage.getFlId());
+		floorManage.setVersion(manage.getVersion());
 		int status = floorManageMapper.updateFloorManage(floorManage);
 		return status == 1 ? true : false;
 	}

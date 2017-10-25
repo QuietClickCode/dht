@@ -22,15 +22,23 @@ import com.retailers.mybatis.pagination.Pagination;
 public class HomeNavigationServiceImpl implements HomeNavigationService {
 	@Autowired
 	private HomeNavigationMapper homeNavigationMapper;
+
 	@Autowired
 	AttachmentService attachmentService;
 
 	public boolean saveHomeNavigation(HomeNavigation homeNavigation) {
+		attachmentService.editorAttachment(homeNavigation.getHnImgpath());
 		int status = homeNavigationMapper.saveHomeNavigation(homeNavigation);
 		return status == 1 ? true : false;
 	}
-	public boolean updateHomeNavigation(HomeNavigation homeNavigation) {
-		int status = homeNavigationMapper.updateHomeNavigation(homeNavigation);
+	public boolean updateHomeNavigation(HomeNavigation navigation) {
+		HomeNavigation homeNavigation = homeNavigationMapper.queryHomeNavigationByHnId(navigation.getHnId());
+		if(homeNavigation.getHnImgpath().compareTo(navigation.getHnImgpath()) != 0) {
+			attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+			attachmentService.editorAttachment(navigation.getHnImgpath());
+		}
+		navigation.setVersion(homeNavigation.getVersion());
+		int status = homeNavigationMapper.updateHomeNavigation(navigation);
 		return status == 1 ? true : false;
 	}
 	public HomeNavigation queryHomeNavigationByHnId(Long hnId) {

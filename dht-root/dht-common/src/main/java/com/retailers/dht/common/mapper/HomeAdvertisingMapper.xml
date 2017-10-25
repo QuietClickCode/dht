@@ -16,6 +16,11 @@
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<select id="queryHomeAdvertisings" resultMap="rm_homeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising">
+		SELECT <include refid="homeAdvertising_columns" />
+		FROM t_home_advertising WHERE ha_client = #{haClient} and ha_region = #{haRegion} and ha_country = #{haCountry} and is_delete = 0 ORDER BY ha_order
+	</select>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="homeAdvertising_columns">
 		ha_id,ha_name,ha_order,is_show,is_delete,url,image_path,ha_client,ha_country,ha_region,version
@@ -66,8 +71,10 @@
 	<!--分页查询 -->
 	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="homeAdvertising_columns" />
-		FROM t_home_advertising WHERE is_delete = 0 ORDER BY ha_order
+		FROM t_home_advertising <include refid="homeAdvertising_where"/>
 	</select>
+	
+
 	<!--添加首页广告设置表 -->
 	<insert id="saveHomeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising" useGeneratedKeys="true" keyProperty="haId">
 		INSERT INTO t_home_advertising (

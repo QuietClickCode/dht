@@ -25,33 +25,27 @@
 <body>
 <div id="toolbar" class="form-inline">
     <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
-    <div id="Client" style="display: inline-block">
-        <button class="btn btn-success" data-clientValue="0">移动端</button>
-        <button class="btn" data-clientValue="1" disabled="disabled">PC端</button>
-        <button class="btn" data-clientValue="2" disabled="disabled">小程序</button>
-        <input id="clientValue" style="display: none" value="0">
-    </div>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            主推样式 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">带副标题的样式</a></li>
-            <li><a href="#">不带副标题的样式</a></li>
-        </ul>
-    </div>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            推送对象 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">乡村</a></li>
-            <li><a href="#">城市</a></li>
-        </ul>
-    </div>
+    <select id="clientMenu" class="form-control">
+        <option value="">客户端</option>
+        <option value="0">移动端</option>
+        <option disabled="disabled" style="cursor: no-drop" value="1">PC端</option>
+        <option disabled="disabled" style="cursor: no-drop" value="2">小程序</option>
+    </select>
 
-    <button class="btn btn-default">查询</button>
+    <select id="styleMenu" class="form-control">
+        <option value="">主推样式</option>
+        <option value="0">带副标题的样式</option>
+        <option value="1">不带都标题的样式</option>
+    </select>
+
+    <select id="countryMenu" class="form-control">
+        <option value="">主推方向</option>
+        <option value="0">乡村</option>
+        <option value="1">城市</option>
+    </select>
+
+    <button class="btn btn-default" onclick="refreshTableData()">查询</button>
 </div>
 <div>
     <table id="goodsTypeTables" ></table>
@@ -349,9 +343,12 @@
      **/
     function queryParams(that){
         return {
+            hnStyle:$("#styleMenu").val(),
+            hnClient:$("#clientMenu").val(),
+            hnCountry:$("#countryMenu").val(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gtName: $("#search_goodsType_name").val(),
+            gtName: $("#search_goodsType_name").val()
         };
     }
 
@@ -553,7 +550,6 @@
             contentType : false,
             success:function (data) {
                 var imagepath = JSON.parse(data).original;
-                alert(imagepath);
                 $.ajax({
                     url:"/openHomeNavigation/addNavigatorBar",
                     method:"post",
@@ -572,7 +568,7 @@
                         isShow:1
                     },
                     success:function (data) {
-                        bootbox.alert(data.msg);
+                        layer.msg(data.msg);
                         refreshTableData();
                         $("#addHomeNavigationBar").modal("hide");
                     }

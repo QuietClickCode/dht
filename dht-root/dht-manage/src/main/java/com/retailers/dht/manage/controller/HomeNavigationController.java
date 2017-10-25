@@ -2,7 +2,6 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.HomeNavigation;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeNavigationService;
@@ -40,8 +39,6 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "添加首页导航",description = "添加首页导航",resourse = "openHomeNavigation.addNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp addNavigatorBar(HomeNavigation navigation){
-        System.out.println(navigation.getHnName());
-        attachmentService.editorAttachment(navigation.getHnImgpath());
         boolean flag = homeNavigationService.saveHomeNavigation(navigation);
         if(flag)
             return success("新增楼层成功");
@@ -53,12 +50,6 @@ public class HomeNavigationController extends BaseController {
     @Function(label = "修改首页导航",description = "修改首页导航",resourse = "openHomeNavigation.updateNavigatorBar",sort = 3,parentRes = "openHomeNavigation.homeNavigationMapping")
     @ResponseBody
     public BaseResp updateNavigatorBar(HomeNavigation navigation){
-        HomeNavigation homeNavigation = homeNavigationService.queryHomeNavigationByHnId(navigation.getHnId());
-        if(homeNavigation.getHnImgpath().compareTo(navigation.getHnImgpath()) != 0) {
-            attachmentService.editorAttachment(homeNavigation.getHnImgpath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
-            attachmentService.editorAttachment(navigation.getHnImgpath());
-        }
-        navigation.setVersion(homeNavigation.getVersion());
         boolean flag = homeNavigationService.updateHomeNavigation(navigation);
         if(flag)
             return success("修改首页导航[" + navigation.getHnName() + "]成功");
@@ -77,10 +68,12 @@ public class HomeNavigationController extends BaseController {
     @RequestMapping("/queryNavigationLists")
     @Function(label="商品大类列表", description = "所有商品大类列表", resourse = "openHomeNavigation.queryNavigationLists",sort=1,parentRes="openHomeNavigation.homeNavigationMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(String gtName, Long isShow, PageUtils pageForm){
+    public Map<String,Object> queryNavigationLists(Long hnStyle,Long hnClient,Long hnCountry, PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
-        map.put("gtName",gtName);
-        map.put("isShow",isShow);
+        map.put("hnStyle",hnStyle);
+        map.put("hnClient",hnClient);
+        map.put("hnCountry",hnCountry);
+        map.put("isDelete",0);
         Pagination<HomeNavigation> goodsTypePagination = homeNavigationService.queryHomeNavigationList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",goodsTypePagination.getTotalCount());

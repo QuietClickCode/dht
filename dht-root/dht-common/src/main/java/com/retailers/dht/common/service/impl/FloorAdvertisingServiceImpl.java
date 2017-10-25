@@ -29,13 +29,24 @@ public class FloorAdvertisingServiceImpl implements FloorAdvertisingService {
 	private FloorAdvertisingMapper floorAdvertisingMapper;
 
 	@Autowired
-	AttachmentService attachmentService;
+	private AttachmentService attachmentService;
+
+
 	public boolean saveFloorAdvertising(FloorAdvertising floorAdvertising) {
+		attachmentService.editorAttachment(floorAdvertising.getImageId());
 		int status = floorAdvertisingMapper.saveFloorAdvertising(floorAdvertising);
 		return status == 1 ? true : false;
 	}
-	public boolean updateFloorAdvertising(FloorAdvertising floorAdvertising) {
-		int status = floorAdvertisingMapper.updateFloorAdvertising(floorAdvertising);
+
+	public boolean updateFloorAdvertising(FloorAdvertising advertising) {
+		System.out.println(advertising.getFaName());
+		FloorAdvertising floorAdvertising = floorAdvertisingMapper.queryFloorAdvertisingByFaId(advertising.getFaId());
+		if(floorAdvertising.getImageId().compareTo(advertising.getImageId()) != 0) {
+			attachmentService.editorAttachment(floorAdvertising.getImageId(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+			attachmentService.editorAttachment(advertising.getImageId());
+		}
+		advertising.setVersion(floorAdvertising.getVersion());
+		int status = floorAdvertisingMapper.updateFloorAdvertising(advertising);
 		return status == 1 ? true : false;
 	}
 	public FloorAdvertising queryFloorAdvertisingByFaId(Long faId) {

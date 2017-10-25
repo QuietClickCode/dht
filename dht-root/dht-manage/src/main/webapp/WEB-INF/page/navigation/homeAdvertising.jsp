@@ -24,38 +24,30 @@
 </head>
 <body>
 <div id="toolbar" class="form-inline">
-    <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            客户端 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">移动端</a></li>
-            <li><a href="#">PC端</a></li>
-            <li><a href="#">小程序</a></li>
-        </ul>
-    </div>
+    <button class="btn btn-default" type="button" onclick="addNavigationBar()">新增首页广告</button>
 
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            主推样式 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">带副标题的样式</a></li>
-            <li><a href="#">不带副标题的样式</a></li>
-        </ul>
-    </div>
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            推送对象 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">乡村</a></li>
-            <li><a href="#">城市</a></li>
-        </ul>
-    </div>
+    <select id="clientMenu" class="form-control">
+        <option value="">客户端</option>
+        <option value="0">移动端</option>
+        <option disabled="disabled" style="cursor: no-drop" value="1">PC端</option>
+        <option disabled="disabled" style="cursor: no-drop" value="2">小程序</option>
+    </select>
 
-    <button class="btn btn-default">查询</button>
+    <select id="regionMenu" class="form-control">
+        <option value="">推送区域</option>
+        <option value="0">顶部区域</option>
+        <option value="1">中间区域</option>
+        <option value="2">底部区域</option>
+    </select>
+
+    <select id="countryMenu" class="form-control">
+        <option value="">主推方向</option>
+        <option value="0">乡村</option>
+        <option value="1">城市</option>
+    </select>
+
+
+    <button class="btn btn-default" onclick="refreshTableData()">查询</button>
 </div>
 
 </div>
@@ -343,6 +335,9 @@
      **/
     function queryParams(that){
         return {
+            haClient:$("#clientMenu").val(),
+            haCountry:$("#countryMenu").val(),
+            haRegion:$("#regionMenu").val(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             gtName: $("#search_goodsType_name").val(),
@@ -461,8 +456,8 @@
     function saveAdvertising() {
         let name = $("#saveName").val();
         let area = $(".area:checked").val();
-        let country = $("#setCountry:checked").val();
-        let client = $("#setClient:checked").val();
+        let country = $(".setCountry:checked").val();
+        let client = $(".setClient:checked").val();
         let order = $("#saveOrder").val();
         let url = $("#saveUrl").val();
 
@@ -520,7 +515,6 @@
             }
         });
     }
-
 
     /*$(function () {
         $('#updateHomeAdvertising').bootstrapValidator({

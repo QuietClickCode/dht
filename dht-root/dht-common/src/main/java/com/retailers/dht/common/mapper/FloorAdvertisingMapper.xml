@@ -29,12 +29,12 @@
 		
 	<select id="queryGoodsClassificationList" resultMap="floorAdvertisingVo">
 		select t1.gg_id fa_id,t1.gg_name fa_name,t1.parent_Id parent_id,t1.gg_order fa_order,t1.is_show,t1.version,t1.is_delete,t1.gg_imgpath image_id
-			from t_goods_classification t1 WHERE t1.parent_Id is NULL AND t1.is_delete = 0
+			from t_goods_classification t1 WHERE t1.parent_Id is NULL AND t1.is_delete = 0 ORDER BY fa_order
 	</select>
 
 	<select id="queryFloorAdvertisingVo" resultMap="floorAdvertisingVo">
 		SELECT t2.fa_id,t2.fa_name,t2.parent_id,t2.fa_order,t2.is_show,t2.version,t2.is_delete,t2.image_id
-			from t_floor_advertising t2 WHERE t2.is_delete = 0
+			from t_floor_advertising t2 WHERE t2.is_delete = 0 ORDER BY t2.fa_order
 	</select>
 	
 	<!-- 用于select查询公用抽取的列 -->

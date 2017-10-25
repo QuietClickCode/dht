@@ -24,30 +24,6 @@
 
 </head>
 <body>
-<div id="toolbar"  class="form-inline" style="margin-bottom: 5px">
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            客户端 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">移动端</a></li>
-            <li><a href="#">PC端</a></li>
-            <li><a href="#">小程序</a></li>
-        </ul>
-    </div>
-
-    <div class="btn-group">
-        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            推送对象 <span class="caret"></span>
-        </button>
-        <ul class="dropdown-menu">
-            <li><a href="#">乡村</a></li>
-            <li><a href="#">城市</a></li>
-        </ul>
-    </div>
-
-    <button class="btn btn-default">查询</button>
-</div>
 <div>
     <table id="goodsClassificationTable" ></table>
 </div>

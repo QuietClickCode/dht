@@ -1,7 +1,9 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.dht.common.entity.HomeAdvertising;
+import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.Map;
 /**
  * 描述：首页广告设置表Service
@@ -54,6 +56,7 @@ public interface HomeAdvertisingService {
 	 * @date 2017-10-20 17:07:09
 	 */
 	public boolean deleteHomeAdvertisingByHaId(Long haId);
+
 
 }
 

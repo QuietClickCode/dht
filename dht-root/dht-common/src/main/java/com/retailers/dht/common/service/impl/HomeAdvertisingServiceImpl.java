@@ -28,11 +28,18 @@ public class HomeAdvertisingServiceImpl implements HomeAdvertisingService {
 	private AttachmentService attachmentService;
 
 	public boolean saveHomeAdvertising(HomeAdvertising homeAdvertising) {
+		attachmentService.editorAttachment(homeAdvertising.getImagePath());
 		int status = homeAdvertisingMapper.saveHomeAdvertising(homeAdvertising);
 		return status == 1 ? true : false;
 	}
-	public boolean updateHomeAdvertising(HomeAdvertising homeAdvertising) {
-		int status = homeAdvertisingMapper.updateHomeAdvertising(homeAdvertising);
+	public boolean updateHomeAdvertising(HomeAdvertising advertising) {
+		HomeAdvertising homeAdvertising = homeAdvertisingMapper.queryHomeAdvertisingByHaId(advertising.getHaId());
+		if(homeAdvertising.getImagePath().compareTo(advertising.getImagePath()) != 0) {
+			attachmentService.editorAttachment(homeAdvertising.getImagePath(), AttachmentConstant.ATTACHMENT_STATUS_NO);
+			attachmentService.editorAttachment(advertising.getImagePath());
+		}
+		advertising.setVersion(homeAdvertising.getVersion());
+		int status = homeAdvertisingMapper.updateHomeAdvertising(advertising);
 		return status == 1 ? true : false;
 	}
 	public HomeAdvertising queryHomeAdvertisingByHaId(Long haId) {

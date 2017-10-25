@@ -46,12 +46,7 @@ public class FloorManageController extends BaseController {
     @Function(label = "编辑楼层",parentRes = "floorManage.floorManageMapping",resourse = "floorManage.UpdateFloor",description = "编辑楼层",sort = 2)
     @ResponseBody
     public BaseResp UpdateFloor(FloorManage floorManage){
-        FloorManage manage = floorManageService.queryFloorManageByFlId(floorManage.getFlId());
-        manage.setFlName(floorManage.getFlName());
-        manage.setFlOrder(floorManage.getFlOrder());
-        manage.setIsShow(floorManage.getIsShow());
-        manage.setParentId(floorManage.getParentId());
-        boolean flag = floorManageService.updateFloorManage(manage);
+        boolean flag = floorManageService.updateFloorManage(floorManage);
         if (flag)
             return success("修改楼层[" + floorManage.getFlName() + "]成功");
         else
