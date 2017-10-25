@@ -28,7 +28,7 @@
 				AND gl_id = #{params.glId}
 			</if>
 			<if test="null != params.glName and '' != params.glName">
-				AND gl_name = #{params.glName}
+				AND gl_name like  concat('%', #{params.glName}, '%')
 			</if>
 			<if test="null != params.glStarttimeBegin">
 				AND gl_starttime &gt;= #{params.glStarttime}

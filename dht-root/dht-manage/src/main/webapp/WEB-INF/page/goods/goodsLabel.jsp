@@ -66,8 +66,6 @@
                               <span class="input-group-addon">
                                  商品标签有效时间:
                               </span>
-                                <input type="hidden" class="form-control" name="glStarttime" id="glStarttime">
-                                <input type="hidden" class="form-control" name="glEndtime" id="glEndtime">
 
                                 <input id="reportrange" name="reportrange" type="text" class="form-control">
                             </div>
@@ -288,13 +286,14 @@
             }
             var editSubmitIndex = layer.load(2);
 
-            var arr = $("#searchDateRange").html().split(" - ");
+            var arr = $("#reportrange").val().split(" - ");
             $('#glStarttime').val(arr[0]);
             $('#glEndtime').val(arr[1]);
 
-            var sendData=new Array();
             var formData=$("#editorGoodsLabelForm").serializeObject();
 
+            formData["glStarttimes"] = arr[0];
+            formData["glEndtimes"] = arr[1];
             let url="/goods/addGoodsLabel";
             if(editorGoodsLabelType==1){
                 url="/goods/editGoodsLabel";
@@ -442,7 +441,8 @@
             $("#editorGoodsLabelForm #isGoodslabel").val(rowData.isGoodslabel);
             $("#editorGoodsLabelForm #glStarttime").val(rowData.glStarttime);
             $("#editorGoodsLabelForm #glEndtime").val(rowData.glEndtime);
-            $("#searchDateRange").html(rowData.glStarttime + ' - ' + rowData.glEndtime);
+            $("#editorGoodsLabelForm #version").val(rowData.version);
+            $("#reportrange").val(rowData.glStarttime + ' - ' + rowData.glEndtime);
 
             if(rowData.isGoodslabel==1){
                 $('#isGoodsShow').attr("checked","checked");

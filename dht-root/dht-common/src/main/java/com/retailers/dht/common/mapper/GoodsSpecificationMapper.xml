@@ -25,7 +25,7 @@
 				AND gs_id = #{params.gsId}
 			</if>
 			<if test="null != params.gsName and '' != params.gsName">
-				AND gs_name = #{params.gsName}
+				AND gs_name like  concat('%', #{params.gsName}, '%')
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}

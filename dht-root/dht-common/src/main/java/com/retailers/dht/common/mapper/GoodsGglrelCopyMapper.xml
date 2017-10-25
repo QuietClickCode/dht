@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGglrelCopyMapper">
+
+	<resultMap id="rm_goodsGglrelCopy" type="com.retailers.dht.common.entity.GoodsGglrelCopy">
+			<result property="gglId" column="ggl_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="glId" column="gl_id"/>
+			<result property="gglUploadpersonId" column="ggl_uploadpersonId"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGglrelCopy_columns">
+		ggl_id,g_id,gl_id,ggl_uploadpersonId,is_delete,version
+	</sql>
+	<!-- 根据商品与标签关系副本表主键取得数据 -->
+	<select id="queryGoodsGglrelCopyByGglId" resultMap="rm_goodsGglrelCopy" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGglrelCopy_columns" />
+		FROM t_goods_gglrel_copy WHERE ggl_id = #{gglId}
+	</select>
+	<!-- 商品与标签关系副本表查询条件组合 -->
+	<sql id="goodsGglrelCopy_where">
+		<where>
+			<if test="null != params.gglId">
+				AND ggl_id = #{params.gglId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.glId">
+				AND gl_id = #{params.glId}
+			</if>
+			<if test="null != params.gglUploadpersonId">
+				AND ggl_uploadpersonId = #{params.gglUploadpersonId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGglrelCopyList" resultMap="rm_goodsGglrelCopy" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGglrelCopy_columns" />
+		FROM t_goods_gglrel_copy
+		<include refid="goodsGglrelCopy_where"/>
+	</select>
+	<!--添加商品与标签关系副本表 -->
+	<insert id="saveGoodsGglrelCopy" parameterType="com.retailers.dht.common.entity.GoodsGglrelCopy" useGeneratedKeys="true" keyProperty="gglId">
+		INSERT INTO t_goods_gglrel_copy (
+			g_id,gl_id,ggl_uploadpersonId,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{glId,jdbcType=BIGINT},#{gglUploadpersonId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与标签关系副本表 -->
+	<update id="updateGoodsGglrelCopy" parameterType="com.retailers.dht.common.entity.GoodsGglrelCopy">
+		UPDATE t_goods_gglrel_copy
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != glId">
+                gl_id = #{glId},
+            </if>
+            <if test="null != gglUploadpersonId">
+                ggl_uploadpersonId = #{gglUploadpersonId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggl_id = #{gglId} and version = #{version}
+	</update>
+	<!--删除商品与标签关系副本表 -->
+	<delete id="deleteGoodsGglrelCopyByGglId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_gglrel_copy WHERE ggl_id = #{gglId}
+	</delete>
+</mapper>
