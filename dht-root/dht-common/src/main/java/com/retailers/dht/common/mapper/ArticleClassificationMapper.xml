@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.ArticleClassificationMapper">
+
+	<resultMap id="rm_articleClassification" type="com.retailers.dht.common.entity.ArticleClassification">
+			<result property="aid" column="a_id"/>
+			<result property="aname" column="a_name"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="aorder" column="a_order"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="articleClassification_columns">
+		a_id,a_name,is_show,is_delete,a_order,version
+	</sql>
+	<!-- 根据文章分类主键取得数据 -->
+	<select id="queryArticleClassificationByAid" resultMap="rm_articleClassification" parameterType="java.lang.Long">
+		SELECT <include refid="articleClassification_columns" />
+		FROM t_article_classification WHERE a_id = #{aid}
+	</select>
+	<!-- 文章分类查询条件组合 -->
+	<sql id="articleClassification_where">
+		<where>
+			<if test="null != params.aid">
+				AND a_id = #{params.aid}
+			</if>
+			<if test="null != params.aname and '' != params.aname">
+				AND a_name = #{params.aname}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.aorder">
+				AND a_order = #{params.aorder}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryArticleClassificationList" resultMap="rm_articleClassification" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="articleClassification_columns" />
+		FROM t_article_classification
+		<include refid="articleClassification_where"/> ORDER BY a_order
+	</select>
+	<!--添加文章分类 -->
+	<insert id="saveArticleClassification" parameterType="com.retailers.dht.common.entity.ArticleClassification" useGeneratedKeys="true" keyProperty="aid">
+		INSERT INTO t_article_classification (
+			a_name,is_show,is_delete,a_order,version
+		) VALUES
+		(
+			#{aname,jdbcType=VARCHAR},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},#{aorder,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改文章分类 -->
+	<update id="updateArticleClassification" parameterType="com.retailers.dht.common.entity.ArticleClassification">
+		UPDATE t_article_classification
+		<set>
+            <if test="null != aname and '' != aname">
+                a_name = #{aname},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != aorder">
+                a_order = #{aorder},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE a_id = #{aid} and version = #{version}
+	</update>
+	<!--删除文章分类 -->
+	<delete id="deleteArticleClassificationByAid" parameterType="java.lang.Long">
+		DELETE FROM t_article_classification WHERE a_id = #{aid}
+	</delete>
+</mapper>
