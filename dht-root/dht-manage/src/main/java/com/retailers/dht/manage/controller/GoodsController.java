@@ -89,4 +89,16 @@ public class GoodsController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/checkGoods")
+    @Function(label="审核商品", description = "审核商品", resourse = "goods.checkGoods",parentRes="goods.openGoods")
+    @ResponseBody
+    public BaseResp checkGoods(Long gid,String message,Long myidea){
+        Goods goods = goodsService.queryGoodsByGid(gid);
+        goods.setIsChecked(myidea);
+        goods.setGcheckmessage(message);
+        boolean flag = goodsService.checkGoods(goods);
+        return success(flag);
+    }
+
+
 }

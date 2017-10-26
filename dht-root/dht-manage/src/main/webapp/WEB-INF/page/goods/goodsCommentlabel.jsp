@@ -27,7 +27,7 @@
 
     <br>
     <div class="form-group" style="margin-top: 5px">
-        <input type="text" class="form-control" id="search_GoodsCommentLabel_name" placeholder="请输入商品评论名称">
+        <input type="text" class="form-control" id="search_GoodsCommentlabel_name" placeholder="请输入商品评论名称">
     </div>
 
     <ex:perm url="goods/queryGoodsCommentlabelLists">
@@ -36,7 +36,7 @@
 
 </div>
 <div>
-    <table id="GoodsCommentLabelTables" ></table>
+    <table id="GoodsCommentlabelTables" ></table>
 </div>
 <div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
     <div class="modal-dialog" role="document"  style="width: 800px;">
@@ -46,7 +46,7 @@
                 <h4 class="modal-title" id="editorSysUserTitle"></h4>
             </div>
             <div class="modal-body">
-                <form id="editorGoodsCommentLabelForm">
+                <form id="editorGoodsCommentlabelForm">
                     <input type="hidden" name="gclId" id="gclId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
@@ -101,7 +101,7 @@
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
-    var editorGoodsCommentLabelType=0;
+    var editorGoodsCommentlabelType=0;
     var treeColumns=[
         {   checkbox: true,
             align : 'center',
@@ -120,7 +120,7 @@
             valign : 'middle',
             formatter:function(value,row,index){
                 let html='';
-                if(row.gclStatus==0){
+                if(row.gclStatus==1){
                     html = '启用';
                 }else{
                     html = '停用';
@@ -138,9 +138,9 @@
                 rowDatas.set(row.gclId,row);
                 let html='';
                 <ex:perm url="goods/editGoodsCommentlabel">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCommentLabel(\''+row.gclId+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsCommentlabel(\''+row.gclId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="goods/removeGoodsCommentLabel">
+                <ex:perm url="goods/removeGoodsCommentlabel">
                 html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gclId+'\',this)">删除</button>';
                 </ex:perm>
                 return html;
@@ -149,38 +149,38 @@
     ]
 
     $(function () {
-        createTable("/goods/queryGoodsCommentLabelLists","GoodsCommentLabelTables","gclId",treeColumns,queryParams)
+        createTable("/goods/queryGoodsCommentlabelLists","GoodsCommentlabelTables","gclId",treeColumns,queryParams)
         //初始华开关选择器
-        $("#editorGoodsCommentLabelForm #gclStatus").bootstrapSwitch();
+        $("#editorGoodsCommentlabelForm #gclStatus").bootstrapSwitch();
 
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
 
-            clearFormValidation("editorGoodsCommentLabelForm",formValidater)
+            clearFormValidation("editorGoodsCommentlabelForm",formValidater)
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
             //开启校验
-            $('#editorGoodsCommentLabelForm').data('bootstrapValidator').validate();
+            $('#editorGoodsCommentlabelForm').data('bootstrapValidator').validate();
             //判断校验是否通过
-            if(!$('#editorGoodsCommentLabelForm').data('bootstrapValidator').isValid()){
+            if(!$('#editorGoodsCommentlabelForm').data('bootstrapValidator').isValid()){
                 return;
             }
 
-            var formData=$("#editorGoodsCommentLabelForm").serializeObject();
+            var formData=$("#editorGoodsCommentlabelForm").serializeObject();
 
             var flag = false;
-            flag = $("#editorGoodsCommentLabelForm #gclStatus").bootstrapSwitch("state");
+            flag = $("#editorGoodsCommentlabelForm #gclStatus").bootstrapSwitch("state");
             if(flag){
                 formData["gclStatus"]=1;
             }else{
                 formData["gclStatus"]=0;
             }
             let url="/goods/addGoodsCommentlabel";
-            if(editorGoodsCommentLabelType==1){
-                url="/goods/editGoodsCommentLabel";
+            if(editorGoodsCommentlabelType==1){
+                url="/goods/editGoodsCommentlabel";
             }
             //取得form表单数据
             $.ajax({
@@ -208,7 +208,7 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editorGoodsCommentLabelForm')
+        $('#editorGoodsCommentlabelForm')
             .bootstrapValidator({
                     container: 'tooltip',
                     //不能编辑 隐藏 不可见的不做校验
@@ -244,17 +244,17 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gclName: $("#search_GoodsCommentLabel_name").val(),
+            gclName: $("#search_GoodsCommentlabel_name").val(),
         };
     }
     /**
      * 刷新表格数据
      **/
     function refreshTableData() {
-        $('#GoodsCommentLabelTables').bootstrapTable(
+        $('#GoodsCommentlabelTables').bootstrapTable(
             "refresh",
             {
-                url:"/goods/queryGoodsCommentLabelLists"
+                url:"/goods/queryGoodsCommentlabelLists"
             }
         );
     }
@@ -264,17 +264,17 @@
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeGoodsCommentLabel(gclId);
+            removeGoodsCommentlabel(gclId);
         }, function(){
         });
     }
     /**
      * 删除商品大类
      **/
-    function removeGoodsCommentLabel(gclId){
+    function removeGoodsCommentlabel(gclId){
         $.ajax({
             type:"post",
-            url:'/goods/removeGoodsCommentLabel',
+            url:'/goods/removeGoodsCommentlabel',
             dataType: "json",
             data:{gclId:gclId},
             success:function(data){
@@ -290,9 +290,8 @@
 
 
     var zNodes;
-    function editorGoodsCommentLabel(orgId){
-        editorGoodsCommentLabelType=1;
-        reloadOrgTree(orgId);
+    function editorGoodsCommentlabel(orgId){
+        editorGoodsCommentlabelType=1;
         initFormData(orgId);
         $("#editorSysUserTitle").text("编辑商品评论");
         $('#editorSysUser').modal("show")
@@ -301,10 +300,10 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorGoodsCommentLabelForm #gclName").val("");
-        $("#editorGoodsCommentLabelForm #gclId").val("");
-        $("#editorGoodsCommentLabelForm #version").val("");
-        $("#editorGoodsCommentLabelForm #gclStatus").bootstrapSwitch("status",true);
+        $("#editorGoodsCommentlabelForm #gclName").val("");
+        $("#editorGoodsCommentlabelForm #gclId").val("");
+        $("#editorGoodsCommentlabelForm #version").val("");
+        $("#editorGoodsCommentlabelForm #gclStatus").bootstrapSwitch("state",true);
     }
     /**
      * 清除form 表单数据
@@ -312,35 +311,26 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorGoodsCommentLabelForm #glId").val(rowData.glId);
-            $("#editorGoodsCommentLabelForm #glName").val(rowData.glName);
-            $("#editorGoodsCommentLabelForm #isGoodsCommentLabel").val(rowData.isGoodsCommentLabel);
-            $("#editorGoodsCommentLabelForm #glStarttime").val(rowData.glStarttime);
-            $("#editorGoodsCommentLabelForm #glEndtime").val(rowData.glEndtime);
-            $("#editorGoodsCommentLabelForm #version").val(rowData.version);
-            $("#reportrange").val(rowData.glStarttime + ' - ' + rowData.glEndtime);
+            $("#editorGoodsCommentlabelForm #gclId").val(rowData.gclId);
+            $("#editorGoodsCommentlabelForm #gclName").val(rowData.gclName);
+            $("#editorGoodsCommentlabelForm #version").val(rowData.version);
+            var gclStatus = rowData.gclStatus;
 
-            if(rowData.isGoodsCommentLabel==1){
-                $('#isGoodsShow').attr("checked","checked");
+            if(gclStatus==1){
+                $('#gclStatus').bootstrapSwitch("state",true);
             }else{
-                $('#isClassShow').attr("checked","checked");
+                $('#gclStatus').bootstrapSwitch("state",false);
             }
 
         }else{
-            $("#editorGoodsCommentLabelForm #glName").val('');
-            $("#editorGoodsCommentLabelForm #glId").val('');
-            $("#editorGoodsCommentLabelForm #isGoods").val('');
-            $("#editorGoodsCommentLabelForm #glStarttime").val('');
-            $("#editorGoodsCommentLabelForm #glEndtime").val('');
-            $("#searchDateRange").html('');
-            $('#isGoodsShow').attr("checked","checked");
+            clearFormData();
         }
     }
     /**
      * 添加商品大类
      **/
     function addGoodsCommentlabel(){
-        editorGoodsCommentLabelType=0;
+        editorGoodsCommentlabelType=0;
         initFormData();
 
         $("#editorSysUserTitle").text("添加商品评论");
@@ -393,14 +383,14 @@
         }
     }
     
-    function deleteGoodsCommentLabelList() {
-        var objs = $('#GoodsCommentLabelTables') .bootstrapTable('getAllSelections');
+    function deleteGoodsCommentlabelList() {
+        var objs = $('#GoodsCommentlabelTables') .bootstrapTable('getAllSelections');
         if(objs.length>0){
             layer.confirm('确定要删除选中的数据吗？', {
                 btn: ['确认','取消'] //按钮
             }, function(){
                 for(var i=0;i<objs.length;i++){
-                    removeGoodsCommentLabel(objs[i].glId);
+                    removeGoodsCommentlabel(objs[i].glId);
                 }
             }, function(){
             });
