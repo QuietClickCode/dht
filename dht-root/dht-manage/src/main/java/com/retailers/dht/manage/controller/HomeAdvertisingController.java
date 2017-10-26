@@ -64,9 +64,10 @@ public class HomeAdvertisingController extends BaseController{
     @RequestMapping("/queryAdvertisingLists")
     @Function(label="首页广告集合", description = "首页广告集合", resourse = "openHomeAdvertising.queryNavigationLists",sort=1,parentRes="openHomeAdvertising.homeAdvertisingMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(Long haClient,Long haCountry,Long haRegion,PageUtils pageForm){
+    public Map<String,Object> queryNavigationLists(String haName,Long haClient,Long haCountry,Long haRegion,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("haName",haName);
         map.put("haClient", haClient);
         map.put("haCountry", haCountry);
         map.put("haRegion",haRegion);

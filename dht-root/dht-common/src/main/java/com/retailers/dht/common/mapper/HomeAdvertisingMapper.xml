@@ -37,7 +37,7 @@
 				AND ha_id = #{params.haId}
 			</if>
 			<if test="null != params.haName and '' != params.haName">
-				AND ha_name = #{params.haName}
+				AND ha_name like  concat('%', #{params.haName}, '%')
 			</if>
 			<if test="null != params.haOrder">
 				AND ha_order = #{params.haOrder}
