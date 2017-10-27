@@ -126,55 +126,49 @@
             <div class="modal-body">
                 <center>
                     <div class="form-group" style="margin-top: 5px;display: inline-block">
-                        <input type="text" class="form-control" id="search_GoodsBrand_name" placeholder="请输入商品名称">
+                        <input type="text" class="form-control" id="search_Goods_name" placeholder="请输入商品名称">
                     </div>
-                    <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+                    <button class="btn btn-default" type="button" onclick="searchgoods()">查询</button>
                 </center>
-                <button class="btn btn-default" type="button" onclick="refreshTableData()">新增</button>
-                <button class="btn btn-default" type="button" onclick="refreshTableData()">删除</button>
 
+                <button class="btn btn-default" type="button" onclick="addgglrel()" id="addgoodsbtn">新增</button>
+                <button class="btn btn-default" type="button" onclick="deletegglrel()" id="delgoodsbtn">删除</button>
+                <button class="btn btn-primary" type="button" onclick="refreshgoodsTbody()" style="float: right;margin-bottom: 10px;">刷新</button>
 
-                <form id="editorGoodsLabelRelForm">
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px;text-align: center">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center" id="topgoodsname">
+                                    商品名称（已有）
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="goodsTbody">
+                            <tr>
+                                <td>
+                                    <div class="checkbox checkbox-info">
+                                        <input id="checkbox1" class="styled" type="checkbox">
+                                        <label for="checkbox1">
 
-                        <div class="row clearfix">
-                            <div class="col-md-12 column">
-                                <table class="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th style="width: 30px;text-align: center">
-                                            <div class="checkbox checkbox-info">
-                                                <input id="checkbox4" class="styled" type="checkbox">
-                                                <label for="checkbox4">
+                                        </label>
+                                    </div>
+                                </td>
+                                <td style="text-align: center;display:table-cell; vertical-align:bottom;">
+                                    TB - Monthly
+                                </td>
+                            </tr>
 
-                                                </label>
-                                            </div>
-                                        </th>
-                                        <th style="text-align: center">
-                                            商品名称（已有）
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody id="myTbody">
-                                    <tr>
-                                        <td>
-                                            <div class="checkbox checkbox-info">
-                                                <input id="checkbox1" class="styled" type="checkbox">
-                                                <label for="checkbox1">
-
-                                                </label>
-                                            </div>
-                                        </td>
-                                        <td style="text-align: center">
-                                            TB - Monthly
-                                        </td>
-                                    </tr>
-
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                </form>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
                 <button type="button" class="btn btn-primary" id="editorGoodsLabelRelSubmit">确认</button>
@@ -194,6 +188,7 @@
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<!--商品标签编辑-->
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -335,24 +330,16 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    gbName: {
-                        message: '商品品牌名称未通过',
+                    glName: {
+                        message: '商品标签名称未通过',
                         validators: {
                             notEmpty: {
-                                message: '商品品牌名称不能为空'
+                                message: '商品标签名称不能为空'
                             },
                             stringLength: {
                                 min: 1,
                                 max: 30,
-                                message: '商品品牌名称长度在1-30之间'
-                            }
-                        }
-                    },
-                    gbImgpath: {
-                        message: '商品品牌logo未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '商品品牌logo不能为空'
+                                message: '商品标签名称长度在1-30之间'
                             }
                         }
                     }
@@ -366,7 +353,7 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
-            gbName: $("#search_GoodsLabel_name").val(),
+            glName: $("#search_GoodsLabel_name").val(),
         };
     }
     /**
@@ -565,6 +552,188 @@
 
 </script>
 
+<!--商品与标签关系编辑-->
+<script>
+    $(function () {
+        $('#editorGoodsLabelRelSubmit').click(function () {
+            $('#editorGoodsLabel').modal("hide");
+        });
+    });
+    
+    var initgdataArr = new Array();
+
+    function refreshgoodsTbody() {
+        var glId = $('#glId').val();
+        if(glId==''){
+            layer.msg('请先保存标签!');
+            return;
+        }
+        initgoodsFormData(glId);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initgoodsFormData(glId){
+        $('#topgoodsname').html('商品名称（已有）');
+        initgdataArr = [];
+        $('#addgoodsbtn').hide();
+        $('#delgoodsbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGglrelLists",
+            dataType: "json",
+            data:{glId:glId,pageNo:1,pageSize:1000},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="checkbox'+i+'" name="gglcheckbox" class="styled" type="checkbox" value="'+rows[i].gglId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgdataArr.push(rows[i].gid);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定商品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#goodsTbody').html(html);
+            }
+        });
+    }
+
+    function searchgoods() {
+        var glId = $('#glId').val();
+        if(glId==''){
+            layer.msg('请先保存标签!');
+            return;
+        }
+        var gname = $('#search_Goods_name').val();
+        $('#topgoodsname').html('商品名称');
+        $('#addgoodsbtn').show();
+        $('#delgoodsbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsLists",
+            dataType: "json",
+            data: {gname: gname,pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgdataArr.length>0){
+                            for (var j=0; j<initgdataArr.length; j++){
+                                if (rows[i].gid==initgdataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+
+                        if(flag == 0){
+                            html += '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="gglcheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gid+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gname+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                }
+
+                if(html == ''){
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的商品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#goodsTbody').html(html);
+            }
+        });
+    }
+
+    function addgglrel() {
+        var glId = $('#glId').val();
+        if(glId==''){
+            layer.msg('请先保存标签!');
+            return;
+        }
+        var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
+        var addggl = "";
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addggl += ","+checkboxs[i].value;
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGglrel",
+                dataType: "json",
+                data: {gids: addggl,glId:glId},
+                success: function (data) {
+                    layer.msg('新增成功!');
+                    refreshgoodsTbody();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据!');
+        }
+
+    }
+
+    function deletegglrel() {
+        var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var gglIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    gglIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGglrel",
+                dataType: "json",
+                data: {gglIds: gglIds},
+                success: function (data) {
+                    layer.msg('删除成功!');
+                    refreshgoodsTbody();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据!');
+        }
+
+    }
+</script>
+
 <script>
     $("input[name='isGoods']").click(function () {
         var val = $(this).val();
@@ -579,6 +748,7 @@
 
     $('#goodsBtn').click(function () {
         $("#editorGoodsLabelTitle").text("商品标签");
+        refreshgoodsTbody();
         $('#editorGoodsLabel').modal("show");
     });
     $('#classBtn').click(function () {

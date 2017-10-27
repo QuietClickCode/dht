@@ -51,6 +51,9 @@
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
+			<if test="null != params.nowDate">
+				AND gl_endtime > #{params.nowDate}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->

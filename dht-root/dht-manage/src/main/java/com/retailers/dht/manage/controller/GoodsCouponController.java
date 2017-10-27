@@ -22,6 +22,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -58,12 +60,24 @@ public class GoodsCouponController extends BaseController{
     @RequestMapping("queryGoodsCoupons")
     @Function(label="商品优惠列表", description = "商品优惠列表", resourse = "goodsCoupon.queryGoodsCoupons",sort=1,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
-    public Map<String,Object> queryGoodsCoupons(String gcpName, Long gcpType,Long isValid,PageUtils pageForm){
+    public Map<String,Object> queryGoodsCoupons(String gcpName, Long gcpType,Long isValid,String now,PageUtils pageForm){
         Map<String,Object> params=new HashMap<String, Object>();
         params.put("gcpName",gcpName);
         params.put("gcpType",gcpType);
         params.put("isValid",isValid);
         params.put("isDelete",0);
+        System.out.println(now);
+        if(!ObjectUtils.isEmpty(now)){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date nowDate = sdf.parse(now);
+                System.out.println(nowDate);
+                params.put("now",nowDate);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         Pagination<GoodsCoupon> pages= goodsCouponService.queryGoodsCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
     }

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsComplimentaryMapper">
+
+	<resultMap id="rm_goodsComplimentary" type="com.retailers.dht.common.entity.GoodsComplimentary">
+	<result property="gcId" column="gc_id"/>
+	<result property="gcName" column="gc_name"/>
+	<result property="gcCondition" column="gc_condition"/>
+	<result property="gcType" column="gc_type"/>
+	<result property="gid" column="g_id"/>
+	<result property="isMultiuse" column="is_multiuse"/>
+	<result property="isValid" column="is_valid"/>
+	<result property="isDelete" column="is_delete"/>
+	<result property="version" column="version"/>
+</resultMap>
+	<resultMap id="rm_goodsComplimentary_vo" type="com.retailers.dht.common.vo.GoodsComplimentaryVo">
+		<result property="gcId" column="gc_id"/>
+		<result property="gcName" column="gc_name"/>
+		<result property="gcCondition" column="gc_condition"/>
+		<result property="gcType" column="gc_type"/>
+		<result property="gid" column="g_id"/>
+		<result property="isMultiuse" column="is_multiuse"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gname" column="gname"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsComplimentary_columns">
+		gc_id,gc_name,gc_condition,gc_type,g_id,is_multiuse,is_valid,is_delete,version
+	</sql>
+	<!-- 根据赠品表主键取得数据 -->
+	<select id="queryGoodsComplimentaryByGcId" resultMap="rm_goodsComplimentary" parameterType="java.lang.Long">
+		SELECT <include refid="goodsComplimentary_columns" />
+		FROM t_goods_complimentary WHERE gc_id = #{gcId}
+	</select>
+	<!-- 赠品表查询条件组合 -->
+	<sql id="goodsComplimentary_where">
+		<where>
+			<if test="null != params.gcId">
+				AND t1.gc_id = #{params.gcId}
+			</if>
+			<if test="null != params.gcName and '' != params.gcName">
+				AND t1.gc_name like concat('%', #{params.gcName} ,'%')
+			</if>
+			<if test="null != params.gcCondition">
+				AND t1.gc_condition = #{params.gcCondition}
+			</if>
+			<if test="null != params.gcType">
+				AND t1.gc_type = #{params.gcType}
+			</if>
+			<if test="null != params.gid">
+				AND t1.g_id = #{params.gid}
+			</if>
+			<if test="null != params.isMultiuse">
+				AND t1.is_multiuse = #{params.isMultiuse}
+			</if>
+			<if test="null != params.isValid">
+				AND t1.is_valid = #{params.isValid}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsComplimentaryList" resultMap="rm_goodsComplimentary_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.g_name gname from t_goods_complimentary t1
+		LEFT JOIN t_goods t2 ON t1.g_id=t2.g_id
+		<include refid="goodsComplimentary_where"/>
+	</select>
+	<!--添加赠品表 -->
+	<insert id="saveGoodsComplimentary" parameterType="com.retailers.dht.common.entity.GoodsComplimentary" useGeneratedKeys="true" keyProperty="gcId">
+		INSERT INTO t_goods_complimentary (
+			gc_name,gc_condition,gc_type,g_id,is_multiuse,is_valid,is_delete,version
+		) VALUES
+		(
+			#{gcName,jdbcType=VARCHAR},#{gcCondition,jdbcType=BIGINT},#{gcType,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{isMultiuse,jdbcType=BIGINT},#{isValid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改赠品表 -->
+	<update id="updateGoodsComplimentary" parameterType="com.retailers.dht.common.entity.GoodsComplimentary">
+		UPDATE t_goods_complimentary
+		<set>
+            <if test="null != gcName and '' != gcName">
+                gc_name = #{gcName},
+            </if>
+            <if test="null != gcCondition">
+                gc_condition = #{gcCondition},
+            </if>
+            <if test="null != gcType">
+                gc_type = #{gcType},
+            </if>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != isMultiuse">
+                is_multiuse = #{isMultiuse},
+            </if>
+            <if test="null != isValid">
+                is_valid = #{isValid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gc_id = #{gcId} and version = #{version}
+	</update>
+	<!--删除赠品表 -->
+	<delete id="deleteGoodsComplimentaryByGcId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_complimentary WHERE gc_id = #{gcId}
+	</delete>
+</mapper>

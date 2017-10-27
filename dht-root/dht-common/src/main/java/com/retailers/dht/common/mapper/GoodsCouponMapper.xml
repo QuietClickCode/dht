@@ -79,6 +79,9 @@
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
+			<if test="null != params.now ">
+				AND gcp_end_time > #{params.now}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->

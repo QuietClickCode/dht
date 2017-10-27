@@ -6,6 +6,7 @@ import com.retailers.dht.common.vo.GoodsGglrelVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +28,7 @@ public class GoodsGglrelController extends BaseController {
     GoodsGglrelService goodsGglrelService;
 
     @RequestMapping("/removeGoodsGglrel")
-    @Function(label="删除商品与品牌关系", description = "删除商品与品牌关系", resourse = "goods.removeGoodsGglrel",sort=3,parentRes="goods.openGoods")
+    @Function(label="删除商品与标签关系", description = "删除商品与标签关系", resourse = "goods.removeGoodsGglrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGglrel(String gglIds, HttpServletRequest request){
         boolean flag=goodsGglrelService.deleteGoodsGglrelByGglId(gglIds,getCurLoginUserId(request));
@@ -35,11 +36,12 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGglrelLists")
-    @Function(label="商品与品牌关系列表", description = "商品与品牌关系列表", resourse = "goods.queryGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
+    @Function(label="商品与标签关系列表", description = "商品与标签关系列表", resourse = "goods.queryGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
-    public  Map<String,Object> queryGoodsGglrelLists(Long gid,PageUtils pageForm){
+    public  Map<String,Object> queryGoodsGglrelLists(Long gid,Long glId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gid",gid);
+        map.put("glId",glId);
         map.put("isDelete",0);
         Pagination<GoodsGglrelVo> GoodsGglrelPagination = goodsGglrelService.queryGoodsGglrelList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
@@ -49,11 +51,18 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGglrel")
-    @Function(label="增加商品与品牌关系", description = "增加商品与品牌关系", resourse = "goods.addGoodsGglrel",parentRes="goods.openGoods")
+    @Function(label="增加商品与标签关系", description = "增加商品与标签关系", resourse = "goods.addGoodsGglrel",parentRes="goods.openGoods")
     @ResponseBody
-    public BaseResp addGoodsGglrel(String glIds,Long gid,HttpServletRequest request){
-        boolean flag=goodsGglrelService.saveGoodsGglrel(glIds,gid,getCurLoginUserId(request));
+    public BaseResp addGoodsGglrel(String glIds,Long gid,String gids,Long glId,HttpServletRequest request){
+        boolean flag = false;
+        if(!ObjectUtils.isEmpty(glIds)){
+            flag = goodsGglrelService.saveGoodsGglrel(glIds,gid,getCurLoginUserId(request));
+        }else{
+            flag = goodsGglrelService.saveGoodsGglrelByGids(gids,glId,getCurLoginUserId(request));
+        }
         return success(flag);
     }
+
+
 
 }
