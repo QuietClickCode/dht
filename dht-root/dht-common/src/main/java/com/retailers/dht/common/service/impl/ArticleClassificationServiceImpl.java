@@ -41,7 +41,9 @@ public class ArticleClassificationServiceImpl implements ArticleClassificationSe
 		return page;
 	}
 	public boolean deleteArticleClassificationByAid(Long aid) {
-		int status = articleClassificationMapper.deleteArticleClassificationByAid(aid);
+		ArticleClassification classification = articleClassificationMapper.queryArticleClassificationByAid(aid);
+		classification.setIsDelete(1L);
+		int status = articleClassificationMapper.updateArticleClassification(classification);
 		return status == 1 ? true : false;
 	}
 }

@@ -18,6 +18,23 @@
 			<result property="hnCountry" column="hn_country"/>
 	</resultMap>
 
+	<resultMap id="rm_homeNavigationVo" type="com.retailers.dht.common.vo.HomeNavigationVo">
+		<result property="hnId" column="hn_id"/>
+		<result property="hnName" column="hn_name"/>
+		<result property="hnMianTitle" column="hn_mian_title"/>
+		<result property="hnSubTitle" column="hn_subTitle"/>
+		<result property="hnStyle" column="hn_style"/>
+		<result property="hnClient" column="hn_client"/>
+		<result property="hnUrl" column="hn_url"/>
+		<result property="hnImgpath" column="hn_imgpath"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="isShow" column="is_show"/>
+		<result property="hnOrder" column="hn_order"/>
+		<result property="hnCountry" column="hn_country"/>
+		<result property="imageUrl" column="image_url"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="homeNavigation_columns">
 		hn_id,hn_name,hn_mian_title,hn_subTitle,hn_style,hn_client,hn_url,hn_imgpath,is_delete,version,is_show,hn_order,hn_country
@@ -34,7 +51,7 @@
 				AND hn_id = #{params.hnId}
 			</if>
 			<if test="null != params.hnName and '' != params.hnName">
-				AND hn_name = #{params.hnName}
+				AND hn_name like  concat('%', #{params.hnName}, '%')
 			</if>
 			<if test="null != params.hnMianTitle and '' != params.hnMianTitle">
 				AND hn_mian_title = #{params.hnMianTitle}
@@ -72,9 +89,9 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryHomeNavigationList" resultMap="rm_homeNavigation" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="homeNavigation_columns" />
-		FROM t_home_navigation <include refid="homeNavigation_where"/> ORDER BY hn_order
+	<select id="queryHomeNavigationList" resultMap="rm_homeNavigationVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.show_url image_url FROM t_home_navigation t1 LEFT JOIN t_attachment t2
+		ON t1.hn_imgpath = t2.id <include refid="homeNavigation_where"/> ORDER BY hn_order
 	</select>
 	<!--添加主页导航表 -->
 	<insert id="saveHomeNavigation" parameterType="com.retailers.dht.common.entity.HomeNavigation" useGeneratedKeys="true" keyProperty="hnId">

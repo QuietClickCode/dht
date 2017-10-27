@@ -6,6 +6,7 @@ import com.retailers.dht.common.dao.HomeAdvertisingMapper;
 import com.retailers.dht.common.entity.HomeAdvertising;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeAdvertisingService;
+import com.retailers.dht.common.vo.HomeAdvertisingVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -46,12 +47,16 @@ public class HomeAdvertisingServiceImpl implements HomeAdvertisingService {
 		return homeAdvertisingMapper.queryHomeAdvertisingByHaId(haId);
 	}
 
-	public Pagination<HomeAdvertising> queryHomeAdvertisingList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<HomeAdvertising> page = new Pagination<HomeAdvertising>();
+	public Pagination<HomeAdvertisingVo> queryHomeAdvertisingList(Map<String, Object> params,int pageNo,int pageSize) {
+		Pagination<HomeAdvertisingVo> page = new Pagination<HomeAdvertisingVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<HomeAdvertising> list = homeAdvertisingMapper.queryHomeAdvertisingList(page);
+		List<HomeAdvertisingVo> list = homeAdvertisingMapper.queryHomeAdvertisingList(page);
+		for(int i = 0;i<list.size();i++) {
+			HomeAdvertisingVo vo = list.get(i);
+			vo.setImageUrl(AttachmentConstant.IMAGE_SHOW_URL+vo.getImageUrl());
+		}
 		page.setData(list);
 		return page;
 	}

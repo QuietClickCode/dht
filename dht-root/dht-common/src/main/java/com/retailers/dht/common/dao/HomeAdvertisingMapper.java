@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.HomeAdvertising;
+import com.retailers.dht.common.vo.HomeAdvertisingVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface HomeAdvertisingMapper {
 	 * @author wangjue
 	 * @date 2017-10-20 17:07:09
 	 */
-	public List<HomeAdvertising> queryHomeAdvertisingList(Pagination<HomeAdvertising> pagination);
+	public List<HomeAdvertisingVo> queryHomeAdvertisingList(Pagination<HomeAdvertisingVo> pagination);
 
 }

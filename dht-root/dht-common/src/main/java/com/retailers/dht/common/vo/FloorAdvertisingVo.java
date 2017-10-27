@@ -33,6 +33,8 @@ public class FloorAdvertisingVo {
 
     private Long imageId;
 
+    private String imageUrl;
+
 
     public String getFaName() {
         return faName;
@@ -104,5 +106,13 @@ public class FloorAdvertisingVo {
 
     public void setImageId(Long imageId) {
         this.imageId = imageId;
+    }
+
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 }

@@ -12,7 +12,7 @@
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
-
+    <link rel="stylesheet" href="/js/validate/css/bootstrapValidator.min.css">
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
 
@@ -21,7 +21,7 @@
     <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
-
+    <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
 </head>
 <body>
 <div>
@@ -42,7 +42,6 @@
                         <label for="img" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
                             <input id="img" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
@@ -56,27 +55,42 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="country" class="country" value="0">乡村
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="country" class="country" value="1">城市
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="country" class="country" value="0">
+                                    乡村
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="country" class="country" value="1">
+                                    城市
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="client" checked class="client" value="0">移动端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="client" disabled="disabled" class="client" value="1">PC端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="client" disabled="disabled" class="client" value="2">小程序
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" class="client" value="0">
+                                    移动端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" class="client" value="1" disabled="disabled">
+                                    PC端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" class="client" value="2" disabled="disabled">
+                                    小程序
+                                </label>
+                            </div>
                         </div>
                     </div>
                     
@@ -115,10 +129,10 @@
             <div class="modal-body">
                 <form class="form-horizontal" id="updateFloorAdvertising">
                     <div class="form-group">
-                        <label for="updateImage" class="col-sm-2 control-label">图片</label>
+                        <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="updateImage" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
+                            <img id="showImg" style="width: 50px;height: 50px;display: inline-block;">
+                            <input id="uploadImage" style="display: inline-block" name="dht_image_upload" type="file"/>
                         </div>
                     </div>
 
@@ -273,6 +287,19 @@
                 title: '排序'
 
             },{
+                field: 'imageUrl',
+                title: '图片',
+                align : 'center',
+                valign : 'middle',
+                formatter:function (value,row,index) {
+                    rowDatas.set(row.faId,row);
+                    let html;
+                    if(row.parentId != null)
+                    html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                    return html;
+                }
+            }
+            ,{
                 field: 'isShow',
                 align : 'center',
                 valign : 'middle',
@@ -312,7 +339,7 @@
                     let html;
                     let parentId = row.parentId;
                     if(parentId != null)
-                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.faId+'\',\''+row.imageId+'\')">编辑</button>';
+                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.faId+'\',\''+row.imageId+'\',\''+row.imageUrl+'\')">编辑</button>';
                     return html;
                 }
             },{
@@ -335,11 +362,25 @@
     var faid;
     var imageId;
     /*打开编辑楼层广告模态框*/
-    function updateFloorAdvertising(id,imgId) {
+    function updateFloorAdvertising(id,imgId,imageUrl) {
+        $("#showImg").attr("src",imageUrl);
         faid = id;
         imageId = imgId;
         $("#updateAdvertising").modal("show");
     }
+
+    $("#uploadImage").change(function () {
+        let path = $(this).val();
+        $("#showImg").attr("src","");
+        $("#showImg").attr("src",path);
+
+        var r= new FileReader();
+        f=document.getElementById('uploadImage').files[0];
+        r.readAsDataURL(f);
+        r.onload=function  (e) {
+            document.getElementById('showImg').src=this.result;
+        };
+    });
 
     /*编辑楼层广告*/
     function updateFloor() {
@@ -620,6 +661,68 @@
         showMethod: "fadeIn",
         hideMethod: "fadeOut"
     };
+</script>
+
+<%--表单校验--%>
+<script type="text/javascript">
+    $(function () {
+        $('#addFloorAdv').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                AdvName: {
+                    validators: {
+                        notEmpty: {
+                            message: '分类名称不能为空'
+                        }
+                    }
+                },
+                order: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp: {
+                            regexp: /\d/,
+                            message: "只能输入数字"
+                        }
+                    }
+                },
+                country: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                client: {
+                    validators: {
+                        notEmpty: {
+                            message: '必须选择一个客户端对象'
+                        }
+                    }
+                },
+                url: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                dht_image_upload: {
+                    validators: {
+                        notEmpty: {
+                            message: '文件不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });
 </script>
 
 </body>

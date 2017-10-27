@@ -27,7 +27,7 @@
 				AND a_id = #{params.aid}
 			</if>
 			<if test="null != params.aname and '' != params.aname">
-				AND a_name = #{params.aname}
+				AND a_name like  concat('%', #{params.aname}, '%')
 			</if>
 			<if test="null != params.isShow">
 				AND is_show = #{params.isShow}

@@ -64,9 +64,10 @@ public class ArticleClassificationController extends BaseController {
     @RequestMapping("/queryArticleClassifyList")
     @Function(label="首页广告集合", description = "首页广告集合", resourse = "openArticleClassification.queryArticleClassifyList",sort=1,parentRes="openArticleClassification.articleClassificationMapping")
     @ResponseBody
-    public Map<String,Object> queryArticleClassifyList(PageUtils pageForm){
+    public Map<String,Object> queryArticleClassifyList(PageUtils pageForm,String aname){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("aname", aname);
         Pagination<ArticleClassification> advertisingPagination = classificationService.queryArticleClassificationList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",advertisingPagination.getTotalCount());

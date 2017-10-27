@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.HomeAdvertising;
 import com.retailers.dht.common.service.HomeAdvertisingService;
+import com.retailers.dht.common.vo.HomeAdvertisingVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -64,16 +65,16 @@ public class HomeAdvertisingController extends BaseController{
     @RequestMapping("/queryAdvertisingLists")
     @Function(label="首页广告集合", description = "首页广告集合", resourse = "openHomeAdvertising.queryNavigationLists",sort=1,parentRes="openHomeAdvertising.homeAdvertisingMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(Long haClient,Long haCountry,Long haRegion,PageUtils pageForm){
+    public Map<String,Object> queryNavigationLists(String haName,Long haClient,Long haCountry,Long haRegion,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("haName",haName);
         map.put("haClient", haClient);
         map.put("haCountry", haCountry);
         map.put("haRegion",haRegion);
-        Pagination<HomeAdvertising> advertisingPagination = advertisingService.queryHomeAdvertisingList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<HomeAdvertisingVo> advertisingPagination = advertisingService.queryHomeAdvertisingList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        System.out.println(advertisingPagination.getTotalCount());
-        gtm.put("total",advertisingPagination.getTotalCount());
+        gtm.put("total",advertisingPagination.getPageSize());
         gtm.put("rows",advertisingPagination.getData());
         return gtm;
     }

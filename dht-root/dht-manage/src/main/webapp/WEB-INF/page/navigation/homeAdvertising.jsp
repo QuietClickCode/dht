@@ -7,8 +7,10 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
+    <link rel="stylesheet" href="/js/validate/css/bootstrapValidator.min.css">
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
 
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
@@ -25,7 +27,7 @@
 <body>
 <div id="toolbar" class="form-inline">
     <button class="btn btn-default" type="button" onclick="addNavigationBar()">新增首页广告</button>
-
+    <input type="text" class="form-control"  id="AdvertisingName" placeholder="请输入广告名称">
     <select id="clientMenu" class="form-control">
         <option value="">客户端</option>
         <option value="0">移动端</option>
@@ -59,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">编辑该导航栏</h4>
+                <h4 class="modal-title">新增首页广告</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="saveHomeAdvertising">
@@ -67,70 +69,93 @@
                         <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
                             <input id="saveImage" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">商品名称</label>
                         <div class="col-sm-10">
-                            <input type="text" id="saveName" class="form-control">
+                            <input type="text" name="saveName" id="saveName" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送区域</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="area" class="area" value="1">顶部区域
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="area" class="area" value="0">中间区域
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="area" class="area" value="0">底部区域
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="area" class="area" value="0">
+                                    顶部区域
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="area" class="area" value="1">
+                                    中间区域
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="area" class="area" value="2">
+                                    底部区域
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="setCountry" class="setCountry" value="1">乡村
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="setCountry" class="setCountry" value="0">城市
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setCountry" class="setCountry" value="0">
+                                    乡村
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setCountry" class="setCountry" value="1">
+                                    城市
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="setClient" checked class="setClient" value="1">移动端
+                            <div class="radio">
+                            <label>
+                                <input type="radio" name="setClient" checked class="setClient" value="0">
+                                移动端
                             </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="setClient" disabled="disabled" class="setClient" value="0">PC端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="setClient" disabled="disabled" class="setClient" value="0">小程序
-                            </label>
+                        </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setClient" disabled="disabled" class="setClient" value="1">
+                                    PC端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setClient" disabled="disabled" class="setClient" value="2">
+                                    小程序
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <input type="text" id="saveOrder" class="form-control">
+                            <input type="text" name="saveOrder" id="saveOrder" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" id="saveUrl" class="form-control">
+                            <input type="text" name="saveUrl" id="saveUrl" class="form-control">
                         </div>
                     </div>
 
@@ -158,8 +183,8 @@
                     <div class="form-group">
                         <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="uploadImage" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
+                            <img id="showImg" src="" style="width: 50px;height: 50px; display: inline-block">
+                            <input id="uploadImage" style="display: inline-block;vertical-align: middle;" name="dht_image_upload" type="file"/>
                         </div>
                     </div>
 
@@ -173,54 +198,84 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送区域</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="region" class="region" value="1">顶部区域
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="region" class="region" value="0">中间区域
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="region" class="region" value="0">底部区域
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="region" class="region" value="0">
+                                    顶部区域
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="region" class="region" value="1">
+                                    中间区域
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="region" class="region" value="2">
+                                    底部区域
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="1">乡村
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="0">城市
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="updateCountry" class="updateCountry" value="0">
+                                    乡村
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="updateCountry" class="updateCountry" value="1">
+                                    城市
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" checked class="updateClient" value="1">移动端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">PC端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="0">小程序
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="updateClient" checked class="updateClient" value="0">
+                                    移动端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="1">
+                                    PC端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="2">
+                                    小程序
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="1">显示
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="0">不显示
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="isShow" class="isShow" value="0">
+                                    不显示
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="isShow" class="isShow" value="1">
+                                    显示
+                                </label>
+                            </div>
                         </div>
                     </div>
 
@@ -248,6 +303,26 @@
         </div>
     </div>
 </div>
+
+<%--删除广告模态框--%>
+<div class="modal fade" id="deleteAdvertising" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除分类</h4>
+            </div>
+            <div class="modal-body">
+                <p>删除该分类</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"  onclick="deleteHomeAdvertising()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -284,7 +359,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
                 let show = row.isShow;
                 let isShow;
@@ -297,19 +372,24 @@
             }
         },
         {
-            field: 'url',
-            title: '链接',
+            field: 'imageUrl',
+            title: '图片',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                rowDatas.set(row.haId,row);
+                let html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                return html;
+            }
         },
         {
             title: '编辑',
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal(\''+row.haId+'\',\''+row.imagePath+'\')">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal(\''+row.haId+'\',\''+row.imagePath+'\',\''+row.haName+'\',\''+row.haOrder+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.haClient+'\',\''+row.haCountry+'\',\''+row.haRegion+'\',\''+row.imageUrl+'\')">编辑</button>'
                 return html;
             }
         },
@@ -319,7 +399,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
                 html+='<button class="btn btn-primary" onclick="event.stopPropagation();deleteHomeAdv(\''+row.haId+'\')">删除</button>'
                 return html;
@@ -335,6 +415,7 @@
      **/
     function queryParams(that){
         return {
+            haName:$("#AdvertisingName").val(),
             haClient:$("#clientMenu").val(),
             haCountry:$("#countryMenu").val(),
             haRegion:$("#regionMenu").val(),
@@ -355,6 +436,19 @@
         );
     }
 
+    $("#uploadImage").change(function () {
+        let path = $(this).val();
+        $("#showImg").attr("src","");
+        $("#showImg").attr("src",path);
+
+        var r= new FileReader();
+        f=document.getElementById('uploadImage').files[0];
+        r.readAsDataURL(f);
+        r.onload=function  (e) {
+            document.getElementById('showImg').src=this.result;
+        };
+    });
+
     $("#Client button").click(function () {
         let clientValue = $(this).attr("data-clientValue");
         $("#clientValue").attr("value",clientValue);
@@ -362,7 +456,15 @@
     });
     var haId;
     var imgpath;
-    function openSaveAdvertisingModal(id,path) {
+    function openSaveAdvertisingModal(id,path,name,order,isShow,url,client,country,region,imageUrl) {
+        $("#setAdvName").val(name);
+        radioChoose(".region",region);
+        radioChoose(".updateCountry",country);
+        radioChoose(".updateClient",client);
+        radioChoose(".isShow",isShow);
+        $("#showImg").attr("src",imageUrl);
+        $("#setAdvertUrl").val(url);
+        $("#setAdvertOrder").val(order);
         haId = id;
         imgpath = path;
         $("#saveAdvertising").modal("show");
@@ -375,6 +477,13 @@
     });
 
 
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
+        }
+    }
+
     /*
      * 新增首页导航
      * */
@@ -383,6 +492,10 @@
     }
 
     function subHomeAdvertisingChange() {
+        let bootstrapValidator = $("#updateHomeAdvertising").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
         let name = $("#setAdvName").val();
         let region = $(".region:checked").val();
         let country = $(".updateCountry:checked").val();
@@ -460,9 +573,9 @@
         let client = $(".setClient:checked").val();
         let order = $("#saveOrder").val();
         let url = $("#saveUrl").val();
-
-        let path = $("#saveImage").val();
-        if(path != ""){
+        let bootstrapValidator = $("#saveHomeAdvertising").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(bootstrapValidator.isValid()){
             var fd = new FormData($("#saveHomeAdvertising")[0]);
             fd.append("imageUse","image/jpeg");
             fd.append("isWatermark","false");
@@ -494,6 +607,7 @@
                             layer.msg(data.msg);
                             refreshTableData();
                             $("#addHomeNavigationBar").modal("hide");
+                            $("#saveHomeAdvertising").data('bootstrapValidator').resetForm(true);
                         }
                     });
                 }
@@ -502,21 +616,95 @@
     }
 
     function deleteHomeAdv(id) {
-        $.ajax({
-            url:"/openHomeAdvertising/removeAdvertising",
-            method:"post",
-            dataType:"json",
-            data:{
-                haId:id
-            },
-            success:function (data) {
-                layer.msg(data.msg);
-                refreshTableData();
-            }
-        });
+        $("#deleteAdvertising").modal("show");
+        haId = id;
     }
 
-    /*$(function () {
+    function deleteHomeAdvertising() {
+        $.ajax({
+             url:"/openHomeAdvertising/removeAdvertising",
+             method:"post",
+             dataType:"json",
+             data:{
+             haId:haId
+             },
+         success:function (data) {
+             $("#deleteAdvertising").modal("hide");
+             layer.msg(data.msg);
+             refreshTableData();
+            }
+         });
+    }
+</script>
+
+<%--表单校验--%>
+<script type="text/javascript">
+    $(function () {
+        $('#saveHomeAdvertising').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                saveName: {
+                    validators: {
+                        notEmpty: {
+                            message: '分类名称不能为空'
+                        }
+                    }
+                },
+                saveOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp:{
+                            regexp:/\d/,
+                            message:"只能输入数字"
+                        }
+                    }
+                },
+                area: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送区域'
+                        }
+                    }
+                },
+                setCountry: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                setClient: {
+                    validators: {
+                        notEmpty: {
+                            message: '必须选择一个客户端对象'
+                        }
+                    }
+                },
+                saveUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                dht_image_upload:{
+                    validators: {
+                        notEmpty: {
+                            message: '文件不能为空'
+                        }
+                    }
+                }
+            }
+        });
+
+
         $('#updateHomeAdvertising').bootstrapValidator({
             message: 'This value is not valid',
             feedbackIcons: {
@@ -526,10 +714,41 @@
             },
             fields: {
                 setName: {
-                    message: '广告名验证失败',
                     validators: {
                         notEmpty: {
-                            message: '用户名不能为空'
+                            message: '广告名称不能为空'
+                        }
+                    }
+                },
+                setOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp:{
+                            regexp:/\d/,
+                            message:"只能输入数字"
+                        }
+                    }
+                },
+                region: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送区域'
+                        }
+                    }
+                },
+                updateCountry: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                updateClient: {
+                    validators: {
+                        notEmpty: {
+                            message: '必须选择一个客户端对象'
                         }
                     }
                 },
@@ -540,16 +759,16 @@
                         }
                     }
                 },
-                setOrder: {
+                isShow:{
                     validators: {
                         notEmpty: {
-                            message: '排序不能为空'
+                            message: '状态不能为空'
                         }
                     }
                 }
             }
         });
-    });*/
+    });
 </script>
 
 </body>
