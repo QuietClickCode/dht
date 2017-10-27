@@ -2,6 +2,7 @@
 package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.HomeAdvertising;
+import com.retailers.dht.common.vo.HomeAdvertisingVo;
 import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.Map;
@@ -47,7 +48,7 @@ public interface HomeAdvertisingService {
 	 * @author wangjue
 	 * @date 2017-10-20 17:07:09
 	 */
-	public Pagination<HomeAdvertising> queryHomeAdvertisingList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<HomeAdvertisingVo> queryHomeAdvertisingList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据haId删除首页广告设置表
 	 * @param haId

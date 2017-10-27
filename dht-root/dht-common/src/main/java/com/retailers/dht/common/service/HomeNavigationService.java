@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.dht.common.entity.HomeNavigation;
+import com.retailers.dht.common.vo.HomeNavigationVo;
+import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.Map;
 /**
  * 描述：主页导航表Service
@@ -45,7 +48,7 @@ public interface HomeNavigationService {
 	 * @author wangjue
 	 * @date 2017-10-17 14:58:24
 	 */
-	public Pagination<HomeNavigation> queryHomeNavigationList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<HomeNavigationVo> queryHomeNavigationList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据hnId删除主页导航表
 	 * @param hnId

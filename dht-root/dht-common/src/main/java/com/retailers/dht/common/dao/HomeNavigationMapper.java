@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.HomeNavigation;
+import com.retailers.dht.common.vo.HomeNavigationVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface HomeNavigationMapper {
 	 * @author wangjue
 	 * @date 2017-10-17 14:58:24
 	 */
-	public List<HomeNavigation> queryHomeNavigationList(Pagination<HomeNavigation> pagination);
+	public List<HomeNavigationVo> queryHomeNavigationList(Pagination<HomeNavigationVo> pagination);
 
 }

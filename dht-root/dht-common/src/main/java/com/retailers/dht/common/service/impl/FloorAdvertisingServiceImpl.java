@@ -83,8 +83,10 @@ public class FloorAdvertisingServiceImpl implements FloorAdvertisingService {
 		for(FloorAdvertisingVo vo:advertisingVos)
 			vo.setFaId(vo.getFaId()*100000);
 		List<FloorAdvertisingVo> advertisingVoList = floorAdvertisingMapper.queryFloorAdvertisingVo();
-		for(FloorAdvertisingVo vo:advertisingVoList)
+		for(FloorAdvertisingVo vo:advertisingVoList){
 			vo.setParentId(vo.getParentId()*100000);
+			vo.setImageUrl(AttachmentConstant.IMAGE_SHOW_URL+vo.getImageUrl());
+		}
 		advertisingVos.addAll(advertisingVoList);
 		List<FloorAdvertisingVo> rtnList=new ArrayList<FloorAdvertisingVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();

@@ -27,7 +27,7 @@
 <body>
 <div id="toolbar" class="form-inline">
     <button class="btn btn-default" type="button" onclick="addNavigationBar()">新增首页广告</button>
-    <input type="text" class="form-control" id="AdvertisingName" placeholder="请输入广告名称">
+    <input type="text" class="form-control"  id="AdvertisingName" placeholder="请输入广告名称">
     <select id="clientMenu" class="form-control">
         <option value="">客户端</option>
         <option value="0">移动端</option>
@@ -183,8 +183,8 @@
                     <div class="form-group">
                         <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="uploadImage" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
+                            <img id="showImg" src="" style="width: 50px;height: 50px; display: inline-block">
+                            <input id="uploadImage" style="display: inline-block;vertical-align: middle;" name="dht_image_upload" type="file"/>
                         </div>
                     </div>
 
@@ -359,7 +359,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
                 let show = row.isShow;
                 let isShow;
@@ -372,19 +372,24 @@
             }
         },
         {
-            field: 'url',
-            title: '链接',
+            field: 'imageUrl',
+            title: '图片',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                rowDatas.set(row.haId,row);
+                let html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                return html;
+            }
         },
         {
             title: '编辑',
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal(\''+row.haId+'\',\''+row.imagePath+'\',\''+row.haName+'\',\''+row.haOrder+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.haClient+'\',\''+row.haCountry+'\',\''+row.haRegion+'\')">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveAdvertisingModal(\''+row.haId+'\',\''+row.imagePath+'\',\''+row.haName+'\',\''+row.haOrder+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.haClient+'\',\''+row.haCountry+'\',\''+row.haRegion+'\',\''+row.imageUrl+'\')">编辑</button>'
                 return html;
             }
         },
@@ -394,7 +399,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(row.haId,row);
                 let html='';
                 html+='<button class="btn btn-primary" onclick="event.stopPropagation();deleteHomeAdv(\''+row.haId+'\')">删除</button>'
                 return html;
@@ -431,6 +436,19 @@
         );
     }
 
+    $("#uploadImage").change(function () {
+        let path = $(this).val();
+        $("#showImg").attr("src","");
+        $("#showImg").attr("src",path);
+
+        var r= new FileReader();
+        f=document.getElementById('uploadImage').files[0];
+        r.readAsDataURL(f);
+        r.onload=function  (e) {
+            document.getElementById('showImg').src=this.result;
+        };
+    });
+
     $("#Client button").click(function () {
         let clientValue = $(this).attr("data-clientValue");
         $("#clientValue").attr("value",clientValue);
@@ -438,12 +456,13 @@
     });
     var haId;
     var imgpath;
-    function openSaveAdvertisingModal(id,path,name,order,isShow,url,client,country,region) {
+    function openSaveAdvertisingModal(id,path,name,order,isShow,url,client,country,region,imageUrl) {
         $("#setAdvName").val(name);
         radioChoose(".region",region);
         radioChoose(".updateCountry",country);
         radioChoose(".updateClient",client);
         radioChoose(".isShow",isShow);
+        $("#showImg").attr("src",imageUrl);
         $("#setAdvertUrl").val(url);
         $("#setAdvertOrder").val(order);
         haId = id;
@@ -473,6 +492,10 @@
     }
 
     function subHomeAdvertisingChange() {
+        let bootstrapValidator = $("#updateHomeAdvertising").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
         let name = $("#setAdvName").val();
         let region = $(".region:checked").val();
         let country = $(".updateCountry:checked").val();
@@ -690,11 +713,56 @@
                 validating: 'glyphicon glyphicon-refresh'
             },
             fields: {
+                setName: {
+                    validators: {
+                        notEmpty: {
+                            message: '广告名称不能为空'
+                        }
+                    }
+                },
                 setOrder: {
                     validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
                         regexp:{
                             regexp:/\d/,
                             message:"只能输入数字"
+                        }
+                    }
+                },
+                region: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送区域'
+                        }
+                    }
+                },
+                updateCountry: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                updateClient: {
+                    validators: {
+                        notEmpty: {
+                            message: '必须选择一个客户端对象'
+                        }
+                    }
+                },
+                setUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                isShow:{
+                    validators: {
+                        notEmpty: {
+                            message: '状态不能为空'
                         }
                     }
                 }

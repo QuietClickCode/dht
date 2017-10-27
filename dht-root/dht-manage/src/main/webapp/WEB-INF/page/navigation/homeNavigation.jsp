@@ -25,7 +25,7 @@
 <body>
 <div id="toolbar" class="form-inline">
     <button class="btn btn-primary" type="button" onclick="addNavigationBar()">新增首页导航</button>
-
+    <input type="text" class="form-control" id="hnName" placeholder="请输入导航名称">
     <select id="clientMenu" class="form-control">
         <option value="">客户端</option>
         <option value="0">移动端</option>
@@ -56,7 +56,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">编辑该导航栏</h4>
+                <h4 class="modal-title">编辑该导航栏</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="addHomeNavigation">
@@ -70,76 +70,97 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">导航名称</label>
                         <div class="col-sm-10">
-                            <input type="text" id="NavigationName" class="form-control">
+                            <input type="text" id="NavigationName" name="NavigationName" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">客户端</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="client" checked class="client" value="0">移动端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="client" disabled="disabled" class="client" value="1">PC端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="client" disabled="disabled" class="client" value="2">小程序
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" checked class="client" value="0">
+                                    移动端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" disabled="disabled" class="client" value="1">
+                                    PC端
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="client" disabled="disabled" class="client" value="2">
+                                    小程序
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="country" class="country" value="0">乡村
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="country" class="country" value="1">城市
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="country" class="country" value="0">
+                                    乡村
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="country" class="country" value="1">
+                                    城市
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">样式</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="setStyle" class="setStyle" value="1">带副标题的样式
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="setStyle" class="setStyle" value="0">不带副标题的样式
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setStyle" class="setStyle" value="0">
+                                    不带副标题的样式
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="setStyle" class="setStyle" value="1">
+                                    带副标题的样式
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group" >
                         <label for="mainTitle" class="col-sm-2 control-label">主标题</label>
                         <div class="col-sm-10">
-                            <input type="text" id="mainTitle" class="form-control">
+                            <input type="text" id="mainTitle" name="mainTitle" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group" id="subTitleModal">
                         <label for="subTitle" class="col-sm-2 control-label">副标题</label>
                         <div class="col-sm-10">
-                            <input type="text" id="subTitle" class="form-control">
+                            <input type="text" id="subTitle" name="subTitle" class="form-control">
                         </div>
                     </div>
 
 
 
-                    <div class="form-group" id="">
-                        <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
+                    <div class="form-group">
+                        <label for="hnOrder" class="col-sm-2 control-label">排序</label>
                         <div class="col-sm-10">
-                            <input type="text" id="hnOrder" class="form-control">
+                            <input type="text" id="hnOrder" name="hnOrder" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="NaviOrder" class="col-sm-2 control-label">链接</label>
+                        <label for="hnUrl" class="col-sm-2 control-label">链接</label>
                         <div class="col-sm-10">
-                            <input type="text" id="hnUrl" class="form-control">
+                            <input type="text" id="hnUrl" name="hnUrl" class="form-control">
                         </div>
                     </div>
 
@@ -167,77 +188,99 @@
                     <div class="form-group">
                         <label for="uploadImage" class="col-sm-2 control-label">图片</label>
                         <div class="col-sm-10">
-                            <input id="uploadImage" name="dht_image_upload" type="file"/>
-                            <p class="help-block">不更改就不上传图片</p>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">推送对象</label>
-                        <div class="col-sm-10" id="chooseCountry">
-                            <input class="btn btn-default" data-Country="0" type="button" value="乡村">
-                            <input class="btn btn-default" data-Country="1" type="button" value="城市">
-                            <input id="countryValue" style="display: none">
+                            <img id="showImg" style="width: 50px;height: 50px;display: inline-block;">
+                            <input id="uploadImage" style="display: inline-block;" name="dht_image_upload" type="file"/>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="NaviName" class="col-sm-2 control-label">导航名称</label>
                         <div class="col-sm-10">
-                            <input type="text" id="NaviName" class="form-control">
+                            <input type="text" id="NaviName" name="NaviName" class="form-control">
                         </div>
                     </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">推送对象</label>
+                        <div class="col-sm-10" id="chooseCountry">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="countryValue" class="countryValue" value="0">
+                                    乡村
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="countryValue" class="countryValue" value="1">
+                                    城市
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">样式</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="style" class="style" value="1">带副标题的样式
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="style" class="style" value="0">不带副标题的样式
-                            </label>
-                        </div>
-                    </div>
-
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">主标题</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="inputMainTitle" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="updateSubtitle">
-                        <label for="" class="col-sm-2 control-label">副标题</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="inputSubTitle" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">链接</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="imageUrl" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group" id="chooseClassifyLabel">
-                        <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
-                        <div class="col-sm-10">
-                            <input type="text" id="NaviOrder" class="form-control">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="style" class="style" value="0">
+                                    不带副标题的样式
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="style" class="style" value="1">
+                                    带副标题的样式
+                                </label>
+                            </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="1">显示
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="isShow" class="isShow" value="0">不显示
-                            </label>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="isShow" class="isShow" value="0">
+                                    不显示
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="isShow" class="isShow" value="1">
+                                    显示
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="inputMainTitle" class="col-sm-2 control-label">主标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputMainTitle" name="inputMainTitle" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="updateSubtitle">
+                        <label for="inputSubTitle" class="col-sm-2 control-label">副标题</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="inputSubTitle" name="inputSubTitle" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="imageUrl" class="col-sm-2 control-label">链接</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="imageUrl" name="imageUrl" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="form-group" id="chooseClassifyLabel">
+                        <label for="NaviOrder" class="col-sm-2 control-label">排序</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="NaviOrder" name="NaviOrder" class="form-control">
                         </div>
                     </div>
                 </form>
@@ -249,6 +292,27 @@
         </div>
     </div>
 </div>
+
+
+<%--删除导航模态框--%>
+<div class="modal fade" id="deleteNavigation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除导航</h4>
+            </div>
+            <div class="modal-body">
+                <p>删除该导航</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary"  onclick="deleteNavigation()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -292,6 +356,17 @@
             valign : 'middle'
         },
         {
+            field: 'imageUrl',
+            title: '图片',
+            align : 'center',
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                rowDatas.set(row.haId,row);
+                let html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                return html;
+            }
+        },
+        {
             field: 'isShow',
             title: '状态',
             align : 'center',
@@ -316,7 +391,7 @@
             formatter:function (value,row,index) {
                 rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveNavigatorModal(\''+row.hnId+'\',\''+row.hnImgpath+'\')">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openSaveNavigatorModal(\''+row.hnId+'\',\''+row.hnImgpath+'\',\''+row.hnName+'\',\''+row.hnMianTitle+'\',\''+row.hnSubTitle+'\',\''+row.hnStyle+'\',\''+row.hnClient+'\',\''+row.hnUrl+'\',\''+row.isShow+'\',\''+row.hnOrder+'\',\''+row.hnCountry+'\',\''+row.imageUrl+'\')">编辑</button>'
                 return html;
             }
         },
@@ -343,6 +418,7 @@
      **/
     function queryParams(that){
         return {
+            hnName:$("#hnName").val(),
             hnStyle:$("#styleMenu").val(),
             hnClient:$("#clientMenu").val(),
             hnCountry:$("#countryMenu").val(),
@@ -359,11 +435,45 @@
         $(this).addClass("btn-success").siblings().removeClass("btn-success");
     });
 
-    function openSaveNavigatorModal(id,imagePath) {
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
+        }
+    }
+
+    function openSaveNavigatorModal(id,imagePath,name,maintitle,subtitle,style,client,url,isshow,order,hnCountry,imageUrl) {
         hnid = id;
         pathid = imagePath;
+        $("#showImg").attr("src",imageUrl);
+        $("#clientValue").val(client);
+        radioChoose(".countryValue",hnCountry);
+        $("#NaviName").val(name);
+        $("#NaviOrder").val(order);
+        radioChoose(".isShow",isshow);
+        radioChoose(".style",style);
+        if(style == 0)
+            $("#updateSubtitle").hide();
+        $("#inputMainTitle").val(maintitle);
+        $("#inputSubTitle").val(subtitle)
+        $("#imageUrl").val(url);
+
         $("#saveHomeNavigation").modal("show");
     }
+
+    $("#uploadImage").change(function () {
+        let path = $(this).val();
+        $("#showImg").attr("src","");
+        $("#showImg").attr("src",path);
+
+        var r= new FileReader();
+        f=document.getElementById('uploadImage').files[0];
+        r.readAsDataURL(f);
+        r.onload=function  (e) {
+            document.getElementById('showImg').src=this.result;
+        };
+    });
+
 
     $("#chooseCountry input").click(function () {
         let countryValue = $(this).attr("data-Country");
@@ -373,15 +483,19 @@
 
 
     function updateNavigator() {
+        let bootstrapValidator = $("#updateNavigationInfo").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
         let clientValue = $("#clientValue").val();
-        let countryValue = $("#countryValue").val();
+        let countryValue = $(".countryValue:checked").val();
         let naviName = $("#NaviName").val();
         let navOrder = $("#NaviOrder").val();
         let show = $(".isShow:checked").val();
         let imagePath = $("#uploadImage").val();
         let style = $(".style:checked").val();
         let mainTitle = $("#inputMainTitle").val();
-        let subTitle = $("#subTitle").val()
+        let subTitle = $("#inputSubTitle").val();
         let url = $("#imageUrl").val();
         if(imagePath != ""){
             var fd = new FormData($("#updateNavigationInfo")[0]);
@@ -415,6 +529,7 @@
                         },
                         success:function (data) {
                             refreshTableData();
+                            $("#updateNavigationInfo").data('bootstrapValidator').resetForm(true);
                             $("#saveHomeNavigation").modal("hide");
                         }
                     });
@@ -440,6 +555,7 @@
                 },
                 success:function (data) {
                     refreshTableData();
+                    $("#updateNavigationInfo").data('bootstrapValidator').resetForm(true);
                     $("#saveHomeNavigation").modal("hide");
                 }
             });
@@ -478,20 +594,26 @@
             $("#subTitleModal").show();
     });
 
-
-    function deleteHomeNavigation(id) {
+    function deleteNavigation() {
         $.ajax({
             url:"/openHomeNavigation/removeNavigatorBar",
             method:"post",
             dataType:"json",
             data:{
-                hnId:id
+                hnId:hnid
             },
             success:function(data){
                 refreshTableData();
-                bootbox.alert("删除成功");
+                layer.msg(data.msg);
+                $("#deleteNavigation").modal("hide");
             }
         });
+    }
+
+
+    function deleteHomeNavigation(id) {
+        hnid = id;
+        $("#deleteNavigation").modal("show");
     }
 
     /**
@@ -507,6 +629,10 @@
     }
     
     function addHomeNavigation() {
+        let bootstrapValidator = $("#addHomeNavigation").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
         var fd = new FormData($("#addHomeNavigation")[0]);
         let name = $("#NavigationName").val();
         let client = $(".client:checked").val();
@@ -516,28 +642,6 @@
         let subtitle = $("#subTitle").val();
         let order = $("#hnOrder").val();
         let url = $("#hnUrl").val();
-
-        if($("#addImagePath").val() == "") {
-            layer.msg("请上传图片");
-            return;
-        }
-
-        if(name == "") {
-            layer.msg("请输入导航名称");
-            return;
-        }
-
-        if(maintitle == ""){
-            layer.msg("请输入主标题");
-            return;
-        }
-
-        if(url == ""){
-            layer.msg("请输入链接");
-            return;
-        }
-
-
         var fd = new FormData($("#addHomeNavigation")[0]);
         fd.append("imageUse","image/jpeg");
         fd.append("isWatermark","false");
@@ -571,6 +675,7 @@
                         layer.msg(data.msg);
                         refreshTableData();
                         $("#addHomeNavigationBar").modal("hide");
+                        $("#addHomeNavigation").data('bootstrapValidator').resetForm(true);
                     }
                 });
             },
@@ -582,5 +687,183 @@
     }
 </script>
 
+<%--表单校验--%>
+<script type="text/javascript">
+    $(function () {
+        $('#addHomeNavigation').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                NavigationName: {
+                    validators: {
+                        notEmpty: {
+                            message: '导航名称不能为空'
+                        }
+                    }
+                },
+                hnOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp: {
+                            regexp: /\d/,
+                            message: "只能输入数字"
+                        }
+                    }
+                },
+                setStyle: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择样式'
+                        }
+                    }
+                },
+                country: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                client: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个客户端对象'
+                        }
+                    }
+                },
+                hnUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                dht_image_upload: {
+                    validators: {
+                        notEmpty: {
+                            message: '文件不能为空'
+                        }
+                    }
+                },
+                mainTitle: {
+                    validators: {
+                        notEmpty: {
+                            message: '主标题不能为空'
+                        },
+                        stringLength:{
+                            min:4,
+                            message:"主标题至少输入四个字符"
+                        }
+                    }
+                },
+                subTitle: {
+                    validators: {
+                        notEmpty: {
+                            message: '副标题不能为空'
+                        },
+                        stringLength:{
+                            min:4,
+                            message:"副标题至少输入四个字符"
+                        }
+                    }
+                }
+            }
+        });
+
+
+        $('#updateNavigationInfo').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                NaviOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp:{
+                            regexp:/\d/,
+                            message:"只能输入数字"
+                        }
+                    }
+                },
+                NaviName: {
+                    validators: {
+                        notEmpty: {
+                            message: '导航名称不能为空'
+                        }
+                    }
+                },
+                style: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择样式'
+                        }
+                    }
+                },
+                countryValue: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个推送对象'
+                        }
+                    }
+                },
+                client: {
+                    validators: {
+                        notEmpty: {
+                            message: '请选择一个客户端对象'
+                        }
+                    }
+                },
+                imageUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
+                        }
+                    }
+                },
+                inputMainTitle: {
+                    validators: {
+                        notEmpty: {
+                            message: '主标题不能为空'
+                        },
+                        stringLength:{
+                            min:4,
+                            message:"主标题至少输入四个字符"
+                        }
+                    }
+                },
+                inputSubTitle: {
+                    validators: {
+                        notEmpty: {
+                            message: '副标题不能为空'
+                        },
+                        stringLength:{
+                            min:4,
+                            message:"副标题至少输入四个字符"
+                        }
+                    }
+                },
+                isShow:{
+                    validators: {
+                        notEmpty: {
+                            message: '副标题不能为空'
+                        }
+                    }
+                }
+            }
+        });
+    });
+
+</script>
 </body>
 </html>

@@ -1,16 +1,19 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.List;
-import java.util.Map;
 
 import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.entity.HomeNavigation;
 import com.retailers.dht.common.dao.HomeNavigationMapper;
+import com.retailers.dht.common.entity.HomeNavigation;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeNavigationService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.retailers.dht.common.vo.HomeAdvertisingVo;
+import com.retailers.dht.common.vo.HomeNavigationVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：主页导航表Service
  * @author wangjue
@@ -45,14 +48,18 @@ public class HomeNavigationServiceImpl implements HomeNavigationService {
 		return homeNavigationMapper.queryHomeNavigationByHnId(hnId);
 	}
 
-	public Pagination<HomeNavigation> queryHomeNavigationList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<HomeNavigation> page = new Pagination<HomeNavigation>();
+	public Pagination<HomeNavigationVo> queryHomeNavigationList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<HomeNavigationVo> page = new Pagination<HomeNavigationVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<HomeNavigation> list = homeNavigationMapper.queryHomeNavigationList(page);
-		page.setData(list);
-		return page;
+		List<HomeNavigationVo> list = homeNavigationMapper.queryHomeNavigationList(page);
+		for (int i = 0; i < list.size(); i++) {
+			HomeNavigationVo vo = list.get(i);
+			vo.setImageUrl(AttachmentConstant.IMAGE_SHOW_URL + vo.getImageUrl());
+		}
+			page.setData(list);
+			return page;
 	}
 	public boolean deleteHomeNavigationByHnId(Long hnId) {
 		HomeNavigation homeNavigation = homeNavigationMapper.queryHomeNavigationByHnId(hnId);

@@ -16,6 +16,21 @@
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_homeAdvertisingVo" type="com.retailers.dht.common.vo.HomeAdvertisingVo">
+		<result property="haId" column="ha_id"/>
+		<result property="haName" column="ha_name"/>
+		<result property="haOrder" column="ha_order"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="url" column="url"/>
+		<result property="imagePath" column="image_path"/>
+		<result property="haClient" column="ha_client"/>
+		<result property="haCountry" column="ha_country"/>
+		<result property="haRegion" column="ha_region"/>
+		<result property="version" column="version"/>
+		<result property="imageUrl" column="image_url"/>
+	</resultMap>
+
 	<select id="queryHomeAdvertisings" resultMap="rm_homeAdvertising" parameterType="com.retailers.dht.common.entity.HomeAdvertising">
 		SELECT <include refid="homeAdvertising_columns" />
 		FROM t_home_advertising WHERE ha_client = #{haClient} and ha_region = #{haRegion} and ha_country = #{haCountry} and is_delete = 0 ORDER BY ha_order
@@ -69,9 +84,10 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertising" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="homeAdvertising_columns" />
-		FROM t_home_advertising <include refid="homeAdvertising_where"/> ORDER BY ha_order
+	<select id="queryHomeAdvertisingList" resultMap="rm_homeAdvertisingVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.show_url image_url FROM t_home_advertising t1 LEFT JOIN t_attachment t2
+		ON t1.image_path = t2.id
+		<include refid="homeAdvertising_where"/>ORDER BY ha_order
 	</select>
 	
 

@@ -5,6 +5,7 @@ import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.HomeNavigation;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeNavigationService;
+import com.retailers.dht.common.vo.HomeNavigationVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -68,13 +69,14 @@ public class HomeNavigationController extends BaseController {
     @RequestMapping("/queryNavigationLists")
     @Function(label="商品大类列表", description = "所有商品大类列表", resourse = "openHomeNavigation.queryNavigationLists",sort=1,parentRes="openHomeNavigation.homeNavigationMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(Long hnStyle,Long hnClient,Long hnCountry, PageUtils pageForm){
+    public Map<String,Object> queryNavigationLists(String hnName,Long hnStyle,Long hnClient,Long hnCountry, PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("hnStyle",hnStyle);
         map.put("hnClient",hnClient);
         map.put("hnCountry",hnCountry);
+        map.put("hnName",hnName);
         map.put("isDelete",0);
-        Pagination<HomeNavigation> goodsTypePagination = homeNavigationService.queryHomeNavigationList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<HomeNavigationVo> goodsTypePagination = homeNavigationService.queryHomeNavigationList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",goodsTypePagination.getTotalCount());
         gtm.put("rows",goodsTypePagination.getData());
