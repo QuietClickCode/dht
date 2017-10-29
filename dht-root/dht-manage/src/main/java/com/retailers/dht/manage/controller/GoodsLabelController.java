@@ -61,10 +61,19 @@ public class GoodsLabelController extends BaseController {
     @RequestMapping("/queryGoodsLabelLists")
     @Function(label = "商品标签列表", description = "所有商品标签列表", resourse = "goods.queryGoodsLabelLists", sort = 1, parentRes = "goods.openGoodsLabel")
     @ResponseBody
-    public Map<String, Object> queryGoodsLabelLists(String glName, PageUtils pageForm) {
+    public Map<String, Object> queryGoodsLabelLists(String glName,String now,PageUtils pageForm) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("glName", glName);
         map.put("isDelete", 0);
+        if(!ObjectUtils.isEmpty(now)){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date nowDate = sdf.parse(now);
+                map.put("nowDate",nowDate);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
         Pagination<GoodsLabel> GoodsLabelPagination = goodsLabelService.queryGoodsLabelList(map, pageForm.getPageNo(), pageForm.getPageSize());
         Map<String, Object> gtm = new HashMap<String, Object>();
         gtm.put("total", GoodsLabelPagination.getTotalCount());

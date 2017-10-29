@@ -79,5 +79,25 @@ public class GoodsGglrelServiceImpl implements GoodsGglrelService {
 		}
 		return status == gglIdsArr.length ? true : false;
 	}
+
+	public boolean saveGoodsGglrelByGids(String gids,Long glId,Long uploadpersonId) {
+		String[] gidsArr = gids.replaceAll(","," ").trim().split(" ");
+		int status = 0;
+		if(!ObjectUtils.isEmpty(gidsArr)){
+			for (String gid:gidsArr){
+				Long gidLong = Long.parseLong(gid);
+				GoodsGglrel goodsGglrel = new GoodsGglrel();
+				goodsGglrel.setIsDelete(0L);
+				goodsGglrel.setGlId(glId);
+				goodsGglrel.setGid(gidLong);
+				GoodsGglrelCopy g = new GoodsGglrelCopy();
+				BeanUtils.copyProperties(goodsGglrel,g);
+				g.setGglUploadpersonId(uploadpersonId);
+				goodsGglrelCopyService.saveGoodsGglrelCopy(g);
+				status += goodsGglrelMapper.saveGoodsGglrel(goodsGglrel);
+			}
+		}
+		return status == gidsArr.length ? true : false;
+	}
 }
 

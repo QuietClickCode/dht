@@ -56,6 +56,8 @@ public interface GoodsGglrelService {
 	 */
 	public boolean deleteGoodsGglrelByGglId(String gglIds,Long uploadpersonId);
 
+	public boolean saveGoodsGglrelByGids(String gids,Long glId,Long uploadpersonId);
+
 }
 
 

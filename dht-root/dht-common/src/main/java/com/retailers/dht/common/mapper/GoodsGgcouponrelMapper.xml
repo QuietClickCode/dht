@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGgcouponrelMapper">
+
+	<resultMap id="rm_goodsGgcouponrel" type="com.retailers.dht.common.entity.GoodsGgcouponrel">
+			<result property="ggcId" column="ggc_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gcId" column="gc_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goodsGgcouponrel_vo" type="com.retailers.dht.common.vo.GoodsGgcouponrelVo">
+		<result property="ggcId" column="ggc_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="gcId" column="gc_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gcname" column="gcname"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGgcouponrel_columns">
+		ggc_id,g_id,gc_id,is_delete,version
+	</sql>
+	<!-- 根据商品与优惠关系表主键取得数据 -->
+	<select id="queryGoodsGgcouponrelByGgcId" resultMap="rm_goodsGgcouponrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGgcouponrel_columns" />
+		FROM t_goods_ggcouponrel WHERE ggc_id = #{ggcId}
+	</select>
+	<!-- 商品与优惠关系表查询条件组合 -->
+	<sql id="goodsGgcouponrel_where">
+		<where>
+			<if test="null != params.ggcId">
+				AND t1.ggc_id = #{params.ggcId}
+			</if>
+			<if test="null != params.gid">
+				AND t1.g_id = #{params.gid}
+			</if>
+			<if test="null != params.gcId">
+				AND t1.gc_id = #{params.gcId}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGgcouponrelList" resultMap="rm_goodsGgcouponrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.gcp_name gcname from t_goods_ggcouponrel t1
+		LEFT JOIN t_goods_coupon t2 on t1.gc_id=t2.gcp_id
+		<include refid="goodsGgcouponrel_where"/>
+	</select>
+	<!--添加商品与优惠关系表 -->
+	<insert id="saveGoodsGgcouponrel" parameterType="com.retailers.dht.common.entity.GoodsGgcouponrel" useGeneratedKeys="true" keyProperty="ggcId">
+		INSERT INTO t_goods_ggcouponrel (
+			g_id,gc_id,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与优惠关系表 -->
+	<update id="updateGoodsGgcouponrel" parameterType="com.retailers.dht.common.entity.GoodsGgcouponrel">
+		UPDATE t_goods_ggcouponrel
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gcId">
+                gc_id = #{gcId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ggc_id = #{ggcId} and version = #{version}
+	</update>
+	<!--删除商品与优惠关系表 -->
+	<delete id="deleteGoodsGgcouponrelByGgcId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_ggcouponrel WHERE ggc_id = #{ggcId}
+	</delete>
+</mapper>

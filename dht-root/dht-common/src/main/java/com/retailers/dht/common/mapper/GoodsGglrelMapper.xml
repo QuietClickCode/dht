@@ -16,6 +16,7 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="labelname" column="label_name"/>
+		<result property="gname" column="gname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -49,8 +50,9 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryGoodsGglrelList" resultMap="rm_goodsGglrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT t1.*,t2.gl_name label_name from t_goods_gglrel t1
+		SELECT t1.*,t2.gl_name label_name,t3.g_name gname from t_goods_gglrel t1
 		LEFT JOIN t_goods_label t2 on t1.gl_id=t2.gl_id
+		LEFT JOIN t_goods t3 ON t1.g_id=t3.g_id
 		<include refid="goodsGglrel_where"/>
 	</select>
 	<!--添加商品与标签关系表 -->

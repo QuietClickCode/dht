@@ -42,14 +42,27 @@
             console.log(arg);
             console.log(t);
 
-            for(var i=0; i<arg.length; i++){
-                var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+            if(uploadImgFlag==1){
+                for(var i=0; i<arg.length; i++){
+                    var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+                        '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
+                        '<div onclick="deleteGoodsImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+                        '</div>';
+                    $('#uploadImgBtn').before(imgdiv);
+                    newImgArr.push(arg[i].alt);
+                }
+            }else if(uploadImgFlag==0){
+                for(var i=0; i<arg.length; i++){
+                    var html = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
                                 '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
-                                '<div onclick="deleteGoodsImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+                                '<div onclick="deletegsgImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
                                 '</div>';
-                $('#uploadImgBtn').before(imgdiv);
-                newImgArr.push(arg[i].alt);
+                    $('#uploadGoodsSpecilgoodscredentialImgBtn').after(html);
+                    addImgArr.push(arg[i].alt);
+                }
+
             }
+
 
 
             //alert('这是图片地址：'+arg[0].src);
@@ -101,9 +114,6 @@
 <div id="toolbar" class="form-inline">
     <ex:perm url="goods/addGoods">
         <button class="btn btn-primary" type="button" onclick="addGoods()">添加商品</button>
-    </ex:perm>
-    <ex:perm url="goods/addGoods">
-        <button class="btn btn-default" type="button" onclick="deleteGoodsList()">删除</button>
     </ex:perm>
 
     <br>
@@ -174,7 +184,13 @@
                                         <a href="#goodsCommentlabelPane" data-toggle="tab"  onclick="refreshmygclTbody()" id="nava7">评论标签</a>
                                     </li>
                                     <li>
-                                        <a href="#goodsLabelPane" data-toggle="tab"  onclick="refreshmyglTbody()" id="nava8">商品优惠</a>
+                                        <a href="#goodsCouponPane" data-toggle="tab"  onclick="refreshmygcTbody()" id="nava8">商品优惠</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsSpecilgoodscredentialPane" data-toggle="tab"  onclick="initgsgdata()" id="nava9">上传证件</a>
+                                    </li>
+                                    <li>
+                                        <a href="#goodsgcPane" data-toggle="tab"  onclick="refreshmyggcomplimentaryrelTbody()" id="nava10">赠品</a>
                                     </li>
                                 </ul>
                                     <div class="tab-content">
@@ -186,7 +202,7 @@
                                                     <input type="hidden" name="isDelete" id="isDelete">
 
                                                     <div class="row">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品名称:
@@ -194,7 +210,7 @@
                                                                 <input type="text" class="form-control" name="gname" id="gname">
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               商品分类:
@@ -203,10 +219,10 @@
                                                                 <input id="gclassificationName" name="gclassificationName" type="text" class="form-control" onclick="showMenu(); return false;"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <%--<div class="col-lg-12">--%>
+
+
+                                                        <%--<div class="col-lg-6" style="height:49px;">--%>
                                                             <%--<div class="input-group form-group">--%>
                                                           <%--<span class="input-group-addon">--%>
                                                             <%--所属仓库/地区:--%>
@@ -215,7 +231,7 @@
                                                                 <%--<input id="gareaName" name="gareaName" type="text" class="form-control" />--%>
                                                             <%--</div>--%>
                                                         <%--</div>--%>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               可售范围:
@@ -223,10 +239,10 @@
                                                                 <input id="gsalescope" name="gsalescope" type="text" class="form-control" placeholder="以千米为单位"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+
+
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             商品价格（原价）:
@@ -234,7 +250,7 @@
                                                                 <input id="gprice" name="gprice" type="text" class="form-control" placeholder="单位：元"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;" style="height: 49px">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               主推方向:
@@ -260,10 +276,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+
+
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             计件单位:
@@ -271,10 +287,10 @@
                                                                 <input id="gunitname" name="gunitname" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+
+
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             生产地信息:
@@ -282,7 +298,7 @@
                                                                 <input id="gproductioninaddress" name="gproductioninaddress" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               生产人姓名:
@@ -290,10 +306,10 @@
                                                                 <input id="gproductioninperson" name="gproductioninperson" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+
+
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             收集人地址:
@@ -301,7 +317,7 @@
                                                                 <input id="gpickaddress" name="gpickaddress" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               收集人姓名:
@@ -309,10 +325,10 @@
                                                                 <input id="gpickperson" name="gpickperson" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                    </div>
+
 
                                                     <!--定金 详情描述-->
-                                                    <div class="row">
+
                                                         <div class="col-lg-12">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
@@ -339,7 +355,7 @@
                                                     <input id="gcgid" name="gid" type="hidden">
                                                     <input id="configversion" name="configversion" type="hidden">
                                                     <div class="row">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             是否是服务类商品:
@@ -351,10 +367,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             利润率:
@@ -362,7 +376,7 @@
                                                                 <input type="text" class="form-control" name="gprofitability" id="gprofitability" style="width: 60%">%
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12" id="allowsettimediv">
+                                                        <div class="col-lg-6" style="height:49px;" id="allowsettimediv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon" id="allowsettimespen">
                                                               允许用户设置发货时间:
@@ -374,10 +388,8 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             是否显示销量:
@@ -389,7 +401,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12" id="gsalesvolumediv">
+                                                        <div class="col-lg-6" style="height:49px;" id="gsalesvolumediv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               销量:
@@ -397,10 +409,8 @@
                                                                 <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control" value="0"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             会员是否打折:
@@ -412,7 +422,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               是否上架:
@@ -424,10 +434,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row" id="isadvancesalediv">
-                                                        <div class="col-lg-12">
+
+                                                    <div id="isadvancesalediv">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             是否预售:
@@ -439,7 +449,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12" id="gedtdiv">
+                                                        <div class="col-lg-6" style="height:49px;" id="gedtdiv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               预计发货时间:
@@ -449,8 +459,8 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12" id="gfreightdiv">
+
+                                                        <div class="col-lg-6" style="height:49px;" id="gfreightdiv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             运费:
@@ -458,10 +468,10 @@
                                                                 <input id="gfreight" name="gfreight" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="row" id="iscoddiv">
-                                                        <div class="col-lg-12">
+
+                                                    <div  id="iscoddiv">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               能否货到付款:
@@ -475,13 +485,13 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <div class="col-lg-12">
+
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             起售数量:
                                                           </span>
-                                                                <input id="gstartbuy" name="gstartbuy" type="text" class="form-control"style="width: 80%"/>
+                                                                <input id="gstartbuy" name="gstartbuy" type="text" class="form-control"style="width: 75%"/>
                                                                 <div class="checkbox checkbox-info" style="display: inline-block">
                                                                     <input id="isMultiplebuy" class="styled" type="checkbox" name="isMultiplebuy">
                                                                     <label for="isMultiplebuy">
@@ -490,7 +500,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-12">
+                                                        <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               限购量:
@@ -498,10 +508,8 @@
                                                                 <input id="gendbuy" name="gendbuy" type="text" class="form-control"/>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <!--定金 详情描述-->
-                                                    <div class="row">
-                                                        <div class="col-lg-12" id="gdepositdiv">
+
+                                                        <div class="col-lg-6" style="height:49px;" id="gdepositdiv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                             定金:
@@ -511,6 +519,7 @@
                                                         </div>
                                                     </div>
                                                 </form>
+
                                                 <center>
                                                     <button id="editGoodsConfigSubmit" class="btn btn-success" >保存</button>
                                                 </center>
@@ -530,7 +539,7 @@
 
                                                         <div id="uploadImgBtn"  style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
                                                             <center>
-                                                                <button onclick="upImage();return false;" class="btn btn-default" style="margin: 0 auto;margin-top: 33px">+</button>
+                                                                <button onclick="giupload();return false;" class="btn btn-default" style="margin: 0 auto;margin-top: 33px">+</button>
                                                             </center>
                                                         </div>
                                                     </div>
@@ -656,6 +665,128 @@
                                                             </tr>
                                                             </thead>
                                                             <tbody id="mygclTbody">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="goodsCouponPane">
+                                            <div class="modal-body">
+                                                <center>
+                                                    <div class="form-group" style="margin-top: 5px;">
+                                                        <input type="text" class="form-control" id="search_GoodsCoupon_name" placeholder="请输入优惠名称">
+                                                    </div>
+                                                    <ex:perm url="/goods/queryGoodsGgcouponrelLists">
+                                                        <button class="btn btn-default" type="button" onclick="searchcoupons()">查询</button>
+                                                    </ex:perm>
+
+                                                </center>
+                                                <ex:perm url="/goods/addGoodsGgcouponrel">
+                                                    <button class="btn btn-default" style="float: left" type="button" onclick="addggcrel()" id="addggcouponrelbtn">新增</button>
+                                                </ex:perm>
+                                                <ex:perm url="/goods/removeGoodsGgcouponrel">
+                                                    <button class="btn btn-default" style="float: left" type="button" onclick="deleteggcrel()" id="deleteggcouponrelbtn">删除</button>
+                                                </ex:perm>
+
+                                                <ex:perm url="/goods/queryGoodsGgclrelLists">
+                                                    <button class="btn btn-primary" type="button" onclick="refreshmygcTbody()" style="float: right;margin-bottom: 10px">刷新</button>
+                                                </ex:perm>
+                                                <div class="row clearfix" style="margin-top: 5px">
+                                                    <div class="col-md-12 column">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width: 30px">
+                                                                    &nbsp;
+                                                                </th>
+                                                                <th style="text-align: center;" id="topcouponname">
+                                                                    商品评论名称（已有）
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="mygcTbody">
+
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="goodsSpecilgoodscredentialPane">
+                                            <div class="modal-body">
+                                                <form id="editorGoodsSpecilgoodscredentialImageForm">
+                                                    <div class="row">
+                                                        <div id="uploadGoodsSpecilgoodscredentialImgBtn"  style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <center>
+                                                                <button onclick="gsguploadimg();return false;" class="btn btn-default" style="margin: 0 auto;margin-top: 33px">+</button>
+                                                            </center>
+                                                        </div>
+
+                                                        <div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">
+                                                            <img src="" style="width: 100%;height: 100%;" >
+                                                            <div onclick="deletegsgImage(this,gsgImgId)" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>
+                                                        </div>
+
+                                                    </div>
+                                                    <br>
+
+                                                    <div class="row" id="gsgnumberrow">
+                                                        <div class="col-lg-3" id="addnumberbtnparent">
+                                                            <button onclick="addnumber(this);return false;" style="margin-left: 40%" class="btn btn-default" >+</button>
+                                                        </div>
+
+                                                        <div class="col-lg-3" style="color: red;">
+                                                            <div class="input-group form-group">
+                                                                <input class="form-control" type="text" placeholder="请输入商品编号" style="float: left;width: 70%">
+                                                                <span  style="float: left;margin-left:3px;margin-top: 7px; display: block;cursor: pointer">删除</span>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </form>
+
+
+                                                <center>
+                                                    <button id="editGoodsSpecilgoodscredentialSubmit" class="btn btn-success" >保存</button>
+                                                </center>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane" id="goodsgcPane">
+                                            <div class="modal-body">
+                                                <center>
+                                                    <div class="form-group" style="margin-top: 5px;">
+                                                        <input type="text" class="form-control" id="search_Goodsgc_name" placeholder="请输入优惠名称">
+                                                    </div>
+                                                    <ex:perm url="/goods/queryGoodsComplimentaryLists">
+                                                        <button class="btn btn-default" type="button" onclick="searchgcs()">查询</button>
+                                                    </ex:perm>
+
+                                                </center>
+                                                <ex:perm url="/goods/addGoodsGglrel">
+                                                    <button class="btn btn-default" type="button" onclick="addggcomplimentaryrel()" id="addggcrelbtn">新增</button>
+                                                </ex:perm>
+                                                <ex:perm url="/goods/removeGoodsGglrel">
+                                                    <button class="btn btn-default" type="button" onclick="deleteggcomplimentaryrel()" id="deleteggcrelbtn">删除</button>
+                                                </ex:perm>
+                                                <ex:perm url="/goods/queryGoodsGglrelLists">
+                                                    <button class="btn btn-primary" type="button" onclick="refreshmyggcomplimentaryrelTbody()" style="float: right">刷新</button>
+                                                </ex:perm>
+                                                <div class="row clearfix" style="margin-top: 5px">
+                                                    <div class="col-md-12 column">
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                            <tr>
+                                                                <th style="width: 30px">
+                                                                    &nbsp;
+                                                                </th>
+                                                                <th style="text-align: center;" id="topgcname">
+                                                                    赠品名称（已有）
+                                                                </th>
+                                                            </tr>
+                                                            </thead>
+                                                            <tbody id="mygcomplimentaryrelTbody">
 
                                                             </tbody>
                                                         </table>
@@ -1161,21 +1292,7 @@
     }
 
     
-    function deleteGoodsList() {
-        var objs = $('#GoodsTables') .bootstrapTable('getAllSelections');
-        if(objs.length>0){
-            layer.confirm('确定要删除选中的数据吗？', {
-                btn: ['确认','取消'] //按钮
-            }, function(){
-                for(var i=0;i<objs.length;i++){
-                    removeGoods(objs[i].gbId);
-                }
-            }, function(){
-            });
-        }else{
-            layer.msg("请选择需要删除的品牌！");
-        }
-    }
+
 </script>
 
 <!--商品审查-->
@@ -1610,6 +1727,11 @@
     <!--隐藏商品删除按钮-->
     function hideDeleteImage(obj) {
         $(obj).find('div').hide();
+    }
+
+    function giupload() {
+        uploadImgFlag = 1;
+        upImage();
     }
 </script>
 
@@ -2418,7 +2540,7 @@
             type: "post",
             url: "/goods/queryGoodsLabelLists",
             dataType: "json",
-            data: {glName: glName,pageNo: 1, pageSize: 100},
+            data: {glName: glName,now:new Date().format("yyyy-MM-dd hh:mm:ss"),pageNo: 1, pageSize: 100},
             success: function (data) {
                 var rows = data.rows;
                 var html = '';
@@ -2521,6 +2643,27 @@
             toastr.warning('请选择您想操作的数据!');
         }
 
+    }
+
+    Date.prototype.format = function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1,                 //月份
+            "d+" : this.getDate(),                    //日
+            "h+" : this.getHours(),                   //小时
+            "m+" : this.getMinutes(),                 //分
+            "s+" : this.getSeconds(),                 //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S"  : this.getMilliseconds()             //毫秒
+        };
+        if(/(y+)/.test(fmt)) {
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        for(var k in o) {
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
     }
 </script>
 
@@ -2716,6 +2859,590 @@
     function changelevel() {
         refreshmygclTbody();
     }
+</script>
+
+<!--商品与优惠关系-->
+<script>
+    var initgcdataArr = new Array();
+
+    function refreshmygcTbody() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        initggcFormData(gid);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initggcFormData(gid){
+        $('#topcouponname').html('优惠名称（已有）');
+        initgcdataArr = [];
+        $('#addggcouponrelbtn').hide();
+        $('#deleteggcouponrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGgcouponrelLists",
+            dataType: "json",
+            data:{gid:gid,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="checkbox'+i+'" name="ggccheckbox" class="styled" type="checkbox" value="'+rows[i].ggcId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gcname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgcdataArr.push(rows[i].gcId);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定优惠</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#mygcTbody').html(html);
+            }
+        });
+    }
+
+    function searchcoupons() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var gcName = $('#search_GoodsCoupon_name').val();
+        $('#topgoodsname').html('优惠名称');
+        $('#addggcouponrelbtn').show();
+        $('#deleteggcouponrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goodsCoupon/queryGoodsCoupons",
+            dataType: "json",
+            data: {gcpName: gcName,now:new Date().format("yyyy-MM-dd hh:mm:ss"),pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgcdataArr.length>0){
+                            for (var j=0; j<initgcdataArr.length; j++){
+                                if (rows[i].gcpId==initgcdataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+
+                        if(flag == 0){
+                            html += '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="ggccheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gcpId+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gcpName+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                }
+
+                if(html == ''){
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的优惠</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#mygcTbody').html(html);
+            }
+        });
+    }
+
+    function addggcrel() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var checkboxs = $('input:checkbox[name="ggccheckbox"]:checked');
+        var addggc = "";
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addggc += ","+checkboxs[i].value;
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGgcouponrel",
+                dataType: "json",
+                data: {gcIds: addggc,gid:gid},
+                success: function (data) {
+                    toastr.success('新增成功!');
+                    refreshmygcTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
+    }
+
+    function deleteggcrel() {
+        var checkboxs = $('input:checkbox[name="ggccheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var ggcIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    ggcIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGgcouponrel",
+                dataType: "json",
+                data: {ggcIds: ggcIds},
+                success: function (data) {
+                    toastr.success('删除成功!');
+                    refreshmygcTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
+    }
+
+</script>
+
+<!--商品与证件关系-->
+<script>
+    var uploadImgFlag = 0;
+
+    var addImgArr = new Array();
+    var delImgArr = new Array();
+
+    var addgsgParent = new Array();
+    var delgsgParent = new Array();
+    var updgsgParent = new Array();
+
+    function addnumber(obj) {
+        var html = '<div class="col-lg-3" style="color: red;">'+
+                    '<div class="input-group form-group">' +
+                    '<input type="hidden">'+
+                    '<input onfocus="focusnumber(this);" onblur="blurnumber(this);" class="form-control" type="text" placeholder="请输入商品编号" style="float: left;width: 70%">'+
+                    '<span  onclick="deletenumber(this);" style="float: left;margin-left:3px;margin-top: 7px; display: block;cursor: pointer">删除</span>'+
+                    '</div>'+
+                    '</div>';
+        $(obj).parent().after(html);
+    }
+    function deletenumber(obj) {
+        var gsgId = $(obj).parent().find('input[type=hidden]').get(0).value;
+        if(gsgId!=''){
+            delgsgParent.push(gsgId);
+        }
+        $(obj).parent().parent().remove();
+    }
+
+    function gsguploadimg() {
+        uploadImgFlag = 0;
+        upImage();
+    }
+
+    function deletegsgImage(obj,imgId) {
+        var index = 0;
+        for(var i=0; i<addImgArr.length; i++){
+            if(addImgArr[i]==imgId){
+                addImgArr.splice(i,1);
+                index = 1;
+            }
+        }
+        if(index==0){
+            delImgArr.push(imgId);
+        }
+        $(obj).parent().remove();
+    }
+
+    var numberchange;
+    function focusnumber(obj) {
+        numberchange = $(obj).val();
+
+    }
+    function blurnumber(obj) {
+        var flag = $(obj).val() == numberchange;
+        if(!flag){
+            updgsgParent.push($(obj).parent())
+        }
+    }
+
+    $(function () {
+        $('#editGoodsSpecilgoodscredentialSubmit').click(function () {
+            var gid = $('#gid').val();
+            if(gid==''){
+                toastr.warning('请先保存商品!');
+                document.getElementById("nava1").click();
+                return;
+            }
+            var gsgnumberrowinputs = $('#gsgnumberrow').find('input[type=text]');
+            if(gsgnumberrowinputs!=null && gsgnumberrowinputs.length>0){
+                for(var i=0;i<gsgnumberrowinputs.length;i++){
+                    if(gsgnumberrowinputs[i].value==''){
+                        toastr.warning('请将数据填写完整!');
+                        return;
+                    }
+
+                }
+            }
+
+
+            if(addImgArr!=null && addImgArr.length>0){
+                for(var i=0; i<addImgArr.length; i++){
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/addGoodsSpecilgoodscredential",
+                        dataType: "json",
+                        data:{gid:gid,gsgImgid:addImgArr[i],gsgType:1},
+                        success:function(data){
+                            if(i==addImgArr.length-1){
+                                addImgArr=[];
+                            }
+                        }
+                    });
+                }
+            }
+
+            if(delImgArr!=null && delImgArr.length>0){
+                for(var i=0; i<delImgArr.length; i++){
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/removeGoodsSpecilgoodscredential",
+                        dataType: "json",
+                        data:{gsgId:delImgArr[i]},
+                        success:function(data){
+                            if(i==delImgArr.length-1){
+                                delImgArr=[];
+                            }
+                        }
+                    });
+                }
+            }
+
+            var gsghidden = $("#gsgnumberrow").find('input[type=hidden]');
+            if(gsghidden!=null && gsghidden.length>0){
+                for(var i=0;i<gsghidden.length; i++){
+                    if(gsghidden[i].value==''){
+                        addgsgParent.push($(gsghidden[i]).next());
+                    }
+                }
+            }
+
+            if(addgsgParent!=null && addgsgParent.length>0){
+                for(var i=0; i<addgsgParent.length; i++){
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/addGoodsSpecilgoodscredential",
+                        dataType: "json",
+                        data:{gid:gid,gsgType:0,gsgNumber:addgsgParent[i].val()},
+                        success:function(data){
+                            if(i==addgsgParent.length-1){
+                                addgsgParent=[];
+                            }
+                        }
+                    });
+                }
+            }
+
+            if(delgsgParent!=null && delgsgParent.length>0){
+                for(var i=0; i<delgsgParent.length; i++){
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/removeGoodsSpecilgoodscredential",
+                        dataType: "json",
+                        data:{gsgId:delgsgParent[i]},
+                        success:function(data){
+                            if(i==delgsgParent.length-1){
+                                delgsgParent=[];
+                            }
+                        }
+                    });
+                }
+            }
+
+            if(updgsgParent!=null && updgsgParent.length>0){
+                for(var i=0; i<updgsgParent.length; i++){
+                    $.ajax({
+                        type:"post",
+                        url:"/goods/editorGoodsSpecilgoodscredential",
+                        dataType: "json",
+                        data:{gid:gid,gsgId:updgsgParent[i].children().get(0).value,gsgNumber:updgsgParent[i].children().get(1).value,gsgType:0,isDelete:0},
+                        success:function(data){
+                            if(i==updgsgParent.length-1){
+                                updgsgParent=[];
+                            }
+                        }
+                    });
+                }
+            }
+
+
+        });
+    });
+    
+    function initgsgdata() {
+        var gid = $('#gid').val();
+        if (gid == '') {
+            toastr.warning('请先保存商品!');
+            $('#editorGoodsSpecilgoodscredentialImageForm').hide();
+            return;
+        } else {
+            $('#editorGoodsSpecilgoodscredentialImageForm').show();
+        }
+
+        cleargsgdata();
+
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsSpecilgoodscredentialLists",
+            dataType: "json",
+            data: {gid: gid,pageNo:1,pageSize:1000},
+            success: function (data) {
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    for(var i=0;i<rows.length;i++){
+                        if(rows[i].gsgType==1){
+                            html = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+                                        '<img src="'+rows[i].imgUrl+'" style="width: 100%;height: 100%;" >'+
+                                        '<div onclick="deletegsgImage(this,'+rows[i].gsgId+')" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+                                        '</div>';
+
+                            $('#uploadGoodsSpecilgoodscredentialImgBtn').after(html);
+                        }else{
+                            var html = '<div class="col-lg-3" style="color: red;">'+
+                                '<div class="input-group form-group">' +
+                                '<input type="hidden" value="'+rows[i].gsgId+'">'+
+                                '<input value="'+rows[i].gsgNumber+'" onfocus="focusnumber(this);" onblur="blurnumber(this);" class="form-control" type="text" placeholder="请输入商品编号" style="float: left;width: 70%">'+
+                                '<span  onclick="deletenumber(this);" style="float: left;margin-left:3px;margin-top: 7px; display: block;cursor: pointer">删除</span>'+
+                                '</div>'+
+                                '</div>';
+                            $('#addnumberbtnparent').after(html);
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function cleargsgdata() {
+        $('#uploadGoodsSpecilgoodscredentialImgBtn').nextAll().remove();
+        $('#addnumberbtnparent').nextAll().remove();
+    }
+</script>
+
+<!--商品与赠品关系-->
+<script>
+    var initgcomplimentaryreldataArr = new Array();
+
+    function refreshmyggcomplimentaryrelTbody() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        initggcomplimentaryrelFormData(gid);
+    }
+    /**
+     * 清除form 表单数据
+     * */
+    function initggcomplimentaryrelFormData(gid){
+        $('#topgcname').html('赠品名称（已有）');
+        initgcomplimentaryreldataArr = [];
+        $('#addggcrelbtn').hide();
+        $('#deleteggcrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGgcrelLists",
+            dataType: "json",
+            data:{gid:gid,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="checkbox'+i+'" name="ggcomplimentaryrelcheckbox" class="styled" type="checkbox" value="'+rows[i].ggcId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gcname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgcomplimentaryreldataArr.push(rows[i].gcId);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定赠品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#mygcomplimentaryrelTbody').html(html);
+            }
+        });
+    }
+
+    function searchgcs() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var gcName = $('#search_Goodsgc_name').val();
+        $('#topcommentlabelname').html('赠品名称');
+        $('#addggcrelbtn').show();
+        $('#deleteggcrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsComplimentaryLists",
+            dataType: "json",
+            data: {gcName: gcName,pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgcomplimentaryreldataArr.length>0){
+                            for (var j=0; j<initgcomplimentaryreldataArr.length; j++){
+                                if (rows[i].gcId==initgcomplimentaryreldataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+
+                        if(flag == 0){
+                            html += '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="ggcomplimentaryrelcheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gcId+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gcName+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                }
+
+                if(html == ''){
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的赠品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#mygcomplimentaryrelTbody').html(html);
+            }
+        });
+    }
+
+    function addggcomplimentaryrel() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            toastr.warning('请先保存商品!');
+            document.getElementById("nava1").click();
+            return;
+        }
+        var checkboxs = $('input:checkbox[name="ggcomplimentaryrelcheckbox"]:checked');
+        var addggb = "";
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addggb += ","+checkboxs[i].value;
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGgcrel",
+                dataType: "json",
+                data: {ggcIds: addggb,gid:gid},
+                success: function (data) {
+                    toastr.success('新增成功!');
+                    refreshmyggcomplimentaryrelTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
+    }
+
+    function deleteggcomplimentaryrel() {
+        var checkboxs = $('input:checkbox[name="ggcomplimentaryrelcheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var gglIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    gglIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGgcrel",
+                dataType: "json",
+                data: {ggcIds: gglIds},
+                success: function (data) {
+                    toastr.success('删除成功!');
+                    refreshmyggcomplimentaryrelTbody();
+                }
+            });
+
+        }else{
+            toastr.warning('请选择您想操作的数据!');
+        }
+
+    }
+
 </script>
 
 <!--商品子类选择1-->
