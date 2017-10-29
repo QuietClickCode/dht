@@ -19,12 +19,15 @@
 	<resultMap id="floorAdvertisingVo" type="com.retailers.dht.common.vo.FloorAdvertisingVo">
 		<result property="faId" column="fa_id"/>
 		<result property="parentId" column="parent_id"/>
-		<result property="faName" column="fa_name"/>
-		<result property="isShow" column="is_show"/>
-		<result property="faOrder" column="fa_order"/>
-		<result property="version" column="version"/>
-		<result property="isDelete" column="is_delete"/>
 		<result property="imageId" column="image_id"/>
+		<result property="url" column="url"/>
+		<result property="faName" column="fa_name"/>
+		<result property="faOrder" column="fa_order"/>
+		<result property="faCountry" column="fa_country"/>
+		<result property="faClient" column="fa_client"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
 		<result property="imageUrl" column="image_url"/>
 	</resultMap>
 		
@@ -34,7 +37,7 @@
 	</select>
 
 	<select id="queryFloorAdvertisingVo" resultMap="floorAdvertisingVo">
-		SELECT t2.fa_id,t2.fa_name,t2.parent_id,t2.fa_order,t2.is_show,t2.version,t2.is_delete,t2.image_id,t1.show_url image_url
+		SELECT t2.*,t1.show_url image_url
 			from t_floor_advertising t2 LEFT JOIN t_attachment t1 ON t2.image_id = t1.id WHERE t2.is_delete = 0 ORDER BY t2.fa_order
 	</select>
 	

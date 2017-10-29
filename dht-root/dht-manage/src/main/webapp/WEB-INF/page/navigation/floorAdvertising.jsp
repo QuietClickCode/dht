@@ -8,7 +8,6 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
-    <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
@@ -75,7 +74,7 @@
                         <div class="col-sm-10">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="client" class="client" value="0">
+                                    <input type="radio" name="client" checked class="client" value="0">
                                     移动端
                                 </label>
                             </div>
@@ -124,7 +123,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="">编辑该楼层广告</h4>
+                <h4 class="modal-title">编辑该楼层广告</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="updateFloorAdvertising">
@@ -339,7 +338,7 @@
                     let html;
                     let parentId = row.parentId;
                     if(parentId != null)
-                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.faId+'\',\''+row.imageId+'\',\''+row.imageUrl+'\')">编辑</button>';
+                        html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.faId+'\',\''+row.imageId+'\',\''+row.imageUrl+'\',\''+row.faName+'\',\''+row.faCountry+'\',\''+row.faClient+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.faOrder+'\')">编辑</button>';
                     return html;
                 }
             },{
@@ -359,14 +358,29 @@
         });
     });
 
+
+
     var faid;
     var imageId;
     /*打开编辑楼层广告模态框*/
-    function updateFloorAdvertising(id,imgId,imageUrl) {
+    function updateFloorAdvertising(id,imgId,imageUrl,name,country,client,isshow,url,order) {
+        $("#AdvertisingName").val(name);
+        radioChoose(".updateCountry",country);
+        radioChoose(".updateClient",client);
+        radioChoose(".isShow",isshow);
+        $("#setAdvertUrl").val(url);
+        $("#setAdvertOrder").val(order);
         $("#showImg").attr("src",imageUrl);
         faid = id;
         imageId = imgId;
         $("#updateAdvertising").modal("show");
+    }
+
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
+        }
     }
 
     $("#uploadImage").change(function () {
@@ -384,7 +398,12 @@
 
     /*编辑楼层广告*/
     function updateFloor() {
-        let imgPath = $("#updateImage").val();
+        let bootstrapValidator = $("#updateFloorAdvertising").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+
+        let imgPath = $("#uploadImage").val();
         let name = $("#AdvertisingName").val();
         let country = $(".updateCountry:checked").val();
         let client = $(".updateClient:checked").val();
@@ -469,6 +488,11 @@
     }
     
     function saveFloorAdv() {
+        let bootstrapValidator = $("#addFloorAdv").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+
         let img = $("#img").val();
         let name = $("#AdvName").val();
         let country = $(".country:checked").val();
@@ -508,6 +532,7 @@
                             $("#saveFloorAdvertising").modal("hide");
                             refreshTableData();
                             layer.msg(data.msg);
+                            $("#addFloorAdv").data('bootstrapValidator').resetForm(true);
                         }
                     });
                 }
@@ -717,6 +742,42 @@
                     validators: {
                         notEmpty: {
                             message: '文件不能为空'
+                        }
+                    }
+                }
+            }
+        });
+
+        $('#updateFloorAdvertising').bootstrapValidator({
+            message: 'This value is not valid',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                setName: {
+                    validators: {
+                        notEmpty: {
+                            message: '广告名称不能为空'
+                        }
+                    }
+                },
+                setOrder: {
+                    validators: {
+                        notEmpty: {
+                            message: '排序不能为空'
+                        },
+                        regexp: {
+                            regexp: /\d/,
+                            message: "只能输入数字"
+                        }
+                    }
+                },
+                setUrl: {
+                    validators: {
+                        notEmpty: {
+                            message: '链接不能为空'
                         }
                     }
                 }

@@ -803,27 +803,6 @@
                         }
                     }
                 },
-                style: {
-                    validators: {
-                        notEmpty: {
-                            message: '请选择样式'
-                        }
-                    }
-                },
-                countryValue: {
-                    validators: {
-                        notEmpty: {
-                            message: '请选择一个推送对象'
-                        }
-                    }
-                },
-                client: {
-                    validators: {
-                        notEmpty: {
-                            message: '请选择一个客户端对象'
-                        }
-                    }
-                },
                 imageUrl: {
                     validators: {
                         notEmpty: {
@@ -850,13 +829,6 @@
                         stringLength:{
                             min:4,
                             message:"副标题至少输入四个字符"
-                        }
-                    }
-                },
-                isShow:{
-                    validators: {
-                        notEmpty: {
-                            message: '副标题不能为空'
                         }
                     }
                 }
