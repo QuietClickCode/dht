@@ -65,9 +65,10 @@ public class GoodsClassificationController extends BaseController {
         gtm.put("rows",goodsClassificationList);
         return gtm;
     }
+
     @RequestMapping("queryGoodsClassificationNode")
     @ResponseBody
-    public BaseResp queryGoodsClassificationNode(Long ggId){
+    public BaseResp queryGoodsClassificationNode(String ggId){
         List<GoodsClassificationVo> goodsClassificationVoList =  goodsClassificationService.queryGoodsClassificationNode(ggId);
         return success(goodsClassificationVoList);
     }

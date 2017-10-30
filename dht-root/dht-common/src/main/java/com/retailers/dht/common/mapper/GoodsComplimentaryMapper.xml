@@ -9,6 +9,7 @@
 	<result property="gcType" column="gc_type"/>
 	<result property="gid" column="g_id"/>
 	<result property="isMultiuse" column="is_multiuse"/>
+	<result property="isClass" column="is_class"/>
 	<result property="isValid" column="is_valid"/>
 	<result property="isDelete" column="is_delete"/>
 	<result property="version" column="version"/>
@@ -20,6 +21,7 @@
 		<result property="gcType" column="gc_type"/>
 		<result property="gid" column="g_id"/>
 		<result property="isMultiuse" column="is_multiuse"/>
+		<result property="isClass" column="is_class"/>
 		<result property="isValid" column="is_valid"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
@@ -28,7 +30,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsComplimentary_columns">
-		gc_id,gc_name,gc_condition,gc_type,g_id,is_multiuse,is_valid,is_delete,version
+		gc_id,gc_name,gc_condition,gc_type,g_id,is_multiuse,is_class,is_valid,is_delete,version
 	</sql>
 	<!-- 根据赠品表主键取得数据 -->
 	<select id="queryGoodsComplimentaryByGcId" resultMap="rm_goodsComplimentary" parameterType="java.lang.Long">
@@ -65,6 +67,9 @@
 			<if test="null != params.version">
 				AND t1.version = #{params.version}
 			</if>
+			<if test="null != params.isClass">
+				AND t1.is_class = #{params.isClass}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
@@ -76,10 +81,10 @@
 	<!--添加赠品表 -->
 	<insert id="saveGoodsComplimentary" parameterType="com.retailers.dht.common.entity.GoodsComplimentary" useGeneratedKeys="true" keyProperty="gcId">
 		INSERT INTO t_goods_complimentary (
-			gc_name,gc_condition,gc_type,g_id,is_multiuse,is_valid,is_delete,version
+			gc_name,gc_condition,gc_type,g_id,is_multiuse,is_class,is_valid,is_delete,version
 		) VALUES
 		(
-			#{gcName,jdbcType=VARCHAR},#{gcCondition,jdbcType=BIGINT},#{gcType,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{isMultiuse,jdbcType=BIGINT},#{isValid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gcName,jdbcType=VARCHAR},#{gcCondition,jdbcType=BIGINT},#{gcType,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{isMultiuse,jdbcType=BIGINT},#{isClass,jdbcType=BIGINT},#{isValid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改赠品表 -->
@@ -101,6 +106,9 @@
             <if test="null != isMultiuse">
                 is_multiuse = #{isMultiuse},
             </if>
+			<if test="null != isClass">
+				is_class = #{isClass},
+			</if>
             <if test="null != isValid">
                 is_valid = #{isValid},
             </if>

@@ -30,6 +30,9 @@ public class GoodsComplimentary implements java.io.Serializable {
 	/**能否叠加使用 0不能 1可以*/
 	@NotEmpty
 	private Long isMultiuse;
+	/**是否是按子类划分 0不是 其他是*/
+	@NotEmpty
+	private Long isClass;
 	/**是否有效 0无效 1有效*/
 	@NotEmpty
 	private Long isValid;
@@ -112,5 +115,10 @@ public class GoodsComplimentary implements java.io.Serializable {
 		return this.version;
 	}
 
-
+	public Long getIsClass() {
+		return isClass;
+	}
+	public void setIsClass(Long isClass) {
+		this.isClass = isClass;
+	}
 }

@@ -106,7 +106,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				vo.setLevel(2l);
 			}
 		}
-		queryGoodsClassificationNode(1L);
+		queryGoodsClassificationNode(1+"");
 
 		if(!ObjectUtils.isEmpty(rntList)){
 			for (int i=0; i<rntList.size(); i++){
@@ -117,7 +117,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return rntList;
 	}
 
-	public List<GoodsClassificationVo> queryGoodsClassificationNode(Long ggId) {
+	public List<GoodsClassificationVo> queryGoodsClassificationNode(String ggId) {
 		List<GoodsClassificationVo> list =goodsClassificationMapper.queryGoodsClassificationNode(ggId);
 		List<GoodsClassificationVo> rtnList=new ArrayList<GoodsClassificationVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();

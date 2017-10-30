@@ -6,6 +6,8 @@
 			<result property="ggcId" column="ggc_id"/>
 			<result property="gid" column="g_id"/>
 			<result property="gcId" column="gc_id"/>
+			<result property="gclassId" column="gclass_id"/>
+			<result property="isUse" column="is_use"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -13,14 +15,18 @@
 		<result property="ggcId" column="ggc_id"/>
 		<result property="gid" column="g_id"/>
 		<result property="gcId" column="gc_id"/>
+		<result property="gclassId" column="gclass_id"/>
+		<result property="gclassName" column="gclassName"/>
+		<result property="isUse" column="is_use"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="gcname" column="gcname"/>
+		<result property="gname" column="gname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGgcrel_columns">
-		ggc_id,g_id,gc_id,is_delete,version
+		ggc_id,g_id,gc_id,gclass_id,is_use,is_delete,version
 	</sql>
 	<!-- 根据赠品与商品关系表主键取得数据 -->
 	<select id="queryGoodsGgcrelByGgcId" resultMap="rm_goodsGgcrel" parameterType="java.lang.Long">
@@ -39,27 +45,44 @@
 			<if test="null != params.gcId">
 				AND t1.gc_id = #{params.gcId}
 			</if>
+			<if test="null != params.gclassId">
+				AND t1.gclass_id = #{params.gclassId}
+			</if>
+			<if test="null != params.isUse">
+				AND t1.is_use = #{params.isUse}
+			</if>
 			<if test="null != params.isDelete">
 				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
 				AND t1.version = #{params.version}
 			</if>
+			<if test="null != params.isClass">
+				AND t2.is_class = #{params.isClass}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
 	<select id="queryGoodsGgcrelList" resultMap="rm_goodsGgcrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.gc_name gcname,t3.gg_name gclassName,t4.g_name gname FROM t_goods_ggcrel t1
+		LEFT JOIN t_goods_complimentary t2 ON t1.gc_id=t2.gc_id
+		LEFT JOIN t_goods_classification t3 on t1.gclass_id=t3.gg_id
+		LEFT JOIN t_goods t4 on t1.g_id=t4.g_id
+		<include refid="goodsGgcrel_where"/>
+	</select>
+
+	<select id="queryGclassGoodsGgcrelLists" resultMap="rm_goodsGgcrel_vo">
 		SELECT t1.*,t2.gc_name gcname FROM t_goods_ggcrel t1
 		LEFT JOIN t_goods_complimentary t2 ON t1.gc_id=t2.gc_id
-		<include refid="goodsGgcrel_where"/>
+		where t1.gclass_id in ( #{gclassIds} ) and t1.is_delete!=1
 	</select>
 	<!--添加赠品与商品关系表 -->
 	<insert id="saveGoodsGgcrel" parameterType="com.retailers.dht.common.entity.GoodsGgcrel" useGeneratedKeys="true" keyProperty="ggcId">
 		INSERT INTO t_goods_ggcrel (
-			g_id,gc_id,is_delete,version
+			g_id,gc_id,gclass_id,is_use,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{gclassId,jdbcType=BIGINT},#{isUse,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改赠品与商品关系表 -->
@@ -72,6 +95,12 @@
             <if test="null != gcId">
                 gc_id = #{gcId},
             </if>
+			<if test="null != gclassId">
+				gclass_id = #{gclassId},
+			</if>
+			<if test="null != isUse">
+				is_use = #{isUse},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>

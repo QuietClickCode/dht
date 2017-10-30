@@ -1,9 +1,15 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.dao.GoodsMapper;
+import com.retailers.dht.common.entity.Goods;
+import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsGgcrel;
 import com.retailers.dht.common.dao.GoodsGgcrelMapper;
+import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsGgcrelService;
 import com.retailers.dht.common.vo.GoodsGgcrelVo;
 import com.retailers.tools.utils.ObjectUtils;
@@ -21,6 +27,10 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 	@Autowired
 	private GoodsGgcrelMapper goodsGgcrelMapper;
+	@Autowired
+	private GoodsMapper goodsMapper;
+	@Autowired
+	private GoodsClassificationService goodsClassificationService;
 	public boolean saveGoodsGgcrel(String gcIds,Long gid) {
 		String[] gcIdsArr = gcIds.replaceAll(","," ").trim().split(" ");
 		int status = 0;
@@ -29,6 +39,7 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 				Long gcIdLong = Long.parseLong(gcId);
 				GoodsGgcrel goodsGgcrel = new GoodsGgcrel();
 				goodsGgcrel.setIsDelete(0L);
+				goodsGgcrel.setIsUse(1L);
 				goodsGgcrel.setGcId(gcIdLong);
 				goodsGgcrel.setGid(gid);
 				status += goodsGgcrelMapper.saveGoodsGgcrel(goodsGgcrel);
@@ -65,6 +76,88 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 			}
 		}
 		return status == ggcIdsArr.length ? true : false;
+	}
+
+	public boolean clearGoodsGgcrel(Long gcId){
+		Map map = new HashMap();
+		map.put("gcId",gcId);
+		map.put("isDelete",0);
+		Pagination<GoodsGgcrel> pagination = queryGoodsGgcrelList(map,1,1000);
+		List<GoodsGgcrel> list = pagination.getData();
+		int status = 0;
+		if(!ObjectUtils.isEmpty(list)){
+			for (GoodsGgcrel goodsGgcrel:list){
+				goodsGgcrel.setIsDelete(1L);
+				status += goodsGgcrelMapper.updateGoodsGgcrel(goodsGgcrel);
+			}
+		}
+
+		return status==list.size() ? true:false;
+	}
+
+	public boolean saveGoodsGgcrelByGc(String gclassIds,Long gcId){
+		String[] gclassIdsArr = gclassIds.replaceAll(","," ").trim().split(" ");
+		int status = 0;
+		if(!ObjectUtils.isEmpty(gclassIdsArr)){
+			for (String gclassId:gclassIdsArr){
+				Long gclassIdLong = Long.parseLong(gclassId);
+				GoodsGgcrel goodsGgcrel = new GoodsGgcrel();
+				goodsGgcrel.setIsDelete(0L);
+				goodsGgcrel.setIsUse(1L);
+				goodsGgcrel.setGcId(gcId);
+				goodsGgcrel.setGclassId(gclassIdLong);
+				status += goodsGgcrelMapper.saveGoodsGgcrel(goodsGgcrel);
+			}
+		}
+		return status == gclassIdsArr.length ? true : false;
+	}
+
+	public boolean saveGoodsGgcrels(String gids,Long gcId){
+		String[] gidsArr = gids.replaceAll(","," ").trim().split(" ");
+		int status = 0;
+		if(!ObjectUtils.isEmpty(gidsArr)){
+			for (String gid:gidsArr){
+				Long gidLong = Long.parseLong(gid);
+				GoodsGgcrel goodsGgcrel = new GoodsGgcrel();
+				goodsGgcrel.setIsDelete(0L);
+				goodsGgcrel.setIsUse(1L);
+				goodsGgcrel.setGcId(gcId);
+				goodsGgcrel.setGid(gidLong);
+				status += goodsGgcrelMapper.saveGoodsGgcrel(goodsGgcrel);
+			}
+		}
+		return status == gidsArr.length ? true : false;
+	}
+
+	public List<GoodsGgcrelVo> queryGclassGoodsGgcrelLists(Long gid){
+		Goods goods = goodsMapper.queryGoodsByGid(gid);
+		String gclassIds = "";
+		GoodsClassification goodsClassification1 = null;
+		GoodsClassification goodsClassification2 = null;
+		GoodsClassification goodsClassification3 = null;
+		goodsClassification1 = goodsClassificationService.queryGoodsClassificationByGgId(goods.getGclassification());
+		if(!ObjectUtils.isEmpty(goodsClassification1.getParentId())){
+			goodsClassification2 = goodsClassificationService.queryGoodsClassificationByGgId(goodsClassification1.getParentId());
+			if(!ObjectUtils.isEmpty(goodsClassification2.getParentId())){
+				goodsClassification3 = goodsClassificationService.queryGoodsClassificationByGgId(goodsClassification2.getParentId());
+			}
+		}
+
+		if(!ObjectUtils.isEmpty(goodsClassification1)){
+			gclassIds += "," + goodsClassification1.getGgId();
+		}
+		if(!ObjectUtils.isEmpty(goodsClassification2)){
+			gclassIds += "," + goodsClassification2.getGgId();
+		}
+		if(!ObjectUtils.isEmpty(goodsClassification3)){
+			gclassIds += "," + goodsClassification3.getGgId();
+		}
+
+		gclassIds = gclassIds.substring(1);
+
+		List<GoodsGgcrelVo> list = goodsGgcrelMapper.queryGclassGoodsGgcrelLists(gclassIds);
+
+		return list;
 	}
 }
 

@@ -6,6 +6,8 @@
 			<result property="ggcId" column="ggc_id"/>
 			<result property="gid" column="g_id"/>
 			<result property="gcId" column="gc_id"/>
+			<result property="gclassId" column="gclass_id"/>
+			<result property="isUse" column="is_use"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -13,6 +15,8 @@
 		<result property="ggcId" column="ggc_id"/>
 		<result property="gid" column="g_id"/>
 		<result property="gcId" column="gc_id"/>
+		<result property="gclassId" column="gclass_id"/>
+		<result property="isUse" column="is_use"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="gcname" column="gcname"/>
@@ -20,7 +24,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGgcouponrel_columns">
-		ggc_id,g_id,gc_id,is_delete,version
+		ggc_id,g_id,gc_id,gclass_id,is_use,is_delete,version
 	</sql>
 	<!-- 根据商品与优惠关系表主键取得数据 -->
 	<select id="queryGoodsGgcouponrelByGgcId" resultMap="rm_goodsGgcouponrel" parameterType="java.lang.Long">
@@ -39,6 +43,12 @@
 			<if test="null != params.gcId">
 				AND t1.gc_id = #{params.gcId}
 			</if>
+			<if test="null != params.gclassId">
+				AND gclass_id = #{params.gclassId}
+			</if>
+			<if test="null != params.isUse">
+				AND is_use = #{params.isUse}
+			</if>
 			<if test="null != params.isDelete">
 				AND t1.is_delete = #{params.isDelete}
 			</if>
@@ -56,10 +66,10 @@
 	<!--添加商品与优惠关系表 -->
 	<insert id="saveGoodsGgcouponrel" parameterType="com.retailers.dht.common.entity.GoodsGgcouponrel" useGeneratedKeys="true" keyProperty="ggcId">
 		INSERT INTO t_goods_ggcouponrel (
-			g_id,gc_id,is_delete,version
+			g_id,gc_id,gclass_id,is_use,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gcId,jdbcType=BIGINT},#{gclassId,jdbcType=BIGINT},#{isUse,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品与优惠关系表 -->
@@ -72,6 +82,12 @@
             <if test="null != gcId">
                 gc_id = #{gcId},
             </if>
+			<if test="null != gclassId">
+				gclass_id = #{gclassId},
+			</if>
+			<if test="null != isUse">
+				is_use = #{isUse},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
