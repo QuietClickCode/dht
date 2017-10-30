@@ -731,38 +731,10 @@
                         }
                     }
                 },
-                region: {
-                    validators: {
-                        notEmpty: {
-                            message: '请选择一个推送区域'
-                        }
-                    }
-                },
-                updateCountry: {
-                    validators: {
-                        notEmpty: {
-                            message: '请选择一个推送对象'
-                        }
-                    }
-                },
-                updateClient: {
-                    validators: {
-                        notEmpty: {
-                            message: '必须选择一个客户端对象'
-                        }
-                    }
-                },
                 setUrl: {
                     validators: {
                         notEmpty: {
                             message: '链接不能为空'
-                        }
-                    }
-                },
-                isShow:{
-                    validators: {
-                        notEmpty: {
-                            message: '状态不能为空'
                         }
                     }
                 }
