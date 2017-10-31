@@ -63,6 +63,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
 	public  boolean clearAllGgsrel(Long gid,Long updatepersonId){
 	    Map<String,Object> map = new HashMap<String,Object>();
 	    map.put("gid",gid);
+	    map.put("isDelete",0);
 	    int index = 0;
 	    int status = 0;
         boolean flag =false;

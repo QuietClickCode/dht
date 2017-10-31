@@ -17,7 +17,7 @@ public interface GoodsGgcrelService {
 
 	/**
 	 * 添加赠品与商品关系表
-	 * @param goodsGgcrel
+	 * @param gcIds,gid
 	 * @return
 	 * @author fanghui
 	 * @date 2017-10-27 17:14:07
@@ -65,6 +65,10 @@ public interface GoodsGgcrelService {
 	public  boolean saveGoodsGgcrels(String gids,Long gcId);
 
 	public List<GoodsGgcrelVo> queryGclassGoodsGgcrelLists(Long gid);
+
+	public boolean deleteGclassGoodsGgcrelByGgcId(String gcIds,Long gid);
+
+	public List<GoodsGgcrelVo> querydeletedgclass(Long gid);
 }
 
 

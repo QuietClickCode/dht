@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CityMapper">
+
+	<resultMap id="rm_city" type="com.retailers.dht.common.entity.City">
+			<result property="cityid" column="CITYID"/>
+			<result property="cityname" column="CITYNAME"/>
+			<result property="parentid" column="PARENTID"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="city_columns">
+		CITYID,CITYNAME,PARENTID
+	</sql>
+	<!-- 根据城市表主键取得数据 -->
+	<select id="queryCityByCityid" resultMap="rm_city" parameterType="java.lang.Long">
+		SELECT <include refid="city_columns" />
+		FROM t_city WHERE CITYID = #{cityid}
+	</select>
+	<!-- 城市表查询条件组合 -->
+	<sql id="city_where">
+		<where>
+			<if test="null != params.cityid">
+				AND CITYID = #{params.cityid}
+			</if>
+			<if test="null != params.cityname and '' != params.cityname">
+				AND CITYNAME = #{params.cityname}
+			</if>
+			<if test="null != params.parentid">
+				AND PARENTID = #{params.parentid}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCityList" resultMap="rm_city" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="city_columns" />
+		FROM t_city
+		<include refid="city_where"/>
+	</select>
+	<!--添加城市表 -->
+	<insert id="saveCity" parameterType="com.retailers.dht.common.entity.City" useGeneratedKeys="true" keyProperty="cityid">
+		INSERT INTO t_city (
+			CITYNAME,PARENTID
+		) VALUES
+		(
+			#{cityname,jdbcType=VARCHAR},#{parentid,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改城市表 -->
+	<update id="updateCity" parameterType="com.retailers.dht.common.entity.City">
+		UPDATE t_city
+		<set>
+            <if test="null != cityname and '' != cityname">
+                CITYNAME = #{cityname},
+            </if>
+            <if test="null != parentid">
+                PARENTID = #{parentid},
+            </if>
+		</set>
+		WHERE CITYID = #{cityid}
+	</update>
+	<!--删除城市表 -->
+	<delete id="deleteCityByCityid" parameterType="java.lang.Long">
+		DELETE FROM t_city WHERE CITYID = #{cityid}
+	</delete>
+</mapper>

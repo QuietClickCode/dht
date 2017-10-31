@@ -77,9 +77,15 @@ public class GoodsServiceImpl implements GoodsService {
 
 	}
 
-	public  boolean checkGoods(Goods goods){
+	public  boolean checkGoods(Goods goods ){
 		int status = goodsMapper.updateGoods(goods);
 		return status==1 ? true:false;
+	}
+
+	public boolean updateGoodsSetNotChecked(Long gid,Long uploadpersonId){
+		Goods goods = goodsMapper.queryGoodsByGid(gid);
+		goods.setIsChecked(0L);
+		return updateGoods(goods,uploadpersonId);
 	}
 }
 

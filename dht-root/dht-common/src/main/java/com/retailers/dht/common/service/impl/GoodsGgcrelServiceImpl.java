@@ -13,6 +13,7 @@ import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsGgcrelService;
 import com.retailers.dht.common.vo.GoodsGgcrelVo;
 import com.retailers.tools.utils.ObjectUtils;
+import com.sun.tools.corba.se.idl.constExpr.BooleanOr;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -158,6 +159,33 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 		List<GoodsGgcrelVo> list = goodsGgcrelMapper.queryGclassGoodsGgcrelLists(gclassIds);
 
 		return list;
+	}
+
+	public boolean deleteGclassGoodsGgcrelByGgcId(String gcIds,Long gid){
+		String[] gcIdsArr = gcIds.replaceAll(","," ").trim().split(" ");
+		int status = 0;
+		if(!ObjectUtils.isEmpty(gcIdsArr)){
+			for (String gcId:gcIdsArr){
+				Long gcIdLong = Long.parseLong(gcId);
+				GoodsGgcrel goodsGgcrel = new GoodsGgcrel();
+				goodsGgcrel.setIsDelete(1L);
+				goodsGgcrel.setIsUse(0L);
+				goodsGgcrel.setGcId(gcIdLong);
+				goodsGgcrel.setGid(gid);
+				status += goodsGgcrelMapper.saveGoodsGgcrel(goodsGgcrel);
+			}
+		}
+
+		return status == gcIdsArr.length ? true : false;
+	}
+
+	public List<GoodsGgcrelVo> querydeletedgclass(Long gid){
+		Map map = new HashMap();
+		map.put("gid",gid);
+		map.put("isDelete",1L);
+		map.put("isUse",0L);
+		Pagination<GoodsGgcrelVo> pagination = queryGoodsGgcrelList(map,1,100);
+		return pagination.getData();
 	}
 }
 

@@ -92,13 +92,21 @@ public class GoodsController extends BaseController {
     @RequestMapping("/checkGoods")
     @Function(label="审核商品", description = "审核商品", resourse = "goods.checkGoods",parentRes="goods.openGoods")
     @ResponseBody
-    public BaseResp checkGoods(Long gid,String message,Long myidea){
+    public BaseResp checkGoods(Long gid,String message,Long myidea,HttpServletRequest request){
         Goods goods = goodsService.queryGoodsByGid(gid);
         goods.setIsChecked(myidea);
         goods.setGcheckmessage(message);
+        goods.setGcheckperson(getCurLoginUserId(request));
         boolean flag = goodsService.checkGoods(goods);
         return success(flag);
     }
 
+    @RequestMapping("/updateGoodsSetNotChecked")
+    @Function(label="设置商品未审核", description = "设置商品未审核", resourse = "goods.updateGoodsSetNotChecked",parentRes="goods.openGoods")
+    @ResponseBody
+    public BaseResp updateGoodsSetNotChecked(Long gid,HttpServletRequest request){
+        boolean flag = goodsService.updateGoodsSetNotChecked(gid,getCurLoginUserId(request));
+        return success(flag);
+    }
 
 }

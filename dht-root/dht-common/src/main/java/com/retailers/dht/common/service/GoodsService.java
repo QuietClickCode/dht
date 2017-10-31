@@ -57,6 +57,8 @@ public interface GoodsService {
 	public boolean deleteGoodsByGid(Long gid,Long uploadpersonId);
 
 	public boolean checkGoods(Goods goods);
+
+	public boolean updateGoodsSetNotChecked(Long gid,Long uploadpersonId);
 }
 
 

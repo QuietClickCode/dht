@@ -145,8 +145,8 @@
 </div>
 </div>
 
-<div id="addandeditgoods">
-    <button class="btn btn-default" type="button" onclick="">返回</button>
+<div id="addandeditgoods" style="display: none">
+    <button class="btn btn-default" type="button" onclick="returnback();">返回</button>
     <div class="" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser" >
         <div class="modal-dialog" role="document"  style="width: 85%;">
             <div class="modal-content">
@@ -463,9 +463,13 @@
                                                         <div class="col-lg-6" style="height:49px;" id="gfreightdiv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
-                                                            运费:
+                                                            支持使用优惠券:
                                                           </span>
-                                                                <input id="gfreight" name="gfreight" type="text" class="form-control"/>
+                                                                <div class="controls">
+                                                                    <div class="switch" tabindex="0">
+                                                                        <input id="gfreight" name="gfreight" type="checkbox" />
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
 
@@ -1183,6 +1187,8 @@
         editorGoodsType=1;
         initFormData(gid);
         $("#editorSysUserTitle").text("编辑商品");
+        $('#tabDiv').hide();
+        $('#addandeditgoods').show();
     }
     /**
      * 清除form 表单数据
@@ -1291,7 +1297,10 @@
         $("#editorSysUserTitle").text("添加商品");
     }
 
-    
+    function returnback() {
+        $('#tabDiv').show();
+        $('#addandeditgoods').hide();
+    }
 
 </script>
 
@@ -1309,7 +1318,7 @@
             toastr.error("请先保存商品！");
             return;
         }
-        var message = $('#checkGoodsTextarea').html();
+        var message = $('#checkGoodsTextarea').val();
 
         $.ajax({
             type:"post",
@@ -1346,14 +1355,12 @@
             if(flag){
                 $('#allowsettimediv').hide();
                 $('#isadvancesalediv').hide();
-                $('#gfreightdiv').hide();
                 $('#gdepositdiv').show();
                 $('#maincomtrayside').attr('checked','checked');
                 $('#iscoddiv').hide();
             }else{
                 $('#allowsettimediv').show();
                 $('#isadvancesalediv').show();
-                $('#gfreightdiv').show();
                 $('#gdepositdiv').hide();
                 $('#iscoddiv').show();
             }
@@ -1445,6 +1452,13 @@
                 formData["isMultiplebuy"]=0;
             }
 
+            flag = $("#gfreight").bootstrapSwitch("state");
+            if(flag){
+                formData["gfreight"]=1;
+            }else{
+                formData["gfreight"]=0;
+            }
+
             $.ajax({
                 type:"post",
                 url:"/goods/editGoodsConfig",
@@ -1455,13 +1469,7 @@
                         //显示提示
                         toastr.success('操作成功！');
                         document.getElementById('nava2').click();
-//                        var gcId = $('#gcId').val();
-//                        if(gcId=='' || gcId==null){
-//                            $('#configversion').val(1);
-//                        }else{
-//                            var configversion = $('#configversion').val();
-//                            $('#configversion').val(parseInt(configversion)+2);
-//                        }
+                        refreshTableData();
                     }else{
                         toastr.error('操作失败！');
                     }
@@ -1493,13 +1501,15 @@
                     $('#gcId').val('');
                     $('#gcgid').val();
                     $('#configversion').val('');
-                    $("#gfreight").val('');
                     $("#gstartbuy").val('');
                     $("#gendbuy").val('');
                     $("#gsalesvolume").val('');
                     $("#gedt").val('');
                     $("#gprofitability").val('');
                     $("#gdeposit").val('');
+
+                    $("#gfreight").val('');
+                    $("#gfreight").bootstrapSwitch("state",true);
 
                     $("#isServicegoods").val('');
                     $("#isServicegoods").bootstrapSwitch("state",false);
@@ -1599,6 +1609,14 @@
                     }
                     $("#isCod").bootstrapSwitch("state",flag);
 
+
+                    flag = false;
+                    $("#gfreight").val(goodsConfig.gfreight);
+                    if(goodsConfig.gfreight==1){
+                        flag = true;
+                    }
+                    $("#gfreight").bootstrapSwitch("state",flag);
+
                     $("#isMultiplebuy").val(goodsConfig.isMultiplebuy);
                     if(goodsConfig.isMultiplebuy==1){
                         $('#isMultiplebuy').attr('checked','checked');
@@ -1671,6 +1689,9 @@
                         if(data.status==0){
                             //显示提示
                             toastr.success('操作成功！');
+                            if(i==0){
+                                refreshTableData();
+                            }
                         }else{
                             toastr.error('操作失败！');
                         }
@@ -1691,13 +1712,16 @@
                         if(data.status==0){
                             //显示提示
                             toastr.success('操作成功！');
+                            if(i==0){
+                                refreshTableData();
+                            }
                         }else{
                             toastr.error('操作失败！');
                         }
                     }
                 });
             }
-
+            refreshTableData();
         }
 
         deleteArr=[];
@@ -2114,6 +2138,7 @@
             dataType: "json",
             data:{gid:gid},
             success:function(data){
+                refreshTableData();
                 var imgs = $('#gstabel').find('input[type="file"]');
                 imglength = imgs.length;
                 uploadimgindex = 0;
@@ -2460,6 +2485,7 @@
             dataType: "json",
             data: {gbIds: addggb,gid:gid},
             success: function (data) {
+                updateGoodsSetNotChecked();
                 toastr.success('操作成功!');
             }
         });
@@ -2609,6 +2635,7 @@
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmyglTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -2636,6 +2663,7 @@
                 success: function (data) {
                     toastr.success('删除成功!');
                     refreshmyglTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -2820,6 +2848,7 @@
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmygclTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -2847,6 +2876,7 @@
                 success: function (data) {
                     toastr.success('删除成功!');
                     refreshmygclTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -3003,6 +3033,7 @@
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmygcTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -3030,6 +3061,7 @@
                 success: function (data) {
                     toastr.success('删除成功!');
                     refreshmygcTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -3053,6 +3085,7 @@
     var updgsgParent = new Array();
 
     function addnumber(obj) {
+
         var html = '<div class="col-lg-3" style="color: red;">'+
                     '<div class="input-group form-group">' +
                     '<input type="hidden">'+
@@ -3095,9 +3128,12 @@
 
     }
     function blurnumber(obj) {
-        var flag = $(obj).val() == numberchange;
-        if(!flag){
-            updgsgParent.push($(obj).parent())
+        var preval = $(obj).prev().val();
+        if(preval!=''){
+            var flag = $(obj).val() == numberchange;
+            if(!flag){
+                updgsgParent.push($(obj).parent())
+            }
         }
     }
 
@@ -3127,6 +3163,7 @@
                         type:"post",
                         url:"/goods/addGoodsSpecilgoodscredential",
                         dataType: "json",
+                        async :false,
                         data:{gid:gid,gsgImgid:addImgArr[i],gsgType:1},
                         success:function(data){
                             if(i==addImgArr.length-1){
@@ -3135,6 +3172,8 @@
                         }
                     });
                 }
+                toastr.success('操作成功');
+                updateGoodsSetNotChecked();
             }
 
             if(delImgArr!=null && delImgArr.length>0){
@@ -3143,6 +3182,7 @@
                         type:"post",
                         url:"/goods/removeGoodsSpecilgoodscredential",
                         dataType: "json",
+                        async :false,
                         data:{gsgId:delImgArr[i]},
                         success:function(data){
                             if(i==delImgArr.length-1){
@@ -3151,6 +3191,8 @@
                         }
                     });
                 }
+                toastr.success('操作成功');
+                updateGoodsSetNotChecked();
             }
 
             var gsghidden = $("#gsgnumberrow").find('input[type=hidden]');
@@ -3168,6 +3210,7 @@
                         type:"post",
                         url:"/goods/addGoodsSpecilgoodscredential",
                         dataType: "json",
+                        async :false,
                         data:{gid:gid,gsgType:0,gsgNumber:addgsgParent[i].val()},
                         success:function(data){
                             if(i==addgsgParent.length-1){
@@ -3176,6 +3219,8 @@
                         }
                     });
                 }
+                toastr.success('操作成功');
+                updateGoodsSetNotChecked();
             }
 
             if(delgsgParent!=null && delgsgParent.length>0){
@@ -3184,6 +3229,7 @@
                         type:"post",
                         url:"/goods/removeGoodsSpecilgoodscredential",
                         dataType: "json",
+                        async :false,
                         data:{gsgId:delgsgParent[i]},
                         success:function(data){
                             if(i==delgsgParent.length-1){
@@ -3192,6 +3238,8 @@
                         }
                     });
                 }
+                toastr.success('操作成功');
+                updateGoodsSetNotChecked();
             }
 
             if(updgsgParent!=null && updgsgParent.length>0){
@@ -3200,6 +3248,7 @@
                         type:"post",
                         url:"/goods/editorGoodsSpecilgoodscredential",
                         dataType: "json",
+                        async :false,
                         data:{gid:gid,gsgId:updgsgParent[i].children().get(0).value,gsgNumber:updgsgParent[i].children().get(1).value,gsgType:0,isDelete:0},
                         success:function(data){
                             if(i==updgsgParent.length-1){
@@ -3208,6 +3257,8 @@
                         }
                     });
                 }
+                toastr.success('操作成功');
+                updateGoodsSetNotChecked();
             }
 
 
@@ -3215,6 +3266,12 @@
     });
     
     function initgsgdata() {
+        addImgArr = [];
+        delImgArr = [];
+        addgsgParent = [];
+        delgsgParent = [];
+        updgsgParent = [];
+
         var gid = $('#gid').val();
         if (gid == '') {
             toastr.warning('请先保存商品!');
@@ -3336,18 +3393,18 @@
                             '</div>'+
                             '</td>'+
                             '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                            '<span style="line-height: 100%">(子类关联)'+rows[i].gcname+'</span>'+
+                            '<span style="line-height: 100%"> <span style="color:red">(子类关联)</span> '+rows[i].gcname+'</span>'+
                             '</td>'+
                             '</tr>';
                         $('#mygcomplimentaryrelTbody').prepend(html);
+
+                        if(i == rows.length-1){
+                             removedeletedgclass();
+                        }
                     }
                 }
-
             }
         });
-
-
-
     }
 
     function searchgcs() {
@@ -3434,6 +3491,7 @@
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmyggcomplimentaryrelTbody();
+                    updateGoodsSetNotChecked();
                 }
             });
 
@@ -3445,31 +3503,78 @@
 
     function deleteggcomplimentaryrel() {
         var checkboxs = $('input:checkbox[name="ggcomplimentaryrelcheckbox"]:checked');
-        if(checkboxs.length > 0){
-            var gglIds = "";
-            for(var i=0; i<checkboxs.length; i++){
-                if(checkboxs[i].checked){
-                    gglIds += checkboxs[i].value + ",";
+        var glcasscheckboxs = $('input:checkbox[name="gclassggcomplimentaryrelcheckbox"]:checked');
+
+        if(checkboxs.length > 0 || glcasscheckboxs.length > 0) {
+            if(checkboxs.length > 0){
+                var gglIds = "";
+                for (var i = 0; i < checkboxs.length; i++) {
+                    if (checkboxs[i].checked) {
+                        gglIds += checkboxs[i].value + ",";
+                    }
                 }
+
+                $.ajax({
+                    type: "post",
+                    url: "/goods/removeGoodsGgcrel",
+                    dataType: "json",
+                    data: {ggcIds: gglIds},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmyggcomplimentaryrelTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
             }
 
-            $.ajax({
-                type: "post",
-                url: "/goods/removeGoodsGgcrel",
-                dataType: "json",
-                data: {ggcIds: gglIds},
-                success: function (data) {
-                    toastr.success('删除成功!');
-                    refreshmyggcomplimentaryrelTbody();
+            if (glcasscheckboxs.length > 0) {
+                var gclassgglIds = "";
+                for (var i = 0; i < glcasscheckboxs.length; i++) {
+                    if (glcasscheckboxs[i].checked) {
+                        gclassgglIds += glcasscheckboxs[i].value + ",";
+                    }
                 }
-            });
 
-        }else{
+                $.ajax({
+                    type: "post",
+                    url: "/goods/removeGclassGoodsGgcrel",
+                    dataType: "json",
+                    data: {gcIds: gclassgglIds, gid: $('#gid').val()},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmyggcomplimentaryrelTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
+            }
+        }else {
             toastr.warning('请选择您想操作的数据!');
         }
-
     }
 
+    function removedeletedgclass() {
+        var gid = $('#gid').val();
+        $.ajax({
+            type: "post",
+            url: "/goods/querydeletedgclass",
+            dataType: "json",
+            data: {gid:gid},
+            success: function (data) {
+                var rows = data.rows;
+                var gclasscheckboxs = $('input:checkbox[name="gclassggcomplimentaryrelcheckbox"]');
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<gclasscheckboxs.length; i++){
+                        for(var j=0; j<rows.length; j++){
+                            if(gclasscheckboxs[i].value==rows[j].gcId){
+                                $(gclasscheckboxs[i]).parent().parent().parent().remove();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
 </script>
 
 <!--商品子类选择1-->
@@ -3650,6 +3755,23 @@
         showMethod: "fadeIn",
         hideMethod: "fadeOut"
     };
+
+    <!--更新商品时让商品为未审核状态-->
+    function updateGoodsSetNotChecked() {
+        var gid = $('#gid').val();
+        if(gid==''){
+            return;
+        }
+        $.ajax({
+            type: "post",
+            url: "/goods/updateGoodsSetNotChecked",
+            dataType: "json",
+            data: {gid:gid},
+            success: function (data) {
+                refreshTableData();
+            }
+        });
+    }
 </script>
 </body>
 </html>

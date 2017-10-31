@@ -29,7 +29,7 @@ public class GoodsFreightController extends BaseController {
     @RequestMapping("/openGoodsFreight")
     @Menu(parentRes = "sys.manager.goods",resourse = "goods.openGoodsFreight",description = "商品运费管理",sort = 1,label = "商品运费管理")
     public String openGoodsFreight(){
-        return "goods/GoodsFreight";
+        return "goods/goodsFreight";
     }
 
     @RequestMapping("editGoodsFreight")
@@ -69,10 +69,12 @@ public class GoodsFreightController extends BaseController {
     @RequestMapping("/addGoodsFreight")
     @Function(label="增加商品运费", description = "增加商品运费", resourse = "goods.addGoodsFreight",parentRes="goods.openGoodsFreight")
     @ResponseBody
-    public BaseResp addGoodsFreight(GoodsFreight goodsFreight){
+    public Map<String,Object> addGoodsFreight(GoodsFreight goodsFreight){
         goodsFreight.setIsDelete(0L);
-        boolean flag = goodsFreightService.saveGoodsFreight(goodsFreight);
-        return success(flag);
+        goodsFreight = goodsFreightService.saveGoodsFreight(goodsFreight);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("rows",goodsFreight);
+        return gtm;
     }
 
 }

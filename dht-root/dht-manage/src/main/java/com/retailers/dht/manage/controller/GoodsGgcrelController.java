@@ -39,6 +39,14 @@ public class GoodsGgcrelController extends BaseController {
         return success(flag);
     }
 
+    @RequestMapping("/removeGclassGoodsGgcrel")
+    @Function(label="删除子类商品与赠品关系", description = "删除子类商品与赠品关系", resourse = "goods.removeGclassGoodsGgcrel",sort=3,parentRes="goods.openGoods")
+    @ResponseBody
+    public BaseResp removeGclassGoodsGgcrel(String gcIds,Long gid){
+        boolean flag=goodsGgcrelService.deleteGclassGoodsGgcrelByGgcId(gcIds,gid);
+        return success(flag);
+    }
+
     @RequestMapping("/queryGoodsGgcrelLists")
     @Function(label="商品与赠品关系列表", description = "商品与赠品关系列表", resourse = "goods.queryGoodsGgcrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
@@ -95,5 +103,13 @@ public class GoodsGgcrelController extends BaseController {
         return success(flag);
     }
 
-
+    @RequestMapping("/querydeletedgclass")
+    @Function(label="查询商品大类与赠品关系", description = "清除商品大类与赠品关系", resourse = "goods.removedeletedgclass",parentRes="goods.openGoods")
+    @ResponseBody
+    public Map<String,Object> querydeletedgclass(Long gid){
+        List<GoodsGgcrelVo> rows = goodsGgcrelService.querydeletedgclass(gid);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("rows",rows);
+        return gtm;
+    }
 }

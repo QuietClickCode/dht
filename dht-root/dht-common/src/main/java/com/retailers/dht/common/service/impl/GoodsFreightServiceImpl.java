@@ -19,9 +19,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsFreightServiceImpl implements GoodsFreightService {
 	@Autowired
 	private GoodsFreightMapper goodsFreightMapper;
-	public boolean saveGoodsFreight(GoodsFreight goodsFreight) {
+	public GoodsFreight saveGoodsFreight(GoodsFreight goodsFreight) {
 		int status = goodsFreightMapper.saveGoodsFreight(goodsFreight);
-		return status == 1 ? true : false;
+		return status == 1 ? goodsFreight : null;
 	}
 	public boolean updateGoodsFreight(GoodsFreight goodsFreight) {
 		int status = goodsFreightMapper.updateGoodsFreight(goodsFreight);

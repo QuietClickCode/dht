@@ -19,7 +19,7 @@ public interface GoodsFreightService {
 	 * @author fanghui
 	 * @date 2017-10-29 10:39:17
 	 */
-	public boolean saveGoodsFreight(GoodsFreight goodsFreight);
+	public GoodsFreight saveGoodsFreight(GoodsFreight goodsFreight);
 	/**
 	 * 编辑商品运费表
 	 * @param goodsFreight

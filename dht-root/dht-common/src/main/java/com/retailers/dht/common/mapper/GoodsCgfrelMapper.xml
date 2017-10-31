@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsCgfrelMapper">
+
+	<resultMap id="rm_goodsCgfrel" type="com.retailers.dht.common.entity.GoodsCgfrel">
+			<result property="cgfId" column="cgf_id"/>
+			<result property="gfId" column="gf_id"/>
+			<result property="cid" column="c_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsCgfrel_columns">
+		cgf_id,gf_id,c_id,is_delete,version
+	</sql>
+	<!-- 根据地区与运费关系表主键取得数据 -->
+	<select id="queryGoodsCgfrelByCgfId" resultMap="rm_goodsCgfrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsCgfrel_columns" />
+		FROM t_goods_cgfrel WHERE cgf_id = #{cgfId}
+	</select>
+	<!-- 地区与运费关系表查询条件组合 -->
+	<sql id="goodsCgfrel_where">
+		<where>
+			<if test="null != params.cgfId">
+				AND cgf_id = #{params.cgfId}
+			</if>
+			<if test="null != params.gfId">
+				AND gf_id = #{params.gfId}
+			</if>
+			<if test="null != params.cid">
+				AND c_id = #{params.cid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsCgfrelList" resultMap="rm_goodsCgfrel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsCgfrel_columns" />
+		FROM t_goods_cgfrel
+		<include refid="goodsCgfrel_where"/>
+	</select>
+	<!--添加地区与运费关系表 -->
+	<insert id="saveGoodsCgfrel" parameterType="com.retailers.dht.common.entity.GoodsCgfrel" useGeneratedKeys="true" keyProperty="cgfId">
+		INSERT INTO t_goods_cgfrel (
+			gf_id,c_id,is_delete,version
+		) VALUES
+		(
+			#{gfId,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改地区与运费关系表 -->
+	<update id="updateGoodsCgfrel" parameterType="com.retailers.dht.common.entity.GoodsCgfrel">
+		UPDATE t_goods_cgfrel
+		<set>
+            <if test="null != gfId">
+                gf_id = #{gfId},
+            </if>
+            <if test="null != cid">
+                c_id = #{cid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cgf_id = #{cgfId} and version = #{version}
+	</update>
+	<!--删除地区与运费关系表 -->
+	<delete id="deleteGoodsCgfrelByCgfId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_cgfrel WHERE cgf_id = #{cgfId}
+	</delete>
+</mapper>
