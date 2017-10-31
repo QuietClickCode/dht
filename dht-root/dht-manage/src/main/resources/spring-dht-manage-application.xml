@@ -20,4 +20,5 @@
     <!-- mybatis 配置文件 -->
     <import resource="classpath:spring-mybatis.xml" />
     <import resource="classpath:spring-common-dht-mvc.xml" />
+    <import resource="classpath:spring-wx-common-application.xml"/>
 </beans>

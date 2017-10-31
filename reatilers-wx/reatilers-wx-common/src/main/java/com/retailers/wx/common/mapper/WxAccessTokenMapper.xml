@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.wx.common.dao.WxAccessTokenMapper">
+
+	<resultMap id="rm_wxAccessToken" type="com.retailers.wx.common.entity.WxAccessToken">
+			<result property="watId" column="wat_id"/>
+			<result property="watWxId" column="wat_wx_id"/>
+			<result property="watToken" column="wat_token"/>
+			<result property="watTokenCreateTime" column="wat_token_create_time"/>
+			<result property="watTokenExpiresTime" column="wat_token_expires_time"/>
+			<result property="watTokenExpires" column="wat_token_expires"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="wxAccessToken_columns">
+		wat_id,wat_wx_id,wat_token,wat_token_create_time,wat_token_expires_time,wat_token_expires
+	</sql>
+	<!-- 根据微信认证token主键取得数据 -->
+	<select id="queryWxAccessTokenByWatId" resultMap="rm_wxAccessToken" parameterType="java.lang.Long">
+		SELECT <include refid="wxAccessToken_columns" />
+		FROM t_wx_access_token WHERE wat_id = #{watId}
+	</select>
+	<!-- 微信认证token查询条件组合 -->
+	<sql id="wxAccessToken_where">
+		<where>
+			<if test="null != params.watId">
+				AND wat_id = #{params.watId}
+			</if>
+			<if test="null != params.watWxId">
+				AND wat_wx_id = #{params.watWxId}
+			</if>
+			<if test="null != params.watToken">
+				AND wat_token = #{params.watToken}
+			</if>
+			<if test="null != params.watTokenCreateTimeBegin">
+				AND wat_token_create_time &gt;= TO_DATE('${params.watTokenCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.watTokenCreateTimeEnd">
+				AND wat_token_create_time &lt;= TO_DATE('${params.watTokenCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.watTokenExpiresTimeBegin">
+				AND wat_token_expires_time &gt;= TO_DATE('${params.watTokenExpiresTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.watTokenExpiresTimeEnd">
+				AND wat_token_expires_time &lt;= TO_DATE('${params.watTokenExpiresTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.watTokenExpires">
+				AND wat_token_expires = #{params.watTokenExpires}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryWxAccessTokenList" resultMap="rm_wxAccessToken" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="wxAccessToken_columns" />
+		FROM t_wx_access_token
+		<include refid="wxAccessToken_where"/>
+	</select>
+	<!--添加微信认证token -->
+	<insert id="saveWxAccessToken" parameterType="com.retailers.wx.common.entity.WxAccessToken" useGeneratedKeys="true" keyProperty="watId">
+		INSERT INTO t_wx_access_token (
+			wat_wx_id,wat_token,wat_token_create_time,wat_token_expires_time,wat_token_expires
+		) VALUES
+		(
+			#{watWxId,jdbcType=BIGINT},#{watToken,jdbcType=VARCHAR},#{watTokenCreateTime,jdbcType=TIMESTAMP},#{watTokenExpiresTime,jdbcType=TIMESTAMP},#{watTokenExpires,jdbcType=INTEGER}
+		)
+	</insert>
+	<!--修改微信认证token -->
+	<update id="updateWxAccessToken" parameterType="com.retailers.wx.common.entity.WxAccessToken">
+		UPDATE t_wx_access_token
+		<set>
+            <if test="null != watWxId">
+                wat_wx_id = #{watWxId},
+            </if>
+            <if test="null != watToken">
+                wat_token = #{watToken},
+            </if>
+            <if test="null != watTokenCreateTime">
+                wat_token_create_time = #{watTokenCreateTime},
+            </if>
+            <if test="null != watTokenExpiresTime">
+                wat_token_expires_time = #{watTokenExpiresTime},
+            </if>
+            <if test="null != watTokenExpires">
+                wat_token_expires = #{watTokenExpires},
+            </if>
+		</set>
+		WHERE wat_id = #{watId}
+	</update>
+	<!--删除微信认证token -->
+	<delete id="deleteWxAccessTokenByWatId" parameterType="java.lang.Long">
+		DELETE FROM t_wx_access_token WHERE wat_id = #{watId}
+	</delete>
+
+	<!-- 根据微信认证token主键取得数据 -->
+	<select id="queryCurWxAccessTokenByWxId" resultMap="rm_wxAccessToken">
+		SELECT
+			*
+		FROM
+			t_wx_access_token w
+		WHERE
+			w.wat_wx_id = #{wxId}
+		AND w.wat_token_expires_time >#{curDate}
+	</select>
+</mapper>

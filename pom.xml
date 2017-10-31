@@ -11,6 +11,8 @@
         <module>retailers-mybatis</module>
         <module>dht-root</module>
         <module>retailers-auth</module>
+        <module>retailers-static</module>
+        <module>reatilers-wx</module>
     </modules>
     <packaging>pom</packaging>
     <name>大汇堂主工程</name>

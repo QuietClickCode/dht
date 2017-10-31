@@ -112,4 +112,5 @@
             <bean id="reqInterceptor" class="com.retailers.dht.manage.filter.ReqInterceptor"/>
         </mvc:interceptor>
     </mvc:interceptors>
+    <import resource="spring-wx-common-mvc.xml"/>
 </beans>

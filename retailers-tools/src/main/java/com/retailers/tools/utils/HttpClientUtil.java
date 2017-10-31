@@ -15,7 +15,9 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.entity.ContentType;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -25,10 +27,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.nio.charset.Charset;
+import java.util.*;
 
 
 /**
@@ -275,5 +275,46 @@ public class HttpClientUtil {
 				get.releaseConnection();
 			}
 		}
+	}
+
+	public static String doGet(String url) {
+		return  doGet(url, new HashMap<String, Object>());
+	}
+	/**
+	 * 发送 GET 请求（HTTP），K-V形式
+	 * @param url
+	 * @param params
+	 * @return
+	 */
+	public static String doGet(String url, Map<String, Object> params) {
+		String apiUrl = url;
+		StringBuffer param = new StringBuffer();
+		int i = 0;
+		for (String key : params.keySet()) {
+			if (i == 0)
+				param.append("?");
+			else
+				param.append("&");
+			param.append(key).append("=").append(params.get(key));
+			i++;
+		}
+		apiUrl += param;
+		String result = null;
+		CloseableHttpClient httpclient = HttpClientManager.getHttpClient();
+		try {
+			HttpGet httpPost = new HttpGet(apiUrl);
+			HttpResponse response = httpclient.execute(httpPost);
+			int statusCode = response.getStatusLine().getStatusCode();
+			System.out.println("执行状态码 : " + statusCode);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				ContentType contentType = ContentType.getOrDefault(entity);
+				Charset charset = contentType.getCharset();
+				result = EntityUtils.toString(entity, charset);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }
