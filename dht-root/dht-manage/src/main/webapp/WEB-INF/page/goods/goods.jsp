@@ -3286,6 +3286,7 @@
         initgcomplimentaryreldataArr = [];
         $('#addggcrelbtn').hide();
         $('#deleteggcrelbtn').show();
+        $('#mygcomplimentaryrelTbody').html('');
         $.ajax({
             type:"post",
             url:"/goods/queryGoodsGgcrelLists",
@@ -3296,7 +3297,7 @@
                 var html = '';
                 if(rows!=null && rows.length>0){
                     for(var i=0; i<rows.length; i++){
-                        html   +=  '<tr>'+
+                        html   =  '<tr>'+
                             '<td>'+
                             '<div class="checkbox checkbox-info">'+
                             '<input id="checkbox'+i+'" name="ggcomplimentaryrelcheckbox" class="styled" type="checkbox" value="'+rows[i].ggcId+'">'+
@@ -3309,18 +3310,44 @@
                             '</td>'+
                             '</tr>';
                         initgcomplimentaryreldataArr.push(rows[i].gcId);
+                        $('#mygcomplimentaryrelTbody').prepend(html);
                     }
-                }else{
-                    html += '<tr>'+
-                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                        '<span style="line-height: 100%;color:red;">暂时没有绑定赠品</span>'+
-                        '</td>'+
-                        '</tr>';
-
                 }
-                $('#mygcomplimentaryrelTbody').html(html);
+
             }
         });
+
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGclassGoodsGgcrelLists",
+            dataType: "json",
+            data:{gid:gid},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   =  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="xcheckbox'+i+'" name="gclassggcomplimentaryrelcheckbox" class="styled" type="checkbox" value="'+rows[i].gcId+'">'+
+                            '<label for="xcheckbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">(子类关联)'+rows[i].gcname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        $('#mygcomplimentaryrelTbody').prepend(html);
+                    }
+                }
+
+            }
+        });
+
+
+
     }
 
     function searchgcs() {
@@ -3338,7 +3365,7 @@
             type: "post",
             url: "/goods/queryGoodsComplimentaryLists",
             dataType: "json",
-            data: {gcName: gcName,pageNo: 1, pageSize: 100},
+            data: {gcName: gcName,isClass:0,pageNo: 1, pageSize: 100},
             success: function (data) {
                 var rows = data.rows;
                 var html = '';
@@ -3528,7 +3555,6 @@
 </script>
 <!--商品子类选择2-->
 <script>
-
     var setting = {
         view: {
             dblClickExpand: false
@@ -3604,8 +3630,6 @@
             hideMenu2();
         }
     }
-
-
 </script>
 
 <!--弹出框-->

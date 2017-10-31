@@ -20,6 +20,12 @@ public class GoodsGgcrel implements java.io.Serializable {
 	/**赠品ID*/
 	@NotEmpty
 	private Long gcId;
+	/**子类ID*/
+	@NotEmpty
+	private Long gclassId;
+	/**是否使用*/
+	@NotEmpty
+	private Long isUse;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -71,5 +77,19 @@ public class GoodsGgcrel implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getGclassId() {
+		return gclassId;
+	}
 
+	public void setGclassId(Long gclassId) {
+		this.gclassId = gclassId;
+	}
+
+	public Long getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(Long isUse) {
+		this.isUse = isUse;
+	}
 }

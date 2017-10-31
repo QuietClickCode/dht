@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.dht.common.entity.GoodsComplimentary;
 import com.retailers.dht.common.dao.GoodsComplimentaryMapper;
 import com.retailers.dht.common.service.GoodsComplimentaryService;
+import com.retailers.dht.common.service.GoodsGgcrelService;
 import com.retailers.dht.common.vo.GoodsComplimentaryVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,17 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsComplimentaryServiceImpl implements GoodsComplimentaryService {
 	@Autowired
 	private GoodsComplimentaryMapper goodsComplimentaryMapper;
+	@Autowired
+	private GoodsGgcrelService goodsGgcrelService;
 	public boolean saveGoodsComplimentary(GoodsComplimentary goodsComplimentary) {
 		int status = goodsComplimentaryMapper.saveGoodsComplimentary(goodsComplimentary);
 		return status == 1 ? true : false;
 	}
 	public boolean updateGoodsComplimentary(GoodsComplimentary goodsComplimentary) {
+		GoodsComplimentary gc = goodsComplimentaryMapper.queryGoodsComplimentaryByGcId(goodsComplimentary.getGcId());
+		if(gc.getIsClass()!=goodsComplimentary.getIsClass()){
+			goodsGgcrelService.clearGoodsGgcrel(goodsComplimentary.getGcId());
+		}
 		int status = goodsComplimentaryMapper.updateGoodsComplimentary(goodsComplimentary);
 		return status == 1 ? true : false;
 	}

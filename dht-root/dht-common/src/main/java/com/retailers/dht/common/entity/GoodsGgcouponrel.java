@@ -20,6 +20,12 @@ public class GoodsGgcouponrel implements java.io.Serializable {
 	/**优惠ID*/
 	@NotEmpty
 	private Long gcId;
+	/**商品子类ID*/
+	@NotEmpty
+	private Long gclassId;
+	/**是否使用 0不使用*/
+	@NotEmpty
+	private Long isUse;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -71,5 +77,13 @@ public class GoodsGgcouponrel implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getGclassId(){  return this.gclassId;}
+	public void setGclassId(Long value) {
+		this.gclassId = value;
+	}
 
+	public Long getIsUse(){  return this.isUse;}
+	public void setIsUse(Long value) {
+		this.isUse = value;
+	}
 }

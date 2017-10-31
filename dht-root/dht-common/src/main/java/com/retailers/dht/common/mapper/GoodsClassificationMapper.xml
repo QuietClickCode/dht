@@ -82,7 +82,7 @@
 		<include refid="goodsClassification_where"/>
 	</select>
 	<!--树形商品子类查询-->
-	<select id="queryGoodsClassificationTree" resultMap="rm_goodsClassification_vo">
+	<select id="queryGoodsClassificationTree" resultMap="rm_goodsClassification_vo" parameterType="java.lang.String">
 		select t1.*,t2.gg_name parent_name,t3.gt_name home_name,t4.show_url img_url
 					from t_goods_classification t1
 				LEFT JOIN t_goods_classification t2 ON t1.parent_Id=t2.gg_id
@@ -94,7 +94,7 @@
 	<select id="queryGoodsClassificationNode" resultMap="rm_goodsClassification_vo">
 		SELECT <include refid="goodsClassification_columns" />
 		FROM t_goods_classification
-		where is_delete!=1 and gg_id!=#{ggId} ORDER BY parent_id asc,gg_order ASC
+		where is_delete!=1 and gg_id NOT IN ( #{ggId} )  ORDER BY parent_id asc,gg_order ASC
 	</select>
 	<!--添加商品子类表 -->
 	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">

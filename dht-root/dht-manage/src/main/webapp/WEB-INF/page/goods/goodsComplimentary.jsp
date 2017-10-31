@@ -27,7 +27,7 @@
 
     <br>
     <div class="form-group" style="margin-top: 5px">
-        <input type="text" class="form-control" id="search_GoodsComplimentary_name" placeholder="请输入赠品名称">
+        <input type="text"  class="form-control" id="search_GoodsComplimentary_name" placeholder="请输入赠品名称">
     </div>
 
     <ex:perm url="goods/queryGoodsComplimentaryLists">
@@ -106,15 +106,47 @@
                                 <input id="gname" name="gname" type="text" class="form-control" disabled="disabled"/>
                             </div>
                         </div>
+
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                    选择类型:
+                              </span>
+                              <select id="isClass" name="isClass" onchange="isClasschange();" class="form-control">
+                                  <option value="2">无限制</option>
+                                  <option value="0">按商品</option>
+                                  <option value="1">按类型</option>
+                              </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="ggccol" style="display: none">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                选择商品:
+                              </span>
+                                <button onclick="showrel();" class="form-control">点击选择</button>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6" id="gcgccol" style="display: none">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                选择商品子类:
+                              </span>
+                                <button onclick="showrel();" class="form-control">点击选择</button>
+                            </div>
+                        </div>
+
                     </div>
                 </form>
-
                 <center>
                     <div class="form-group" style="margin-top: 5px;display: inline-block">
                         <input type="text" class="form-control" id="search_Goods_name" placeholder="请输入商品名称">
                     </div>
                     <button class="btn btn-default" type="button" onclick="searchgoods()">查询</button>
                 </center>
+
                 <div class="row clearfix">
                     <div class="col-md-12 column">
                         <table class="table table-bordered">
@@ -144,9 +176,115 @@
     </div>
 </div>
 
+<div class="modal fade" id="editorgcgcrel" tabindex="-1" role="dialog" aria-labelledby="editorgcgcrel">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorgcgcTitle">编辑商品与赠品关系</h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="form-group" style="margin-top: 5px;display: inline-block">
+                        <input id="gclassNum" onclick="showMenu();" type="text" class="form-control"  placeholder="点击选择商品子类">
+                    </div>
+                </center>
+
+                <ex:perm url="/goods/removeGoodsGgcrel">
+                    <button class="btn btn-default" type="button" onclick="deletegcgclrel()" id="deletegtgclrelbtn">删除</button>
+                </ex:perm>
+                <ex:perm url="/goods/queryGoodsGgcrelLists">
+                    <button class="btn btn-primary" type="button" onclick="initgcgcrel()" style="float: right;margin-bottom: 10px">刷新</button>
+                </ex:perm>
+
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px;text-align: center">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center" id="topgcgcname">
+                                    子类名称
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="gcgcTbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editgcgcSubmit">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editorggcrel" tabindex="-1" role="dialog" aria-labelledby="editorggcrel">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorggcTitle">编辑商品与赠品关系</h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="form-group" style="margin-top: 5px;display: inline-block">
+                        <input id="gnamecopy" onclick="" type="text" class="form-control"  placeholder="请输入商品名称">
+                    </div>
+                    <ex:perm url="/goods/queryGoodsGgcrelLists">
+                        <button class="btn btn-default" type="button" onclick="searchggcgoods()">查询</button>
+                    </ex:perm>
+                </center>
+
+                <ex:perm url="/goods/addGoodsGgcrel">
+                    <button class="btn btn-default" type="button" onclick="addggcrel()" id="addggcrelbtn">新增</button>
+                </ex:perm>
+                <ex:perm url="/goods/removeGoodsGgcrel">
+                    <button class="btn btn-default" type="button" onclick="deleteggcrel()" id="deleteggcrelbtn">删除</button>
+                </ex:perm>
+                <ex:perm url="/goods/queryGoodsGgcrelLists">
+                    <button class="btn btn-primary" type="button" onclick="initggcrel()" style="float: right;margin-bottom: 10px">刷新</button>
+                </ex:perm>
+
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px;text-align: center">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center" id="topggcname">
+                                    商品名称
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="ggcTbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editggcSubmit">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- 公用下拉择树 -->
-<div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
+<div id="menuContent1" class="menuContent1" style="display:none; position: absolute;z-index:1059">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -390,6 +528,10 @@
         $("#editorGoodsComplimentaryForm #gcType").val('1');
         $("#editorGoodsComplimentaryForm #gid").val('');
         $("#editorGoodsComplimentaryForm #gname").val('');
+        $("#editorGoodsComplimentaryForm #isClass").val('2');
+        $("#editorGoodsComplimentaryForm #gcgccol").hide();
+        $("#editorGoodsComplimentaryForm #ggccol").hide();
+        $('#search_Goods_name').val('');
 
         $('#goodsTbody').html('');
     }
@@ -406,6 +548,18 @@
             $("#editorGoodsComplimentaryForm #gcType").val(rowData.gcType);
             $("#editorGoodsComplimentaryForm #gid").val(rowData.gid);
             $("#editorGoodsComplimentaryForm #gname").val(rowData.gname);
+            $("#editorGoodsComplimentaryForm #isClass").val(rowData.isClass);
+
+            if(rowData.isClass == 0){
+                $("#editorGoodsComplimentaryForm #gcgccol").hide();
+                $("#editorGoodsComplimentaryForm #ggccol").show();
+            }else if(rowData.isClass == 1){
+                $("#editorGoodsComplimentaryForm #gcgccol").show();
+                $("#editorGoodsComplimentaryForm #ggccol").hide();
+            }else if(rowData.isClass == 2){
+                $("#editorGoodsComplimentaryForm #gcgccol").hide();
+                $("#editorGoodsComplimentaryForm #ggccol").hide();
+            }
 
             var flag = false;
             if(rowData.isMultiuse==1){
@@ -432,14 +586,349 @@
         $("#editorGoodsComplimentaryTitle").text("添加赠品");
         $('#editorGoodsComplimentary').modal("show")
     }
+    
+</script>
+
+<!--赠品与子类关系1-->
+<script>
+
+    $(function () {
+        $('#editgcgcSubmit').click(function () {
+            cleargcgcdata();
+        });
+    });
+
+    function cleargcgcdata() {
+        var gcId = $('#gcId').val();
+
+        $.ajax({
+            type:"post",
+            url:"/goods/clearGoodsGgcrel",
+            dataType: "json",
+            data:{gcId:gcId},
+            success:function(data){
+                addgcgcrel();
+            }
+        });
+    }
+
+    function addgcgcrel() {
+        var gcId = $('#gcId').val();
+        var gcgccheckboxs = $('#gcgcTbody').find('input[type=checkbox]');
+        if(gcgccheckboxs!=null && gcgccheckboxs.length>0){
+            var gclassIds = '';
+            for(var i=0; i<gcgccheckboxs.length; i++){
+                gclassIds += ','+gcgccheckboxs[i].value;
+            }
+            gclassIds = gclassIds.substr(1);
+            $.ajax({
+                type:"post",
+                url:"/goods/addGoodsGgcrelByGc",
+                dataType: "json",
+                data:{gcId:gcId,gclassIds:gclassIds},
+                success:function(data){
+                    if(data.status==0){
+                        layer.msg("操作成功");
+                        $('#editorgcgcrel').modal('hide');
+                    }else{
+                        layer.msg("系统错误");
+                    }
+
+                }
+            });
+        }else{
+            $('#editorgcgcrel').modal('hide');
+        }
+    }
+
+    function deletegcgclrel() {
+        var gcgccheckboxs = $('#gcgcTbody').find('input[type=checkbox]:checked');
+        if(gcgccheckboxs!=null&&gcgccheckboxs.length>0){
+            for(var i=0;i<gcgccheckboxs.length;i++){
+                $(gcgccheckboxs[i]).parent().parent().parent().remove();
+            }
+        }else{
+            layer.msg("请选择想操作的数据");
+        }
+    }
+
+    function initgcgcrel() {
+        var gcId = $('#gcId').val();
+        $('#gclassNum').val('');
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGgcrelLists",
+            dataType: "json",
+            data:{gcId:gcId,isClass:1,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        html += '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="gcgccheckbox'+i+'"  type="checkbox" name="gcgccheckbox" onclick="" value="'+rows[i].gclassId+'">'+
+                            '<label for="gcgccheckbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            rows[i].gclassName+
+                            '</td>'+
+                            '</tr>';
+                    }
+                }
+                $('#gcgcTbody').html(html);
+
+                var gcgccheckboxs = $('#gcgcTbody').find('input[type=checkbox]');
+                if(gcgccheckboxs!=null && gcgccheckboxs.length>0){
+                    var ggIds = '';
+                    for(var i=0; i<gcgccheckboxs.length; i++){
+                        ggIds += ','+gcgccheckboxs[i].value;
+                    }
+                    ggIds = ggIds.substr(1);
+                    initgcgctree(ggIds);
+                }else{
+                    initgcgctree(-1);
+                }
+
+            }
+        });
+    }
+
+    <!--初始化树形结构-->
+    function initgcgctree(ggIds) {
+        $.ajax({
+            type:"post",
+            url:'/goods/queryGoodsClassificationNode',
+            dataType: "json",
+            data:{ggId:ggIds,pageSize:1000,pageNo:1},
+            async:false,
+            success:function(data){
+                let d=data.data;
+                var nodeData=new Array();
+                for(row of d){
+                    let treeRow=new Object();
+                    treeRow.id=row.ggId;
+                    treeRow.pId=row.parentId;
+                    treeRow.name=row.ggName;
+                    nodeData.push(treeRow);
+                }
+                var zTree=$.fn.zTree.init($("#treeDemo"), setting1, nodeData);
+            }
+        });
+    }
+
+    function showrel() {
+        var isClass = $('#isClass').val();
+        if(isClass == 0){
+            initggcrel();
+            $('#editorggcrel').modal("show");
+        }
+        if(isClass == 1){
+            initgcgcrel();
+            $('#editorgcgcrel').modal("show");
+        }
+    }
+
+    function isClasschange() {
+        var gcId = $('#gcId').val();
+        if(gcId == ''){
+            return;
+        }
+        var isClass = $('#isClass').val();
+        if(isClass == 0){
+            $('#ggccol').show();
+            $('#gcgccol').hide();
+        }
+        if(isClass == 1){
+            $('#ggccol').hide();
+            $('#gcgccol').show();
+        }
+        if(isClass ==2){
+            $('#ggccol').hide();
+            $('#gcgccol').hide();
+        }
+    }
 
 
-    /***********************************************************************************/
-    var setting = {
-        check: {
-            enable: true,
-            chkboxType: { "Y" : "s", "N" : "s" }
-        },
+
+</script>
+
+<!--赠品与子类关系2-->
+<script>
+    var initgcomplimentaryreldataArr = new Array();
+
+    $(function () {
+        $('#editggcSubmit').click(function () {
+            $('#editorggcrel').modal('hide');
+        });
+    });
+
+    /**
+     * 清除form 表单数据
+     * */
+    function initggcrel(){
+        var gcId = $('#gcId').val();
+        $('#gnamecopy').val('');
+        initgcomplimentaryreldataArr = [];
+        $('#addggcrelbtn').hide();
+        $('#deleteggcrelbtn').show();
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGgcrelLists",
+            dataType: "json",
+            data:{gcId:gcId,isClass:0,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="checkbox'+i+'" name="ggccheckbox" class="styled" type="checkbox" value="'+rows[i].ggcId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        initgcomplimentaryreldataArr.push(rows[i].gid);
+                    }
+                }else{
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">暂时没有绑定商品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#ggcTbody').html(html);
+            }
+        });
+    }
+
+    function searchggcgoods() {
+        var gnamecopy = $('#gnamecopy').val();
+        if(gnamecopy==''){
+            layer.msg('请输入商品名称');
+            return;
+        }
+        $('#addggcrelbtn').show();
+        $('#deleteggcrelbtn').hide();
+        $.ajax({
+            type: "post",
+            url: "/goods/queryGoodsLists",
+            dataType: "json",
+            data: {gname: gnamecopy,pageNo: 1, pageSize: 100},
+            success: function (data) {
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null){
+                    for(var i=0; i<rows.length; i++){
+                        var flag = 0;
+                        if (initgcomplimentaryreldataArr.length>0){
+                            for (var j=0; j<initgcomplimentaryreldataArr.length; j++){
+                                if (rows[i].gid==initgcomplimentaryreldataArr[j]){
+                                    flag = 1;
+                                }
+                            }
+                        }
+
+                        if(flag == 0){
+                            html += '<tr>'+
+                                '<td>'+
+                                '<div class="checkbox checkbox-info">'+
+                                '<input name="ggccheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gid+'">'+
+                                '<label for="checkbox'+i+'">'+
+                                '</label>'+
+                                '</div>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].gname+'</span>'+
+                                '</td>'+
+                                '</tr>';
+                        }
+
+                    }
+                }
+
+                if(html == ''){
+                    html += '<tr>'+
+                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<span style="line-height: 100%;color:red;">没有找到符合要求的商品</span>'+
+                        '</td>'+
+                        '</tr>';
+
+                }
+                $('#ggcTbody').html(html);
+            }
+        });
+    }
+
+    function addggcrel() {
+        var checkboxs = $('input:checkbox[name="ggccheckbox"]:checked');
+        var addggb = "";
+        var gcId = $('#gcId').val();
+        if(checkboxs.length > 0){
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    addggb += ","+checkboxs[i].value;
+                }
+            }
+            $.ajax({
+                type: "post",
+                url: "/goods/addGoodsGgcrel",
+                dataType: "json",
+                data: {gids: addggb,gcId:gcId},
+                success: function (data) {
+                    layer.msg('新增成功!');
+                    initggcrel();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据!');
+        }
+
+    }
+
+    function deleteggcrel() {
+        var checkboxs = $('input:checkbox[name="ggccheckbox"]:checked');
+        if(checkboxs.length > 0){
+            var gglIds = "";
+            for(var i=0; i<checkboxs.length; i++){
+                if(checkboxs[i].checked){
+                    gglIds += checkboxs[i].value + ",";
+                }
+            }
+
+            $.ajax({
+                type: "post",
+                url: "/goods/removeGoodsGgcrel",
+                dataType: "json",
+                data: {ggcIds: gglIds},
+                success: function (data) {
+                    layer.msg('删除成功!');
+                    initggcrel();
+                }
+            });
+
+        }else{
+            layer.msg('请选择您想操作的数据!');
+        }
+
+    }
+
+</script>
+
+<!--树形结构展示-->
+<script>
+    var setting1 = {
         view: {
             dblClickExpand: false
         },
@@ -449,60 +938,76 @@
             }
         },
         callback: {
-            onCheck: onCheck
+            beforeClick: beforeClick1,
+            onClick: onClick1
         }
     };
 
-    function onCheck(e, treeId, treeNode) {
-        var zTree = $.fn.zTree.getZTreeObj("orgTree"),
-            nodes = zTree.getCheckedNodes(),
+    function beforeClick1(treeId, treeNode) {
+        return true;
+    }
+
+    function onClick1(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getSelectedNodes(),
             v = "",vId="";
         nodes.sort(function compare(a,b){return a.id-b.id;});
         for (var i=0, l=nodes.length; i<l; i++) {
-            v += nodes[i].name+",";
-            vId += nodes[i].id+",";
+            v += nodes[i].name;
+            vId += nodes[i].id;
         }
-        var orgPname = $("#orgNms");
-        var orgPid_ = $("#orgIds");
-        orgPname.val(v);
-        orgPid_.val(vId);
-        //hideOrgTree();
-    }
+        var gclassNum = $("#gclassNum");
+        gclassNum.val(v);
 
-    function showOrgTree() {
-        var cityObj = $("#orgNms");
-        var cityOffset = $("#orgNms").offset();
-        $("#orgNodeContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-        $("body").bind("mousedown", onBodyDown);
-    }
-    function hideOrgTree() {
-        $("#orgNodeContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
-    }
-    function onBodyDown(event) {
-        if (!(event.target.id == "menuBtn" || event.target.id == "orgNodeContent" || $(event.target).parents("#orgNodeContent").length>0)) {
-            hideOrgTree();
-        }
-    }
-    
-    function deleteGoodsComplimentaryList() {
-        var objs = $('#GoodsComplimentaryTables') .bootstrapTable('getAllSelections');
-        if(objs.length>0){
-            layer.confirm('确定要删除选中的数据吗？', {
-                btn: ['确认','取消'] //按钮
-            }, function(){
-                for(var i=0;i<objs.length;i++){
-                    removeGoodsComplimentary(objs[i].glId);
+        var flag = 0;
+        var gcgccheckboxs = $('#gcgcTbody').find('input[type=checkbox]');
+        if(gcgccheckboxs!=null && gcgccheckboxs.length>0){
+            for(var i=0; i<gcgccheckboxs.length; i++){
+                if(vId==gcgccheckboxs[i].value){
+                    $(gcgccheckboxs[i]).parent().parent().parent().remove();
+                    console.log(gcgccheckboxs[i]);
+                    flag++;
                 }
-            }, function(){
-            });
-        }else{
-            layer.msg("请选择需要删除的品牌！");
+            }
+        }
+
+        if(flag == 0){
+            var html = '<tr>'+
+                '<td>'+
+                '<div class="checkbox checkbox-info">'+
+                '<input id="gcgccheckbox'+vId+'"  type="checkbox" name="gcgccheckbox" onclick="" value="'+vId+'">'+
+                '<label for="gcgccheckbox'+vId+'">'+
+                '</label>'+
+                '</div>'+
+                '</td>'+
+                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                v+
+                '</td>'+
+                '</tr>';
+            $('#gcgcTbody').prepend(html);
         }
     }
 
+    var zNodes1;
+    $.fn.zTree.init($("#treeDemo1"), setting1, zNodes1);
 
+    function showMenu() {
+        var cityObj = $("#gclassNum");
+        var cityOffset = $("#gclassNum").offset();
+        $("#menuContent1").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+        $("body").bind("mousedown", onBodyDown1);
+    }
+    function hideMenu() {
+        $("#menuContent1").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown1);
+    }
+    function onBodyDown1(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "menuContent1" || $(event.target).parents("#menuContent1").length>0)) {
+            hideMenu();
+        }
+    }
 </script>
+
 
 <script>
     function searchgoods() {

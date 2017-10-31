@@ -58,9 +58,10 @@ public class GoodsComplimentaryController extends BaseController {
     @RequestMapping("/queryGoodsComplimentaryLists")
     @Function(label = "赠品列表", description = "所有赠品列表", resourse = "goods.queryGoodsComplimentaryLists", sort = 1, parentRes = "goods.openGoodsComplimentary")
     @ResponseBody
-    public Map<String, Object> queryGoodsComplimentaryLists(String gcName,PageUtils pageForm) {
+    public Map<String, Object> queryGoodsComplimentaryLists(String gcName,Long isClass,PageUtils pageForm) {
         Map<String, Object> map = new HashMap<String, Object>();
         map.put("gcName", gcName);
+        map.put("isClass", isClass);
         map.put("isDelete", 0);
         Pagination<GoodsComplimentaryVo> GoodsComplimentaryPagination = goodsComplimentaryService.queryGoodsComplimentaryList(map, pageForm.getPageNo(), pageForm.getPageSize());
         Map<String, Object> gtm = new HashMap<String, Object>();

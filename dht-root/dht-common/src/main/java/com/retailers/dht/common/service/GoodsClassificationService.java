@@ -62,7 +62,7 @@ public interface GoodsClassificationService {
 
 	public List<GoodsClassificationVo> queryGoodsClassificationTree();
 
-	public List<GoodsClassificationVo> queryGoodsClassificationNode(Long ggId);
+	public List<GoodsClassificationVo> queryGoodsClassificationNode(String ggId);
 
 }
 

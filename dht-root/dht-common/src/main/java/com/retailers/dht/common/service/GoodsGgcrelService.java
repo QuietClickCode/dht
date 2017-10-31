@@ -3,6 +3,8 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsGgcrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgcrel;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：赠品与商品关系表Service
@@ -56,6 +58,13 @@ public interface GoodsGgcrelService {
 	 */
 	public boolean deleteGoodsGgcrelByGgcId(String ggcIds);
 
+	public  boolean clearGoodsGgcrel(Long gcId);
+
+	public  boolean saveGoodsGgcrelByGc(String gclassIds,Long gcId);
+
+	public  boolean saveGoodsGgcrels(String gids,Long gcId);
+
+	public List<GoodsGgcrelVo> queryGclassGoodsGgcrelLists(Long gid);
 }
 
 

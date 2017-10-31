@@ -53,4 +53,6 @@ public interface GoodsGgcrelMapper {
 	 */
 	public List<GoodsGgcrelVo> queryGoodsGgcrelList(Pagination<GoodsGgcrelVo> pagination);
 
+	public List<GoodsGgcrelVo> queryGclassGoodsGgcrelLists(String gclassIds);
+
 }
