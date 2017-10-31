@@ -22,6 +22,33 @@
             height: 34px;
             width: 110px;
         }
+
+        .window{
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            position: fixed;
+            top: 0;
+            left:0;
+            overflow: hidden;
+            text-align: center;
+            z-index: 9999;
+            display: none;
+
+        }
+        .window img{
+            width: auto;
+            height: auto;
+            position: relative;
+            top: 50%;
+            max-width: 90%;
+            transform:translateY(-50%);
+        }
+        .window button{
+            position: absolute;
+            right: 0px;
+            top:0px;
+        }
     </style>
 </head>
 <body>
@@ -48,6 +75,12 @@
         <option value="1">城市</option>
     </select>
 
+    <div class="window">
+        <img src="">
+        <button type="button" class="btn btn-default" aria-label="Left Align">
+            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+    </div>
 
     <button class="btn btn-default" onclick="refreshTableData()">查询</button>
 </div>
@@ -378,7 +411,7 @@
             valign : 'middle',
             formatter:function (value,row,index) {
                 rowDatas.set(row.haId,row);
-                let html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                let html = '<img style="width: 50px;height: 50px;" class="demo" onclick="event.stopPropagation();wtf(\''+row.imageUrl+'\')" src='+row.imageUrl+'>'
                 return html;
             }
         },
@@ -635,6 +668,17 @@
             }
          });
     }
+
+    function wtf(url) {
+        $(".window img").attr("src",url);
+        $(".window").show();
+    }
+</script>
+
+<script>
+    $(".window").click(function(){
+        $(this).hide();
+    });
 </script>
 
 <%--表单校验--%>

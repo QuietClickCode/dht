@@ -204,6 +204,27 @@
     </div>
 </div>
 
+
+<%--图片展示模态框--%>
+<div class="modal fade" id="showImageModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >图片展示</h4>
+            </div>
+            <div class="modal-body">
+                <img src="">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="submit" class="btn btn-primary" onclick="saveFloorAdv()">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!-- 公用下拉择树 -->
 <div id="menuContent" class="menuContent" style="display:none; position: absolute;z-index:1059">
     <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
@@ -294,7 +315,7 @@
                     rowDatas.set(row.faId,row);
                     let html;
                     if(row.parentId != null)
-                    html = "<img style='width: 50px;height: 50px;' src="+row.imageUrl+">";
+                    html = "<img style='width: 50px;height: 50px;cursor: pointer;'  onclick='event.stopPropagation();wtffff()'  src="+row.imageUrl+">";
                     return html;
                 }
             }
@@ -382,7 +403,7 @@
                 $(className)[i].checked = 'checked';
         }
     }
-
+    
     $("#uploadImage").change(function () {
         let path = $(this).val();
         $("#showImg").attr("src","");
@@ -554,7 +575,10 @@
             }
         });
     }
-
+    
+    function wtffff() {
+        alert($(this).attr("src"));
+    }
 </script>
 
 <script>
@@ -665,7 +689,6 @@
             hideMenu();
         }
     }
-
 
 </script>
 
