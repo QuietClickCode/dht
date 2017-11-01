@@ -13,6 +13,7 @@ import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalService;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsInventoryVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -106,6 +107,25 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         }
 
 	    return index==status?true:false;
+    }
+
+    public Pagination<GoodsInventoryVo> queryGoodsInventoryLists(Map<String, Object> params,int pageNo,int pageSize){
+        Pagination<GoodsInventoryVo> page = new Pagination<GoodsInventoryVo>();
+        page.setPageNo(pageNo);
+        page.setPageSize(pageSize);
+        page.setParams(params);
+        List<GoodsInventoryVo> list = goodsGgsvalDetailMapper.queryGoodsInventoryLists(page);
+        page.setData(list);
+        return page;
+    }
+
+    public boolean editGoodsInventory(Long gdId,Long inventory){
+        GoodsDetail goodsDetail = goodsDetailService.queryGoodsDetailByGdId(gdId);
+        if(inventory>0){
+            goodsDetail.setGdInventory(goodsDetail.getGdInventory()+inventory);
+        }
+        goodsDetail.setGdResidueinventory(goodsDetail.getGdResidueinventory()+inventory);
+        return goodsDetailService.updateGoodsDetail(goodsDetail);
     }
 }
 

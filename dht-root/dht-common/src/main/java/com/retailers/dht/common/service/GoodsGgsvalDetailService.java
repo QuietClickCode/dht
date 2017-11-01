@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
 import java.util.Map;
@@ -57,6 +58,9 @@ public interface GoodsGgsvalDetailService {
 
 	public boolean clearAllGgsrel(Long gid,Long updatepersonId);
 
+	public Pagination<GoodsInventoryVo> queryGoodsInventoryLists(Map<String, Object> params, int pageNo, int pageSize);
+
+	public boolean editGoodsInventory(Long gdId,Long inventory);
 }
 
 

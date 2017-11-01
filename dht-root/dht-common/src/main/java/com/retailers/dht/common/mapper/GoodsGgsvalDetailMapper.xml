@@ -12,6 +12,13 @@
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_goodsInventory_vo" type="com.retailers.dht.common.vo.GoodsInventoryVo">
+		<result property="gid" column="g_id"/>
+		<result property="gname" column="g_name"/>
+		<result property="inventory" column="gd_inventory"/>
+		<result property="residueInventory" column="gd_residueInventory"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGgsvalDetail_columns">
 		ggd_id,g_id,gs_id,gsv_id,gd_id,is_delete,version
@@ -47,11 +54,29 @@
 			</if>
 		</where>
 	</sql>
+	<sql id="goodsGgsvalDetail_where_vo">
+		<where>
+			t1.is_delete!=1 and t2.is_delete!=1 and t3.is_delete!=1
+			<if test="null != params.gname and ''!=params.gname ">
+				AND t3.g_name like concat('%', #{params.gname} ,'%')
+			</if>
+		</where>
+	</sql>
 	<!--分页查询 -->
 	<select id="queryGoodsGgsvalDetailList" resultMap="rm_goodsGgsvalDetail" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="goodsGgsvalDetail_columns" />
 		FROM t_goods_ggsval_detail
 		<include refid="goodsGgsvalDetail_where"/>
+	</select>
+
+	<select id="queryGoodsInventoryLists" resultMap="rm_goodsInventory_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.g_id,t1.g_name,sum(t1.gd_inventory) gd_inventory,sum(t1.gd_residueinventory) gd_residueinventory from
+		(SELECT t3.g_id,t3.g_name,t1.gd_inventory,t1.gd_residueinventory,t1.gd_id from t_goods_detail t1
+		LEFT JOIN t_goods_ggsval_detail t2 on t1.gd_id=t2.gd_id
+		LEFT JOIN t_goods t3 on t2.g_id=t3.g_id
+		<include refid="goodsGgsvalDetail_where_vo"/>
+		GROUP BY t1.gd_id) t1
+		GROUP BY t1.g_id
 	</select>
 	<!--添加商品与规格值详情表 -->
 	<insert id="saveGoodsGgsvalDetail" parameterType="com.retailers.dht.common.entity.GoodsGgsvalDetail" useGeneratedKeys="true" keyProperty="ggdId">
