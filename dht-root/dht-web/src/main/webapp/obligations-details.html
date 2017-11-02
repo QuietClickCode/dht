@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>待付款订单详情</title>
+    <script src="js/Adaptive.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bge6">
+    <div class="specialty-title2 borderB">
+        <a href="" class="icon-return"></a>
+        <span>订单详情</span>
+    </div>
+
+    <div class="obligations-start">
+        <p class="start-text">等待买家付款</p>
+        <p class="time">
+            剩2天21小时自动关闭
+            <i></i>
+        </p>
+    </div>
+
+    <div class="obligations-user">
+        <p class="user-name">
+            收货人:胡月半
+            <span class="phone">151****2388</span>
+        </p>
+        <p class="obligations-address">重庆 重庆市石柱县物流镇明星村</p>
+    </div>
+
+    <div class="obligations-order box2">
+        <div class="order-box">
+            <a href="" class="img">
+                <img src="img/list2.jpg" alt="">
+            </a>
+            <div class="text-box">
+                <a href="">
+                    <span class="text">乐事多力多滋薯片多口味零食大礼盒400克</span>
+                    <span class="price">￥29.9</span>
+                </a>
+                <p>规格:400g
+                    <span class="number">×1</span>
+                </p>
+            </div>
+        </div>
+        <div class="after-sales">
+            <a href="">申请售后</a>
+        </div>
+    </div>
+
+    <div class="obligations-total box2">
+        <p class="total-number1">
+            应付总额
+            <span class="number1">￥150.22</span>
+        </p>
+        <p class="total-number2">
+            商品总金额
+            <span class="number2">￥150.22</span>
+        </p>
+        <p class="total-number2">
+            运费
+            <span class="number2">￥150.22</span>
+        </p>
+        <p class="total-number2">
+            会员折扣
+            <span class="number2">￥150.22</span>
+        </p>
+        <p class="total-number2">
+            优惠卷
+            <span class="number2">￥150.22</span>
+        </p>
+        <p class="total-number2">
+            以为您节省
+            <span class="number2">￥150.22</span>
+        </p>
+    </div>
+
+    <div class="obligations-order-number">
+        <p>订单编号：2017234974325446840</p>
+        <p>下单时间:2017-10-17 17：35：22</p>
+    </div>
+
+    <div class="obligations-payment">
+        <p>
+            支付方式
+            <span>余额支付</span>
+        </p>
+        <p>
+            发票信息
+            <span>个人</span>
+        </p>
+    </div>
+
+    <div class="placeholder-footer2"></div>
+    <div class="obligations-footer">
+        <a href="javascript:void(0);" id="J_cancelOrder">取消订单</a>
+        <a href="" class="payment-btn">立即支付</a>
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="mark" id="J_mark"></div>
+    <div class="footprint-prompt" id="J_footprintPrompt">
+        <p class="text1">取消订单不再享受优惠，您确定要取消订单吗？</p>
+        <div class="footprint-confirm">
+            <span class="cancel" id="J_cancel">残忍拒绝</span>
+            <span class="confirm" id="J_confirm">再想想</span>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script>
+        // 取消订单
+        $('#J_cancelOrder').on('click',function(){
+            $('#J_footprintPrompt,#J_mark').show();
+        })
+        //取消
+        $('#J_cancel').on('click',function(){
+            $('#J_footprintPrompt,#J_mark').hide();
+        });
+
+        //确定
+        $('#J_confirm').on('click',function(){
+            $('#J_footprintPrompt,#J_mark').hide();
+            // 向后台发送数据
+
+        });
+    </script>
+</body>
+
+</html>
