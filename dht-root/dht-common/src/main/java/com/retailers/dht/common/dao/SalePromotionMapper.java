@@ -1,13 +1,16 @@
 package com.retailers.dht.common.dao;
+
 import com.retailers.dht.common.entity.SalePromotion;
+import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.List;
 /**
  * 描述：商品促销表DAO
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-30 15:28:44
+ * @date 2017-11-02 16:28:41
  */
 public interface SalePromotionMapper {
 
@@ -16,7 +19,7 @@ public interface SalePromotionMapper {
 	 * @param salePromotion
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public int saveSalePromotion(SalePromotion salePromotion);
 	/**
@@ -24,7 +27,7 @@ public interface SalePromotionMapper {
 	 * @param salePromotion
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public int updateSalePromotion(SalePromotion salePromotion);
 	/**
@@ -32,7 +35,7 @@ public interface SalePromotionMapper {
 	 * @param spId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public int deleteSalePromotionBySpId(Long spId);
 	/**
@@ -40,7 +43,7 @@ public interface SalePromotionMapper {
 	 * @param spId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public SalePromotion querySalePromotionBySpId(Long spId);
 	/**
@@ -48,8 +51,10 @@ public interface SalePromotionMapper {
 	 * @param pagination 分页对象
 	 * @return  商品促销表列表
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
-	public List<SalePromotion> querySalePromotionList(Pagination<SalePromotion> pagination);
+	public List<SalePromotionVo> querySalePromotionList(Pagination<SalePromotionVo> pagination);
+
+	/*public List<SalePromotionVo> querySalePromotionTree();*/
 
 }

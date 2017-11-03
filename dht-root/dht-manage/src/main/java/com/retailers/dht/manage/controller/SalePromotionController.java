@@ -4,16 +4,17 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.SalePromotion;
 import com.retailers.dht.common.service.SalePromotionService;
+import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
-import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -64,13 +65,14 @@ public class SalePromotionController extends BaseController{
     @RequestMapping("/querySalePromotionLists")
     @Function(label="特价名单集合", description = "特价名单集合", resourse = "openSalePromotion.querySalePromotionLists",sort=1,parentRes="openSalePromotion.salePromotionMapping")
     @ResponseBody
-    public Map<String,Object> querySalePromotionLists(PageUtils pageForm){
+    public Map<String,Object> querySalePromotionLists(){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        Pagination<SalePromotion> advertisingPagination = promotionService.querySalePromotionList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<SalePromotionVo> advertisingPagination = promotionService.querySalePromotionList(map,1,10);
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("total",advertisingPagination.getPageSize());
-        gtm.put("rows",advertisingPagination.getData());
+        gtm.put("total",1000);
+        List<SalePromotionVo> promotionVos = promotionService.querySalePromotionTree(advertisingPagination.getData());
+        gtm.put("rows",promotionVos);
         return gtm;
     }
 }
