@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
+import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -52,4 +53,5 @@ public interface GoodsGgsvalDetailMapper {
 	 */
 	public List<GoodsGgsvalDetail> queryGoodsGgsvalDetailList(Pagination<GoodsGgsvalDetail> pagination);
 
+	public List<GoodsInventoryVo> queryGoodsInventoryLists(Pagination<GoodsInventoryVo> pagination);
 }

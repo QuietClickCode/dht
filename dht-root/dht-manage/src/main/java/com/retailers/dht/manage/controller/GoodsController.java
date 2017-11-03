@@ -73,6 +73,16 @@ public class GoodsController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/queryGoodsById")
+    @Function(label="商品列表", description = "所有商品列表", resourse = "goods.queryGoodsById",sort=1,parentRes="goods.openGoods")
+    @ResponseBody
+    public  Map<String,Object> queryGoodsById(Long gid){
+        Goods goods = goodsService.queryGoodsByGid(gid);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("row",goods);
+        return gtm;
+    }
+
     @RequestMapping("/addGoods")
     @Function(label="增加商品", description = "增加商品", resourse = "goods.addGoods",parentRes="goods.openGoods")
     @ResponseBody

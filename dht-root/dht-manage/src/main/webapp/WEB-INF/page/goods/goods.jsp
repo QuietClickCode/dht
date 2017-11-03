@@ -1295,6 +1295,8 @@
         editorGoodsType=0;
         initFormData(-1);
         $("#editorSysUserTitle").text("添加商品");
+        $('#tabDiv').hide();
+        $('#addandeditgoods').show();
     }
 
     function returnback() {
@@ -1782,6 +1784,15 @@
                 toastr.warning('请把数据填写完整!');
                 return;
             }
+            if(inputs!=null && inputs.length>0) {
+                for (var i = 0; i < inputs.length; i++) {
+                    if(isNaN(inputs[i].value)){
+                        toastr.warning("请填写数字");
+                        return;
+                    }
+                }
+            }
+
             var gid = $('#gid').val();
             clearggsdata(gid);
 
@@ -1804,8 +1815,6 @@
             return;
         }
         getggHome(ggId);
-
-
     }
 
     function getggHome(ggId) {
@@ -2324,7 +2333,9 @@
                             $(ggsvaldetailtds[ggsvaldetailtds.length-6]).find('input').get(0).value = goodsDetail.gdPrice;
                             $(ggsvaldetailtds[ggsvaldetailtds.length-5]).find('input').get(0).value = goodsDetail.gdCostprice;
                             $(ggsvaldetailtds[ggsvaldetailtds.length-4]).find('input').get(0).value = goodsDetail.gdInventory;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-4]).find('input').attr('disabled','disabled');
                             $(ggsvaldetailtds[ggsvaldetailtds.length-3]).find('input').get(0).value = goodsDetail.gdResidueinventory;
+                            $(ggsvaldetailtds[ggsvaldetailtds.length-3]).find('input').attr('disabled','disabled');
                             $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('input').get(0).value = goodsDetail.gdImgid;
                             if(goodsDetail.imgUrl.substring(goodsDetail.imgUrl.length-4)!="null"){
                                 $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('img').get(0).src = goodsDetail.imgUrl;

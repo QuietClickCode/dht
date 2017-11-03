@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+
 /**
  * @author zhongp
  * @version 1.0.1
@@ -28,7 +30,9 @@ public class WxController {
 
     @RequestMapping("openWxPage")
     @Menu(resourse = "wx.openWxPage",label = "公众号绑定",parentRes = "system.manager.wx")
-    public ModelAndView openWxPage(){
+    public ModelAndView openWxPage(HttpServletRequest request){
+        String realpath = request.getSession().getServletContext().getRealPath("/");
+        System.out.println(realpath);
         ModelAndView mav = new ModelAndView();
         WxManager wxManager= wxManagerService.queryCurUsedWx();
         System.out.println(JSON.toJSON(wxManager));

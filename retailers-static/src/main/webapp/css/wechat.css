@@ -1,0 +1,42 @@
+
+body{
+	overflow-x: hidden;
+	padding: 0px;
+	margin:0px;
+}
+
+#wx_nav{
+	margin-bottom: 100px;
+}
+
+.navigation li{
+	height: 40px;
+	line-height: 40px;
+	width: 32%;
+	color: white;
+	text-align: center;
+	border-radius: 5px;
+	cursor: pointer;
+	background-color: rgba(0,0,255,0.4);
+}
+
+#mainbody{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+#footer{
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.wx_info{
+	display: none;
+	height: 550px;
+}
+
+.popover {
+	max-width: none;
+	max-width: 510px;
+	left: 600px;
+}

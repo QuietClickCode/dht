@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="initial-scale=1.0,maximum-scale=1.0,width=device-width" name="viewport">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <title>足迹</title>
+    <script src="js/Adaptive.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bge6">
+    <div class="specialty-title2 borderB">
+        <a href="" class="icon-return"></a>
+        <span>商品详情</span>
+        <span class="footprint-all-close" id="J_allClose">清空</span>
+    </div>
+    <div class="box2">
+
+        <div class="footprint-list J_footprintProduct">
+            <a href="" class="img">
+                <img src="img/footprint.png" alt="">
+            </a>
+            <div class="text">
+                <a href="">野生桃胶</a>
+                <p>天然食用桃胶野生桃胶桃花泪</p>
+                <span>￥29.8</span>
+            </div>
+            <div class="close-box J_closeList">删除</div>
+        </div>
+
+        <div class="footprint-list J_footprintProduct">
+            <a href="" class="img">
+                <img src="img/footprint.png" alt="">
+            </a>
+            <div class="text">
+                <a href="">野生桃胶</a>
+                <p>天然食用桃胶野生桃胶桃花泪</p>
+                <span>￥29.8</span>
+            </div>
+            <div class="close-box J_closeList">删除</div>
+        </div>
+
+        <div class="footprint-list J_footprintProduct">
+            <a href="" class="img">
+                <img src="img/footprint.png" alt="">
+            </a>
+            <div class="text">
+                <a href="">野生桃胶</a>
+                <p>天然食用桃胶野生桃胶桃花泪</p>
+                <span>￥29.8</span>
+            </div>
+            <div class="close-box J_closeList">删除</div>
+        </div>
+
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="mark" id="J_mark"></div>
+    <div class="footprint-prompt" id="J_footprintPrompt">
+        <p>确定清空所有浏览记录？</p>
+        <div class="footprint-confirm">
+            <span class="cancel" id="J_cancel">取消</span>
+            <span class="confirm" id="J_confirm">确定</span>
+        </div>
+    </div>
+
+    <script src="js/jquery-1.9.1.min.js"></script>
+    <script src="js/touch.min.js"></script>
+    <script>
+        // 产品列表向左滑动，显示删除按钮
+        touch.on('.J_footprintProduct', 'swipeleft', function (ev) {
+            ev.preventDefault();
+            $(this).parents('.J_footprintProduct').addClass('swiperLeft');
+        });
+        // 产品列表向左滑动，显示删除按钮
+        touch.on('.J_footprintProduct', 'swiperight', function (ev) {
+            ev.preventDefault();
+            $(this).parents('.J_footprintProduct').removeClass('swiperLeft')
+        });
+
+        $('.J_closeList').on('click', function () {
+            $(this).parents('.J_footprintProduct').remove()
+        });
+
+        // 清空所有
+        $('#J_allClose').on('click',function(){
+            $('#J_footprintPrompt,#J_mark').show();
+        });
+
+        //取消
+        $('#J_cancel').on('click',function(){
+            $('#J_footprintPrompt,#J_mark').hide();
+        });
+
+        //确定
+        $('#J_confirm').on('click',function(){
+            $('.J_footprintProduct').remove();
+            $('#J_footprintPrompt,#J_mark').hide();
+            // 向后台发送数据
+
+        });
+    </script>
+</body>
+
+</html>
