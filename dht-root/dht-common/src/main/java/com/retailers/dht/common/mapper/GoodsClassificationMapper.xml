@@ -52,6 +52,9 @@
 			<if test="null != params.parentId">
 				AND parent_id = #{params.parentId}
 			</if>
+			<if test="null == params.parentId">
+				AND parent_id is null
+			</if>
 			<if test="null != params.ggHome">
 				AND gg_home = #{params.ggHome}
 			</if>
@@ -94,7 +97,12 @@
 	<select id="queryGoodsClassificationNode" resultMap="rm_goodsClassification_vo">
 		SELECT <include refid="goodsClassification_columns" />
 		FROM t_goods_classification
-		where is_delete!=1 and gg_id NOT IN ( #{ggId} )  ORDER BY parent_id asc,gg_order ASC
+		where is_delete!=1 and gg_id NOT IN
+		<foreach collection="list" item="ggId" index="index"
+				 open="(" close=")" separator=",">
+			#{ggId}
+		</foreach>
+		ORDER BY parent_id asc,gg_order ASC
 	</select>
 	<!--添加商品子类表 -->
 	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">

@@ -53,7 +53,7 @@
                     <input type="hidden" name="glId" id="glId">
                     <input type="hidden" name="version" id="version">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 商品标签名称:
@@ -61,7 +61,7 @@
                                 <input type="text" class="form-control" name="glName" id="glName">
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                  商品标签有效时间:
@@ -73,7 +73,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 标签类型:
@@ -93,7 +93,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6" id="chosebtn">
                             <div class="input-group form-group">
                               <span id="goodsBtn" class="input-group-addon" style="cursor: pointer">
                                  选择商品
@@ -177,10 +177,59 @@
     </div>
 </div>
 
+<div class="modal fade" id="editorgcglrel" tabindex="-1" role="dialog" aria-labelledby="editorgcglrel">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorgcglTitle">编辑商品与标签关系</h4>
+            </div>
+            <div class="modal-body">
+                <center>
+                    <div class="form-group" style="margin-top: 5px;display: inline-block">
+                        <input id="gclassNum" onclick="showMenu();" type="text" class="form-control"  placeholder="点击选择商品子类">
+                    </div>
+                </center>
+
+                <ex:perm url="/goods/removeGoodsGgcrel">
+                    <button class="btn btn-default" type="button" onclick="deletegcgllrel()" id="deletegtgclrelbtn">删除</button>
+                </ex:perm>
+                <ex:perm url="/goods/queryGoodsGgcrelLists">
+                    <button class="btn btn-primary" type="button" onclick="initgcglrel()" style="float: right;margin-bottom: 10px">刷新</button>
+                </ex:perm>
+
+                <div class="row clearfix">
+                    <div class="col-md-12 column">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th style="width: 30px;text-align: center">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center" id="topgcglname">
+                                    子类名称
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody id="gcglTbody">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editgcglSubmit">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <!-- 公用下拉择树 -->
-<div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
+<div id="menuContent1" class="menuContent1" style="display:none; position: absolute;z-index:1059">
+    <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -266,8 +315,6 @@
         $('#editorSysUser').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
-            //隐藏下拉菜单
-            hideOrgTree();
             clearFormValidation("editorGoodsLabelForm",formValidater)
         });
 
@@ -397,11 +444,8 @@
         });
     }
 
-
-    var zNodes;
     function editorGoodsLabel(orgId){
         editorGoodsLabelType=1;
-        reloadOrgTree(orgId);
         initFormData(orgId);
         $("#editorSysUserTitle").text("编辑商品标签");
         $('#editorSysUser').modal("show")
@@ -432,10 +476,15 @@
             $("#reportrange").val(rowData.glStarttime + ' - ' + rowData.glEndtime);
 
             if(rowData.isGoodslabel==1){
-                $('#isGoodsShow').attr("checked","checked");
+                document.getElementById("isGoodsShow").checked = true;
+                $("#goodsBtn").show();
+                $("#classBtn").hide();
             }else{
-                $('#isClassShow').attr("checked","checked");
+                document.getElementById("isClassShow").checked = true;
+                $("#goodsBtn").hide();
+                $("#classBtn").show();
             }
+            $('#chosebtn').show();
 
         }else{
             $("#editorGoodsLabelForm #glName").val('');
@@ -444,7 +493,8 @@
             $("#editorGoodsLabelForm #glStarttime").val('');
             $("#editorGoodsLabelForm #glEndtime").val('');
             $("#searchDateRange").html('');
-            $('#isGoodsShow').attr("checked","checked");
+            document.getElementById("isGoodsShow").checked = true;
+            $('#chosebtn').hide();
         }
     }
     /**
@@ -452,101 +502,10 @@
      **/
     function addGoodsLabel(){
         editorGoodsLabelType=0;
-        let orgId,orgPid;
-        reloadOrgTree();
         initFormData();
 
         $("#editorSysUserTitle").text("添加商品标签");
         $('#editorSysUser').modal("show")
-    }
-    /**
-     * 重新加载树型结构
-     **/
-    function reloadOrgTree(uid){
-        $.fn.zTree.init($("#orgTree"), setting, zNodes);
-        var rowData=rowDatas.get(parseInt(uid,10));
-        let selectOrgIds="";
-        if(rowData){
-            selectOrgIds=rowData.orgIds
-        }
-        $.ajax({
-            type:"post",
-            url:'/org/reqOrgTree',
-            dataType: "json",
-            data:{selectOrgIds:selectOrgIds},
-            async:false,
-            success:function(data){
-                let nodeData=data.data;
-                var zTree=$.fn.zTree.init($("#orgTree"), setting, nodeData);
-            }
-        });
-    }
-
-    /***********************************************************************************/
-    var setting = {
-        check: {
-            enable: true,
-            chkboxType: { "Y" : "s", "N" : "s" }
-        },
-        view: {
-            dblClickExpand: false
-        },
-        data: {
-            simpleData: {
-                enable: true
-            }
-        },
-        callback: {
-            onCheck: onCheck
-        }
-    };
-
-    function onCheck(e, treeId, treeNode) {
-        var zTree = $.fn.zTree.getZTreeObj("orgTree"),
-            nodes = zTree.getCheckedNodes(),
-            v = "",vId="";
-        nodes.sort(function compare(a,b){return a.id-b.id;});
-        for (var i=0, l=nodes.length; i<l; i++) {
-            v += nodes[i].name+",";
-            vId += nodes[i].id+",";
-        }
-        var orgPname = $("#orgNms");
-        var orgPid_ = $("#orgIds");
-        orgPname.val(v);
-        orgPid_.val(vId);
-        //hideOrgTree();
-    }
-
-    function showOrgTree() {
-        var cityObj = $("#orgNms");
-        var cityOffset = $("#orgNms").offset();
-        $("#orgNodeContent").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
-        $("body").bind("mousedown", onBodyDown);
-    }
-    function hideOrgTree() {
-        $("#orgNodeContent").fadeOut("fast");
-        $("body").unbind("mousedown", onBodyDown);
-    }
-    function onBodyDown(event) {
-        if (!(event.target.id == "menuBtn" || event.target.id == "orgNodeContent" || $(event.target).parents("#orgNodeContent").length>0)) {
-            hideOrgTree();
-        }
-    }
-    
-    function deleteGoodsLabelList() {
-        var objs = $('#GoodsLabelTables') .bootstrapTable('getAllSelections');
-        if(objs.length>0){
-            layer.confirm('确定要删除选中的数据吗？', {
-                btn: ['确认','取消'] //按钮
-            }, function(){
-                for(var i=0;i<objs.length;i++){
-                    removeGoodsLabel(objs[i].glId);
-                }
-            }, function(){
-            });
-        }else{
-            layer.msg("请选择需要删除的品牌！");
-        }
     }
 
 
@@ -734,9 +693,214 @@
     }
 </script>
 
+<!--标签与子类关系1-->
 <script>
-    $("input[name='isGoods']").click(function () {
+
+    $(function () {
+        $('#editgcglSubmit').click(function () {
+            addgcglrel();
+        });
+    });
+
+    function addgcglrel() {
+        var glId = $('#glId').val();
+        var gcglcheckboxs = $('#gcglTbody').find('input[type=checkbox]');
+        if(gcglcheckboxs!=null && gcglcheckboxs.length>0){
+            var gclassIds = '';
+            for(var i=0; i<gcglcheckboxs.length; i++){
+                gclassIds += ','+gcglcheckboxs[i].value;
+            }
+            gclassIds = gclassIds.substr(1);
+            $.ajax({
+                type:"post",
+                url:"/goods/addGoodsGglrel",
+                dataType: "json",
+                data:{glId:glId,gclassIds:gclassIds},
+                success:function(data){
+                    if(data.status==0){
+                        layer.msg("操作成功");
+                        $('#editorgcglrel').modal('hide');
+                    }else{
+                        layer.msg("系统错误");
+                    }
+
+                }
+            });
+        }else{
+            $('#editorgcglrel').modal('hide');
+        }
+    }
+
+    function deletegcgllrel() {
+        var gcglcheckboxs = $('#gcglTbody').find('input[type=checkbox]:checked');
+        if(gcglcheckboxs!=null&&gcglcheckboxs.length>0){
+            for(var i=0;i<gcglcheckboxs.length;i++){
+                $(gcglcheckboxs[i]).parent().parent().parent().remove();
+            }
+        }else{
+            layer.msg("请选择想操作的数据");
+        }
+    }
+
+    function initgcglrel() {
+        var glId = $('#glId').val();
+        $('#gclassNum').val('');
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsGglrelLists",
+            dataType: "json",
+            data:{glId:glId,isGoodslabel:0,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        html += '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="gcglcheckbox'+i+'"  type="checkbox" name="gcglcheckbox" onclick="" value="'+rows[i].gclassId+'">'+
+                            '<label for="gcglcheckbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            rows[i].gclassname+
+                            '</td>'+
+                            '</tr>';
+                    }
+                }
+                $('#gcglTbody').html(html);
+
+                var gcglcheckboxs = $('#gcglTbody').find('input[type=checkbox]');
+                if(gcglcheckboxs!=null && gcglcheckboxs.length>0){
+                    var ggIds = '';
+                    for(var i=0; i<gcglcheckboxs.length; i++){
+                        ggIds += ','+gcglcheckboxs[i].value;
+                    }
+                    ggIds = ggIds.substr(1);
+                    initgcgltree(ggIds);
+                }else{
+                    initgcgltree(-1);
+                }
+
+            }
+        });
+    }
+
+    <!--初始化树形结构-->
+    function initgcgltree(ggIds) {
+        $.ajax({
+            type:"post",
+            url:'/goods/queryGoodsClassificationNode',
+            dataType: "json",
+            data:{ggId:ggIds,pageSize:1000,pageNo:1},
+            async:false,
+            success:function(data){
+                let d=data.data;
+                var nodeData=new Array();
+                for(row of d){
+                    let treeRow=new Object();
+                    treeRow.id=row.ggId;
+                    treeRow.pId=row.parentId;
+                    treeRow.name=row.ggName;
+                    nodeData.push(treeRow);
+                }
+                var zTree=$.fn.zTree.init($("#treeDemo"), setting1, nodeData);
+            }
+        });
+    }
+
+
+
+
+</script>
+
+<!--树形结构展示-->
+<script>
+    var setting1 = {
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            beforeClick: beforeClick1,
+            onClick: onClick1
+        }
+    };
+
+    function beforeClick1(treeId, treeNode) {
+        return true;
+    }
+
+    function onClick1(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("treeDemo"),
+            nodes = zTree.getSelectedNodes(),
+            v = "",vId="";
+        nodes.sort(function compare(a,b){return a.id-b.id;});
+        for (var i=0, l=nodes.length; i<l; i++) {
+            v += nodes[i].name;
+            vId += nodes[i].id;
+        }
+        var gclassNum = $("#gclassNum");
+        gclassNum.val(v);
+
+        var flag = 0;
+        var gcglcheckboxs = $('#gcglTbody').find('input[type=checkbox]');
+        if(gcglcheckboxs!=null && gcglcheckboxs.length>0){
+            for(var i=0; i<gcglcheckboxs.length; i++){
+                if(vId==gcglcheckboxs[i].value){
+                    $(gcglcheckboxs[i]).parent().parent().parent().remove();
+                    console.log(gcglcheckboxs[i]);
+                    flag++;
+                }
+            }
+        }
+
+        if(flag == 0){
+            var html = '<tr>'+
+                '<td>'+
+                '<div class="checkbox checkbox-info">'+
+                '<input id="gcglcheckbox'+vId+'"  type="checkbox" name="gcglcheckbox" onclick="" value="'+vId+'">'+
+                '<label for="gcglcheckbox'+vId+'">'+
+                '</label>'+
+                '</div>'+
+                '</td>'+
+                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                v+
+                '</td>'+
+                '</tr>';
+            $('#gcglTbody').prepend(html);
+        }
+    }
+
+    var zNodes1;
+    $.fn.zTree.init($("#treeDemo1"), setting1, zNodes1);
+
+    function showMenu() {
+        var cityObj = $("#gclassNum");
+        var cityOffset = $("#gclassNum").offset();
+        $("#menuContent1").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+        $("body").bind("mousedown", onBodyDown1);
+    }
+    function hideMenu() {
+        $("#menuContent1").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown1);
+    }
+    function onBodyDown1(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "menuContent1" || $(event.target).parents("#menuContent1").length>0)) {
+            hideMenu();
+        }
+    }
+</script>
+
+<script>
+    $("input[name='labelType']").click(function () {
         var val = $(this).val();
+        $('#isGoodslabel').val(val);
         if(val==1){
             $("#goodsBtn").show();
             $("#classBtn").hide();
@@ -752,8 +916,8 @@
         $('#editorGoodsLabel').modal("show");
     });
     $('#classBtn').click(function () {
-        $("#editorGoodsLabelTitle").text("类型标签");
-        $('#editorGoodsLabel').modal("show");
+        initgcglrel();
+        $('#editorgcglrel').modal("show");
     });
 
 

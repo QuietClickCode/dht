@@ -17,9 +17,15 @@ public class GoodsGglrel implements java.io.Serializable {
 	/**商品ID*/
 	@NotEmpty
 	private Long gid;
+	/*子类ID*/
+	@NotEmpty
+	private Long gclassId;
 	/**标签ID*/
 	@NotEmpty
 	private Long glId;
+	/**是否使用 0不使用 1使用*/
+	@NotEmpty
+	private Long isUse;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -71,5 +77,19 @@ public class GoodsGglrel implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getGclassId() {
+		return gclassId;
+	}
 
+	public void setGclassId(Long gclassId) {
+		this.gclassId = gclassId;
+	}
+
+	public Long getIsUse() {
+		return isUse;
+	}
+
+	public void setIsUse(Long isUse) {
+		this.isUse = isUse;
+	}
 }
