@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,8 +33,14 @@ public class WxAuthController {
      * 获得用户授权确认
      */
     @RequestMapping("queryUserAuth")
-    public void queryUserAuth(HttpServletResponse response) throws IOException {
-        String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid="+WxConfig.APP_ID+"&redirect_uri="+ URLEncoder.encode("http://zpaman.free.ngrok.cc/wxAuth/userLogin","utf-8")+"&response_type=code&scope=SCOPE&state=STATE#wechat_redirect";
+    public void queryUserAuth(HttpServletResponse response,HttpServletRequest request) throws IOException {
+        String userAgent = request.getHeader("user-agent");
+        System.out.println("userAgent======================================>:"+userAgent);
+
+
+
+        String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa3da99ccbc1cafd0&redirect_uri="+
+                URLEncoder.encode("http://www.kuaiyis.com/wxAuth/userLogin","utf-8")+"&response_type=code&scope=snsapi_userinfo&state=aabc";
         response.sendRedirect(url);
     }
 
@@ -47,6 +54,8 @@ public class WxAuthController {
     @RequestMapping("userLogin")
     public void auth(HttpServletRequest request,String code) {
         System.out.println("------------------------------------------------->:"+code);
+        Map<String,Object> parms = WebUtils.getParametersStartingWith(request,"");
+        System.out.println(parms);
 //        String code =WxConfig.ACCESS_TOKEN;
         Map<String, String> data = new HashMap();
         Map<String, String> result = getUserInfoAccessToken(code);//通过这个code获取access_token
@@ -72,7 +81,7 @@ public class WxAuthController {
         Map<String, String> data = new HashMap();
         try {
             String url = String.format("https://api.weixin.qq.com/sns/oauth2/access_token?appid=%s&secret=%s&code=%s&grant_type=authorization_code",
-                    WxConfig.APP_ID,WxConfig.APP_SECRET, code);
+                    "wxa3da99ccbc1cafd0","e42aae6dd96dc71a3625cc8de331a003", code);
             logger.info("request accessToken from url: {}", url);
             String rtn = HttpClientUtil.doGet(url);
             object = JSONObject.parseObject(rtn);
@@ -99,6 +108,8 @@ public class WxAuthController {
         logger.info("request user info from url: {}", url);
         try {
             String info = HttpClientUtil.doGet(url);;
+            info = new String(info.getBytes("ISO-8859-1"), "UTF-8");
+            System.out.println(info);
             JSONObject userInfo=JSONObject.parseObject(info);
             logger.info("get userinfo success. [result={}]", info);
             System.out.println(info);
