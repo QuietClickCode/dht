@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>分类</title>
-    <script src="js/Adaptive.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="bge6" onload="loaded()">
@@ -21,57 +21,26 @@
         </div>
 
         <div class="classify-left" id="J_wrapperLeft">
-            <ul class="box2">
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
+            <ul class="box2" id="mainclassul">
                 <li class="active">
                     <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐</a>
-                </li>
-                <li>
-                    <a href="">为你推荐2</a>
                 </li>
             </ul>
         </div>
 
         <div class="classify-right" id="J_wrapperRight">
+            <div id="banner" class="focus">
+                <div class="hd">
+                    <ul></ul>
+                </div>
+                <div class="bd">
+                    <ul id="topbanner">
+                        <li style="width: 100%"><a href="#"><img _src="/img/banner1.jpg"  src="/img/banner1.jpg" style="width: 100%;height: 100%"/></a></li>
+                        <li style="width: 100%"><a href="#"><img _src="/img/banner1.jpg"  src="/img/banner1.jpg" style="width: 100%;height: 100%"/></a></li>
+                    </ul>
+                </div>
+            </div>
             <div class="list-right" id="scroller">
-                <a href="" class="banner">
-                    <img src="img/classify1.jpg" alt="">
-                </a>
                 <h2>热卖水果</h2>
                 <ul class="box2">
                     <li>
@@ -266,12 +235,19 @@
     <!-- 底部 -->
     <div id="footer"></div>
 
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/public.js"></script>
-    <script src="js/iscroll.js"></script>
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/public.js"></script>
+    <script src="/js/iscroll.js"></script>
+    <script src="/js/TouchSlide.1.1.js"></script>
     <script>
-        var shopLeft, shopRight;
+        $(function () {
+            <!--加载主类-->
+            loadmainclass();
+        });
 
+
+
+        var shopLeft, shopRight;
         function loaded() {
             shopLeft = new IScroll('#J_wrapperLeft', {
                 preventDefault: false
@@ -280,6 +256,61 @@
                 preventDefault: false
             });
         };
+
+        function configbanner() {
+            TouchSlide({
+                slideCell: "#banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+        <!--加载分类数据-->
+        function loadclass(parenId) {
+            var gclass = null;
+            $.ajax({
+                type:"post",
+                url:'/goodsClassification/queryGoodsClassificationLists',
+                dataType: "json",
+                async :false,
+                data:{parentId:parenId},
+                success:function(data){
+                    gclass = data.rows;
+                }
+            });
+            while(true){
+                if(gclass != null){
+                    return gclass;
+                    break;
+                }
+            }
+        }
+
+        <!--加载主类-->
+        function loadmainclass() {
+            var gclass = loadclass(null);
+            $('#mainclassul').html('');
+            if(gclass!=null && gclass.length>0){
+                var html = '';
+                for(var i=0;i<gclass.length;i++){
+                    html += '<li onclick="activeli(this,gclass[i].ggId);">'+
+                            '<a href="">'+gclass[i].ggName+'</a>'+
+                            '</li>';
+                }
+                $('#mainclassul').html(html);
+            }
+
+        }
+
+
+        function activeli(obj,ggId) {
+            $(obj).siblings().removeClass('active');
+            $(obj).addClass('active');
+        }
     </script>
 </body>
 

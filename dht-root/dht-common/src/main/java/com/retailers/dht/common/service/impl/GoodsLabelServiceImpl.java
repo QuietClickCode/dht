@@ -2,8 +2,11 @@
 package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.entity.GoodsGglrel;
 import com.retailers.dht.common.entity.GoodsLabel;
 import com.retailers.dht.common.dao.GoodsLabelMapper;
+import com.retailers.dht.common.service.GoodsGglrelService;
 import com.retailers.dht.common.service.GoodsLabelService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +22,20 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsLabelServiceImpl implements GoodsLabelService {
 	@Autowired
 	private GoodsLabelMapper goodsLabelMapper;
+	@Autowired
+	private GoodsGglrelService goodsGglrelService;
 	public boolean saveGoodsLabel(GoodsLabel goodsLabel) {
 		int status = goodsLabelMapper.saveGoodsLabel(goodsLabel);
 		return status == 1 ? true : false;
 	}
 	public boolean updateGoodsLabel(GoodsLabel goodsLabel) {
+		GoodsLabel g = goodsLabelMapper.queryGoodsLabelByGlId(goodsLabel.getGlId());
+		Long isGoodslabel = goodsLabel.getIsGoodslabel();
+		if(g.getIsGoodslabel()!=isGoodslabel){
+			goodsGglrelService.clearrels(goodsLabel.getGlId());
+		}
 		int status = goodsLabelMapper.updateGoodsLabel(goodsLabel);
+
 		return status == 1 ? true : false;
 	}
 	public GoodsLabel queryGoodsLabelByGlId(Long glId) {
@@ -46,5 +57,7 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 		int status = goodsLabelMapper.updateGoodsLabel(goodsLabel);
 		return status == 1 ? true : false;
 	}
+
+
 }
 

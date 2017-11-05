@@ -3,6 +3,9 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsGglrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGglrel;
+
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品与标签关系表Service
@@ -58,6 +61,13 @@ public interface GoodsGglrelService {
 
 	public boolean saveGoodsGglrelByGids(String gids,Long glId,Long uploadpersonId);
 
+	public List<GoodsGglrelVo> queryGclassGoodsGglrelLists(Long gid);
+
+	public boolean saveGclassGoodsGglrel(Long glId,String gclassIds);
+
+	public void clearrels(Long glId);
+
+	public boolean removeGclassGoodsGglrel(Long gid,String glIds);
 }
 
 

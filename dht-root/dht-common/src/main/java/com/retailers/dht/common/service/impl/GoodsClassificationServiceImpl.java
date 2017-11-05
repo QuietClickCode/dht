@@ -106,7 +106,9 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				vo.setLevel(2l);
 			}
 		}
-		queryGoodsClassificationNode(1+"");
+		List<Long> a = new ArrayList<Long>();
+		a.add(1L);
+		queryGoodsClassificationNode(a);
 
 		if(!ObjectUtils.isEmpty(rntList)){
 			for (int i=0; i<rntList.size(); i++){
@@ -117,8 +119,8 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return rntList;
 	}
 
-	public List<GoodsClassificationVo> queryGoodsClassificationNode(String ggId) {
-		List<GoodsClassificationVo> list =goodsClassificationMapper.queryGoodsClassificationNode(ggId);
+	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds) {
+		List<GoodsClassificationVo> list =goodsClassificationMapper.queryGoodsClassificationNode(ggIds);
 		List<GoodsClassificationVo> rtnList=new ArrayList<GoodsClassificationVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
 		queryChildNode(list,child);
@@ -178,5 +180,12 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		}
 	}
 
+	public List<GoodsClassification> queryGoodsClassificationListByParentId(Long parentId){
+		Map map = new HashMap();
+		map.put("parentId",parentId);
+		map.put("isDelete",0L);
+		Pagination<GoodsClassification> pagination = queryGoodsClassificationList(map,1,1000);
+		return pagination.getData();
+	}
 }
 

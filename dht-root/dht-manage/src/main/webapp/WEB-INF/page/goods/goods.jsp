@@ -2549,17 +2549,39 @@
                             '</tr>';
                         initgldataArr.push(rows[i].glId);
                     }
-                }else{
-                    html += '<tr>'+
-                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                        '<span style="line-height: 100%;color:red;">暂时没有绑定标签</span>'+
-                        '</td>'+
-                        '</tr>';
-
                 }
                 $('#myglTbody').html(html);
             }
         });
+
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGclassGoodsGglrelLists",
+            dataType: "json",
+            data:{gid:gid},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   =  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="xcheckbox'+i+'" name="gclassgglcheckbox" class="styled" type="checkbox" value="'+rows[i].glId+'">'+
+                            '<label for="xcheckbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%"> <span style="color:red">(子类关联)</span> '+rows[i].labelname+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        $('#myglTbody').prepend(html);
+                    }
+                }
+            }
+        });
+
     }
 
     function searchlabels() {
@@ -2658,25 +2680,48 @@
 
     function deletegglrel() {
         var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
-        if(checkboxs.length > 0){
-            var gglIds = "";
-            for(var i=0; i<checkboxs.length; i++){
-                if(checkboxs[i].checked){
-                    gglIds += checkboxs[i].value + ",";
+        var glcasscheckboxs = $('input:checkbox[name="gclassgglcheckbox"]:checked');
+        if(checkboxs.length > 0 || glcasscheckboxs.length>0) {
+            if (checkboxs.length > 0) {
+                var gglIds = "";
+                for (var i = 0; i < checkboxs.length; i++) {
+                    if (checkboxs[i].checked) {
+                        gglIds += checkboxs[i].value + ",";
+                    }
                 }
-            }
 
-            $.ajax({
-                type: "post",
-                url: "/goods/removeGoodsGglrel",
-                dataType: "json",
-                data: {gglIds: gglIds},
-                success: function (data) {
-                    toastr.success('删除成功!');
-                    refreshmyglTbody();
-                    updateGoodsSetNotChecked();
+                $.ajax({
+                    type: "post",
+                    url: "/goods/removeGoodsGglrel",
+                    dataType: "json",
+                    data: {gglIds: gglIds},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmyglTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
+            }
+            if (glcasscheckboxs.length > 0) {
+                var gclassgglIds = "";
+                for (var i = 0; i < glcasscheckboxs.length; i++) {
+                    if (glcasscheckboxs[i].checked) {
+                        gclassgglIds += glcasscheckboxs[i].value + ",";
+                    }
                 }
-            });
+
+                $.ajax({
+                    type: "post",
+                    url: "/goods/removeGclassGoodsGglrel",
+                    dataType: "json",
+                    data: {glIds: gclassgglIds, gid: $('#gid').val()},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmyglTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
+            }
 
         }else{
             toastr.warning('请选择您想操作的数据!');
@@ -2968,7 +3013,7 @@
             return;
         }
         var gcName = $('#search_GoodsCoupon_name').val();
-        $('#topgoodsname').html('优惠名称');
+        $('#topcouponname').html('优惠名称');
         $('#addggcouponrelbtn').show();
         $('#deleteggcouponrelbtn').hide();
         $.ajax({
@@ -3408,10 +3453,6 @@
                             '</td>'+
                             '</tr>';
                         $('#mygcomplimentaryrelTbody').prepend(html);
-
-                        if(i == rows.length-1){
-                             removedeletedgclass();
-                        }
                     }
                 }
             }
@@ -3426,7 +3467,7 @@
             return;
         }
         var gcName = $('#search_Goodsgc_name').val();
-        $('#topcommentlabelname').html('赠品名称');
+        $('#topgcname').html('赠品名称');
         $('#addggcrelbtn').show();
         $('#deleteggcrelbtn').hide();
         $.ajax({
@@ -3561,30 +3602,6 @@
         }else {
             toastr.warning('请选择您想操作的数据!');
         }
-    }
-
-    function removedeletedgclass() {
-        var gid = $('#gid').val();
-        $.ajax({
-            type: "post",
-            url: "/goods/querydeletedgclass",
-            dataType: "json",
-            data: {gid:gid},
-            success: function (data) {
-                var rows = data.rows;
-                var gclasscheckboxs = $('input:checkbox[name="gclassggcomplimentaryrelcheckbox"]');
-                if(rows!=null && rows.length>0){
-                    for(var i=0; i<gclasscheckboxs.length; i++){
-                        for(var j=0; j<rows.length; j++){
-                            if(gclasscheckboxs[i].value==rows[j].gcId){
-                                $(gclasscheckboxs[i]).parent().parent().parent().remove();
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        });
     }
 </script>
 
