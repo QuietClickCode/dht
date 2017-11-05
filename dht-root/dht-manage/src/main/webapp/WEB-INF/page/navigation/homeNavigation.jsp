@@ -35,8 +35,8 @@
 
     <select id="styleMenu" class="form-control">
         <option value="">主推样式</option>
-        <option value="0">带副标题的样式</option>
-        <option value="1">不带都标题的样式</option>
+        <option value="1">带副标题的样式</option>
+        <option value="0">不带都标题的样式</option>
     </select>
 
     <select id="countryMenu" class="form-control">

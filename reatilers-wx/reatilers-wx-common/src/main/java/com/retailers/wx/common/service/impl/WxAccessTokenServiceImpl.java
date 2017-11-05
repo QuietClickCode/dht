@@ -69,7 +69,9 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 		//取得当前使用微信
 		WxManager wxManager= wxManagerMapper.queryCurUsedWx();
 		if(ObjectUtils.isNotEmpty(wxManager)){
-			//根据当前使用微信，取得token
+			WxConfig.APP_ID=wxManager.getAppId();
+			WxConfig.APP_SECRET=wxManager.getAppSecret();
+				//根据当前使用微信，取得token
 			WxAccessToken token=wxAccessTokenMapper.queryCurWxAccessTokenByWxId(wxManager.getWxId(),curDate);
 			//判断当前token是否为空 如果当前token 还处于有效期则不进行处理。
 			if(ObjectUtils.isNotEmpty(token)){

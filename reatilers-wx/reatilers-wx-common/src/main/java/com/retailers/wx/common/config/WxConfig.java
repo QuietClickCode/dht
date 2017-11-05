@@ -7,8 +7,8 @@ package com.retailers.wx.common.config;
  *@date 2017-09-07
  */
 public class WxConfig {
-    public static String appId="";
-    public static String appSecret="";
+    public static String APP_ID="";
+    public static String APP_SECRET="";
     public static String ACCESS_TOKEN="nUd7jMakoJGO5QoAdOXgVedNGZcOqt3rLcLtjp6V_d1inAJ3pZb2l5CMbT0SG_2H6VyxZKyUfaHzgWe5flm8lVwPiWqJGYbHA5paSEBI7c-TwJ1y5bjN421ze4wf4MRVLFVjAFAGAQ";
     /**
      * 取得微信token 访问链接

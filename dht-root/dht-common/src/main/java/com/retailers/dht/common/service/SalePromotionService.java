@@ -1,14 +1,18 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.dht.common.entity.SalePromotion;
+import com.retailers.dht.common.vo.SalePromotionVo;
+import com.retailers.mybatis.pagination.Pagination;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品促销表Service
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-30 15:28:44
+ * @date 2017-11-02 16:28:41
  */
 public interface SalePromotionService {
 
@@ -17,7 +21,7 @@ public interface SalePromotionService {
 	 * @param salePromotion
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public boolean saveSalePromotion(SalePromotion salePromotion);
 	/**
@@ -33,7 +37,7 @@ public interface SalePromotionService {
 	 * @param spId
 	 * @return salePromotion
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public SalePromotion querySalePromotionBySpId(Long spId);
 	/**
@@ -43,18 +47,19 @@ public interface SalePromotionService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
-	public Pagination<SalePromotion> querySalePromotionList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<SalePromotionVo> querySalePromotionList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据spId删除商品促销表
 	 * @param spId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-10-30 15:28:44
+	 * @date 2017-11-02 16:28:41
 	 */
 	public boolean deleteSalePromotionBySpId(Long spId);
 
+	public List<SalePromotionVo> querySalePromotionTree(List<SalePromotionVo> promotionVos);
 }
 
 

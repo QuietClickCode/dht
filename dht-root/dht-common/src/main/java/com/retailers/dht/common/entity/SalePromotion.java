@@ -7,13 +7,17 @@ import java.util.Date;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-10-30 15:28:44
+ * @date 2017-11-02 16:28:41
  */
 public class SalePromotion implements java.io.Serializable {
 
 	/**spId*/
 	@NotEmpty
 	private Long spId;
+	/**活动名称*/
+	@NotEmpty
+	@Length(min = 1, max = 200)
+	private String propotionName;
 	/**商品ID*/
 	@NotEmpty
 	private Long goodsId;
@@ -21,6 +25,9 @@ public class SalePromotion implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String goodsName;
+	/**父类ID*/
+	@NotEmpty
+	private Long parentId;
 	/**原价*/
 	@NotEmpty
 	private Long spPrice;
@@ -82,6 +89,13 @@ public class SalePromotion implements java.io.Serializable {
 	public Long getSpId() {
 		return this.spId;
 	}
+	public void setPropotionName(String value) {
+		this.propotionName = value;
+	}
+
+	public String getPropotionName() {
+		return this.propotionName;
+	}
 	public void setGoodsId(Long value) {
 		this.goodsId = value;
 	}
@@ -95,6 +109,13 @@ public class SalePromotion implements java.io.Serializable {
 
 	public String getGoodsName() {
 		return this.goodsName;
+	}
+	public void setParentId(Long value) {
+		this.parentId = value;
+	}
+
+	public Long getParentId() {
+		return this.parentId;
 	}
 	public void setSpPrice(Long value) {
 		this.spPrice = value;
