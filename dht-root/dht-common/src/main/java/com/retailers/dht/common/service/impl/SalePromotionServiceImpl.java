@@ -49,7 +49,9 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 		return page;
 	}
 	public boolean deleteSalePromotionBySpId(Long spId) {
-		int status = salePromotionMapper.deleteSalePromotionBySpId(spId);
+		SalePromotion promotion = salePromotionMapper.querySalePromotionBySpId(spId);
+		promotion.setIsDelete(1L);
+		int status = salePromotionMapper.updateSalePromotion(promotion);
 		return status == 1 ? true : false;
 	}
 
