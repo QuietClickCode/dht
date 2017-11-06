@@ -674,7 +674,7 @@
                             '</div>'+
                             '</td>'+
                             '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                            rows[i].gclassName+
+                            rows[i].labelname+
                             '</td>'+
                             '</tr>';
                     }

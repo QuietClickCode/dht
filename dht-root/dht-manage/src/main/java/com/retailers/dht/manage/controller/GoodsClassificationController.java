@@ -9,11 +9,13 @@ import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +71,7 @@ public class GoodsClassificationController extends BaseController {
     @RequestMapping("queryGoodsClassificationNode")
     @ResponseBody
     public BaseResp queryGoodsClassificationNode(String ggId){
-        List<GoodsClassificationVo> goodsClassificationVoList =  goodsClassificationService.queryGoodsClassificationNode(ggId);
+        List<GoodsClassificationVo> goodsClassificationVoList =  goodsClassificationService.queryGoodsClassificationNode(change(ggId));
         return success(goodsClassificationVoList);
     }
 
@@ -94,5 +96,18 @@ public class GoodsClassificationController extends BaseController {
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("goodsClassification",goodsClassification);
         return gtm;
+    }
+
+    private List<Long> change(String ggId){
+        List<Long> list = new ArrayList<Long>();
+        if(!ObjectUtils.isEmpty(ggId)){
+            String[] ggIdsArr = ggId.split(",");
+            for(String ggIdStr:ggIdsArr){
+                Long ggIdLong = Long.parseLong(ggIdStr);
+                list.add(ggIdLong);
+            }
+        }
+
+        return list;
     }
 }

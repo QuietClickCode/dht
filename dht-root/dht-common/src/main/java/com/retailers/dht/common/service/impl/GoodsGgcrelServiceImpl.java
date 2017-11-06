@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -157,6 +158,25 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 		gclassIds = gclassIds.substring(1);
 
 		List<GoodsGgcrelVo> list = goodsGgcrelMapper.queryGclassGoodsGgcrelLists(gclassIds);
+
+		List<GoodsGgcrelVo> removeList = querydeletedgclass(gid);
+
+		List<GoodsGgcrelVo> index = new ArrayList<GoodsGgcrelVo>();
+
+		for (int i=0;i<list.size();i++){
+			for(int j=0;j<removeList.size();j++){
+				GoodsGgcrelVo g1 = list.get(i);
+				GoodsGgcrelVo g2 = removeList.get(j);
+				if(g1.getGcId()==g2.getGcId()){
+					index.add(g1);
+					break;
+				}
+			}
+		}
+
+		for(GoodsGgcrelVo g:index){
+			list.remove(g);
+		}
 
 		return list;
 	}

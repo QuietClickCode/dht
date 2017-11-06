@@ -8,6 +8,7 @@ import com.retailers.dht.common.entity.GoodsGglrel;
 public class GoodsGglrelVo extends GoodsGglrel {
     private String labelname;
     private String gname;
+    private  String gclassname;
 
     public void setLabelname(String value) {
         this.labelname = value;
@@ -25,5 +26,11 @@ public class GoodsGglrelVo extends GoodsGglrel {
         return this.gname;
     }
 
+    public String getGclassname() {
+        return gclassname;
+    }
 
+    public void setGclassname(String gclassname) {
+        this.gclassname = gclassname;
+    }
 }

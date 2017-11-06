@@ -58,6 +58,6 @@ public interface GoodsClassificationMapper {
 
 	public List<GoodsClassificationVo> queryGoodsClassificationTree();
 
-	public List<GoodsClassificationVo> queryGoodsClassificationNode(String ggId);
+	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
 
 }
