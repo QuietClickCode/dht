@@ -158,7 +158,6 @@ public class WxPayController extends BaseController{
         TreeMap<String, String> params = new TreeMap<String, String>();
         String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
         params.put("appid", appId);
-        params.put("openid", "oEIKZxOHy-ovkImvP8X78sMCYlGA");
         params.put("mch_id", "1450860802");
         params.put("device_info", "WEB");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
         params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
