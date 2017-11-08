@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,10 +8,14 @@ import java.util.Map;
 import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.dao.GoodsMapper;
+import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsCopy;
+import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsCopyService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsVo;
+import com.retailers.dht.common.vo.PagintionVo;
+import com.retailers.tools.utils.ObjectUtils;
 import org.apache.ibatis.ognl.IntHashMap;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -30,6 +35,8 @@ public class GoodsServiceImpl implements GoodsService {
 	private GoodsMapper goodsMapper;
 	@Autowired
 	private GoodsCopyMapper goodsCopyMapper;
+	@Autowired
+	private GoodsClassificationService goodsClassificationService;
 	public Goods saveGoods(Goods goods,Long uploadpersonId) {
 		int status = goodsMapper.saveGoods(goods);
 		if(status==1){
@@ -55,6 +62,32 @@ public class GoodsServiceImpl implements GoodsService {
 		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
+		if(!ObjectUtils.isEmpty(params.get("gclassification"))){
+			Long gclassification = (Long)params.get("gclassification");
+			List<Long> gclassIds = new ArrayList<Long>();
+			gclassIds.add(gclassification);
+
+			Map map1 = new HashMap();
+			map1.put("parentId",gclassification);
+			map1.put("isDelete",0L);
+			Pagination<GoodsClassification> pagination1 = goodsClassificationService.queryGoodsClassificationList(map1,1,1000);
+			if(!ObjectUtils.isEmpty(pagination1.getData())){
+				for(GoodsClassification goodsClassification:pagination1.getData()){
+					gclassIds.add(goodsClassification.getGgId());
+
+					Map map2 = new HashMap();
+					map2.put("parentId",goodsClassification.getGgId());
+					map2.put("isDelete",0L);
+					Pagination<GoodsClassification> pagination2 = goodsClassificationService.queryGoodsClassificationList(map2,1,1000);
+					if(!ObjectUtils.isEmpty(pagination2.getData())){
+						for(GoodsClassification goodsClassification2:pagination2.getData()){
+							gclassIds.add(goodsClassification2.getGgId());
+						}
+					}
+				}
+			}
+			params.put("gclassification",gclassIds);
+		}
 		page.setParams(params);
 		List<GoodsVo> list = goodsMapper.queryGoodsList(page);
 		page.setData(list);

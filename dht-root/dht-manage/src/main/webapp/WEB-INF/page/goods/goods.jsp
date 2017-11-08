@@ -643,15 +643,6 @@
                                                 <ex:perm url="/goods/removeGoodsGgclrel">
                                                     <button class="btn btn-default" style="float: left" type="button" onclick="deleteggclrel()" id="deleteggclrelbtn">删除</button>
                                                 </ex:perm>
-                                                <ex:perm url="/goods/addGoodsGgclrel">
-                                                    <select onchange="changelevel()" id="levelselect" class="form-control" style="float: left;margin-left: 20px;margin-bottom: 10px;width: 100px">
-                                                        <option value="1">一星</option>
-                                                        <option value="2">二星</option>
-                                                        <option value="3">三星</option>
-                                                        <option value="4">四星</option>
-                                                        <option value="5">五星</option>
-                                                    </select>
-                                                </ex:perm>
                                                 <ex:perm url="/goods/queryGoodsGgclrelLists">
                                                     <button class="btn btn-primary" type="button" onclick="refreshmygclTbody()" style="float: right">刷新</button>
                                                 </ex:perm>
@@ -663,8 +654,31 @@
                                                                 <th style="width: 30px">
                                                                     &nbsp;
                                                                 </th>
-                                                                <th style="text-align: center;" id="topcommentlabelname">
+                                                                <th style="text-align: center;" id="topcommentlabelname" colspan="6">
                                                                     商品评论名称（已有）
+                                                                </th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th style="width: 30px">
+                                                                    &nbsp;
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    评论分类名称
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    一星
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    二星
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    三星
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    四星
+                                                                </th>
+                                                                <th style="text-align: center;" >
+                                                                    五星
                                                                 </th>
                                                             </tr>
                                                             </thead>
@@ -2783,16 +2797,16 @@
             document.getElementById("nava1").click();
             return;
         }
-        var level = $('#levelselect').val();
         $('#toplabelname').html('评论标签名称（已有）');
         initgcldataArr = [];
         $('#addggclrelbtn').hide();
         $('#deleteggclrelbtn').show();
+        $('#mygclTbody').html('');
         $.ajax({
             type:"post",
             url:"/goods/queryGoodsGgclrelLists",
             dataType: "json",
-            data:{gid:gid,level:level,pageNo:1,pageSize:100},
+            data:{gid:gid,},
             success:function(data){
                 var rows = data.rows;
                 var html = '';
@@ -2807,22 +2821,74 @@
                             '</div>'+
                             '</td>'+
                             '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                            '<span style="line-height: 100%">'+rows[i].gclname+'</span>'+
+                            '<span style="line-height: 100%">'+rows[i].gclName+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start1name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start2name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start3name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start4name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start5name+'</span>'+
                             '</td>'+
                             '</tr>';
                         initgcldataArr.push(rows[i].gclId);
                     }
-                }else{
-                    html += '<tr>'+
-                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                        '<span style="line-height: 100%;color:red;">暂时没有绑定标签</span>'+
-                        '</td>'+
-                        '</tr>';
-
                 }
-                $('#mygclTbody').html(html);
+                $('#mygclTbody').append(html);
             }
         });
+
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGclassGoodsGgclrelLists",
+            dataType: "json",
+            data:{gid:gid,},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   +=  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="gccheckbox'+i+'" name="gcgclcheckbox" class="styled" type="checkbox" value="'+rows[i].gclId+'">'+
+                            '<label for="gccheckbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%"><span style="color: red">(子类关联)</span>'+rows[i].gclName+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start1name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start2name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start3name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start4name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start5name+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                    }
+                }
+                $('#mygclTbody').append(html);
+            }
+        });
+
     }
 
     function searchgoodscommentlabels() {
@@ -2835,7 +2901,7 @@
             type: "post",
             url: "/goods/queryGoodsGtgclrelLists",
             dataType: "json",
-            data: {gclName:gclName,ggId:$('#gclassification').val(),pageNo: 1, pageSize: 100},
+            data: {gclName:gclName,isClass:0,ggId:$('#gclassification').val(),pageNo: 1, pageSize: 100},
             success: function (data) {
                 var rows = data.rows;
                 var html = '';
@@ -2860,7 +2926,22 @@
                                 '</div>'+
                                 '</td>'+
                                 '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                                '<span style="line-height: 100%">'+rows[i].gclname+'</span>'+
+                                '<span style="line-height: 100%">'+rows[i].gclName+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start1name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start2name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start3name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start4name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start5name+'</span>'+
                                 '</td>'+
                                 '</tr>';
                         }
@@ -2870,11 +2951,10 @@
 
                 if(html == ''){
                     html += '<tr>'+
-                        '<td colspan="2" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                        '<td colspan="7" style="text-align: center;display:table-cell; vertical-align:bottom;">'+
                         '<span style="line-height: 100%;color:red;">没有找到符合要求的品牌</span>'+
                         '</td>'+
                         '</tr>';
-
                 }
                 $('#mygclTbody').html(html);
             }
@@ -2896,11 +2976,12 @@
                     addggcl += ","+checkboxs[i].value;
                 }
             }
+            addggcl = addggcl.substr(1);
             $.ajax({
                 type: "post",
                 url: "/goods/addGoodsGgclrel",
                 dataType: "json",
-                data: {gclIds: addggcl,level:$('#levelselect').val(),gid:gid},
+                data: {gclIds: addggcl,gid:gid},
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmygclTbody();
@@ -2916,34 +2997,53 @@
 
     function deleteggclrel() {
         var checkboxs = $('input:checkbox[name="ggclcheckbox"]:checked');
-        if(checkboxs.length > 0){
-            var ggclIds = "";
-            for(var i=0; i<checkboxs.length; i++){
-                if(checkboxs[i].checked){
-                    ggclIds += checkboxs[i].value + ",";
+        var gcgclcheckboxs = $('input:checkbox[name="gcgclcheckbox"]:checked');
+        if(checkboxs.length>0||gcgclcheckboxs.length>0){
+            if(checkboxs.length > 0){
+                var ggclIds = "";
+                for(var i=0; i<checkboxs.length; i++){
+                    if(checkboxs[i].checked){
+                        ggclIds += checkboxs[i].value + ",";
+                    }
                 }
+
+                $.ajax({
+                    type: "post",
+                    url: "/goods/removeGoodsGgclrel",
+                    dataType: "json",
+                    data: {ggclIds: ggclIds},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmygclTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
+
             }
-
-            $.ajax({
-                type: "post",
-                url: "/goods/removeGoodsGgclrel",
-                dataType: "json",
-                data: {ggclIds: ggclIds},
-                success: function (data) {
-                    toastr.success('删除成功!');
-                    refreshmygclTbody();
-                    updateGoodsSetNotChecked();
+            if(gcgclcheckboxs.length>0){
+                var ggclIds = "";
+                for(var i=0; i<gcgclcheckboxs.length; i++){
+                    if(gcgclcheckboxs[i].checked){
+                        ggclIds += gcgclcheckboxs[i].value + ",";
+                    }
                 }
-            });
 
-        }else{
+                $.ajax({
+                    type: "post",
+                    url: "/goods/saveDeleteGt",
+                    dataType: "json",
+                    data: {gclIds: ggclIds,gid:$('#gid').val()},
+                    success: function (data) {
+                        toastr.success('删除成功!');
+                        refreshmygclTbody();
+                        updateGoodsSetNotChecked();
+                    }
+                });
+            }
+        } else{
             toastr.warning('请选择您想操作的数据!');
         }
 
-    }
-
-    function changelevel() {
-        refreshmygclTbody();
     }
 </script>
 

@@ -7,8 +7,10 @@ import com.retailers.dht.common.entity.FloorAdvertising;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.FloorAdvertisingService;
 import com.retailers.dht.common.vo.FloorAdvertisingVo;
+import com.retailers.dht.common.vo.PagintionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -138,6 +140,16 @@ public class FloorAdvertisingServiceImpl implements FloorAdvertisingService {
 				child.put(parentId,maps);
 			}
 		}
+	}
+
+	public List<FloorAdvertisingVo> queryFloorAdvertisingListByGclassId(Map params){
+		Pagination<FloorAdvertising> pagination = new Pagination<FloorAdvertising>();
+		pagination.setParams(params);
+		List<FloorAdvertisingVo> list = floorAdvertisingMapper.queryFloorAdvertisingListByGclassId(pagination);
+		for(FloorAdvertisingVo floorAdvertisingVo:list){
+			floorAdvertisingVo.setImageUrl(AttachmentConstant.IMAGE_SHOW_URL+floorAdvertisingVo.getImageUrl());
+		}
+		return list;
 	}
 }
 

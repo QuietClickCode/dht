@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品与商品评论关系表对象
+ * 描述：商品与评论关系表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-25 13:55:59
+ * @date 2017-11-06 11:17:50
  */
 public class GoodsGgclrel implements java.io.Serializable {
 
@@ -20,12 +20,15 @@ public class GoodsGgclrel implements java.io.Serializable {
 	/**评论标签ID*/
 	@NotEmpty
 	private Long gclId;
-	/**评论等级*/
+	/**子类ID*/
 	@NotEmpty
-	private Long gclLevel;
+	private Long gclassId;
 	/**评论数量*/
 	@NotEmpty
 	private Long gclCount;
+	/**是否使用 0不使用 1使用*/
+	@NotEmpty
+	private Long isUse;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -62,12 +65,12 @@ public class GoodsGgclrel implements java.io.Serializable {
 	public Long getGclId() {
 		return this.gclId;
 	}
-	public void setGclLevel(Long value) {
-		this.gclLevel = value;
+	public void setGclassId(Long value) {
+		this.gclassId = value;
 	}
 
-	public Long getGclLevel() {
-		return this.gclLevel;
+	public Long getGclassId() {
+		return this.gclassId;
 	}
 	public void setGclCount(Long value) {
 		this.gclCount = value;
@@ -75,6 +78,13 @@ public class GoodsGgclrel implements java.io.Serializable {
 
 	public Long getGclCount() {
 		return this.gclCount;
+	}
+	public void setIsUse(Long value) {
+		this.isUse = value;
+	}
+
+	public Long getIsUse() {
+		return this.isUse;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

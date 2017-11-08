@@ -9,6 +9,7 @@ import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -74,7 +75,6 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		System.out.println(params.get("isDelete"));
 		List<GoodsClassification> list = goodsClassificationMapper.queryGoodsClassificationList(page);
 		page.setData(list);
 		return page;
@@ -180,12 +180,16 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		}
 	}
 
-	public List<GoodsClassification> queryGoodsClassificationListByParentId(Long parentId){
+	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long parentId){
 		Map map = new HashMap();
 		map.put("parentId",parentId);
+		map.put("isShow",1L);
 		map.put("isDelete",0L);
-		Pagination<GoodsClassification> pagination = queryGoodsClassificationList(map,1,1000);
-		return pagination.getData();
+		List<GoodsClassificationVo> list = goodsClassificationMapper.queryGoodsClassificationListByParentId(map);
+		for(GoodsClassificationVo goodsClassificationVo:list){
+			goodsClassificationVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsClassificationVo.getImgUrl());
+		}
+		return list;
 	}
 }
 

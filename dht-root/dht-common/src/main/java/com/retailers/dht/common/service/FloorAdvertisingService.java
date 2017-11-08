@@ -64,6 +64,8 @@ public interface FloorAdvertisingService {
 	public List<FloorAdvertisingVo> queryGoodsClassificationList();
 
 	public List<FloorAdvertisingVo> queryFloorAdvertisingVo();
+
+	public List<FloorAdvertisingVo> queryFloorAdvertisingListByGclassId(Map params);
 }
 
 

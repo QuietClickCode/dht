@@ -554,34 +554,6 @@
                 title: '结束时间'
 
             },{
-                field: 'spPrice',
-                align : 'center',
-                valign : 'middle',
-                title: '原价'
-
-            },{
-                field: 'spSale',
-                align : 'center',
-                valign : 'middle',
-                title: '特价'
-            },{
-                field: 'spBounds',
-                align : 'center',
-                valign : 'middle',
-                title: '限购量'
-
-            },{
-                field: 'spDiscountRate',
-                align : 'center',
-                valign : 'middle',
-                title: '已售数量'
-
-            },{
-                align : 'center',
-                valign : 'middle',
-                title: '库存量'
-
-            },{
                 align : 'center',
                 valign : 'middle',
                 title: '添加商品',
@@ -693,8 +665,9 @@
         });
     }
     
-    function openAddPromotionModal(id) {
-        parentId = id;
+    function openAddPromotionModal(parentId) {
+        parentId = parentId;
+        id = '';
         $("#addSalePromotion").modal("show");
     }
 
@@ -703,6 +676,10 @@
     var id;
     var version;
     function chooseGoodsModal(num) {
+        if(id!=''){
+            layer.msg('已经存在商品');
+            return;
+        }
         number = num;
         $("#chooseGoodsList").modal("show");
     }

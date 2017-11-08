@@ -27,8 +27,8 @@ public class GoodsClassificationController extends BaseController {
 
     @RequestMapping("/queryGoodsClassificationLists")
     @ResponseBody
-    public Map<String,Object> queryGoodsClassificationLists(Long parenId){
-        List<GoodsClassification> goodsClassificationList = goodsClassificationService.queryGoodsClassificationListByParentId(parenId);
+    public Map<String,Object> queryGoodsClassificationLists(Long parentId){
+        List<GoodsClassificationVo> goodsClassificationList = goodsClassificationService.queryGoodsClassificationListByParentId(parentId);
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("rows",goodsClassificationList);
         return gtm;

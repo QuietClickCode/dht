@@ -67,6 +67,7 @@
         <option value="0">顶部区域</option>
         <option value="1">中间区域</option>
         <option value="2">底部区域</option>
+        <option value="3">特价广告</option>
     </select>
 
     <select id="countryMenu" class="form-control">
@@ -131,6 +132,13 @@
                                 <label>
                                     <input type="radio" name="area" class="area" value="2">
                                     底部区域
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="area" class="area" value="3">
+                                    特价广告
                                 </label>
                             </div>
                         </div>
@@ -247,6 +255,13 @@
                                 <label>
                                     <input type="radio" name="region" class="region" value="2">
                                     底部区域
+                                </label>
+                            </div>
+
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="region" class="region" value="3">
+                                    特价广告
                                 </label>
                             </div>
                         </div>

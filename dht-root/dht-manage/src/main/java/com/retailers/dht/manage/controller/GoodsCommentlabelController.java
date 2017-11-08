@@ -55,9 +55,10 @@ public class GoodsCommentlabelController extends BaseController {
     @RequestMapping("/queryGoodsCommentlabelLists")
     @Function(label="商品评论列表", description = "所有商品评论列表", resourse = "goods.queryGoodsCommentlabelLists",sort=1,parentRes="goods.openGoodsCommentlabel")
     @ResponseBody
-    public  Map<String,Object> queryGoodsCommentlabelLists(String gclName,PageUtils pageForm){
+    public  Map<String,Object> queryGoodsCommentlabelLists(Long gclId,String gclName,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gclName",gclName);
+        map.put("gclId",gclId);
         map.put("isDelete",0);
         Pagination<GoodsCommentlabel> GoodsCommentlabelPagination = goodsCommentlabelService.queryGoodsCommentlabelList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
@@ -69,11 +70,21 @@ public class GoodsCommentlabelController extends BaseController {
     @RequestMapping("/addGoodsCommentlabel")
     @Function(label="增加商品评论", description = "增加商品评论", resourse = "goods.addGoodsCommentlabel",parentRes="goods.openGoodsCommentlabel")
     @ResponseBody
-    public BaseResp addGoodsCommentlabel(GoodsCommentlabel goodsCommentlabel){
+    public Map<String,Object> addGoodsCommentlabel(GoodsCommentlabel goodsCommentlabel){
         goodsCommentlabel.setIsDelete(0L);
-        System.out.println(goodsCommentlabel.getGclName());
-        System.out.println(goodsCommentlabel.getGclStatus());
-        boolean flag=goodsCommentlabelService.saveGoodsCommentlabel(goodsCommentlabel);
+        goodsCommentlabel = goodsCommentlabelService.saveGoodsCommentlabel(goodsCommentlabel);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("row",goodsCommentlabel);
+        return gtm;
+    }
+
+    @RequestMapping("editGoodsCommentlabelStart")
+    @Function(label = "编辑星级",parentRes = "goods.openGoodsCommentlabel",resourse = "goods.editGoodsCommentlabelStart",description = "编辑星级",sort = 2)
+    @ResponseBody
+    public BaseResp editGoodsCommentlabelStart(Long gclId,String gclName){
+        GoodsCommentlabel goodsCommentlabel = goodsCommentlabelService.queryGoodsCommentlabelByGclId(gclId);
+        goodsCommentlabel.setGclName(gclName);
+        boolean flag = goodsCommentlabelService.updateGoodsCommentlabel(goodsCommentlabel);
         return success(flag);
     }
 

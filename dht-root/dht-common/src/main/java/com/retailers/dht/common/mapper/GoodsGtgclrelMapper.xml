@@ -48,10 +48,13 @@
 			<if test="null != params.gclName and ''!=params.gclName">
 				AND t2.gcl_name like concat('%', #{params.gclName} ,'%')
 			</if>
+			<if test="null != params.isClass">
+				AND t2.is_class = #{params.isClass}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryGoodsGtgclrelList" resultMap="rm_goodsGtgclrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="queryGoodsGtgclrelList" resultMap="rm_goodsGtgclrel" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT t1.*,t2.gcl_name gclname from t_goods_gtgclrel t1
 		LEFT JOIN t_goods_commentlabel t2 ON t1.gcl_id=t2.gcl_id
 		<include refid="goodsGtgclrel_where"/>

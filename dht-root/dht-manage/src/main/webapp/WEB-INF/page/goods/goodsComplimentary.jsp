@@ -756,7 +756,7 @@
 
 </script>
 
-<!--赠品与子类关系2-->
+<!--赠品与商品关系2-->
 <script>
     var initgcomplimentaryreldataArr = new Array();
 

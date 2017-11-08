@@ -6,55 +6,106 @@
 			<result property="gclId" column="gcl_id"/>
 			<result property="gclName" column="gcl_name"/>
 			<result property="gclStatus" column="gcl_status"/>
+			<result property="gclLevel" column="gcl_level"/>
+			<result property="gclParenid" column="gcl_parenid"/>
+			<result property="isClass" column="is_class"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goodsCommentlabel_vo" type="com.retailers.dht.common.vo.GoodsCommentlabelVo">
+		<result property="gclId" column="gcl_id"/>
+		<result property="gclName" column="gcl_name"/>
+		<result property="gclStatus" column="gcl_status"/>
+		<result property="gclLevel" column="gcl_level"/>
+		<result property="gclParenid" column="gcl_parenid"/>
+		<result property="isClass" column="is_class"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="start1id" column="start1id"/>
+		<result property="start1name" column="start1name"/>
+		<result property="start2id" column="start2id"/>
+		<result property="start2name" column="start2name"/>
+		<result property="start3id" column="start3id"/>
+		<result property="start3name" column="start3name"/>
+		<result property="start4id" column="start4id"/>
+		<result property="start4name" column="start4name"/>
+		<result property="start5id" column="start5id"/>
+		<result property="start5name" column="start5name"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCommentlabel_columns">
-		gcl_id,gcl_name,gcl_status,is_delete,version
+		gcl_id,gcl_name,gcl_status,gcl_level,gcl_parenid,is_class,is_delete,version
 	</sql>
-	<!-- 根据商品评论标签表主键取得数据 -->
+	<!-- 根据商品评论表主键取得数据 -->
 	<select id="queryGoodsCommentlabelByGclId" resultMap="rm_goodsCommentlabel" parameterType="java.lang.Long">
 		SELECT <include refid="goodsCommentlabel_columns" />
 		FROM t_goods_commentlabel WHERE gcl_id = #{gclId}
 	</select>
-	<!-- 商品评论标签表查询条件组合 -->
+	<!-- 商品评论表查询条件组合 -->
 	<sql id="goodsCommentlabel_where">
 		<where>
 			<if test="null != params.gclId">
-				AND gcl_id = #{params.gclId}
+				AND t1.gcl_id = #{params.gclId}
 			</if>
 			<if test="null != params.gclName and '' != params.gclName">
-				AND gcl_name like  concat('%', #{params.gclName}, '%')
+				AND t1.gcl_name like concat('%', #{params.gclName} ,'%')
 			</if>
 			<if test="null != params.gclStatus">
-				AND gcl_status = #{params.gclStatus}
+				AND t1.gcl_status = #{params.gclStatus}
+			</if>
+			<if test="null != params.gclLevel and '' != params.gclLevel">
+				AND t1.gcl_level = #{params.gclLevel}
+			</if>
+			<if test="null != params.gclParenid">
+				AND t1.gcl_parenid = #{params.gclParenid}
+			</if>
+			<if test="null == params.gclParenid">
+				AND t1.gcl_parenid is null
+			</if>
+			<if test="null != params.isClass">
+				AND t1.is_class = #{params.isClass}
 			</if>
 			<if test="null != params.isDelete">
-				AND is_delete = #{params.isDelete}
+				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
-				AND version = #{params.version}
+				AND t1.version = #{params.version}
 			</if>
+			and t2.gcl_level=1
+			and t3.gcl_level=2
+			and t4.gcl_level=3
+			and t5.gcl_level=4
+			and t6.gcl_level=5
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryGoodsCommentlabelList" resultMap="rm_goodsCommentlabel" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="goodsCommentlabel_columns" />
-		FROM t_goods_commentlabel
+	<select id="queryGoodsCommentlabelList" resultMap="rm_goodsCommentlabel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t2.gcl_id start1id,t2.gcl_name start1name,
+		t3.gcl_id start2id,t3.gcl_name start2name,
+		t4.gcl_id start3id,t4.gcl_name start3name,
+		t5.gcl_id start4id,t5.gcl_name start4name,
+		t6.gcl_id start5id,t6.gcl_name start5name
+		from t_goods_commentlabel t1
+		LEFT JOIN t_goods_commentlabel t2 on t1.gcl_id=t2.gcl_parenid
+		LEFT JOIN t_goods_commentlabel t3 on t1.gcl_id=t3.gcl_parenid
+		LEFT JOIN t_goods_commentlabel t4 on t1.gcl_id=t4.gcl_parenid
+		LEFT JOIN t_goods_commentlabel t5 on t1.gcl_id=t5.gcl_parenid
+		LEFT JOIN t_goods_commentlabel t6 on t1.gcl_id=t6.gcl_parenid
 		<include refid="goodsCommentlabel_where"/>
 	</select>
-	<!--添加商品评论标签表 -->
+	<!--添加商品评论表 -->
 	<insert id="saveGoodsCommentlabel" parameterType="com.retailers.dht.common.entity.GoodsCommentlabel" useGeneratedKeys="true" keyProperty="gclId">
 		INSERT INTO t_goods_commentlabel (
-			gcl_name,gcl_status,is_delete,version
+			gcl_name,gcl_status,gcl_level,gcl_parenid,is_class,is_delete,version
 		) VALUES
 		(
-			#{gclName,jdbcType=VARCHAR},#{gclStatus,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gclName,jdbcType=VARCHAR},#{gclStatus,jdbcType=BIGINT},#{gclLevel,jdbcType=VARCHAR},#{gclParenid,jdbcType=BIGINT}，#{isClass,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改商品评论标签表 -->
+	<!--修改商品评论表 -->
 	<update id="updateGoodsCommentlabel" parameterType="com.retailers.dht.common.entity.GoodsCommentlabel">
 		UPDATE t_goods_commentlabel
 		<set>
@@ -64,6 +115,15 @@
             <if test="null != gclStatus">
                 gcl_status = #{gclStatus},
             </if>
+            <if test="null != gclLevel and '' != gclLevel">
+                gcl_level = #{gclLevel},
+            </if>
+            <if test="null != gclParenid">
+                gcl_parenid = #{gclParenid},
+            </if>
+			<if test="null != isClass">
+				is_class = #{isClass},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
@@ -73,7 +133,7 @@
 		</set>
 		WHERE gcl_id = #{gclId} and version = #{version}
 	</update>
-	<!--删除商品评论标签表 -->
+	<!--删除商品评论表 -->
 	<delete id="deleteGoodsCommentlabelByGclId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_commentlabel WHERE gcl_id = #{gclId}
 	</delete>

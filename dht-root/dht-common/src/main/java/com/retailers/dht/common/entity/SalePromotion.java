@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品促销表对象
- * @author wangjue
+ * 描述：商品特价表对象
+ * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-11-02 16:28:41
+ * @date 2017-11-08 17:28:44
  */
 public class SalePromotion implements java.io.Serializable {
 
@@ -28,12 +28,6 @@ public class SalePromotion implements java.io.Serializable {
 	/**父类ID*/
 	@NotEmpty
 	private Long parentId;
-	/**原价*/
-	@NotEmpty
-	private Long spPrice;
-	/**特价*/
-	@NotEmpty
-	private Long spSale;
 	/**促销类型（0代表特价，1代表秒杀）*/
 	@NotEmpty
 	private Long spType;
@@ -46,21 +40,6 @@ public class SalePromotion implements java.io.Serializable {
 	/**推送地区（0代表乡村，1代表城市）*/
 	@NotEmpty
 	private Long spRegion;
-	/**库存量*/
-	@NotEmpty
-	private Long spInventory;
-	/**折扣率*/
-	@NotEmpty
-	private Double spDiscountRate;
-	/**已售数量*/
-	@NotEmpty
-	private Long spSoldOut;
-	/**特价数量*/
-	@NotEmpty
-	private Long spSaleSize;
-	/**限购量*/
-	@NotEmpty
-	private Long spBounds;
 	/**开始时间*/
 	@NotEmpty
 	private Date spStartTime;
@@ -117,20 +96,6 @@ public class SalePromotion implements java.io.Serializable {
 	public Long getParentId() {
 		return this.parentId;
 	}
-	public void setSpPrice(Long value) {
-		this.spPrice = value;
-	}
-
-	public Long getSpPrice() {
-		return this.spPrice;
-	}
-	public void setSpSale(Long value) {
-		this.spSale = value;
-	}
-
-	public Long getSpSale() {
-		return this.spSale;
-	}
 	public void setSpType(Long value) {
 		this.spType = value;
 	}
@@ -158,41 +123,6 @@ public class SalePromotion implements java.io.Serializable {
 
 	public Long getSpRegion() {
 		return this.spRegion;
-	}
-	public void setSpInventory(Long value) {
-		this.spInventory = value;
-	}
-
-	public Long getSpInventory() {
-		return this.spInventory;
-	}
-	public void setSpDiscountRate(Double value) {
-		this.spDiscountRate = value;
-	}
-
-	public Double getSpDiscountRate() {
-		return this.spDiscountRate;
-	}
-	public void setSpSoldOut(Long value) {
-		this.spSoldOut = value;
-	}
-
-	public Long getSpSoldOut() {
-		return this.spSoldOut;
-	}
-	public void setSpSaleSize(Long value) {
-		this.spSaleSize = value;
-	}
-
-	public Long getSpSaleSize() {
-		return this.spSaleSize;
-	}
-	public void setSpBounds(Long value) {
-		this.spBounds = value;
-	}
-
-	public Long getSpBounds() {
-		return this.spBounds;
 	}
 	public void setSpStartTime(Date value) {
 		this.spStartTime = value;

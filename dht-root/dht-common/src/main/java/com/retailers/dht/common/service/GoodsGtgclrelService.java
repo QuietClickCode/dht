@@ -3,6 +3,8 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsGtgclrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGtgclrel;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：大类与商品评论关系表Service
@@ -46,7 +48,7 @@ public interface GoodsGtgclrelService {
 	 * @author fanghui
 	 * @date 2017-10-25 10:54:33
 	 */
-	public Pagination<GoodsGtgclrelVo> queryGoodsGtgclrelList(Map<String, Object> params, int pageNo, int pageSize);
+	public List<GoodsGtgclrelVo> queryGoodsGtgclrelList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据gtgclId删除大类与商品评论关系表
 	 * @param gtgclIds

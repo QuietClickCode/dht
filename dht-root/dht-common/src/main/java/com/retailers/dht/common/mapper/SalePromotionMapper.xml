@@ -2,68 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.retailers.dht.common.dao.SalePromotionMapper">
 
-	<resultMap id="rm_salePromotion" type="com.retailers.dht.common.entity.SalePromotion">
+	<resultMap id="rm_salePromotion" type="com.retailers.dht.common.vo.SalePromotionVo">
 			<result property="spId" column="sp_id"/>
 			<result property="propotionName" column="propotion_name"/>
 			<result property="goodsId" column="goods_id"/>
 			<result property="goodsName" column="goods_name"/>
 			<result property="parentId" column="parent_id"/>
-			<result property="spPrice" column="sp_price"/>
-			<result property="spSale" column="sp_sale"/>
 			<result property="spType" column="sp_type"/>
 			<result property="spOrder" column="sp_order"/>
 			<result property="isCoupon" column="is_coupon"/>
 			<result property="spRegion" column="sp_region"/>
-			<result property="spInventory" column="sp_inventory"/>
-			<result property="spDiscountRate" column="sp_discount_rate"/>
-			<result property="spSoldOut" column="sp_sold_out"/>
-			<result property="spSaleSize" column="sp_sale_size"/>
-			<result property="spBounds" column="sp_bounds"/>
 			<result property="spStartTime" column="sp_start_time"/>
 			<result property="spEndTime" column="sp_end_time"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
-	<resultMap id="rm_salePromotionVo" type="com.retailers.dht.common.vo.SalePromotionVo">
-		<result property="spId" column="sp_id"/>
-		<result property="propotionName" column="propotion_name"/>
-		<result property="goodsId" column="goods_id"/>
-		<result property="goodsName" column="goods_name"/>
-		<result property="parentId" column="parent_id"/>
-		<result property="spPrice" column="sp_price"/>
-		<result property="spSale" column="sp_sale"/>
-		<result property="spType" column="sp_type"/>
-		<result property="spOrder" column="sp_order"/>
-		<result property="isCoupon" column="is_coupon"/>
-		<result property="spRegion" column="sp_region"/>
-		<result property="spInventory" column="sp_inventory"/>
-		<result property="spDiscountRate" column="sp_discount_rate"/>
-		<result property="spSoldOut" column="sp_sold_out"/>
-		<result property="spSaleSize" column="sp_sale_size"/>
-		<result property="spBounds" column="sp_bounds"/>
-		<result property="spStartTime" column="sp_start_time"/>
-		<result property="spEndTime" column="sp_end_time"/>
-		<result property="isDelete" column="is_delete"/>
-		<result property="version" column="version"/>
-	</resultMap>
-
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="salePromotion_columns">
-		sp_id,propotion_name,goods_id,goods_name,parent_id,sp_price,sp_sale,sp_type,sp_order,is_coupon,sp_region,sp_inventory,sp_discount_rate,sp_sold_out,sp_sale_size,sp_bounds,sp_start_time,sp_end_time,is_delete,version
+		sp_id,propotion_name,goods_id,goods_name,parent_id,sp_type,sp_order,is_coupon,sp_region,sp_start_time,sp_end_time,is_delete,version
 	</sql>
-
-
-	<!--<select id="querySalePromotionTree" resultMap="rm_salePromotionVo">
-		select * from t_sale_promotion where is_delete = 0 ORDER BY sp_order
-	</select>-->
-
-	<!-- 根据商品促销表主键取得数据 -->
+	<!-- 根据商品特价表主键取得数据 -->
 	<select id="querySalePromotionBySpId" resultMap="rm_salePromotion" parameterType="java.lang.Long">
 		SELECT <include refid="salePromotion_columns" />
 		FROM t_sale_promotion WHERE sp_id = #{spId}
 	</select>
-	<!-- 商品促销表查询条件组合 -->
+	<!-- 商品特价表查询条件组合 -->
 	<sql id="salePromotion_where">
 		<where>
 			<if test="null != params.spId">
@@ -81,12 +45,6 @@
 			<if test="null != params.parentId">
 				AND parent_id = #{params.parentId}
 			</if>
-			<if test="null != params.spPrice">
-				AND sp_price = #{params.spPrice}
-			</if>
-			<if test="null != params.spSale">
-				AND sp_sale = #{params.spSale}
-			</if>
 			<if test="null != params.spType">
 				AND sp_type = #{params.spType}
 			</if>
@@ -98,21 +56,6 @@
 			</if>
 			<if test="null != params.spRegion">
 				AND sp_region = #{params.spRegion}
-			</if>
-			<if test="null != params.spInventory">
-				AND sp_inventory = #{params.spInventory}
-			</if>
-			<if test="null != params.spDiscountRate">
-				AND sp_discount_rate = #{params.spDiscountRate}
-			</if>
-			<if test="null != params.spSoldOut">
-				AND sp_sold_out = #{params.spSoldOut}
-			</if>
-			<if test="null != params.spSaleSize">
-				AND sp_sale_size = #{params.spSaleSize}
-			</if>
-			<if test="null != params.spBounds">
-				AND sp_bounds = #{params.spBounds}
 			</if>
 			<if test="null != params.spStartTimeBegin">
 				AND sp_start_time &gt;= #{params.spStartTime}
@@ -135,21 +78,21 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="querySalePromotionList" resultMap="rm_salePromotionVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="querySalePromotionList" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="salePromotion_columns" />
 		FROM t_sale_promotion
 		<include refid="salePromotion_where"/>
 	</select>
-	<!--添加商品促销表 -->
+	<!--添加商品特价表 -->
 	<insert id="saveSalePromotion" parameterType="com.retailers.dht.common.entity.SalePromotion" useGeneratedKeys="true" keyProperty="spId">
 		INSERT INTO t_sale_promotion (
-			propotion_name,goods_id,goods_name,parent_id,sp_price,sp_sale,sp_type,sp_order,is_coupon,sp_region,sp_inventory,sp_discount_rate,sp_sold_out,sp_sale_size,sp_bounds,sp_start_time,sp_end_time,is_delete,version
+			propotion_name,goods_id,goods_name,parent_id,sp_type,sp_order,is_coupon,sp_region,sp_start_time,sp_end_time,is_delete,version
 		) VALUES
 		(
-			#{propotionName,jdbcType=VARCHAR},#{goodsId,jdbcType=BIGINT},#{goodsName,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT},#{spPrice,jdbcType=BIGINT},#{spSale,jdbcType=BIGINT},#{spType,jdbcType=BIGINT},#{spOrder,jdbcType=BIGINT},#{isCoupon,jdbcType=BIGINT},#{spRegion,jdbcType=BIGINT},#{spInventory,jdbcType=BIGINT},#{spDiscountRate,jdbcType=DOUBLE},#{spSoldOut,jdbcType=BIGINT},#{spSaleSize,jdbcType=BIGINT},#{spBounds,jdbcType=BIGINT},#{spStartTime,jdbcType=TIMESTAMP},#{spEndTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
+			#{propotionName,jdbcType=VARCHAR},#{goodsId,jdbcType=BIGINT},#{goodsName,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT},#{spType,jdbcType=BIGINT},#{spOrder,jdbcType=BIGINT},#{isCoupon,jdbcType=BIGINT},#{spRegion,jdbcType=BIGINT},#{spStartTime,jdbcType=TIMESTAMP},#{spEndTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改商品促销表 -->
+	<!--修改商品特价表 -->
 	<update id="updateSalePromotion" parameterType="com.retailers.dht.common.entity.SalePromotion">
 		UPDATE t_sale_promotion
 		<set>
@@ -165,12 +108,6 @@
             <if test="null != parentId">
                 parent_id = #{parentId},
             </if>
-            <if test="null != spPrice">
-                sp_price = #{spPrice},
-            </if>
-            <if test="null != spSale">
-                sp_sale = #{spSale},
-            </if>
             <if test="null != spType">
                 sp_type = #{spType},
             </if>
@@ -182,21 +119,6 @@
             </if>
             <if test="null != spRegion">
                 sp_region = #{spRegion},
-            </if>
-            <if test="null != spInventory">
-                sp_inventory = #{spInventory},
-            </if>
-            <if test="null != spDiscountRate">
-                sp_discount_rate = #{spDiscountRate},
-            </if>
-            <if test="null != spSoldOut">
-                sp_sold_out = #{spSoldOut},
-            </if>
-            <if test="null != spSaleSize">
-                sp_sale_size = #{spSaleSize},
-            </if>
-            <if test="null != spBounds">
-                sp_bounds = #{spBounds},
             </if>
             <if test="null != spStartTime">
                 sp_start_time = #{spStartTime},
@@ -213,7 +135,7 @@
 		</set>
 		WHERE sp_id = #{spId} and version = #{version}
 	</update>
-	<!--删除商品促销表 -->
+	<!--删除商品特价表 -->
 	<delete id="deleteSalePromotionBySpId" parameterType="java.lang.Long">
 		DELETE FROM t_sale_promotion WHERE sp_id = #{spId}
 	</delete>

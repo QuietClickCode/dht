@@ -5,15 +5,14 @@ import com.retailers.dht.common.entity.GoodsGtgclrel;
 /**
  * Created by Administrator on 2017/10/19.
  */
-public class GoodsGtgclrelVo extends GoodsGtgclrel {
-    private String gclname;
+public class GoodsGtgclrelVo extends GoodsCommentlabelVo {
+    private Long gtgclId;
 
-    public void setGclname(String value) {
-        this.gclname = value;
+    public Long getGtgclId() {
+        return gtgclId;
     }
 
-    public String getGclname() {
-        return this.gclname;
-
+    public void setGtgclId(Long gtgclId) {
+        this.gtgclId = gtgclId;
     }
 }
