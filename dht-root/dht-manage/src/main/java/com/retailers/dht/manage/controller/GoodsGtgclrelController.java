@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,7 +44,7 @@ public class GoodsGtgclrelController extends BaseController {
     @RequestMapping("/queryGoodsGtgclrelLists")
     @Function(label="商品大类与评论标签关系列表", description = "商品大类与评论标签关系列表", resourse = "goods.queryGoodsGtgclrelLists",sort=1,parentRes="goods.openGoodsType")
     @ResponseBody
-    public  Map<String,Object> queryGoodsGtgclrelLists(Long gtId,String gclName,Long ggId,PageUtils pageForm){
+    public  Map<String,Object> queryGoodsGtgclrelLists(Long gtId,String gclName,Long ggId,Long isClass,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         if(!ObjectUtils.isEmpty(ggId)){
             map.put("gtId",goodsClassificationService.queryGoodsClassificationByGgId(ggId).getGgHome());
@@ -51,19 +52,19 @@ public class GoodsGtgclrelController extends BaseController {
             map.put("gtId",gtId);
         }
         map.put("gclName",gclName);
+        map.put("isClass",isClass);
         map.put("isDelete",0);
-        Pagination<GoodsGtgclrelVo> GoodsGtgclrelPagination = goodsGtgclrelService.queryGoodsGtgclrelList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        List<GoodsGtgclrelVo> list = goodsGtgclrelService.queryGoodsGtgclrelList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("total",GoodsGtgclrelPagination.getTotalCount());
-        gtm.put("rows",GoodsGtgclrelPagination.getData());
+        gtm.put("rows",list);
         return gtm;
     }
 
     @RequestMapping("/addGoodsGtgclrel")
     @Function(label="增加商品大类与评论标签关系", description = "增加商品大类与评论标签关系", resourse = "goods.addGoodsGtgclrel",parentRes="goods.openGoodsType")
     @ResponseBody
-    public BaseResp addGoodsGtgclrel(String gsIds,Long gtId){
-        boolean flag=goodsGtgclrelService.saveGoodsGtgclrel(gsIds,gtId);
+    public BaseResp addGoodsGtgclrel(String gclIds,Long gtId){
+        boolean flag=goodsGtgclrelService.saveGoodsGtgclrel(gclIds,gtId);
         return success(flag);
     }
 

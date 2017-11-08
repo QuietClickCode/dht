@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGdsprelMapper">
+
+	<resultMap id="rm_goodsGdsprel" type="com.retailers.dht.common.entity.GoodsGdsprel">
+			<result property="gdspId" column="gdsp_id"/>
+			<result property="gdId" column="gd_id"/>
+			<result property="spId" column="sp_id"/>
+			<result property="spSale" column="sp_sale"/>
+			<result property="spInventory" column="sp_inventory"/>
+			<result property="spDiscountRate" column="sp_discount_rate"/>
+			<result property="spBounds" column="sp_bounds"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGdsprel_columns">
+		gdsp_id,gd_id,sp_id,sp_sale,sp_inventory,sp_discount_rate,sp_bounds,is_delete,version
+	</sql>
+	<!-- 根据商品与特价关系表主键取得数据 -->
+	<select id="queryGoodsGdsprelByGdspId" resultMap="rm_goodsGdsprel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGdsprel_columns" />
+		FROM t_goods_gdsprel WHERE gdsp_id = #{gdspId}
+	</select>
+	<!-- 商品与特价关系表查询条件组合 -->
+	<sql id="goodsGdsprel_where">
+		<where>
+			<if test="null != params.gdspId">
+				AND gdsp_id = #{params.gdspId}
+			</if>
+			<if test="null != params.gdId">
+				AND gd_id = #{params.gdId}
+			</if>
+			<if test="null != params.spId">
+				AND sp_id = #{params.spId}
+			</if>
+			<if test="null != params.spSale">
+				AND sp_sale = #{params.spSale}
+			</if>
+			<if test="null != params.spInventory">
+				AND sp_inventory = #{params.spInventory}
+			</if>
+			<if test="null != params.spDiscountRate">
+				AND sp_discount_rate = #{params.spDiscountRate}
+			</if>
+			<if test="null != params.spBounds">
+				AND sp_bounds = #{params.spBounds}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGdsprelList" resultMap="rm_goodsGdsprel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGdsprel_columns" />
+		FROM t_goods_gdsprel
+		<include refid="goodsGdsprel_where"/>
+	</select>
+	<!--添加商品与特价关系表 -->
+	<insert id="saveGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel" useGeneratedKeys="true" keyProperty="gdspId">
+		INSERT INTO t_goods_gdsprel (
+			gd_id,sp_id,sp_sale,sp_inventory,sp_discount_rate,sp_bounds,is_delete,version
+		) VALUES
+		(
+			#{gdId,jdbcType=BIGINT},#{spId,jdbcType=BIGINT},#{spSale,jdbcType=REAL},#{spInventory,jdbcType=BIGINT},#{spDiscountRate,jdbcType=REAL},#{spBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品与特价关系表 -->
+	<update id="updateGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel">
+		UPDATE t_goods_gdsprel
+		<set>
+            <if test="null != gdId">
+                gd_id = #{gdId},
+            </if>
+            <if test="null != spId">
+                sp_id = #{spId},
+            </if>
+            <if test="null != spSale">
+                sp_sale = #{spSale},
+            </if>
+            <if test="null != spInventory">
+                sp_inventory = #{spInventory},
+            </if>
+            <if test="null != spDiscountRate">
+                sp_discount_rate = #{spDiscountRate},
+            </if>
+            <if test="null != spBounds">
+                sp_bounds = #{spBounds},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gdsp_id = #{gdspId} and version = #{version}
+	</update>
+	<!--删除商品与特价关系表 -->
+	<delete id="deleteGoodsGdsprelByGdspId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_gdsprel WHERE gdsp_id = #{gdspId}
+	</delete>
+</mapper>

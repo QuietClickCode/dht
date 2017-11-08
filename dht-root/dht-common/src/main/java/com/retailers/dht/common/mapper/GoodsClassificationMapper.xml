@@ -84,6 +84,20 @@
 		FROM t_goods_classification
 		<include refid="goodsClassification_where"/>
 	</select>
+	<select id="queryGoodsClassificationListByParentId" resultMap="rm_goodsClassification_vo" parameterType="java.util.Map">
+		SELECT t1.*,t2.show_url img_url from t_goods_classification t1
+		LEFT JOIN t_attachment t2 ON t1.gg_imgpath=t2.id
+		WHERE t1.is_delete!=1
+		<if test="null != parentId">
+			AND t1.parent_id = #{parentId}
+		</if>
+		<if test="null == parentId">
+			AND t1.parent_id is null
+		</if>
+		<if test="null != isShow">
+			AND t1.is_show = #{isShow}
+		</if>
+	</select>
 	<!--树形商品子类查询-->
 	<select id="queryGoodsClassificationTree" resultMap="rm_goodsClassification_vo" parameterType="java.lang.String">
 		select t1.*,t2.gg_name parent_name,t3.gt_name home_name,t4.show_url img_url

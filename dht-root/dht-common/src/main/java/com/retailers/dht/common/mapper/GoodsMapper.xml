@@ -79,7 +79,11 @@
 				AND t1.g_shop = #{params.gshop}
 			</if>
 			<if test="null != params.gclassification">
-				AND t1.g_classification = #{params.gclassification}
+				AND t1.g_classification in
+				<foreach collection="params.gclassification" item="item" index="index"
+						 open="(" close=")" separator=",">
+					#{params.gclassification[${index}]}
+				</foreach>
 			</if>
 			<if test="null != params.gbrand">
 				AND t1.g_brand = #{params.gbrand}
@@ -136,10 +140,9 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryGoodsList" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
-		select t1.*,t2.a_name,t3.gg_name from t_goods t1 LEFT JOIN t_area t2 ON
-		t1.g_area=t2.a_id
-		LEFT JOIN t_goods_classification t3
-		ON t1.g_classification=t3.gg_id
+		select t1.*,t2.a_name,t3.gg_name from t_goods t1
+		LEFT JOIN t_area t2 ON t1.g_area=t2.a_id
+		LEFT JOIN t_goods_classification t3 ON t1.g_classification=t3.gg_id
 		<include refid="goods_where"/>
 	</select>
 	<!--添加商品表 -->

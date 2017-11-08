@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品评论标签表对象
+ * 描述：商品评论表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-24 17:36:13
+ * @date 2017-11-06 11:18:22
  */
 public class GoodsCommentlabel implements java.io.Serializable {
 
@@ -21,6 +21,16 @@ public class GoodsCommentlabel implements java.io.Serializable {
 	/**评论标签状态 0停用 1启用*/
 	@NotEmpty
 	private Long gclStatus;
+	/**评论等级*/
+	@NotEmpty
+	@Length(min = 1, max = 100)
+	private String gclLevel;
+	/**父类*/
+	@NotEmpty
+	private Long gclParenid;
+	/**是否是类型评论*/
+	@NotEmpty
+	private Long isClass;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -57,6 +67,20 @@ public class GoodsCommentlabel implements java.io.Serializable {
 	public Long getGclStatus() {
 		return this.gclStatus;
 	}
+	public void setGclLevel(String value) {
+		this.gclLevel = value;
+	}
+
+	public String getGclLevel() {
+		return this.gclLevel;
+	}
+	public void setGclParenid(Long value) {
+		this.gclParenid = value;
+	}
+
+	public Long getGclParenid() {
+		return this.gclParenid;
+	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;
 	}
@@ -72,5 +96,11 @@ public class GoodsCommentlabel implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getIsClass() {
+		return isClass;
+	}
 
+	public void setIsClass(Long isClass) {
+		this.isClass = isClass;
+	}
 }

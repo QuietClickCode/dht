@@ -3,6 +3,8 @@ import com.retailers.dht.common.entity.FloorAdvertising;
 import com.retailers.dht.common.vo.FloorAdvertisingVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：楼层广告设置DAO
  * @author wangjue
@@ -56,4 +58,6 @@ public interface FloorAdvertisingMapper {
 	public List<FloorAdvertisingVo> queryGoodsClassificationList();
 
 	public List<FloorAdvertisingVo> queryFloorAdvertisingVo();
+
+	public List<FloorAdvertisingVo> queryFloorAdvertisingListByGclassId(Pagination<FloorAdvertising> pagination);
 }

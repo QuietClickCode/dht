@@ -1,11 +1,17 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.GoodsGtgclrel;
 import com.retailers.dht.common.dao.GoodsGtgclrelMapper;
+import com.retailers.dht.common.service.GoodsCommentlabelService;
 import com.retailers.dht.common.service.GoodsGtgclrelService;
+import com.retailers.dht.common.vo.GoodsGgclrelVo;
 import com.retailers.dht.common.vo.GoodsGtgclrelVo;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -20,11 +26,12 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsGtgclrelServiceImpl implements GoodsGtgclrelService {
 	@Autowired
 	private GoodsGtgclrelMapper goodsGtgclrelMapper;
+	@Autowired
+	private GoodsCommentlabelService goodsCommentlabelService;
 	public boolean saveGoodsGtgclrel(String gclIds,Long gtId) {
 		int status = 0;
 		GoodsGtgclrel goodsGtgclrel = new GoodsGtgclrel();
-		gclIds = gclIds.replaceAll(","," ");
-		String[] gclIdArr = gclIds.trim().split(" ");
+		String[] gclIdArr = gclIds.split(",");
 		for(int i=0; i<gclIdArr.length; i++){
 			Long gclId = Long.parseLong(gclIdArr[i]);
 			goodsGtgclrel.setIsDelete(0L);
@@ -42,14 +49,27 @@ public class GoodsGtgclrelServiceImpl implements GoodsGtgclrelService {
 		return goodsGtgclrelMapper.queryGoodsGtgclrelByGtgclId(gtgclId);
 	}
 
-	public Pagination<GoodsGtgclrelVo> queryGoodsGtgclrelList(Map<String, Object> params, int pageNo, int pageSize) {
-		Pagination<GoodsGtgclrelVo> page = new Pagination<GoodsGtgclrelVo>();
+	public List<GoodsGtgclrelVo> queryGoodsGtgclrelList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<GoodsGtgclrel> page = new Pagination<GoodsGtgclrel>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<GoodsGtgclrelVo> list = goodsGtgclrelMapper.queryGoodsGtgclrelList(page);
+		List<GoodsGtgclrel> list = goodsGtgclrelMapper.queryGoodsGtgclrelList(page);
 		page.setData(list);
-		return page;
+		List<GoodsGtgclrelVo> personList = new ArrayList<GoodsGtgclrelVo>();
+		for(GoodsGtgclrel g:list){
+			GoodsGtgclrelVo goodsGtgclrelVo = new GoodsGtgclrelVo();
+			Map map = new HashMap();
+			map.put("isDelete",0L);
+			map.put("gclId",g.getGclId());
+			Pagination<GoodsGgclrelVo> pagination = goodsCommentlabelService.queryGoodsCommentlabelList(map,1,2);
+			if(!ObjectUtils.isEmpty(pagination.getData())){
+				BeanUtils.copyProperties(pagination.getData().get(0),goodsGtgclrelVo);
+				goodsGtgclrelVo.setGtgclId(g.getGtgclId());
+				personList.add(goodsGtgclrelVo);
+			}
+		}
+		return personList;
 	}
 	public boolean deleteGoodsGtgclrelByGtgclId(String gtgclIds) {
 
@@ -57,7 +77,9 @@ public class GoodsGtgclrelServiceImpl implements GoodsGtgclrelService {
 		int status = 0;
 		for (int i=0; i<gtgclIdArr.length; i++){
 			Long gtgclLong = Long.parseLong(gtgclIdArr[i]);
-			status += goodsGtgclrelMapper.deleteGoodsGtgclrelByGtgclId(gtgclLong);
+			GoodsGtgclrel goodsGtgclrel = goodsGtgclrelMapper.queryGoodsGtgclrelByGtgclId(gtgclLong);
+			goodsGtgclrel.setIsDelete(1L);
+			status += goodsGtgclrelMapper.updateGoodsGtgclrel(goodsGtgclrel);
 		}
 		return status == gtgclIdArr.length ? true : false;
 	}

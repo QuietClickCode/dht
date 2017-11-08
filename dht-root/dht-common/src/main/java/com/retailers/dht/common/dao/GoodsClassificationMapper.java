@@ -5,6 +5,7 @@ import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 描述：商品子类表DAO
@@ -59,5 +60,7 @@ public interface GoodsClassificationMapper {
 	public List<GoodsClassificationVo> queryGoodsClassificationTree();
 
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
+
+	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Map map);
 
 }

@@ -51,6 +51,6 @@ public interface GoodsGtgclrelMapper {
 	 * @author fanghui
 	 * @date 2017-10-25 10:54:33
 	 */
-	public List<GoodsGtgclrelVo> queryGoodsGtgclrelList(Pagination<GoodsGtgclrelVo> pagination);
+	public List<GoodsGtgclrel> queryGoodsGtgclrelList(Pagination<GoodsGtgclrel> pagination);
 
 }

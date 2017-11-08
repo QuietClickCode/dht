@@ -64,7 +64,7 @@ public interface GoodsClassificationService {
 
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
 
-	public List<GoodsClassification> queryGoodsClassificationListByParentId(Long ggId);
+	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
 }
 
 

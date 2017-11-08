@@ -283,8 +283,31 @@
                                 <th style="width: 30px">
                                     &nbsp;
                                 </th>
-                                <th style="text-align: center;" id="topcommentlabelname">
+                                <th style="text-align: center;" id="topcommentlabelname" colspan="6">
                                     商品评论名称（已有）
+                                </th>
+                            </tr>
+                            <tr>
+                                <th style="width: 30px">
+                                    &nbsp;
+                                </th>
+                                <th style="text-align: center;" >
+                                    评论分类名称
+                                </th>
+                                <th style="text-align: center;" >
+                                    一星
+                                </th>
+                                <th style="text-align: center;" >
+                                    二星
+                                </th>
+                                <th style="text-align: center;" >
+                                    三星
+                                </th>
+                                <th style="text-align: center;" >
+                                    四星
+                                </th>
+                                <th style="text-align: center;" >
+                                    五星
                                 </th>
                             </tr>
                             </thead>
@@ -1166,7 +1189,22 @@
                             '</div>'+
                             '</td>'+
                             '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                            '<span style="line-height: 100%">'+rows[i].gclname+'</span>'+
+                            '<span style="line-height: 100%">'+rows[i].gclName+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start1name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start2name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start3name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start4name+'</span>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].start5name+'</span>'+
                             '</td>'+
                             '</tr>';
                         initgtgclArr.push(rows[i].gclId);
@@ -1225,6 +1263,21 @@
                                 '</td>'+
                                 '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
                                 '<span style="line-height: 100%">'+rows[i].gclName+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start1name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start2name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start3name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start4name+'</span>'+
+                                '</td>'+
+                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                                '<span style="line-height: 100%">'+rows[i].start5name+'</span>'+
                                 '</td>'+
                                 '</tr>';
                         }

@@ -5,16 +5,50 @@ import com.retailers.dht.common.entity.GoodsGgclrel;
 /**
  * Created by Administrator on 2017/9/30.
  */
-public class GoodsGgclrelVo extends GoodsGgclrel {
-    private String gclname;
+public class GoodsGgclrelVo extends GoodsCommentlabelVo {
+    private Long ggclId;
+    private Long gid;
+    private String gname;
+    private Long gclassId;
+    private String gclassName;
 
-    public void setGclname(String value) {
-        this.gclname = value;
+    public Long getGid() {
+        return gid;
     }
 
-    public String getGclname() {
-        return this.gclname;
+    public void setGid(Long gid) {
+        this.gid = gid;
     }
 
+    public String getGname() {
+        return gname;
+    }
 
+    public void setGname(String gname) {
+        this.gname = gname;
+    }
+
+    public Long getGgclId(){
+       return this.ggclId;
+   }
+
+    public void setGgclId(Long ggclId) {
+        this.ggclId = ggclId;
+    }
+
+    public Long getGclassId() {
+        return gclassId;
+    }
+
+    public void setGclassId(Long gclassId) {
+        this.gclassId = gclassId;
+    }
+
+    public String getGclassName() {
+        return gclassName;
+    }
+
+    public void setGclassName(String gclassName) {
+        this.gclassName = gclassName;
+    }
 }
