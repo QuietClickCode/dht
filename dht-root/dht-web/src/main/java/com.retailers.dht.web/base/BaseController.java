@@ -3,6 +3,7 @@ package com.retailers.dht.web.base;
 
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.auth.entity.SysUser;
+import com.retailers.dht.web.constant.WebSystemConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseWrite;
 import com.retailers.tools.exception.AppException;
@@ -66,5 +67,19 @@ public class BaseController extends BaseWrite {
         rtn.put("total",pages.getTotalCount());
         rtn.put("rows",pages.getData());
         return rtn;
+    }
+
+    /**
+     * 设置页面跳转路径
+     * @param request
+     * @param url 原本指向路径
+     * @return
+     */
+    protected  String redirectUrl(HttpServletRequest request,String url){
+        String type=request.getAttribute(WebSystemConstant.WEB_REQ_TYPE).toString();
+        if(url.indexOf("/")!=0){
+            url="/"+url;
+        }
+        return type+url;
     }
 }

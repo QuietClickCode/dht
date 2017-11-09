@@ -5,6 +5,7 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.auth.entity.SysUser;
 import com.retailers.dht.common.entity.LogManagerReq;
 import com.retailers.dht.common.service.LogManagerReqService;
+import com.retailers.dht.web.constant.WebSystemConstant;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.IPUtil;
 import com.retailers.tools.utils.ObjectUtils;
@@ -35,6 +36,17 @@ public class ReqInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         logger.info("进入拦截");
         req.setAttribute("sysManagerReqTime", new Date());
+        String userAgent = req.getHeader( "USER-AGENT" ).toLowerCase();
+        if(null == userAgent){
+            userAgent = "";
+        }
+        boolean isFromMobile=CheckMobile.check(userAgent);
+        //判断是否为移动端访问
+        if(isFromMobile){
+            req.setAttribute(WebSystemConstant.WEB_REQ_TYPE,"m_modle");
+        } else {
+            req.setAttribute(WebSystemConstant.WEB_REQ_TYPE,"pc_modle");
+        }
         return true;
     }
 

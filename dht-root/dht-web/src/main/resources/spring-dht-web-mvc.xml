@@ -68,11 +68,20 @@
         <property name="cacheSeconds" value="60" />
     </bean>
 
-    <!--对视图进行解析-->
+    <!--对jsp视图进行解析-->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
         <property name="prefix" value="/WEB-INF/page/"/>
         <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--对html视图进行解析-->
+    <bean id="htmlviewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="com.retailers.dht.web.utils.HtmlResourceView"/>
+        <property name="order" value="0" />
+        <property name="prefix" value="/WEB-INF/html/"/>
+        <property name="suffix" value=".html" />
+        <property name="contentType" value="text/html;charset=UTF-8"></property>
     </bean>
     <mvc:resources location="/assets" mapping="/assets/**"     cache-period="604800"/>
     <!--异常处理-->
