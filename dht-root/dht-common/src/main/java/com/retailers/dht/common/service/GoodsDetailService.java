@@ -3,6 +3,8 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsDetail;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品详情表Service
@@ -56,6 +58,9 @@ public interface GoodsDetailService {
 	 */
 	public boolean deleteGoodsDetailByGdId(Long gdId);
 
+	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
+
+	public boolean addMyData(String mydata,Long gid);
 }
 
 

@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsGgsvalOnceVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgsval;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品与规格值关系表Service
@@ -55,6 +58,9 @@ public interface GoodsGgsvalService {
 	 */
 	public boolean deleteGoodsGgsvalByGgsId(Long ggsId);
 
+	public List<GoodsGgsvalOnceVo> queryGgsrelListsOnce(Long gid);
+
+	public boolean addGoodsGgsvalByMyData(String gsIds,String gsvalIds,Long gid);
 }
 
 

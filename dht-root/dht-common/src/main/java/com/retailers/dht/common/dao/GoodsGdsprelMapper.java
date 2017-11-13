@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGdsprel;
+import com.retailers.dht.common.vo.GoodsGdsprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -52,4 +53,5 @@ public interface GoodsGdsprelMapper {
 	 */
 	public List<GoodsGdsprel> queryGoodsGdsprelList(Pagination<GoodsGdsprel> pagination);
 
+	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid);
 }

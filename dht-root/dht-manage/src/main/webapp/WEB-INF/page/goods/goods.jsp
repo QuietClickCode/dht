@@ -875,6 +875,7 @@
     </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+
 <img style="width: 200px;height: 200px;display: none;position: absolute" src="" id="mybigimg">
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -1828,103 +1829,119 @@
             toastr.warning('请先选择商品分类!');
             return;
         }
-        getggHome(ggId);
+
+        loadgsonce(gid);
+        loadgoodsdetailonce(gid);
     }
 
-    function getggHome(ggId) {
+    <!--一次性加载规格-->
+    function loadgsonce(gid) {
         $.ajax({
             type:"post",
-            url:"/goods/queryGoodsClassificationById",
+            url:"/goods/queryGgsrelListsOnce",
             dataType: "json",
-            data:{ggId:ggId,pageNo:1,pageSize:2},
+            data:{gid:gid},
             success:function(data){
-                var goodsClassification = data.goodsClassification;
-                if(goodsClassification!=null){
-                    $.ajax({
-                        type:"post",
-                        url:"/goods/queryGoodsTypeById",
-                        dataType: "json",
-                        data:{gtId:goodsClassification.ggHome},
-                        success:function(data){
-                            var goodsType = data.goodsType;
-                            if(goodsType!=null && goodsType.isSpecification==1){
-                                loadSpecifications(goodsType.gtId);
-                            }
-
-                        }
-                    });
-
-                }
-            }
-        });
-    }
-
-    function loadSpecifications(gtId) {
-        $.ajax({
-            type:"post",
-            url:"/goods/queryGoodsGtgsrelLists",
-            dataType: "json",
-            data:{gtId:gtId,pageNo:1,pageSize:100},
-            success:function(data){
-                var gtgsrels = data.rows;
-                var html = '';
-                if(gtgsrels != null && gtgsrels.length>0){
-                    for(var i=0; i<gtgsrels.length; i++){
-                        html += '<div class="row">'+
-                            '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
-                            '<input type="hidden" name="specificationId" value="'+gtgsrels[i].gsId+'">'+
-                        '<span >'+gtgsrels[i].gsname+'</span>'+
-                        '</div>'+
-                        '<div class="col-lg-11">'+
-                        '<div class="row">'+
-                        '</div>'+
-                        '</div>'+
-                        '</div>';
-                    }
-                    $('#goodsSpecificatiodiv').html(html);
-                    loadgsvals();
-                }
-            }
-        });
-    }
-    <!--加载规格值-->
-    function loadgsvals() {
-        var gsIds = $('input[name="specificationId"]');
-        if(gsIds!=null && gsIds.length>0){
-            for(var i=0; i<gsIds.length; i++){
-                loadgsval(gsIds[i],i,gsIds.length-1);
-            }
-        }
-    }
-    function loadgsval(obj,x,y) {
-        var showobj = $($(obj).parent().next().children().get(0));
-        $.ajax({
-            type:"post",
-            url:"/goods/queryGoodsGsvalLists",
-            dataType: "json",
-            async:false,
-            data:{gsId:$(obj).val(),pageNo:1,pageSize:100},
-            success:function(data){
-                var html = '';
                 var rows = data.rows;
-                if(rows!=null && rows.length>0){
-                    for(var i=0; i<rows.length; i++){
-                        html += '<div class="col-lg-2">'+
-                                '<div class="checkbox checkbox-info" style="display: block">'+
-                                '<input onclick="createtabel();" id="gsvalId'+i+rows[i].gsvVal+'" class="styled" name="gsvalId" type="checkbox" value="'+rows[i].gsvId+'">'+
-                                '<label for="gsvalId'+i+rows[i].gsvVal+'">'+ rows[i].gsvVal+'</label>'+
-                                '</div>'+
-                                '</div>';
-                    }
-                    showobj.html(html);
-                    if(x==y){
-                        var gid = $('#gid').val();
-                        inithavegsandcreatetabel(gid);
+                if(rows!=null){
+                    var html = '';
+                    $('#goodsSpecificatiodiv').html('');
+                    for(var i=0;i<rows.length;i++){
+                        var gsvids = rows[i].gsvidstr.split(' ');
+                        var gsvvals = rows[i].gsvvalstr.split(' ');
+                        var selectedgsvids = null;
+                        if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
+                            selectedgsvids = rows[i].selectedgsvidstr.split(' ');
+                        }
+                        html = '<div class="row">'+
+                            '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
+                            '<input name="specificationId" value="'+rows[i].gsid+'" type="hidden" />'+
+                            '<span>'+rows[i].gsname+'</span>'+
+                            '</div>'+
+                            '<div class="col-lg-11">'+
+                            '<div class="row">';
+
+                        if(gsvids!=null&&gsvids.length>0){
+                            for(var j=0;j<gsvids.length;j++){
+                                html += '<div class="col-lg-2">'+
+                                    '<div class="checkbox checkbox-info" style="display: block">';
+                                var flag = false;
+                                if(selectedgsvids!=null&&selectedgsvids.length>0){
+                                    for(var k=0;k<selectedgsvids.length;k++){
+                                        if(selectedgsvids[k]==gsvids[j]){
+                                            flag = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if(flag){
+                                    html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" checked="checked"/>';
+                                }else{
+                                    html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" />';
+                                }
+                                html += '<label for="gsvalId'+i+gsvvals[j]+'">'+gsvvals[j]+'</label>'+
+                                    '</div>'+
+                                    '</div>';
+                            }
+                        }
+                            html += '</div>'+
+                            '</div>'+
+                            '</div>';
+                        $('#goodsSpecificatiodiv').append(html);
                     }
                 }
             }
         });
     }
+
+    function loadgoodsdetailonce(gid) {
+        $.ajax({
+            type:"post",
+            url:"/goods/queryGoodsDetailOnce",
+            dataType: "json",
+            data:{gid:gid},
+            success:function(data){
+                var html = '';
+                $('#gstabel').html('');
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    var gsid = rows[0].gsid.split(' ');
+                    var gsname = rows[0].gsname.split(' ');
+                    html = '<thead><tr>';
+                    for(var j=0;j<gsid.length;j++){
+                        html += '<th> <input value="'+gsid[j]+'" type="hidden">'+gsname[j]+'</th>';
+                    }
+                    html += '<th>售价</th><th>成本</th><th>库存</th><th>剩余库存</th><th>图片</th><th>操作</th></tr></thead>';
+                    $('#gstabel').append(html);
+                    html = '<tbody id="ggsvaldetailTbody">';
+
+                    for(var i=0;i<rows.length;i++){
+                        var hasgsvalid = rows[i].hasgsvalid.split(' ');
+                        var hasgsval = rows[i].hasgsval.split(' ');
+                        html += '<tr>';
+                        for(var j=0;j<hasgsvalid.length;j++){
+                            html += '<td> <input value="'+hasgsvalid[j]+'" type="hidden" /> '+hasgsval[j]+' </td>';
+                        }
+                        html += '<td> <input value="'+rows[i].gdPrice+'" class="form-control" placeholder="售价" type="text" /> </td>'+
+                            '<td> <input value="'+rows[i].gdCostprice+'" class="form-control" placeholder="成本" type="text" /> </td>'+
+                            '<td> <input value="'+rows[i].gdInventory+'" class="form-control" placeholder="库存" disabled="disabled" type="text" /> </td>'+
+                            '<td> <input value="'+rows[i].gdResidueinventory+'" class="form-control" placeholder="剩余库存" disabled="disabled" type="text" /> </td>'+
+                            '<td>'+
+                            '<form>'+
+                            '<input value="'+rows[i].gdImgid+'" type="hidden" />'+
+                            '<img src="'+rows[i].imgUrl+'" style="width: 20px; height: 20px; margin-top: 5px; float: left;" onmouseover="showbigimg(this)" onmouseleave="hidebigimg()"  />'+
+                            '<input name="dht_image_upload" style="margin-left:20px;" placeholder="上传图片" type="file" />'+
+                            '</form> </td>'+
+                            '<td> <button class="btn btn-primary" onclick="deleterow(this);">删除</button> </td>'+
+                            '</tr>';
+                    }
+                    html += '</tbody>';
+                    $('#gstabel').append(html);
+                }
+            }
+        });
+    }
+
     <!--创建表格-->
     function createtabel() {
         var gsIds = new Array();
@@ -2155,13 +2172,7 @@
     }
     <!--清除所有关系-->
     function clearggsdata(gid) {
-        $.ajax({
-            type:"post",
-            url:"/goods/clearAllGgsrel",
-            dataType: "json",
-            data:{gid:gid},
-            success:function(data){
-                refreshTableData();
+
                 var imgs = $('#gstabel').find('input[type="file"]');
                 imglength = imgs.length;
                 uploadimgindex = 0;
@@ -2184,8 +2195,7 @@
                 }else{
                     toastr.warning("请将图片上传完整！");
                 }
-            }
-        });
+
     }
     <!--删除行-->
     function deleterow(obj) {
@@ -2223,9 +2233,20 @@
            var ggsvaldetailTtrs = $('#ggsvaldetailTbody').children();
            var gid = $('#gid').val();
            if(ggsvaldetailTtrs!=null && ggsvaldetailTtrs.length>0){
-
+               var uploaddata = '';
                for(var i=0; i<ggsvaldetailTtrs.length;i++){
+                   uploaddata += ',{';
                    var ggsvaldetailTtds = $(ggsvaldetailTtrs[i]).children();
+                   var gsid='';
+                   var gsvalid='';
+                   for(var j=0;j<ggsvaldetailTtds.length-6;j++){
+                       gsvalid += '_'+$(ggsvaldetailTtds[j]).find('input[type=hidden]').get(0).value;
+                       gsid += '_'+$($($('#gstabel').find('tr')[0]).children()[j]).find('input[type=hidden]').get(0).value;
+                   }
+                   gsvalid = gsvalid.substr(1);
+                   gsid = gsid.substr(1);
+                   uploaddata += '\"gsid\":\"'+gsid+'\",';
+                   uploaddata += '\"gsvalid\":\"'+gsvalid+'\",';
 
                    var gdImgid = $(ggsvaldetailTtds[ggsvaldetailTtds.length-2]).find('input').get(0).value;
                    var gdResidueinventory = $(ggsvaldetailTtds[ggsvaldetailTtds.length-3]).find('input').get(0).value;
@@ -2233,135 +2254,52 @@
                    var gdCostprice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-5]).find('input').get(0).value;
                    var gdPrice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-6]).find('input').get(0).value;
 
+                   uploaddata += '\"gdImgid\":'+gdImgid+',';
+                   uploaddata += '\"gdResidueinventory\":'+gdResidueinventory+',';
+                   uploaddata += '\"gdInventory\":'+gdInventory+',';
+                   uploaddata += '\"gdCostprice\":'+gdCostprice+',';
+                   uploaddata += '\"gdPrice\":'+gdPrice;
+                   uploaddata += '}';
+               }
+               if(uploaddata!=''){
+                   uploaddata = uploaddata.substr(1);
+                   uploaddata = '['+uploaddata+']';
                    $.ajax({
                        type:"post",
-                       url:"/goods/addGoodsDetail",
+                       url:"/goods/addMyData",
                        dataType: "json",
                        async :false,
-                       data:{gdImgid:gdImgid,gdResidueinventory:gdResidueinventory,gdInventory:gdInventory,gdCostprice:gdCostprice,gdPrice:gdPrice,gid:gid},
+                       data:{uploaddata:uploaddata,gid:gid},
                        success:function(data){
-                            for(var j=0; j<ggsvaldetailTtds.length-6;j++){
-                                var gsId = $($($('#gstabel').find('tr').get(0)).find('th').get(j)).find('input').get(0).value;
 
-                                var gdId = data.goodsDetail.gdId;
-                                var gsvId = $(ggsvaldetailTtds[j]).find('input').get(0).value;
-                                $.ajax({
-                                    type:"post",
-                                    url:"/goods/addGoodsGgsvalDetail",
-                                    dataType: "json",
-                                    data:{gsId:gsId,gid:gid,gdId:gdId,gsvId:gsvId},
-                                    success:function(data){
-
-                                    }
-                                });
-                            }
                        }
                    });
                }
 
                var gsvIds = $('#goodsSpecificatiodiv').find('input:checked');
                if(gsvIds!=null && gsvIds.length>0){
+                   var gsvalids = '';
+                   var gsids = '';
                    for(var i=0; i<gsvIds.length; i++){
                        var gsvId = gsvIds[i].value;
                        var gsId = $($(gsvIds[i]).parent().parent().parent().parent().prevAll().get(0)).find('input').get(0).value;
-                       $.ajax({
-                           type:"post",
-                           url:"/goods/addGoodsGgsval",
-                           dataType: "json",
-                           data:{gsId:gsId,gid:gid,gsvId:gsvId},
-                           success:function(data){
-
-                           }
-                       });
+                       gsvalids += '_'+gsvId;
+                       gsids += '_'+gsId;
                    }
+                   gsvalids = gsvalids.substr(1);
+                   gsids = gsids.substr(1);
+                   $.ajax({
+                       type:"post",
+                       url:"/goods/addGoodsGgsvalByMyData",
+                       dataType: "json",
+                       data:{gsIds:gsids,gid:gid,gsvalids:gsvalids},
+                       success:function(data){
+
+                       }
+                   });
                }
            }
             toastr.success("操作成功！");
-    }
-
-    function inithavegsandcreatetabel(gid) {
-        var allgscheckbox = $('#goodsSpecificatiodiv').find('input[type=checkbox]');
-
-        $.ajax({
-            type:"post",
-            url:"/goods/queryGgsrelLists",
-            dataType: "json",
-            data:{gid:gid,pageNo:1,pageSize:1000},
-            success:function(data){
-                var rows = data.rows;
-                if(rows!=null && rows.length>0){
-                    for (var i=0; i<rows.length; i++){
-                        for(var j=0; j<allgscheckbox.length; j++){
-                            if(rows[i].gsvId == allgscheckbox[j].value){
-                                $(allgscheckbox[j]).attr('checked','checked');
-                            }
-                        }
-                    }
-                    createtabel();
-                    loadgsdata();
-                }
-            }
-        });
-    }
-
-    function loadgsdata() {
-        var ggsvaldetailtrs = $('#ggsvaldetailTbody').children();
-        var gid = $('#gid').val();
-        if(ggsvaldetailtrs!=null && ggsvaldetailtrs.length>0){
-            for(var i=0;i<ggsvaldetailtrs.length; i++){
-                var ggsvaldetailtds = $(ggsvaldetailtrs[i]).children();
-                var gdIds = new Array();
-                for(var j=0; j<ggsvaldetailtds.length-6; j++){
-                    var gsvId = $(ggsvaldetailtds[j]).find('input').get(0).value;
-                    $.ajax({
-                        type:"post",
-                        url:"/goods/queryGoodsGgsvalDetailLists",
-                        dataType: "json",
-                        async:false,
-                        data:{gid:gid,gsvId:gsvId,pageNo:1,pageSize:100},
-                        success:function(data){
-                            var rows = data.rows;
-                            if(rows!=null && rows.length>0) {
-                                for (var k = 0; k < rows.length; k++) {
-                                    gdIds.push(rows[k].gdId);
-                                }
-
-                            }
-                        }
-                    });
-                }
-
-                var gdId = getMostTimes(gdIds);
-
-                if(gdId == null){
-                    $(ggsvaldetailtrs[i]).remove();
-                }else{
-                    $.ajax({
-                        type:"post",
-                        url:"/goods/queryGoodsDetailById",
-                        dataType: "json",
-                        async:false,
-                        data:{gdId:gdId},
-                        success:function(data){
-                            var goodsDetail = data.goodsDetail;
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-6]).find('input').get(0).value = goodsDetail.gdPrice;
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-5]).find('input').get(0).value = goodsDetail.gdCostprice;
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-4]).find('input').get(0).value = goodsDetail.gdInventory;
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-4]).find('input').attr('disabled','disabled');
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-3]).find('input').get(0).value = goodsDetail.gdResidueinventory;
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-3]).find('input').attr('disabled','disabled');
-                            $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('input').get(0).value = goodsDetail.gdImgid;
-                            if(goodsDetail.imgUrl.substring(goodsDetail.imgUrl.length-4)!="null"){
-                                $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('img').get(0).src = goodsDetail.imgUrl;
-                                $(ggsvaldetailtds[ggsvaldetailtds.length-2]).find('img').show();
-                            }
-                        }
-                    });
-                }
-
-            }
-        }
-
     }
 
     function getMostTimes(arr) {

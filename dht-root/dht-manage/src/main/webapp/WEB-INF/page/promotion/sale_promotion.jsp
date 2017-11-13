@@ -18,6 +18,7 @@
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
     <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
+
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -171,7 +172,7 @@
 
 <%--添加商品--%>
 <div class="modal fade" id="addSalePromotion" tabindex="-1" style="overflow-y: auto;" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 70%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -239,49 +240,10 @@
                             <input type="text" name="spOrder" class="form-control">
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">原价</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spPrice" readonly class="goodsPrice form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">折扣率</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spDiscountRate" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">特价</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSale" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">已售数量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSoldOut" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">特价数量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSaleSize" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">限购量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spBounds" class="form-control">
-                        </div>
-                    </div>
                 </form>
+                <table id="addgdspTabel">
+
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -294,7 +256,7 @@
 
 <%--编辑商品--%>
 <div class="modal fade" id="updateSalePromotionGoods" tabindex="-1" style="overflow-y: auto;" role="dialog" aria-labelledby="myModalLabel">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog" role="document" style="width: 70%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -350,49 +312,10 @@
                             <input type="text" name="spOrder" id="setAdvertOrder" class="form-control">
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">原价</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spPrice" readonly class="goodsPrice form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">折扣率</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spDiscountRate" id="spDiscountRate" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">特价</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSale" id="spSale" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">已售数量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSoldOut" id="spSoldOut" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">特价数量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spSaleSize" class="form-control">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">限购量</label>
-                        <div class="col-sm-10">
-                            <input type="text" name="spBounds" class="form-control">
-                        </div>
-                    </div>
                 </form>
+                <table id="gdspTabel">
+
+                </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -572,7 +495,7 @@
                     formatter:function (value,row,index) {
                         rowDatas.set(row.spId,row);
                         let html='';
-                        html+='<button class="btn btn-primary" onclick="event.stopPropagation();updateSalePromotion(\''+row.parentId+'\',\''+row.spId+'\',\''+row.version+'\')">编辑</button>'
+                        html+='<button class="btn btn-primary" onclick="event.stopPropagation();updateSalePromotion(\''+row.parentId+'\',\''+row.spId+'\',\''+row.version+'\',\''+row.goodsId+'\')">编辑</button>'
                         return html;
                     }
                 },
@@ -636,11 +559,9 @@
         );
     }
 
-
     function addPromotion() {
         $("#saveSalePromotion").modal("show");
     }
-
 
     /*添加商品*/
     function savePromotion() {
@@ -665,9 +586,13 @@
         });
     }
     
-    function openAddPromotionModal(parentId) {
-        parentId = parentId;
+    function openAddPromotionModal(inparentId) {
+        parentId = inparentId;
         id = '';
+        gid='';
+        $('.goodsName').val('');
+        refreshaddinnerTableData();
+        $("#addSalePromotionGoods").data('bootstrapValidator').resetForm(true);
         $("#addSalePromotion").modal("show");
     }
 
@@ -675,8 +600,9 @@
     var parentId;
     var id;
     var version;
+    var gid;
     function chooseGoodsModal(num) {
-        if(id!=''){
+        if(gid!=''){
             layer.msg('已经存在商品');
             return;
         }
@@ -698,25 +624,40 @@
         $(".goodsId").eq(number).val(goods[0].gid);
         $(".goodsName").eq(number).val(goods[0].gname);
         $(".goodsPrice").eq(number).val(goods[0].gprice);
+        gid = goods[0].gid;
+
+
+        refreshaddinnerTableData();
         $("#chooseGoodsList").modal("hide");
     }
     
     function addSaleGoods() {
         let bootstrapValidator = $("#addSalePromotionGoods").data('bootstrapValidator');
         bootstrapValidator.validate();
+
         if(!bootstrapValidator.isValid())
             return;
-        var goods = document.getElementById("addSalePromotionGoods");
-        var data = new FormData(goods);
-        data.append("isDelete", 0);
-        data.append("parentId", parentId);
+
+        var inputs = $('#addgdspTabel').find('input[type=text]');
+        if(!validateinputs(inputs)){
+            return;
+        }
+
+        var goodsId = $('.goodsId')[0].value;
+        var goodsName = $('.goodsName')[0].value;
+        var isCoupon = $('input[name=isCoupon]:checked')[0].value;
+        var spRegion = $('input[name=spRegion]:checked')[0].value;
+        var spOrder = $('#addSalePromotionGoods input[name=spOrder]')[0].value;
         $.ajax({
             url:"/openSalePromotion/addSalePromotion",
-            method:"post",
-            data:data,
-            processData : false,
-            contentType : false,
+            type:"post",
+            dataType: "json",
+            data:{goodsId:goodsId,goodsName:goodsName,isCoupon:isCoupon,spRegion:spRegion,spOrder:spOrder,isDelete:0,parentId:parentId},
             success:function (data) {
+                if(data.row!=null){
+                    id=data.row.spId;
+                }
+                uploadaddgdspdata();
                 refreshTableData();
                 $("#addSalePromotion").modal("hide");
                 $("#addSalePromotionGoods").data('bootstrapValidator').resetForm(true);
@@ -725,9 +666,10 @@
     }
 
     /*设置表单默认值*/
-    function updateSalePromotion(parentId,spid,v) {
+    function updateSalePromotion(parentId,spid,v,goodsId) {
         id = spid;
         version = v;
+        gid=goodsId;
         if(parentId == "null"){
             let goods = $("#goodsClassificationTable").bootstrapTable("getRowByUniqueId",spid);
             setInfo("updateSalePromotionForm",goods);
@@ -741,17 +683,37 @@
             setInfo("updateSalePromotionGoodsFrom",goods);
             radioChoose("#updateSalePromotionGoodsFrom .isCoupon",goods.isCoupon);
             radioChoose("#updateSalePromotionGoodsFrom .spRegion",goods.spRegion);
+
+            refreshinnerTableData();
             $("#updateSalePromotionGoods").modal("show");
+        }
+    }
+
+    function validateinputs(inputs) {
+        if(inputs!=null&&inputs.length>0){
+            for(var i=0;i<inputs.length;i++){
+                if(inputs[i].value==''||isNaN(inputs[i].value)||inputs[i].value<0){
+                    layer.msg('填写的数据不正确');
+                    return false;
+                }
+            }
+            return true;
         }
     }
 
     /*编辑商品*/
     function updateGoods(number) {
         let fromId = "";
-        if(number == 0)
+        if(number == 0){
             fromId = "updateSalePromotionForm";
-        else
+        }
+        else{
             fromId = "updateSalePromotionGoodsFrom";
+        }
+        var inputs = $('#gdspTabel').find('input[type=text]');
+        if(!validateinputs(inputs)){
+            return;
+        }
         let bootstrapValidator = $("#"+fromId).data('bootstrapValidator');
         bootstrapValidator.validate();
         if(!bootstrapValidator.isValid())
@@ -767,6 +729,9 @@
             processData : false,
             contentType : false,
             success:function (data) {
+                if(number==1){
+                    uploadgdspdata();
+                }
                 refreshTableData();
                 $("#updateSalePromotion").modal("hide");
                 $("#updateSalePromotionGoods").modal("hide");
@@ -816,6 +781,331 @@
             }
         });
     }
+
+</script>
+
+<!--商品详情与特价关系-->
+<script type="text/javascript">
+    var gdspColumns=[
+        {
+            field: 'gsName',
+            title: '规格',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'gdPrice',
+            title: '原价',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'spDiscountRate',
+            title: '折扣率',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="hidden" value="'+row.gdId+'">' +
+                    '<input type="text" class="form-controller" value="'+val+'" onblur="changspsale(this)">';
+                return html;
+            }
+        },
+        {
+            field: 'spSale',
+            title: '特价',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" class="form-controller" value="'+val+'" onblur="changsprate(this);">';
+                return html;
+            }
+        },
+        {
+            field: 'spInventory',
+            title: '特价数量',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                    '<input type="hidden" value="'+row.gdResidueinventory+'">';
+                return html;
+            }
+        },
+        {
+            field: 'spBounds',
+            title: '限购量',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" class="form-controller" value="'+val+'">';
+                return html;
+            }
+        }
+    ]
+
+    $(function () {
+        $('#gdspTabel').bootstrapTable({
+            url:'',
+            method: 'post',                      //请求方式（*）
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            sortable: false,                     //是否启用排序
+            pagination:false,
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                      //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: false,
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            selectItemName: 'parentItem',
+            dataType: "json",
+            columns: gdspColumns,
+            contentType : "application/x-www-form-urlencoded"  //设置传入方式 可以用getparams 取得参数  默认为：application/json  json 方式传输
+        });
+    });
+
+    function refreshinnerTableData() {
+        $('#gdspTabel').bootstrapTable(
+            "refresh",
+            {
+                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid
+            }
+        );
+    }
+
+    function uploadgdspdata() {
+        if(gid!=''){
+            var inputs = $('#gdspTabel').find('input[type=text]');
+            if(inputs!=null&&inputs.length>0){
+                for(var i=0;i<inputs.length;i++){
+                    if(isNaN(inputs[i].value) || inputs[i].value<0){
+                        layer.msg('您输入的信息有误！');
+                        return;
+                    }
+                }
+            }
+
+            var trs = $('#gdspTabel').find('tr');
+            if(trs!=null&&trs.length>0){
+                for(var i=1;i<trs.length;i++){
+                    loadtrdata(trs[i],i,trs.length-1);
+                }
+            }
+        }
+    }
+
+    function loadtrdata(obj,x,y) {
+        var $obj = $(obj);
+        var tds = $obj.children();
+
+        var gdId = $(tds[2]).find('input[type=hidden]').get(0).value;
+        var spDiscountRate = $(tds[2]).find('input[type=text]').get(0).value;
+        var spSale = $(tds[3]).find('input[type=text]').get(0).value;
+        var spInventory = $(tds[4]).find('input[type=text]').get(0).value;
+        var spBounds = $(tds[5]).find('input[type=text]').get(0).value;
+        $.ajax({
+            url:"/openGoodsGdsprel/addGoodsGdsprel",
+            type:"post",
+            dataType: "json",
+            data:{gdId:gdId,spDiscountRate:spDiscountRate,spSale:spSale,spInventory:spInventory,spBounds:spBounds,spId:id},
+            success:function (data) {
+                if(x==y){
+                    layer.msg('操作成功');
+                }
+            }
+        });
+
+    }
+
+    function checkspInventory(obj) {
+        var val = $(obj).val();
+        if(!isNaN(val)){
+            var valInt = parseInt(val);
+            var gdInventory = $(obj).next().val();
+            if(valInt>gdInventory){
+                layer.msg('您输入的内容不在指定范围内');
+                $(obj).focus();
+            }
+        }else{
+            layer.msg('您输入的内容不是数字');
+            $(obj).focus();
+        }
+    }
+
+    function changspsale(obj) {
+        var rate = $(obj).val();
+        if(isNaN(rate) || rate<0 || rate==''){
+            layer.msg('您输入的数据不符合规格');
+        }else{
+            var preval = parseFloat($(obj).parent().prev().html());
+            $(obj).parent().next().children()[0].value = (parseFloat(rate)*preval/10).toFixed(2);
+        }
+    }
+
+    function changsprate(obj) {
+        var sale = $(obj).val();
+        if(isNaN(sale) || sale<0 || sale==''){
+            layer.msg('您输入的数据不符合规格');
+        }else{
+            var preval = parseFloat($(obj).parent().prev().prev().html());
+            $(obj).parent().prev().children()[1].value = ((preval-sale)/preval*10).toFixed(2);
+        }
+    }
+</script>
+
+<script type="text/javascript">
+    var addgdspColumns=[
+        {
+            field: 'gsName',
+            title: '规格',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'gdPrice',
+            title: '原价',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'spDiscountRate',
+            title: '折扣率',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="hidden" value="'+row.gdId+'">' +
+                    '<input type="text" class="form-controller" value="'+val+'" onblur="changspsale(this)">';
+                return html;
+            }
+        },
+        {
+            field: 'spSale',
+            title: '特价',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" class="form-controller" value="'+val+'" onblur="changsprate(this);">';
+                return html;
+            }
+        },
+        {
+            field: 'spInventory',
+            title: '特价数量',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                    '<input type="hidden" value="'+row.gdResidueinventory+'">';
+                return html;
+            }
+        },
+        {
+            field: 'spBounds',
+            title: '限购量',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = value;
+                }
+                html = '<input type="text" class="form-controller" value="'+val+'">';
+                return html;
+            }
+        }
+    ]
+
+    $(function () {
+        $('#addgdspTabel').bootstrapTable({
+            url:'',
+            method: 'post',                      //请求方式（*）
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            sortable: false,                     //是否启用排序
+            pagination:false,
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                      //初始化加载第一页，默认第一页
+            pageSize: 10,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: false,
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            selectItemName: 'parentItem',
+            dataType: "json",
+            columns: addgdspColumns,
+            contentType : "application/x-www-form-urlencoded"  //设置传入方式 可以用getparams 取得参数  默认为：application/json  json 方式传输
+        });
+    });
+
+    function refreshaddinnerTableData() {
+        $('#addgdspTabel').bootstrapTable(
+            "refresh",
+            {
+                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid
+            }
+        );
+    }
+
+    function uploadaddgdspdata() {
+        if(gid!=''){
+            var inputs = $('#addgdspTabel').find('input[type=text]');
+            if(inputs!=null&&inputs.length>0){
+                for(var i=0;i<inputs.length;i++){
+                    if(isNaN(inputs[i].value) || inputs[i].value<0){
+                        layer.msg('您输入的信息有误！');
+                        return;
+                    }
+                }
+            }
+
+            var trs = $('#addgdspTabel').find('tr');
+            if(trs!=null&&trs.length>0){
+                for(var i=1;i<trs.length;i++){
+                    loadtrdata(trs[i],i,trs.length-1);
+                }
+            }
+        }
+    }
+
 </script>
 
 <script>
@@ -997,49 +1287,6 @@
                         }
                     }
                 },
-                spPrice: {
-                    validators: {
-                        notEmpty: {
-                            message: '原价不能为空'
-                        }
-                    }
-                },
-                spDiscountRate: {
-                    validators: {
-                        notEmpty: {
-                            message: '折扣率不能为空'
-                        }
-                    }
-                },
-                spSale: {
-                    validators: {
-                        notEmpty: {
-                            message: '特价不能为空'
-                        }
-                    }
-                }
-                ,
-                spSoldOut: {
-                    validators: {
-                        notEmpty: {
-                            message: '已售数量不能为空'
-                        }
-                    }
-                },
-                spSaleSize: {
-                    validators: {
-                        notEmpty: {
-                            message: '特价数量不能为空'
-                        }
-                    }
-                },
-                spBounds: {
-                    validators: {
-                        notEmpty: {
-                            message: '限购量不能为空'
-                        }
-                    }
-                },
                 isCoupon: {
                     validators: {
                         notEmpty: {
@@ -1080,49 +1327,6 @@
                         regexp: {
                             regexp: /\d/,
                             message: "只能输入数字"
-                        }
-                    }
-                },
-                spPrice: {
-                    validators: {
-                        notEmpty: {
-                            message: '原价不能为空'
-                        }
-                    }
-                },
-                spDiscountRate: {
-                    validators: {
-                        notEmpty: {
-                            message: '折扣率不能为空'
-                        }
-                    }
-                },
-                spSale: {
-                    validators: {
-                        notEmpty: {
-                            message: '特价不能为空'
-                        }
-                    }
-                }
-                ,
-                spSoldOut: {
-                    validators: {
-                        notEmpty: {
-                            message: '已售数量不能为空'
-                        }
-                    }
-                },
-                spSaleSize: {
-                    validators: {
-                        notEmpty: {
-                            message: '特价数量不能为空'
-                        }
-                    }
-                },
-                spBounds: {
-                    validators: {
-                        notEmpty: {
-                            message: '限购量不能为空'
                         }
                     }
                 }

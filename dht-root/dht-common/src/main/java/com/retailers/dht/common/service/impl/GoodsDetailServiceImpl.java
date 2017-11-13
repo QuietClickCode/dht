@@ -1,18 +1,24 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.List;
-import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.dao.GoodsDetailMapper;
+import com.retailers.dht.common.entity.GoodsDetail;
+import com.retailers.dht.common.entity.GoodsGgsvalDetail;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsDetailService;
+import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.vo.GoodsDetailVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：商品详情表Service
  * @author fanghui
@@ -26,6 +32,8 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 	private GoodsDetailMapper goodsDetailMapper;
 	@Autowired
 	private AttachmentService attachmentService;
+	@Autowired
+	private GoodsGgsvalDetailService goodsGgsvalDetailService;
 	public GoodsDetail saveGoodsDetail(GoodsDetail goodsDetail) {
 		Long gdImgid = goodsDetail.getGdImgid();
 		int status = goodsDetailMapper.saveGoodsDetail(goodsDetail);
@@ -59,6 +67,57 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 	public boolean deleteGoodsDetailByGdId(Long gdId) {
 		int status = goodsDetailMapper.deleteGoodsDetailByGdId(gdId);
 		return status == 1 ? true : false;
+	}
+
+	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid){
+		List<GoodsDetailVo> list = goodsDetailMapper.queryGoodsDetailOnce(gid);
+		for(GoodsDetailVo goodsDetailVo:list){
+			goodsDetailVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsDetailVo.getImgUrl());
+		}
+		return list;
+	}
+
+	public boolean addMyData(String mydata,Long gid){
+		JSONArray jsonArray = JSON.parseArray(mydata);
+		GoodsDetail goodsDetail = new GoodsDetail();
+		goodsDetail.setGid(gid);
+		goodsDetail.setIsDelete(0L);
+		GoodsGgsvalDetail goodsGgsvalDetail = new GoodsGgsvalDetail();
+		goodsGgsvalDetail.setIsDelete(0L);
+		for(int i=0;i<jsonArray.size();i++){
+			JSONObject jsonObject = jsonArray.getJSONObject(i);
+			String gsids = jsonObject.getString("gsid");
+			String gsvalids = jsonObject.getString("gsvalid");
+			Long gdImgid = jsonObject.getLong("gdImgid");
+			Long gdResidueinventory = jsonObject.getLong("gdResidueinventory");
+			Long gdInventory = jsonObject.getLong("gdInventory");
+			Float gdCostprice = jsonObject.getFloat("gdCostprice");
+			Float gdPrice = jsonObject.getFloat("gdPrice");
+
+			goodsDetail.setGdImgid(gdImgid);
+			goodsDetail.setGdResidueinventory(gdResidueinventory);
+			goodsDetail.setGdInventory(gdInventory);
+			goodsDetail.setGdCostprice(gdCostprice);
+			goodsDetail.setGdPrice(gdPrice);
+			goodsDetail = saveGoodsDetail(goodsDetail);
+			System.out.println("gdid:"+goodsDetail.getGdId());
+			if(!ObjectUtils.isEmpty(gsids)&&!ObjectUtils.isEmpty(gsvalids)){
+				String[] gsidsArr = gsids.split("_");
+				String[] gsvalidsArr = gsvalids.split("_");
+
+				for(int j=0;j<gsidsArr.length;j++){
+					Long gsidLong = Long.parseLong(gsidsArr[j]);
+					Long gsvalidLong = Long.parseLong(gsvalidsArr[j]);
+					goodsGgsvalDetail.setGsId(gsidLong);
+					goodsGgsvalDetail.setGsvId(gsvalidLong);
+					goodsGgsvalDetail.setGid(gid);
+					goodsGgsvalDetail.setGdId(goodsDetail.getGdId());
+					goodsGgsvalDetailService.saveGoodsGgsvalDetail(goodsGgsvalDetail);
+				}
+			}
+		}
+
+		return true;
 	}
 }
 

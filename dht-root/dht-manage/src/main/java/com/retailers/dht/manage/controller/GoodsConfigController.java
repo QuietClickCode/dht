@@ -74,7 +74,10 @@ public class GoodsConfigController extends BaseController {
         map.put("gid",gid);
         Pagination<GoodsConfig> goodsConfigPagination = goodsConfigService.queryGoodsConfigList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("goodsConfig",goodsConfigPagination.getData().get(0));
+        if(!ObjectUtils.isEmpty(goodsConfigPagination.getData())){
+            gtm.put("goodsConfig",goodsConfigPagination.getData().get(0));
+        }
+
         return gtm;
     }
 

@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsGdsprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGdsprel;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品与特价关系表Service
@@ -55,6 +58,7 @@ public interface GoodsGdsprelService {
 	 */
 	public boolean deleteGoodsGdsprelByGdspId(Long gdspId);
 
+	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid);
 }
 
 

@@ -23,7 +23,7 @@ public interface SalePromotionService {
 	 * @author wangjue
 	 * @date 2017-11-02 16:28:41
 	 */
-	public boolean saveSalePromotion(SalePromotion salePromotion);
+	public SalePromotion saveSalePromotion(SalePromotion salePromotion);
 	/**
 	 * 编辑商品促销表
 	 * @param salePromotion

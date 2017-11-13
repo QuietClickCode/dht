@@ -8,6 +8,41 @@ import com.retailers.dht.common.entity.GoodsGgsval;
  */
 public class GoodsDetailVo extends GoodsDetail {
     private String imgUrl;
+    private String gsid;
+    private String gsname;
+    private String hasgsvalid;
+    private String hasgsval;
+
+    public String getGsid() {
+        return gsid;
+    }
+
+    public void setGsid(String gsid) {
+        this.gsid = gsid;
+    }
+
+    public String getGsname() {
+        return gsname;
+    }
+
+    public void setGsname(String gsname) {
+        this.gsname = gsname;
+    }
+
+    public String getHasgsvalid() {
+        return hasgsvalid;
+    }
+    public void setHasgsvalid(String hasgsvalid) {
+        this.hasgsvalid = hasgsvalid;
+    }
+
+    public String getHasgsval() {
+        return hasgsval;
+    }
+
+    public void setHasgsval(String hasgsval) {
+        this.hasgsval = hasgsval;
+    }
 
     public void setImgUrl(String value) {
         this.imgUrl = value;

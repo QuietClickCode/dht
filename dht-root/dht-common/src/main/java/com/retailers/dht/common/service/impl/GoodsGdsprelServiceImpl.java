@@ -1,13 +1,18 @@
 
 package com.retailers.dht.common.service.impl;
+
+import com.retailers.dht.common.dao.GoodsGdsprelMapper;
+import com.retailers.dht.common.entity.GoodsGdsprel;
+import com.retailers.dht.common.service.GoodsGdsprelService;
+import com.retailers.dht.common.vo.GoodsGdsprelVo;
+import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.retailers.dht.common.entity.GoodsGdsprel;
-import com.retailers.dht.common.dao.GoodsGdsprelMapper;
-import com.retailers.dht.common.service.GoodsGdsprelService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
 /**
  * 描述：商品与特价关系表Service
  * @author fanghui
@@ -20,6 +25,15 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 	@Autowired
 	private GoodsGdsprelMapper goodsGdsprelMapper;
 	public boolean saveGoodsGdsprel(GoodsGdsprel goodsGdsprel) {
+		Map params = new HashMap();
+		params.put("isDelete",0L);
+		params.put("gdId",goodsGdsprel.getGdId());
+		Pagination<GoodsGdsprel> pagination = queryGoodsGdsprelList(params,1,100);
+		if(!ObjectUtils.isEmpty(pagination.getData())){
+			for(GoodsGdsprel g:pagination.getData()){
+				deleteGoodsGdsprelByGdspId(g.getGdspId());
+			}
+		}
 		int status = goodsGdsprelMapper.saveGoodsGdsprel(goodsGdsprel);
 		return status == 1 ? true : false;
 	}
@@ -43,6 +57,11 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 	public boolean deleteGoodsGdsprelByGdspId(Long gdspId) {
 		int status = goodsGdsprelMapper.deleteGoodsGdsprelByGdspId(gdspId);
 		return status == 1 ? true : false;
+	}
+
+	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid){
+		List<GoodsGdsprelVo> list = goodsGdsprelMapper.queryGoodsGdsprelListsByGid(gid);
+		return list;
 	}
 }
 

@@ -53,4 +53,5 @@ public interface GoodsDetailMapper {
 	 */
 	public List<GoodsDetail> queryGoodsDetailList(Pagination<GoodsDetail> pagination);
 
+	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
 }

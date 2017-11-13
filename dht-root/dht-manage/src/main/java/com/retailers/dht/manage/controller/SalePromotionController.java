@@ -38,13 +38,12 @@ public class SalePromotionController extends BaseController{
     @RequestMapping("/addSalePromotion")
     @Function(label = "添加特价名单",description = "添加特价名单",resourse = "openSalePromotion.addSalePromotion",sort = 3,parentRes = "openSalePromotion.salePromotionMapping")
     @ResponseBody
-    public BaseResp addSalePromotion(SalePromotion promotion,String spStartTimes,String spEndTimes){
+    public Map<String,Object> addSalePromotion(SalePromotion promotion,String spStartTimes,String spEndTimes){
         addDate(promotion, spStartTimes, spEndTimes);
-        boolean flag = promotionService.saveSalePromotion(promotion);
-        if(flag)
-            return success("新增楼层成功");
-        else
-            return success("新增楼层失败");
+        SalePromotion salePromotion = promotionService.saveSalePromotion(promotion);
+        Map map = new HashMap();
+        map.put("row",salePromotion);
+        return map;
     }
 
     @RequestMapping("/updateSalePromotion")
@@ -94,4 +93,5 @@ public class SalePromotionController extends BaseController{
         }
         return promotion;
     }
+
 }

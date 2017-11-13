@@ -1,11 +1,11 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.SalePromotionMapper;
+import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.entity.SalePromotion;
+import com.retailers.dht.common.service.GoodsGdsprelService;
 import com.retailers.dht.common.service.SalePromotionService;
-import com.retailers.dht.common.vo.FloorAdvertisingVo;
 import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
@@ -27,9 +27,11 @@ import java.util.Map;
 public class SalePromotionServiceImpl implements SalePromotionService {
 	@Autowired
 	private SalePromotionMapper salePromotionMapper;
-	public boolean saveSalePromotion(SalePromotion salePromotion) {
+	@Autowired
+	GoodsGdsprelService goodsGdsprelService;
+	public SalePromotion saveSalePromotion(SalePromotion salePromotion) {
 		int status = salePromotionMapper.saveSalePromotion(salePromotion);
-		return status == 1 ? true : false;
+		return status == 1 ? salePromotion : null;
 	}
 	public boolean updateSalePromotion(SalePromotion salePromotion) {
 		int status = salePromotionMapper.updateSalePromotion(salePromotion);
@@ -52,10 +54,22 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 		SalePromotion promotion = salePromotionMapper.querySalePromotionBySpId(spId);
 		promotion.setIsDelete(1L);
 		int status = salePromotionMapper.updateSalePromotion(promotion);
+		if(status==1){
+			cleargdsprel(spId);
+		}
 		return status == 1 ? true : false;
 	}
 
-
+	public void cleargdsprel(Long spId){
+		Map map = new HashMap();
+		map.put("spId",spId);
+		List<GoodsGdsprel> list = goodsGdsprelService.queryGoodsGdsprelList(map,1,100).getData();
+		if(!ObjectUtils.isEmpty(list)){
+			for(GoodsGdsprel goodsGdsprel:list){
+				goodsGdsprelService.deleteGoodsGdsprelByGdspId(goodsGdsprel.getGdspId());
+			}
+		}
+	}
 
 	public List<SalePromotionVo> querySalePromotionTree(List<SalePromotionVo> promotionVos) {
 		List<SalePromotionVo> rtnList=new ArrayList<SalePromotionVo>();

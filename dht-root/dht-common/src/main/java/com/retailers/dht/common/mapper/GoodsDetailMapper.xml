@@ -24,6 +24,10 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="imgUrl" column="img_url"/>
+		<result property="gsid" column="gsid"/>
+		<result property="gsname" column="gsname"/>
+		<result property="hasgsvalid" column="hasgsvalid"/>
+		<result property="hasgsval" column="hasgsval"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -73,6 +77,30 @@
 		SELECT <include refid="goodsDetail_columns" />
 		FROM t_goods_detail
 		<include refid="goodsDetail_where"/>
+	</select>
+
+	<select id="queryGoodsDetailOnce" resultMap="rm_goodsDetail_vo">
+		SELECT
+		gd.*,
+		GROUP_CONCAT(s.gs_id ORDER BY g.gs_id separator ' ') gsid,
+		GROUP_CONCAT(s.gs_name ORDER BY g.gs_id separator ' ') gsname,
+		GROUP_CONCAT(gs.gsv_id ORDER BY g.gs_id separator ' ') hasgsvalid,
+		GROUP_CONCAT(gs.gsv_val ORDER BY g.gs_id separator ' ') hasgsval,
+		a.show_url img_url
+
+		FROM
+		t_goods_ggsval_detail g,
+		t_goods_specification s,
+		t_goods_gsval gs,
+		t_goods_detail gd LEFT JOIN t_attachment a ON gd.gd_imgid=a.id
+		where
+		g.g_id=#{gid}
+		and g.is_delete=0
+		and g.gs_id=s.gs_id
+		and g.gsv_id=gs.gsv_id
+		and g.gd_id=gd.gd_id
+
+		GROUP BY gd.gd_id
 	</select>
 	<!--添加商品详情表 -->
 	<insert id="saveGoodsDetail" parameterType="com.retailers.dht.common.entity.GoodsDetail" useGeneratedKeys="true" keyProperty="gdId">

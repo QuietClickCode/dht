@@ -70,6 +70,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         boolean flag =false;
 
         Goods goods = goodsService.queryGoodsByGid(gid);
+        System.out.println(gid);
         goods.setIsChecked(0L);
         goodsService.updateGoods(goods,updatepersonId);
 
