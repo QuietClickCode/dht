@@ -80,7 +80,7 @@
         <url-pattern>*.ico</url-pattern>
         <url-pattern>*.svg</url-pattern>
         <url-pattern>*.swf</url-pattern>
-        <url-pattern>*.txt</url-pattern>
+        <!--<url-pattern>*.txt</url-pattern>-->
     </servlet-mapping>
     <!--请求日志过滤器-->
     <filter>
