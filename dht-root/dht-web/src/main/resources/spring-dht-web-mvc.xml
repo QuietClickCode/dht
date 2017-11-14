@@ -83,6 +83,9 @@
         <property name="suffix" value=".html" />
         <property name="contentType" value="text/html;charset=UTF-8"></property>
     </bean>
+    <!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+    <mvc:default-servlet-handler/>
+
     <mvc:resources location="/assets" mapping="/assets/**"     cache-period="604800"/>
     <!--异常处理-->
     <bean class="com.retailers.tools.exception.AppSimpleMappingExceptionResolver">
@@ -108,6 +111,7 @@
         <!-- 接口请求拦截器 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:mapping path="/home/**"/>
             <!--<mvc:mapping path="/user/**"/>-->
             <!--<mvc:mapping path="/bank/**"/>-->
             <!--<mvc:mapping path="/version/**"/>-->

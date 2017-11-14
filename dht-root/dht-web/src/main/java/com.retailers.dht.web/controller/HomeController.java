@@ -2,6 +2,7 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.dht.web.base.BaseController;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -20,6 +21,11 @@ public class HomeController extends BaseController {
      */
     @RequestMapping(value = {"","/","/index"})
     public String home(HttpServletRequest request){
+        return redirectUrl(request,"index");
+    }
+    @RequestMapping("/home/{id}.html")
+    public String randomHome(HttpServletRequest request, @PathVariable("id")String id){
+        System.out.println("id====================================>:"+id);
         return redirectUrl(request,"index");
     }
 }

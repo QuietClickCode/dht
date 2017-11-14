@@ -1,4 +1,4 @@
-package com.retailers.dht.web.filter;
+package com.retailers.tools.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -60,6 +60,7 @@
         <servlet-name>springmvc</servlet-name>
         <url-pattern>/</url-pattern>
     </servlet-mapping>
+
     <servlet-mapping>
         <servlet-name>default</servlet-name>
         <url-pattern>*.js</url-pattern>
@@ -73,7 +74,7 @@
         <url-pattern>*.eot@</url-pattern>
         <url-pattern>*.woff</url-pattern>
         <url-pattern>*.woff2</url-pattern>
-        <url-pattern>*.html</url-pattern>
+        <!--<url-pattern>*.html</url-pattern>-->
         <url-pattern>*.less</url-pattern>
         <url-pattern>*.ico</url-pattern>
         <url-pattern>*.svg</url-pattern>
