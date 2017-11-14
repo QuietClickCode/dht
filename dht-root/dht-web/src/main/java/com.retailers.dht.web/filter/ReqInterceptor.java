@@ -6,10 +6,7 @@ import com.retailers.auth.entity.SysUser;
 import com.retailers.dht.common.entity.LogManagerReq;
 import com.retailers.dht.common.service.LogManagerReqService;
 import com.retailers.dht.web.constant.WebSystemConstant;
-import com.retailers.tools.utils.DateUtil;
-import com.retailers.tools.utils.IPUtil;
-import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.StringUtils;
+import com.retailers.tools.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +37,7 @@ public class ReqInterceptor implements HandlerInterceptor {
         if(null == userAgent){
             userAgent = "";
         }
-        boolean isFromMobile=CheckMobile.check(userAgent);
+        boolean isFromMobile= CheckMobile.check(userAgent);
         //判断是否为移动端访问
         if(isFromMobile){
             req.setAttribute(WebSystemConstant.WEB_REQ_TYPE,"m_modle");
