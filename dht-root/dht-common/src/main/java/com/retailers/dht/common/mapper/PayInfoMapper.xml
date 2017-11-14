@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.PayInfoMapper">
+
+	<resultMap id="rm_payInfo" type="com.retailers.dht.common.entity.PayInfo">
+			<result property="piId" column="pi_id"/>
+			<result property="piWay" column="pi_way"/>
+			<result property="piType" column="pi_type"/>
+			<result property="piOrderNo" column="pi_order_no"/>
+			<result property="pcRemoteAdd" column="pc_remote_add"/>
+			<result property="piPrepayId" column="pi_prepay_id"/>
+			<result property="piContext" column="pi_context"/>
+			<result property="piCreateTime" column="pi_create_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="payInfo_columns">
+		pi_id,pi_way,pi_type,pi_order_no,pc_remote_add,pi_prepay_id,pi_context,pi_create_time
+	</sql>
+	<!-- 根据支付信息主键取得数据 -->
+	<select id="queryPayInfoByPiId" resultMap="rm_payInfo" parameterType="java.lang.Long">
+		SELECT <include refid="payInfo_columns" />
+		FROM t_pay_info WHERE pi_id = #{piId}
+	</select>
+	<!-- 支付信息查询条件组合 -->
+	<sql id="payInfo_where">
+		<where>
+			<if test="null != params.piId">
+				AND pi_id = #{params.piId}
+			</if>
+			<if test="null != params.piWay">
+				AND pi_way = #{params.piWay}
+			</if>
+			<if test="null != params.piType">
+				AND pi_type = #{params.piType}
+			</if>
+			<if test="null != params.piOrderNo and '' != params.piOrderNo">
+				AND pi_order_no = #{params.piOrderNo}
+			</if>
+			<if test="null != params.pcRemoteAdd and '' != params.pcRemoteAdd">
+				AND pc_remote_add = #{params.pcRemoteAdd}
+			</if>
+			<if test="null != params.piPrepayId and '' != params.piPrepayId">
+				AND pi_prepay_id = #{params.piPrepayId}
+			</if>
+			<if test="null != params.piContext and '' != params.piContext">
+				AND pi_context = #{params.piContext}
+			</if>
+			<if test="null != params.piCreateTimeBegin">
+				AND pi_create_time &gt;= TO_DATE('${params.piCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.piCreateTimeEnd">
+				AND pi_create_time &lt;= TO_DATE('${params.piCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryPayInfoList" resultMap="rm_payInfo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="payInfo_columns" />
+		FROM t_pay_info
+		<include refid="payInfo_where"/>
+	</select>
+	<!--添加支付信息 -->
+	<insert id="savePayInfo" parameterType="com.retailers.dht.common.entity.PayInfo" useGeneratedKeys="true" keyProperty="piId">
+		INSERT INTO t_pay_info (
+			pi_way,pi_type,pi_order_no,pc_remote_add,pi_prepay_id,pi_context,pi_create_time
+		) VALUES
+		(
+			#{piWay,jdbcType=INTEGER},#{piType,jdbcType=INTEGER},#{piOrderNo,jdbcType=VARCHAR},#{pcRemoteAdd,jdbcType=VARCHAR},#{piPrepayId,jdbcType=VARCHAR},#{piContext,jdbcType=VARCHAR},#{piCreateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改支付信息 -->
+	<update id="updatePayInfo" parameterType="com.retailers.dht.common.entity.PayInfo">
+		UPDATE t_pay_info
+		<set>
+            <if test="null != piWay">
+                pi_way = #{piWay},
+            </if>
+            <if test="null != piType">
+                pi_type = #{piType},
+            </if>
+            <if test="null != piOrderNo and '' != piOrderNo">
+                pi_order_no = #{piOrderNo},
+            </if>
+            <if test="null != pcRemoteAdd and '' != pcRemoteAdd">
+                pc_remote_add = #{pcRemoteAdd},
+            </if>
+            <if test="null != piPrepayId and '' != piPrepayId">
+                pi_prepay_id = #{piPrepayId},
+            </if>
+            <if test="null != piContext and '' != piContext">
+                pi_context = #{piContext},
+            </if>
+            <if test="null != piCreateTime">
+                pi_create_time = #{piCreateTime},
+            </if>
+		</set>
+		WHERE pi_id = #{piId}
+	</update>
+	<!--删除支付信息 -->
+	<delete id="deletePayInfoByPiId" parameterType="java.lang.Long">
+		DELETE FROM t_pay_info WHERE pi_id = #{piId}
+	</delete>
+</mapper>

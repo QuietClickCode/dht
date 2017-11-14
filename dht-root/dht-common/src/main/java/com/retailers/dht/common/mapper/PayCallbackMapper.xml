@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.PayCallbackMapper">
+
+	<resultMap id="rm_payCallback" type="com.retailers.dht.common.entity.PayCallback">
+			<result property="pcId" column="pc_id"/>
+			<result property="pcOrderNo" column="pc_order_no"/>
+			<result property="pcWay" column="pc_way"/>
+			<result property="pcType" column="pc_type"/>
+			<result property="pcStatus" column="pc_status"/>
+			<result property="pcRemoteAdd" column="pc_remote_add"/>
+			<result property="pcIsSign" column="pc_is_sign"/>
+			<result property="pcSign" column="pc_sign"/>
+			<result property="pcReturnCode" column="pc_return_code"/>
+			<result property="pcContext" column="pc_context"/>
+			<result property="pcCreateTime" column="pc_create_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="payCallback_columns">
+		pc_id,pc_order_no,pc_way,pc_type,pc_status,pc_remote_add,pc_is_sign,pc_sign,pc_return_code,pc_context,pc_create_time
+	</sql>
+	<!-- 根据支付回调数据主键取得数据 -->
+	<select id="queryPayCallbackByPcId" resultMap="rm_payCallback" parameterType="java.lang.Long">
+		SELECT <include refid="payCallback_columns" />
+		FROM t_pay_callback WHERE pc_id = #{pcId}
+	</select>
+	<!-- 支付回调数据查询条件组合 -->
+	<sql id="payCallback_where">
+		<where>
+			<if test="null != params.pcId">
+				AND pc_id = #{params.pcId}
+			</if>
+			<if test="null != params.pcOrderNo and '' != params.pcOrderNo">
+				AND pc_order_no = #{params.pcOrderNo}
+			</if>
+			<if test="null != params.pcWay">
+				AND pc_way = #{params.pcWay}
+			</if>
+			<if test="null != params.pcType">
+				AND pc_type = #{params.pcType}
+			</if>
+			<if test="null != params.pcStatus">
+				AND pc_status = #{params.pcStatus}
+			</if>
+			<if test="null != params.pcRemoteAdd and '' != params.pcRemoteAdd">
+				AND pc_remote_add = #{params.pcRemoteAdd}
+			</if>
+			<if test="null != params.pcIsSign">
+				AND pc_is_sign = #{params.pcIsSign}
+			</if>
+			<if test="null != params.pcSign and '' != params.pcSign">
+				AND pc_sign = #{params.pcSign}
+			</if>
+			<if test="null != params.pcReturnCode and '' != params.pcReturnCode">
+				AND pc_return_code = #{params.pcReturnCode}
+			</if>
+			<if test="null != params.pcContext and '' != params.pcContext">
+				AND pc_context = #{params.pcContext}
+			</if>
+			<if test="null != params.pcCreateTimeBegin">
+				AND pc_create_time &gt;= TO_DATE('${params.pcCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.pcCreateTimeEnd">
+				AND pc_create_time &lt;= TO_DATE('${params.pcCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryPayCallbackList" resultMap="rm_payCallback" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="payCallback_columns" />
+		FROM t_pay_callback
+		<include refid="payCallback_where"/>
+	</select>
+	<!--添加支付回调数据 -->
+	<insert id="savePayCallback" parameterType="com.retailers.dht.common.entity.PayCallback" useGeneratedKeys="true" keyProperty="pcId">
+		INSERT INTO t_pay_callback (
+			pc_order_no,pc_way,pc_type,pc_status,pc_remote_add,pc_is_sign,pc_sign,pc_return_code,pc_context,pc_create_time
+		) VALUES
+		(
+			#{pcOrderNo,jdbcType=VARCHAR},#{pcWay,jdbcType=INTEGER},#{pcType,jdbcType=INTEGER},#{pcStatus,jdbcType=INTEGER},#{pcRemoteAdd,jdbcType=VARCHAR},#{pcIsSign,jdbcType=INTEGER},#{pcSign,jdbcType=VARCHAR},#{pcReturnCode,jdbcType=VARCHAR},#{pcContext,jdbcType=VARCHAR},#{pcCreateTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改支付回调数据 -->
+	<update id="updatePayCallback" parameterType="com.retailers.dht.common.entity.PayCallback">
+		UPDATE t_pay_callback
+		<set>
+            <if test="null != pcOrderNo and '' != pcOrderNo">
+                pc_order_no = #{pcOrderNo},
+            </if>
+            <if test="null != pcWay">
+                pc_way = #{pcWay},
+            </if>
+            <if test="null != pcType">
+                pc_type = #{pcType},
+            </if>
+            <if test="null != pcStatus">
+                pc_status = #{pcStatus},
+            </if>
+            <if test="null != pcRemoteAdd and '' != pcRemoteAdd">
+                pc_remote_add = #{pcRemoteAdd},
+            </if>
+            <if test="null != pcIsSign">
+                pc_is_sign = #{pcIsSign},
+            </if>
+            <if test="null != pcSign and '' != pcSign">
+                pc_sign = #{pcSign},
+            </if>
+            <if test="null != pcReturnCode and '' != pcReturnCode">
+                pc_return_code = #{pcReturnCode},
+            </if>
+            <if test="null != pcContext and '' != pcContext">
+                pc_context = #{pcContext},
+            </if>
+            <if test="null != pcCreateTime">
+                pc_create_time = #{pcCreateTime},
+            </if>
+		</set>
+		WHERE pc_id = #{pcId}
+	</update>
+	<!--删除支付回调数据 -->
+	<delete id="deletePayCallbackByPcId" parameterType="java.lang.Long">
+		DELETE FROM t_pay_callback WHERE pc_id = #{pcId}
+	</delete>
+</mapper>

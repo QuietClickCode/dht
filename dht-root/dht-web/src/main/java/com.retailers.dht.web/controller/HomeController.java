@@ -23,6 +23,8 @@ public class HomeController extends BaseController {
     public String home(HttpServletRequest request){
         return redirectUrl(request,"index");
     }
+
+
     @RequestMapping("/home/{id}.html")
     public String randomHome(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
