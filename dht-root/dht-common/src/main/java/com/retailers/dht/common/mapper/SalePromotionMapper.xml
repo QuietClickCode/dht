@@ -81,7 +81,7 @@
 	<select id="querySalePromotionList" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="salePromotion_columns" />
 		FROM t_sale_promotion
-		<include refid="salePromotion_where"/>
+		<include refid="salePromotion_where"/> ORDER BY sp_order
 	</select>
 	<!--添加商品特价表 -->
 	<insert id="saveSalePromotion" parameterType="com.retailers.dht.common.entity.SalePromotion" useGeneratedKeys="true" keyProperty="spId">
