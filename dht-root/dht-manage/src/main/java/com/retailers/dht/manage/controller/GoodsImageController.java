@@ -59,7 +59,6 @@ public class GoodsImageController extends BaseController {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gid",gid);
         map.put("isDelete",0);
-        System.out.println(gid);
         Pagination<GoodsImageVo> GoodsImagePagination = goodsImageService.queryGoodsImageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("goodsImages",GoodsImagePagination.getData());

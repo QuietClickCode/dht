@@ -21,13 +21,14 @@
 			<result property="isServicegoods" column="is_servicegoods"/>
 			<result property="isMultiplebuy" column="is_multiplebuy"/>
 			<result property="isAdvancesale" column="is_advancesale"/>
+			<result property="isOnlymenberbuy" column="is_onlymenberbuy"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsConfig_columns">
-		gc_id,g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_copyid,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+		gc_id,g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_copyid,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_onlymenberbuy,is_delete,version
 	</sql>
 	<!-- 根据商品配置表主键取得数据 -->
 	<select id="queryGoodsConfigByGcId" resultMap="rm_goodsConfig" parameterType="java.lang.Long">
@@ -94,6 +95,9 @@
 			<if test="null != params.isAdvancesale">
 				AND is_advancesale = #{params.isAdvancesale}
 			</if>
+			<if test="null != params.isOnlymenberbuy">
+				AND is_onlymenberbuy = #{params.isOnlymenberbuy}
+			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
 			</if>
@@ -111,10 +115,10 @@
 	<!--添加商品配置表 -->
 	<insert id="saveGoodsConfig" parameterType="com.retailers.dht.common.entity.GoodsConfig" useGeneratedKeys="true" keyProperty="gcId">
 		INSERT INTO t_goods_config (
-			g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_copyid,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_delete,version
+			g_id,g_salesvolume,g_freight,g_deposit,g_edt,g_profitability,g_startbuy,g_endbuy,gc_copyid,is_putway,is_allowsetdeliverytime,is_showsalesvolume,is_menberdiscount,is_cod,is_servicegoods,is_multiplebuy,is_advancesale,is_onlymenberbuy,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{gprofitability,jdbcType=REAL},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gcCopyid,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gsalesvolume,jdbcType=BIGINT},#{gfreight,jdbcType=REAL},#{gdeposit,jdbcType=REAL},#{gedt,jdbcType=TIMESTAMP},#{gprofitability,jdbcType=REAL},#{gstartbuy,jdbcType=BIGINT},#{gendbuy,jdbcType=BIGINT},#{gcCopyid,jdbcType=BIGINT},#{isPutway,jdbcType=BIGINT},#{isAllowsetdeliverytime,jdbcType=BIGINT},#{isShowsalesvolume,jdbcType=BIGINT},#{isMenberdiscount,jdbcType=BIGINT},#{isCod,jdbcType=BIGINT},#{isServicegoods,jdbcType=BIGINT},#{isMultiplebuy,jdbcType=BIGINT},#{isAdvancesale,jdbcType=BIGINT},#{isOnlymenberbuy,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品配置表 -->
@@ -169,6 +173,9 @@
             <if test="null != isAdvancesale">
                 is_advancesale = #{isAdvancesale},
             </if>
+			<if test="null != isOnlymenberbuy">
+				is_onlymenberbuy = #{isOnlymenberbuy},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>

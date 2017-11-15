@@ -32,7 +32,7 @@ public class SalePromotionController extends BaseController{
 
     @RequestMapping("/querySalePromotionLists")
     @ResponseBody
-    public Map<String,Object> querySalePromotionLists(String now,Long spType){
+    public Map<String,Object> querySalePromotionLists(String now,Long spType,Long gid){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
         if(!ObjectUtils.isEmpty(now)){
@@ -47,7 +47,7 @@ public class SalePromotionController extends BaseController{
             return null;
         }
         map.put("spType",spType);
-        System.out.println();
+        map.put("gid",gid);
         Pagination<SalePromotionVo> advertisingPagination = promotionService.querySalePromotionListWeb(map,1,2);
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("rows",advertisingPagination.getData());

@@ -427,18 +427,20 @@
                     var rows = data.rows;
                     if(rows!=null){
                         timestape = rows[0].timestap*1000;
+                        console.log(timestape);
+                        timegoing();
                         for(var i=0;i<rows.length;i++){
                             html = '<li>'+
-                                '<a href="/seckillp/" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
                                 '<div class="text-box">'+
-                                '<a href="" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
                                 '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
                             '<div class="price">'+
                                 '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
                             '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
                             '</div>'+
                             '<div class="purchase">'+
-                                '<a href="">马上抢购</a>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html">马上抢购</a>'+
                                 '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
                                 '</div>'+
                                 '</div>'+
@@ -469,16 +471,16 @@
                         timestape = rows[0].timestap*1000;
                         for(var i=0;i<rows.length;i++){
                             html = '<li>'+
-                                '<a href="" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
                                 '<div class="text-box">'+
-                                '<a href="" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
                                 '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
                                 '<div class="price">'+
                                 '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
                                 '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
                                 '</div>'+
                                 '<div class="purchase">'+
-                                '<a href="">马上抢购</a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html">马上抢购</a>'+
                                 '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
                                 '</div>'+
                                 '</div>'+
@@ -497,29 +499,33 @@
     <!--时间减少-->
     <script>
         var timestape = 0;
-        var interval = setInterval(function () {
+        function timegoing() {
             var date = new Date(timestape);
-            var shi1 = Math.floor((date.getHours()-8)/10);
-            var shi2 = Math.floor((date.getHours()-8)%10);
-            var fen1 = Math.floor(date.getMinutes()/10);
-            var fen2 = Math.floor(date.getMinutes()%10);
-            var miao1 = Math.floor(date.getSeconds()/10);
-            var miao2 = Math.floor(date.getSeconds()%10);
+            var interval = setInterval(function () {
+                var shi1 = Math.floor((date.getHours()-8)/10);
+                var shi2 = Math.floor((date.getHours()-8)%10);
+                var fen1 = Math.floor(date.getMinutes()/10);
+                var fen2 = Math.floor(date.getMinutes()%10);
+                var miao1 = Math.floor(date.getSeconds()/10);
+                var miao2 = Math.floor(date.getSeconds()%10);
 
-            $('#shi1').html(shi1);
-            $('#shi2').html(shi2);
-            $('#fen1').html(fen1);
-            $('#fen2').html(fen2);
-            $('#miao1').html(miao1);
-            $('#miao2').html(miao2);
+                $('#shi1').html(shi1);
+                $('#shi2').html(shi2);
+                $('#fen1').html(fen1);
+                $('#fen2').html(fen2);
+                $('#miao1').html(miao1);
+                $('#miao2').html(miao2);
 
-            timestape -= 1000;
-            if(timestape<0){
-                clearInterval(interval);
+                date.setTime(date.getTime()-1000);
+                timestape -= 1000;
+                if(timestape<0){
+                    clearInterval(interval);
 //                $('#shi1').parent().parent().next().remove();
 //                $('#shi1').parent().parent().remove();
-            }
-        },1000);
+                }
+            },1000);
+        }
+
     </script>
 
     <script src="/js/TouchSlide.1.1.js"></script>

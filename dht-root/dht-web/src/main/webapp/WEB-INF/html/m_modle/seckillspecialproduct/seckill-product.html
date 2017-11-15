@@ -21,49 +21,30 @@
             <ul></ul>
         </div>
         <div class="bd">
-            <ul>
+            <ul id="goodsImagesul">
                 <li>
-                    <a href="#">
-                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                    </a>
+                    <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                 </li>
                 <li>
-                    <a href="#">
-                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                    </a>
-                </li>
-                <li>
-                    <a href="#">
-                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                    </a>
+                    <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                 </li>
             </ul>
             <!-- 倒计时 -->
             <div class="product-countDown2">
-                <span class="price">￥650</span>
+                <span id="minprice" class="price">￥650</span>
                 <span class="special-text">秒杀价</span>
-                <s>￥980</s>
+                <s id="gprice">￥980</s>
                 <div class="time-box">
                     <p class="text">距结束仅剩</p>
                     <div class="time-span">
-                        <span class="time">0</span>
-                        <span class="time">3</span>
+                        <span id="shi1" class="time">0</span>
+                        <span id="shi2" class="time">0</span>
                         <span class="colon">:</span>
-                        <span class="time">3</span>
-                        <span class="time">5</span>
+                        <span id="fen1" class="time">0</span>
+                        <span id="fen2" class="time">0</span>
                         <span class="colon">:</span>
-                        <span class="time">3</span>
-                        <span class="time">5</span>
+                        <span id="miao1" class="time">0</span>
+                        <span id="miao2" class="time">0</span>
                     </div>
                 </div>
             </div>
@@ -71,21 +52,22 @@
     </div>
 
     <div class="bargain-text box2">
-        <div class="title">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
-        <div class="seckill-address">
-            <div class="text">
+        <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+        <div class="seckill-address" id="personaddressdiv">
+            <div class="text" >
                 <span class="seckill-address-title">产自</span>
-                <div class="name">高达山</div>
+                <div class="name" id="gproductioninperson">高达山</div>
                 <span class="address-text">
                     <i></i>
-                    石柱县高家庄
+                    <span id="gproductioninaddress">石柱县高家庄</span>
                 </span>
             </div>
-            <div class="text">
+            <div class="text" >
                 <span class="seckill-address-title">采供</span>
-                <div class="name2">高达山</div>
+                <div class="name2" id="gpickperson">高达山</div>
                 <span class="address-text">
-                    石柱县高家庄
+                    <i></i>
+                    <span id="gpickaddress">石柱县高家庄</span>
                 </span>
             </div>
         </div>
@@ -96,10 +78,10 @@
         </div>
         <div class="norms">
             <span class="name">送至</span>
-            <span class="text overflow"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
+            <span class="text overflow" id="open_address"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms">
+        <div class="norms" id="open_time">
             <span class="name">配送</span>
             <span class="text overflow"> 选择配送时间</span>
             <span class="checkbox"></span>
@@ -108,7 +90,7 @@
             <span class="name">运费</span>
             <span class="text overflow"> 12.0元</span>
         </div>
-        <div class="ensure">
+        <div class="ensure" style="display: none;">
             <span>
                 <i class="icon-yes"></i>
                 农家自产
@@ -148,7 +130,10 @@
                         <span class="bargain-like">商品信息</span>
                     </div>
                 </div>
-                <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
+
+                <div id="gdescription">
+                    <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
+                </div>
             </div>
 
             <div class="product-evaluate box2 displayN" id="evaluate">
@@ -292,30 +277,273 @@
 	    </div>
     </div>
 
+    <div class="mark" id="J_mark3" style="display:none;">
+        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+            <i class="care-norms-close J_careNormsClose3"></i>
+            <p class="J_mark_title">选择配送时间</p>
+            <div class="care-checkbox J_careCheckbox">
+                <span class="checkbox active J_checkbox">橙黄色</span>
+                <select name="" class="select_input">
+                    <option value="0">选择时间</option>
+                    <option value="0">周一至周五</option>
+                    <option value="0">周末</option>
+                </select>
+            </div>
+            <a href="" class="care-norms-checkbox-btn">确定</a>
+        </div>
+    </div>
+
+    <div class="mark" id="J_mark" style="display:none;">
+        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+            <i class="care-norms-close J_careNormsClose"></i>
+            <p class="J_mark_title">送至</p>
+            <ul class="address_list_box">
+                <li class="active">
+                    <span class="address_img"></span>
+                    <div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+                    <span  class="icon_choice"></span>
+                </li>
+                <li>
+                    <span class="address_img"></span>
+                    <div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+                    <span  class="icon_choice"></span>
+                </li>
+            </ul>
+            <a href="" class="care-norms-checkbox-btn">新增收获地址</a>
+        </div>
+    </div>
+
     <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/public.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/tabs.js"></script>
+    <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+
     <script>
-        console.log(window.location.pathname);
-        TouchSlide({
-            slideCell: "#banner",
-            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-            mainCell: ".bd ul",
-            effect: "left",
-            autoPlay: true, //自动播放
-            autoPage: true, //自动分页
-            switchLoad: "_src" //切换加载，真实图片路径为"_src" 
-        });
+        var path = window.location.pathname;
+        var gid = parseInt(path.substring(10,path.indexOf('.html')));
+
+        <!--初始化banner-->
+        function initbanner() {
+            TouchSlide({
+                slideCell: "#banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+        <!--加载商品图片-->
+        function loadgoodsimage() {
+            $.ajax({
+                type:"post",
+                url:'/goodsImage/queryGoodsImages',
+                dataType: "json",
+                data:{gid:gid,pageNo:1,pageSize:100},
+                success:function(data){
+                    var goodsImages = data.goodsImages;
+                    if(goodsImages!=null&&goodsImages.length>0){
+                        var html = '';
+                        $('#goodsImagesul').html(html);
+                        for(var i=0;i<goodsImages.length;i++){
+                            html = '<li>'+
+                                '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" data-original="'+goodsImages[i].imgUrl+'" style="height: 200px" />'+
+                                '</li>';
+                            $('#goodsImagesul').append(html);
+                        }
+                    }
+                    initbanner();
+                    $("img").lazyload({effect: "fadeIn"});
+                }
+            });
+        }
+        <!--加载剩余时间-->
+        function loadtimestape() {
+            $.ajax({
+                type:"post",
+                url:'/openSalePromotion/querySalePromotionLists',
+                dataType: "json",
+                data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid},
+                success:function(data){
+                    timestape = data.rows[0].timestap*1000;
+                    $('#gprice').html('￥'+data.rows[0].gprice);
+                    $('#goodsNameDiv').html(data.rows[0].goodsName);
+                    $('#minprice').html('￥'+data.rows[0].minprice);
+                    timegoing();
+                }
+            });
+        }
+
+        <!--加载采摘人和地址-->
+        function loadpersonaddress() {
+            $.ajax({
+                type:"post",
+                url:'/goods/queryGoodsById',
+                dataType: "json",
+                data:{gid:gid},
+                success:function(data){
+                    var row = data.row;
+                    var gproductioninperson = row.gproductioninperson;
+                    var gproductioninaddress = row.gproductioninaddress;
+                    var gpickperson = row.gpickperson;
+                    var gpickaddress = row.gpickaddress;
+                    if(gproductioninperson==''||gproductioninaddress==''||gpickperson==''||gpickaddress==''){
+                        $('#personaddressdiv').hide();
+                    }else{
+                        $('#gproductioninperson').html(gproductioninperson);
+                        $('#gproductioninaddress').html(gproductioninaddress);
+                        $('#gpickperson').html(gpickperson);
+                        $('#gpickaddress').html(gpickaddress);
+                    }
+                    $('#gdescription').html(row.gdescription);
+                }
+            });
+        }
+
+        <!--日期格式化-->
+        Date.prototype.pattern=function(fmt) {
+            var o = {
+                "M+" : this.getMonth()+1, //月份
+                "d+" : this.getDate(), //日
+                "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+                "H+" : this.getHours(), //小时
+                "m+" : this.getMinutes(), //分
+                "s+" : this.getSeconds(), //秒
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                "S" : this.getMilliseconds() //毫秒
+            };
+            var week = {
+                "0" : "/u65e5",
+                "1" : "/u4e00",
+                "2" : "/u4e8c",
+                "3" : "/u4e09",
+                "4" : "/u56db",
+                "5" : "/u4e94",
+                "6" : "/u516d"
+            };
+            if(/(y+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            }
+            if(/(E+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+            }
+            for(var k in o){
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
         $(function(){
         	$("#open_car").click(function(){
         		$("#J_mark2").show()
-        	})
+        	});
         	$(".J_careNormsClose2").click(function(){
         		$("#J_mark2").hide()
-        	})
+        	});
+            $(".address_list_box>li").click(function(){
+                $(".address_list_box>li").removeClass("active")
+                $(this).addClass("active")
+            })
+            $(".checkbox_service").click(function(){
+                $('.checkbox_service').removeClass("active")
+                $(this).addClass('active')
+            })
         })
     </script>
 
+    <script>
+        <!--加载图片-->
+        loadgoodsimage();
+
+        <!--初始化时间-->
+        loadtimestape();
+
+        <!--加载生产人采摘人信息-->
+        loadpersonaddress();
+    </script>
+
+    <script>
+        $(function () {
+            <!--图片懒加载-->
+            $("img").lazyload({effect: "fadeIn"});
+        });
+    </script>
+
+    <!--时间减少-->
+    <script>
+        var timestape = 0;
+        function timegoing() {
+            var interval = setInterval(function () {
+                var date = new Date(timestape);
+                var shi1 = Math.floor((date.getHours()-8)/10);
+                var shi2 = Math.floor((date.getHours()-8)%10);
+                var fen1 = Math.floor(date.getMinutes()/10);
+                var fen2 = Math.floor(date.getMinutes()%10);
+                var miao1 = Math.floor(date.getSeconds()/10);
+                var miao2 = Math.floor(date.getSeconds()%10);
+
+                $('#shi1').html(shi1);
+                $('#shi2').html(shi2);
+                $('#fen1').html(fen1);
+                $('#fen2').html(fen2);
+                $('#miao1').html(miao1);
+                $('#miao2').html(miao2);
+
+                timestape -= 1000;
+                if(timestape<0){
+                    clearInterval(interval);
+//                $('#shi1').parent().parent().next().remove();
+//                $('#shi1').parent().parent().remove();
+                }
+            },1000);
+        }
+
+    </script>
+
+    <script>
+        $(function(){
+            $("#open_address").click(function(){
+                $("#J_mark").show()
+            })
+            $("#open_car").click(function(){
+                $("#J_mark2").show()
+            })
+            $("#open_time").click(function(){
+                $("#J_mark3").show()
+            })
+            $(".J_careNormsClose").click(function(){
+                $("#J_mark").hide()
+            })
+            $(".J_careNormsClose2").click(function(){
+                $("#J_mark2").hide()
+            })
+
+            $(".J_careNormsClose3").click(function(){
+                $("#J_mark3").hide()
+            })
+            $("#open_dis").click(function(){
+                $("#J_mark4").show()
+            })
+            $(".J_careNormsClose4").click(function(){
+                $("#J_mark4").hide()
+            })
+
+            $(".address_list_box>li").click(function(){
+                $(".address_list_box>li").removeClass("active")
+                $(this).addClass("active")
+            })
+            $(".checkbox_service").click(function(){
+                $('.checkbox_service').removeClass("active")
+                $(this).addClass('active')
+            })
+        });
+
+    </script>
 </body>
 
 </html>

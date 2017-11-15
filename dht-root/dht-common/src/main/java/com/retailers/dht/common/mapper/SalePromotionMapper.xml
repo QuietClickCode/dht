@@ -101,10 +101,17 @@
 		LEFT JOIN t_goods t6 ON t3.goods_id=t6.g_id
 		where
 		t3.is_delete!=1
-		and #{params.nowDate}>t1.sp_start_time
-		and t1.sp_end_time>#{params.nowDate}
+		<if test="null != params.nowDate">
+			and #{params.nowDate}>t1.sp_start_time
+			and t1.sp_end_time>#{params.nowDate}
+		</if>
 		and t1.sp_id=t3.parent_id
-		and t1.sp_type=#{params.spType}
+		<if test="null != params.spType">
+			and t1.sp_type=#{params.spType}
+		</if>
+		<if test="null != params.gid">
+			and t3.goods_id=#{params.gid}
+		</if>
 		GROUP BY t3.sp_id
 	</select>
 	<!--添加商品特价表 -->
