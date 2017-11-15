@@ -120,7 +120,7 @@
             </div>
         </div>
 
-        <ul class="seckill box2">
+        <ul class="seckill box2" id="seckillul">
             <li>
                 <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
                 <div class="text-box">
@@ -171,7 +171,7 @@
             <a href="" class="more">全部<i class="icon-more"></i></a>
         </div>
 
-        <ul class="seckill box2">
+        <ul class="seckill box2" id="barginul">
             <li>
                 <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
                 <div class="text-box">
@@ -213,22 +213,22 @@
 
         <ul class="like-list box2">
             <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
+                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
             <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
+                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
             <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
+                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
             <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
+                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
@@ -238,7 +238,6 @@
         <!-- 底部 -->
         <div class="placeholder-footer"></div>
         <div id="footer"></div>
-
 
     </div>
 
@@ -375,10 +374,130 @@
         }
     </script>
 
+    <!--加载秒杀/特价-->
+    <script>
+        <!--日期格式化-->
+        Date.prototype.pattern=function(fmt) {
+            var o = {
+                "M+" : this.getMonth()+1, //月份
+                "d+" : this.getDate(), //日
+                "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+                "H+" : this.getHours(), //小时
+                "m+" : this.getMinutes(), //分
+                "s+" : this.getSeconds(), //秒
+                "q+" : Math.floor((this.getMonth()+3)/3), //季度
+                "S" : this.getMilliseconds() //毫秒
+            };
+            var week = {
+                "0" : "/u65e5",
+                "1" : "/u4e00",
+                "2" : "/u4e8c",
+                "3" : "/u4e09",
+                "4" : "/u56db",
+                "5" : "/u4e94",
+                "6" : "/u516d"
+            };
+            if(/(y+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+            }
+            if(/(E+)/.test(fmt)){
+                fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+            }
+            for(var k in o){
+                if(new RegExp("("+ k +")").test(fmt)){
+                    fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+                }
+            }
+            return fmt;
+        }
+
+        <!--加载秒杀-->
+        loadseckill();
+        <!--加载秒杀-->
+        function loadseckill() {
+            $('#seckillul').html('');
+            var date = new Date().pattern('yyyy-MM-dd hh:mm:ss');
+            $.ajax({
+                type:"post",
+                url:'/openSalePromotion/querySalePromotionLists',
+                dataType: "json",
+                data:{now:date,spType:1},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null){
+                        timestape = rows[0].timestap*1000;
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<a href="/seckillp/" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a href="" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
+                            '<div class="price">'+
+                                '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
+                            '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
+                            '</div>'+
+                            '<div class="purchase">'+
+                                '<a href="">马上抢购</a>'+
+                                '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#seckillul').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }
+                }
+            });
+        }
+
+        <!--加载特价-->
+        loadbargain();
+        <!--加载特价-->
+        function loadbargain() {
+            $('#barginul').html('');
+            var date = new Date().pattern('yyyy-MM-dd hh:mm:ss');
+            $.ajax({
+                type:"post",
+                url:'/openSalePromotion/querySalePromotionLists',
+                dataType: "json",
+                data:{now:date,spType:0},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null){
+                        timestape = rows[0].timestap*1000;
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<a href="" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a href="" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
+                                '<div class="price">'+
+                                '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
+                                '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
+                                '</div>'+
+                                '<div class="purchase">'+
+                                '<a href="">马上抢购</a>'+
+                                '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#barginul').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }
+                }
+            });
+        }
+
+
+    </script>
+
     <!--时间减少-->
     <script>
-        var timestape = 9999;
-        setInterval(function () {
+        var timestape = 0;
+        var interval = setInterval(function () {
             var date = new Date(timestape);
             var shi1 = Math.floor((date.getHours()-8)/10);
             var shi2 = Math.floor((date.getHours()-8)%10);
@@ -396,8 +515,9 @@
 
             timestape -= 1000;
             if(timestape<0){
-                $('#shi1').parent().parent().next().remove();
-                $('#shi1').parent().parent().remove();
+                clearInterval(interval);
+//                $('#shi1').parent().parent().next().remove();
+//                $('#shi1').parent().parent().remove();
             }
         },1000);
     </script>

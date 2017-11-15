@@ -53,4 +53,5 @@ public interface SalePromotionMapper {
 	 */
 	public List<SalePromotionVo> querySalePromotionList(Pagination<SalePromotionVo> pagination);
 
+	public List<SalePromotionVo> querySalePromotionListWeb(Pagination<SalePromotionVo> pagination);
 }

@@ -16,6 +16,13 @@
 			<result property="spEndTime" column="sp_end_time"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
+			<result property="minprice" column="minprice"/>
+			<result property="maxprice" column="maxprice"/>
+			<result property="spinventory" column="spinventory"/>
+			<result property="imgurl" column="imgurl"/>
+			<result property="timestap" column="timestap"/>
+			<result property="gprice" column="gprice"/>
+			<result property="gunitname" column="gunitname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -82,6 +89,23 @@
 		SELECT <include refid="salePromotion_columns" />
 		FROM t_sale_promotion
 		<include refid="salePromotion_where"/>
+	</select>
+	<select id="querySalePromotionListWeb" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.sp_end_time) timestap,t3.*,t6.g_price gprice,t6.g_unitname gunitname,t5.show_url imgurl,min(t2.sp_sale) minprice,max(t2.sp_sale) maxprice,t2.sp_inventory spinventory
+		FROM
+		t_sale_promotion t1 ,
+		t_sale_promotion t3
+		LEFT JOIN t_goods_gdsprel t2 ON t3.sp_id=t2.sp_id and t2.is_delete!=1
+		LEFT JOIN t_goods_image t4 ON t4.g_id=t3.goods_id and t4.is_delete!=1
+		LEFT JOIN t_attachment t5 ON t4.gi_id=t5.id
+		LEFT JOIN t_goods t6 ON t3.goods_id=t6.g_id
+		where
+		t3.is_delete!=1
+		and #{params.nowDate}>t1.sp_start_time
+		and t1.sp_end_time>#{params.nowDate}
+		and t1.sp_id=t3.parent_id
+		and t1.sp_type=#{params.spType}
+		GROUP BY t3.sp_id
 	</select>
 	<!--添加商品特价表 -->
 	<insert id="saveSalePromotion" parameterType="com.retailers.dht.common.entity.SalePromotion" useGeneratedKeys="true" keyProperty="spId">

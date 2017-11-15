@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.SalePromotionMapper;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.entity.SalePromotion;
@@ -122,6 +123,19 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 				child.put(parentId,maps);
 			}
 		}
+	}
+
+	public Pagination<SalePromotionVo> querySalePromotionListWeb(Map<String, Object> params,int pageNo,int pageSize) {
+		Pagination<SalePromotionVo> page = new Pagination<SalePromotionVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<SalePromotionVo> list = salePromotionMapper.querySalePromotionListWeb(page);
+		for(SalePromotionVo salePromotionVo:list){
+			salePromotionVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+salePromotionVo.getImgurl());
+		}
+		page.setData(list);
+		return page;
 	}
 }
 

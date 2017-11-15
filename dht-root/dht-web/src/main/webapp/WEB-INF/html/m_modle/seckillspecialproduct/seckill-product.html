@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>秒杀商品</title>
-    <script src="js/Adaptive.js"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body class="bge6">
@@ -24,27 +24,27 @@
             <ul>
                 <li>
                     <a href="#">
-                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                     </a>
                 </li>
                 <li>
                     <a href="#">
-                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                        <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                     </a>
                 </li>
             </ul>
@@ -89,7 +89,7 @@
                 </span>
             </div>
         </div>
-        <div class="norms">
+        <div class="norms" id="open_car">
             <span class="name">已选</span>
             <span class="text overflow"> 一斤装（玻璃瓶），数量×1</span>
             <span class="checkbox"></span>
@@ -148,7 +148,7 @@
                         <span class="bargain-like">商品信息</span>
                     </div>
                 </div>
-                <img src="img/bangain5.png" class="dispalyB" width="100%" alt="">
+                <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
             </div>
 
             <div class="product-evaluate box2 displayN" id="evaluate">
@@ -173,7 +173,7 @@
                 <!-- 用户评价 -->
                 <div class="user-evaluate ">
                     <div class="box2">
-                        <img src="img/class1.png" class="img" alt="">
+                        <img src="/img/class1.png" class="img" alt="">
                         <div class="text">hz2375</div>
                         <div class="stars2">
                             <i></i>
@@ -192,7 +192,7 @@
                 </div>
                 <div class="user-evaluate">
                     <div class="box2">
-                        <img src="img/class1.png" class="img" alt="">
+                        <img src="/img/class1.png" class="img" alt="">
                         <div class="text">hz2375</div>
                         <div class="stars2">
                             <i></i>
@@ -211,7 +211,7 @@
                 </div>
                 <div class="user-evaluate">
                     <div class="box2">
-                        <img src="img/class1.png" class="img" alt="">
+                        <img src="/img/class1.png" class="img" alt="">
                         <div class="text">hz2375</div>
                         <div class="stars2">
                             <i></i>
@@ -258,12 +258,45 @@
         </div>
         <a href="" class="bargain-btn2">立即购买</a>
     </div>
+    <!--选择规格弹框-->
+	<div class="mark" id="J_mark2" style="display:none;">
+    	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+	        <i class="care-norms-close J_careNormsClose2"></i>
+	        <div class="product">
+	            <img src="/img/list2.jpg" alt="">
+	            <div class="text">
+	                <span class="mr_4" style="color: #ec3c3c;">￥</span>168.00/桌
+	                <br />
+	                <span>库存60件</span>
+	            </div>
+	        </div>
+	        <div class="care-checkbox J_careCheckbox">
+	            <span class="name">规格</span>
+	            <span class="checkbox_service active">人工费(不包含食材、设备费用)</span>
+	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
+	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
+	        </div>
+	        <div class="care-checkbox" style="margin-top: .2rem;">
+	            <span class="name">数量</span>
+	            <div class="number number-box">
+	                <span class="reduce J_careReduce">-</span>
+	                <span class="num J_careNum">1</span>
+	                <span class="add J_careAdd">+</span>
+	            </div>
+	        </div>
+	        
+	        <div class="car_footer_box">
+	        	<a href="" class="add_car_btn">加入购物车</a>
+	        	<a href="" class="add_car_btn2">立即购买</a>
+	        </div>
+	    </div>
+    </div>
 
-
-    <script src="js/jquery-1.9.1.min.js"></script>
-    <script src="js/TouchSlide.1.1.js"></script>
-    <script src="js/tabs.js"></script>
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/TouchSlide.1.1.js"></script>
+    <script src="/js/tabs.js"></script>
     <script>
+        console.log(window.location.pathname);
         TouchSlide({
             slideCell: "#banner",
             titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
@@ -273,6 +306,14 @@
             autoPage: true, //自动分页
             switchLoad: "_src" //切换加载，真实图片路径为"_src" 
         });
+        $(function(){
+        	$("#open_car").click(function(){
+        		$("#J_mark2").show()
+        	})
+        	$(".J_careNormsClose2").click(function(){
+        		$("#J_mark2").hide()
+        	})
+        })
     </script>
 
 </body>

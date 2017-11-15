@@ -65,6 +65,9 @@ public class GoodsConfig implements java.io.Serializable {
 	/**是否预售 0不是 1是*/
 	@NotEmpty
 	private Long isAdvancesale;
+	/**是否只允许会员购买 0不是 1是*/
+	@NotEmpty
+	private Long isOnlymenberbuy;
 	/**是否删除 0不是 1是*/
 	@NotEmpty
 	private Long isDelete;
@@ -221,5 +224,11 @@ public class GoodsConfig implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getIsOnlymenberbuy() {
+		return isOnlymenberbuy;
+	}
 
+	public void setIsOnlymenberbuy(Long isOnlymenberbuy) {
+		this.isOnlymenberbuy = isOnlymenberbuy;
+	}
 }

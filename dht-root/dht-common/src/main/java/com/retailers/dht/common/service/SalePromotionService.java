@@ -60,6 +60,8 @@ public interface SalePromotionService {
 	public boolean deleteSalePromotionBySpId(Long spId);
 
 	public List<SalePromotionVo> querySalePromotionTree(List<SalePromotionVo> promotionVos);
+
+	public Pagination<SalePromotionVo> querySalePromotionListWeb(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

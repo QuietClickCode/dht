@@ -643,6 +643,15 @@
             return;
         }
 
+        var gdResidueinventory = $('#addgdspTabel input[name=gdResidueinventory]');
+        for(var i=0;i<gdResidueinventory.length;i++){
+            var preval = $(gdResidueinventory[i]).prev().val();
+            if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
+                layer.msg('特价数量不可大于最大数量');
+                return;
+            }
+        }
+
         var goodsId = $('.goodsId')[0].value;
         var goodsName = $('.goodsName')[0].value;
         var isCoupon = $('input[name=isCoupon]:checked')[0].value;
@@ -703,12 +712,21 @@
 
     /*编辑商品*/
     function updateGoods(number) {
+
         let fromId = "";
         if(number == 0){
             fromId = "updateSalePromotionForm";
         }
         else{
             fromId = "updateSalePromotionGoodsFrom";
+            var gdResidueinventory = $('#gdspTabel input[name=gdResidueinventory]');
+            for(var i=0;i<gdResidueinventory.length;i++){
+                var preval = $(gdResidueinventory[i]).prev().val();
+                if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
+                    layer.msg('特价数量不可大于最大数量');
+                    return;
+                }
+            }
         }
         var inputs = $('#gdspTabel').find('input[type=text]');
         if(!validateinputs(inputs)){
@@ -841,8 +859,8 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
-                    '<input type="hidden" value="'+row.gdResidueinventory+'">';
+                html = '<input  type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                    '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'">';
                 return html;
             }
         },
@@ -970,7 +988,7 @@
             layer.msg('您输入的数据不符合规格');
         }else{
             var preval = parseFloat($(obj).parent().prev().prev().html());
-            $(obj).parent().prev().children()[1].value = ((preval-sale)/preval*10).toFixed(2);
+            $(obj).parent().prev().children()[1].value = (sale*10/preval).toFixed(2);
         }
     }
 </script>
@@ -1032,7 +1050,7 @@
                     val = value;
                 }
                 html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
-                    '<input type="hidden" value="'+row.gdResidueinventory+'">';
+                    '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'" >';
                 return html;
             }
         },
