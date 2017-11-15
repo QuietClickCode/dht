@@ -88,7 +88,7 @@
 	<select id="querySalePromotionList" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="salePromotion_columns" />
 		FROM t_sale_promotion
-		<include refid="salePromotion_where"/>
+		<include refid="salePromotion_where"/> ORDER BY sp_order
 	</select>
 	<select id="querySalePromotionListWeb" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.sp_end_time) timestap,t3.*,t6.g_price gprice,t6.g_unitname gunitname,t5.show_url imgurl,min(t2.sp_sale) minprice,max(t2.sp_sale) maxprice,t2.sp_inventory spinventory
