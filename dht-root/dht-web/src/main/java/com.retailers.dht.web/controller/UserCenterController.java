@@ -30,11 +30,38 @@ public class UserCenterController extends BaseController{
      * @param request
      * @return
      */
+    @RequestMapping("userMember")
+    public String openUserMember(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-member");
+    }
+    /**
+     * 用户余额
+     * @param request
+     * @return
+     */
     @RequestMapping("userWallet")
     public String openUserWallet(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-wallet");
     }
+    /**
+     * 用户余额
+     * @param request
+     * @return
+     */
+    @RequestMapping("userDetailInfo")
+    public String openUserDetailInfo(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-info");
+    }
 
+    /**
+     * 用户余额
+     * @param request
+     * @return
+     */
+    @RequestMapping("userAddress")
+    public String openUserAddress(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-address");
+    }
     /**
      * 打开用户优惠卷页面
      * @param request

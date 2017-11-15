@@ -11,10 +11,11 @@
 <body class="bge6">
     <div class="box2">
         <div class="user-header">
-            <div class="user-img">
-                <img src="/img/user-header.png" alt="">
-                <a href="" class="icon-change"></a>
-            </div>
+            <a href="/user/userDetailInfo" class="icon-change">
+                <div class="user-img">
+                    <img src="/img/user-header.png" alt=""/>
+                </div>
+            </a>
             <p class="user-name">56dfsdf</p>
             <div class="vip">
                 <i class="icon-vip"></i>
@@ -92,7 +93,7 @@
                 <i class="user-icon-list4"></i>
                 <span>会员卡</span>
             </div>
-            <a href="">有12件商品在等你噢
+            <a href="/user/userMember">有12件商品在等你噢
                 <span class="prompt"></span>
             </a>
         </div>

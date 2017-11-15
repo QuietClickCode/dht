@@ -11,7 +11,7 @@
 
 <body class="bge6">
     <div class="specialty-title2 borderB">
-        <a href="" class="icon-return"></a>
+        <a class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;" ></a>
         <span>优惠卷</span>
     </div>
 
@@ -31,16 +31,14 @@
     </div>
 
     <div class="coupon-cont box2">
-
         <div class="coupon-box" id="wsy">
-            <div class="more-coupon">
-                <a href="/coupon/openCoupon">
+            <a href="/coupon/openCoupon">
+                <div class="more-coupon">
                     <span class="icon-coupon"></span>
                     <span class="text">领取更多优惠券</span>
                     <i class="icon-coupon-right"></i>
-                </a>
-            </div>
-
+                </div>
+            </a>
             <a href="" class="coupon-img">
                 <img src="/img/coupon2.png" alt="">
             </a>

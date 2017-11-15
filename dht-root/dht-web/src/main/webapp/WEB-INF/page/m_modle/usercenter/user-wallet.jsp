@@ -11,7 +11,7 @@
 <body class="bge6">
     <div class="integral">
         <div class="integral-title">
-            <a href="" class="return"></a>
+            <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="return"></a>
             <span>账户余额</span>
             <a href="" class="detailed">明细</a>
         </div>
