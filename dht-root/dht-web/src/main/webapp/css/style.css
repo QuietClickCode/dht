@@ -523,6 +523,19 @@ li,ol,ul{list-style:none}.position-r,.search{position:relative}.box,.footer ul{m
 	background: #ec3c3c;
 	color: #fff;
 }
+.checkbox_service2{
+	padding: 0 .1rem;
+	height: .6rem;
+	background: #e6e6e6;
+	display: inline-block;
+	margin-top: .1rem;
+	color: #666;
+	border-radius: 4px;
+}
+.checkbox_service2.active{
+	background: #ec3c3c;
+	color: #fff;
+}
 .color_red1{
 	color: #ec3c3c;
 }

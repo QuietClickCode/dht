@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsUggclrelMapper">
+
+	<resultMap id="rm_goodsUggclrel" type="com.retailers.dht.common.entity.GoodsUggclrel">
+			<result property="uggclId" column="uggcl_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="gclId" column="gcl_id"/>
+			<result property="gclTime" column="gcl_time"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goodsUggclrel_vo" type="com.retailers.dht.common.vo.GoodsUggclrelVo">
+		<result property="uggclId" column="uggcl_id"/>
+		<result property="uid" column="u_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="gclId" column="gcl_id"/>
+		<result property="gclTime" column="gcl_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="uname" column="uname"/>
+		<result property="gclname" column="gclname"/>
+		<result property="gcllevel" column="gcllevel"/>
+		<result property="imgurl" column="imgurl"/>
+		<result property="sumgcl" column="sumgcl"/>
+		<result property="avglevel" column="avglevel"/>
+		<result property="siglegclsum" column="siglegclsum"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsUggclrel_columns">
+		uggcl_id,u_id,g_id,gcl_id,gcl_time,is_delete,version
+	</sql>
+	<!-- 根据商品用户评论关系表主键取得数据 -->
+	<select id="queryGoodsUggclrelByUggclId" resultMap="rm_goodsUggclrel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsUggclrel_columns" />
+		FROM t_goods_uggclrel WHERE uggcl_id = #{uggclId}
+	</select>
+	<select id="queryGoodsclsumandavg" resultMap="rm_goodsUggclrel_vo" parameterType="java.lang.Long">
+		SELECT count(*) sumgcl,AVG(t2.gcl_level) avglevel
+		from
+		t_goods_uggclrel t1 LEFT JOIN t_goods_commentlabel t2 ON t1.gcl_id=t2.gcl_id and t2.is_delete!=1
+		where t1.g_id=#{gid} and t1.is_delete!=1
+	</select>
+	<select id="queryHasGoodscls" resultMap="rm_goodsUggclrel_vo" parameterType="java.lang.Long">
+		SELECT COUNT(*) siglegclsum,t2.gcl_name gclname
+		from
+		t_goods_uggclrel t1 LEFT JOIN t_goods_commentlabel t2 ON t1.gcl_id=t2.gcl_id and t2.is_delete!=1
+		where t1.g_id=#{gid} and t1.is_delete!=1
+		GROUP BY t1.gcl_id
+	</select>
+	<!-- 商品用户评论关系表查询条件组合 -->
+	<sql id="goodsUggclrel_where">
+		<where>
+			<if test="null != params.uggclId">
+				AND t1.uggcl_id = #{params.uggclId}
+			</if>
+			<if test="null != params.uid">
+				AND t1.u_id = #{params.uid}
+			</if>
+			<if test="null != params.gid">
+				AND t1.g_id = #{params.gid}
+			</if>
+			<if test="null != params.gclId">
+				AND t1.gcl_id = #{params.gclId}
+			</if>
+			<if test="null != params.gclTimeBegin">
+				AND t1.gcl_time &gt;= #{params.gclTime}
+			</if>
+			<if test="null != params.gclTimeEnd">
+				AND t1.gcl_time &lt;= #{params.gclTime}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsUggclrelList" resultMap="rm_goodsUggclrel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsUggclrel_columns" />
+		FROM t_goods_uggclrel t1
+		<include refid="goodsUggclrel_where"/>
+	</select>
+	<select id="queryGoodsUggclrelListVo" resultMap="rm_goodsUggclrel_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.u_name uname,t3.gcl_level gcllevel,
+		GROUP_CONCAT(t3.gcl_name separator ' ') gclname,
+		t4.show_url imgurl
+		from t_goods_uggclrel t1
+		LEFT JOIN t_user t2 ON t1.u_id=t2.u_id and t2.is_delete!=1
+		LEFT JOIN t_goods_commentlabel t3 ON t1.gcl_id=t3.gcl_id
+		LEFT JOIN t_attachment t4 ON t2.u_imgid=t4.id
+		<include refid="goodsUggclrel_where"/>
+		GROUP BY t1.u_id,t1.gcl_time
+	</select>
+	<!--添加商品用户评论关系表 -->
+	<insert id="saveGoodsUggclrel" parameterType="com.retailers.dht.common.entity.GoodsUggclrel" useGeneratedKeys="true" keyProperty="uggclId">
+		INSERT INTO t_goods_uggclrel (
+			u_id,g_id,gcl_id,gcl_time,is_delete,version
+		) VALUES
+		(
+			#{uid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{gclId,jdbcType=BIGINT},#{gclTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品用户评论关系表 -->
+	<update id="updateGoodsUggclrel" parameterType="com.retailers.dht.common.entity.GoodsUggclrel">
+		UPDATE t_goods_uggclrel
+		<set>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != gclId">
+                gcl_id = #{gclId},
+            </if>
+            <if test="null != gclTime">
+                gcl_time = #{gclTime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE uggcl_id = #{uggclId} and version = #{version}
+	</update>
+	<!--删除商品用户评论关系表 -->
+	<delete id="deleteGoodsUggclrelByUggclId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_uggclrel WHERE uggcl_id = #{uggclId}
+	</delete>
+</mapper>

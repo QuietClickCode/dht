@@ -6,6 +6,7 @@ import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.GoodsLabel;
 import com.retailers.dht.common.service.GoodsLabelService;
+import com.retailers.dht.common.vo.GoodsLabelVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -34,7 +36,7 @@ public class GoodsLabelController extends BaseController {
     @RequestMapping("/openGoodsLabel")
     @Menu(parentRes = "sys.manager.goods", resourse = "goods.openGoodsLabel", description = "商品标签管理", sort = 1, label = "商品标签管理")
     public String openGoodsLabel() {
-        return "goods/goodsLabel";
+        return "goods/goodsLabelTest";
     }
 
     @RequestMapping("editGoodsLabel")
@@ -104,5 +106,16 @@ public class GoodsLabelController extends BaseController {
             }
         }
         return goodsLabel;
+    }
+
+    @RequestMapping("/queryGoodsLabelAdvertisingList")
+    @Function(label = "查询所有标签广告楼层",parentRes = "goods.openGoodsLabel",resourse = "goods.queryGoodsLabelAdvertisingList",description = "查询所有标签广告楼层",sort = 2)
+    @ResponseBody
+    public Map<String,Object> queryGoodsLabelAdvertisingList(){
+        List<GoodsLabelVo> list = goodsLabelService.queryGoodsLabelAdvertisingTree();
+        Map<String,Object> rtn=new HashMap<String, Object>();
+        rtn.put("total",1000);
+        rtn.put("rows",list);
+        return rtn;
     }
 }

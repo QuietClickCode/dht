@@ -85,6 +85,7 @@ public class GoodsConfigController extends BaseController {
     @Function(label="增加商品配置", description = "增加商品配置", resourse = "goodsConfig.addGoodsConfig",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsConfig(GoodsConfig GoodsConfig){
+        GoodsConfig.setIsDelete(0L);
         boolean flag=goodsConfigService.saveGoodsConfig(GoodsConfig);
         return success(flag);
     }

@@ -368,14 +368,6 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6" style="height:49px;">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            利润率:
-                                                          </span>
-                                                                <input type="text" class="form-control" name="gprofitability" id="gprofitability" style="width: 60%">%
-                                                            </div>
-                                                        </div>
                                                         <div class="col-lg-6" style="height:49px;" id="allowsettimediv">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon" id="allowsettimespen">
@@ -1124,18 +1116,6 @@
                             message: '销量不能为空'
                         }
                     }
-                },
-                gprofitability: {
-                    message: '利润率为空',
-                    validators: {
-                        notEmpty: {
-                            message: '利润率不能为空'
-                        },
-                        regexp:{
-                            regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                            message:'利润率只允许在10位整数和2位小数范围内'
-                        }
-                    }
                 }
             }
         });
@@ -1235,7 +1215,6 @@
         $("#gendbuy").val('');
         $("#gsalesvolume").val('');
         $("#gedt").val('');
-        $("#gprofitability").val('');
         $("#gdeposit").val('');
 
         $("#isServicegoods").val('');
@@ -1437,6 +1416,13 @@
                     formData["gedts"]='';
                 }
 
+                flag = $("#isCod").bootstrapSwitch("state");
+                if(flag){
+                    formData["isCod"]=1;
+                }else{
+                    formData["isCod"]=0;
+                }
+
                 formData["gdeposit"]='';
 
             }
@@ -1522,7 +1508,6 @@
                     $("#gendbuy").val('');
                     $("#gsalesvolume").val('');
                     $("#gedt").val('');
-                    $("#gprofitability").val('');
                     $("#gdeposit").val('');
 
                     $("#gfreight").val('');
@@ -1559,7 +1544,6 @@
                     $("#gendbuy").val(goodsConfig.gendbuy);
                     $("#gsalesvolume").val(goodsConfig.gsalesvolume);
                     $("#gedt").val(goodsConfig.gedt);
-                    $("#gprofitability").val(goodsConfig.gprofitability);
                     $("#gdeposit").val(goodsConfig.gdeposit);
                     $('#configversion').val(goodsConfig.version);
 
