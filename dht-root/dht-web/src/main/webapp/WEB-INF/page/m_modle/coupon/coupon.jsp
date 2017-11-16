@@ -15,7 +15,7 @@
         <a class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;" ></a>
         <span>领券中心</span>
     </div>
-	
+
 	<div class="coupon-box" id="wsy">
         <a href="" class="coupon-img">
             <img src="/img/coupon2.png" alt="">
@@ -28,6 +28,22 @@
         </a>
     </div>
     <script src="/js/jquery-1.9.1.min.js"></script>
-s</body>
+    <script>
+        function queryCoupon(pageNo,pageSize){
+            $.ajax({
+                type:"post",
+                url:'/coupon/couponList',
+                dataType: "json",
+                data:{pageNo:pageNo,pageSize:pageSize},
+                success:function(data){
+                    console.log(data)
+                }
+            });
+        }
+        $(function () {
+            queryCoupon(1,10);
+        })
+    </script>
 
+</body>
 </html>

@@ -391,8 +391,6 @@
             }
         });
     }
-
-
     function editorRecharge(gcpId){
         editorRechargeType=1;
         initFormData(gcpId);

@@ -2,15 +2,19 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @author zhongp
@@ -33,10 +37,23 @@ public class CouponController extends BaseController{
         return redirectUrl(request,"coupon/coupon");
     }
 
+    /**
+     * 优惠卷列表
+     * @param request
+     * @return
+     */
     @RequestMapping("couponList")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录后再领取")
-    public BaseResp couponList(HttpServletRequest request){
-        return success(null);
+    @ResponseBody
+    public BaseResp couponList(HttpServletRequest request,PageUtils pageForm){
+        Long uid=getCurLoginUserId(request);
+        try{
+           List<Coupon> lists= couponService.queryCouponList(uid,pageForm.getPageNo(),pageForm.getPageSize());
+            return success(lists);
+        }catch(AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
     }
 
     /**

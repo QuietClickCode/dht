@@ -1,6 +1,8 @@
 package com.retailers.dht.com.service;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
+import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.GoodsCouponService;
@@ -11,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -22,6 +25,8 @@ public class CouponServiceTest extends TestBaseJunit {
 
     @Autowired
     private GoodsCouponService goodsCouponService;
+    @Autowired
+    private CouponService couponService;
 
     @Test
     public void test()throws Exception{
@@ -30,5 +35,14 @@ public class CouponServiceTest extends TestBaseJunit {
         params.put("nowDate",new Date());
         Pagination<GoodsCoupon> pages= goodsCouponService.queryGoodsCouponList(params,1,100);
         System.out.println(pages.getData().size());
+    }
+
+    @Test
+    public void queryCurCoupon()throws Exception{
+        Long uid=-1l;
+        int pageNo=1;
+        int pageSize=10;
+        List<Coupon> lists=couponService.queryCouponList(uid,pageNo,pageSize);
+        System.out.println(JSON.toJSON(lists));
     }
 }
