@@ -45,4 +45,24 @@ public class CouponServiceTest extends TestBaseJunit {
         List<Coupon> lists=couponService.queryCouponList(uid,pageNo,pageSize);
         System.out.println(JSON.toJSON(lists));
     }
+
+    @Test
+    public void userGrabCoupon()throws Exception{
+        for(int i=0;i<2;i++){
+            new Thread(new Runnable() {
+                public void run() {
+                    long cpid=6;
+                    long uid=3;
+                    try{
+                        couponService.userGrabCoupon(uid,cpid);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }).start();
+        }
+        Thread.sleep(1000*30);
+    }
+
 }

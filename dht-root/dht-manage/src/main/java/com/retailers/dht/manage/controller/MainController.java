@@ -34,7 +34,7 @@ public class MainController extends BaseController {
 		if(ObjectUtils.isEmpty(sysUser)){
 			SysUser info = new SysUser();
 			info.setUid(-1l);
-			info.setUaccount("admin2");
+			info.setUaccount("admin");
 			info.setUname("测试");
 			setCurLoginUser(request,info);
 		}

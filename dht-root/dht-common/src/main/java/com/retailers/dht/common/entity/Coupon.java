@@ -67,6 +67,10 @@ public class Coupon implements java.io.Serializable {
 	/**发送优惠卷张数*/
 	@NotEmpty
 	private Long cpNum;
+	/**
+	 * 优惠卷剩余张数
+	 */
+	private Long cpSurplusNum;
 	/**金额*/
 	@NotEmpty
 	private Long cpMoney;
@@ -314,5 +318,11 @@ public class Coupon implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getCpSurplusNum() {
+		return cpSurplusNum;
+	}
 
+	public void setCpSurplusNum(Long cpSurplusNum) {
+		this.cpSurplusNum = cpSurplusNum;
+	}
 }

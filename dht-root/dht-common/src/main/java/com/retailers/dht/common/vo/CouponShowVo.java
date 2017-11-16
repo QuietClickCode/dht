@@ -55,6 +55,10 @@ public class CouponShowVo {
     private Long cpSendNum;
     /**发送优惠卷张数*/
     private Long cpNum;
+    /**
+     * 优惠卷剩余张数
+     */
+    private Long cpSurplusNum;
     /**金额*/
     private Long cpMoney;
     /**折扣*/
@@ -318,5 +322,13 @@ public class CouponShowVo {
 
     public void setVersion(Integer version) {
         this.version = version;
+    }
+
+    public Long getCpSurplusNum() {
+        return cpSurplusNum;
+    }
+
+    public void setCpSurplusNum(Long cpSurplusNum) {
+        this.cpSurplusNum = cpSurplusNum;
     }
 }

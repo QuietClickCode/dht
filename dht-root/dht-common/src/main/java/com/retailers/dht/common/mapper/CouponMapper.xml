@@ -21,6 +21,7 @@
 			<result property="cpCycleSendType" column="cp_cycle_send_type"/>
 			<result property="cpSendNum" column="cp_send_num"/>
 			<result property="cpNum" column="cp_num"/>
+			<result property="cpSurplusNum" column="cp_surplus_num"/>
 			<result property="cpMoney" column="cp_money"/>
 			<result property="cpDiscount" column="cp_discount"/>
 			<result property="cpTotalMoney" column="cp_total_money"/>
@@ -53,6 +54,7 @@
 		<result property="cpCycleSendType" column="cp_cycle_send_type"/>
 		<result property="cpSendNum" column="cp_send_num"/>
 		<result property="cpNum" column="cp_num"/>
+		<result property="cpSurplusNum" column="cp_surplus_num"/>
 		<result property="cpMoney" column="cp_money"/>
 		<result property="cpDiscount" column="cp_discount"/>
 		<result property="cpTotalMoney" column="cp_total_money"/>
@@ -67,7 +69,9 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="coupon_columns">
-		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,cp_context,cp_create_s_id,cp_create,is_delete,is_valid,version
+		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,
+		cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_surplus_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,cp_context,cp_create_s_id,cp_create,
+		is_delete,is_valid,version
 	</sql>
 	<!-- 根据优惠卷主键取得数据 -->
 	<select id="queryCouponByCpId" resultMap="rm_coupon" parameterType="java.lang.Long">
@@ -197,10 +201,16 @@
 	<!--添加优惠卷 -->
 	<insert id="saveCoupon" parameterType="com.retailers.dht.common.entity.Coupon" useGeneratedKeys="true" keyProperty="cpId">
 		INSERT INTO t_coupon (
-			cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,cp_context,cp_create_s_id,cp_create,is_delete,is_valid,version
+			cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,
+			cp_send_way,cp_send_start_date,cp_send_end_date,cp_cycle_send_type,cp_send_num,cp_num,cp_surplus_num,cp_money,cp_discount,cp_total_money,cp_min_discount,cp_max_discount,
+			cp_context,cp_create_s_id,cp_create,is_delete,is_valid,version
 		) VALUES
 		(
-			#{cpName,jdbcType=VARCHAR},#{cpCoinType,jdbcType=INTEGER},#{cpType,jdbcType=INTEGER},#{cpLogo,jdbcType=BIGINT},#{cpIsRestricted,jdbcType=BIGINT},#{cpReceiveCondition,jdbcType=VARCHAR},#{cpUseCondition,jdbcType=BIGINT},#{cpStartDate,jdbcType=TIMESTAMP},#{cpEndDate,jdbcType=TIMESTAMP},#{cpIsOverlapUse,jdbcType=INTEGER},#{cpIsFirst,jdbcType=INTEGER},#{cpSendWay,jdbcType=INTEGER},#{cpSendStartDate,jdbcType=TIMESTAMP},#{cpSendEndDate,jdbcType=TIMESTAMP},#{cpCycleSendType,jdbcType=INTEGER},#{cpSendNum,jdbcType=BIGINT},#{cpNum,jdbcType=BIGINT},#{cpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=BIGINT},#{cpTotalMoney,jdbcType=BIGINT},#{cpMinDiscount,jdbcType=BIGINT},#{cpMaxDiscount,jdbcType=BIGINT},#{cpContext,jdbcType=VARCHAR},#{cpCreateSid,jdbcType=BIGINT},#{cpCreate,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
+			#{cpName,jdbcType=VARCHAR},#{cpCoinType,jdbcType=INTEGER},#{cpType,jdbcType=INTEGER},#{cpLogo,jdbcType=BIGINT},#{cpIsRestricted,jdbcType=BIGINT},#{cpReceiveCondition,jdbcType=VARCHAR},
+			#{cpUseCondition,jdbcType=BIGINT},#{cpStartDate,jdbcType=TIMESTAMP},#{cpEndDate,jdbcType=TIMESTAMP},#{cpIsOverlapUse,jdbcType=INTEGER},#{cpIsFirst,jdbcType=INTEGER},
+			#{cpSendWay,jdbcType=INTEGER},#{cpSendStartDate,jdbcType=TIMESTAMP},#{cpSendEndDate,jdbcType=TIMESTAMP},#{cpCycleSendType,jdbcType=INTEGER},#{cpSendNum,jdbcType=BIGINT},
+			#{cpNum,jdbcType=BIGINT},#{cpSurplusNum,jdbcType=BIGINT},#{cpMoney,jdbcType=BIGINT},#{cpDiscount,jdbcType=BIGINT},#{cpTotalMoney,jdbcType=BIGINT},#{cpMinDiscount,jdbcType=BIGINT},
+			#{cpMaxDiscount,jdbcType=BIGINT},#{cpContext,jdbcType=VARCHAR},#{cpCreateSid,jdbcType=BIGINT},#{cpCreate,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改优惠卷 -->
@@ -258,6 +268,9 @@
             <if test="null != cpNum">
                 cp_num = #{cpNum},
             </if>
+			<if test="null != cpSurplusNum">
+				cp_surplus_num = #{cpSurplusNum},
+			</if>
             <if test="null != cpMoney">
                 cp_money = #{cpMoney},
             </if>
@@ -324,4 +337,10 @@
 				AND u.cpu_id IS NULL
 			</if>
 	</select>
+	<!--减小优惠卷剩余数量 -->
+	<update id="reduceCouponNum">
+		UPDATE t_coupon
+		SET cp_surplus_num =cp_surplus_num-1
+		WHERE cp_id = #{cpId} and cp_surplus_num-1>=0
+	</update>
 </mapper>

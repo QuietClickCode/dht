@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CouponUserMapper">
+
+	<resultMap id="rm_couponUser" type="com.retailers.dht.common.entity.CouponUser">
+			<result property="cpuId" column="cpu_id"/>
+			<result property="cpId" column="cp_id"/>
+			<result property="cpuCycleId" column="cpu_cycle_id"/>
+			<result property="cpuUid" column="cpu_uid"/>
+			<result property="cpuStatus" column="cpu_status"/>
+			<result property="cpuCreateTime" column="cpu_create_time"/>
+			<result property="cpuUseTime" column="cpu_use_time"/>
+			<result property="cpuUseOid" column="cpu_use_oid"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="couponUser_columns">
+		cpu_id,cp_id,cpu_cycle_id,cpu_uid,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
+	</sql>
+	<!-- 根据用户优惠卷领取记录主键取得数据 -->
+	<select id="queryCouponUserByCpuId" resultMap="rm_couponUser" parameterType="java.lang.Long">
+		SELECT <include refid="couponUser_columns" />
+		FROM t_coupon_user WHERE cpu_id = #{cpuId}
+	</select>
+	<!-- 用户优惠卷领取记录查询条件组合 -->
+	<sql id="couponUser_where">
+		<where>
+			<if test="null != params.cpuId">
+				AND cpu_id = #{params.cpuId}
+			</if>
+			<if test="null != params.cpId">
+				AND cp_id = #{params.cpId}
+			</if>
+			<if test="null != params.cpuCycleId">
+				AND cpu_cycle_id = #{params.cpuCycleId}
+			</if>
+			<if test="null != params.cpuUid">
+				AND cpu_uid = #{params.cpuUid}
+			</if>
+			<if test="null != params.cpuStatus">
+				AND cpu_status = #{params.cpuStatus}
+			</if>
+			<if test="null != params.cpuCreateTimeBegin">
+				AND cpu_create_time &gt;= TO_DATE('${params.cpuCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpuCreateTimeEnd">
+				AND cpu_create_time &lt;= TO_DATE('${params.cpuCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpuUseTimeBegin">
+				AND cpu_use_time &gt;= TO_DATE('${params.cpuUseTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpuUseTimeEnd">
+				AND cpu_use_time &lt;= TO_DATE('${params.cpuUseTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.cpuUseOid">
+				AND cpu_use_oid = #{params.cpuUseOid}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCouponUserList" resultMap="rm_couponUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="couponUser_columns" />
+		FROM t_coupon_user
+		<include refid="couponUser_where"/>
+	</select>
+	<!--添加用户优惠卷领取记录 -->
+	<insert id="saveCouponUser" parameterType="com.retailers.dht.common.entity.CouponUser" useGeneratedKeys="true" keyProperty="cpuId">
+		INSERT INTO t_coupon_user (
+			cp_id,cpu_cycle_id,cpu_uid,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
+		) VALUES
+		(
+			#{cpId,jdbcType=BIGINT},#{cpuCycleId,jdbcType=INTEGER},#{cpuUid,jdbcType=BIGINT},#{cpuStatus,jdbcType=BIGINT},#{cpuCreateTime,jdbcType=TIMESTAMP},#{cpuUseTime,jdbcType=TIMESTAMP},#{cpuUseOid,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改用户优惠卷领取记录 -->
+	<update id="updateCouponUser" parameterType="com.retailers.dht.common.entity.CouponUser">
+		UPDATE t_coupon_user
+		<set>
+            <if test="null != cpId">
+                cp_id = #{cpId},
+            </if>
+            <if test="null != cpuCycleId">
+                cpu_cycle_id = #{cpuCycleId},
+            </if>
+            <if test="null != cpuUid">
+                cpu_uid = #{cpuUid},
+            </if>
+            <if test="null != cpuStatus">
+                cpu_status = #{cpuStatus},
+            </if>
+            <if test="null != cpuCreateTime">
+                cpu_create_time = #{cpuCreateTime},
+            </if>
+            <if test="null != cpuUseTime">
+                cpu_use_time = #{cpuUseTime},
+            </if>
+            <if test="null != cpuUseOid">
+                cpu_use_oid = #{cpuUseOid},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cpu_id = #{cpuId} and version = #{version}
+	</update>
+	<!--删除用户优惠卷领取记录 -->
+	<delete id="deleteCouponUserByCpuId" parameterType="java.lang.Long">
+		DELETE FROM t_coupon_user WHERE cpu_id = #{cpuId}
+	</delete>
+
+	<!--分页查询 -->
+	<select id="checkCouponUser" resultType="java.lang.Integer">
+		SELECT count(cpu_id) total FROM t_coupon_user where cp_id =#{cpId} and cpu_uid=#{uId}
+	</select>
+</mapper>

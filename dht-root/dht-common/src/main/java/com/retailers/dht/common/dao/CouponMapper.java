@@ -60,4 +60,10 @@ public interface CouponMapper {
 	 */
 	public List<Coupon> queryCurValidCoupon(Pagination<CouponShowVo> pagination);
 
+	/**
+	 * 减小优惠卷剩余数量
+	 * @param cpId
+	 * @return
+	 */
+	public int reduceCouponNum(long cpId);
 }

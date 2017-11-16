@@ -8,6 +8,7 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
+import com.sun.media.jfxmedia.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,6 @@ public class CouponController extends BaseController{
      * @return
      */
     @RequestMapping("couponList")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录后再领取")
     @ResponseBody
     public BaseResp couponList(HttpServletRequest request,PageUtils pageForm){
         Long uid=getCurLoginUserId(request);
@@ -66,5 +66,25 @@ public class CouponController extends BaseController{
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录")
     public BaseResp queryUserCoupon(HttpServletRequest request){
         return success(null);
+    }
+
+    /**
+     * 抢夺优惠卷
+     * @param request
+     * @param cpId 优惠卷id
+     * @return
+     */
+    @RequestMapping("userGrabCoupon")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录后操作")
+    @ResponseBody
+    public BaseResp userGrabCoupon(HttpServletRequest request,long cpId){
+        long userId=getCurLoginUserId(request);
+        try{
+            couponService.userGrabCoupon(userId,cpId);
+            return success("获取成功");
+        }catch (AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
     }
 }
