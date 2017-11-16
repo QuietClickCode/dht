@@ -298,4 +298,30 @@
 	<delete id="deleteCouponByCpId" parameterType="java.lang.Long">
 		DELETE FROM t_coupon WHERE cp_id = #{cpId}
 	</delete>
+
+
+	<!--取得当前有效的优惠卷列表 -->
+	<select id="queryCurValidCoupon" resultMap="rm_coupon" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+			c.*, a.show_url
+		FROM
+			t_coupon c
+			LEFT JOIN t_attachment a ON c.cp_logo = a.id
+			<if test="null != params.uid">
+				LEFT JOIN t_coupon_user u ON c.cp_id = u.cp_id
+				AND u.cpu_uid = - 1
+			</if>
+		WHERE
+			(
+			c.cp_send_start_date &lt; SYSDATE()
+			OR c.cp_send_start_date IS NULL
+			)
+			AND (
+			c.cp_send_end_date > SYSDATE()
+			OR c.cp_send_end_date IS NULL
+			)
+			<if test="null != params.uid">
+				AND u.cpu_id IS NULL
+			</if>
+	</select>
 </mapper>

@@ -53,4 +53,11 @@ public interface CouponMapper {
 	 */
 	public List<CouponShowVo> queryCouponList(Pagination<CouponShowVo> pagination);
 
+	/**
+	 * 取得当前有效的优惠卷列表
+	 * @param pagination
+	 * @return
+	 */
+	public List<Coupon> queryCurValidCoupon(Pagination<CouponShowVo> pagination);
+
 }

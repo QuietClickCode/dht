@@ -1,22 +1,17 @@
 package com.retailers.dht.manage.controller;
 
-import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.auth.entity.SysUser;
 import com.retailers.dht.common.entity.Coupon;
-import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponVo;
-import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
-import org.hibernate.validator.constraints.br.CNPJ;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;

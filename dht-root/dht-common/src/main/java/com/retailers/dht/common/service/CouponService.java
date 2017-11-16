@@ -3,6 +3,9 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
+import com.retailers.tools.exception.AppException;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：优惠卷Service
@@ -55,6 +58,14 @@ public interface CouponService {
 	 * @date 2017-10-11 20:34:20
 	 */
 	public boolean deleteCouponByCpId(Long cpId);
+
+	/**
+	 * 取得优惠卷列表
+	 * @param uid 用户id
+	 * @return
+	 * @throws AppException
+	 */
+	public List<Coupon> queryCouponList(Long uid,int pageNo, int pageSize)throws AppException;
 
 }
 

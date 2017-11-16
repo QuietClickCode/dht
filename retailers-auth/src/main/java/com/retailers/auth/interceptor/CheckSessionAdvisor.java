@@ -30,6 +30,7 @@ public class CheckSessionAdvisor {
     // Service层切点
     @Pointcut("@annotation(com.retailers.auth.annotation.CheckSession)")
     public void checkSession() {
+        System.out.println("checkSession==============================================================>>>>");
     }
 
     /**
@@ -41,6 +42,7 @@ public class CheckSessionAdvisor {
      */
     @Around(value="checkSession()")
     public Object doBefore(ProceedingJoinPoint joinPoint) throws Throwable,Exception {
+        System.out.println("checkSession================================doBefore==============================>>>>");
         Object result = null;
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
                 .getRequestAttributes()).getRequest();

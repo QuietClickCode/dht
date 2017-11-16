@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.Coupon;
@@ -9,6 +10,7 @@ import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,6 +62,22 @@ public class CouponServiceImpl implements CouponService {
 	public boolean deleteCouponByCpId(Long cpId) {
 		int status = couponMapper.deleteCouponByCpId(cpId);
 		return status == 1 ? true : false;
+	}
+
+	/**
+	 *
+	 * @param uid 用户id
+	 * @return
+	 * @throws AppException
+	 */
+	public List<Coupon> queryCouponList(Long uid,int pageNo, int pageSize) throws AppException {
+		Map<String,Object> params=new HashMap<String, Object>();
+		params.put("uid",uid);
+		Pagination<CouponShowVo> page = new Pagination<CouponShowVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		return couponMapper.queryCurValidCoupon(page);
 	}
 }
 
