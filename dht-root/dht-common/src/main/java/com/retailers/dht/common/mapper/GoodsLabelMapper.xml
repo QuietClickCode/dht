@@ -11,6 +11,21 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_goodsLabel_vo" type="com.retailers.dht.common.vo.GoodsLabelVo">
+		<result property="glId" column="gl_id"/>
+		<result property="glName" column="gl_name"/>
+		<result property="glStarttime" column="gl_starttime"/>
+		<result property="glEndtime" column="gl_endtime"/>
+		<result property="isGoodslabel" column="is_goodslabel"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="imageId" column="image_id"/>
+		<result property="url" column="url"/>
+		<result property="glOrder" column="fa_order"/>
+		<result property="glCountry" column="fa_country"/>
+		<result property="imgUrl" column="imgUrl"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsLabel_columns">
@@ -61,6 +76,15 @@
 		SELECT <include refid="goodsLabel_columns" />
 		FROM t_goods_label
 		<include refid="goodsLabel_where"/>
+	</select>
+	<select id="queryGoodslabelAdvertisingList" resultMap="rm_goodsLabel_vo" >
+		SELECT * from t_goods_label t1 where t1.is_delete!=1 ORDER BY gl_endtime DESC
+	</select>
+	<select id="queryGoodsLabelAdvertisingVo" resultMap="rm_goodsLabel_vo">
+		SELECT t2.*,t1.show_url imgUrl,t2.fa_id gl_id,t2.fa_name gl_name
+		from t_floor_advertising t2
+		LEFT JOIN t_attachment t1 ON t2.image_id = t1.id
+		WHERE t2.is_delete = 0 ORDER BY t2.fa_order
 	</select>
 	<!--添加商品图片表 -->
 	<insert id="saveGoodsLabel" parameterType="com.retailers.dht.common.entity.GoodsLabel" useGeneratedKeys="true" keyProperty="glId">

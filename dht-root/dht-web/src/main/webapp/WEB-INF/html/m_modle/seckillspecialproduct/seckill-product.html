@@ -76,7 +76,7 @@
             <span class="text overflow"> 一斤装（玻璃瓶），数量×1</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms">
+        <div class="norms showaddressfreigh">
             <span class="name">送至</span>
             <span class="text overflow" id="open_address"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
             <span class="checkbox"></span>
@@ -86,9 +86,9 @@
             <span class="text overflow"> 选择配送时间</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms">
+        <div class="norms showaddressfreigh">
             <span class="name">运费</span>
-            <span class="text overflow"> 12.0元</span>
+            <span class="text overflow" id="gfreigh"> 12.0元</span>
         </div>
         <div class="ensure" style="display: none;">
             <span>
@@ -138,8 +138,8 @@
 
             <div class="product-evaluate box2 displayN" id="evaluate">
                 <div class="title">
-                    <span>全部评价(1990) </span>
-                    <div class="stars1">
+                    <span id="sumgclsspan">全部评价(1990) </span>
+                    <div class="stars1" id="avgleveldiv">
                         <i></i>
                         <i></i>
                         <i></i>
@@ -147,7 +147,7 @@
                         <i></i>
                     </div>
                 </div>
-                <div class="label box2">
+                <div class="label box2" id="singlegcldiv">
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
@@ -156,66 +156,51 @@
                 </div>
 
                 <!-- 用户评价 -->
-                <div class="user-evaluate ">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                <div id="usercommentdiv">
+
+                    <div class="user-evaluate">
+                        <div class="box2">
+                            <img src="/img/class1.png" class="img" alt="">
+                            <div class="text">hz2375</div>
+                            <div class="stars2">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </div>
+                        </div>
+                        <div class="label2 box2">
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
                         </div>
                     </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                    </div>
-                </div>
-                <div class="user-evaluate">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                    <div class="user-evaluate">
+                        <div class="box2">
+                            <img src="/img/class1.png" class="img" alt="">
+                            <div class="text">hz2375</div>
+                            <div class="stars2">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                    </div>
-                </div>
-                <div class="user-evaluate">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                        <div class="label2 box2">
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
                         </div>
-                    </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
                     </div>
                 </div>
 
-                <div class="more">
-                    <a href="">查看全部评论</a>
+
+                <div class="more" id="nogoodscldiv">
+
                 </div>
 
             </div>
@@ -244,37 +229,49 @@
         <a href="" class="bargain-btn2">立即购买</a>
     </div>
     <!--选择规格弹框-->
-	<div class="mark" id="J_mark2" style="display:none;">
-    	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-	        <i class="care-norms-close J_careNormsClose2"></i>
-	        <div class="product">
-	            <img src="/img/list2.jpg" alt="">
-	            <div class="text">
-	                <span class="mr_4" style="color: #ec3c3c;">￥</span>168.00/桌
-	                <br />
-	                <span>库存60件</span>
-	            </div>
-	        </div>
-	        <div class="care-checkbox J_careCheckbox">
-	            <span class="name">规格</span>
-	            <span class="checkbox_service active">人工费(不包含食材、设备费用)</span>
-	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-	        </div>
-	        <div class="care-checkbox" style="margin-top: .2rem;">
-	            <span class="name">数量</span>
-	            <div class="number number-box">
-	                <span class="reduce J_careReduce">-</span>
-	                <span class="num J_careNum">1</span>
-	                <span class="add J_careAdd">+</span>
-	            </div>
-	        </div>
-	        
-	        <div class="car_footer_box">
-	        	<a href="" class="add_car_btn">加入购物车</a>
-	        	<a href="" class="add_car_btn2">立即购买</a>
-	        </div>
-	    </div>
+    <div class="mark" id="J_mark2" style="display:none;">
+        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+            <i class="care-norms-close J_careNormsClose2"></i>
+            <div class="product">
+                <img src="/img/list2.jpg" alt="">
+                <div class="text">
+                    <span class="mr_4" style="color: #ec3c3c;">￥</span>168.00/桌
+                    <br />
+                    <span>库存60件</span>
+                </div>
+            </div>
+            <div class="care-checkbox J_careCheckbox">
+                <span class="name">规格1</span>
+                <span class="checkbox_service" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
+                <span class="checkbox_service" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                <span class="checkbox_service" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+            </div>
+            <div class="care-checkbox J_careCheckbox">
+                <span class="name">规格2</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+            </div>
+            <div class="care-checkbox J_careCheckbox">
+                <span class="name">规格2</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+            </div>
+            <div class="care-checkbox" style="margin-top: .2rem;">
+                <span class="name">数量</span>
+                <div class="number number-box">
+                    <span class="reduce J_careReduce">-</span>
+                    <span class="num J_careNum">1</span>
+                    <span class="add J_careAdd">+</span>
+                </div>
+            </div>
+
+            <div class="car_footer_box">
+                <a href="" class="add_car_btn">加入购物车</a>
+                <a href="" class="add_car_btn2">立即购买</a>
+            </div>
+        </div>
     </div>
 
     <div class="mark" id="J_mark3" style="display:none;">
@@ -295,9 +292,9 @@
 
     <div class="mark" id="J_mark" style="display:none;">
         <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-            <i class="care-norms-close J_careNormsClose"></i>
+            <i class="care-norms-close J_careNormsClose" id="closeaddress"></i>
             <p class="J_mark_title">送至</p>
-            <ul class="address_list_box">
+            <ul class="address_list_box" id="addressul">
                 <li class="active">
                     <span class="address_img"></span>
                     <div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
@@ -305,11 +302,11 @@
                 </li>
                 <li>
                     <span class="address_img"></span>
-                    <div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+                    <div class="address_text">上海市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
                     <span  class="icon_choice"></span>
                 </li>
             </ul>
-            <a href="" class="care-norms-checkbox-btn">新增收获地址</a>
+            <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
         </div>
     </div>
 
@@ -319,9 +316,44 @@
     <script src="/js/tabs.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
 
+    <!--时间减少-->
+    <script>
+        var timestape = 0;
+        function timegoing() {
+            var interval = setInterval(function () {
+                var date = new Date(timestape);
+                var shi1 = Math.floor((date.getHours()-8)/10);
+                var shi2 = Math.floor((date.getHours()-8)%10);
+                var fen1 = Math.floor(date.getMinutes()/10);
+                var fen2 = Math.floor(date.getMinutes()%10);
+                var miao1 = Math.floor(date.getSeconds()/10);
+                var miao2 = Math.floor(date.getSeconds()%10);
+
+                $('#shi1').html(shi1);
+                $('#shi2').html(shi2);
+                $('#fen1').html(fen1);
+                $('#fen2').html(fen2);
+                $('#miao1').html(miao1);
+                $('#miao2').html(miao2);
+
+                timestape -= 1000;
+                if(timestape<0){
+                    clearInterval(interval);
+//                $('#shi1').parent().parent().next().remove();
+//                $('#shi1').parent().parent().remove();
+                }
+            },1000);
+        }
+
+    </script>
+    <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
         var gid = parseInt(path.substring(10,path.indexOf('.html')));
+        var isServiceGoods;
+        <!--用户评论分页查询-->
+        var pageNo=1;
+        var pageSize=10;
 
         <!--初始化banner-->
         function initbanner() {
@@ -368,11 +400,16 @@
                 dataType: "json",
                 data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid},
                 success:function(data){
-                    timestape = data.rows[0].timestap*1000;
-                    $('#gprice').html('￥'+data.rows[0].gprice);
-                    $('#goodsNameDiv').html(data.rows[0].goodsName);
-                    $('#minprice').html('￥'+data.rows[0].minprice);
-                    timegoing();
+                    if(data.rows!=null){
+                        timestape = data.rows[0].timestap*1000;
+                        $('#gprice').html('￥'+data.rows[0].gprice);
+                        $('#goodsNameDiv').html(data.rows[0].goodsName);
+                        $('#minprice').html('￥'+data.rows[0].minprice);
+                        timegoing();
+                    }else{
+                        nogoods();
+                    }
+
                 }
             });
         }
@@ -383,24 +420,194 @@
                 type:"post",
                 url:'/goods/queryGoodsById',
                 dataType: "json",
+                data:{gid:gid,isShow:1,isChecked:1},
+                success:function(data){
+                    var row = data.row;
+                    if(row!=null){
+                        var gproductioninperson = row.gproductioninperson;
+                        var gproductioninaddress = row.gproductioninaddress;
+                        var gpickperson = row.gpickperson;
+                        var gpickaddress = row.gpickaddress;
+                        if(gproductioninperson==''||gproductioninaddress==''||gpickperson==''||gpickaddress==''){
+                            $('#personaddressdiv').hide();
+                        }else{
+                            $('#gproductioninperson').html(gproductioninperson);
+                            $('#gproductioninaddress').html(gproductioninaddress);
+                            $('#gpickperson').html(gpickperson);
+                            $('#gpickaddress').html(gpickaddress);
+                        }
+                        $('#gdescription').html(row.gdescription);
+                    }else{
+                        nogoods();
+                    }
+                }
+            });
+        }
+
+        <!--加载商品配置-->
+        function loadgoodsconfig() {
+            $.ajax({
+                type:"post",
+                url:'/goodsConfig/queryGoodsConfigBygid',
+                dataType: "json",
+                data:{gid:gid,pageNo:1,pageSize:2},
+                success:function(data){
+                    var goodsConfig = data.goodsConfig;
+                    if(goodsConfig!=null){
+                        isServiceGoods = goodsConfig.isServicegoods;
+                        var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
+                        if(isServiceGoods==1){
+                            $('.showaddressfreigh').hide();
+                        }else{
+                            $('.showaddressfreigh').show();
+                        }
+                        if(isAllowsetdeliverytime==1){
+                            $('#open_time').show();
+                        }else{
+                            $('#open_time').hide();
+                        }
+                    }else{
+                        nogoods();
+                    }
+                }
+            });
+        }
+
+        <!--设置地址和运费-->
+        function setaddress(obj) {
+            var address = $(obj).prev().find('li[class=active]').find('div').html();
+            $('#open_address').html(address);
+            $.ajax({
+                type:"post",
+                url:'/city/queryCityListsByCityName',
+                dataType: "json",
+                data:{cityname:address.substr(0,2),pageNo:1,pageSize:2},
+                success:function(data){
+                    var row = data.row;
+                    if(row!=null){
+                        var gfreigh = row.gfreigh;
+                        $('#gfreigh').html(gfreigh+'元');
+                    }
+                }
+            });
+
+            document.getElementById('closeaddress').click();
+        }
+
+        <!--商品不存在 跳转页面-->
+        function nogoods() {
+            //window.location.href='';
+        }
+
+        <!--滚动加载商品评论-->
+        function scrollgoodsclm() {
+            $(document).ready(function(){
+                $('#usercommentdiv').html('');
+                var range = 50;             //距下边界长度/单位px
+                var totalheight = 0;
+                var main = $("#usercommentdiv");                     //主体元素
+                $(window).scroll(function(){
+                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+                    if(($(document).height()-range) <= totalheight ) {
+                        $.ajax({
+                            type:"post",
+                            url:'/goodsUggclrel/queryGoodsUggclrel',
+                            dataType: "json",
+                            async :false,
+                            data:{gid:gid,pageNo:pageNo,pageSize:pageSize},
+                            success:function(data){
+                                var html = '';
+                                var rows = data.rows;
+                                if(rows!=null&&rows.length>0){
+                                    for(var i=0;i<rows.length;i++){
+                                        var gcllevel = parseInt(rows[i].gcllevel);
+                                        var gclnames = rows[i].gclname.split(' ');
+                                        html = '<div class="user-evaluate ">'+
+                                            '<div class="box2">'+
+                                            '<img src="'+rows[i].imgurl+'" class="img" alt="">'+
+                                            '<div class="text">'+rows[i].uname+'</div>'+
+                                            '<div class="stars2">';
+
+                                        for(var j=0;j<gcllevel;j++){
+                                            html += '<i></i>';
+                                        }
+
+                                        html += '</div>'+
+                                            '</div>'+
+                                            '<div class="label2 box2">';
+
+                                        for(var j=0;j<gclnames.length;j++){
+                                            html += '<span>'+gclnames[j]+'</span>';
+                                        }
+                                        html += '</div>'+
+                                            '</div>';
+                                        main.append(html);
+                                    }
+                                    pageNo++;
+                                }else{
+                                    html = '<a >已全部加载</a>';
+                                    $('#nogoodscldiv').html(html);
+                                }
+                            }
+                        });
+
+                    }
+                });
+            });
+        }
+
+        <!--全部评论数量及平均分数-->
+        function sumgclandavglevel() {
+            $.ajax({
+                type:"post",
+                url:'/goodsUggclrel/queryGoodsclsumandavg',
+                dataType: "json",
+                async :false,
                 data:{gid:gid},
                 success:function(data){
                     var row = data.row;
-                    var gproductioninperson = row.gproductioninperson;
-                    var gproductioninaddress = row.gproductioninaddress;
-                    var gpickperson = row.gpickperson;
-                    var gpickaddress = row.gpickaddress;
-                    if(gproductioninperson==''||gproductioninaddress==''||gpickperson==''||gpickaddress==''){
-                        $('#personaddressdiv').hide();
-                    }else{
-                        $('#gproductioninperson').html(gproductioninperson);
-                        $('#gproductioninaddress').html(gproductioninaddress);
-                        $('#gpickperson').html(gpickperson);
-                        $('#gpickaddress').html(gpickaddress);
+                    if(row!=null){
+                        $('#sumgclsspan').html('全部评论（'+row.sumgcl+'）');
+                        var avglevel = Math.round(row.avglevel);
+                        $('#avgleveldiv').html('');
+                        for(var i=0;i<avglevel;i++){
+                            var html = '<i></i>';
+                            $('#avgleveldiv').append(html);
+                        }
                     }
-                    $('#gdescription').html(row.gdescription);
                 }
             });
+        }
+
+        <!--加载已有评论-->
+        function loadhasgcl() {
+            $.ajax({
+                type:"post",
+                url:'/goodsUggclrel/queryHasGoodscls',
+                dataType: "json",
+                async :false,
+                data:{gid:gid},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        $('#singlegcldiv').html(html);
+                        for(var i=0;i<rows.length;i++){
+                            html = '<span>'+rows[i].gclname+'('+rows[i].siglegclsum+')</span>';
+                            $('#singlegcldiv').append(html);
+                        }
+                    }
+
+                }
+            });
+        }
+
+        <!--点击规格加载信息-->
+        function clickactive(obj) {
+            $(obj).siblings().removeClass('active');
+            $(obj).addClass('active');
         }
 
         <!--日期格式化-->
@@ -456,6 +663,7 @@
         })
     </script>
 
+    <!--初始化页面调用函数-->
     <script>
         <!--加载图片-->
         loadgoodsimage();
@@ -465,6 +673,18 @@
 
         <!--加载生产人采摘人信息-->
         loadpersonaddress();
+
+        <!--加载配置信息-->
+        loadgoodsconfig();
+
+        <!--滚动加载商品评论-->
+        scrollgoodsclm();
+
+        <!--全部评论数量及平均分数-->
+        sumgclandavglevel();
+
+        <!--加载已有评论-->
+        loadhasgcl();
     </script>
 
     <script>
@@ -472,37 +692,6 @@
             <!--图片懒加载-->
             $("img").lazyload({effect: "fadeIn"});
         });
-    </script>
-
-    <!--时间减少-->
-    <script>
-        var timestape = 0;
-        function timegoing() {
-            var interval = setInterval(function () {
-                var date = new Date(timestape);
-                var shi1 = Math.floor((date.getHours()-8)/10);
-                var shi2 = Math.floor((date.getHours()-8)%10);
-                var fen1 = Math.floor(date.getMinutes()/10);
-                var fen2 = Math.floor(date.getMinutes()%10);
-                var miao1 = Math.floor(date.getSeconds()/10);
-                var miao2 = Math.floor(date.getSeconds()%10);
-
-                $('#shi1').html(shi1);
-                $('#shi2').html(shi2);
-                $('#fen1').html(fen1);
-                $('#fen2').html(fen2);
-                $('#miao1').html(miao1);
-                $('#miao2').html(miao2);
-
-                timestape -= 1000;
-                if(timestape<0){
-                    clearInterval(interval);
-//                $('#shi1').parent().parent().next().remove();
-//                $('#shi1').parent().parent().remove();
-                }
-            },1000);
-        }
-
     </script>
 
     <script>

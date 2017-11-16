@@ -2,10 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.retailers.dht.common.dao.CityMapper">
 
-	<resultMap id="rm_city" type="com.retailers.dht.common.entity.City">
+	<resultMap id="rm_city" type="com.retailers.dht.common.vo.CityVo">
 			<result property="cityid" column="CITYID"/>
 			<result property="cityname" column="CITYNAME"/>
 			<result property="parentid" column="PARENTID"/>
+			<result property="gfreigh" column="gfreigh"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -21,20 +22,21 @@
 	<sql id="city_where">
 		<where>
 			<if test="null != params.cityid">
-				AND CITYID = #{params.cityid}
+				AND t1.CITYID = #{params.cityid}
 			</if>
 			<if test="null != params.cityname and '' != params.cityname">
-				AND CITYNAME = #{params.cityname}
+				AND t1.CITYNAME like concat('%', #{params.cityname} ,'%')
 			</if>
 			<if test="null != params.parentid">
-				AND PARENTID = #{params.parentid}
+				AND t1.PARENTID = #{params.parentid}
 			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
 	<select id="queryCityList" resultMap="rm_city" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="city_columns" />
-		FROM t_city
+		SELECT t1.*,t3.gf_price gfreigh from t_city t1
+		LEFT JOIN t_goods_cgfrel t2 ON t1.CITYID=t2.c_id and t2.is_delete!=1
+		LEFT JOIN t_goods_freight t3 ON t2.gf_id=t3.gf_id and t3.is_delete!=1
 		<include refid="city_where"/>
 	</select>
 	<!--添加城市表 -->
