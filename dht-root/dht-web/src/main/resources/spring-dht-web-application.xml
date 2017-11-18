@@ -17,11 +17,11 @@
     <!-- aop 自定义注删使用有效不加则不会生效 -->
     <aop:aspectj-autoproxy/>
     <!-- 扫描文件（自动将servicec层注入） -->
-    <context:component-scan base-package="com.retailers.dht.web.controller,com.retailers.dht.common.service">
+    <context:component-scan base-package="com.retailers.dht.common.service">
         <!--将注解Service的类都注册为java bean容器中的bean-->
-        <!--<context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />-->
-<!--        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController" />-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
     </context:component-scan>
     <!-- mybatis 配置文件 -->
     <import resource="classpath:spring-mybatis.xml"/>

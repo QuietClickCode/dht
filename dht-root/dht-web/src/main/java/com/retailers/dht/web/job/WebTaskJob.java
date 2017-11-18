@@ -9,10 +9,6 @@ import org.springframework.stereotype.Service;
  */
 @Service("webTaskJob")
 public class WebTaskJob {
-    @Autowired
-    private ExecuteQueueService executeQueueService;
     public void init(){
-        executeQueueService.addHistoryExecuteQueue(null);
-        System.out.println("init==================================================================");
     }
 }
