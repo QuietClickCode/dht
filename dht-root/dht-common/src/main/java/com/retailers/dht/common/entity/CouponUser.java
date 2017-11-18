@@ -23,6 +23,8 @@ public class CouponUser implements java.io.Serializable {
 	/**领取优惠卷用户id*/
 	@NotEmpty
 	private Long cpuUid;
+	/**cpu_val**/
+	private long cpuVal;
 	/**优惠卷所处状态（0 未使用，1 己使用，2 己过期）*/
 	@NotEmpty
 	private Long cpuStatus;
@@ -63,6 +65,14 @@ public class CouponUser implements java.io.Serializable {
 	}
 	public void setCpuCycleId(Integer value) {
 		this.cpuCycleId = value;
+	}
+
+	public long getCpuVal() {
+		return cpuVal;
+	}
+
+	public void setCpuVal(long cpuVal) {
+		this.cpuVal = cpuVal;
 	}
 
 	public Integer getCpuCycleId() {

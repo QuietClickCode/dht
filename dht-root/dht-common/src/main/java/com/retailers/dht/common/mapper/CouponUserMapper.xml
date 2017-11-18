@@ -7,6 +7,7 @@
 			<result property="cpId" column="cp_id"/>
 			<result property="cpuCycleId" column="cpu_cycle_id"/>
 			<result property="cpuUid" column="cpu_uid"/>
+			<result property="cpuVal" column="cpu_val"/>
 			<result property="cpuStatus" column="cpu_status"/>
 			<result property="cpuCreateTime" column="cpu_create_time"/>
 			<result property="cpuUseTime" column="cpu_use_time"/>
@@ -16,7 +17,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="couponUser_columns">
-		cpu_id,cp_id,cpu_cycle_id,cpu_uid,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
+		cpu_id,cp_id,cpu_cycle_id,cpu_uid,cpu_val,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
 	</sql>
 	<!-- 根据用户优惠卷领取记录主键取得数据 -->
 	<select id="queryCouponUserByCpuId" resultMap="rm_couponUser" parameterType="java.lang.Long">
@@ -70,10 +71,10 @@
 	<!--添加用户优惠卷领取记录 -->
 	<insert id="saveCouponUser" parameterType="com.retailers.dht.common.entity.CouponUser" useGeneratedKeys="true" keyProperty="cpuId">
 		INSERT INTO t_coupon_user (
-			cp_id,cpu_cycle_id,cpu_uid,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
+			cp_id,cpu_cycle_id,cpu_uid,cpu_val,cpu_status,cpu_create_time,cpu_use_time,cpu_use_oid,version
 		) VALUES
 		(
-			#{cpId,jdbcType=BIGINT},#{cpuCycleId,jdbcType=INTEGER},#{cpuUid,jdbcType=BIGINT},#{cpuStatus,jdbcType=BIGINT},#{cpuCreateTime,jdbcType=TIMESTAMP},#{cpuUseTime,jdbcType=TIMESTAMP},#{cpuUseOid,jdbcType=BIGINT},0
+			#{cpId,jdbcType=BIGINT},#{cpuCycleId,jdbcType=INTEGER},#{cpuUid,jdbcType=BIGINT},#{cpuVal,jdbcType=BIGINT},#{cpuStatus,jdbcType=BIGINT},#{cpuCreateTime,jdbcType=TIMESTAMP},#{cpuUseTime,jdbcType=TIMESTAMP},#{cpuUseOid,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改用户优惠卷领取记录 -->
@@ -89,6 +90,9 @@
             <if test="null != cpuUid">
                 cpu_uid = #{cpuUid},
             </if>
+			<if test="null != cpuVal">
+				cpu_val = #{cpuVal},
+			</if>
             <if test="null != cpuStatus">
                 cpu_status = #{cpuStatus},
             </if>

@@ -67,6 +67,30 @@
 		<result property="isValid" column="is_valid"/>
 		<result property="version" column="version"/>
 	</resultMap>
+
+	<resultMap id="rm_coupon_web_vo" type="com.retailers.dht.common.vo.CouponWebVo">
+		<result property="cpId" column="cp_id"/>
+		<result property="cpName" column="cp_name"/>
+		<result property="cpCoinType" column="cp_coin_type"/>
+		<result property="cpType" column="cp_type"/>
+		<result property="cpLogoUrl" column="show_url"/>
+		<result property="cpIsRestricted" column="cp_is_restricted"/>
+		<result property="cpReceiveCondition" column="cp_receive_condition"/>
+		<result property="cpUseCondition" column="cp_use_condition"/>
+		<result property="cpStartDate" column="cp_start_date"/>
+		<result property="cpEndDate" column="cp_end_date"/>
+		<result property="cpIsOverlapUse" column="cp_is_overlap_use"/>
+		<result property="cpIsFirst" column="cp_is_first"/>
+		<result property="cpSendStartDate" column="cp_send_start_date"/>
+		<result property="cpSendEndDate" column="cp_send_end_date"/>
+		<result property="cpNum" column="cp_num"/>
+		<result property="cpSurplusNum" column="cp_surplus_num"/>
+		<result property="cpMinDiscount" column="cp_min_discount"/>
+		<result property="cpMaxDiscount" column="cp_max_discount"/>
+		<result property="couponVal" column="couponVal"/>
+		<result property="useCondition" column="useCondition"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="coupon_columns">
 		cp_id,cp_name,cp_coin_type,cp_type,cp_logo,cp_is_restricted,cp_receive_condition,cp_use_condition,cp_start_date,cp_end_date,cp_is_overlap_use,cp_is_first,cp_send_way,cp_send_start_date,
@@ -314,15 +338,48 @@
 
 
 	<!--取得当前有效的优惠卷列表 -->
-	<select id="queryCurValidCoupon" resultMap="rm_coupon" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="queryCurValidCoupon" resultMap="rm_coupon_web_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
-			c.*, a.show_url
+			c.cp_id,
+			c.cp_name,
+			c.cp_coin_type,
+			c.cp_type,
+			c.cp_is_restricted,
+			c.cp_receive_condition,
+			c.cp_use_condition,
+			c.cp_start_date,
+			c.cp_end_date,
+			c.cp_is_overlap_use,
+			c.cp_is_first,
+			c.cp_send_start_date,
+			c.cp_send_end_date,
+			c.cp_num,
+			c.cp_surplus_num,
+			c.cp_min_discount,
+			c.cp_max_discount,
+			CONCAT(
+			'满',
+			ROUND(c.cp_use_condition / 100, 2),
+			'可用'
+			) useCondition,
+			CASE
+			WHEN c.cp_end_date IS NULL THEN
+			'长期有效'
+			ELSE
+			DATE_FORMAT(c.cp_end_date, '%Y-%m-%d')
+			END userTime,
+			CASE
+			WHEN cp_type = 0 THEN
+			ROUND(c.cp_money / 100, 2)
+			WHEN cp_type = 1 THEN
+			ROUND(c.cp_discount / 100, 2)
+			END couponVal,
+			a.show_url
 		FROM
 			t_coupon c
 			LEFT JOIN t_attachment a ON c.cp_logo = a.id
 			<if test="null != params.uid">
-				LEFT JOIN t_coupon_user u ON c.cp_id = u.cp_id
-				AND u.cpu_uid = - 1
+				LEFT JOIN t_coupon_user u ON c.cp_id = u.cp_id 	AND u.cpu_uid =#{params.uid}
 			</if>
 		WHERE
 			(
@@ -336,6 +393,7 @@
 			<if test="null != params.uid">
 				AND u.cpu_id IS NULL
 			</if>
+			order BY cp_end_date DESC,cp_id asc
 	</select>
 	<!--减小优惠卷剩余数量 -->
 	<update id="reduceCouponNum">

@@ -50,6 +50,7 @@ public class ExecuteQueueServiceImpl implements ExecuteQueueService {
 	}
 	@Async
 	public void addHistoryExecuteQueue(ExecuteQueue executeQueue) {
+		System.out.println("addHistoryExecuteQueue------------------------------------->>");
 		try{
 			Thread.sleep(1000*3);
 		}catch (Exception e){

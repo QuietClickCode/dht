@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
@@ -48,7 +49,7 @@ public class CouponController extends BaseController{
     public BaseResp couponList(HttpServletRequest request,PageUtils pageForm){
         Long uid=getCurLoginUserId(request);
         try{
-           List<Coupon> lists= couponService.queryCouponList(uid,pageForm.getPageNo(),pageForm.getPageSize());
+           List<CouponWebVo> lists= couponService.queryCouponList(uid,pageForm.getPageNo(),pageForm.getPageSize());
             return success(lists);
         }catch(AppException e){
             e.printStackTrace();

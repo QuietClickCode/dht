@@ -3,11 +3,9 @@ package com.retailers.dht.common.service.impl;
 import java.util.*;
 
 import com.alibaba.fastjson.JSON;
-import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
-import com.retailers.auth.annotation.SystemAopLog;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.ExecuteQueueConstant;
-import com.retailers.dht.common.constant.GoodsCouponConstant;
 import com.retailers.dht.common.dao.CouponUserMapper;
 import com.retailers.dht.common.dao.ExecuteQueueMapper;
 import com.retailers.dht.common.entity.Coupon;
@@ -19,7 +17,9 @@ import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -98,11 +98,10 @@ public class CouponServiceImpl implements CouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	@SystemAopLog(name="============================>>>")
-	public List<Coupon> queryCouponList(Long uid,int pageNo, int pageSize) throws AppException {
+	public List<CouponWebVo> queryCouponList(Long uid, int pageNo, int pageSize) throws AppException {
 		Map<String,Object> params=new HashMap<String, Object>();
 		params.put("uid",uid);
-		Pagination<CouponShowVo> page = new Pagination<CouponShowVo>();
+		Pagination<CouponWebVo> page = new Pagination<CouponWebVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
@@ -128,6 +127,7 @@ public class CouponServiceImpl implements CouponService {
 			eq.setSeqExeId(cpId+"");
 			eq.setSeqStatus(SystemConstant.FAIL);
 			executeQueueMapper.saveExecuteQueue(eq);
+
 			Coupon coupon=couponMapper.queryCouponByCpId(cpId);
 			if(ObjectUtils.isEmpty(coupon)){
 				throw new AppException("优惠卷不存在");
@@ -137,6 +137,19 @@ public class CouponServiceImpl implements CouponService {
 			checkCoupon(coupon,userId);
 			//设置用户获得优惠卷
 			CouponUser cu = new CouponUser();
+			//判断优惠卷类型
+			if(coupon.getCpCoinType().intValue()== CouponConstant.CP_COIN_TYPE_FIXED){
+				if(coupon.getCpCoinType().intValue()==CouponConstant.GCP_TYPE_MONEY){
+					cu.setCpuVal(coupon.getCpMoney());
+				}else{
+					cu.setCpuVal(coupon.getCpDiscount());
+				}
+			}else if(coupon.getCpCoinType().intValue()==CouponConstant.CP_COIN_TYPE_RAND){
+				if(coupon.getCpCoinType().intValue()==CouponConstant.GCP_TYPE_DISCOUNT){
+					long discount= NumberUtils.randomNumber(coupon.getCpMinDiscount().intValue(),coupon.getCpMaxDiscount().intValue());
+					cu.setCpuVal(discount);
+				}
+			}
 			cu.setCpId(coupon.getCpId());
 			cu.setCpuCycleId(0);
 			cu.setCpuUid(userId);

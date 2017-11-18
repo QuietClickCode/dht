@@ -41,7 +41,7 @@ public class WriteData {
 	}
 	public static void writeObject(int status,String msg,Object object,HttpServletResponse response) {
 		JSONObject json = new JSONObject();
-		json.put("status", status + "");
+		json.put("status", status);
 		json.put("msg", msg);
 		if (null == object) {
 			json.put("data", new JSONObject());

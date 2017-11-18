@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -58,7 +59,7 @@ public interface CouponMapper {
 	 * @param pagination
 	 * @return
 	 */
-	public List<Coupon> queryCurValidCoupon(Pagination<CouponShowVo> pagination);
+	public List<CouponWebVo> queryCurValidCoupon(Pagination<CouponWebVo> pagination);
 
 	/**
 	 * 减小优惠卷剩余数量

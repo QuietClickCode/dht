@@ -6,7 +6,16 @@ package com.retailers.dht.common.constant;
  * @version 1.0.1
  * @data 2017/10/9
  */
-public class GoodsCouponConstant {
+public class CouponConstant {
+    /**
+     * 优惠卷金额类型 0 固定金额
+     */
+    public static final int CP_COIN_TYPE_FIXED =0;
+    /**
+     * 优惠卷金额类型 1 随机金额
+     */
+    public static final int CP_COIN_TYPE_RAND=1;
+
     /**
      * 商品优惠活动类型 代金卷
      */

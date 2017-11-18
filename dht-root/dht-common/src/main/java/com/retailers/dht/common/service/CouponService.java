@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.tools.exception.AppException;
@@ -65,7 +66,7 @@ public interface CouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	public List<Coupon> queryCouponList(Long uid,int pageNo, int pageSize)throws AppException;
+	public List<CouponWebVo> queryCouponList(Long uid, int pageNo, int pageSize)throws AppException;
 
 	/**
 	 * 抢夺优惠卷

@@ -51,7 +51,7 @@
         </ul>
     </div>
     <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/coupon/coupon.js"></script>
+    <script src="/js/layer_mobile/layer.js"></script>
     <script>
         function queryCoupon(pageNo,pageSize){
             $("#couponLists").html("");
@@ -75,7 +75,48 @@
         $(function () {
             queryCoupon(1,10);
         })
-    </script>
 
+        /**
+         * 展示优惠卷
+         * @param couponId 元素id
+         * @param row 行数据
+         */
+        function showCoupon(couponId,row) {
+            let html='<li><a href="javascript:void(0)"><div class="coupon_item_box clearfix">';
+            if(row.cpType==0){
+                html+='<div class="item_box_left">'+row.couponVal+'<span>￥</span></div>';
+            }else {
+                html+='<div class="item_box_left">'+row.couponVal+'<span>折</span></div>';
+            }
+            html+='<div class="item_box_right"><p class="term">'+row.useCondition+'</p>';
+            html+='<p class="time">'+row.userTime+'</p></div></div><p class="p1">服装类商品通用</p>';
+            html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即使用</span></a></li>';
+            $(couponId).append(html);
+        }
+        /**
+         * 领取优惠卷
+         * @param id 优惠卷id
+         */
+        function userGrabCoupon(id){
+            $.ajax({
+                type:"post",
+                url:'/coupon/userGrabCoupon',
+                dataType: "json",
+                data:{cpId:id},
+                success:function(data){
+                    if(data.status==3){
+                        //提示
+                        layer.open({
+                            content: data.msg,
+                            skin: 'msg',
+                            time: 2 //2秒后自动关闭
+                        });
+                    }else if(data.status==0){
+                        queryCoupon(1,10);
+                    }
+                }
+            });
+        }
+    </script>
 </body>
 </html>
