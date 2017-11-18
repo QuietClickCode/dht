@@ -139,13 +139,13 @@ public class CouponServiceImpl implements CouponService {
 			CouponUser cu = new CouponUser();
 			//判断优惠卷类型
 			if(coupon.getCpCoinType().intValue()== CouponConstant.CP_COIN_TYPE_FIXED){
-				if(coupon.getCpCoinType().intValue()==CouponConstant.GCP_TYPE_MONEY){
+				if(coupon.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
 					cu.setCpuVal(coupon.getCpMoney());
 				}else{
 					cu.setCpuVal(coupon.getCpDiscount());
 				}
 			}else if(coupon.getCpCoinType().intValue()==CouponConstant.CP_COIN_TYPE_RAND){
-				if(coupon.getCpCoinType().intValue()==CouponConstant.GCP_TYPE_DISCOUNT){
+				if(coupon.getCpType().intValue()==CouponConstant.GCP_TYPE_DISCOUNT){
 					long discount= NumberUtils.randomNumber(coupon.getCpMinDiscount().intValue(),coupon.getCpMaxDiscount().intValue());
 					cu.setCpuVal(discount);
 				}
@@ -169,6 +169,7 @@ public class CouponServiceImpl implements CouponService {
 			eq.setSeqRemark(e.getMessage());
 			throw new AppException("请求正在执行，请不要重复提交");
 		}catch (Exception e){
+			e.printStackTrace();
 			eq.setSeqRemark(e.getMessage());
 			throw new AppException(e.getMessage());
 		}finally {

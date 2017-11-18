@@ -56,13 +56,14 @@ public class ExecuteQueueServiceImpl implements ExecuteQueueService {
 		}catch (Exception e){
 
 		}
-		if(ObjectUtils.isNotEmpty(executeQueue.getId())){
-			deleteExecuteQueueById(executeQueue.getId());
-		}
-		if(ObjectUtils.isNotEmpty(executeQueue.getSeqRemark())&&executeQueue.getSeqRemark().length()>800){
-			executeQueue.setSeqRemark(executeQueue.getSeqRemark().substring(0,800));
-		}
-		executeQueueMapper.saveExecuteQueueHistory(executeQueue);
+//		if(ObjectUtils.isNotEmpty(executeQueue.getId())){
+//			deleteExecuteQueueById(executeQueue.getId());
+//		}
+//		if(ObjectUtils.isNotEmpty(executeQueue.getSeqRemark())&&executeQueue.getSeqRemark().length()>800){
+//			executeQueue.setSeqRemark(executeQueue.getSeqRemark().substring(0,800));
+//		}
+//		executeQueueMapper.saveExecuteQueueHistory(executeQueue);
+		System.out.println("执行完毕------------------------------------->>");
 	}
 }
 
