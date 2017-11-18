@@ -47,12 +47,12 @@
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
     </context:component-scan>
     <!-- 排除掉service 扫描 -->
-    <context:component-scan base-package="com.retailers.dht.common.service">
-        <!--将注解Service的类都注册为java bean容器中的bean-->
+<!--    <context:component-scan base-package="com.retailers.dht.common.service">
+        &lt;!&ndash;将注解Service的类都注册为java bean容器中的bean&ndash;&gt;
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
         <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Component" />
-    </context:component-scan>
+    </context:component-scan>-->
 
     <!-- 上传配置 -->
     <bean id="multipartResolver"
