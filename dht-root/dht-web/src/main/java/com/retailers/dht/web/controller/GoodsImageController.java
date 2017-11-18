@@ -1,19 +1,15 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.auth.annotation.Function;
-import com.retailers.dht.common.entity.GoodsImage;
 import com.retailers.dht.common.service.GoodsImageService;
 import com.retailers.dht.common.vo.GoodsImageVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 

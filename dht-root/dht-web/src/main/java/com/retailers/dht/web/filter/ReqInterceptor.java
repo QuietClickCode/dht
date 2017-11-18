@@ -31,7 +31,6 @@ public class ReqInterceptor implements HandlerInterceptor {
 
     //reqLog
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
-        logger.info("进入拦截------------------------------>"+req.getRequestURI());
         req.setAttribute("sysManagerReqTime", new Date());
         String userAgent = req.getHeader( "USER-AGENT" ).toLowerCase();
         if(null == userAgent){

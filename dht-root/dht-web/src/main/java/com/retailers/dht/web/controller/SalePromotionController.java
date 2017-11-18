@@ -1,15 +1,10 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.auth.annotation.Function;
-import com.retailers.auth.annotation.Menu;
-import com.retailers.dht.common.entity.SalePromotion;
 import com.retailers.dht.common.service.SalePromotionService;
 import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
-import org.omg.CORBA.ObjectHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +13,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
