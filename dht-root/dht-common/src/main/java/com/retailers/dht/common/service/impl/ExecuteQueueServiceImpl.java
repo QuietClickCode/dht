@@ -8,6 +8,8 @@ import com.retailers.dht.common.entity.ExecuteQueue;
 import com.retailers.dht.common.dao.ExecuteQueueMapper;
 import com.retailers.dht.common.service.ExecuteQueueService;
 import com.retailers.tools.utils.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import com.retailers.mybatis.pagination.Pagination;
  */
 @Service("executequeueService")
 public class ExecuteQueueServiceImpl implements ExecuteQueueService {
+	Logger logger = LoggerFactory.getLogger(ExecuteQueueServiceImpl.class);
 	@Autowired
 	private ExecuteQueueMapper executeQueueMapper;
 	public boolean saveExecuteQueue(ExecuteQueue executeQueue) {
@@ -50,20 +53,19 @@ public class ExecuteQueueServiceImpl implements ExecuteQueueService {
 	}
 	@Async
 	public void addHistoryExecuteQueue(ExecuteQueue executeQueue) {
-		System.out.println("addHistoryExecuteQueue------------------------------------->>");
+		logger.info("将请求队列移动至历史开始");
 		try{
 			Thread.sleep(1000*3);
 		}catch (Exception e){
-
 		}
-//		if(ObjectUtils.isNotEmpty(executeQueue.getId())){
-//			deleteExecuteQueueById(executeQueue.getId());
-//		}
-//		if(ObjectUtils.isNotEmpty(executeQueue.getSeqRemark())&&executeQueue.getSeqRemark().length()>800){
-//			executeQueue.setSeqRemark(executeQueue.getSeqRemark().substring(0,800));
-//		}
-//		executeQueueMapper.saveExecuteQueueHistory(executeQueue);
-		System.out.println("执行完毕------------------------------------->>");
+		if(ObjectUtils.isNotEmpty(executeQueue.getId())){
+			deleteExecuteQueueById(executeQueue.getId());
+		}
+		if(ObjectUtils.isNotEmpty(executeQueue.getSeqRemark())&&executeQueue.getSeqRemark().length()>800){
+			executeQueue.setSeqRemark(executeQueue.getSeqRemark().substring(0,800));
+		}
+		executeQueueMapper.saveExecuteQueueHistory(executeQueue);
+		logger.info("将请求队列移动至历史结束");
 	}
 }
 

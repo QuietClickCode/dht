@@ -74,6 +74,17 @@
         }
         $(function () {
             queryCoupon(1,10);
+
+
+            $.ajax({
+                type:"post",
+                url:'/coupon/webAsyncTask',
+                dataType: "json",
+                success:function(data){
+                    console.log(data)
+                }
+            });
+
         })
 
         /**
@@ -83,14 +94,22 @@
          */
         function showCoupon(couponId,row) {
             let html='<li><a href="javascript:void(0)"><div class="coupon_item_box clearfix">';
-            if(row.cpType==0){
-                html+='<div class="item_box_left">'+row.couponVal+'<span>￥</span></div>';
-            }else {
-                html+='<div class="item_box_left">'+row.couponVal+'<span>折</span></div>';
+            if(row.cpCoinType==0){
+                if(row.cpType==0){
+                    html+='<div class="item_box_left">'+row.couponVal+'<span>￥</span></div>';
+                }else {
+                    html+='<div class="item_box_left">'+row.couponVal+'<span>折</span></div>';
+                }
+            }else{
+                if(row.cpType==0){
+                    html+='<div class="item_box_left"><span>拼手气代金</span></div>';
+                }else {
+                    html+='<div class="item_box_left"><span>拼手气折扣</span></div>';
+                }
             }
             html+='<div class="item_box_right"><p class="term">'+row.useCondition+'</p>';
             html+='<p class="time">'+row.userTime+'</p></div></div><p class="p1">服装类商品通用</p>';
-            html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即使用</span></a></li>';
+            html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即领取</span></a></li>';
             $(couponId).append(html);
         }
         /**
@@ -98,22 +117,30 @@
          * @param id 优惠卷id
          */
         function userGrabCoupon(id){
+            //loading带文字
+            let curIndex = layer.open({
+                type: 2,
+                shadeClose:false,
+                content: '努力抢夺中…………'
+            });
             $.ajax({
                 type:"post",
                 url:'/coupon/userGrabCoupon',
                 dataType: "json",
                 data:{cpId:id},
                 success:function(data){
-                    if(data.status==3){
-                        //提示
-                        layer.open({
-                            content: data.msg,
-                            skin: 'msg',
-                            time: 2 //2秒后自动关闭
-                        });
-                    }else if(data.status==0){
+                    layer.close(curIndex);
+                    let msg = data.msg;
+                   if(data.status==0){
                         queryCoupon(1,10);
+                       msg='领取成功';
                     }
+                    //提示
+                    layer.open({
+                        content: msg,
+                        skin: 'msg',
+                        time: 2 //2秒后自动关闭
+                    });
                 }
             });
         }

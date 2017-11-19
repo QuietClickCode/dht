@@ -10,5 +10,6 @@ import org.springframework.stereotype.Service;
 @Service("webTaskJob")
 public class WebTaskJob {
     public void init(){
+        System.out.println("init==================================================================");
     }
 }
