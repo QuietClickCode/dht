@@ -43,8 +43,7 @@ public class CheckPermissionTag extends SimpleTagSupport {
                 if(obj.getUaccount().equals("admin")){
                     getJspBody().invoke(sw);
                     getJspContext().getOut().println(sw.toString());
-                }
-                if(CheckUserPermissionUtils.permUrl.containsKey(obj.getUid())&&CheckUserPermissionUtils.permUrl.get(obj.getUid()).containsKey(url)){
+                }else if(CheckUserPermissionUtils.permUrl.containsKey(obj.getUid())&&CheckUserPermissionUtils.permUrl.get(obj.getUid()).containsKey(url)){
                     getJspBody().invoke(sw);
                     getJspContext().getOut().println(sw.toString());
                 }

@@ -23,5 +23,6 @@ public class SystemStartFilter {
     public void initSysParamterConfig(){
         long time = System.currentTimeMillis();
         sysParameterConfigService.initSysParamter();
+        System.out.println("initSysParamterConfig------------------------------------------------>:");
     }
 }

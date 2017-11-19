@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,27 @@ public class CouponServiceTest extends TestBaseJunit {
         Long uid=-1l;
         int pageNo=1;
         int pageSize=10;
-        List<Coupon> lists=couponService.queryCouponList(uid,pageNo,pageSize);
+        List<CouponWebVo> lists=couponService.queryCouponList(uid,pageNo,pageSize);
         System.out.println(JSON.toJSON(lists));
     }
+
+    @Test
+    public void userGrabCoupon()throws Exception{
+        for(int i=0;i<2;i++){
+            new Thread(new Runnable() {
+                public void run() {
+                    long cpid=6;
+                    long uid=1;
+                    try{
+                        couponService.userGrabCoupon(uid,cpid);
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+
+                }
+            }).start();
+        }
+        Thread.sleep(1000*30);
+    }
+
 }

@@ -1,8 +1,5 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.dht.common.entity.GoodsConfig;
-import com.retailers.dht.common.entity.GoodsUggclrel;
-import com.retailers.dht.common.service.GoodsConfigService;
 import com.retailers.dht.common.service.GoodsUggclrelService;
 import com.retailers.dht.common.vo.GoodsUggclrelVo;
 import com.retailers.dht.web.base.BaseController;

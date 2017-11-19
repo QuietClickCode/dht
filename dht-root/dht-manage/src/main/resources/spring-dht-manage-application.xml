@@ -14,8 +14,8 @@
     <context:component-scan base-package="com.retailers.dht.common.service">
         <!--将注解Service的类都注册为java bean容器中的bean-->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
-<!--        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController" />-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
     </context:component-scan>
     <!-- mybatis 配置文件 -->
     <import resource="classpath:spring-mybatis.xml" />

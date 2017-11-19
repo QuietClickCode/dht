@@ -11,6 +11,7 @@ import com.retailers.dht.common.dao.SysParameterConfigMapper;
 import com.retailers.dht.common.service.SysParameterConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -52,6 +53,7 @@ public class SysParameterConfigServiceImpl implements SysParameterConfigService 
 	/**
 	 * 初始化系统参数
 	 */
+	@Async
 	public void initSysParamter() {
 		long cur=System.currentTimeMillis();
 		logger.info("初始化系统参数开始[{}]",cur);

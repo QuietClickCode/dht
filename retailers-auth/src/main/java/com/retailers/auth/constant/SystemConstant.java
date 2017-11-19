@@ -28,4 +28,12 @@ public class SystemConstant {
      * 后台职工默认密码
      */
     public static final String SYS_USER_DEFAULT_PASSWORD="123456";
+    /**
+     * 成功
+     */
+    public static final int SUCCESS=0;
+    /**
+     * 失败
+     */
+    public static final int FAIL=1;
 }

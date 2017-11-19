@@ -1,11 +1,9 @@
 package com.retailers.dht.manage.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.auth.vo.SysUserVo;
-import com.retailers.dht.common.constant.GoodsCouponConstant;
+import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.GoodsCouponVo;
@@ -13,7 +11,6 @@ import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
-import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.BeanUtils;
@@ -138,20 +135,20 @@ public class GoodsCouponController extends BaseController{
      */
     private void validateParams(GoodsCouponVo goodsCoupon)throws AppException{
         validateForm(goodsCoupon);
-        if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_MONEY){
+        if(goodsCoupon.getGcpType().intValue()== CouponConstant.GCP_TYPE_MONEY){
             if(ObjectUtils.isEmpty(goodsCoupon.getGcpMoney())){
                 throw new AppException("优惠活动为代金卷时优惠金额不能为空");
             }
             goodsCoupon.setGcpDiscount(null);
         }
-        if(goodsCoupon.getGcpType().intValue()== GoodsCouponConstant.GCP_TYPE_DISCOUNT){
+        if(goodsCoupon.getGcpType().intValue()== CouponConstant.GCP_TYPE_DISCOUNT){
             if(ObjectUtils.isEmpty(goodsCoupon.getGcpDiscount())){
                 throw new AppException("优惠活动为折扣卷时折扣额不能为空");
             }
             goodsCoupon.setGcpMoney(null);
         }
         //包邮时清除金额以及折扣卷值
-        if(goodsCoupon.getGcpType().intValue()==GoodsCouponConstant.GCP_TYPE_FREE_SHIPPING){
+        if(goodsCoupon.getGcpType().intValue()== CouponConstant.GCP_TYPE_FREE_SHIPPING){
             goodsCoupon.setGcpDiscount(null);
             goodsCoupon.setGcpMoney(null);
         }

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.ExecuteQueueMapper">
+
+	<resultMap id="rm_executeQueue" type="com.retailers.dht.common.entity.ExecuteQueue">
+			<result property="id" column="id"/>
+			<result property="seqType" column="seq_type"/>
+			<result property="seqUid" column="seq_uid"/>
+			<result property="seqExeId" column="seq_exe_id"/>
+			<result property="seqParams" column="seq_params"/>
+			<result property="seqCreateTime" column="seq_create_time"/>
+			<result property="seqExeTime" column="seq_exe_time"/>
+			<result property="seqTime" column="seq_time"/>
+			<result property="seqWaitTime" column="seq_wait_time"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="executeQueue_columns">
+		id,seq_type,seq_uid,seq_exe_id,seq_params,seq_create_time,seq_exe_time,seq_time,seq_wait_time,version
+	</sql>
+	<!-- 根据执行队列主键取得数据 -->
+	<select id="queryExecuteQueueById" resultMap="rm_executeQueue" parameterType="java.lang.Long">
+		SELECT <include refid="executeQueue_columns" />
+		FROM t_execute_queue WHERE id = #{id}
+	</select>
+	<!-- 执行队列查询条件组合 -->
+	<sql id="executeQueue_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.seqType">
+				AND seq_type = #{params.seqType}
+			</if>
+			<if test="null != params.seqUid">
+				AND seq_uid = #{params.seqUid}
+			</if>
+			<if test="null != params.seqExeId and '' != params.seqExeId">
+				AND seq_exe_id = #{params.seqExeId}
+			</if>
+			<if test="null != params.seqParams and '' != params.seqParams">
+				AND seq_params = #{params.seqParams}
+			</if>
+			<if test="null != params.seqCreateTimeBegin">
+				AND seq_create_time &gt;= TO_DATE('${params.seqCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.seqCreateTimeEnd">
+				AND seq_create_time &lt;= TO_DATE('${params.seqCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.seqExeTimeBegin">
+				AND seq_exe_time &gt;= TO_DATE('${params.seqExeTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.seqExeTimeEnd">
+				AND seq_exe_time &lt;= TO_DATE('${params.seqExeTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.seqWaitTime">
+				AND seq_wait_time = #{params.seqWaitTime}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryExecuteQueueList" resultMap="rm_executeQueue" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="executeQueue_columns" />
+		FROM t_execute_queue
+		<include refid="executeQueue_where"/>
+	</select>
+	<!--添加执行队列 -->
+	<insert id="saveExecuteQueue" parameterType="com.retailers.dht.common.entity.ExecuteQueue" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_execute_queue (
+			seq_type,seq_uid,seq_exe_id,seq_params,seq_create_time,seq_exe_time,seq_time,seq_wait_time,version
+		) VALUES
+		(
+			#{seqType,jdbcType=INTEGER},#{seqUid,jdbcType=BIGINT},#{seqExeId,jdbcType=VARCHAR},#{seqParams,jdbcType=VARCHAR},#{seqCreateTime,jdbcType=TIMESTAMP},#{seqExeTime,jdbcType=TIMESTAMP},#{seqTime,jdbcType=BIGINT},#{seqWaitTime,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--添加历史 -->
+	<insert id="saveExecuteQueueHistory" parameterType="com.retailers.dht.common.entity.ExecuteQueue" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_execute_queue_history (
+		seq_type,seq_uid,seq_exe_id,seq_params,seq_create_time,seq_exe_time,seq_time,seq_wait_time,seq_status,seq_remark,version
+		) VALUES
+		(
+		#{seqType,jdbcType=INTEGER},#{seqUid,jdbcType=BIGINT},#{seqExeId,jdbcType=VARCHAR},#{seqParams,jdbcType=VARCHAR},#{seqCreateTime,jdbcType=TIMESTAMP},
+		#{seqExeTime,jdbcType=TIMESTAMP},#{seqTime,jdbcType=BIGINT},
+		#{seqWaitTime,jdbcType=BIGINT},#{seqStatus,jdbcType=INTEGER},#{seqRemark,jdbcType=VARCHAR},0
+		)
+	</insert>
+	<!--修改执行队列 -->
+	<update id="updateExecuteQueue" parameterType="com.retailers.dht.common.entity.ExecuteQueue">
+		UPDATE t_execute_queue
+		<set>
+            <if test="null != seqType">
+                seq_type = #{seqType},
+            </if>
+            <if test="null != seqUid">
+                seq_uid = #{seqUid},
+            </if>
+            <if test="null != seqExeId and '' != seqExeId">
+                seq_exe_id = #{seqExeId},
+            </if>
+            <if test="null != seqParams and '' != seqParams">
+                seq_params = #{seqParams},
+            </if>
+            <if test="null != seqCreateTime">
+                seq_create_time = #{seqCreateTime},
+            </if>
+            <if test="null != seqExeTime">
+                seq_exe_time = #{seqExeTime},
+            </if>
+            <if test="null != seqTime">
+                seq_time = #{seqTime},
+            </if>
+            <if test="null != seqWaitTime">
+                seq_wait_time = #{seqWaitTime},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE id = #{id} and version = #{version}
+	</update>
+	<!--删除执行队列 -->
+	<delete id="deleteExecuteQueueById" parameterType="java.lang.Long">
+		DELETE FROM t_execute_queue WHERE id = #{id}
+	</delete>
+</mapper>

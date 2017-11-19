@@ -16,34 +16,134 @@
         <span>领券中心</span>
     </div>
 
-	<div class="coupon-box" id="wsy">
-        <a href="" class="coupon-img">
-            <img src="/img/coupon2.png" alt="">
-        </a>
-        <a href="" class="coupon-img">
-            <img src="/img/coupon2.png" alt="">
-        </a>
-        <a href="" class="coupon-img">
-            <img src="/img/coupon2.png" alt="">
-        </a>
+    <div class="coupon-box">
+        <ul class="coupon_list1" id="couponLists">
+            <li>
+                <a href="">
+                    <div class="coupon_item_box clearfix">
+                        <div class="item_box_left">
+                            <span>￥</span>200
+                        </div>
+                        <div class="item_box_right">
+                            <p class="term">满200可用</p>
+                            <p class="time">2017-11-11</p>
+                        </div>
+                    </div>
+                    <p class="p1">服装类商品通用</p>
+                    <span class="btn_span">立即使用</span>
+                </a>
+            </li>
+            <li>
+                <a href="">
+                    <div class="coupon_item_box clearfix">
+                        <div class="item_box_left">
+                            <span>￥</span>200
+                        </div>
+                        <div class="item_box_right">
+                            <p class="term">满200可用</p>
+                            <p class="time">2017-11-11</p>
+                        </div>
+                    </div>
+                    <p class="p1">服装类商品通用</p>
+                    <span class="btn_span">立即使用</span>
+                </a>
+            </li>
+        </ul>
     </div>
     <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/layer_mobile/layer.js"></script>
     <script>
         function queryCoupon(pageNo,pageSize){
+            $("#couponLists").html("");
             $.ajax({
                 type:"post",
                 url:'/coupon/couponList',
                 dataType: "json",
                 data:{pageNo:pageNo,pageSize:pageSize},
                 success:function(data){
-                    console.log(data)
+                    if(data.status==0){
+                        var rows=data.data;
+                        if(rows&&rows.length>0){
+                            for(var row of rows){
+                                showCoupon("#couponLists",row);
+                            }
+                        }
+                    }
                 }
             });
         }
         $(function () {
             queryCoupon(1,10);
-        })
-    </script>
 
+
+            $.ajax({
+                type:"post",
+                url:'/coupon/webAsyncTask',
+                dataType: "json",
+                success:function(data){
+                    console.log(data)
+                }
+            });
+
+        })
+
+        /**
+         * 展示优惠卷
+         * @param couponId 元素id
+         * @param row 行数据
+         */
+        function showCoupon(couponId,row) {
+            let html='<li><a href="javascript:void(0)"><div class="coupon_item_box clearfix">';
+            if(row.cpCoinType==0){
+                if(row.cpType==0){
+                    html+='<div class="item_box_left">'+row.couponVal+'<span>￥</span></div>';
+                }else {
+                    html+='<div class="item_box_left">'+row.couponVal+'<span>折</span></div>';
+                }
+            }else{
+                if(row.cpType==0){
+                    html+='<div class="item_box_left"><span>拼手气代金</span></div>';
+                }else {
+                    html+='<div class="item_box_left"><span>拼手气折扣</span></div>';
+                }
+            }
+            html+='<div class="item_box_right"><p class="term">'+row.useCondition+'</p>';
+            html+='<p class="time">'+row.userTime+'</p></div></div><p class="p1">服装类商品通用</p>';
+            html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即领取</span></a></li>';
+            $(couponId).append(html);
+        }
+        /**
+         * 领取优惠卷
+         * @param id 优惠卷id
+         */
+        function userGrabCoupon(id){
+            //loading带文字
+            let curIndex = layer.open({
+                type: 2,
+                shadeClose:false,
+                content: '努力抢夺中…………'
+            });
+            $.ajax({
+                type:"post",
+                url:'/coupon/userGrabCoupon',
+                dataType: "json",
+                data:{cpId:id},
+                success:function(data){
+                    layer.close(curIndex);
+                    let msg = data.msg;
+                   if(data.status==0){
+                        queryCoupon(1,10);
+                       msg='领取成功';
+                    }
+                    //提示
+                    layer.open({
+                        content: msg,
+                        skin: 'msg',
+                        time: 2 //2秒后自动关闭
+                    });
+                }
+            });
+        }
+    </script>
 </body>
 </html>

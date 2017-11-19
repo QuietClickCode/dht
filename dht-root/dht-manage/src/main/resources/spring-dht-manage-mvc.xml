@@ -45,6 +45,7 @@
         <!--<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>-->
         <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
     </context:component-scan>
     <!-- 上传配置 -->
     <bean id="multipartResolver"

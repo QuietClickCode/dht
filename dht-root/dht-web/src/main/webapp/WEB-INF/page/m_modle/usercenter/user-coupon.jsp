@@ -29,55 +29,120 @@
             <p>(6)</p>
         </a>
     </div>
-
     <div class="coupon-cont box2">
         <div class="coupon-box" id="wsy">
-            <a href="/coupon/openCoupon">
-                <div class="more-coupon">
+            <div class="more-coupon">
+                <a href="/coupon/openCoupon">
                     <span class="icon-coupon"></span>
                     <span class="text">领取更多优惠券</span>
                     <i class="icon-coupon-right"></i>
-                </div>
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
+                </a>
+            </div>
+            <ul class="coupon_list1">
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <span class="btn_span">立即使用</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <span class="btn_span">立即使用</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <div class="coupon-box displayN" id="ysy">
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
+            <ul class="coupon_list2">
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <span class="btn_span">立即使用</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <span class="btn_span">立即使用</span>
+                    </a>
+                </li>
+            </ul>
         </div>
 
         <div class="coupon-box displayN" id="ysx">
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
+            <ul class="coupon_list2">
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <!--<span class="btn_span">立即使用</span>-->
+                    </a>
+                </li>
+                <li>
+                    <a href="">
+                        <div class="coupon_item_box clearfix">
+                            <div class="item_box_left">
+                                <span>￥</span>200
+                            </div>
+                            <div class="item_box_right">
+                                <p class="term">满200可用</p>
+                                <p class="time">2017-11-11</p>
+                            </div>
+                        </div>
+                        <p class="p1">服装类商品通用</p>
+                        <!--<span class="btn_span">立即使用</span>-->
+                    </a>
+                </li>
+            </ul>
         </div>
-
     </div>
-
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/tabs.js"></script>
 </body>
-
 </html>

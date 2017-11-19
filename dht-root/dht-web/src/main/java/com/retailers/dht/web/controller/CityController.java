@@ -1,7 +1,6 @@
 package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
-import com.retailers.auth.annotation.Function;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.City;
 import com.retailers.dht.common.service.CityService;
