@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsLabelVo;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsLabel;
 
@@ -58,7 +59,9 @@ public interface GoodsLabelService {
 	 */
 	public boolean deleteGoodsLabelByGlId(Long glId);
 
-	public List<GoodsLabelVo> queryGoodsLabelAdvertisingTree();
+	public List<GoodsLabelVo> queryGoodsLabelAdvertisingTree(String glName);
+
+	public List<GoodsVo> queryGoodsListsByGoodsLabel(Long glId,int pageNo,int pageSize);
 }
 
 

@@ -12,7 +12,7 @@
 
 <body class="bge6">
     <div class="specialty-title2 borderB">
-        <a href="" class="icon-return"></a>
+        <a onclick="returnhistory();" class="icon-return"></a>
         <span>商品详情</span>
     </div>
 
@@ -21,7 +21,7 @@
             <ul></ul>
         </div>
         <div class="bd">
-            <ul id="goodsImagesul">
+            <ul id="goodsImagesul" style="height: 200px">
                 <li>
                     <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                 </li>
@@ -81,15 +81,20 @@
             <span class="text overflow" id="open_address"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
             <span class="checkbox"></span>
         </div>
+        <div class="norms showaddressfreigh">
+            <span class="name">运费</span>
+            <span class="text overflow" id="gfreigh"> 12.0元</span>
+        </div>
         <div class="norms" id="open_time">
             <span class="name">配送</span>
             <span class="text overflow"> 选择配送时间</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms showaddressfreigh">
-            <span class="name">运费</span>
-            <span class="text overflow" id="gfreigh"> 12.0元</span>
+        <div class="norms" id="isAdvancesalediv">
+            <span class="name">预售</span>
+            <span class="text overflow"> 预售时间xxxx</span>
         </div>
+
         <div class="ensure" style="display: none;">
             <span>
                 <i class="icon-yes"></i>
@@ -240,24 +245,27 @@
                     <span>库存60件</span>
                 </div>
             </div>
-            <div class="care-checkbox J_careCheckbox">
-                <span class="name">规格1</span>
-                <span class="checkbox_service" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
-                <span class="checkbox_service" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
-                <span class="checkbox_service" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+            <div id="gsdiv">
+                <div class="care-checkbox J_careCheckbox">
+                    <span class="name">规格1</span>
+                    <span class="checkbox_service" onclick="clickactive(this)">人工费=</span>
+                    <span class="checkbox_service" onclick="clickactive(this)">人工</span>
+                    <span class="checkbox_service" onclick="clickactive(this)">材)</span>
+                </div>
+                <div class="care-checkbox J_careCheckbox">
+                    <span class="name">规格2</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                </div>
+                <div class="care-checkbox J_careCheckbox">
+                    <span class="name">规格2</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                    <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
+                </div>
             </div>
-            <div class="care-checkbox J_careCheckbox">
-                <span class="name">规格2</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
-            </div>
-            <div class="care-checkbox J_careCheckbox">
-                <span class="name">规格2</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(不包含食材、设备费用)</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
-                <span class="checkbox_service2" onclick="clickactive(this)">人工费(包设备用具、不包食材)</span>
-            </div>
+
             <div class="care-checkbox" style="margin-top: .2rem;">
                 <span class="name">数量</span>
                 <div class="number number-box">
@@ -382,7 +390,7 @@
                         $('#goodsImagesul').html(html);
                         for(var i=0;i<goodsImages.length;i++){
                             html = '<li>'+
-                                '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" data-original="'+goodsImages[i].imgUrl+'" style="height: 200px" />'+
+                                '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" style="height: 200px" />'+
                                 '</li>';
                             $('#goodsImagesul').append(html);
                         }
@@ -456,6 +464,14 @@
                     if(goodsConfig!=null){
                         isServiceGoods = goodsConfig.isServicegoods;
                         var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
+                        var isAdvancesale = goodsConfig.isAdvancesale;
+
+                        if(isAdvancesale==1){
+                            $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt);
+                            $('#isAdvancesalediv').show();
+                        }else{
+                            $('#isAdvancesalediv').hide();
+                        }
                         if(isServiceGoods==1){
                             $('.showaddressfreigh').hide();
                         }else{
@@ -499,6 +515,7 @@
             //window.location.href='';
         }
 
+        var flag = true;
         <!--滚动加载商品评论-->
         function scrollgoodsclm() {
             $(document).ready(function(){
@@ -510,7 +527,9 @@
                     var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
 
                     totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
-                    if(($(document).height()-range) <= totalheight ) {
+
+                    if(($(document).height()-range) <= totalheight && flag) {
+                        flag = false;
                         $.ajax({
                             type:"post",
                             url:'/goodsUggclrel/queryGoodsUggclrel',
@@ -546,6 +565,7 @@
                                         main.append(html);
                                     }
                                     pageNo++;
+                                    flag = true;
                                 }else{
                                     html = '<a >已全部加载</a>';
                                     $('#nogoodscldiv').html(html);
@@ -608,6 +628,66 @@
         function clickactive(obj) {
             $(obj).siblings().removeClass('active');
             $(obj).addClass('active');
+        }
+
+        <!--加载规格值-->
+        function loadgsonce() {
+            $.ajax({
+                type:"post",
+                url:"/goodsGgsrel/queryGgsrelListsOnce",
+                dataType: "json",
+                data:{gid:gid},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null){
+                        $('#goodsSpecificatiodiv').html('');
+                        var gsvalArr = new Array();
+                        for(var i=0;i<rows.length;i++){
+                            var gsvids = rows[i].gsvidstr.split(' ');
+                            var gsvvals = rows[i].gsvvalstr.split(' ');
+                            var selectedgsvids = null;
+                            if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
+                                selectedgsvids = rows[i].selectedgsvidstr.split(' ');
+                                var str = '';
+                                var index = 0;
+                                for(var j=0;j<selectedgsvids.length;j++){
+                                    for(var k=0;k<gsvids.length;k++){
+                                        if(selectedgsvids[j]==gsvids[k]){
+                                            str += ','+gsvids[k]+':'+gsvvals[k];
+                                            index++;
+                                        }
+                                    }
+                                }
+                                if(index != 0){
+                                    str = str.substr(1);
+                                    str = rows[i].gsname+'_'+str;
+                                    gsvalArr.push(str);
+                                }
+                            }
+                        }
+
+                        if(gsvalArr!=null && gsvalArr.length>0){
+                            $('#gsdiv').html('');
+                            var html = '';
+                            for(var i=0;i<gsvalArr.length;i++){
+                                var gsname = gsvalArr[i].split('_')[0];
+                                var gsvalidnames = gsvalArr[i].split('_')[1].split(',');
+                                html = '<div class="care-checkbox J_careCheckbox">'+
+                                    '<span class="name">'+gsname+'</span>';
+                                for(var j=0;j<gsvalidnames.length;j++){
+                                    var gsvalid = gsvalidnames[j].split(':')[0];
+                                    var gsvalname = gsvalidnames[j].split(':')[1];
+                                    html += '<span class="checkbox_service" onclick="clickactive(this)"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>';
+                                }
+                                html += '</div>';
+                                $('#gsdiv').append(html);
+                            }
+                        }
+
+
+                    }
+                }
+            });
         }
 
         <!--日期格式化-->
@@ -685,6 +765,9 @@
 
         <!--加载已有评论-->
         loadhasgcl();
+
+        <!--加载商品规格-->
+        loadgsonce();
     </script>
 
     <script>
@@ -732,6 +815,10 @@
             })
         });
 
+        <!--返回上一页-->
+        function returnhistory() {
+            window.history.go(-1);
+        }
     </script>
 </body>
 

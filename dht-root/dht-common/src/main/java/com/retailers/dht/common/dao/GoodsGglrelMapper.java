@@ -54,4 +54,6 @@ public interface GoodsGglrelMapper {
 	public List<GoodsGglrelVo> queryGoodsGglrelList(Pagination<GoodsGglrelVo> pagination);
 
 	public List<GoodsGglrelVo> queryGclassGoodsGglrelLists(String gclassIds);
+
+	public List<GoodsGglrel> queryGoodsGglrelListsByGlId(Long glId);
 }

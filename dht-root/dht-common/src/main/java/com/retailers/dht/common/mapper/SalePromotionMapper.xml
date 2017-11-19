@@ -23,6 +23,8 @@
 			<result property="timestap" column="timestap"/>
 			<result property="gprice" column="gprice"/>
 			<result property="gunitname" column="gunitname"/>
+			<result property="gdescription" column="gdescription"/>
+
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -91,7 +93,7 @@
 		<include refid="salePromotion_where"/> ORDER BY sp_order
 	</select>
 	<select id="querySalePromotionListWeb" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.sp_end_time) timestap,t3.*,t6.g_price gprice,t6.g_unitname gunitname,t5.show_url imgurl,min(t2.sp_sale) minprice,max(t2.sp_sale) maxprice,t2.sp_inventory spinventory
+		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.sp_end_time) timestap,t3.*,t6.g_price gprice,t6.g_unitname gunitname,t6.g_description gdescription,t5.show_url imgurl,min(t2.sp_sale) minprice,max(t2.sp_sale) maxprice,t2.sp_inventory spinventory
 		FROM
 		t_sale_promotion t1 ,
 		t_sale_promotion t3

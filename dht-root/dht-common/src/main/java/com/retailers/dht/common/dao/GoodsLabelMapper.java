@@ -1,7 +1,10 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsLabel;
 import com.retailers.dht.common.vo.GoodsLabelVo;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品标签表DAO
@@ -53,7 +56,12 @@ public interface GoodsLabelMapper {
 	 */
 	public List<GoodsLabel> queryGoodsLabelList(Pagination<GoodsLabel> pagination);
 
-	public List<GoodsLabelVo> queryGoodslabelAdvertisingList();
+	public List<GoodsLabelVo> queryGoodslabelAdvertisingList(@Param("glName") String glName);
 
 	public List<GoodsLabelVo> queryGoodsLabelAdvertisingVo();
+
+	public List<GoodsVo> queryGoodsListsByGoodsLabelIsNotGoodsLabel(Long glId);
+
+	public List<GoodsVo> queryGoodsListsByGoodsLabelIsGoodsLabel(Long glId);
+
 }

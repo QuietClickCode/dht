@@ -38,14 +38,13 @@ public class GoodsConfigController extends BaseController {
     @ResponseBody
     public BaseResp editGoodsConfig(GoodsConfig goodsConfig,String gedts,HttpServletRequest request){
         if(!ObjectUtils.isEmpty(gedts)){
-            SimpleDateFormat sdf = new SimpleDateFormat();
-            Date gedt = null;
             try {
-                gedt = sdf.parse(gedts);
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+                Date gedt = sdf.parse(gedts);
+                goodsConfig.setGedt(gedt);
             } catch (ParseException e) {
-                e.printStackTrace();
+                goodsConfig.setGedt(null);
             }
-            goodsConfig.setGedt(gedt);
         }else{
             goodsConfig.setGedt(null);
         }
@@ -84,8 +83,18 @@ public class GoodsConfigController extends BaseController {
     @RequestMapping("/addGoodsConfig")
     @Function(label="增加商品配置", description = "增加商品配置", resourse = "goodsConfig.addGoodsConfig",parentRes = "goods.openGoods")
     @ResponseBody
-    public BaseResp addGoodsConfig(GoodsConfig GoodsConfig){
+    public BaseResp addGoodsConfig(GoodsConfig GoodsConfig,String gedts){
         GoodsConfig.setIsDelete(0L);
+        if(!ObjectUtils.isEmpty(gedts)){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                Date gedt = sdf.parse(gedts);
+                GoodsConfig.setGedt(gedt);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
         boolean flag=goodsConfigService.saveGoodsConfig(GoodsConfig);
         return success(flag);
     }

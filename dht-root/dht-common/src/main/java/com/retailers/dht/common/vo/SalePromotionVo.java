@@ -14,6 +14,15 @@ public class SalePromotionVo extends SalePromotion {
     private Long timestap;
     private Float gprice;
     private String gunitname;
+    private String gdescription;
+
+    public String getGdescription() {
+        return gdescription;
+    }
+
+    public void setGdescription(String gdescription) {
+        this.gdescription = gdescription;
+    }
 
     public long getLevel() {
         return level;

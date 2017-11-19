@@ -1,27 +1,24 @@
 
 package com.retailers.dht.common.service.impl;
+
+import com.retailers.dht.common.dao.GoodsCopyMapper;
+import com.retailers.dht.common.dao.GoodsMapper;
+import com.retailers.dht.common.entity.Goods;
+import com.retailers.dht.common.entity.GoodsClassification;
+import com.retailers.dht.common.entity.GoodsCopy;
+import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsVo;
+import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import com.retailers.dht.common.dao.GoodsCopyMapper;
-import com.retailers.dht.common.entity.Goods;
-import com.retailers.dht.common.dao.GoodsMapper;
-import com.retailers.dht.common.entity.GoodsClassification;
-import com.retailers.dht.common.entity.GoodsCopy;
-import com.retailers.dht.common.service.GoodsClassificationService;
-import com.retailers.dht.common.service.GoodsCopyService;
-import com.retailers.dht.common.service.GoodsService;
-import com.retailers.dht.common.vo.GoodsVo;
-import com.retailers.dht.common.vo.PagintionVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.apache.ibatis.ognl.IntHashMap;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
 /**
  * 描述：商品表Service
  * @author fanghui

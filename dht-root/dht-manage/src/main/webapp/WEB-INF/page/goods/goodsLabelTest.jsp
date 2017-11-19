@@ -24,9 +24,6 @@
     <ex:perm url="goods/addGoodsLabel">
         <button class="btn btn-primary" type="button" onclick="addGoodsLabel()">添加商品标签</button>
     </ex:perm>
-    <ex:perm url="goods/addGoodsLabel">
-        <button class="btn btn-default" type="button" onclick="deleteGoodsLabelList()">删除</button>
-    </ex:perm>
 
     <br>
     <div class="form-group" style="margin-top: 5px">
@@ -340,33 +337,6 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">推送对象</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="0">乡村
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateCountry" class="updateCountry" value="1">城市
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">客户端</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" checked class="updateClient" value="0">移动端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="1">PC端
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="updateClient" disabled="disabled" class="updateClient" value="2">小程序
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
                         <label for="" class="col-sm-2 control-label">状态</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
@@ -406,101 +376,21 @@
     <ul id="treeDemo" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
+<script type="text/javascript" src="<%=path%>/js/iconpicker/dist/js/bootstrap-iconpicker-iconset-all.js"></script>
+<script type="text/javascript" src="<%=path%>/js/iconpicker/dist/js/bootstrap-iconpicker.js"></script>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/bootstrap/jquery.treegrid.extension.js"></script>
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<script src="/js/toast/js/toastr.js"></script>
 <!--商品标签编辑-->
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
     var editorGoodsLabelType=0;
-    var treeColumns=[
-        {   checkbox: true,
-            align : 'center',
-            valign : 'middle'
-        },
-        {
-            field: 'glName',
-            title: '商品标签名称',
-            align : 'center',
-            valign : 'middle'
-        },
-        {
-            field: 'glStarttime',
-            title: '开始时间',
-            align : 'center',
-            valign : 'middle',
-        },
-        {
-            field: 'glEndtime',
-            title: '结束时间',
-            align : 'center',
-            valign : 'middle',
-        },
-        {
-            field: 'CreateTime',
-            title: '状态',
-            align : 'center',
-            valign : 'middle',
-            formatter:function(value,row,index){
-                rowDatas.set(row.glId,row);
-                let html='';
-                var now = new Date();
-                if(now<new Date(row.glStarttime)){
-                    html='未生效';
-                }
-                if(now>new Date(row.glStarttime) && now<new Date(row.glEndtime)){
-                    html='生效中';
-                }
-                if(now>new Date(row.glEndtime)){
-                    html='已失效';
-                }
-                return html;
-            }
-        },
-        {
-            align : 'center',
-            valign : 'middle',
-            title: '添加子项',
-            formatter:function (value,row,index) {
-                rowDatas.set(row.faId,row);
-                let html='';
-                let parentId = row.parentId;
-                if(parentId == null)
-                    html+='<button class="btn btn-default addSubitem" type="button"  onclick="event.stopPropagation();addGoodsLabelAdvertising(\''+row.glId+'\')">添加子项</button>'
-                else
-                    html + "";
-                return html;
-            }
-        },
-        {
-            field: 'CreateTime',
-            title: '操作',
-            align : 'center',
-            valign : 'middle',
-            width:240,
-            formatter:function(value,row,index){
-                rowDatas.set(row.glId,row);
-                let html='';
-                if(row.parentId==null){
-                    <ex:perm url="goods/editGoodsLabel">
-                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsLabel(\''+(-row.glId)/100000+'\')"">编辑</button>&nbsp;';
-                    </ex:perm>
-                    <ex:perm url="goods/removeGoodsLabel">
-                    html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+(-row.glId)/100000+'\',this)">删除</button>';
-                    </ex:perm>
-                }else{
-                    html+='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.faId+'\',\''+row.imageId+'\',\''+row.imageUrl+'\',\''+row.faName+'\',\''+row.faCountry+'\',\''+row.faClient+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.faOrder+'\')">编辑</button>';
-                    html='<button class="btn btn-default" type="button" onclick="event.stopPropagation();deleteFloorAdv(\''+row.faId+'\')">删除</button>';
-                }
-
-                return html;
-            }
-        }
-    ]
 
     $(function () {
 
@@ -514,8 +404,10 @@
                 //pagination: true,                   //是否显示分页（*）
                 sortable: false,                     //是否启用排序
                 sortOrder: "asc",                   //排序方式
-                queryParams: function (params) {
-                    return params;
+                queryParams: function () {
+                    return {
+                        glName:$("#search_GoodsLabel_name").val()
+                    };
                 },                                  //传递参数（*）
                 sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
                 pageNumber: 1,                      //初始化加载第一页，默认第一页
@@ -536,7 +428,124 @@
                 showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
                 selectItemName: 'parentItem',
                 dataType:"json",
-                columns: treeColumns
+                contentType : "application/x-www-form-urlencoded",
+                columns: [
+                    {   checkbox: true,
+                        align : 'center',
+                        valign : 'middle'
+                    },
+                    {
+                        field: 'glName',
+                        title: '商品标签名称',
+                        align : 'left',
+                        valign : 'middle'
+                    },
+                    {
+                        field: 'glStarttime',
+                        title: '开始时间',
+                        align : 'center',
+                        valign : 'middle',
+                    },
+                    {
+                        field: 'glEndtime',
+                        title: '结束时间',
+                        align : 'center',
+                        valign : 'middle',
+                    },
+                    {
+                        field: 'CreateTime',
+                        title: '状态',
+                        align : 'center',
+                        valign : 'middle',
+                        formatter:function(value,row,index){
+                            rowDatas.set(row.glId,row);
+                            let html='';
+                            var now = new Date();
+                            if(now<new Date(row.glStarttime)){
+                                html='未生效';
+                            }
+                            if(now>new Date(row.glStarttime) && now<new Date(row.glEndtime)){
+                                html='生效中';
+                            }
+                            if(now>new Date(row.glEndtime)){
+                                html='已失效';
+                            }
+                            if(row.glEndtime==''||row.glEndtime==null){
+                                html = '-';
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        field: 'imgUrl',
+                        title: '图片',
+                        align : 'center',
+                        valign : 'middle',
+                        formatter:function(value,row,index){
+                            var html = '';
+                            if(value!=''&&value!=null){
+                                html='<img src="'+value+'" style="width: 50px;height: 50px">'
+                            }else{
+                                html='-';
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        field: 'isShow',
+                        title: '广告状态',
+                        align : 'center',
+                        valign : 'middle',
+                        formatter:function(value,row,index){
+                            var html = '';
+                            if(value==1){
+                                html='显示';
+                            }else if(value==0){
+                                html='隐藏';
+                            }
+                            return html;
+                        }
+                    },
+                    {
+                        align : 'center',
+                        valign : 'middle',
+                        title: '添加子项',
+                        formatter:function (value,row,index) {
+                            rowDatas.set(row.faId,row);
+                            let html='';
+                            let parentId = row.parentId;
+                            if(parentId == null)
+                                html+='<button class="btn btn-default addSubitem" type="button"  onclick="event.stopPropagation();addGoodsLabelAdvertising(\''+(-row.glId)+'\')">添加子项</button>'
+                            else
+                                html + "";
+                            return html;
+                        }
+                    },
+                    {
+                        field: 'CreateTime',
+                        title: '操作',
+                        align : 'center',
+                        valign : 'middle',
+                        width:240,
+                        formatter:function(value,row,index){
+                            rowDatas.set(row.glId,row);
+                            let html='';
+                            if(row.parentId==null){
+                                <ex:perm url="goods/editGoodsLabel">
+                                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsLabel(\''+row.glId+'\')"">编辑</button>&nbsp;';
+                                </ex:perm>
+                                <ex:perm url="goods/removeGoodsLabel">
+                                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+(-row.glId)/100000+'\',this)">删除</button>';
+                                </ex:perm>
+                            }else{
+                                html+='<button class="btn btn-default" type="button" onclick="event.stopPropagation();updateFloorAdvertising(\''+row.glId+'\',\''+row.imageId+'\',\''+row.imgUrl+'\',\''+row.glName+'\',\''+row.isShow+'\',\''+row.url+'\',\''+row.glOrder+'\')">编辑</button>';
+                                html+='<button class="btn btn-default" type="button" onclick="event.stopPropagation();deleteFloorAdv(\''+row.glId+'\')">删除</button>';
+                            }
+
+                            return html;
+                        }
+                    }
+                ]
             });
 
 
@@ -567,6 +576,7 @@
             let url="/goods/addGoodsLabel";
             if(editorGoodsLabelType==1){
                 url="/goods/editGoodsLabel";
+                formData["glId"] = -$("#editorGoodsLabelForm #glId").val()/100000;
             }
             //取得form表单数据
             $.ajax({
@@ -638,7 +648,7 @@
         $('#GoodsLabelTables').bootstrapTable(
             "refresh",
             {
-                url:"/goods/queryGoodsLabelLists"
+                url:"/goods/queryGoodsLabelAdvertisingList"
             }
         );
     }
@@ -1213,10 +1223,8 @@
     var faid;
     var imageId;
     /*打开编辑楼层广告模态框*/
-    function updateFloorAdvertising(id,imgId,imageUrl,name,country,client,isshow,url,order) {
+    function updateFloorAdvertising(id,imgId,imageUrl,name,isshow,url,order) {
         $("#AdvertisingName").val(name);
-        radioChoose(".updateCountry",country);
-        radioChoose(".updateClient",client);
         radioChoose(".isShow",isshow);
         $("#setAdvertUrl").val(url);
         $("#setAdvertOrder").val(order);
@@ -1290,6 +1298,81 @@
                     });
                 }
             });
+        }
+    }
+
+    /*编辑楼层广告*/
+    function updateFloor() {
+        let bootstrapValidator = $("#updateFloorAdvertising").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+
+        let imgPath = $("#uploadImage").val();
+        let name = $("#AdvertisingName").val();
+        let show = $(".isShow:checked").val();
+        let url = $("#setAdvertUrl").val();
+        let order = $("#setAdvertOrder").val();
+        if(imgPath != ""){
+            var fd = new FormData($("#updateFloorAdvertising")[0]);
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    var imagepath = JSON.parse(data).original;
+                    $.ajax({
+                        url:"/floorAdvertising/updateFloorAdvertising",
+                        method:"post",
+                        dataType:"json",
+                        data:{
+                            faId:faid,
+                            imageId:imagepath,
+                            url:url,
+                            faName:name,
+                            faOrder:order,
+                            isShow:show
+                        },
+                        success:function (data) {
+                            $("#updateAdvertising").modal("hide");
+                            refreshTableData();
+                            layer.msg(data.msg);
+                        }
+                    });
+                }
+            });
+        }else{
+            $.ajax({
+                url:"/floorAdvertising/updateFloorAdvertising",
+                method:"post",
+                dataType:"json",
+                data:{
+                    faId:faid,
+                    imageId:imageId,
+                    url:url,
+                    faName:name,
+                    faOrder:order,
+                    isShow:show
+                },
+                success:function (data) {
+                    $("#updateAdvertising").modal("hide");
+                    refreshTableData();
+                    layer.msg(data.msg);
+                }
+            });
+        }
+
+    }
+
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
         }
     }
 </script>

@@ -7,6 +7,34 @@ import com.retailers.dht.common.entity.Goods;
 public class GoodsVo extends Goods {
     private String gclassificationName;
     private String gareaName;
+    private String imgUrl;
+    private Float minprice;
+    private Float maxprice;
+    private Long inventory;
+
+    public Float getMinprice() {
+        return minprice;
+    }
+
+    public void setMinprice(Float minprice) {
+        this.minprice = minprice;
+    }
+
+    public Float getMaxprice() {
+        return maxprice;
+    }
+
+    public void setMaxprice(Float maxprice) {
+        this.maxprice = maxprice;
+    }
+
+    public Long getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(Long inventory) {
+        this.inventory = inventory;
+    }
 
     public void setGareaName(String value) {
         this.gareaName = value;
@@ -24,5 +52,11 @@ public class GoodsVo extends Goods {
         return this.gclassificationName;
     }
 
+    public String getImgUrl() {
+        return imgUrl;
+    }
 
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 }

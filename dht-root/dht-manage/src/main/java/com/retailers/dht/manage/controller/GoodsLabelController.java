@@ -14,9 +14,12 @@ import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -111,8 +114,10 @@ public class GoodsLabelController extends BaseController {
     @RequestMapping("/queryGoodsLabelAdvertisingList")
     @Function(label = "查询所有标签广告楼层",parentRes = "goods.openGoodsLabel",resourse = "goods.queryGoodsLabelAdvertisingList",description = "查询所有标签广告楼层",sort = 2)
     @ResponseBody
-    public Map<String,Object> queryGoodsLabelAdvertisingList(){
-        List<GoodsLabelVo> list = goodsLabelService.queryGoodsLabelAdvertisingTree();
+    public Map<String,Object> queryGoodsLabelAdvertisingList(String glName, HttpServletRequest request){
+        System.out.println("reqglName======================="+request.getParameter("glName"));
+        System.out.println("glName======================="+glName);
+        List<GoodsLabelVo> list = goodsLabelService.queryGoodsLabelAdvertisingTree(glName);
         Map<String,Object> rtn=new HashMap<String, Object>();
         rtn.put("total",1000);
         rtn.put("rows",list);

@@ -23,7 +23,7 @@
                 <ul></ul>
             </div>
             <div class="bd">
-                <ul id="topbanner">
+                <ul id="topbanner" style="height: 250px">
                     <li><a href="#"><img _src="img/banner1.jpg"  data-original="img/banner1.jpg" /></a></li>
                 </ul>
             </div>
@@ -90,7 +90,7 @@
                 <ul></ul>
             </div>
             <div class="bd">
-                <ul id="midbanner">
+                <ul id="midbanner" style="height: 200px">
                     <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
                     <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
                     <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
@@ -159,7 +159,7 @@
                 <ul></ul>
             </div>
             <div class="bd">
-                <ul id="bottombanner">
+                <ul id="bottombanner" style="height: 200px;">
                     <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
                 </ul>
             </div>
@@ -364,10 +364,26 @@
                         $('#secondnav').html('');
                         for(var i=0;i<rows.length;i++){
                             html += '<li>'+
-                                    '<a href="'+rows[i].hnUrl+'"><img src="'+rows[i].imageUrl+'" alt=""></a>'+
+                                    '<a onclick="gotolabelpage(\''+rows[i].hnMianTitle+'\')"><img src="'+rows[i].imageUrl+'" alt=""></a>'+
                                     '</li>';
                         }
                         $('#secondnav').html(html);
+                    }
+                }
+            });
+        }
+        
+        function gotolabelpage(labelname) {
+            $.ajax({
+                type:"post",
+                url:'/goodsLabel/queryGoodsLabelLists',
+                dataType: "json",
+                data:{glName:labelname},
+                success:function(data){
+                    var row = data.row;
+                    if(row!=null){
+                        var glId = row.glId;
+                        window.location.href='/goodsLabel/'+glId+'.html';
                     }
                 }
             });
@@ -411,6 +427,16 @@
             return fmt;
         }
 
+        <!--获取纯文本内容-->
+        function removeHTMLTag(str) {
+            str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+            str=str.replace(/\s/g,''); //将空格去掉
+            return str;
+        }
+
         <!--加载秒杀-->
         loadseckill();
         <!--加载秒杀-->
@@ -427,18 +453,22 @@
                     var rows = data.rows;
                     if(rows!=null){
                         timestape = rows[0].timestap*1000;
-                        console.log(timestape);
                         timegoing();
                         for(var i=0;i<rows.length;i++){
+                            var minprice = rows[i].minprice;
+                            var maxprice = rows[i].maxprice;
                             html = '<li>'+
                                 '<a href="/seckillp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
                                 '<div class="text-box">'+
                                 '<a href="/seckillp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
-                                '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
-                            '<div class="price">'+
-                                '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
-                            '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
-                            '</div>'+
+                                '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            if(minprice==maxprice){
+                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                            }else{
+                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                            }
+                            html += '</div>'+
                             '<div class="purchase">'+
                                 '<a href="/seckillp/'+rows[i].goodsId+'.html">马上抢购</a>'+
                                 '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
@@ -468,19 +498,23 @@
                     var html = '';
                     var rows = data.rows;
                     if(rows!=null){
-                        timestape = rows[0].timestap*1000;
                         for(var i=0;i<rows.length;i++){
+                            var minprice = rows[i].minprice;
+                            var maxprice = rows[i].maxprice;
                             html = '<li>'+
-                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
                                 '<div class="text-box">'+
-                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
-                                '<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>'+
-                                '<div class="price">'+
-                                '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
-                                '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
-                                '</div>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            if(minprice==maxprice){
+                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                            }else{
+                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                            }
+                            html += '</div>'+
                                 '<div class="purchase">'+
-                                '<a href="/specialp/'+rows[i].goodsId+'.html">马上抢购</a>'+
+                                '<a href="/seckillp/'+rows[i].goodsId+'.html">马上抢购</a>'+
                                 '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
                                 '</div>'+
                                 '</div>'+
@@ -532,7 +566,6 @@
     <script src="/js/public.js"></script>
     <script type="text/javascript">
         <!--判断设备-->
-        //browserRedirect();
         $(function () {
             <!--图片懒加载-->
             $("img").lazyload({effect: "fadeIn"});
@@ -574,21 +607,6 @@
             });
         }
 
-        <!--设备判断-->
-        function browserRedirect() {
-            var sUserAgent = navigator.userAgent.toLowerCase();
-            var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
-            var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
-            var bIsMidp = sUserAgent.match(/midp/i) == "midp";
-            var bIsUc7 = sUserAgent.match(/rv:1.2.3.4/i) == "rv:1.2.3.4";
-            var bIsUc = sUserAgent.match(/ucweb/i) == "ucweb";
-            var bIsAndroid = sUserAgent.match(/android/i) == "android";
-            var bIsCE = sUserAgent.match(/windows ce/i) == "windows ce";
-            var bIsWM = sUserAgent.match(/windows mobile/i) == "windows mobile";
-            if (!(bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) ){
-                window.location.href="";
-            }
-        }
 
     </script>
 </body>

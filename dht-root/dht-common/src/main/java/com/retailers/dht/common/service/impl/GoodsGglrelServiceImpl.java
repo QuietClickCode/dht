@@ -214,5 +214,10 @@ public class GoodsGglrelServiceImpl implements GoodsGglrelService {
 
 		return status==glIdsArr.length?true:false;
 	}
+
+	public List<GoodsGglrel> queryGoodsGglrelListsByGlId(Long glId){
+		List<GoodsGglrel> list = goodsGglrelMapper.queryGoodsGglrelListsByGlId(glId);
+		return list;
+	}
 }
 

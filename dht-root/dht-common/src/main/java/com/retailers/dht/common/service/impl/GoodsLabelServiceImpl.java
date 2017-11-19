@@ -1,22 +1,24 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.dao.GoodsLabelMapper;
+import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsGglrel;
 import com.retailers.dht.common.entity.GoodsLabel;
-import com.retailers.dht.common.dao.GoodsLabelMapper;
+import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsGglrelService;
 import com.retailers.dht.common.service.GoodsLabelService;
-import com.retailers.dht.common.vo.FloorAdvertisingVo;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsLabelVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.*;
+
 /**
  * 描述：商品标签表Service
  * @author fanghui
@@ -30,6 +32,8 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 	private GoodsLabelMapper goodsLabelMapper;
 	@Autowired
 	private GoodsGglrelService goodsGglrelService;
+	@Autowired
+	private GoodsService goodsService;
 	public boolean saveGoodsLabel(GoodsLabel goodsLabel) {
 		int status = goodsLabelMapper.saveGoodsLabel(goodsLabel);
 		return status == 1 ? true : false;
@@ -64,13 +68,12 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 		return status == 1 ? true : false;
 	}
 
-	public List<GoodsLabelVo> queryGoodsLabelAdvertisingTree(){
-		List<GoodsLabelVo> advertisingVos = goodsLabelMapper.queryGoodslabelAdvertisingList();
+	public List<GoodsLabelVo> queryGoodsLabelAdvertisingTree(String glName){
+		List<GoodsLabelVo> advertisingVos = goodsLabelMapper.queryGoodslabelAdvertisingList(glName);
 		for(GoodsLabelVo vo:advertisingVos)
 			vo.setGlId(-vo.getGlId()*100000);
 		List<GoodsLabelVo> advertisingVoList = goodsLabelMapper.queryGoodsLabelAdvertisingVo();
 		for(GoodsLabelVo vo:advertisingVoList){
-			System.out.println("parentid==================>"+vo.getParentId());
 			vo.setParentId(vo.getParentId()*100000);
 			vo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+vo.getImgUrl());
 		}
@@ -123,6 +126,37 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 				}
 			}
 		}
+	}
+
+	public List<GoodsVo> queryGoodsListsByGoodsLabel(Long glId,int pageNo,int pageSize){
+		GoodsLabel goodsLabel = goodsLabelMapper.queryGoodsLabelByGlId(glId);
+		Long isGoodslabel = goodsLabel.getIsGoodslabel();
+		List<GoodsVo> list = new ArrayList<GoodsVo>();
+		if(isGoodslabel==1){
+			list = goodsLabelMapper.queryGoodsListsByGoodsLabelIsGoodsLabel(glId);
+		}else{
+			List<GoodsGglrel> goodsGglrelList = goodsGglrelService.queryGoodsGglrelListsByGlId(glId);
+			for(GoodsGglrel goodsGglrel:goodsGglrelList){
+				Map params = new HashMap();
+				params.put("isDelete",0L);
+				params.put("isChecked",1L);
+				params.put("gclassification",goodsGglrel.getGclassId());
+				Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,pageNo,pageSize);
+				if(!ObjectUtils.isEmpty(pagination.getData())){
+					list.addAll(pagination.getData());
+				}
+			}
+			HashSet<GoodsVo> set = new HashSet<GoodsVo>(list);
+			list = new ArrayList<GoodsVo>(set);
+		}
+
+
+		if(!ObjectUtils.isEmpty(list)) {
+			for (GoodsVo goodsVo : list) {
+				goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL + goodsVo.getImgUrl());
+			}
+		}
+		return list;
 	}
 
 }

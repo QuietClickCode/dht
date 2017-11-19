@@ -68,6 +68,8 @@ public interface GoodsGglrelService {
 	public void clearrels(Long glId);
 
 	public boolean removeGclassGoodsGglrel(Long gid,String glIds);
+
+	public List<GoodsGglrel> queryGoodsGglrelListsByGlId(Long glId);
 }
 
 

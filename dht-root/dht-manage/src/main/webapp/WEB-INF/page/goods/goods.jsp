@@ -876,6 +876,7 @@
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script src="/js/toast/js/toastr.js"></script>
+<script type="text/javascript" src="/js/laydate/laydate.js"></script>
 <!--商品基本信息-->
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -1629,6 +1630,11 @@
             }
         });
     }
+
+    laydate.render({
+        elem: '#gedt'
+        ,type: 'datetime'
+    });
 </script>
 
 <!--商品图片-->

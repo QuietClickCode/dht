@@ -33,6 +33,14 @@
 		SELECT <include refid="goodsGglrel_columns" />
 		FROM t_goods_gglrel WHERE ggl_id = #{gglId}
 	</select>
+	<select id="queryGoodsGglrelListsByGlId" resultMap="rm_goodsGglrel" parameterType="java.lang.Long">
+		select * from t_goods_gglrel t1
+		WHERE
+		t1.gclass_id is not null
+		and t1.g_id is null
+		and t1.is_delete!=1
+		and t1.gl_id=#{glId}
+	</select>
 	<!-- 商品与标签关系表查询条件组合 -->
 	<sql id="goodsGglrel_where">
 		<where>

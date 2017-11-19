@@ -27,6 +27,7 @@ public class GoodsLabelVo extends GoodsLabel {
     private Long glCountry;
     private String imgUrl;
     private Long level;
+    private Long isShow;
 
     public Long getParentId() {
         return parentId;
@@ -82,6 +83,14 @@ public class GoodsLabelVo extends GoodsLabel {
 
     public void setLevel(Long level) {
         this.level = level;
+    }
+
+    public Long getIsShow() {
+        return isShow;
+    }
+
+    public void setIsShow(Long isShow) {
+        this.isShow = isShow;
     }
 }
 

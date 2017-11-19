@@ -18,12 +18,12 @@ public class SeckillSpecialProductController extends BaseController {
     @RequestMapping("/seckillp/{id}.html")
     public String seckillp(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
-        return redirectUrl(request,"seckillspecialproduct/seckill-product");
+        return redirectUrl(request,"sksppdt/seckill-product");
     }
 
     @RequestMapping("/specialp/{id}.html")
     public String specialp(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
-        return redirectUrl(request,"seckillspecialproduct/special-product");
+        return redirectUrl(request,"sksppdt/special-product");
     }
 }
