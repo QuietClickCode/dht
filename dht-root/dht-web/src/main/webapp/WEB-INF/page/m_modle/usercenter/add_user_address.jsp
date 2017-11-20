@@ -159,11 +159,15 @@
                             layer.open({
                                 content: msg,
                                 skin: 'msg',
-                                time: 2 //2秒后自动关闭
+                                time: 2, //2秒后自动关闭
+                                end:function(){
+                                    console.log("============================>")
+                                    setTimeout(function(){
+                                        window.history.back()
+                                    },2000);
+                                }
                             });
-                            setTimeout(function(){
-                                window.history.back()
-                            },2000);
+
                         }
                         isSaves=false;
 

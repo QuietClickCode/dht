@@ -108,10 +108,10 @@
 			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},
 			#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},
 			#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},
-			<if test="null != params.version">
+			<if test="null != version">
 				#{version,jdbcType=INTEGER}
 			</if>
-			<if test="null == params.version">
+			<if test="null == version">
 				0
 			</if>
 		)
