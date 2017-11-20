@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserAddressMapper">
+
+	<resultMap id="rm_userAddress" type="com.retailers.dht.common.entity.UserAddress">
+			<result property="uaId" column="ua_id"/>
+			<result property="uaUuid" column="ua_uuid"/>
+			<result property="uaUid" column="ua_uid"/>
+			<result property="uaName" column="ua_name"/>
+			<result property="uaPhone" column="ua_phone"/>
+			<result property="uaZipCode" column="ua_zip_code"/>
+			<result property="uaProvince" column="ua_province"/>
+			<result property="uaCity" column="ua_city"/>
+			<result property="uaDistrict" column="ua_district"/>
+			<result property="uaAddress" column="ua_address"/>
+			<result property="uaAllAddress" column="ua_all_address"/>
+			<result property="uaIsDefault" column="ua_is_default"/>
+			<result property="uaCreateTime" column="ua_create_time"/>
+			<result property="uaUpdateTime" column="ua_update_time"/>
+			<result property="isValida" column="is_valida"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userAddress_columns">
+		ua_id,ua_uuid,ua_uid,ua_name,ua_phone,ua_zip_code,ua_province,ua_city,ua_district,ua_address,ua_all_address,ua_is_default,ua_create_time,ua_update_time,is_valida,is_delete,version
+	</sql>
+	<!-- 根据用户收货地址列表主键取得数据 -->
+	<select id="queryUserAddressByUaId" resultMap="rm_userAddress" parameterType="java.lang.Long">
+		SELECT <include refid="userAddress_columns" />
+		FROM t_user_address WHERE ua_id = #{uaId}
+	</select>
+	<!-- 用户收货地址列表查询条件组合 -->
+	<sql id="userAddress_where">
+		<where>
+			<if test="null != params.uaId">
+				AND ua_id = #{params.uaId}
+			</if>
+			<if test="null != params.uaUuid and '' != params.uaUuid">
+				AND ua_uuid = #{params.uaUuid}
+			</if>
+			<if test="null != params.uaUid">
+				AND ua_uid = #{params.uaUid}
+			</if>
+			<if test="null != params.uaName and '' != params.uaName">
+				AND ua_name = #{params.uaName}
+			</if>
+			<if test="null != params.uaPhone and '' != params.uaPhone">
+				AND ua_phone = #{params.uaPhone}
+			</if>
+			<if test="null != params.uaZipCode and '' != params.uaZipCode">
+				AND ua_zip_code = #{params.uaZipCode}
+			</if>
+			<if test="null != params.uaProvince and '' != params.uaProvince">
+				AND ua_province = #{params.uaProvince}
+			</if>
+			<if test="null != params.uaCity and '' != params.uaCity">
+				AND ua_city = #{params.uaCity}
+			</if>
+			<if test="null != params.uaDistrict and '' != params.uaDistrict">
+				AND ua_district = #{params.uaDistrict}
+			</if>
+			<if test="null != params.uaAddress and '' != params.uaAddress">
+				AND ua_address = #{params.uaAddress}
+			</if>
+			<if test="null != params.uaAllAddress and '' != params.uaAllAddress">
+				AND ua_all_address = #{params.uaAllAddress}
+			</if>
+			<if test="null != params.uaIsDefault">
+				AND ua_is_default = #{params.uaIsDefault}
+			</if>
+			<if test="null != params.uaCreateTimeBegin">
+				AND ua_create_time &gt;= #{params.uaCreateTime}
+			</if>
+			<if test="null != params.uaCreateTimeEnd">
+				AND ua_create_time &lt;= #{params.uaCreateTime}
+			</if>
+			<if test="null != params.uaUpdateTimeBegin">
+				AND ua_update_time &gt;= #{params.uaUpdateTime}
+			</if>
+			<if test="null != params.uaUpdateTimeEnd">
+				AND ua_update_time &lt;= #{params.uaUpdateTime}
+			</if>
+			<if test="null != params.isValida">
+				AND is_valida = #{params.isValida}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserAddressList" resultMap="rm_userAddress" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="userAddress_columns" />
+		FROM t_user_address
+		<include refid="userAddress_where"/>
+	</select>
+	<!--添加用户收货地址列表 -->
+	<insert id="saveUserAddress" parameterType="com.retailers.dht.common.entity.UserAddress" useGeneratedKeys="true" keyProperty="uaId">
+		INSERT INTO t_user_address (
+			ua_uuid,ua_uid,ua_name,ua_phone,ua_zip_code,ua_province,ua_city,ua_district,ua_address,ua_all_address,ua_is_default,ua_create_time,ua_update_time,is_valida,is_delete,version
+		) VALUES
+		(
+			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改用户收货地址列表 -->
+	<update id="updateUserAddress" parameterType="com.retailers.dht.common.entity.UserAddress">
+		UPDATE t_user_address
+		<set>
+            <if test="null != uaUuid and '' != uaUuid">
+                ua_uuid = #{uaUuid},
+            </if>
+            <if test="null != uaUid">
+                ua_uid = #{uaUid},
+            </if>
+            <if test="null != uaName and '' != uaName">
+                ua_name = #{uaName},
+            </if>
+            <if test="null != uaPhone and '' != uaPhone">
+                ua_phone = #{uaPhone},
+            </if>
+            <if test="null != uaZipCode and '' != uaZipCode">
+                ua_zip_code = #{uaZipCode},
+            </if>
+            <if test="null != uaProvince and '' != uaProvince">
+                ua_province = #{uaProvince},
+            </if>
+            <if test="null != uaCity and '' != uaCity">
+                ua_city = #{uaCity},
+            </if>
+            <if test="null != uaDistrict and '' != uaDistrict">
+                ua_district = #{uaDistrict},
+            </if>
+            <if test="null != uaAddress and '' != uaAddress">
+                ua_address = #{uaAddress},
+            </if>
+            <if test="null != uaAllAddress and '' != uaAllAddress">
+                ua_all_address = #{uaAllAddress},
+            </if>
+            <if test="null != uaIsDefault">
+                ua_is_default = #{uaIsDefault},
+            </if>
+            <if test="null != uaCreateTime">
+                ua_create_time = #{uaCreateTime},
+            </if>
+            <if test="null != uaUpdateTime">
+                ua_update_time = #{uaUpdateTime},
+            </if>
+            <if test="null != isValida">
+                is_valida = #{isValida},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ua_id = #{uaId} and version = #{version}
+	</update>
+	<!--删除用户收货地址列表 -->
+	<delete id="deleteUserAddressByUaId" parameterType="java.lang.Long">
+		DELETE FROM t_user_address WHERE ua_id = #{uaId}
+	</delete>
+</mapper>
