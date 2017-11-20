@@ -1,5 +1,7 @@
 package com.retailers.dht.web.controller;
 
+import com.retailers.auth.annotation.CheckSession;
+import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.CityArea;
 import com.retailers.dht.common.entity.UserAddress;
 import com.retailers.dht.common.service.UserAddressService;
@@ -7,13 +9,17 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import sun.security.krb5.internal.KdcErrException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Map;
 
 /**
  *用户收货地址管理
@@ -25,16 +31,24 @@ public class UserAddressController extends BaseController {
     private UserAddressService userAddressService;
 
     @RequestMapping("openAddUserAddress")
-    public String openAddUserAddress(HttpServletRequest request){
-        return redirectUrl(request,"usercenter/add_user_address");
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    public ModelAndView openAddUserAddress(HttpServletRequest request,Long uaId){
+        ModelAndView mv = new ModelAndView();
+        if(ObjectUtils.isNotEmpty(uaId)){
+            UserAddress userAddress= userAddressService.queryUserAddressByUaId(uaId);
+            mv.addObject("userAddress",userAddress);
+        }
+        String url= redirectUrl(request,"usercenter/add_user_address");
+        mv.setViewName(url);
+        return mv;
     }
 
     @RequestMapping("queryUserAddress")
     @ResponseBody
-    public BaseResp queryUserAddress(HttpServletRequest request,PageUtils pageForm){
+    public Map<String,Object> queryUserAddress(HttpServletRequest request, PageUtils pageForm){
         Long uId=getCurLoginUserId(request);
         Pagination<UserAddress> page= userAddressService.queryUserAddress(uId,pageForm.getPageNo(),pageForm.getPageSize());
-        return success(page);
+        return queryPages(page);
     }
 
     /**
@@ -45,6 +59,7 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping("addUserAddress")
     @ResponseBody
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     public BaseResp addUserAddress(HttpServletRequest request, UserAddress userAddress){
         Long uId=getCurLoginUserId(request);
         userAddress.setUaUid(uId);

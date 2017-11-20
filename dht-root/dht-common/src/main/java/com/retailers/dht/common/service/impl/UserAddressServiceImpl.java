@@ -10,6 +10,7 @@ import com.retailers.dht.common.dao.UserAddressMapper;
 import com.retailers.dht.common.service.UserAddressService;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.UUIDUtils;
 import org.apache.ibatis.ognl.IntHashMap;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,10 @@ public class UserAddressServiceImpl implements UserAddressService {
 	@Autowired
 	private UserAddressMapper userAddressMapper;
 	public boolean saveUserAddress(UserAddress userAddress) {
+		String uuid=UUIDUtils.getUUID();
+		userAddress.setUaUuid(uuid);
+		userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+		userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
 		int status = userAddressMapper.saveUserAddress(userAddress);
 		return status == 1 ? true : false;
 	}
@@ -53,7 +58,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 
 	public Pagination<UserAddress> queryUserAddress(Long userId,int pageNo,int pageSize){
 		Map<String,Object> params=new HashMap<String,Object>();
-		params.put("uaUuid",userId);
+		params.put("uaUid",userId);
 		params.put("isValida", SystemConstant.SYS_IS_VALID_YES);
 		params.put("isDelete", SystemConstant.SYS_IS_DELETE_NO);
 		return  queryUserAddressList(params,pageNo,pageSize);
