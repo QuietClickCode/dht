@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <style>
-	.label_box {font-size:12px;cursor:pointer;}  
+	.label_box {font-size:12px;cursor:pointer;}
 .label_box i {
 	font-size:12px;
 	font-style:normal;
@@ -23,12 +23,12 @@
 	vertical-align:middle;
 	margin:-2px 2px 1px 0px;
 	border:#999 1px solid;
-}  
-input[type="checkbox"],input[type="radio"] {display:none;}  
-input[type="radio"] + i {border-radius:16px;} 
-input[type="checkbox"] + i {border-radius:16px;}  
-input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}  
-input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}  
+}
+input[type="checkbox"],input[type="radio"] {display:none;}
+input[type="radio"] + i {border-radius:16px;}
+input[type="checkbox"] + i {border-radius:16px;}
+input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}
+input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
 <body class="bge6">
@@ -74,38 +74,38 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
 			</div>
 		</li>
 	</ul>
-	
+
 	<div class="add_address_footer">
-		<span class="add_address_footer_btn">新增地址</span>
+		<a href="/userAddress/openAddUserAddress"><span class="add_address_footer_btn">新增地址</span></a>
 	</div>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
 	<script>
-		var countdown=60; 
-		function settime(val) { 
-			if (countdown == 0) { 
-				val.removeAttribute("disabled");    
-				val.value="获取验证码"; 
+		var countdown=60;
+		function settime(val) {
+			if (countdown == 0) {
+				val.removeAttribute("disabled");
+				val.value="获取验证码";
 				countdown = 60;
 				return;
-			} else { 
-				val.setAttribute("disabled", true); 
-				val.value="重新发送(" + countdown + ")"; 
-				countdown--; 
-			} 
-			setTimeout(function() { 
-				settime(val) 
-			},1000) 
-		} 
-		
-		
+			} else {
+				val.setAttribute("disabled", true);
+				val.value="重新发送(" + countdown + ")";
+				countdown--;
+			}
+			setTimeout(function() {
+				settime(val)
+			},1000)
+		}
+
+
 		$(function(){
 	        $("#replace_nav > li").click(function(){
 	            var $this = $(this),
 	                index = $this.index("#replace_nav > li");
 	            $this.addClass("active").siblings("li").removeClass("active");
 	            $(".replace_container > .replace_container_item").eq(index).addClass("active").siblings(".replace_container_item").removeClass("active");
-	        });	        
+	        });
 	    });
 	</script>
 </body>

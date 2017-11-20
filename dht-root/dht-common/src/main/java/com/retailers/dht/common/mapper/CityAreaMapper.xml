@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CityAreaMapper">
+
+	<resultMap id="rm_cityArea" type="com.retailers.dht.common.entity.CityArea">
+			<result property="id" column="id"/>
+			<result property="code" column="code"/>
+			<result property="name" column="name"/>
+			<result property="parentCode" column="parent_code"/>
+			<result property="parentId" column="parent_id"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="cityArea_columns">
+		id,code,name,parent_code,parent_id
+	</sql>
+	<!-- 根据城市地区表主键取得数据 -->
+	<select id="queryCityAreaById" resultMap="rm_cityArea" parameterType="java.lang.Long">
+		SELECT <include refid="cityArea_columns" />
+		FROM t_city_area WHERE id = #{id}
+	</select>
+	<!-- 城市地区表查询条件组合 -->
+	<sql id="cityArea_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.code and '' != params.code">
+				AND code = #{params.code}
+			</if>
+			<if test="null != params.name and '' != params.name">
+				AND name = #{params.name}
+			</if>
+			<if test="null != params.parentCode and '' != params.parentCode">
+				AND parent_code = #{params.parentCode}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCityAreaList" resultMap="rm_cityArea" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="cityArea_columns" />
+		FROM t_city_area
+		<include refid="cityArea_where"/>
+	</select>
+	<!--添加城市地区表 -->
+	<insert id="saveCityArea" parameterType="com.retailers.dht.common.entity.CityArea" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_city_area (
+			code,name,parent_code,parent_id
+		) VALUES
+		(
+			#{code,jdbcType=VARCHAR},#{name,jdbcType=VARCHAR},#{parentCode,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改城市地区表 -->
+	<update id="updateCityArea" parameterType="com.retailers.dht.common.entity.CityArea">
+		UPDATE t_city_area
+		<set>
+            <if test="null != code and '' != code">
+                code = #{code},
+            </if>
+            <if test="null != name and '' != name">
+                name = #{name},
+            </if>
+            <if test="null != parentCode and '' != parentCode">
+                parent_code = #{parentCode},
+            </if>
+            <if test="null != parentId">
+                parent_id = #{parentId},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除城市地区表 -->
+	<delete id="deleteCityAreaById" parameterType="java.lang.Long">
+		DELETE FROM t_city_area WHERE id = #{id}
+	</delete>
+</mapper>
