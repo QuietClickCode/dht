@@ -157,14 +157,11 @@
                         if(data.status==0){
                             //提示
                             layer.open({
-                                content: msg,
+                                content: data.msg,
                                 skin: 'msg',
                                 time: 2, //2秒后自动关闭
                                 end:function(){
-                                    console.log("============================>")
-                                    setTimeout(function(){
-                                        window.history.back()
-                                    },2000);
+                                    window.history.back();
                                 }
                             });
 
