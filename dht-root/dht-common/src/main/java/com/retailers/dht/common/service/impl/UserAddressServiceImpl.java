@@ -43,6 +43,9 @@ public class UserAddressServiceImpl implements UserAddressService {
 	    if(userAddress.getUaUid().intValue()!=ua.getUaUid().intValue()){
             throw new AppException("不能修改他们的收货地址");
         }
+        if(ua.getIsDelete().intValue()==SystemConstant.SYS_IS_DELETE_YES){
+	        throw new AppException("数据己变更新刷后再试");
+        }
         userAddress.setUaUuid(ua.getUaUuid());
 	    userAddress.setUaCreateTime(ua.getUaCreateTime());
 	    userAddress.setUaUpdateTime(new Date());
@@ -51,7 +54,6 @@ public class UserAddressServiceImpl implements UserAddressService {
         userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
         userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
 		int status = userAddressMapper.saveUserAddress(userAddress);
-
 		ua.setIsDelete(SystemConstant.SYS_IS_DELETE_YES);
 		userAddressMapper.updateUserAddress(ua);
 		return status == 1 ? true : false;

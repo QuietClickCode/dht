@@ -165,9 +165,6 @@
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
-            <if test="null != version">
-                version = version+1,
-            </if>
 		</set>
 		WHERE ua_id = #{uaId} and version = #{version}
 	</update>

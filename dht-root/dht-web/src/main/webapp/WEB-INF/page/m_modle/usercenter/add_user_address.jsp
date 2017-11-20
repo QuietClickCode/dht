@@ -161,6 +161,9 @@
                                 skin: 'msg',
                                 time: 2 //2秒后自动关闭
                             });
+                            setTimeout(function(){
+                                window.history.back()
+                            },2000);
                         }
                         isSaves=false;
 
