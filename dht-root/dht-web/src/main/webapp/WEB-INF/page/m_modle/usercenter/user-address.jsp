@@ -36,49 +36,54 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
         <a class="icon-return"  href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
         <span>我的地址</span>
     </div>
-	<ul class="my_address_list">
-		<li>
-			<div class="my_address_item_top">
-				<div class="my_address_L">
-					<label class="label_box"><input type="radio" name="abc" checked="checked"><i>✓</i></label>
-				</div>
-				<div class="my_address_R">
-					<p class="p1">
-						<span class="span1">胡三胖</span>&emsp;
-						<span class="span2">151****1459</span>
-					</p>
-					<p class="p2">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋15-6</p>
-				</div>
-			</div>
-			<div class="my_address_item_bottom">
-				<a href="" class="mr_3">编辑</a>
-				<a href="">删除</a>
-			</div>
-		</li>
-		<li>
-			<div class="my_address_item_top">
-				<div class="my_address_L">
-					<label class="label_box"><input type="radio" name="abc"><i>✓</i></label>
-				</div>
-				<div class="my_address_R">
-					<p class="p1">
-						<span class="span1">胡三胖</span>&emsp;
-						<span class="span2">151****1459</span>
-					</p>
-					<p class="p2">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋15-6</p>
-				</div>
-			</div>
-			<div class="my_address_item_bottom">
-				<a href="" class="mr_3">编辑</a>
-				<a href="">删除</a>
-			</div>
-		</li>
-	</ul>
-
-	<div class="add_address_footer">
-		<a href="/userAddress/openAddUserAddress"><span class="add_address_footer_btn">新增地址</span></a>
-	</div>
-
+    <div class="order_back_box">
+        <img src="/img/max-address.png"/>
+        <p class="p1">你还没有添加地址哦~</p>
+        <a href="/userAddress/openAddUserAddress" class="order_back_btn" style="color: #ea2f3e;width:120px;">添加收货地址</a>
+    </div>
+    <div id="addressLists" style="display: none;">
+        <ul class="my_address_list">
+            <li>
+                <div class="my_address_item_top">
+                    <div class="my_address_L">
+                        <label class="label_box"><input type="radio" name="abc" checked="checked"><i>✓</i></label>
+                    </div>
+                    <div class="my_address_R">
+                        <p class="p1">
+                            <span class="span1">胡三胖</span>&emsp;
+                            <span class="span2">151****1459</span>
+                        </p>
+                        <p class="p2">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋15-6</p>
+                    </div>
+                </div>
+                <div class="my_address_item_bottom">
+                    <a href="" class="mr_3">编辑</a>
+                    <a href="">删除</a>
+                </div>
+            </li>
+            <li>
+                <div class="my_address_item_top">
+                    <div class="my_address_L">
+                        <label class="label_box"><input type="radio" name="abc"><i>✓</i></label>
+                    </div>
+                    <div class="my_address_R">
+                        <p class="p1">
+                            <span class="span1">胡三胖</span>&emsp;
+                            <span class="span2">151****1459</span>
+                        </p>
+                        <p class="p2">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋15-6</p>
+                    </div>
+                </div>
+                <div class="my_address_item_bottom">
+                    <a href="" class="mr_3">编辑</a>
+                    <a href="">删除</a>
+                </div>
+            </li>
+        </ul>
+        <div class="add_address_footer">
+            <a href="/userAddress/openAddUserAddress"><span class="add_address_footer_btn">新增地址</span></a>
+        </div>
+    </div>
     <script src="/js/jquery-1.9.1.min.js"></script>
 	<script>
 		var countdown=60;
@@ -97,7 +102,6 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
 				settime(val)
 			},1000)
 		}
-
 
 		$(function(){
 	        $("#replace_nav > li").click(function(){
