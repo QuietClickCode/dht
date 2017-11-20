@@ -77,8 +77,12 @@ public class UserAddressController extends BaseController {
     public BaseResp editorUserAddress(HttpServletRequest request, UserAddress userAddress){
         Long uId=getCurLoginUserId(request);
         userAddress.setUaUid(uId);
-        userAddressService.updateUserAddress(userAddress);
-        return success(null);
+        try{
+            userAddressService.updateUserAddress(userAddress);
+            return success("修改收货地址成功");
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
     }
 
     /**

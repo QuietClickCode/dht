@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,11 +32,28 @@ public class UserAddressServiceImpl implements UserAddressService {
 		userAddress.setUaUuid(uuid);
 		userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
 		userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
+		Date curDate=new Date();
+		userAddress.setUaCreateTime(curDate);
+		userAddress.setUaUpdateTime(curDate);
 		int status = userAddressMapper.saveUserAddress(userAddress);
 		return status == 1 ? true : false;
 	}
-	public boolean updateUserAddress(UserAddress userAddress) {
-		int status = userAddressMapper.updateUserAddress(userAddress);
+	public boolean updateUserAddress(UserAddress userAddress) throws AppException{
+	    UserAddress ua=userAddressMapper.queryUserAddressByUaId(userAddress.getUaId());
+	    if(userAddress.getUaUid().intValue()!=ua.getUaUid().intValue()){
+            throw new AppException("不能修改他们的收货地址");
+        }
+        userAddress.setUaUuid(ua.getUaUuid());
+	    userAddress.setUaCreateTime(ua.getUaCreateTime());
+	    userAddress.setUaUpdateTime(new Date());
+	    userAddress.setVersion(ua.getVersion());
+	    userAddress.setUaIsDefault(userAddress.getUaIsDefault());
+        userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+        userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
+		int status = userAddressMapper.saveUserAddress(userAddress);
+
+		ua.setIsDelete(SystemConstant.SYS_IS_DELETE_YES);
+		userAddressMapper.updateUserAddress(ua);
 		return status == 1 ? true : false;
 	}
 	public UserAddress queryUserAddressByUaId(Long uaId) {

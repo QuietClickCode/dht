@@ -142,17 +142,28 @@
                 if($("#uaAddress").val()){
                     allAddress+=$("#uaAddress").val();
                 }
+                let url="/userAddress/addUserAddress";
+                if($("#uaId").val()){
+                    url="/userAddress/editorUserAddress";
+                }
 				formData["uaAllAddress"]=allAddress;
-                console.log(formData)
                 $.ajax({
                     type:"post",
-                    url:'/userAddress/addUserAddress',
+                    url:url,
                     dataType: "json",
                     data:formData,
                     success:function(data){
-                        console.log(data)
                         layer.close(curIndex);
+                        if(data.status==0){
+                            //提示
+                            layer.open({
+                                content: msg,
+                                skin: 'msg',
+                                time: 2 //2秒后自动关闭
+                            });
+                        }
                         isSaves=false;
+
                     }
                 });
 			}

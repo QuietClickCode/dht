@@ -29,7 +29,7 @@ public interface UserAddressService {
 	 * @author zhongp
 	 * @date
 	 */
-	public boolean updateUserAddress(UserAddress userAddress);
+	public boolean updateUserAddress(UserAddress userAddress)throws AppException;
 	/**
 	 * 根据id查询用户收货地址列表
 	 * @param uaId
