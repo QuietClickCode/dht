@@ -105,7 +105,15 @@
 			ua_uuid,ua_uid,ua_name,ua_phone,ua_zip_code,ua_province,ua_city,ua_district,ua_address,ua_all_address,ua_is_default,ua_create_time,ua_update_time,is_valida,is_delete,version
 		) VALUES
 		(
-			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},
+			#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},
+			#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},
+			<if test="null != params.version">
+				#{version,jdbcType=INTEGER}
+			</if>
+			<if test="null == params.version">
+				0
+			</if>
 		)
 	</insert>
 	<!--修改用户收货地址列表 -->
