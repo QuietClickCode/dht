@@ -9,6 +9,9 @@ public class GoodsGdsprelVo extends GoodsGdsprel {
     private String gsName;
     private Float gdPrice;
     private Long gdResidueinventory;
+    private Long sumcount;
+    private String imgurl;
+    private String gunitname;
 
     public String getGsName() {
         return gsName;
@@ -32,5 +35,29 @@ public class GoodsGdsprelVo extends GoodsGdsprel {
 
     public void setGdResidueinventory(Long gdResidueinventory) {
         this.gdResidueinventory = gdResidueinventory;
+    }
+
+    public Long getSumcount() {
+        return sumcount;
+    }
+
+    public void setSumcount(Long sumcount) {
+        this.sumcount = sumcount;
+    }
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getGunitname() {
+        return gunitname;
+    }
+
+    public void setGunitname(String gunitname) {
+        this.gunitname = gunitname;
     }
 }

@@ -2,7 +2,11 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.vo.GoodsGdsprelVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：商品与特价关系表DAO
  * @author fanghui
@@ -54,4 +58,6 @@ public interface GoodsGdsprelMapper {
 	public List<GoodsGdsprel> queryGoodsGdsprelList(Pagination<GoodsGdsprel> pagination);
 
 	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid);
+
+	public List<GoodsGdsprelVo> queryGoodsGdsprelVoLists(@Param("params") Map params);
 }

@@ -26,6 +26,9 @@
 		<result property="gsName" column="gsname"/>
 		<result property="gdPrice" column="gdPrice"/>
 		<result property="gdResidueinventory" column="gdResidueinventory"/>
+		<result property="sumcount" column="sumcount"/>
+		<result property="imgurl" column="imgurl"/>
+		<result property="gunitname" column="g_unitname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -85,6 +88,24 @@
 		LEFT JOIN t_goods_gsval t3 ON t2.gsv_id=t3.gsv_id
 		GROUP BY t0.gd_id,t1.is_delete,t2.is_delete,t3.is_delete
 		HAVING t0.is_delete!=1 and g_id=#{gid}
+	</select>
+
+	<select id="queryGoodsGdsprelVoLists" parameterType="java.util.Map" resultMap="rm_goodsGdsprel_vo">
+		SELECT COUNT(*) sumcount,t2.*,t4.show_url imgurl,t5.g_unitname
+		from t_goods_ggsval_detail t1
+		LEFT JOIN t_goods_gdsprel t2 ON t1.gd_id=t2.gd_id and t2.is_delete!=1
+		LEFT JOIN t_goods_detail t3 ON t3.gd_id=t2.gd_id
+		LEFT JOIN t_attachment t4 ON t3.gd_imgid=t4.show_url
+		LEFT JOIN t_goods t5 ON t5.g_id=t3.g_id
+		where t1.is_delete!=1
+		and t1.g_id=#{params[gid]}
+		and t1.gsv_id IN
+		<foreach collection="params.gsvId" item="gsvid" index="index"
+				 open="(" close=")" separator=",">
+			#{gsvid}
+		</foreach>
+		GROUP BY t1.gd_id
+		ORDER BY sumcount DESC
 	</select>
 	<!--添加商品与特价关系表 -->
 	<insert id="saveGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel" useGeneratedKeys="true" keyProperty="gdspId">

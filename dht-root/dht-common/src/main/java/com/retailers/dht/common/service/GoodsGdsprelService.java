@@ -59,6 +59,9 @@ public interface GoodsGdsprelService {
 	public boolean deleteGoodsGdsprelByGdspId(Long gdspId);
 
 	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid);
+
+	public GoodsGdsprelVo queryGoodsGdsprelVoLists(Map<String, Object> params);
+
 }
 
 

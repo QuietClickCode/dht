@@ -7,9 +7,11 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +24,13 @@ public class GoodsController extends BaseController {
 
     @Autowired
     GoodsService goodsService;
+
+    @RequestMapping("/{id}.html")
+    public String service(HttpServletRequest request, @PathVariable("id")String id){
+        System.out.println("id====================================>:"+id);
+        return redirectUrl(request,"goods/goods");
+    }
+
 
     @RequestMapping("/queryGoodsById")
     @ResponseBody

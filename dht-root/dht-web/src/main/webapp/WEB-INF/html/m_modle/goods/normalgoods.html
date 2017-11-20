@@ -5,14 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>秒杀商品</title>
+    <title>商品详情</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    
+    <style>
+    	.focus .hd.bargain{
+    		bottom: .1rem;
+    	}
+    </style>
 </head>
-
 <body class="bge6">
     <div class="specialty-title2 borderB">
-        <a onclick="returnhistory();" class="icon-return"></a>
+        <a href="" class="icon-return"></a>
         <span>商品详情</span>
     </div>
 
@@ -21,81 +26,63 @@
             <ul></ul>
         </div>
         <div class="bd">
-            <ul id="goodsImagesul" style="height: 200px">
+            <ul>
                 <li>
-                    <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
+                    <a href="#">
+                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                    </a>
                 </li>
                 <li>
-                    <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
+                    <a href="#">
+                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img _src="img/banner1.jpg" src="img/bangain5.png" />
+                    </a>
                 </li>
             </ul>
-            <!-- 倒计时 -->
-            <div class="product-countDown2">
-                <span id="minprice" class="price">￥650</span>
-                <span class="special-text">秒杀价</span>
-                <s id="gprice">￥980</s>
-                <div class="time-box">
-                    <p class="text">距结束仅剩</p>
-                    <div class="time-span">
-                        <span id="shi1" class="time">0</span>
-                        <span id="shi2" class="time">0</span>
-                        <span class="colon">:</span>
-                        <span id="fen1" class="time">0</span>
-                        <span id="fen2" class="time">0</span>
-                        <span class="colon">:</span>
-                        <span id="miao1" class="time">0</span>
-                        <span id="miao2" class="time">0</span>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
-
+	
     <div class="bargain-text box2">
-        <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
-        <div class="seckill-address" id="personaddressdiv">
-            <div class="text" >
-                <span class="seckill-address-title">产自</span>
-                <div class="name" id="gproductioninperson">高达山</div>
-                <span class="address-text">
-                    <i></i>
-                    <span id="gproductioninaddress">石柱县高家庄</span>
-                </span>
-            </div>
-            <div class="text" >
-                <span class="seckill-address-title">采供</span>
-                <div class="name2" id="gpickperson">高达山</div>
-                <span class="address-text">
-                    <i></i>
-                    <span id="gpickaddress">石柱县高家庄</span>
-                </span>
-            </div>
-        </div>
+    	<div class="goods_info_box">
+		    <p class="p1">高家庄土蜂蜜</p>
+		    <p class="p2">￥128.00/<span>斤</span></p>
+		    <p class="p3">剩余:60斤</p>
+		</div>
+
         <div class="norms" id="open_car">
             <span class="name">已选</span>
-            <span class="text overflow" id="nowhasgsvalspan"> 请选择规格<!--一斤装（玻璃瓶），数量×1--></span>
+            <span class="text overflow"> 一斤装（玻璃瓶），数量×1</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms showaddressfreigh">
+        <div class="norms">
             <span class="name">送至</span>
-            <span class="text overflow" id="open_address">请选择地址 <!--重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...--></span>
+            <span class="text overflow" id="open_address"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
             <span class="checkbox"></span>
-        </div>
-        <div class="norms showaddressfreigh">
-            <span class="name">运费</span>
-            <span class="text overflow" id="gfreigh"> 0.0元</span>
         </div>
         <div class="norms" id="open_time">
             <span class="name">配送</span>
             <span class="text overflow"> 选择配送时间</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms" id="isAdvancesalediv">
-            <span class="name">预售</span>
-            <span class="text overflow"> 预售时间xxxx</span>
+        <div class="norms">
+            <span class="name">运费</span>
+            <span class="text overflow"> 12.0元</span>
         </div>
-
-        <div class="ensure" style="display: none;">
+        <div class="ensure">
             <span>
                 <i class="icon-yes"></i>
                 农家自产
@@ -114,37 +101,15 @@
             </span>
         </div>
 
-        <div class="loading-more">
-            <i></i>
-            上拉查看图文详情
-        </div>
     </div>
 
     <div class="bargain-details box2">
-        <div class="bargain-tab" id="J_bargainTab">
-            <a href="#details" class="active">商品介绍</a>
-            <a href="#evaluate">用户评价</a>
-        </div>
 
         <div class="box2">
-
-            <div class="product-details" id="details">
-                <!-- 商品信息 -->
-                <div class="like">
-                    <div class="cont">
-                        <span class="bargain-like">商品信息</span>
-                    </div>
-                </div>
-
-                <div id="gdescription">
-                    <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
-                </div>
-            </div>
-
-            <div class="product-evaluate box2 displayN" id="evaluate">
+            <div class="product-evaluate box2" id="evaluate">
                 <div class="title">
-                    <span id="sumgclsspan">全部评价(1990) </span>
-                    <div class="stars1" id="avgleveldiv">
+                    <span>全部评价(1990) </span>
+                    <div class="stars1">
                         <i></i>
                         <i></i>
                         <i></i>
@@ -152,7 +117,7 @@
                         <i></i>
                     </div>
                 </div>
-                <div class="label box2" id="singlegcldiv">
+                <div class="label box2">
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
@@ -161,150 +126,200 @@
                 </div>
 
                 <!-- 用户评价 -->
-                <div id="usercommentdiv">
-
-                    <div class="user-evaluate">
-                        <div class="box2">
-                            <img src="/img/class1.png" class="img" alt="">
-                            <div class="text">hz2375</div>
-                            <div class="stars2">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </div>
-                        </div>
-                        <div class="label2 box2">
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
+                <div class="user-evaluate ">
+                    <div class="box2">
+                        <img src="img/class1.png" class="img" alt="">
+                        <div class="text">hz2375</div>
+                        <div class="stars2">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
                         </div>
                     </div>
-                    <div class="user-evaluate">
-                        <div class="box2">
-                            <img src="/img/class1.png" class="img" alt="">
-                            <div class="text">hz2375</div>
-                            <div class="stars2">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </div>
+                    <div class="label2 box2">
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                    </div>
+                </div>
+                <div class="user-evaluate">
+                    <div class="box2">
+                        <img src="img/class1.png" class="img" alt="">
+                        <div class="text">hz2375</div>
+                        <div class="stars2">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
                         </div>
-                        <div class="label2 box2">
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
+                    </div>
+                    <div class="label2 box2">
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                    </div>
+                </div>
+                <div class="user-evaluate">
+                    <div class="box2">
+                        <img src="img/class1.png" class="img" alt="">
+                        <div class="text">hz2375</div>
+                        <div class="stars2">
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
+                            <i></i>
                         </div>
+                    </div>
+                    <div class="label2 box2">
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
+                        <span>新鲜</span>
                     </div>
                 </div>
 
-
-                <div class="more" id="nogoodscldiv">
-
+                <div class="more">
+                    <a href="">查看全部评论</a>
                 </div>
 
             </div>
 
         </div>
     </div>
+    
+    <div class="recommend_box">
+    	<p class="recommend_title">相似推荐</p>
+    	<ul class="like-list box2">
+            <li>
+                <a href="" class="img"><img src="img/list2.jpg" alt=""></a>
+                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
+                <p>￥189</p>
+            </li>
+            <li>
+                <a href="" class="img"><img src="img/list2.jpg" alt=""></a>
+                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
+                <p>￥189</p>
+            </li>
+            <li>
+                <a href="" class="img"><img src="img/list2.jpg" alt=""></a>
+                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
+                <p>￥189</p>
+            </li>
+            <li>
+                <a href="" class="img"><img src="img/list2.jpg" alt=""></a>
+                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
+                <p>￥189</p>
+            </li>
+        </ul>
+    </div>
+    <div class="loading_more">
+            <i></i>
+            上拉查看图文详情
+        </div>
 
     <div class="placeholder-footer2"></div>
     <div class="bargain-footer">
         <div class="special">
-            <div class="share">
+            <div class="share" style="width: 50%;">
                 <a href="">
                     <i></i>
                     <p>分享好友</p>
                 </a>
             </div>
-            <!-- <div class="care">
+            <div class="care" style="width: 50%;">
                 <a href="">
-                    <i>
-                        <span class="number">4</span>
-                    </i>
-                    <p>分享好友</p>
+                    <i><span class="number">4</span></i>
+                    <p>加入购物车</p>
                 </a>
-            </div> -->
+            </div>
         </div>
         <a href="" class="bargain-btn2">立即购买</a>
     </div>
-    <!--选择规格弹框-->
-    <div class="mark" id="J_mark2" style="display:none;">
-        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-            <i class="care-norms-close J_careNormsClose2" id="closegsdiv"></i>
-            <div class="product" id="product">
-                <img src="" alt="">
-                <div class="text">
-                    <span class="mr_4" style="color: #ec3c3c;"></span>
-                    <br />
-                    <span></span>
-                </div>
-            </div>
-            <div id="gsdiv">
-                <div class="care-checkbox J_careCheckbox">
-                    <span class="name">规格1</span>
-                    <span class="checkbox_service" onclick="clickactive(this)">人工费=</span>
-                    <span class="checkbox_service" onclick="clickactive(this)">人工</span>
-                    <span class="checkbox_service" onclick="clickactive(this)">材)</span>
-                </div>
-
-            </div>
-
-            <div class="care-checkbox" style="margin-top: .2rem;">
-                <span class="name">数量</span>
-                <div class="number number-box">
-                    <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
-                    <span class="num J_careNum" id="goodsnumber">1</span>
-                    <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
-                </div>
-            </div>
-
-            <div class="car_footer_box">
-                <a onclick="suregsa();" class="add_car_btn2" style="width: 100%">确定</a>
-            </div>
-        </div>
-    </div>
-
-    <div class="mark" id="J_mark3" style="display:none;">
-        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-            <i class="care-norms-close J_careNormsClose3"></i>
-            <p class="J_mark_title">选择配送时间</p>
-            <div class="care-checkbox J_careCheckbox">
-                <span class="checkbox active J_checkbox">橙黄色</span>
-                <select name="" class="select_input">
-                    <option value="0">选择时间</option>
-                    <option value="0">周一至周五</option>
-                    <option value="0">周末</option>
-                </select>
-            </div>
-            <a href="" class="care-norms-checkbox-btn">确定</a>
-        </div>
-    </div>
-
+    
     <div class="mark" id="J_mark" style="display:none;">
-        <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-            <i class="care-norms-close J_careNormsClose" id="closeaddress"></i>
-            <p class="J_mark_title">送至</p>
-            <ul class="address_list_box" id="addressul">
-                <li class="active">
-                    <span class="address_img"></span>
-                    <div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
-                    <span  class="icon_choice"></span>
-                </li>
-                <li>
-                    <span class="address_img"></span>
-                    <div class="address_text">上海市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
-                    <span  class="icon_choice"></span>
-                </li>
-            </ul>
-            <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
-        </div>
+    	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+	        <i class="care-norms-close J_careNormsClose"></i>
+	        <p class="J_mark_title">送至</p>
+	        <ul class="address_list_box">
+	        	<li class="active">
+	        		<span class="address_img"></span>
+	        		<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+	        		<span  class="icon_choice"></span>
+	        	</li>
+	        	<li>
+	        		<span class="address_img"></span>
+	        		<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+	        		<span  class="icon_choice"></span>
+	        	</li>
+	        </ul>
+	        <a href="" class="care-norms-checkbox-btn">新增收获地址</a>
+	    </div>
     </div>
+    
+    <div class="mark" id="J_mark2" style="display:none;">
+    	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+	        <i class="care-norms-close J_careNormsClose2"></i>
+	        <div class="product">
+	            <img src="img/list2.jpg" alt="">
+	            <div class="text">
+	                ￥168.00
+	                <br />
+	                <span>库存60件</span>
+	            </div>
+	        </div>
+	        <div class="care-checkbox J_careCheckbox">
+	            <span class="name">颜色</span>
+	            <span class="checkbox active J_checkbox">橙黄色</span>
+	            <span class="checkbox J_checkbox">橙黄色</span>
+	            <span class="checkbox J_checkbox">橙黄色</span>
+	            <span class="checkbox J_checkbox">橙黄色</span>
+	            <span class="checkbox J_checkbox">橙黄色</span>
+	            <span class="checkbox J_checkbox">橙黄色</span>
+	        </div>
+	        <div class="care-checkbox J_careCheckbox">
+	            <span class="name">尺码</span>
+	            <span class="checkbox active J_checkbox">XS</span>
+	            <span class="checkbox J_checkbox">S</span>
+	        </div>
+	        <div class="care-checkbox">
+	            <span class="name">数量</span>
+	            <div class="number number-box">
+	                <span class="reduce J_careReduce">-</span>
+	                <span class="num J_careNum">1</span>
+	                <span class="add J_careAdd">+</span>
+	            </div>
+	        </div>
+	        
+	        <div class="car_footer_box">
+	        	<a href="" class="add_car_btn">加入购物车</a>
+	        	<a href="" class="add_car_btn2">立即购买</a>
+	        </div>
+	    </div>
+    </div>
+    
+    <div class="mark" id="J_mark3" style="display:none;">
+    	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+	        <i class="care-norms-close J_careNormsClose3"></i>
+	        <p class="J_mark_title">选择配送时间</p>
+	        <div class="care-checkbox J_careCheckbox">
+	            <span class="checkbox active J_checkbox">橙黄色</span>
+	            <select name="" class="select_input">
+	            	<option value="0">选择时间</option>
+	            	<option value="0">周一至周五</option>
+	            	<option value="0">周末</option>
+	            </select>
+	        </div>
+	        <a href="" class="care-norms-checkbox-btn">确定</a>
+	    </div>
+    </div>
+
+
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
@@ -472,11 +487,9 @@
                         }
                         if(isServiceGoods==1){
                             $('.showaddressfreigh').hide();
-                            $($('#open_time').find('span')[1]).html('请选择服务时间');
-                            $('#isAdvancesalediv').hide();
+                            $($('#open_time').find('span')[1]).html('请选择服务时间')
                         }else{
                             $('.showaddressfreigh').show();
-                            $('#isAdvancesalediv').show();
                         }
                         if(isAllowsetdeliverytime==1){
                             $('#open_time').show();
@@ -758,8 +771,8 @@
 
         }
 
-        <!--确定规格-->
-        function suregsa() {
+        <!--加入购物车-->
+        function addtobuycar() {
             var actives = $('#gsdiv').find('.active');
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
             if(actives.length>0&&actives.length==gsdivs.length){
@@ -776,9 +789,21 @@
                 var gcount = $('#goodsnumber').html();
                 var bcPriceHtml = $($('#product').find('span')[0]).html();
                 var bcPrice = parseFloat(bcPriceHtml.substr(1,bcPriceHtml.indexOf('/')));
-                $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
-                document.getElementById('closegsdiv').click();
-                $('#minprice').html('￥'+bcPrice);
+                $.ajax({
+                    type:"post",
+                    url:"/buyCar/saveBuyCar",
+                    dataType: "json",
+                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path},
+                    success:function(data){
+                        if(data.status==0){
+                            alert('添加成功!');
+
+                            $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
+                            document.getElementById('closegsdiv').click();
+                        }
+
+                    }
+                });
 
             }else{
                 alert("请选择规格");
@@ -823,12 +848,12 @@
         }
 
         $(function(){
-        	$("#open_car").click(function(){
-        		$("#J_mark2").show()
-        	});
-        	$(".J_careNormsClose2").click(function(){
-        		$("#J_mark2").hide()
-        	});
+            $("#open_car").click(function(){
+                $("#J_mark2").show()
+            });
+            $(".J_careNormsClose2").click(function(){
+                $("#J_mark2").hide()
+            });
             $(".address_list_box>li").click(function(){
                 $(".address_list_box>li").removeClass("active")
                 $(this).addClass("active")
@@ -917,6 +942,7 @@
             window.history.go(-1);
         }
     </script>
+
 </body>
 
 </html>

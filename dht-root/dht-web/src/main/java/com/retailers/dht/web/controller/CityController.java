@@ -26,7 +26,6 @@ public class CityController extends BaseController {
     CityService cityService;
 
     @RequestMapping("/queryCityListsByCityName")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
     public  Map<String,Object> queryCityLists(String cityname){
         Map<String,Object> map = new HashMap<String,Object>();

@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsGdsprelMapper;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.service.GoodsGdsprelService;
@@ -62,6 +63,16 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid){
 		List<GoodsGdsprelVo> list = goodsGdsprelMapper.queryGoodsGdsprelListsByGid(gid);
 		return list;
+	}
+
+	public GoodsGdsprelVo queryGoodsGdsprelVoLists(Map<String, Object> params){
+		List<GoodsGdsprelVo> list = goodsGdsprelMapper.queryGoodsGdsprelVoLists(params);
+		if(!ObjectUtils.isEmpty(list)){
+			GoodsGdsprelVo goodsGdsprelVo = list.get(0);
+			goodsGdsprelVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+goodsGdsprelVo.getImgurl());
+			return  goodsGdsprelVo;
+		}
+		return null;
 	}
 }
 
