@@ -37,19 +37,19 @@
 				<li>
 					<div class="add_adress_box_L">省</div>
 					<div class="add_adress_box_R">
-						<select data-province="---- 选择省 ----" id="uaProvince" name="uaProvince"></select>
+						<select data-province="${userAddress.uaProvince}" id="uaProvince" name="uaProvince"></select>
 					</div>
 				</li>
 				<li>
 					<div class="add_adress_box_L">市</div>
 					<div class="add_adress_box_R">
-						<select data-city="---- 选择市 ----" id="uaCity" name="uaCity"></select>
+						<select data-city="${userAddress.uaCity}" id="uaCity" name="uaCity"></select>
 					</div>
 				</li>
 				<li>
 					<div class="add_adress_box_L">区/县</div>
 					<div class="add_adress_box_R">
-						<select data-district="---- 选择区 ----" id="uaDistrict" name="uaDistrict"></select>
+						<select data-district="${userAddress.uaDistrict}" id="uaDistrict" name="uaDistrict"></select>
 					</div>
 				</li>
 			</div>
@@ -95,9 +95,9 @@
 		var initUaProvince='${userAddress.uaProvince}'==''?'---- 选择省 ----':'${userAddress.uaProvince}';
 		var initUauaCity='${userAddress.uaCity}'==''?'---- 选择市 ----':'${userAddress.uaCity}';
 		var initUauaDistrict='${userAddress.uaDistrict}'==''?'---- 选择区 ----':'${userAddress.uaDistrict}';
-		console.log(initUaProvince)
-		console.log(initUauaCity)
-		console.log(initUauaDistrict)
+//		console.log(initUaProvince)
+//		console.log(initUauaCity)
+//		console.log(initUauaDistrict)
 
 		$(function(){
 	        $("#replace_nav > li").click(function(){
@@ -106,8 +106,11 @@
 	            $this.addClass("active").siblings("li").removeClass("active");
 	            $(".replace_container > .replace_container_item").eq(index).addClass("active").siblings(".replace_container_item").removeClass("active");
 	        });
-            $('#distpicker').distpicker();
-            $("#uaProvince").val(${userAddress.uaProvince});
+//            $('#distpicker').distpicker({
+//                province: initUaProvince,
+//                city: initUauaCity,
+//                district: initUauaDistrict
+//			});
 	    });
 
 		var isSaves=false;

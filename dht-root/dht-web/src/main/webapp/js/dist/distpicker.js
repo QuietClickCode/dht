@@ -111,23 +111,24 @@
       }
       value = options[type];
       code = (
-        type === PROVINCE ? 86 :
-        type === CIRY ? this.$province && this.$province.find(':selected').data('code') :
-        type === DISTRICT ? this.$city && this.$city.find(':selected').data('code') : code
+        type == PROVINCE ? 86 :
+        type == CIRY ? this.$province && this.$province.find(':selected').data('code') :
+        type == DISTRICT ? this.$city && this.$city.find(':selected').data('code') : code
       );
       districts = $.isNumeric(code) ? ChineseDistricts[code] : null;
+
       if ($.isPlainObject(districts)) {
         $.each(districts, function (code, address) {
-          var selected = code === value;
+          var selected = (code == value);
           if (selected) {
             matched = true;
           }
-
           data.push({
             code: code,
             address: address,
             selected: selected
           });
+
         });
       }
 
@@ -150,7 +151,6 @@
           selected: false
         });
       }
-
       $select.html(this.getList(data));
     },
 
