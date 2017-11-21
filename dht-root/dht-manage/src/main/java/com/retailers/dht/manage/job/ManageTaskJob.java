@@ -1,6 +1,7 @@
 package com.retailers.dht.manage.job;
 
 import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.ProcedureToolsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,8 @@ public class ManageTaskJob {
     Logger logger = LoggerFactory.getLogger(ManageTaskJob.class);
     @Autowired
     private AttachmentService attachmentService;
+    @Autowired
+    private ProcedureToolsService procedureToolsService;
 
     /**
      * 每小时清除未被使用的附件资源
@@ -25,5 +28,14 @@ public class ManageTaskJob {
         logger.info("附件资源清除执行开始");
         attachmentService.clearUnUsedAttachemnt();
         logger.info("附件资源清除执行完毕");
+    }
+
+    /**
+     * 清除最近一小时生成的序列
+     */
+    public void clearSequenceData(){
+        logger.info("清除最近一小时生成的序列开始");
+        procedureToolsService.clearSequenceData();
+        logger.info("清除最近一小时生成的序列完毕");
     }
 }

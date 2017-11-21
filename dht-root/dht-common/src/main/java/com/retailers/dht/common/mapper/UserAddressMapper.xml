@@ -105,7 +105,15 @@
 			ua_uuid,ua_uid,ua_name,ua_phone,ua_zip_code,ua_province,ua_city,ua_district,ua_address,ua_all_address,ua_is_default,ua_create_time,ua_update_time,is_valida,is_delete,version
 		) VALUES
 		(
-			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{uaUuid,jdbcType=VARCHAR},#{uaUid,jdbcType=BIGINT},#{uaName,jdbcType=VARCHAR},#{uaPhone,jdbcType=VARCHAR},#{uaZipCode,jdbcType=VARCHAR},#{uaProvince,jdbcType=VARCHAR},
+			#{uaCity,jdbcType=VARCHAR},#{uaDistrict,jdbcType=VARCHAR},#{uaAddress,jdbcType=VARCHAR},#{uaAllAddress,jdbcType=VARCHAR},#{uaIsDefault,jdbcType=INTEGER},
+			#{uaCreateTime,jdbcType=TIMESTAMP},#{uaUpdateTime,jdbcType=TIMESTAMP},#{isValida,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},
+			<if test="null != version">
+				#{version,jdbcType=INTEGER}
+			</if>
+			<if test="null == version">
+				0
+			</if>
 		)
 	</insert>
 	<!--修改用户收货地址列表 -->
@@ -156,9 +164,6 @@
             </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
-            </if>
-            <if test="null != version">
-                version = version+1,
             </if>
 		</set>
 		WHERE ua_id = #{uaId} and version = #{version}
