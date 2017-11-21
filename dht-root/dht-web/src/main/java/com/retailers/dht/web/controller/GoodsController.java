@@ -2,6 +2,7 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
@@ -40,7 +41,7 @@ public class GoodsController extends BaseController {
         params.put("isDelete",0L);
         params.put("isShow",isShow);
         params.put("isChecked",isChecked);
-        Pagination<Goods> pagination = goodsService.queryGoodsList(params,1,2);
+        Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,1,2);
         Map<String,Object> gtm = new HashMap<String,Object>();
         if(!ObjectUtils.isEmpty(pagination.getData())){
             gtm.put("row",pagination.getData().get(0));

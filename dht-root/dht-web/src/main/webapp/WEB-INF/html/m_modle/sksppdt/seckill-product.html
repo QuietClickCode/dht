@@ -64,14 +64,14 @@
             </div>
             <div class="text" >
                 <span class="seckill-address-title">采供</span>
-                <div class="name2" id="gpickperson">高达山</div>
+                <div class="name" id="gpickperson">高达山</div>
                 <span class="address-text">
                     <i></i>
                     <span id="gpickaddress">石柱县高家庄</span>
                 </span>
             </div>
         </div>
-        <div class="norms" id="open_car">
+        <div class="norms" id="open_car" onclick="loadgsval();">
             <span class="name">已选</span>
             <span class="text overflow" id="nowhasgsvalspan"> 请选择规格<!--一斤装（玻璃瓶），数量×1--></span>
             <span class="checkbox"></span>
@@ -628,10 +628,15 @@
 
         var ginventory=0;
         var spBounds = 0;
-        <!--点击规格加载信息-->
+        <!--点击修改规格样式-->
         function clickactive(obj) {
             $(obj).siblings().removeClass('active');
             $(obj).addClass('active');
+            loadgsval();
+        }
+
+        <!--规格加载信息-->
+        function loadgsval() {
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
             var gsvalactive = $('#gsdiv').find('.active');
 
@@ -666,7 +671,7 @@
                             }
 
                             if(inventory<=0){
-
+                                //把按钮全部变为灰色
                             }
 
                             $(pricespan).html('￥'+price+'/'+gunitname);
@@ -726,14 +731,16 @@
                                 for(var j=0;j<gsvalidnames.length;j++){
                                     var gsvalid = gsvalidnames[j].split(':')[0];
                                     var gsvalname = gsvalidnames[j].split(':')[1];
-                                    html += '<span class="checkbox_service" onclick="clickactive(this)"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
+                                    var activeclass = '';
+                                    if(j==0){
+                                        activeclass = 'active';
+                                    }
+                                    html += '<span class="checkbox_service '+activeclass+'" onclick="clickactive(this)"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
                                 }
                                 html += '</div>';
                                 $('#gsdiv').append(html);
                             }
                         }
-
-
                     }
                 }
             });
@@ -783,8 +790,6 @@
             }else{
                 alert("请选择规格");
             }
-
-
         }
 
         <!--日期格式化-->

@@ -2,7 +2,11 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：商品详情表DAO
  * @author fanghui
@@ -54,4 +58,6 @@ public interface GoodsDetailMapper {
 	public List<GoodsDetail> queryGoodsDetailList(Pagination<GoodsDetail> pagination);
 
 	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
+
+	public List<GoodsDetailVo> queryGoodsDetailVoLists(@Param("params") Map params);
 }

@@ -12,6 +12,15 @@ public class GoodsDetailVo extends GoodsDetail {
     private String gsname;
     private String hasgsvalid;
     private String hasgsval;
+    private String gunitname;
+
+    public String getGunitname() {
+        return gunitname;
+    }
+
+    public void setGunitname(String gunitname) {
+        this.gunitname = gunitname;
+    }
 
     public String getGsid() {
         return gsid;

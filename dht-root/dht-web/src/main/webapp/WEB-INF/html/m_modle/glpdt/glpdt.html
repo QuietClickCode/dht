@@ -170,10 +170,10 @@
                                         var minprice = rows[i].minprice;
                                         var maxprice = rows[i].maxprice;
                                         html = '<li class="winter_goods_item">'+
-                                            '<a href=""  class="goods_info_img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html"  class="goods_info_img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
                                             '<div class="winter_goods_info_box">'+
-                                            '<a href="" class="title1">'+rows[i].gname+'</a>'+
-                                            '<p class="title2">'+removeHTMLTag(rows[i].gdescription)+' 鲜肉月饼生胚 苏式月饼现烤鲜肉月饼生胚 苏式月饼现烤</p>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="title1">'+rows[i].gname+'</a>'+
+                                            '<p class="title2">'+removeHTMLTag(rows[i].gdescription)+' </p>'+
                                             '<div class="price">';
                                         if(maxprice==minprice){
                                             html += '<span class="mr_4">￥</span>'+rows[i].maxprice;
@@ -183,7 +183,7 @@
 
                                         html += '</div>'+
                                             '<div class="purchase">'+
-                                            '<a href="">马上抢购</a>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html">马上抢购</a>'+
                                             '<span class="span1">剩余'+rows[i].inventory+rows[i].gunitname+'</span>'+
                                             '</div>'+
                                             '</div>'+
@@ -223,9 +223,9 @@
                             var minprice = rows[i].minprice;
                             var maxprice = rows[i].maxprice;
                             html = '<li class="winter_goods_item">'+
-                                '<a href=""  class="goods_info_img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                '<a href="/goods/'+rows[i].gid+'.html"  class="goods_info_img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
                                 '<div class="winter_goods_info_box">'+
-                                '<a href="" class="title1">'+rows[i].gname+'</a>'+
+                                '<a href="/goods/'+rows[i].gid+'.html" class="title1">'+rows[i].gname+'</a>'+
                                 '<p class="title2">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(maxprice==minprice){
@@ -236,7 +236,7 @@
 
                             html += '</div>'+
                                 '<div class="purchase">'+
-                                '<a href="">马上抢购</a>'+
+                                '<a href="/goods/'+rows[i].gid+'.html">马上抢购</a>'+
                                 '<span class="span1">剩余'+rows[i].inventory+rows[i].gunitname+'</span>'+
                                 '</div>'+
                                 '</div>'+

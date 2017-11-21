@@ -119,5 +119,15 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 
 		return true;
 	}
+
+	public GoodsDetailVo queryGoodsDetailVoLists(Map map){
+		List<GoodsDetailVo> list = goodsDetailMapper.queryGoodsDetailVoLists(map);
+		if(!ObjectUtils.isEmpty(list)){
+			GoodsDetailVo goodsDetailVo = list.get(0);
+			goodsDetailVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsDetailVo.getImgUrl());
+			return  goodsDetailVo;
+		}
+		return null;
+	}
 }
 

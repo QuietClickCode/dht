@@ -61,6 +61,8 @@ public interface GoodsDetailService {
 	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
 
 	public boolean addMyData(String mydata,Long gid);
+
+	public GoodsDetailVo queryGoodsDetailVoLists(Map map);
 }
 
 

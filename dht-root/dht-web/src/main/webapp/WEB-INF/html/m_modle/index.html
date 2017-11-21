@@ -502,9 +502,9 @@
                             var minprice = rows[i].minprice;
                             var maxprice = rows[i].maxprice;
                             html = '<li>'+
-                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
                                 '<div class="text-box">'+
-                                '<a href="/seckillp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
                                 '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(minprice==maxprice){
@@ -514,7 +514,7 @@
                             }
                             html += '</div>'+
                                 '<div class="purchase">'+
-                                '<a href="/seckillp/'+rows[i].goodsId+'.html">马上抢购</a>'+
+                                '<a href="/specialp/'+rows[i].goodsId+'.html">马上抢购</a>'+
                                 '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
                                 '</div>'+
                                 '</div>'+

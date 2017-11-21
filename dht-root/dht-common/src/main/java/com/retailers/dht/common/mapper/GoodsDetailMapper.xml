@@ -28,6 +28,7 @@
 		<result property="gsname" column="gsname"/>
 		<result property="hasgsvalid" column="hasgsvalid"/>
 		<result property="hasgsval" column="hasgsval"/>
+		<result property="gunitname" column="g_unitname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -101,6 +102,22 @@
 		and g.gd_id=gd.gd_id
 
 		GROUP BY gd.gd_id
+	</select>
+	<select id="queryGoodsDetailVoLists" parameterType="java.util.Map" resultMap="rm_goodsDetail_vo">
+		SELECT COUNT(*) sumcount,t3.*,t4.show_url img_url,t5.g_unitname
+		from t_goods_ggsval_detail t1
+		LEFT JOIN t_goods_detail t3 ON t3.gd_id=t1.gd_id
+		LEFT JOIN t_attachment t4 ON t3.gd_imgid=t4.show_url
+		LEFT JOIN t_goods t5 ON t5.g_id=t3.g_id
+		where t1.is_delete!=1
+		and t1.g_id=#{params[gid]}
+		and t1.gsv_id IN
+		<foreach collection="params.gsvId" item="gsvid" index="index"
+				 open="(" close=")" separator=",">
+			#{gsvid}
+		</foreach>
+		GROUP BY t1.gd_id
+		ORDER BY sumcount DESC
 	</select>
 	<!--添加商品详情表 -->
 	<insert id="saveGoodsDetail" parameterType="com.retailers.dht.common.entity.GoodsDetail" useGeneratedKeys="true" keyProperty="gdId">

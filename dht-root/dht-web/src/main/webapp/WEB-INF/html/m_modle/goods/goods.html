@@ -26,7 +26,7 @@
             <ul></ul>
         </div>
         <div class="bd" >
-            <ul id="bannerul">
+            <ul id="bannerul" style="height: 200px">
                 <li>
                     <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
                 </li>
@@ -36,8 +36,8 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;">高家庄土蜂蜜<span class="span_tip">预定服务</span></p>
-		    <p class="p2">￥128.00/<span>桌</span><s><span class="mr_4">￥</span>500.00/桌</s></p>
+		    <p class="p1" style="position: relative;"><span id="gname">高家庄土蜂蜜</span><span id="servicespan" class="span_tip">预定服务</span></p>
+		    <p class="p2"><span id="gdprice" style="font-size: .3rem">￥128.00/桌</span><s><span class="mr_4" id="gprice">￥500.00/桌</span></s></p>
 		</div>
 		<div class="norms" id="open_dis" style="margin-bottom: 0;">
             <span class="name">优惠</span>
@@ -53,18 +53,19 @@
         		<span class="span2">买就送</span>
         	</li>
         </ul>
-        <ul class="norms_son2">
+        <ul class="norms_son2" id="personaddressul" style="display: none">
         	<li>
         		<span class="span1">商家</span>
-        		<span class="span2">刘喜大饭店</span>
-        		<span class="span3">刘二娃</span>
+        		<span class="span2" id="servicegoodsgproductioninperson">刘喜大饭店</span>
         	</li>
         	<li>
         		<span class="span1">地址</span>
-        		<span class="span2">重庆市石柱县××乡××村</span>
+        		<span class="span2" id="servicegoodsgproductioninaddress">重庆市石柱县××乡××村</span>
         	</li>
         </ul>
-        <div class="seckill-address" id="personaddressdiv">
+
+
+        <div class="seckill-address" id="personaddressdiv" style="display: none;">
             <div class="text" >
                 <span class="seckill-address-title">产自</span>
                 <div class="name" id="gproductioninperson">高达山</div>
@@ -84,52 +85,56 @@
         </div>
         <div class="norms" id="open_car">
             <span class="name">已选</span>
-            <span class="text overflow"> 一斤装（玻璃瓶），数量×1</span>
+            <span class="text overflow" id="nowhasgsvalspan" onclick="loadgavalmessage()"> 请选择规格</span>
             <span class="checkbox"></span>
         </div>
         
-        <div class="norms">
-            <span class="name">送至</span>
-            <span class="text overflow" id="open_address"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
+        <div class="norms showaddressfreigh">
+            <span class="name ">送至</span>
+            <span class="text overflow" id="open_address"> 请选择地址</span>
             <span class="checkbox"></span>
+        </div>
+        <div class="norms showaddressfreigh">
+            <span class="name">运费</span>
+            <span class="text overflow" id="gfreigh"> 0.0元</span>
         </div>
         <div class="norms" id="open_time">
             <span class="name">配送</span>
             <span class="text overflow"> 选择配送时间</span>
             <span class="checkbox"></span>
         </div>
-        <div class="norms">
-            <span class="name">运费</span>
-            <span class="text overflow"> 12.0元</span>
-        </div>
-        <div class="ensure">
-            <span>
-                <i class="icon-yes2"></i>
-                需预约
-            </span>
-            <span>
-                <i class="icon-yes"></i>
-                可返现
-            </span>
-            <span>
-                <i class="icon-yes"></i>
-                货到付款
-            </span>
-            <span>
-                <i class="icon-yes"></i>
-                10桌起订
-            </span>
+        <div class="norms" id="isAdvancesalediv">
+            <span class="name">预售</span>
+            <span class="text overflow"> 预售时间xxxx</span>
         </div>
 
     </div>
 
     <div class="bargain-details box2">
+        <div class="bargain-tab" id="J_bargainTab">
+            <a href="#details" class="active">商品介绍</a>
+            <a href="#evaluate">用户评价</a>
+        </div>
 
         <div class="box2">
-            <div class="product-evaluate box2" id="evaluate">
+
+            <div class="product-details" id="details">
+                <!-- 商品信息 -->
+                <div class="like">
+                    <div class="cont">
+                        <span class="bargain-like">商品信息</span>
+                    </div>
+                </div>
+
+                <div id="gdescription">
+                    <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
+                </div>
+            </div>
+
+            <div class="product-evaluate box2 displayN" id="evaluate">
                 <div class="title">
-                    <span>全部评价(1990) </span>
-                    <div class="stars1">
+                    <span id="sumgclsspan">全部评价(1990) </span>
+                    <div class="stars1" id="avgleveldiv">
                         <i></i>
                         <i></i>
                         <i></i>
@@ -137,7 +142,7 @@
                         <i></i>
                     </div>
                 </div>
-                <div class="label box2">
+                <div class="label box2" id="singlegcldiv">
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
                     <span>新鲜(1800)</span>
@@ -146,72 +151,40 @@
                 </div>
 
                 <!-- 用户评价 -->
-                <div class="user-evaluate ">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
+                <div id="usercommentdiv">
+
+                    <div class="user-evaluate">
+                        <div class="box2">
+                            <img src="/img/class1.png" class="img" alt="">
+                            <div class="text">hz2375</div>
+                            <div class="stars2">
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                                <i></i>
+                            </div>
+                        </div>
+                        <div class="label2 box2">
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
+                            <span>新鲜</span>
                         </div>
                     </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                    </div>
-                </div>
-                <div class="user-evaluate">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                        </div>
-                    </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                    </div>
-                </div>
-                <div class="user-evaluate">
-                    <div class="box2">
-                        <img src="/img/class1.png" class="img" alt="">
-                        <div class="text">hz2375</div>
-                        <div class="stars2">
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                            <i></i>
-                        </div>
-                    </div>
-                    <div class="label2 box2">
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                        <span>新鲜</span>
-                    </div>
+
                 </div>
 
-                <div class="more">
-                    <a href="">查看全部评论</a>
+
+                <div class="more" id="nogoodscldiv">
+
                 </div>
 
             </div>
 
         </div>
     </div>
+
     
     <div class="recommend_box">
     	<p class="recommend_title">相似推荐</p>
@@ -253,7 +226,7 @@
                 </a>
             </div>
             <div class="care" style="width: 50%;">
-                <a href="">
+                <a onclick="addtobuycar();">
                     <i><span class="number">4</span></i>
                     <p>加入购物车</p>
                 </a>
@@ -264,7 +237,7 @@
     
     <div class="mark" id="J_mark" style="display:none;">
     	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-	        <i class="care-norms-close J_careNormsClose"></i>
+	        <i class="care-norms-close J_careNormsClose" id="closeaddress"></i>
 	        <p class="J_mark_title">送至</p>
 	        <ul class="address_list_box">
 	        	<li class="active">
@@ -274,43 +247,45 @@
 	        	</li>
 	        	<li>
 	        		<span class="address_img"></span>
-	        		<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
+	        		<div class="address_text">上海九龙坡区狮山大道巴南小区刚光华苑1栋</div>
 	        		<span  class="icon_choice"></span>
 	        	</li>
 	        </ul>
-	        <a href="" class="care-norms-checkbox-btn">新增收获地址</a>
+	        <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
 	    </div>
     </div>
-    
+
     <div class="mark" id="J_mark2" style="display:none;">
     	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
-	        <i class="care-norms-close J_careNormsClose2"></i>
-	        <div class="product">
-	            <img src="/img/list2.jpg" alt="">
+	        <i id="closegsdiv" class="care-norms-close J_careNormsClose2"></i>
+	        <div class="product" id="product">
+	            <img  src="" alt="">
 	            <div class="text">
-	                <span class="mr_4" style="color: #ec3c3c;">￥</span>168.00/桌
+	                <span class="mr_4" style="color: #ec3c3c;font-size: .3rem"></span>
 	                <br />
-	                <span>库存60件</span>
+	                <span></span>
 	            </div>
 	        </div>
-	        <div class="care-checkbox J_careCheckbox">
-	            <span class="name">规格</span>
-	            <span class="checkbox_service active">人工费(不包含食材、设备费用)</span>
-	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-	            <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-	        </div>
-	        <div class="care-checkbox" style="margin-top: .2rem;">
+            <div id="gsdiv">
+                <div class="care-checkbox J_careCheckbox">
+                    <span class="name">规格</span>
+                    <span class="checkbox_service active">人工费(不包含食材、设备费用)</span>
+                    <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
+                    <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
+                </div>
+            </div>
+
+	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce">-</span>
-	                <span class="num J_careNum">1</span>
-	                <span class="add J_careAdd">+</span>
+	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
+	                <span class="num J_careNum" id="goodsnumber">1</span>
+	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
 	            </div>
 	        </div>
 	        
 	        <div class="car_footer_box">
-	        	<a href="" class="add_car_btn">加入购物车</a>
-	        	<a href="" class="add_car_btn2">立即购买</a>
+	        	<a onclick="suregsa();" class="add_car_btn2" style="width: 100%" id="setgsvala">确定</a>
 	        </div>
 	    </div>
     </div>
@@ -320,14 +295,12 @@
 	        <i class="care-norms-close J_careNormsClose3"></i>
 	        <p class="J_mark_title">选择配送时间</p>
 	        <div class="care-checkbox J_careCheckbox">
-	            <span class="checkbox active J_checkbox">橙黄色</span>
 	            <select name="" class="select_input">
-	            	<option value="0">选择时间</option>
-	            	<option value="0">周一至周五</option>
-	            	<option value="0">周末</option>
+	            	<option value="周一至周五">周一至周五</option>
+	            	<option value="周末">周末</option>
 	            </select>
 	        </div>
-	        <a href="" class="care-norms-checkbox-btn">确定</a>
+	        <a onclick="setpstime(this);" class="care-norms-checkbox-btn">确定</a>
 	    </div>
     </div>
 	
@@ -350,15 +323,11 @@
     </div>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/TouchSlide.1.1.js"></script>
-    <script src="/js/tabs.js"></script>
-    <script src="/js/public.js"></script>
-    <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/tabs.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
-
+    <script src="/js/layer/layer.js"></script>
     <!--时间减少-->
     <script>
         var timestape = 0;
@@ -421,6 +390,22 @@
             return str;
         }
 
+        function validatedate() {
+            var nowhasgsvalspan = $('#nowhasgsvalspan').html().toString().trim();
+            if(nowhasgsvalspan=='请选择规格'){
+                layer.msg('请选择规格值');
+                return false;
+            }
+            if(isServiceGoods==1){
+                var servicetime = $($('#open_time').find('span')[1]).html().trim();
+                if(servicetime=='请选择服务时间'){
+                    layer.msg('请选择服务时间');
+                    return false;
+                }
+            }
+            return true;
+        }
+
         <!--加载商品图片-->
         function loadgoodsimage() {
             $.ajax({
@@ -447,28 +432,45 @@
         }
 
         <!--加载采摘人和地址-->
-        function loadpersonaddress() {
+        function loadpersonaddress(flag) {
             $.ajax({
                 type:"post",
                 url:'/goods/queryGoodsById',
                 dataType: "json",
+                async :false,
                 data:{gid:gid,isShow:1,isChecked:1},
                 success:function(data){
                     var row = data.row;
                     if(row!=null){
+                        var gname = row.gname;
                         var gproductioninperson = row.gproductioninperson;
                         var gproductioninaddress = row.gproductioninaddress;
                         var gpickperson = row.gpickperson;
                         var gpickaddress = row.gpickaddress;
-                        if(gproductioninperson==''||gproductioninaddress==''||gpickperson==''||gpickaddress==''){
-                            $('#personaddressdiv').hide();
+                        if(flag){
+                            if(gproductioninperson==''||gproductioninaddress==''){
+                                $('#personaddressul').hide();
+                            }else{
+                                $('#servicegoodsgproductioninperson').html(gproductioninperson);
+                                $('#servicegoodsgproductioninaddress').html(gproductioninaddress);
+                                $('#personaddressul').show();
+                            }
                         }else{
-                            $('#gproductioninperson').html(gproductioninperson);
-                            $('#gproductioninaddress').html(gproductioninaddress);
-                            $('#gpickperson').html(gpickperson);
-                            $('#gpickaddress').html(gpickaddress);
+                            if(gproductioninperson==''||gproductioninaddress==''||gpickperson==''||gpickaddress==''){
+                                $('#personaddressdiv').hide();
+                            }else{
+                                $('#gproductioninperson').html(gproductioninperson);
+                                $('#gproductioninaddress').html(gproductioninaddress);
+                                $('#gpickperson').html(gpickperson);
+                                $('#gpickaddress').html(gpickaddress);
+                                $('#personaddressdiv').show();
+                            }
                         }
+
                         $('#gdescription').html(row.gdescription);
+                        $('#gname').html(gname);
+                        $('#gprice').html('￥'+row.gprice+'/'+row.gunitname);
+                        $('#gdprice').html('￥'+row.minprice+'/'+row.gunitname);
                     }else{
                         nogoods();
                     }
@@ -476,6 +478,9 @@
             });
         }
 
+
+        var startbuy = 1;
+        var goodsisMultiplebuy = 0;
         <!--加载商品配置-->
         function loadgoodsconfig() {
             $.ajax({
@@ -487,26 +492,45 @@
                     var goodsConfig = data.goodsConfig;
                     if(goodsConfig!=null){
                         isServiceGoods = goodsConfig.isServicegoods;
+                        loadpersonaddress(isServiceGoods==1);
                         var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                         var isAdvancesale = goodsConfig.isAdvancesale;
 
+                        if(isServiceGoods==1){
+                            $('.showaddressfreigh').hide();
+                            $($('#open_time').find('span')[1]).html('请选择服务时间');
+                            $('#servicespan').show();
+                        }else{
+                            $('.showaddressfreigh').show();
+                            $('#servicespan').hide();
+                        }
                         if(isAdvancesale==1){
                             $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
                             $('#isAdvancesalediv').show();
                         }else{
                             $('#isAdvancesalediv').hide();
                         }
-                        if(isServiceGoods==1){
-                            $('.showaddressfreigh').hide();
-                            $($('#open_time').find('span')[1]).html('请选择服务时间')
-                        }else{
-                            $('.showaddressfreigh').show();
-                        }
+
                         if(isAllowsetdeliverytime==1){
                             $('#open_time').show();
                         }else{
                             $('#open_time').hide();
                         }
+
+                        var gendbuy = goodsConfig.gendbuy;
+                        var gstartbuy = goodsConfig.gstartbuy;
+                        var isMultiplebuy = goodsConfig.isMultiplebuy;
+                        if(gendbuy!=''&&gendbuy!=null){
+                            spBounds = gendbuy;
+                        }
+                        if(gstartbuy!=''&&gstartbuy!=null){
+                            startbuy = gstartbuy;
+                            $('#goodsnumber').html(startbuy);
+                        }
+                        if(isMultiplebuy==1){
+                            goodsisMultiplebuy = isMultiplebuy;
+                        }
+
                     }else{
                         nogoods();
                     }
@@ -545,7 +569,7 @@
         function scrollgoodsclm() {
             $(document).ready(function(){
                 $('#usercommentdiv').html('');
-                var range = 50;             //距下边界长度/单位px
+                var range = 450;             //距下边界长度/单位px
                 var totalheight = 0;
                 var main = $("#usercommentdiv");                     //主体元素
                 $(window).scroll(function(){
@@ -652,10 +676,16 @@
 
         var ginventory=0;
         var spBounds = 0;
-        <!--点击规格加载信息-->
+        var canbuy = 0;
+        <!--样式规格值改变-->
         function clickactive(obj) {
             $(obj).siblings().removeClass('active');
             $(obj).addClass('active');
+            loadgavalmessage();
+        }
+
+        <!--点击规格加载信息-->
+        function loadgavalmessage() {
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
             var gsvalactive = $('#gsdiv').find('.active');
 
@@ -667,16 +697,16 @@
                 gsvids = gsvids.substr(1);
                 $.ajax({
                     type:"post",
-                    url:'/openGoodsGdsprel/queryGoodsGdsprelVoLists',
+                    url:'/goodsDetail/queryGoodsDetailVoLists',
                     dataType: "json",
                     async :false,
                     data:{gid:gid,gsvalIds:gsvids},
                     success:function(data){
                         var row = data.row;
                         if(row!=null){
-                            var imgUrl = row.imgurl;
-                            var price = row.spSale;
-                            var inventory = row.spInventory;
+                            var imgUrl = row.imgUrl;
+                            var price = row.gdPrice;
+                            var inventory = row.gdResidueinventory;
                             var gunitname = row.gunitname;
 
                             var img = $('#product').find('img')[0];
@@ -684,19 +714,24 @@
                             var inventoryspan = $('#product').find('span')[1];
 
                             if(imgUrl.substring(imgUrl.length-4,imgUrl.length)=='null'){
-                                img.src = $('#goodsImagesul').find('img')[0].src;
+                                img.src = $('#bannerul').find('img')[0].src;
                             }else{
                                 img.src = imgUrl;
                             }
 
                             if(inventory<=0){
-
+                                //把按钮全部变为灰色
+                                $('#setgsvala').css('background','#999');
+                                canbuy = 0;
+                            }else{
+                                $('#setgsvala').css('background','');
+                                canbuy = 1;
                             }
 
                             $(pricespan).html('￥'+price+'/'+gunitname);
                             $(inventoryspan).html('库存'+inventory+gunitname);
                             ginventory = inventory;
-                            spBounds = row.spBounds;
+                            $('#goodscountdiv').show();
                         }
                     }
                 });
@@ -750,7 +785,11 @@
                                 for(var j=0;j<gsvalidnames.length;j++){
                                     var gsvalid = gsvalidnames[j].split(':')[0];
                                     var gsvalname = gsvalidnames[j].split(':')[1];
-                                    html += '<span class="checkbox_service" onclick="clickactive(this)"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
+                                    var activeclass = '';
+                                    if(j==0){
+                                        activeclass = 'active';
+                                    }
+                                    html += '<span class="checkbox_service '+activeclass+'" onclick="clickactive(this)"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
                                 }
                                 html += '</div>';
                                 $('#gsdiv').append(html);
@@ -763,27 +802,118 @@
             });
         }
 
+        var pdindex=1;
         <!--判断库存-->
         function pdmaxinventory(ysf) {
             var goodsnumber = parseInt($('#goodsnumber').html());
             if(ysf=='+'){
                 goodsnumber++;
+                pdindex++;
             }else{
                 goodsnumber--;
+                pdindex--;
+                if(pdindex<=0){
+                    pdindex = 1;
+                }
             }
-            if(goodsnumber>spBounds){
-                alert("最大购买"+spBounds);
+            if(goodsnumber>spBounds&&spBounds!=0){
+                layer.msg("最大购买"+spBounds);
                 $('#goodsnumber').html(spBounds-1);
+                pdindex--;
+                return;
             }
-            if(goodsnumber>ginventory){
-                alert("必须小于库存量"+ginventory);
+            if(goodsnumber>ginventory&&ginventory!=0){
+                layer.msg("必须小于库存量"+ginventory);
                 $('#goodsnumber').html(ginventory-1);
+                pdindex--;
+                return;
+            }
+
+            if(goodsisMultiplebuy==1){
+                if(ysf=='+'){
+                    if(pdindex*startbuy>spBounds){
+                        $('#goodsnumber').html(spBounds-1);
+                    }else{
+                        $('#goodsnumber').html(pdindex*startbuy-1);
+                    }
+                }else{
+                    if(pdindex==1){
+                        $('#goodsnumber').html(startbuy+1);
+                    }else{
+                        $('#goodsnumber').html(goodsnumber - startbuy+2);
+                    }
+
+                }
+
             }
 
         }
 
         <!--加入购物车-->
         function addtobuycar() {
+            var flag = validatedate();
+            if(!flag){
+                return;
+            }
+            var actives = $('#gsdiv').find('.active');
+            var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
+            if(actives.length>0&&actives.length==gsdivs.length){
+                var gsvalid = '';
+                var gsval = '';
+                for(var i=0;i<actives.length;i++){
+                    gsvalid += ' '+$(actives[i]).find('input[type=hidden]')[0].value;
+                    var gsname = $($(actives[i]).siblings()[0]).html()
+                    gsval += ','+gsname+':'+removeHTMLTag($(actives[i]).html());
+                }
+                gsvalid = gsvalid.substr(1);
+                gsval = gsval.substr(1);
+
+                var gcount = $('#goodsnumber').html();
+                var bcPriceHtml = $($('#product').find('span')[0]).html();
+                var bcPrice = parseFloat(bcPriceHtml.substr(1,bcPriceHtml.indexOf('/')-1));
+
+                var bcDescription = '';
+                if(isServiceGoods==1){
+                    var servicetime = $($('#open_time').find('span')[1]).html().trim();
+                    if(servicetime!=''&&servicetime!='请选择服务时间'){
+                        bcDescription += '服务时间:'+servicetime;
+                    }
+                }else{
+                    var servicetime = $($('#open_time').find('span')[1]).html().trim();
+                    if(servicetime!=''&&servicetime!='选择配送时间'){
+                        bcDescription += '配送时间:'+servicetime;
+                    }
+                }
+
+                $.ajax({
+                    type:"post",
+                    url:"/buyCar/saveBuyCar",
+                    dataType: "json",
+                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
+                    success:function(data){
+                        if(data.status==0){
+                            layer.msg('成功加入购物车!');
+
+                        }else{
+                            layer.msg(data.msg);
+                        }
+
+                    }
+                });
+
+            }else{
+                layer.msg("请选择规格");
+            }
+
+
+        }
+
+        <!--确定规格-->
+        function suregsa() {
+            if(canbuy==0){
+                layer.msg('库存不足');
+                return;
+            }
             var actives = $('#gsdiv').find('.active');
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
             if(actives.length>0&&actives.length==gsdivs.length){
@@ -800,27 +930,19 @@
                 var gcount = $('#goodsnumber').html();
                 var bcPriceHtml = $($('#product').find('span')[0]).html();
                 var bcPrice = parseFloat(bcPriceHtml.substr(1,bcPriceHtml.indexOf('/')));
-                $.ajax({
-                    type:"post",
-                    url:"/buyCar/saveBuyCar",
-                    dataType: "json",
-                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path},
-                    success:function(data){
-                        if(data.status==0){
-                            alert('添加成功!');
-
-                            $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
-                            document.getElementById('closegsdiv').click();
-                        }
-
-                    }
-                });
-
+                $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
+                document.getElementById('closegsdiv').click();
+                $('#gdprice').html($($('#product').find('span')[0]).html());
             }else{
-                alert("请选择规格");
+                layer.msg("请选择规格");
             }
+        }
 
-
+        <!--选择配送时间-->
+        function setpstime(obj) {
+            var pstime = $(obj).prev().find('select')[0].value;
+            $($('#open_time').find('span')[1]).html(pstime);
+            document.getElementsByClassName('J_careNormsClose3')[0].click();
         }
 
         <!--日期格式化-->
@@ -880,12 +1002,6 @@
     <script>
         <!--加载图片-->
         loadgoodsimage();
-
-        <!--初始化时间-->
-        loadtimestape();
-
-        <!--加载生产人采摘人信息-->
-        loadpersonaddress();
 
         <!--加载配置信息-->
         loadgoodsconfig();
