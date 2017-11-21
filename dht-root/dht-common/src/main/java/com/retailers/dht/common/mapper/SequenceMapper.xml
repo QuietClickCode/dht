@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.SequenceMapper">
+
+	<resultMap id="rm_sequence" type="com.retailers.dht.common.entity.Sequence">
+			<result property="id" column="id"/>
+			<result property="time" column="time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="sequence_columns">
+		id,time
+	</sql>
+	<!-- 根据自增序列主键取得数据 -->
+	<select id="querySequenceById" resultMap="rm_sequence" parameterType="java.lang.Integer">
+		SELECT <include refid="sequence_columns" />
+		FROM t_sequence WHERE id = #{id}
+	</select>
+	<!-- 自增序列查询条件组合 -->
+	<sql id="sequence_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.time">
+				AND time = #{params.time}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySequenceList" resultMap="rm_sequence" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="sequence_columns" />
+		FROM t_sequence
+		<include refid="sequence_where"/>
+	</select>
+	<!--添加自增序列 -->
+	<insert id="saveSequence" parameterType="com.retailers.dht.common.entity.Sequence" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_sequence (
+			time
+		) VALUES
+		(
+			#{time,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改自增序列 -->
+	<update id="updateSequence" parameterType="com.retailers.dht.common.entity.Sequence">
+		UPDATE t_sequence
+		<set>
+            <if test="null != time">
+                time = #{time},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除自增序列 -->
+	<delete id="deleteSequenceById" parameterType="java.lang.Integer">
+		DELETE FROM t_sequence WHERE id = #{id}
+	</delete>
+</mapper>

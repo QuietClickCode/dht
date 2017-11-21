@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.ProcedureToolsMapper">
+
+	<resultMap id="rm_sequence" type="com.retailers.dht.common.entity.Sequence">
+		<result property="id" column="id"/>
+		<result property="time" column="time"/>
+	</resultMap>
+
+	<!--添加Price -->
+	<insert id="queryCurSequence" parameterType="com.retailers.dht.common.entity.Sequence" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_sequence(time) VALUES (#{time})
+	</insert>
+	<!--删除Price -->
+	<delete id="clearSequenceData" parameterType="java.lang.Long">
+		DELETE FROM t_sequence WHERE time &lt;=#{time} LIMIT 1000
+	</delete>
+</mapper>
+

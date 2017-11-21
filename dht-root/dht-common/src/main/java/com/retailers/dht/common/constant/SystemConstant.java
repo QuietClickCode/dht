@@ -16,6 +16,11 @@ public class SystemConstant {
      */
     public static final  int PLATFORM_PAY_WAY_ALIPY=1;
     /**
+     * 平台支付方式 2 钱包支付
+     */
+    public static final int PALTFORM_PAY_WAY_WALLET=2;
+
+    /**
      * 微信支付方式 1 公众号
      */
     public static final int WX_PAY_WAY_GZH=1;

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.OrderMapper">
+
+	<resultMap id="rm_order" type="com.retailers.dht.common.entity.Order">
+			<result property="id" column="id"/>
+			<result property="parsentId" column="parsent_id"/>
+			<result property="orderType" column="order_type"/>
+			<result property="orderNo" column="order_no"/>
+			<result property="orderStatus" column="order_status"/>
+			<result property="orderPayWay" column="order_pay_way"/>
+			<result property="orderPayUseWay" column="order_pay_use_way"/>
+			<result property="orderPayCallbackNo" column="order_pay_callback_no"/>
+			<result property="orderPayCallbackRemark" column="order_pay_callback_remark"/>
+			<result property="orderPayCallbackDate" column="order_pay_callback_date"/>
+			<result property="orderBuyUid" column="order_buy_uid"/>
+			<result property="orderSellUid" column="order_sell_uid"/>
+			<result property="orderTradePrice" column="order_trade_price"/>
+			<result property="orderShopPrice" column="order_shop_price"/>
+			<result property="orderLogisticsPrice" column="order_logistics_price"/>
+			<result property="orderCreateDate" column="order_create_date"/>
+			<result property="orderPayDate" column="order_pay_date"/>
+			<result property="orderRemark" column="order_remark"/>
+			<result property="orderIllustrate" column="order_illustrate"/>
+			<result property="orderShareUid" column="order_share_uid"/>
+			<result property="orderIntegralOrCash" column="order_integral_or_cash"/>
+			<result property="orderUaId" column="order_ua_id"/>
+			<result property="orderUaName" column="order_ua_name"/>
+			<result property="orderUaPhone" column="order_ua_phone"/>
+			<result property="orderUaAddress" column="order_ua_address"/>
+			<result property="orderDiscount" column="order_discount"/>
+			<result property="orderLogisticsCode" column="order_logistics_code"/>
+			<result property="orderSendDate" column="order_send_date"/>
+			<result property="orderSendRemark" column="order_send_remark"/>
+			<result property="orderConfirmDate" column="order_confirm_date"/>
+			<result property="orderSendAddressId" column="order_send_address_id"/>
+			<result property="isReal" column="is_real"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="order_columns">
+		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,is_real,version
+	</sql>
+	<!-- 根据订单主键取得数据 -->
+	<select id="queryOrderById" resultMap="rm_order" parameterType="java.lang.Long">
+		SELECT <include refid="order_columns" />
+		FROM t_order WHERE id = #{id}
+	</select>
+	<!-- 订单查询条件组合 -->
+	<sql id="order_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.parsentId">
+				AND parsent_id = #{params.parsentId}
+			</if>
+			<if test="null != params.orderType and '' != params.orderType">
+				AND order_type = #{params.orderType}
+			</if>
+			<if test="null != params.orderNo and '' != params.orderNo">
+				AND order_no = #{params.orderNo}
+			</if>
+			<if test="null != params.orderStatus">
+				AND order_status = #{params.orderStatus}
+			</if>
+			<if test="null != params.orderPayWay">
+				AND order_pay_way = #{params.orderPayWay}
+			</if>
+			<if test="null != params.orderPayUseWay">
+				AND order_pay_use_way = #{params.orderPayUseWay}
+			</if>
+			<if test="null != params.orderPayCallbackNo and '' != params.orderPayCallbackNo">
+				AND order_pay_callback_no = #{params.orderPayCallbackNo}
+			</if>
+			<if test="null != params.orderPayCallbackRemark and '' != params.orderPayCallbackRemark">
+				AND order_pay_callback_remark = #{params.orderPayCallbackRemark}
+			</if>
+			<if test="null != params.orderPayCallbackDateBegin">
+				AND order_pay_callback_date &gt;= #{params.orderPayCallbackDate}
+			</if>
+			<if test="null != params.orderPayCallbackDateEnd">
+				AND order_pay_callback_date &lt;= #{params.orderPayCallbackDate}
+			</if>
+			<if test="null != params.orderBuyUid">
+				AND order_buy_uid = #{params.orderBuyUid}
+			</if>
+			<if test="null != params.orderSellUid">
+				AND order_sell_uid = #{params.orderSellUid}
+			</if>
+			<if test="null != params.orderTradePrice">
+				AND order_trade_price = #{params.orderTradePrice}
+			</if>
+			<if test="null != params.orderShopPrice">
+				AND order_shop_price = #{params.orderShopPrice}
+			</if>
+			<if test="null != params.orderLogisticsPrice">
+				AND order_logistics_price = #{params.orderLogisticsPrice}
+			</if>
+			<if test="null != params.orderCreateDateBegin">
+				AND order_create_date &gt;= #{params.orderCreateDate}
+			</if>
+			<if test="null != params.orderCreateDateEnd">
+				AND order_create_date &lt;= #{params.orderCreateDate}
+			</if>
+			<if test="null != params.orderPayDateBegin">
+				AND order_pay_date &gt;= #{params.orderPayDate}
+			</if>
+			<if test="null != params.orderPayDateEnd">
+				AND order_pay_date &lt;= #{params.orderPayDate}
+			</if>
+			<if test="null != params.orderRemark and '' != params.orderRemark">
+				AND order_remark = #{params.orderRemark}
+			</if>
+			<if test="null != params.orderIllustrate and '' != params.orderIllustrate">
+				AND order_illustrate = #{params.orderIllustrate}
+			</if>
+			<if test="null != params.orderShareUid">
+				AND order_share_uid = #{params.orderShareUid}
+			</if>
+			<if test="null != params.orderIntegralOrCash">
+				AND order_integral_or_cash = #{params.orderIntegralOrCash}
+			</if>
+			<if test="null != params.orderUaId">
+				AND order_ua_id = #{params.orderUaId}
+			</if>
+			<if test="null != params.orderUaName and '' != params.orderUaName">
+				AND order_ua_name = #{params.orderUaName}
+			</if>
+			<if test="null != params.orderUaPhone and '' != params.orderUaPhone">
+				AND order_ua_phone = #{params.orderUaPhone}
+			</if>
+			<if test="null != params.orderUaAddress and '' != params.orderUaAddress">
+				AND order_ua_address = #{params.orderUaAddress}
+			</if>
+			<if test="null != params.orderDiscount">
+				AND order_discount = #{params.orderDiscount}
+			</if>
+			<if test="null != params.orderLogisticsCode and '' != params.orderLogisticsCode">
+				AND order_logistics_code = #{params.orderLogisticsCode}
+			</if>
+			<if test="null != params.orderSendDateBegin">
+				AND order_send_date &gt;= #{params.orderSendDate}
+			</if>
+			<if test="null != params.orderSendDateEnd">
+				AND order_send_date &lt;= #{params.orderSendDate}
+			</if>
+			<if test="null != params.orderSendRemark and '' != params.orderSendRemark">
+				AND order_send_remark = #{params.orderSendRemark}
+			</if>
+			<if test="null != params.orderConfirmDateBegin">
+				AND order_confirm_date &gt;= #{params.orderConfirmDate}
+			</if>
+			<if test="null != params.orderConfirmDateEnd">
+				AND order_confirm_date &lt;= #{params.orderConfirmDate}
+			</if>
+			<if test="null != params.orderSendAddressId">
+				AND order_send_address_id = #{params.orderSendAddressId}
+			</if>
+			<if test="null != params.isReal">
+				AND is_real = #{params.isReal}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrderList" resultMap="rm_order" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="order_columns" />
+		FROM t_order
+		<include refid="order_where"/>
+	</select>
+	<!--添加订单 -->
+	<insert id="saveOrder" parameterType="com.retailers.dht.common.entity.Order" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order (
+			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,is_real,version
+		) VALUES
+		(
+			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderShopPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{isReal,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改订单 -->
+	<update id="updateOrder" parameterType="com.retailers.dht.common.entity.Order">
+		UPDATE t_order
+		<set>
+            <if test="null != parsentId">
+                parsent_id = #{parsentId},
+            </if>
+            <if test="null != orderType and '' != orderType">
+                order_type = #{orderType},
+            </if>
+            <if test="null != orderNo and '' != orderNo">
+                order_no = #{orderNo},
+            </if>
+            <if test="null != orderStatus">
+                order_status = #{orderStatus},
+            </if>
+            <if test="null != orderPayWay">
+                order_pay_way = #{orderPayWay},
+            </if>
+            <if test="null != orderPayUseWay">
+                order_pay_use_way = #{orderPayUseWay},
+            </if>
+            <if test="null != orderPayCallbackNo and '' != orderPayCallbackNo">
+                order_pay_callback_no = #{orderPayCallbackNo},
+            </if>
+            <if test="null != orderPayCallbackRemark and '' != orderPayCallbackRemark">
+                order_pay_callback_remark = #{orderPayCallbackRemark},
+            </if>
+            <if test="null != orderPayCallbackDate">
+                order_pay_callback_date = #{orderPayCallbackDate},
+            </if>
+            <if test="null != orderBuyUid">
+                order_buy_uid = #{orderBuyUid},
+            </if>
+            <if test="null != orderSellUid">
+                order_sell_uid = #{orderSellUid},
+            </if>
+            <if test="null != orderTradePrice">
+                order_trade_price = #{orderTradePrice},
+            </if>
+            <if test="null != orderShopPrice">
+                order_shop_price = #{orderShopPrice},
+            </if>
+            <if test="null != orderLogisticsPrice">
+                order_logistics_price = #{orderLogisticsPrice},
+            </if>
+            <if test="null != orderCreateDate">
+                order_create_date = #{orderCreateDate},
+            </if>
+            <if test="null != orderPayDate">
+                order_pay_date = #{orderPayDate},
+            </if>
+            <if test="null != orderRemark and '' != orderRemark">
+                order_remark = #{orderRemark},
+            </if>
+            <if test="null != orderIllustrate and '' != orderIllustrate">
+                order_illustrate = #{orderIllustrate},
+            </if>
+            <if test="null != orderShareUid">
+                order_share_uid = #{orderShareUid},
+            </if>
+            <if test="null != orderIntegralOrCash">
+                order_integral_or_cash = #{orderIntegralOrCash},
+            </if>
+            <if test="null != orderUaId">
+                order_ua_id = #{orderUaId},
+            </if>
+            <if test="null != orderUaName and '' != orderUaName">
+                order_ua_name = #{orderUaName},
+            </if>
+            <if test="null != orderUaPhone and '' != orderUaPhone">
+                order_ua_phone = #{orderUaPhone},
+            </if>
+            <if test="null != orderUaAddress and '' != orderUaAddress">
+                order_ua_address = #{orderUaAddress},
+            </if>
+            <if test="null != orderDiscount">
+                order_discount = #{orderDiscount},
+            </if>
+            <if test="null != orderLogisticsCode and '' != orderLogisticsCode">
+                order_logistics_code = #{orderLogisticsCode},
+            </if>
+            <if test="null != orderSendDate">
+                order_send_date = #{orderSendDate},
+            </if>
+            <if test="null != orderSendRemark and '' != orderSendRemark">
+                order_send_remark = #{orderSendRemark},
+            </if>
+            <if test="null != orderConfirmDate">
+                order_confirm_date = #{orderConfirmDate},
+            </if>
+            <if test="null != orderSendAddressId">
+                order_send_address_id = #{orderSendAddressId},
+            </if>
+            <if test="null != isReal">
+                is_real = #{isReal},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE id = #{id} and version = #{version}
+	</update>
+	<!--删除订单 -->
+	<delete id="deleteOrderById" parameterType="java.lang.Long">
+		DELETE FROM t_order WHERE id = #{id}
+	</delete>
+</mapper>
