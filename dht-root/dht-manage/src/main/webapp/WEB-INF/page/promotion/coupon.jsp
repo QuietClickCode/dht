@@ -126,7 +126,7 @@
                                 <span class="input-group-addon">
                                     使用范围:
                                 </span>
-                                <select id="cpIsRestricted" name="cpIsRestricted" class="form-control">
+                                <select id="cpIsRestricted" name="cpIsRestricted" class="form-control" onclick="syfwChange()">
                                     <option value="0">无限制</option>
                                     <option value="1">指定商品种类</option>
                                     <option value="2">指定商品</option>
@@ -287,6 +287,26 @@
                                 <span class="form-control" style="width:70px;padding-right:0px;">折&nbsp;&nbsp;&nbsp;到</span>
                                 <input type="text" class="form-control" name="cpMaxDiscount" id="cpMaxDiscount" style="width: 60px;padding-right: 2px;">
                                 <span class="form-control" style="width:40px;padding-right:0px;">折</span>
+                            </div>
+                        </div>
+                        <!-- 优惠卷指定商品种类 -->
+                        <div class="col-lg-4" id="yhjzdspzl">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    指定商品种类:
+                                </span>
+                                <input type="hidden" class="form-control" name="spzlIds" id="spzlIds">
+                                <input type="text" class="form-control" name="spzlNames" id="spzlNames">
+                            </div>
+                        </div>
+                        <!-- 优惠卷指定商品 -->
+                        <div class="col-lg-4" id="yhjzdsp">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    指定商品:
+                                </span>
+                                <input type="hidden" class="form-control" name="spIds" id="spIds">
+                                <input type="text" class="form-control" name="spNames" id="spNames">
                             </div>
                         </div>
                     </div>
@@ -700,7 +720,10 @@
         });
     }
 
-
+    /**
+     * 优惠卷编辑
+     *
+     **/
     function editorCoupon(cpId){
         editorCouponType=1;
         initFormData(cpId);
@@ -820,6 +843,9 @@
         $("#editorCouponTitle").text("添加优惠卷");
         $('#editorCoupon').modal("show")
     }
+    /**
+     * 优惠卷优惠额度变更
+     */
     function cpCoinTypeChange(){
         let selectCpCoinType=$("#editorCouponForm #cpCoinType").val();
         let selectCpType=$("#editorCouponForm #cpType").val();
@@ -827,6 +853,8 @@
         $("#editorCouponForm #ptzzkDiv").hide();
         $("#editorCouponForm #psqzjeDiv").hide();
         $("#editorCouponForm #psqzzkDiv").hide();
+        $("#editorCouponForm #yhjzdspzl").hide();
+        $("#editorCouponForm #yhjzdsp").hide();
         //常规优惠卷
         if(parseInt(selectCpCoinType,10)==0){
             //判断优惠倦类型 现金卷
@@ -938,7 +966,9 @@
                 }
             });
     }
-    
+    /**
+     * 发送方式改变事件
+     */
     function cpSendWayChange() {
         let sendWaySelectVal=$("#editorCouponForm #cpSendWay").val();
         $("#editorCouponForm #cpSendEndDateDiv").hide();
@@ -972,6 +1002,24 @@
         $("#cpImagesForm #clearCpLogoDiv").hide();
         $("#editorCouponForm #cpLogo").val('');
     }
+    /**
+     * 优惠卷使用范围改变事件
+     */
+    function syfwChange(){
+        let selectVal=$("#editorCouponForm #cpIsRestricted").val();
+        $("#editorCouponForm #yhjzdspzl").hide();
+        $("#editorCouponForm #yhjzdsp").hide();
+        $("#editorCouponForm #spzlIds").val("");
+        $("#editorCouponForm #spzlNames").val("");
+        $("#editorCouponForm #spIds").val("");
+        $("#editorCouponForm #spNames").val("");
+        if(selectVal==1){
+            $("#editorCouponForm #yhjzdspzl").show();
+        }if(selectVal==2){
+            $("#editorCouponForm #yhjzdsp").show();
+        }
+    }
+
 </script>
 </body>
 </html>
