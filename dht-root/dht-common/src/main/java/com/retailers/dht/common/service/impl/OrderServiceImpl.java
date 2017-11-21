@@ -1,14 +1,24 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.enm.OrderEnum;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.service.OrderService;
+import com.retailers.dht.common.service.ProcedureToolsService;
 import com.retailers.tools.exception.AppException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.transaction.annotation.Transactional;
+
 /**
  * 描述：订单Service
  * @author zhongp
@@ -18,8 +28,14 @@ import com.retailers.mybatis.pagination.Pagination;
  */
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
-	@Autowired
+	Logger logger = LoggerFactory.getLogger(OrderServiceImpl.class);
+
+    @Autowired
 	private OrderMapper orderMapper;
+
+    @Autowired
+    private ProcedureToolsService procedureToolsService;
+
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
 		return status == 1 ? true : false;
@@ -56,8 +72,18 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
+    @Transactional(rollbackFor = Exception.class)
 	public Map<String, Object> shoppingOrder(Long uid, String goodsIds, String numbers, String orderRemark, Long uaId) throws AppException {
-		return null;
+        logger.info("创建购物订单,购买用户:[{}],商品列表:[{}],数量列表:[{}],订单备注:[{}],收货人地址:[{}]",uid,goodsIds,numbers,orderRemark,uaId);
+        Date curDate=new Date();
+        Map<String,Object> rtnMap=new HashMap<String,Object>();
+        String orderNo=procedureToolsService.executeOrderNo(OrderEnum.SHOPPING);
+        try{
+            rtnMap.put("orderNo",orderNo);
+        }finally {
+            logger.info("创建购物订单完成，生成订单号:[{}],执行时间:[{}]",orderNo,(System.currentTimeMillis()-curDate.getTime()));
+        }
+		return rtnMap;
 	}
 }
 
