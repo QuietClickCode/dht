@@ -262,6 +262,31 @@ public class NumberUtils {
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		return  df.format(d);
 	}
+	public static String formaterNumberYuan(Long number,int len) {
+		if(ObjectUtils.isEmpty(number)){
+			number=0l;
+		}
+		String STR_FORMAT = "##0.00";
+		double d=formaterNumber(priceChangeYuan(number),len);
+		DecimalFormat df = new DecimalFormat(STR_FORMAT);
+		String rtn=df.format(d);
+		String[] num=rtn.split("\\.");
+		String xs=num[1];
+		while (xs.length()>0){
+			if(xs.endsWith("0")){
+				xs=xs.substring(0,xs.length()-1);
+			}else{
+				break;
+			}
+		}
+		String rtnNum=num[0];
+		if(xs.length()>0){
+			rtnNum+="."+xs;
+		}
+		return  rtnNum;
+	}
+
+
 	public static String formaterRandNumberr(int randNum) {
 		String STR_FORMAT = "000";
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
@@ -404,6 +429,10 @@ public class NumberUtils {
 //		System.out.println(getMaxNum(10l,2l,5l,1l,null));
 //		System.out.println(getMinNum(10l,2l,5l,-1l));
 		Long num=null;
-		System.out.println(formaterNumberLong(num,2));
+//		System.out.println(formaterNumberLong(num,2));
+
+		for(int i=0;i<100000;i++){
+			System.out.println(formaterNumberYuan((long)i,2));;
+		}
 	}
 }

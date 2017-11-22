@@ -6,12 +6,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.dao.RechargeMapper;
 import com.retailers.dht.common.enm.OrderEnum;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.dao.OrderMapper;
+import com.retailers.dht.common.entity.Recharge;
+import com.retailers.dht.common.entity.UserAddress;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.service.ProcedureToolsService;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
+import org.apache.ibatis.ognl.enhance.OrderedReturn;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -32,6 +39,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private RechargeMapper rechargeMapper;
 
     @Autowired
     private ProcedureToolsService procedureToolsService;
@@ -85,5 +94,48 @@ public class OrderServiceImpl implements OrderService {
         }
 		return rtnMap;
 	}
+
+	/**
+	 * 用户充值
+	 * @param uid 用户id
+	 * @param rid 充值id
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String, Object> userRecharge(Long uid, Long rid) throws AppException {
+		logger.info("用户充值处理开始,充值用户id:[{}],充值卡id:[{}]",uid,rid);
+		Date curDate = new Date();
+		Map<String,Object> rtn=new HashMap<String, Object>();
+		try{
+			//取得充值信息
+			Recharge recharge = rechargeMapper.queryRechargeByRid(rid);
+			if(ObjectUtils.isEmpty(recharge)){
+				throw new AppException("你所购买的充值卡己下架。请刷新后再试");
+			}
+			OrderEnum oe= OrderEnum.RECHARGE;
+			//取得单号
+			String orderNo=procedureToolsService.executeOrderNo(oe);
+			Order order=new Order();
+			order.setOrderType(oe.getKey());
+			order.setOrderNo(orderNo);
+			//出售用户
+			order.setOrderSellUid(com.retailers.dht.common.constant.SystemConstant.GOODS_SHOP_USER);
+			//购买者
+			order.setOrderBuyUid(uid);
+			order.setOrderTradePrice(recharge.getRprice());
+			order.setOrderShopPrice(recharge.getRprice());
+			String illustrate="用户[{}]购买充值卡，充值金额：{}，充值后享受的折扣:{}";
+			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberYuan(recharge.getRprice(),2),NumberUtils.formaterNumberYuan(recharge.getRdiscount(),2));
+			order.setOrderIllustrate(illustrate);
+			order.setOrderCreateDate(curDate);
+			orderMapper.saveOrder(order);
+			rtn.put("orderNo",orderNo);
+		}finally {
+			logger.info("用户充值处理结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return rtn;
+	}
+
+
 }
 

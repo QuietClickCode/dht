@@ -96,7 +96,6 @@
 
     //开始支付
     function onBridgeReady(){
-        console.log("-------------------------------->>>>:")
         WeixinJSBridge.invoke(
             'getBrandWCPayRequest', {
                 "appId" : appId,     //公众号名称，由商户传入

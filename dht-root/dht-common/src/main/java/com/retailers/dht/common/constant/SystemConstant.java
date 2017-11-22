@@ -40,6 +40,14 @@ public class SystemConstant {
      * 失败
      */
     public static final int EXECUTE_FAIL=1;
+    /**
+     * 商品售卖方（平台自己出售)
+     */
+    public static final long GOODS_SHOP_USER=1;
+    /**
+     * 系统默认值
+     */
+    public static final long SYSTEM_DEFAULT_LONG_VAL=0;
 
     /**
      * 压缩类型（ small 小图，middle 中图 ，originalfile 原图)

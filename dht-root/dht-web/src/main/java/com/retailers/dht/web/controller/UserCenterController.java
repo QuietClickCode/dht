@@ -44,7 +44,7 @@ public class UserCenterController extends BaseController{
         return redirectUrl(request,"usercenter/user-wallet");
     }
     /**
-     * 用户余额
+     * 用户详情
      * @param request
      * @return
      */
@@ -54,7 +54,18 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     * 用户余额
+     * 用户详情
+     * @param request
+     * @return
+     */
+    @RequestMapping("userRecharge")
+    public String userRecharge(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-recharge");
+    }
+
+
+    /**
+     * 用户收货地址
      * @param request
      * @return
      */
@@ -62,6 +73,7 @@ public class UserCenterController extends BaseController{
     public String openUserAddress(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-address");
     }
+
     /**
      * 打开用户优惠卷页面
      * @param request

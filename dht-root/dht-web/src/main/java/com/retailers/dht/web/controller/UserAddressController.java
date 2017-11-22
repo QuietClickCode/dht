@@ -43,6 +43,12 @@ public class UserAddressController extends BaseController {
         return mv;
     }
 
+    /**
+     * 取得用户收货地址
+     * @param request
+     * @param pageForm
+     * @return
+     */
     @RequestMapping("queryUserAddress")
     @ResponseBody
     public Map<String,Object> queryUserAddress(HttpServletRequest request, PageUtils pageForm){

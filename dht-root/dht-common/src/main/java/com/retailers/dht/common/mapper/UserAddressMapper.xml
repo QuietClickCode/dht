@@ -98,6 +98,7 @@
 		SELECT <include refid="userAddress_columns" />
 		FROM t_user_address
 		<include refid="userAddress_where"/>
+		order by ua_is_default asc,ua_create_time ASC
 	</select>
 	<!--添加用户收货地址列表 -->
 	<insert id="saveUserAddress" parameterType="com.retailers.dht.common.entity.UserAddress" useGeneratedKeys="true" keyProperty="uaId">
@@ -172,4 +173,10 @@
 	<delete id="deleteUserAddressByUaId" parameterType="java.lang.Long">
 		DELETE FROM t_user_address WHERE ua_id = #{uaId}
 	</delete>
+	<!--修改用户收货地址列表 -->
+	<update id="clearUserDeafultAddress" parameterType="java.lang.Long">
+		UPDATE t_user_address
+		SET ua_is_default =1
+		WHERE ua_uid=#{uid} and is_delete=0
+	</update>
 </mapper>

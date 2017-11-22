@@ -22,7 +22,7 @@
     </div>
     <div class="no-integral">
         <img src="/img/balance.png" alt="">
-        <a href="" class="recharge">充值</a>
+        <a href="/user/userRecharge" class="recharge">充值</a>
     </div>
 </body>
 </html>

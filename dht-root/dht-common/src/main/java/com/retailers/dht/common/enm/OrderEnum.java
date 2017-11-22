@@ -7,12 +7,12 @@ package com.retailers.dht.common.enm;
  * @date 2017-11-21
  */
 public enum  OrderEnum {
-    RECHARGE("Recharge", "充值", "CZ"),
+    RECHARGE("RECHARGE", "充值", "CZ"),
     SHOPPING("SHOPPING", "购买商品", "GM"),
     SECKILL("SECKILL", "秒杀", "MS"),
     GROUP_BUYING("GROUP_BUYING", "团购", "tg"),
     PRE_ORDER("PRE_ORDER", "预购", "YG");
-    //SHOPPING("SHOPPING","购买商品","GM"),
+    //SHOPPING("SHOPPING","购买商品","GM"), recharge
     //SHOPPING("SHOPPING","购买商品","GM");
     String key, value, shorNm;
 

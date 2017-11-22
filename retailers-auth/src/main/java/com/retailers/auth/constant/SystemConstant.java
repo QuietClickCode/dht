@@ -21,6 +21,15 @@ public class SystemConstant {
      */
     public static int SYS_IS_DELETE_YES=1;
     /**
+     * 是否是默认 是
+     */
+    public static int SYS_IS_DEFAULT_YES=0;
+    /**
+     * 是否是默认 否
+     */
+    public static int SYS_IS_DEFAULT_NO=1;
+
+    /**
      * 登录用户session 存入key
      */
     public static final String LOG_USER_SESSION_KEY="user";
@@ -36,4 +45,5 @@ public class SystemConstant {
      * 失败
      */
     public static final int FAIL=1;
+
 }

@@ -1,10 +1,12 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.view.RechargeView;
 import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Recharge;
 import com.retailers.tools.exception.AppException;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：充值管理Service
@@ -58,6 +60,13 @@ public interface RechargeService {
 	 * @date 2017-10-15 23:56:18
 	 */
 	public boolean deleteRechargeByRid(Long rid,Long sId)throws AppException;
+
+	/**
+	 * 取得充值卡列表
+	 * @return
+	 * @throws AppException
+	 */
+	public List<RechargeView> queryRechargeLists();
 
 }
 

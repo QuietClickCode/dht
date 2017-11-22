@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Recharge;
+import com.retailers.dht.common.view.RechargeView;
 import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
@@ -59,5 +60,11 @@ public interface RechargeMapper {
 	 * @date 2017-10-15 23:56:18
 	 */
 	public List<RechargeVo> queryRechargeList(Pagination<RechargeVo> pagination);
+
+	/**
+	 * 取得充值卡列表 用户
+	 * @return
+	 */
+	public List<RechargeView> queryRechargeLists();
 
 }

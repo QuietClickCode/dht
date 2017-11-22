@@ -34,13 +34,15 @@
 			<result property="orderSendRemark" column="order_send_remark"/>
 			<result property="orderConfirmDate" column="order_confirm_date"/>
 			<result property="orderSendAddressId" column="order_send_address_id"/>
+			<result property="orderBuyDel" column="order_buy_del"/>
+			<result property="orderSellDel" column="order_sell_del"/>
 			<result property="isReal" column="is_real"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="order_columns">
-		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,is_real,version
+		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 	</sql>
 	<!-- 根据订单主键取得数据 -->
 	<select id="queryOrderById" resultMap="rm_order" parameterType="java.lang.Long">
@@ -158,6 +160,12 @@
 			<if test="null != params.orderSendAddressId">
 				AND order_send_address_id = #{params.orderSendAddressId}
 			</if>
+			<if test="null != params.orderBuyDel">
+				AND order_buy_del = #{params.orderBuyDel}
+			</if>
+			<if test="null != params.orderSellDel">
+				AND order_sell_del = #{params.orderSellDel}
+			</if>
 			<if test="null != params.isReal">
 				AND is_real = #{params.isReal}
 			</if>
@@ -175,10 +183,10 @@
 	<!--添加订单 -->
 	<insert id="saveOrder" parameterType="com.retailers.dht.common.entity.Order" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_order (
-			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,is_real,version
+			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 		) VALUES
 		(
-			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderShopPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{isReal,jdbcType=INTEGER},0
+			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderShopPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{orderBuyDel,jdbcType=INTEGER},#{orderSellDel,jdbcType=INTEGER},#{isReal,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改订单 -->
@@ -274,6 +282,12 @@
             </if>
             <if test="null != orderSendAddressId">
                 order_send_address_id = #{orderSendAddressId},
+            </if>
+            <if test="null != orderBuyDel">
+                order_buy_del = #{orderBuyDel},
+            </if>
+            <if test="null != orderSellDel">
+                order_sell_del = #{orderSellDel},
             </if>
             <if test="null != isReal">
                 is_real = #{isReal},

@@ -52,4 +52,11 @@ public interface UserAddressMapper {
 	 */
 	public List<UserAddress> queryUserAddressList(Pagination<UserAddress> pagination);
 
+	/**
+	 * 清除用户默认地址
+	 * @param uid 用户id
+	 * @return
+	 */
+	public long clearUserDeafultAddress(Long uid);
+
 }
