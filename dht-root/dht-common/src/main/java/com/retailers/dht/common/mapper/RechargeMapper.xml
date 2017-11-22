@@ -191,6 +191,6 @@
 		t_recharge r
 		LEFT JOIN t_attachment a ON r.r_logo = a.id
 		WHERE r.is_delete=0 and r.is_valid=0
-		order by r_price DESC
+		order by r_price asc
 	</select>
 </mapper>

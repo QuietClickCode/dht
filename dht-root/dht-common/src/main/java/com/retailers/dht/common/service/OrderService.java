@@ -70,6 +70,15 @@ public interface OrderService {
 	 */
 	public Map<String,Object> shoppingOrder(Long uid,String goodsIds,String numbers,String orderRemark,Long uaId)throws AppException;
 
+	/**
+	 * 用户充值
+	 * @param uid 用户id
+	 * @param rid 充值id
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> userRecharge(Long uid,Long rid)throws AppException;
+
 }
 
 

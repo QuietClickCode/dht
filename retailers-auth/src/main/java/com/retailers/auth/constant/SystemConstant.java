@@ -36,4 +36,5 @@ public class SystemConstant {
      * 失败
      */
     public static final int FAIL=1;
+
 }

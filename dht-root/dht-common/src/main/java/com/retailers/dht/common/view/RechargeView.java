@@ -1,6 +1,9 @@
 package com.retailers.dht.common.view;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
+import com.retailers.tools.utils.NumberUtils;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Digits;
@@ -26,8 +29,12 @@ public class RechargeView {
     /**是否返现(0 不返现，1 返现）*/
     private Integer rcashback;
 
-    public Long getRid() {
-        return rid;
+    public String getRid() {
+        try{
+            return DESUtils.encryptDES(rid+"", DesKey.WEB_KEY);
+        }catch(Exception e){
+        }
+        return "";
     }
 
     public void setRid(Long rid) {
@@ -50,16 +57,17 @@ public class RechargeView {
         this.rlogoUrl = rlogoUrl;
     }
 
-    public Long getRprice() {
-        return rprice;
+    public String getRprice() {
+//        return rprice;
+        return NumberUtils.formaterNumberYuan(rprice,2);
     }
 
     public void setRprice(Long rprice) {
         this.rprice = rprice;
     }
 
-    public Long getRdiscount() {
-        return rdiscount;
+    public String getRdiscount() {
+        return NumberUtils.formaterNumberYuan(rdiscount,2);
     }
 
     public void setRdiscount(Long rdiscount) {

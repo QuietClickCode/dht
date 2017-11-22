@@ -7,7 +7,7 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-21 14:23:59
+ * @date 2017-11-22 15:18:18
  */
 public class Order implements java.io.Serializable {
 
@@ -115,6 +115,12 @@ public class Order implements java.io.Serializable {
 	/**发货仓库id*/
 	@NotEmpty
 	private Long orderSendAddressId;
+	/**买家是否删除该订单（0 未删除，1 删除）*/
+	@NotEmpty
+	private Integer orderBuyDel;
+	/**卖家是否删除该订单（0 未删除，1 删除）*/
+	@NotEmpty
+	private Integer orderSellDel;
 	/**是否真实交易订单(0 真实交易订单，1 虚拟交易订单）*/
 	@NotEmpty
 	private Integer isReal;
@@ -346,6 +352,20 @@ public class Order implements java.io.Serializable {
 
 	public Long getOrderSendAddressId() {
 		return this.orderSendAddressId;
+	}
+	public void setOrderBuyDel(Integer value) {
+		this.orderBuyDel = value;
+	}
+
+	public Integer getOrderBuyDel() {
+		return this.orderBuyDel;
+	}
+	public void setOrderSellDel(Integer value) {
+		this.orderSellDel = value;
+	}
+
+	public Integer getOrderSellDel() {
+		return this.orderSellDel;
 	}
 	public void setIsReal(Integer value) {
 		this.isReal = value;

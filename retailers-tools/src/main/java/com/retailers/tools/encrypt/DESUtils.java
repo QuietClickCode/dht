@@ -108,8 +108,9 @@ public class DESUtils{
     public static void main(String args[]) throws Exception {
 //        System.out.println(encryptDES("35",DesKey.WEB_KEY));
 //
-        System.out.println(encryptDES("35",DesKey.WEB_KEY));
-        System.out.println(URLEncoder.encode(encryptDES("35",DesKey.WEB_KEY),"utf-8"));
+//        System.out.println(encryptDES("35",DesKey.WEB_KEY));
+        System.out.println(decryptDES("cYktLaSBYWY=",DesKey.WEB_KEY));
+//        System.out.println(URLEncoder.encode(encryptDES("35",DesKey.WEB_KEY),"utf-8"));
 //        System.out.println(decryptDES(URLDecoder.decode("W6wGZiOTbDQ=","utf-8"),DesKey.WEB_KEY));
 //        System.out.println(decryptDES(URLDecoder.decode("W6wGZiOTbDQ=","utf-8"),DesKey.WEB_KEY));
 //        System.out.println(decryptDES(URLDecoder.decode("W6wGZiOTbDQ=","utf-8"),DesKey.WEB_KEY));
