@@ -34,7 +34,6 @@ public class GoodsConfigController extends BaseController {
     GoodsConfigService goodsConfigService;
 
     @RequestMapping("/editGoodsConfig")
-    @Function(label = "编辑商品配置",parentRes = "goods.openGoods",resourse = "goodsConfig.editGoodsConfig",description = "编辑商品配置",sort = 2)
     @ResponseBody
     public BaseResp editGoodsConfig(GoodsConfig goodsConfig,String gedts,HttpServletRequest request){
         if(!ObjectUtils.isEmpty(gedts)){
@@ -58,7 +57,6 @@ public class GoodsConfigController extends BaseController {
     }
 
     @RequestMapping("/removeGoodsConfig")
-    @Function(label="删除商品配置", description = "删除商品配置", resourse = "goodsConfig.removeGoodsConfig",sort=3,parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsConfig(Long gid){
         boolean flag=goodsConfigService.deleteGoodsConfigByGcId(gid);
@@ -66,7 +64,6 @@ public class GoodsConfigController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsConfigBygid")
-    @Function(label="商品配置", description = "商品配置信息", resourse = "goodsConfig.queryGoodsConfigBygid",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsConfigLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -81,7 +78,6 @@ public class GoodsConfigController extends BaseController {
     }
 
     @RequestMapping("/addGoodsConfig")
-    @Function(label="增加商品配置", description = "增加商品配置", resourse = "goodsConfig.addGoodsConfig",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsConfig(GoodsConfig GoodsConfig,String gedts){
         GoodsConfig.setIsDelete(0L);

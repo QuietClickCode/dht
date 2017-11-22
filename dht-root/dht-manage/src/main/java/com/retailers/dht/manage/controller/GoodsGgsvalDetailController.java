@@ -28,7 +28,6 @@ public class GoodsGgsvalDetailController extends BaseController {
 
 
     @RequestMapping("/removeGoodsGgsvalDetail")
-    @Function(label="删除商品与规格值关系详情", description = "删除商品与规格值关系详情", resourse = "goods.removeGoodsGgsvalDetail",sort=3,parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGgsvalDetail(Long ggsId){
         boolean flag=goodsGgsvalDetailService.deleteGoodsGgsvalDetailByGgdId(ggsId);
@@ -36,7 +35,6 @@ public class GoodsGgsvalDetailController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGgsvalDetailLists")
-    @Function(label="商品与规格值关系详情列表", description = "商品与规格值关系详情列表", resourse = "goods.queryGoodsGgsvalDetailLists",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGgsvalDetailLists(Long gsvId,Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -53,7 +51,6 @@ public class GoodsGgsvalDetailController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgsvalDetail")
-    @Function(label="增加商品与规格值关系详情", description = "增加商品与规格值关系详情", resourse = "goods.addGoodsGgsvalDetail",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgsvalDetail(GoodsGgsvalDetail goodsGgsvalDetail){
         goodsGgsvalDetail.setIsDelete(0L);
@@ -62,7 +59,6 @@ public class GoodsGgsvalDetailController extends BaseController {
     }
 
     @RequestMapping("/clearAllGgsrel")
-    @Function(label="清除商品与规格值关系详情", description = "清除商品与规格值关系详情", resourse = "goods.clearAllGgsrel",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp clearAllGgsrel(Long gid, HttpServletRequest request){
         boolean flag=goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));

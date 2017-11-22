@@ -30,7 +30,6 @@ public class GoodsGgcouponrelController extends BaseController {
     GoodsGgcouponrelService goodsGgcouponrelService;
 
     @RequestMapping("/removeGoodsGgcouponrel")
-    @Function(label="删除商品与优惠关系", description = "删除商品与优惠关系", resourse = "goods.removeGoodsGgcouponrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGgcouponrel(String ggcIds){
         boolean flag=goodsGgcouponrelService.deleteGoodsGgcouponrelByGgcId(ggcIds);
@@ -38,7 +37,6 @@ public class GoodsGgcouponrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGgcouponrelLists")
-    @Function(label="商品与优惠关系列表", description = "商品与优惠关系列表", resourse = "goods.queryGoodsGgcouponrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGgcouponrelLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -52,7 +50,6 @@ public class GoodsGgcouponrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgcouponrel")
-    @Function(label="增加商品与优惠关系", description = "增加商品与优惠关系", resourse = "goods.addGoodsGgcouponrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgcouponrel(String gcIds,Long gid){
         boolean flag = goodsGgcouponrelService.saveGoodsGgcouponrel(gcIds,gid);

@@ -14,7 +14,6 @@
 
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
     <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
@@ -479,6 +478,33 @@
             },{
                 align : 'center',
                 valign : 'middle',
+                title: '状态',
+                formatter:function (value,row,index) {
+                    let html='';
+                    if(row.parentId==null){
+                        var spStartTime = new Date(row.spStartTime);
+                        var spEndTime = new Date(row.spEndTime);
+                        var now = new Date();
+                        if(now<spStartTime){
+                            html = '未开始';
+                        }
+                        if(now>spStartTime&&now<spEndTime){
+                            html = '进行中';
+                        }
+                        if(now>spEndTime){
+                            html = '已结束';
+                        }
+
+                    }else{
+                        html = '-';
+                    }
+
+                    return html;
+                }
+
+            },{
+                align : 'center',
+                valign : 'middle',
                 title: '添加商品',
                 formatter:function (value,row,index) {
                     rowDatas.set(row.spId,row);
@@ -543,7 +569,7 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             gname:$("#inputGoodsName").val(),
-            gtName: $("#search_goodsType_name").val(),
+            isChecked:1
         };
     }
 
@@ -602,7 +628,7 @@
     var version;
     var gid;
     function chooseGoodsModal(num) {
-        if(gid!=''){
+        if(num==1){
             layer.msg('已经存在商品');
             return;
         }
@@ -625,7 +651,6 @@
         $(".goodsName").eq(number).val(goods[0].gname);
         $(".goodsPrice").eq(number).val(goods[0].gprice);
         gid = goods[0].gid;
-
 
         refreshaddinnerTableData();
         $("#chooseGoodsList").modal("hide");
@@ -675,11 +700,12 @@
     }
 
     /*设置表单默认值*/
-    function updateSalePromotion(parentId,spid,v,goodsId) {
+    function updateSalePromotion(parentIdu,spid,v,goodsId) {
+        parentId = parentIdu;
         id = spid;
         version = v;
         gid=goodsId;
-        if(parentId == "null"){
+        if(parentIdu == "null"){
             let goods = $("#goodsClassificationTable").bootstrapTable("getRowByUniqueId",spid);
             setInfo("updateSalePromotionForm",goods);
             $("#spStartTime").val(goods.spStartTime);
@@ -908,7 +934,7 @@
         $('#gdspTabel').bootstrapTable(
             "refresh",
             {
-                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid
+                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid+'&spId='+id
             }
         );
     }
@@ -943,11 +969,12 @@
         var spSale = $(tds[3]).find('input[type=text]').get(0).value;
         var spInventory = $(tds[4]).find('input[type=text]').get(0).value;
         var spBounds = $(tds[5]).find('input[type=text]').get(0).value;
+        var spId = id;
         $.ajax({
             url:"/openGoodsGdsprel/addGoodsGdsprel",
             type:"post",
             dataType: "json",
-            data:{gdId:gdId,spDiscountRate:spDiscountRate,spSale:spSale,spInventory:spInventory,spBounds:spBounds,spId:id},
+            data:{spId:spId,gdId:gdId,spDiscountRate:spDiscountRate,spSale:spSale,spInventory:spInventory,spBounds:spBounds,spId:id},
             success:function (data) {
                 if(x==y){
                     layer.msg('操作成功');
@@ -1098,7 +1125,7 @@
         $('#addgdspTabel').bootstrapTable(
             "refresh",
             {
-                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid
+                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid+'&spId='+id
             }
         );
     }

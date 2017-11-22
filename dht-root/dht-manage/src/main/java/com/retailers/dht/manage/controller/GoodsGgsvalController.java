@@ -29,7 +29,6 @@ public class GoodsGgsvalController extends BaseController {
 
 
     @RequestMapping("/removeGoodsGgsval")
-    @Function(label="删除商品与规格值关系", description = "删除商品与规格值关系", resourse = "goods.removeGoodsGgsval",sort=3,parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGgsval(Long ggsId){
         boolean flag=goodsGgsvalService.deleteGoodsGgsvalByGgsId(ggsId);
@@ -37,7 +36,6 @@ public class GoodsGgsvalController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGgsvalLists")
-    @Function(label="商品与规格值关系列表", description = "商品与规格值关系列表", resourse = "goods.queryGoodsGgsvalLists",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGgsvalLists(Long gsId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -51,7 +49,6 @@ public class GoodsGgsvalController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgsval")
-    @Function(label="增加商品与规格值关系", description = "增加商品与规格值关系", resourse = "goods.addGoodsGgsval",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgsval(GoodsGgsval goodsGgsval){
         goodsGgsval.setIsDelete(0L);
@@ -60,7 +57,6 @@ public class GoodsGgsvalController extends BaseController {
     }
 
     @RequestMapping("/queryGgsrelLists")
-    @Function(label="商品与规格关系列表", description = "商品与规格值关系列表", resourse = "goods.queryGgsrelLists",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGgsrelLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -75,7 +71,6 @@ public class GoodsGgsvalController extends BaseController {
     }
 
     @RequestMapping("/queryGgsrelListsOnce")
-    @Function(label="一次性加载商品与规格值关系列表", description = "一次性加载商品与规格值关系列表", resourse = "goods.queryGgsrelListsOnce",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGgsrelListsOnce(Long gid){
         List<GoodsGgsvalOnceVo> list = goodsGgsvalService.queryGgsrelListsOnce(gid);
@@ -85,7 +80,6 @@ public class GoodsGgsvalController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgsvalByMyData")
-    @Function(label="批量增加商品与规格值关系", description = "批量增加商品与规格值关系", resourse = "goods.addGoodsGgsvalByMyData",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgsvalByMyData(String gsIds,String gsvalids,Long gid){
         boolean flag = goodsGgsvalService.addGoodsGgsvalByMyData(gsIds,gsvalids,gid);

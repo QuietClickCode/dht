@@ -27,7 +27,6 @@ public class CityController extends BaseController {
     CityService cityService;
 
     @RequestMapping("/queryCityLists")
-    @Function(label="城市列表", description = "所有城市列表", resourse = "goods.queryCityLists",sort=1,parentRes="goods.openGoodsFreight")
     @ResponseBody
     public  Map<String,Object> queryCityLists(){
         Map<String,Object> map = new HashMap<String,Object>();

@@ -5,12 +5,15 @@
     <meta charset="utf-8">
     <title>商品管理</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
+    <link rel="stylesheet" href="<%=path%>/css/gclassa.css">
+    <link rel="stylesheet" href="<%=path%>/css/gclassc.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
     <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
+
 
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
@@ -20,7 +23,17 @@
     <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
-
+    <style>
+        li{
+            list-style: none;
+        }
+        #chosegclassdiv a:hover{
+            background: #337AB7;
+            cursor: pointer;
+            text-decoration: none;
+            color:#fff;
+        }
+    </style>
 
 </head>
 <body>
@@ -145,6 +158,46 @@
 </div>
 </div>
 
+<div class="inner bd_b_b pb20" id="chosegclassdiv" style="margin-top: 100px;display: none">
+    <ul class="search_ul plr20 ptb10 bgblue clearfix js-search-ul">
+        <li class="bg_white fl">
+            <div class="bd_d">
+                <div class="ptb10 wp100 bd_d_b" style="text-align: center;" >
+                    <span class="text_bold">一级分类</span>
+                </div>
+                <div class="con over_con" id="divspan1">
+                    <a onclick="loadgclassdivspan(level,parentId,this)">电子产品</a>
+                </div>
+            </div>
+        </li>
+        <li class="bg_white fl">
+            <div class="bd_d">
+                <div class="ptb10 wp100 bd_d_b" style="text-align: center;">
+                    <span class="text_bold">二级分类</span>
+                </div>
+                <div class="con over_con" id="divspan2">
+                </div>
+            </div>
+        </li>
+        <li class="bg_white fl">
+            <div class="bd_d">
+                <div class="ptb10 wp100 bd_d_b" style="text-align: center;">
+                    <span class="text_bold">三级分类</span>
+                </div>
+                <div class="con over_con" id="divspan3">
+                </div>
+            </div>
+        </li>
+    </ul>
+    <center>
+        <button class="btn btn-default" onclick="returnback()">取消</button>
+        &nbsp;
+        <button class="btn btn-primary" onclick="surechosegclass()">确认</button>
+    </center>
+</div>
+
+
+
 <div id="addandeditgoods" style="display: none">
     <button class="btn btn-default" type="button" onclick="returnback();">返回</button>
     <div class="" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser" >
@@ -210,7 +263,7 @@
                                                                 <input type="text" class="form-control" name="gname" id="gname">
                                                             </div>
                                                         </div>
-                                                        <div class="col-lg-6" style="height:49px;">
+                                                        <div class="col-lg-6" style="height:49px;display: none">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
                                                               商品分类:
@@ -1291,11 +1344,116 @@
         initFormData(-1);
         $("#editorSysUserTitle").text("添加商品");
         $('#tabDiv').hide();
-        $('#addandeditgoods').show();
+        loadgclassdivspan(1,null,null,null);
+        $('#chosegclassdiv').show();
+    }
+
+    function loadgclassdivspan(level,parentId,obj,ggName) {
+        if(level!=1){
+            $(obj).siblings().css('background','none');
+            $(obj).css('background','#337AB7');
+
+            $(obj).siblings().css('color','337AB7');
+            $(obj).css('color','#fff');
+        }
+        var element;
+        if(level==1){
+            element = $('#divspan1');
+            $('#divspan2').html('');
+            $('#divspan3').html('');
+        }
+        if(level==2){
+            element = $('#divspan2');
+            $('#divspan3').html('');
+        }
+        if(level==3){
+            element = $('#divspan3');
+        }
+
+        if(level!=4){
+            $.ajax({
+                type:"post",
+                url:"/goods/queryGoodsClassificationListsByParentId",
+                dataType: "json",
+                async:false,
+                data:{parentId:parentId},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        element.html(html);
+                        for(var i=0;i<rows.length;i++){
+                            html = '<a onclick="loadgclassdivspan('+(parseInt(level)+1)+','+rows[i].ggId+',this,\''+rows[i].ggName+'\')">'+rows[i].ggName+'</a>';
+                            element.append(html);
+                        }
+
+                    }else{
+                        if(level==1){
+                            $('#divspan1').html('');
+                            $('#divspan2').html('');
+                            $('#divspan3').html('');
+                        }
+                        if(level==2){
+                            $('#divspan2').html('');
+                            $('#divspan3').html('');
+                        }
+                        if(level==3){
+                            $('#divspan3').html('');
+                        }
+                    }
+                }
+            });
+        }else{
+            $('#gclassification').val(parentId);
+            $('#gclassificationName').val(ggName);
+        }
+    }
+
+    function surechosegclass() {
+        var divspan1a = $('#divspan1').find('a');
+        var divspan2a = $('#divspan2').find('a');
+        var divspan3a = $('#divspan3').find('a');
+
+        var flag1 = false;
+        var flag2 = false;
+        var flag3 = false;
+
+        var bkgd = 'rgb(51, 122, 183) none repeat scroll 0% 0%';
+
+        for(var i=0;i<divspan1a.length;i++){
+            var background = divspan1a[i].style.background;
+            if(background==bkgd){
+                flag1 = true;
+                break;
+            }
+        }
+        for(var i=0;i<divspan2a.length;i++){
+            var background = divspan2a[i].style.background;
+            if(background==bkgd){
+                flag2 = true;
+                break;
+            }
+        }
+        for(var i=0;i<divspan3a.length;i++){
+            var background = divspan3a[i].style.background;
+            if(background==bkgd){
+                flag3 = true;
+                break;
+            }
+        }
+
+        if(flag1&&flag2&&flag3){
+            $('#chosegclassdiv').hide();
+            $('#addandeditgoods').show();
+        }else{
+            toastr.warning("请将分类选择完整");
+        }
+
     }
 
     function returnback() {
         $('#tabDiv').show();
+        $('#chosegclassdiv').hide();
         $('#addandeditgoods').hide();
     }
 

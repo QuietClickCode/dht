@@ -404,13 +404,14 @@
             type:"post",
             url:'/openSalePromotion/querySalePromotionLists',
             dataType: "json",
-            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid},
+            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:0,gid:gid},
             success:function(data){
                 if(data.rows!=null){
                     timestape = data.rows[0].timestap*1000;
                     $('#gprice').html('￥'+data.rows[0].gprice);
                     $('#goodsNameDiv').html(data.rows[0].goodsName);
                     $('#minprice').html('￥'+data.rows[0].minprice);
+                    parentId = data.rows[0].parentId;
                     timegoing();
                 }else{
                     nogoods();
@@ -628,6 +629,7 @@
 
     var ginventory=0;
     var spBounds = 0;
+    var parentId;
     <!--点击修改规格样式-->
     function clickactive(obj) {
         $(obj).siblings().removeClass('active');
@@ -651,7 +653,7 @@
                 url:'/openGoodsGdsprel/queryGoodsGdsprelVoLists',
                 dataType: "json",
                 async :false,
-                data:{gid:gid,gsvalIds:gsvids},
+                data:{gid:gid,gsvalIds:gsvids,parentId:parentId},
                 success:function(data){
                     var row = data.row;
                     if(row!=null){
