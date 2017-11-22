@@ -2,6 +2,7 @@
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponWebVo;
+import com.retailers.mybatis.pagination.PageInterceptor;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.tools.exception.AppException;
@@ -76,6 +77,18 @@ public interface CouponService {
 	 * @throws AppException
 	 */
 	public boolean userGrabCoupon(Long userId,Long cpId)throws AppException;
+
+	/**
+	 * 根据状态取得用户优惠卷列表
+	 * @param uid
+	 * @param type
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 * @throws AppException
+	 */
+	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize)throws AppException;
+
 
 }
 

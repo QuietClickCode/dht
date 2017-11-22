@@ -212,5 +212,22 @@ public class CouponServiceImpl implements CouponService {
 		}
 	}
 
+	/**
+	 *
+	 * @param uid 用户id
+	 * @return
+	 * @throws AppException
+	 */
+	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize) throws AppException {
+		Map<String,Object> params=new HashMap<String, Object>();
+		params.put("uid",uid);
+		Pagination<CouponWebVo> page = new Pagination<CouponWebVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		page.setData(couponMapper.queryCurValidCoupon(page));
+		return  page;
+	}
+
 }
 

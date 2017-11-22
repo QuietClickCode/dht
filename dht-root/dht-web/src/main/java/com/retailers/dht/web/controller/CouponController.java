@@ -61,13 +61,21 @@ public class CouponController extends BaseController{
     /**
      * 取得用户的优惠卷
      * @param request
+     * @param pageForm 分页信息
+     * @param type 查询类型（0 用户未使用的优惠卷，1 己使用，2 己过期）
      * @return
      */
     @RequestMapping("queryUserCoupon")
     @ResponseBody
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录")
-    public BaseResp queryUserCoupon(HttpServletRequest request){
-        return success(null);
+    public BaseResp queryUserCoupon(HttpServletRequest request,PageUtils pageForm,long type){
+        long uid=getCurLoginUserId(request);
+        try{
+            couponService.queryUserCoupon(uid,type,pageForm.getPageNo(),pageForm.getPageSize());
+            return success(null);
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
     }
 
     /**
