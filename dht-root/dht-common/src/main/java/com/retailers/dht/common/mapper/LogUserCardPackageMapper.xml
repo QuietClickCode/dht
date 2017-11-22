@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.LogUserCardPackageMapper">
+
+	<resultMap id="rm_logUserCardPackage" type="com.retailers.dht.common.entity.LogUserCardPackage">
+			<result property="id" column="id"/>
+			<result property="uid" column="u_id"/>
+			<result property="type" column="type"/>
+			<result property="relationOrderId" column="relation_order_id"/>
+			<result property="val" column="val"/>
+			<result property="curVal" column="cur_val"/>
+			<result property="remark" column="remark"/>
+			<result property="createTime" column="create_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="logUserCardPackage_columns">
+		id,u_id,type,relation_order_id,val,cur_val,remark,create_time
+	</sql>
+	<!-- 根据用户卡包操作日志（钱包，积分）主键取得数据 -->
+	<select id="queryLogUserCardPackageById" resultMap="rm_logUserCardPackage" parameterType="java.lang.Long">
+		SELECT <include refid="logUserCardPackage_columns" />
+		FROM t_log_user_card_package WHERE id = #{id}
+	</select>
+	<!-- 用户卡包操作日志（钱包，积分）查询条件组合 -->
+	<sql id="logUserCardPackage_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.type">
+				AND type = #{params.type}
+			</if>
+			<if test="null != params.relationOrderId">
+				AND relation_order_id = #{params.relationOrderId}
+			</if>
+			<if test="null != params.val">
+				AND val = #{params.val}
+			</if>
+			<if test="null != params.curVal">
+				AND cur_val = #{params.curVal}
+			</if>
+			<if test="null != params.remark and '' != params.remark">
+				AND remark = #{params.remark}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= TO_DATE('${params.createTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= TO_DATE('${params.createTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryLogUserCardPackageList" resultMap="rm_logUserCardPackage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="logUserCardPackage_columns" />
+		FROM t_log_user_card_package
+		<include refid="logUserCardPackage_where"/>
+	</select>
+	<!--添加用户卡包操作日志（钱包，积分） -->
+	<insert id="saveLogUserCardPackage" parameterType="com.retailers.dht.common.entity.LogUserCardPackage" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_log_user_card_package (
+			u_id,type,relation_order_id,val,cur_val,remark,create_time
+		) VALUES
+		(
+			#{uid,jdbcType=BIGINT},#{type,jdbcType=INTEGER},#{relationOrderId,jdbcType=BIGINT},#{val,jdbcType=BIGINT},#{curVal,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改用户卡包操作日志（钱包，积分） -->
+	<update id="updateLogUserCardPackage" parameterType="com.retailers.dht.common.entity.LogUserCardPackage">
+		UPDATE t_log_user_card_package
+		<set>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != type">
+                type = #{type},
+            </if>
+            <if test="null != relationOrderId">
+                relation_order_id = #{relationOrderId},
+            </if>
+            <if test="null != val">
+                val = #{val},
+            </if>
+            <if test="null != curVal">
+                cur_val = #{curVal},
+            </if>
+            <if test="null != remark and '' != remark">
+                remark = #{remark},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除用户卡包操作日志（钱包，积分） -->
+	<delete id="deleteLogUserCardPackageById" parameterType="java.lang.Long">
+		DELETE FROM t_log_user_card_package WHERE id = #{id}
+	</delete>
+</mapper>

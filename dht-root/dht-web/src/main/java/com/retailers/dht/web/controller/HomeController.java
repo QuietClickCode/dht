@@ -1,6 +1,7 @@
 package com.retailers.dht.web.controller;
 
 import com.retailers.auth.entity.SysUser;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,16 +23,15 @@ public class HomeController extends BaseController {
      */
     @RequestMapping(value = {"","/","/index"})
     public String home(HttpServletRequest request){
-        SysUser sysUser=new SysUser();
-        sysUser.setUid(-1l);;
-        setCurLoginUser(request,sysUser);
+        UserInfoVIew userInfo=new UserInfoVIew();
+        userInfo.setUid(-1l);;
+        setCurLoginUser(request,userInfo);
         return redirectUrl(request,"index");
     }
 
 
     @RequestMapping("/home/{id}.html")
     public String randomHome(HttpServletRequest request, @PathVariable("id")String id){
-        System.out.println("id====================================>:"+id);
         return redirectUrl(request,"index");
     }
 }

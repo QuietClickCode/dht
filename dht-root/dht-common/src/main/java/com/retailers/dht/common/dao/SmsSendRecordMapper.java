@@ -1,0 +1,67 @@
+package com.retailers.dht.common.dao;
+import com.retailers.dht.common.entity.SmsSendRecord;
+import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
+/**
+ * 描述：短信发送列表DAO
+ * @author zhongp
+ * @version 1.0
+ * @since 1.8
+ * @date 2017-11-23 00:38:54
+ */
+public interface SmsSendRecordMapper {
+
+	/**
+	 * 添加短信发送列表
+	 * @param smsSendRecord
+	 * @return
+	 * @author zhongp
+	 * @date 2017-11-23 00:38:54
+	 */
+	public int saveSmsSendRecord(SmsSendRecord smsSendRecord);
+	/**
+	 * 编辑短信发送列表
+	 * @param smsSendRecord
+	 * @return
+	 * @author zhongp
+	 * @date 2017-11-23 00:38:54
+	 */
+	public int updateSmsSendRecord(SmsSendRecord smsSendRecord);
+	/**
+	 * 根据Id删除短信发送列表
+	 * @param id
+	 * @return
+	 * @author zhongp
+	 * @date 2017-11-23 00:38:54
+	 */
+	public int deleteSmsSendRecordById(Long id);
+	/**
+	 * 根据Id查询短信发送列表
+	 * @param id
+	 * @return
+	 * @author zhongp
+	 * @date 2017-11-23 00:38:54
+	 */
+	public SmsSendRecord querySmsSendRecordById(Long id);
+	/**
+	 * 查询短信发送列表列表
+	 * @param pagination 分页对象
+	 * @return  短信发送列表列表
+	 * @author zhongp
+	 * @date 2017-11-23 00:38:54
+	 */
+	public List<SmsSendRecord> querySmsSendRecordList(Pagination<SmsSendRecord> pagination);
+
+	/**
+	 * 根据手机号，类型取得发送消息内容
+	 * @param phone
+	 * @param type
+	 * @param curDate
+	 * @return
+	 */
+	public SmsSendRecord queryCurSmsSendRecordByPhone(@Param("phone")String phone, @Param("type")int type,@Param("code")String code,@Param("curDate")Date curDate);
+
+}

@@ -4,6 +4,7 @@ import com.retailers.dht.common.dao.ProcedureToolsMapper;
 import com.retailers.dht.common.enm.OrderEnum;
 import com.retailers.dht.common.entity.Sequence;
 import com.retailers.dht.common.service.ProcedureToolsService;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
@@ -62,5 +63,29 @@ public class ProcedureToolsServiceImpl implements ProcedureToolsService {
             count = procedureToolsMapper.clearSequenceData(time);
         }
         logger.info("执行时间：{},删除条数:{}",(System.currentTimeMillis()-curDate.getTime()),count);
+    }
+
+    public void singleLockManager(String key) throws AppException {
+        logger.info("添加单线程锁开始,锁key:[{}]",key);
+        Date curDate=new Date();
+        try{
+            procedureToolsMapper.singleLockManager(key,curDate);
+        }catch(Exception e){
+            throw new AppException("正在执行");
+        }
+        finally {
+            logger.info("添加单线程锁结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
+        }
+
+    }
+    @Async
+    public void singleUnLockManager(String key) {
+        logger.info("解除单线程锁开始,锁key:[{}]",key);
+        Date curDate=new Date();
+        try{
+            procedureToolsMapper.singleUnLockManager(key);
+        }finally {
+            logger.info("解除单线程锁结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
+        }
     }
 }

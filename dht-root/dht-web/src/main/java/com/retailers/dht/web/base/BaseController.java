@@ -3,7 +3,7 @@ package com.retailers.dht.web.base;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.auth.entity.SysUser;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.constant.WebSystemConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseWrite;
@@ -27,13 +27,13 @@ public class BaseController extends BaseWrite {
      * @param request
      * @return
      */
-    protected SysUser getCurLoginUser(HttpServletRequest request){
+    protected UserInfoVIew getCurLoginUser(HttpServletRequest request){
         Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
-        SysUser sysUser=null;
+        UserInfoVIew userInfo=null;
         if(ObjectUtils.isNotEmpty(obj)){
-            sysUser=(SysUser)obj;
+            userInfo=(UserInfoVIew)obj;
         }
-        return sysUser;
+        return userInfo;
     }
     /**
      * 取得当前登陆用户 id
@@ -42,9 +42,9 @@ public class BaseController extends BaseWrite {
      */
     protected Long getCurLoginUserId(HttpServletRequest request){
         Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
-        SysUser sysUser=null;
+        UserInfoVIew sysUser=null;
         if(ObjectUtils.isNotEmpty(obj)){
-            sysUser=(SysUser)obj;
+            sysUser=(UserInfoVIew)obj;
             return sysUser.getUid();
         }
         return null;
@@ -54,8 +54,8 @@ public class BaseController extends BaseWrite {
      * @param request
      * @return
      */
-    protected void setCurLoginUser(HttpServletRequest request,SysUser sysUser){
-        request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,sysUser);
+    protected void setCurLoginUser(HttpServletRequest request,UserInfoVIew userInfo){
+        request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,userInfo);
     }
 
     /**

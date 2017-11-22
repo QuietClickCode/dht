@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserMapper">
+
+	<resultMap id="rm_user" type="com.retailers.dht.common.entity.User">
+			<result property="uid" column="u_id"/>
+			<result property="urecommendId" column="u_recommend_id"/>
+			<result property="uaccount" column="u_account"/>
+			<result property="uphone" column="u_phone"/>
+			<result property="uemail" column="u_email"/>
+			<result property="uname" column="u_name"/>
+			<result property="upwd" column="u_pwd"/>
+			<result property="upayPwd" column="u_pay_pwd"/>
+			<result property="uimgid" column="u_imgid"/>
+			<result property="utype" column="u_type"/>
+			<result property="ustatus" column="u_status"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="ucreateTime" column="u_create_time"/>
+			<result property="uisOld" column="u_is_old"/>
+			<result property="uoldPwd" column="u_old_pwd"/>
+			<result property="usex" column="u_sex"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="user_columns">
+		u_id,u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
+	</sql>
+	<!-- 根据平台会员主键取得数据 -->
+	<select id="queryUserByUid" resultMap="rm_user" parameterType="java.lang.Long">
+		SELECT <include refid="user_columns" />
+		FROM t_user WHERE u_id = #{uid}
+	</select>
+	<!-- 平台会员查询条件组合 -->
+	<sql id="user_where">
+		<where>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.urecommendId">
+				AND u_recommend_id = #{params.urecommendId}
+			</if>
+			<if test="null != params.uaccount and '' != params.uaccount">
+				AND u_account = #{params.uaccount}
+			</if>
+			<if test="null != params.uphone and '' != params.uphone">
+				AND u_phone = #{params.uphone}
+			</if>
+			<if test="null != params.uemail and '' != params.uemail">
+				AND u_email = #{params.uemail}
+			</if>
+			<if test="null != params.uname and '' != params.uname">
+				AND u_name = #{params.uname}
+			</if>
+			<if test="null != params.upwd and '' != params.upwd">
+				AND u_pwd = #{params.upwd}
+			</if>
+			<if test="null != params.upayPwd and '' != params.upayPwd">
+				AND u_pay_pwd = #{params.upayPwd}
+			</if>
+			<if test="null != params.uimgid">
+				AND u_imgid = #{params.uimgid}
+			</if>
+			<if test="null != params.utype">
+				AND u_type = #{params.utype}
+			</if>
+			<if test="null != params.ustatus">
+				AND u_status = #{params.ustatus}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.ucreateTimeBegin">
+				AND u_create_time &gt;= TO_DATE('${params.ucreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.ucreateTimeEnd">
+				AND u_create_time &lt;= TO_DATE('${params.ucreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.uisOld">
+				AND u_is_old = #{params.uisOld}
+			</if>
+			<if test="null != params.uoldPwd">
+				AND u_old_pwd = #{params.uoldPwd}
+			</if>
+			<if test="null != params.usex">
+				AND u_sex = #{params.usex}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserList" resultMap="rm_user" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="user_columns" />
+		FROM t_user
+		<include refid="user_where"/>
+	</select>
+	<!--添加平台会员 -->
+	<insert id="saveUser" parameterType="com.retailers.dht.common.entity.User" useGeneratedKeys="true" keyProperty="uid">
+		INSERT INTO t_user (
+			u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
+		) VALUES
+		(
+			#{urecommendId,jdbcType=BIGINT},#{uaccount,jdbcType=VARCHAR},#{uphone,jdbcType=VARCHAR},#{uemail,jdbcType=VARCHAR},#{uname,jdbcType=VARCHAR},#{upwd,jdbcType=VARCHAR},#{upayPwd,jdbcType=VARCHAR},#{uimgid,jdbcType=INTEGER},#{utype,jdbcType=INTEGER},#{ustatus,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{ucreateTime,jdbcType=TIMESTAMP},#{uisOld,jdbcType=INTEGER},#{uoldPwd,jdbcType=INTEGER},#{usex,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改平台会员 -->
+	<update id="updateUser" parameterType="com.retailers.dht.common.entity.User">
+		UPDATE t_user
+		<set>
+            <if test="null != urecommendId">
+                u_recommend_id = #{urecommendId},
+            </if>
+            <if test="null != uaccount and '' != uaccount">
+                u_account = #{uaccount},
+            </if>
+            <if test="null != uphone and '' != uphone">
+                u_phone = #{uphone},
+            </if>
+            <if test="null != uemail and '' != uemail">
+                u_email = #{uemail},
+            </if>
+            <if test="null != uname and '' != uname">
+                u_name = #{uname},
+            </if>
+            <if test="null != upwd and '' != upwd">
+                u_pwd = #{upwd},
+            </if>
+            <if test="null != upayPwd and '' != upayPwd">
+                u_pay_pwd = #{upayPwd},
+            </if>
+            <if test="null != uimgid">
+                u_imgid = #{uimgid},
+            </if>
+            <if test="null != utype">
+                u_type = #{utype},
+            </if>
+            <if test="null != ustatus">
+                u_status = #{ustatus},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != ucreateTime">
+                u_create_time = #{ucreateTime},
+            </if>
+            <if test="null != uisOld">
+                u_is_old = #{uisOld},
+            </if>
+            <if test="null != uoldPwd">
+                u_old_pwd = #{uoldPwd},
+            </if>
+            <if test="null != usex">
+                u_sex = #{usex},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE u_id = #{uid} and version = #{version}
+	</update>
+	<!--删除平台会员 -->
+	<delete id="deleteUserByUid" parameterType="java.lang.Long">
+		DELETE FROM t_user WHERE u_id = #{uid}
+	</delete>
+	<!-- 校验手机号是否存在-->
+	<select id="checkPhone" resultMap="rm_user" parameterType="java.lang.String">
+		SELECT <include refid="user_columns" />
+		FROM t_user WHERE u_phone = #{phone}
+	</select>
+</mapper>

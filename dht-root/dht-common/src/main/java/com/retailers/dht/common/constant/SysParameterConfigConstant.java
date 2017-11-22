@@ -15,6 +15,16 @@ import java.util.Map;
 public class SysParameterConfigConstant {
     //附件服务器地址
     public static final String ATTACHMENT_SERVER_ADDRESS="ATTACHMENT_SERVER_ADDRESS";
+    /**
+     * 短信验证码有效时间 分
+     */
+    public static final String SMS_VALID_CODE_VALID_TIME="SMS_VALID_CODE_VALID_TIME";
+    /**
+     * 短信验证码间隔时间 分
+     */
+    public static final String SMS_VALID_CODE_INTERVAL_TIME="SMS_VALID_CODE_INTERVAL_TIME";
+
+
     //系统 参数对应的key值
     public static Map<String,Object> params=new HashMap<String, Object>();
 
@@ -29,9 +39,9 @@ public class SysParameterConfigConstant {
 
     public static void main(String[] args) {
         params.put("zpaman",true);
-        params.put("zpaman1","1");
-        params.put("zpaman2",1.2);
-        params.put("zpaman3",2.3);
+//        params.put("zpaman1","1");
+//        params.put("zpaman2",1.2);
+//        params.put("zpaman3",2.3);
         params.put("zpaman4","true");
         boolean flag = getValue("zpaman",Boolean.class);
         long num = getValue("zpaman1",Long.class);

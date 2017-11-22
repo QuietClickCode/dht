@@ -43,7 +43,7 @@ public class User implements java.io.Serializable {
 	private String upayPwd;
 	/**用户头像Id*/
 	@NotEmpty
-	private Integer uimgid;
+	private Long uimgid;
 	/**用户类型*/
 	@NotEmpty
 	private Integer utype;
@@ -133,13 +133,15 @@ public class User implements java.io.Serializable {
 	public String getUpayPwd() {
 		return this.upayPwd;
 	}
-	public void setUimgid(Integer value) {
-		this.uimgid = value;
+
+	public Long getUimgid() {
+		return uimgid;
 	}
 
-	public Integer getUimgid() {
-		return this.uimgid;
+	public void setUimgid(Long uimgid) {
+		this.uimgid = uimgid;
 	}
+
 	public void setUtype(Integer value) {
 		this.utype = value;
 	}

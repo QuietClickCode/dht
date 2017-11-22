@@ -15,5 +15,15 @@
 	<delete id="clearSequenceData" parameterType="java.lang.Long">
 		DELETE FROM t_sequence WHERE time &lt;=#{time} LIMIT 1000
 	</delete>
+
+	<!--添加单线程锁 -->
+	<insert id="singleLockManager">
+		INSERT INTO t_single_thread_lock(lock_key,create_time) VALUES (#{key},#{curDate})
+	</insert>
+	<!--解除单线程锁 -->
+	<delete id="singleUnLockManager" parameterType="java.lang.String">
+		DELETE FROM t_single_thread_lock WHERE lock_key = #{key}
+	</delete>
+
 </mapper>
 

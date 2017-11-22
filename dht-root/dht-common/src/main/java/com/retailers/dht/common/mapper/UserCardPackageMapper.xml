@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserCardPackageMapper">
+
+	<resultMap id="rm_userCardPackage" type="com.retailers.dht.common.entity.UserCardPackage">
+			<result property="id" column="id"/>
+			<result property="utotalWallet" column="u_total_wallet"/>
+			<result property="ucurWallet" column="u_cur_wallet"/>
+			<result property="utotalIntegral" column="u_total_integral"/>
+			<result property="ucurIntegral" column="u_cur_integral"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userCardPackage_columns">
+		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
+	</sql>
+	<!-- 根据用户钱包，积分主键取得数据 -->
+	<select id="queryUserCardPackageById" resultMap="rm_userCardPackage" parameterType="java.lang.Long">
+		SELECT <include refid="userCardPackage_columns" />
+		FROM t_user_card_package WHERE id = #{id}
+	</select>
+	<!-- 用户钱包，积分查询条件组合 -->
+	<sql id="userCardPackage_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.utotalWallet">
+				AND u_total_wallet = #{params.utotalWallet}
+			</if>
+			<if test="null != params.ucurWallet">
+				AND u_cur_wallet = #{params.ucurWallet}
+			</if>
+			<if test="null != params.utotalIntegral">
+				AND u_total_integral = #{params.utotalIntegral}
+			</if>
+			<if test="null != params.ucurIntegral">
+				AND u_cur_integral = #{params.ucurIntegral}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserCardPackageList" resultMap="rm_userCardPackage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="userCardPackage_columns" />
+		FROM t_user_card_package
+		<include refid="userCardPackage_where"/>
+	</select>
+	<!--添加用户钱包，积分 -->
+	<insert id="saveUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_user_card_package (
+			u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
+		) VALUES
+		(
+			#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改用户钱包，积分 -->
+	<update id="updateUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage">
+		UPDATE t_user_card_package
+		<set>
+            <if test="null != utotalWallet">
+                u_total_wallet = #{utotalWallet},
+            </if>
+            <if test="null != ucurWallet">
+                u_cur_wallet = #{ucurWallet},
+            </if>
+            <if test="null != utotalIntegral">
+                u_total_integral = #{utotalIntegral},
+            </if>
+            <if test="null != ucurIntegral">
+                u_cur_integral = #{ucurIntegral},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE id = #{id} and version = #{version}
+	</update>
+	<!--删除用户钱包，积分 -->
+	<delete id="deleteUserCardPackageById" parameterType="java.lang.Long">
+		DELETE FROM t_user_card_package WHERE id = #{id}
+	</delete>
+</mapper>

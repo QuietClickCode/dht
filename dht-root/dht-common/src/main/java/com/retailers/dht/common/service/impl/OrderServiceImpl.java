@@ -125,7 +125,7 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderTradePrice(recharge.getRprice());
 			order.setOrderShopPrice(recharge.getRprice());
 			String illustrate="用户[{}]购买充值卡，充值金额：{}，充值后享受的折扣:{}";
-			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberYuan(recharge.getRprice(),2),NumberUtils.formaterNumberYuan(recharge.getRdiscount(),2));
+			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberPower(recharge.getRprice()),NumberUtils.formaterNumberPower(recharge.getRdiscount()));
 			order.setOrderIllustrate(illustrate);
 			order.setOrderCreateDate(curDate);
 			orderMapper.saveOrder(order);

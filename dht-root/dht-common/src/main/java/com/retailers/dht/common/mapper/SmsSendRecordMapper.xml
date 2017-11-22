@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.SmsSendRecordMapper">
+
+	<resultMap id="rm_smsSendRecord" type="com.retailers.dht.common.entity.SmsSendRecord">
+		<result property="id" column="id"/>
+		<result property="type" column="type"/>
+		<result property="status" column="status"/>
+		<result property="phone" column="phone"/>
+		<result property="code" column="code"/>
+		<result property="context" column="context"/>
+		<result property="createDate" column="create_date"/>
+		<result property="onceSendDate" column="once_send_date"/>
+		<result property="expireDate" column="expire_date"/>
+		<result property="useDate" column="use_date"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="smsSendRecord_columns">
+		id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+	</sql>
+	<!-- 根据短信发送列表主键取得数据 -->
+	<select id="querySmsSendRecordById" resultMap="rm_smsSendRecord" parameterType="java.lang.Long">
+		SELECT <include refid="smsSendRecord_columns" />
+		FROM t_sms_send_record WHERE id = #{id}
+	</select>
+	<!-- 短信发送列表查询条件组合 -->
+	<sql id="smsSendRecord_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.type">
+				AND type = #{params.type}
+			</if>
+			<if test="null != params.status">
+				AND status = #{params.status}
+			</if>
+			<if test="null != params.phone and '' != params.phone">
+				AND phone = #{params.phone}
+			</if>
+			<if test="null != params.code and '' != params.code">
+				AND code = #{params.code}
+			</if>
+			<if test="null != params.context and '' != params.context">
+				AND context = #{params.context}
+			</if>
+			<if test="null != params.createDateBegin">
+				AND create_date &gt;= TO_DATE('${params.createDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.createDateEnd">
+				AND create_date &lt;= TO_DATE('${params.createDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.onceSendDateBegin">
+				AND once_send_date &gt;= TO_DATE('${params.onceSendDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.onceSendDateEnd">
+				AND once_send_date &lt;= TO_DATE('${params.onceSendDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.expireDateBegin">
+				AND expire_date &gt;= TO_DATE('${params.expireDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.expireDateEnd">
+				AND expire_date &lt;= TO_DATE('${params.expireDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.useDateBegin">
+				AND use_date &gt;= TO_DATE('${params.useDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.useDateEnd">
+				AND use_date &lt;= TO_DATE('${params.useDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySmsSendRecordList" resultMap="rm_smsSendRecord" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="smsSendRecord_columns" />
+		FROM t_sms_send_record
+		<include refid="smsSendRecord_where"/>
+	</select>
+	<!--添加短信发送列表 -->
+	<insert id="saveSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_sms_send_record (
+		type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+		) VALUES
+		(
+		#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{onceSendDate,jdbcType=TIMESTAMP},#{expireDate,jdbcType=TIMESTAMP},#{useDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改短信发送列表 -->
+	<update id="updateSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord">
+		UPDATE t_sms_send_record
+		<set>
+			<if test="null != type">
+				type = #{type},
+			</if>
+			<if test="null != status">
+				status = #{status},
+			</if>
+			<if test="null != phone and '' != phone">
+				phone = #{phone},
+			</if>
+			<if test="null != code and '' != code">
+				code = #{code},
+			</if>
+			<if test="null != context and '' != context">
+				context = #{context},
+			</if>
+			<if test="null != createDate">
+				create_date = #{createDate},
+			</if>
+			<if test="null != onceSendDate">
+				once_send_date = #{onceSendDate},
+			</if>
+			<if test="null != expireDate">
+				expire_date = #{expireDate},
+			</if>
+			<if test="null != useDate">
+				use_date = #{useDate},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除短信发送列表 -->
+	<delete id="deleteSmsSendRecordById" parameterType="java.lang.Long">
+		DELETE FROM t_sms_send_record WHERE id = #{id}
+	</delete>
+	<!--分页查询 -->
+	<select id="queryCurSmsSendRecordByPhone" resultMap="rm_smsSendRecord">
+		SELECT
+			<include refid="smsSendRecord_columns" />
+		FROM
+			t_sms_send_record
+		WHERE
+			phone = #{phone}
+			AND STATUS = 0
+			AND expire_date >#{curDate}
+			AND type = #{type}
+			and code=#{code}
+		ORDER BY
+		id DESC
+		LIMIT 1
+	</select>
+</mapper>
