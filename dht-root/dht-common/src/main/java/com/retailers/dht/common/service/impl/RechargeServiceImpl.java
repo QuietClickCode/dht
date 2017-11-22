@@ -9,6 +9,7 @@ import com.retailers.dht.common.entity.Recharge;
 import com.retailers.dht.common.dao.RechargeMapper;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.RechargeService;
+import com.retailers.dht.common.view.RechargeView;
 import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
@@ -105,6 +106,15 @@ public class RechargeServiceImpl implements RechargeService {
         recharge.setIsDelete(SystemConstant.SYS_IS_DELETE_YES);
         recharge.setRcreateSid(sid);
 		return updateRecharge(recharge);
+	}
+
+	/**
+	 * 取得充值卡列表
+	 * @return
+	 * @throws AppException
+	 */
+	public List<RechargeView> queryRechargeLists(){
+		return rechargeMapper.queryRechargeLists();
 	}
 }
 

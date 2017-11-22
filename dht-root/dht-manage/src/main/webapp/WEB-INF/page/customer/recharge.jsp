@@ -430,7 +430,7 @@
             initRlogoForm(rowData.rlogo,rowData.rlogoUrl);
             var rcashback =false;
             if(rowData.rcashback==0){
-                flag=true;
+                rcashback=true;
             }
             $("#editorRechargeForm #rcashback").bootstrapSwitch("state",rcashback);
             var isValid =false;

@@ -31,6 +31,15 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 	</resultMap>
+
+	<resultMap id="rm_recharge_view" type="com.retailers.dht.common.view.RechargeView">
+		<result property="rid" column="r_id"/>
+		<result property="rname" column="r_name"/>
+		<result property="rlogoUrl" column="r_logo_url"/>
+		<result property="rprice" column="r_price"/>
+		<result property="rdiscount" column="r_discount"/>
+		<result property="rcashback" column="r_cashback"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="recharge_columns">
 		r_id,r_name,r_logo,r_price,r_discount,r_cashback,r_create_date,r_create_sid,r_snapshot,is_valid,is_delete,version
@@ -101,6 +110,7 @@
 				AND is_delete = #{params.isDelete}
 			</if>
 		</where>
+		ORDER BY r_price ASC
 	</select>
 	<!--添加充值管理 -->
 	<insert id="saveRecharge" parameterType="com.retailers.dht.common.entity.Recharge" useGeneratedKeys="true" keyProperty="rid">
@@ -167,4 +177,20 @@
 	<delete id="deleteRechargeByRid" parameterType="java.lang.Long">
 		DELETE FROM t_recharge WHERE r_id = #{rid}
 	</delete>
+
+	<!--分页查询 -->
+	<select id="queryRechargeLists" resultMap="rm_recharge_view">
+		SELECT
+		r.r_id,
+		r.r_name,
+		r.r_price,
+		r.r_discount,
+		r.r_cashback,
+		a.show_url r_logo_url
+		FROM
+		t_recharge r
+		LEFT JOIN t_attachment a ON r.r_logo = a.id
+		WHERE r.is_delete=0 and r.is_valid=0
+		order by r_price DESC
+	</select>
 </mapper>
