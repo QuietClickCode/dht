@@ -27,7 +27,6 @@ public class GoodsGdsprelController extends BaseController{
     GoodsGdsprelService goodsGdsprelService;
 
     @RequestMapping("/addGoodsGdsprel")
-    @Function(label = "添加特价与商品详情关系",description = "添加特价与商品详情关系",resourse = "openGoodsGdsprel.addGoodsGdsprel",sort = 3,parentRes = "openSalePromotion.salePromotionMapping")
     @ResponseBody
     public BaseResp addGoodsGdsprel(GoodsGdsprel goodsGdsprel){
         goodsGdsprel.setIsDelete(0L);
@@ -39,7 +38,6 @@ public class GoodsGdsprelController extends BaseController{
     }
 
     @RequestMapping("/updateGoodsGdsprel")
-    @Function(label = "修改特价与商品详情关系",description = "修改特价与商品详情关系",resourse = "openGoodsGdsprel.updateGoodsGdsprel",sort = 3,parentRes = "openSalePromotion.salePromotionMapping")
     @ResponseBody
     public BaseResp updateGoodsGdsprel(GoodsGdsprel goodsGdsprel){
         boolean flag = goodsGdsprelService.updateGoodsGdsprel(goodsGdsprel);
@@ -50,12 +48,11 @@ public class GoodsGdsprelController extends BaseController{
     }
 
     @RequestMapping("/queryGoodsGdsprelListsByGid")
-    @Function(label="特价与商品详情关系集合", description = "特价与商品详情关系集合", resourse = "openGoodsGdsprel.queryGoodsGdsprelListsByGid",sort=1,parentRes="openSalePromotion.salePromotionMapping")
     @ResponseBody
-    public Map<String,Object> queryGoodsGdsprelListsByGid(Long gid){
+    public Map<String,Object> queryGoodsGdsprelListsByGid(Long gid,Long spId){
         List<GoodsGdsprelVo> list = new ArrayList<GoodsGdsprelVo>();
         if(!ObjectUtils.isEmpty(gid)){
-            list = goodsGdsprelService.queryGoodsGdsprelListsByGid(gid);
+            list = goodsGdsprelService.queryGoodsGdsprelListsByGid(gid,spId);
         }
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("rows",list);

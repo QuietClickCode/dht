@@ -8,6 +8,7 @@ import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.dht.manage.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,20 @@ public class GoodsClassificationController extends BaseController {
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",1000);
         gtm.put("rows",goodsClassificationList);
+        return gtm;
+    }
+
+    @RequestMapping("/queryGoodsClassificationListsByParentId")
+    @Function(label="通过parenid商品子类列表", description = "通过parenid商品子类列表", resourse = "goods.queryGoodsClassificationListsByParentId",sort=1,parentRes="goods.openGoodsClassification")
+    @ResponseBody
+    public Map<String,Object> queryGoodsClassificationListsByParentId(Long parentId){
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("parentId",parentId);
+        Pagination<GoodsClassification> goodsClassificationList = goodsClassificationService.queryGoodsClassificationList(params,1,1000);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",1000);
+        gtm.put("rows",goodsClassificationList.getData());
         return gtm;
     }
 

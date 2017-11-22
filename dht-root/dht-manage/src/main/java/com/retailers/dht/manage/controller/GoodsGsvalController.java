@@ -27,7 +27,6 @@ public class GoodsGsvalController extends BaseController {
     GoodsGsvalService goodsGsvalService;
 
     @RequestMapping("editGoodsGsval")
-    @Function(label = "编辑规格值",parentRes = "goods.editGoodsSpecification",resourse = "goods.editGoodsGsval",description = "编辑规格值",sort = 2)
     @ResponseBody
     public BaseResp editGoodsGsval(GoodsGsval goodsGsval){
         goodsGsval.setVersion(goodsGsvalService.queryGoodsGsvalByGsvId(goodsGsval.getGsvId()).getVersion());
@@ -40,7 +39,6 @@ public class GoodsGsvalController extends BaseController {
     }
 
     @RequestMapping("/removeGoodsGsval")
-    @Function(label="删除商品规格值", description = "删除商品规格值", resourse = "goods.removeGoodsGsval",sort=3,parentRes="goods.editGoodsSpecification")
     @ResponseBody
     public BaseResp removeGoodsGsval(Long gsvId){
         boolean flag=goodsGsvalService.deleteGoodsGsvalByGsvId(gsvId);
@@ -48,7 +46,6 @@ public class GoodsGsvalController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGsvalLists")
-    @Function(label="商品规格值列表", description = "商品规格值列表", resourse = "goods.queryGoodsGsvalLists",sort=1,parentRes="goods.editGoodsSpecification")
     @ResponseBody
     public  Map<String,Object> queryGoodsGsvalLists(Long gsId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -62,7 +59,6 @@ public class GoodsGsvalController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGsval")
-    @Function(label="增加商品规格值", description = "增加商品规格值", resourse = "goods.addGoodsGsval",parentRes="goods.editGoodsSpecification")
     @ResponseBody
     public BaseResp addGoodsGsval(GoodsGsval goodsGsval){
         goodsGsval.setIsDelete(0L);

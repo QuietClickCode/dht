@@ -34,7 +34,6 @@ public class GoodsGtgclrelController extends BaseController {
     GoodsClassificationService goodsClassificationService;
 
     @RequestMapping("/removeGoodsGtgclrel")
-    @Function(label="删除商品大类与评论标签关系", description = "删除商品大类与评论标签关系", resourse = "goods.removeGoodsGtgclrel",sort=3,parentRes="goods.openGoodsType")
     @ResponseBody
     public BaseResp removeGoodsGtgclrel(String gtgclIds){
         boolean flag=goodsGtgclrelService.deleteGoodsGtgclrelByGtgclId(gtgclIds);
@@ -42,7 +41,6 @@ public class GoodsGtgclrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGtgclrelLists")
-    @Function(label="商品大类与评论标签关系列表", description = "商品大类与评论标签关系列表", resourse = "goods.queryGoodsGtgclrelLists",sort=1,parentRes="goods.openGoodsType")
     @ResponseBody
     public  Map<String,Object> queryGoodsGtgclrelLists(Long gtId,String gclName,Long ggId,Long isClass,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -61,7 +59,6 @@ public class GoodsGtgclrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGtgclrel")
-    @Function(label="增加商品大类与评论标签关系", description = "增加商品大类与评论标签关系", resourse = "goods.addGoodsGtgclrel",parentRes="goods.openGoodsType")
     @ResponseBody
     public BaseResp addGoodsGtgclrel(String gclIds,Long gtId){
         boolean flag=goodsGtgclrelService.saveGoodsGtgclrel(gclIds,gtId);

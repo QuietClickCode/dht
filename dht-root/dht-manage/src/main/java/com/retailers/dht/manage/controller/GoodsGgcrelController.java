@@ -32,7 +32,6 @@ public class GoodsGgcrelController extends BaseController {
     GoodsGgcrelService goodsGgcrelService;
 
     @RequestMapping("/removeGoodsGgcrel")
-    @Function(label="删除商品与赠品关系", description = "删除商品大类与赠品关系", resourse = "goods.removeGoodsGgcrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGgcrel(String ggcIds){
         boolean flag=goodsGgcrelService.deleteGoodsGgcrelByGgcId(ggcIds);
@@ -40,7 +39,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/removeGclassGoodsGgcrel")
-    @Function(label="删除子类商品与赠品关系", description = "删除子类商品与赠品关系", resourse = "goods.removeGclassGoodsGgcrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGclassGoodsGgcrel(String gcIds,Long gid){
         boolean flag=goodsGgcrelService.deleteGclassGoodsGgcrelByGgcId(gcIds,gid);
@@ -48,7 +46,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGgcrelLists")
-    @Function(label="商品与赠品关系列表", description = "商品与赠品关系列表", resourse = "goods.queryGoodsGgcrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGgcrelLists(Long gid,Long gcId,Long isClass,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -64,7 +61,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/queryGclassGoodsGgcrelLists")
-    @Function(label="通过子类查询商品与赠品关系列表", description = "通过子类查询商品与赠品关系列表", resourse = "goods.queryGclassGoodsGgcrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGclassGoodsGgcrelLists(Long gid){
         List<GoodsGgcrelVo> list = goodsGgcrelService.queryGclassGoodsGgcrelLists(gid);
@@ -74,7 +70,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgcrel")
-    @Function(label="增加商品大类与赠品关系", description = "增加商品大类与赠品关系", resourse = "goods.addGoodsGgcrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgcrel(String ggcIds,Long gid,String gids,Long gcId){
         boolean flag = false;
@@ -88,7 +83,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgcrelByGc")
-    @Function(label="增加商品大类与赠品关系", description = "增加商品大类与赠品关系", resourse = "goods.addGoodsGgcrelByGc",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgcrelByGc(String gclassIds,Long gcId){
         boolean flag=goodsGgcrelService.saveGoodsGgcrelByGc(gclassIds,gcId);
@@ -96,7 +90,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/clearGoodsGgcrel")
-    @Function(label="清除商品大类与赠品关系", description = "清除商品大类与赠品关系", resourse = "goods.clearGoodsGgcrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp clearGoodsGgcrel(Long gcId){
         boolean flag=goodsGgcrelService.clearGoodsGgcrel(gcId);
@@ -104,7 +97,6 @@ public class GoodsGgcrelController extends BaseController {
     }
 
     @RequestMapping("/querydeletedgclass")
-    @Function(label="查询商品大类与赠品关系", description = "清除商品大类与赠品关系", resourse = "goods.removedeletedgclass",parentRes="goods.openGoods")
     @ResponseBody
     public Map<String,Object> querydeletedgclass(Long gid){
         List<GoodsGgcrelVo> rows = goodsGgcrelService.querydeletedgclass(gid);

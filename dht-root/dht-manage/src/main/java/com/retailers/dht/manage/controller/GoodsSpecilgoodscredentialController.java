@@ -27,7 +27,6 @@ public class GoodsSpecilgoodscredentialController extends BaseController {
     GoodsSpecilgoodscredentialService goodsSpecilgoodscredentialService;
 
     @RequestMapping("/removeGoodsSpecilgoodscredential")
-    @Function(label="删除商品与特殊商品证件关系", description = "删除商品与特殊商品证件关系", resourse = "goods.removeGoodsSpecilgoodscredential",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsSpecilgoodscredential(Long gsgId){
         boolean flag=goodsSpecilgoodscredentialService.deleteGoodsSpecilgoodscredentialByGsgId(gsgId);
@@ -35,7 +34,6 @@ public class GoodsSpecilgoodscredentialController extends BaseController {
     }
 
     @RequestMapping("/editorGoodsSpecilgoodscredential")
-    @Function(label="编辑商品与特殊商品证件关系", description = "编辑商品与特殊商品证件关系", resourse = "goods.editorGoodsSpecilgoodscredential",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp editorGoodsSpecilgoodscredential(GoodsSpecilgoodscredential goodsSpecilgoodscredential){
         boolean flag=goodsSpecilgoodscredentialService.updateGoodsSpecilgoodscredential(goodsSpecilgoodscredential);
@@ -43,7 +41,6 @@ public class GoodsSpecilgoodscredentialController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsSpecilgoodscredentialLists")
-    @Function(label="商品与特殊商品证件关系列表", description = "商品与特殊商品证件关系列表", resourse = "goods.queryGoodsSpecilgoodscredentialLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsSpecilgoodscredentialLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -57,7 +54,6 @@ public class GoodsSpecilgoodscredentialController extends BaseController {
     }
 
     @RequestMapping("/addGoodsSpecilgoodscredential")
-    @Function(label="增加商品与特殊商品证件关系", description = "增加商品与特殊商品证件关系", resourse = "goods.addGoodsSpecilgoodscredential",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsSpecilgoodscredential(GoodsSpecilgoodscredential goodsSpecilgoodscredential){
         goodsSpecilgoodscredential.setIsDelete(0L);

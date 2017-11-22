@@ -26,4 +26,10 @@ public class SeckillSpecialProductController extends BaseController {
         System.out.println("id====================================>:"+id);
         return redirectUrl(request,"sksppdt/special-product");
     }
+
+    @RequestMapping("/test/{id}.html")
+    public String test(HttpServletRequest request, @PathVariable("id")String id){
+        System.out.println("id====================================>:"+id);
+        return redirectUrl(request,"sksppdt/sample-async");
+    }
 }

@@ -31,7 +31,6 @@ public class GoodsImageController extends BaseController {
     GoodsImageService goodsImageService;
 
     @RequestMapping("/editGoodsImage")
-    @Function(label = "编辑商品图片",parentRes = "goods.openGoods",resourse = "GoodsImage.editGoodsImage",description = "编辑商品图片",sort = 2)
     @ResponseBody
     public BaseResp editGoodsImage(GoodsImage GoodsImage,String gedts,HttpServletRequest request){
 
@@ -45,7 +44,6 @@ public class GoodsImageController extends BaseController {
     }
 
     @RequestMapping("/removeGoodsImage")
-    @Function(label="删除商品图片", description = "删除商品图片", resourse = "GoodsImage.removeGoodsImage",sort=3,parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsImage(Long giId,HttpServletRequest request){
         boolean flag=goodsImageService.deleteGoodsImageByGiId(giId,getCurLoginUserId(request));
@@ -53,7 +51,6 @@ public class GoodsImageController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsImages")
-    @Function(label="商品图片列表", description = "商品图片信息", resourse = "GoodsImage.queryGoodsImageList",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsImageLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -66,7 +63,6 @@ public class GoodsImageController extends BaseController {
     }
 
     @RequestMapping("/addGoodsImage")
-    @Function(label="增加商品图片", description = "增加商品图片", resourse = "GoodsImage.addGoodsImage",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsImage(GoodsImage goodsImage, HttpServletRequest request){
         goodsImage.setIsDelete(0L);

@@ -29,6 +29,7 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 		Map params = new HashMap();
 		params.put("isDelete",0L);
 		params.put("gdId",goodsGdsprel.getGdId());
+		params.put("spId",goodsGdsprel.getSpId());
 		Pagination<GoodsGdsprel> pagination = queryGoodsGdsprelList(params,1,100);
 		if(!ObjectUtils.isEmpty(pagination.getData())){
 			for(GoodsGdsprel g:pagination.getData()){
@@ -60,8 +61,8 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 		return status == 1 ? true : false;
 	}
 
-	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid){
-		List<GoodsGdsprelVo> list = goodsGdsprelMapper.queryGoodsGdsprelListsByGid(gid);
+	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid,Long spId){
+		List<GoodsGdsprelVo> list = goodsGdsprelMapper.queryGoodsGdsprelListsByGid(gid,spId);
 		return list;
 	}
 

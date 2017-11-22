@@ -28,9 +28,10 @@ public class GoodsGdsprelController extends BaseController{
 
     @RequestMapping("/queryGoodsGdsprelVoLists")
     @ResponseBody
-    public Map<String,Object> queryGoodsGdsprelListsByGid(Long gid,String gsvalIds){
+    public Map<String,Object> queryGoodsGdsprelListsByGid(Long gid,String gsvalIds,Long parentId){
         Map params = new HashMap();
         params.put("gid",gid);
+        params.put("parentId",parentId);
         if(!ObjectUtils.isEmpty(gsvalIds)){
             String[] gsvalIdsArr = gsvalIds.split(",");
             List<Long> l = new ArrayList<Long>();

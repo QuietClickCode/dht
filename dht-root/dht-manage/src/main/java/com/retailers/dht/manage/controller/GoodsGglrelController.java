@@ -29,7 +29,6 @@ public class GoodsGglrelController extends BaseController {
     GoodsGglrelService goodsGglrelService;
 
     @RequestMapping("/removeGoodsGglrel")
-    @Function(label="删除商品与标签关系", description = "删除商品与标签关系", resourse = "goods.removeGoodsGglrel",sort=3,parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp removeGoodsGglrel(String gglIds, HttpServletRequest request){
         boolean flag=goodsGglrelService.deleteGoodsGglrelByGglId(gglIds,getCurLoginUserId(request));
@@ -37,7 +36,6 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGglrelLists")
-    @Function(label="商品与标签关系列表", description = "商品与标签关系列表", resourse = "goods.queryGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGglrelLists(Long gid,Long glId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -52,7 +50,6 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGglrel")
-    @Function(label="增加商品与标签关系", description = "增加商品与标签关系", resourse = "goods.addGoodsGglrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGglrel(String glIds,Long gid,String gids,Long glId,String gclassIds,HttpServletRequest request){
         boolean flag = false;
@@ -67,7 +64,6 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/queryGclassGoodsGglrelLists")
-    @Function(label="通过子类查询商品与标签关系列表", description = "通过子类查询商品与标签关系列表", resourse = "goods.queryGclassGoodsGglrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGclassGoodsGgcrelLists(Long gid){
         List<GoodsGglrelVo> list = goodsGglrelService.queryGclassGoodsGglrelLists(gid);
@@ -77,7 +73,6 @@ public class GoodsGglrelController extends BaseController {
     }
 
     @RequestMapping("/removeGclassGoodsGglrel")
-    @Function(label="删除商品与标签关系", description = "删除商品与标签关系", resourse = "goods.removeGclassGoodsGglrel",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> removedeletedgglclass(Long gid,String glIds){
 

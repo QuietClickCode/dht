@@ -34,7 +34,6 @@ public class GoodsGgbrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGgbrelLists")
-    @Function(label="商品大类与品牌关系列表", description = "商品大类与品牌关系列表", resourse = "goods.queryGoodsGgbrelLists",sort=1,parentRes="goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsGgbrelLists(Long gid,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -48,7 +47,6 @@ public class GoodsGgbrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGgbrel")
-    @Function(label="增加商品大类与品牌关系", description = "增加商品大类与品牌关系", resourse = "goods.addGoodsGgbrel",parentRes="goods.openGoods")
     @ResponseBody
     public BaseResp addGoodsGgbrel(String gbIds,Long gid){
         boolean flag=goodsGgbrelService.saveGoodsGgbrel(gbIds,gid);

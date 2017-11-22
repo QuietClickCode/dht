@@ -33,7 +33,6 @@ public class GoodsDetailController extends BaseController {
     GoodsGgsvalDetailService goodsGgsvalDetailService;
 
     @RequestMapping("/queryGoodsDetailById")
-    @Function(label="商品详情列表", description = "商品详情列表", resourse = "goods.queryGoodsDetailLists",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsDetailLists(Long gdId){
         GoodsDetail goodsDetail = goodsDetailService.queryGoodsDetailByGdId(gdId);
@@ -43,7 +42,6 @@ public class GoodsDetailController extends BaseController {
     }
 
     @RequestMapping("/addGoodsDetail")
-    @Function(label="增加详情", description = "增加商品详情", resourse = "goods.addGoodsDetail",parentRes = "goods.openGoods")
     @ResponseBody
     public Map<String,Object> addGoodsDetail(GoodsDetail goodsDetail){
         goodsDetail.setIsDelete(0L);
@@ -54,7 +52,6 @@ public class GoodsDetailController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsDetailOnce")
-    @Function(label="一次性加载商品详情列表", description = "一次性加载商品详情列表", resourse = "goods.queryGoodsDetailOnce",sort=1,parentRes = "goods.openGoods")
     @ResponseBody
     public  Map<String,Object> queryGoodsDetailOnce(Long gid){
         List<GoodsDetailVo> lsit = goodsDetailService.queryGoodsDetailOnce(gid);
@@ -64,7 +61,6 @@ public class GoodsDetailController extends BaseController {
     }
 
     @RequestMapping("/addMyData")
-    @Function(label="上传我的数据", description = "上传我的数据", resourse = "goods.addMyData",parentRes = "goods.openGoods")
     @ResponseBody
     public BaseResp addMyData(String uploaddata,Long gid, HttpServletRequest request){
         boolean f = goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));

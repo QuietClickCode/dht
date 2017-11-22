@@ -26,7 +26,6 @@ public class GoodsCgfrelController extends BaseController {
     GoodsCgfrelService goodsCgfrelService;
 
     @RequestMapping("/removeGoodsCgfrel")
-    @Function(label="删除城市与运费关系", description = "删除城市与运费关系", resourse = "goods.removeGoodsCgfrel",sort=3,parentRes="goods.openGoodsFreight")
     @ResponseBody
     public BaseResp removeGoodsCgfrel(Long gglIds){
         boolean flag=goodsCgfrelService.deleteGoodsCgfrelByCgfId(gglIds);
@@ -34,7 +33,6 @@ public class GoodsCgfrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsCgfrelLists")
-    @Function(label="城市与运费关系列表", description = "城市与运费关系列表", resourse = "goods.queryGoodsCgfrelLists",sort=1,parentRes="goods.openGoodsFreight")
     @ResponseBody
     public  Map<String,Object> queryGoodsCgfrelLists(Long gfId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -48,7 +46,6 @@ public class GoodsCgfrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsCgfrel")
-    @Function(label="增加城市与运费关系", description = "增加城市与运费关系", resourse = "goods.addGoodsCgfrel",parentRes="goods.openGoodsFreight")
     @ResponseBody
     public BaseResp addGoodsCgfrel(String cids, Long gfId){
         boolean flag = goodsCgfrelService.saveGoodsCgfrel(cids,gfId);

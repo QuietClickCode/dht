@@ -37,7 +37,6 @@ public class GoodsGtgbrelController extends BaseController {
     GoodsTypeService goodsTypeService;
 
     @RequestMapping("/removeGoodsGtgbrel")
-    @Function(label="删除商品大类与品牌关系", description = "删除商品大类与品牌关系", resourse = "goods.removeGoodsGtgbrel",sort=3,parentRes="goods.openGoodsType")
     @ResponseBody
     public BaseResp removeGoodsGtgbrel( String gtgbIds){
         boolean flag=goodsGtgbrelService.deleteGoodsGtgbrelByGtgbId(gtgbIds);
@@ -45,7 +44,6 @@ public class GoodsGtgbrelController extends BaseController {
     }
 
     @RequestMapping("/queryGoodsGtgbrelLists")
-    @Function(label="商品大类与品牌关系列表", description = "商品大类与品牌关系列表", resourse = "goods.queryGoodsGtgbrelLists",sort=1,parentRes="goods.openGoodsType")
     @ResponseBody
     public  Map<String,Object> queryGoodsGtgbrelLists(Long gtId,String gbName,Long ggId,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
@@ -71,7 +69,6 @@ public class GoodsGtgbrelController extends BaseController {
     }
 
     @RequestMapping("/addGoodsGtgbrel")
-    @Function(label="增加商品大类与品牌关系", description = "增加商品大类与品牌关系", resourse = "goods.addGoodsGtgbrel",parentRes="goods.openGoodsType")
     @ResponseBody
     public BaseResp addGoodsGtgbrel(String gbIds,Long gtId){
         boolean flag=goodsGtgbrelService.saveGoodsGtgbrel(gbIds,gtId);

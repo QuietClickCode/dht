@@ -57,7 +57,7 @@ public interface GoodsGdsprelMapper {
 	 */
 	public List<GoodsGdsprel> queryGoodsGdsprelList(Pagination<GoodsGdsprel> pagination);
 
-	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(Long gid);
+	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(@Param("gid") Long gid,@Param("spId") Long spId);
 
 	public List<GoodsGdsprelVo> queryGoodsGdsprelVoLists(@Param("params") Map params);
 }
