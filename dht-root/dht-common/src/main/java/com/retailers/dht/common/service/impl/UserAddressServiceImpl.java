@@ -32,6 +32,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 		userAddress.setUaUuid(uuid);
 		userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
 		userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
+		userAddress.setUaIsDefault(SystemConstant.SYS_IS_DEFAULT_NO);
 		Date curDate=new Date();
 		userAddress.setUaCreateTime(curDate);
 		userAddress.setUaUpdateTime(curDate);
@@ -41,7 +42,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 	public boolean updateUserAddress(UserAddress userAddress) throws AppException{
 	    UserAddress ua=userAddressMapper.queryUserAddressByUaId(userAddress.getUaId());
 	    if(userAddress.getUaUid().intValue()!=ua.getUaUid().intValue()){
-            throw new AppException("不能修改他们的收货地址");
+            throw new AppException("不能修改他人的收货地址");
         }
         if(ua.getIsDelete().intValue()==SystemConstant.SYS_IS_DELETE_YES){
 	        throw new AppException("数据己变更新刷后再试");
@@ -53,6 +54,7 @@ public class UserAddressServiceImpl implements UserAddressService {
 	    userAddress.setUaIsDefault(userAddress.getUaIsDefault());
         userAddress.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
         userAddress.setIsValida(SystemConstant.SYS_IS_VALID_YES);
+        userAddress.setUaIsDefault(ua.getUaIsDefault());
 		int status = userAddressMapper.saveUserAddress(userAddress);
 		ua.setIsDelete(SystemConstant.SYS_IS_DELETE_YES);
 		userAddressMapper.updateUserAddress(ua);
@@ -85,7 +87,24 @@ public class UserAddressServiceImpl implements UserAddressService {
 	}
 
 	public boolean defaultUserAddress(Long userId, Long uaId) throws AppException {
-		return false;
+		UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(uaId);
+		if(ObjectUtils.isEmpty(userAddress)){
+			throw  new AppException("你所修改的地址不存在。");
+		}
+		if(userAddress.getIsDelete().intValue()==SystemConstant.SYS_IS_DELETE_YES){
+			throw new AppException("数据己变更新刷后再试");
+		}
+		if(userAddress.getUaUid().intValue()!=userId.intValue()){
+			throw new AppException("不能修改他人的收货地址");
+		}
+		//判断该条地址是否是默认 不是默认
+		if(userAddress.getUaIsDefault().intValue()!=SystemConstant.SYS_IS_DEFAULT_YES){
+			userAddressMapper.clearUserDeafultAddress(userId);
+			//清除所有默认地址
+			userAddress.setUaIsDefault(SystemConstant.SYS_IS_DEFAULT_YES);
+			userAddressMapper.updateUserAddress(userAddress);
+		}
+		return true;
 	}
 }
 

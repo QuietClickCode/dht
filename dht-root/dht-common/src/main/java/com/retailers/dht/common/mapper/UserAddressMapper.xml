@@ -172,4 +172,10 @@
 	<delete id="deleteUserAddressByUaId" parameterType="java.lang.Long">
 		DELETE FROM t_user_address WHERE ua_id = #{uaId}
 	</delete>
+	<!--修改用户收货地址列表 -->
+	<update id="clearUserDeafultAddress" parameterType="java.lang.Long">
+		UPDATE t_user_address
+		SET ua_is_default =1
+		WHERE ua_uid=#{uid} and is_delete=0
+	</update>
 </mapper>
