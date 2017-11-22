@@ -98,6 +98,7 @@
 		SELECT <include refid="userAddress_columns" />
 		FROM t_user_address
 		<include refid="userAddress_where"/>
+		order by ua_is_default asc,ua_create_time ASC
 	</select>
 	<!--添加用户收货地址列表 -->
 	<insert id="saveUserAddress" parameterType="com.retailers.dht.common.entity.UserAddress" useGeneratedKeys="true" keyProperty="uaId">
