@@ -2,7 +2,9 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.SmsSendRecordConstant;
 import com.retailers.dht.common.entity.UserCardPackage;
+import com.retailers.dht.common.service.SmsSendRecordService;
 import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.web.base.BaseController;
@@ -29,6 +31,8 @@ public class UserCenterController extends BaseController{
     private UserCardPackageService userCardPackageService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private SmsSendRecordService smsSendRecordService;
     /**
      * 打开用户中心
      * @param request
@@ -197,6 +201,28 @@ public class UserCenterController extends BaseController{
         try{
             boolean flag = userService.updateUserHead(uid,attachmentId);
             return success(flag);
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
+    }
+
+    /**
+     * 发送验证码
+     * @param request
+     * @param phone 收短信手机号码
+     * @return
+     */
+    @RequestMapping("sendSmsValidCode")
+    @ResponseBody
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    public BaseResp sendSmsValidCode(HttpServletRequest request,String phone){
+        long uid=getCurLoginUserId(request);
+        if(ObjectUtils.isEmpty(phone)){
+            return errorForParam("手机号不能为空");
+        }
+        try{
+            smsSendRecordService.sendSmsCode(uid,phone, SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE);
+            return success(null);
         }catch (AppException e){
             return errorForSystem(e.getMessage());
         }

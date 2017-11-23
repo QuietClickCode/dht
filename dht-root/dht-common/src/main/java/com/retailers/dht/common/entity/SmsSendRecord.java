@@ -7,13 +7,16 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-23 01:30:37
+ * @date 2017-11-23 23:12:58
  */
 public class SmsSendRecord implements java.io.Serializable {
 
 	/**id*/
 	@NotEmpty
 	private Long id;
+	/**发送短信用户*/
+	@NotEmpty
+	private Long uid;
 	/**发送类型（0 绑定手机号码，1 密码找回，2 动态密码登录）*/
 	@NotEmpty
 	private Integer type;
@@ -59,6 +62,13 @@ public class SmsSendRecord implements java.io.Serializable {
 
 	public Long getId() {
 		return this.id;
+	}
+	public void setUid(Long value) {
+		this.uid = value;
+	}
+
+	public Long getUid() {
+		return this.uid;
 	}
 	public void setType(Integer value) {
 		this.type = value;

@@ -64,4 +64,14 @@ public interface SmsSendRecordMapper {
 	 */
 	public SmsSendRecord queryCurSmsSendRecordByPhone(@Param("phone")String phone, @Param("type")int type,@Param("code")String code,@Param("curDate")Date curDate);
 
+	/**
+	 * 校验短信是否可以发送（该时间周期内未发送过短信)
+	 * @param uid 用户id
+	 * @param phone 接收短信手机号
+	 * @param type 发送类型
+	 * @param curDate 失效时间
+	 * @return
+	 */
+	public int checkSendSms(@Param("uid")Long uid,@Param("phone")String phone, @Param("type")long type,@Param("curDate")Date curDate);
+
 }
