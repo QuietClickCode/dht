@@ -62,6 +62,13 @@ public interface CouponMapper {
 	public List<CouponWebVo> queryCurValidCoupon(Pagination<CouponWebVo> pagination);
 
 	/**
+	 * 取得用户拥有的优惠卷
+	 * @param pagination
+	 * @return
+	 */
+	public List<CouponWebVo> queryUserCoupon(Pagination<CouponWebVo> pagination);
+
+	/**
 	 * 减小优惠卷剩余数量
 	 * @param cpId
 	 * @return

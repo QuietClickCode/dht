@@ -218,7 +218,7 @@ public class CouponServiceImpl implements CouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize) throws AppException {
+	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize){
 		Map<String,Object> params=new HashMap<String, Object>();
 		params.put("uid",uid);
 		Pagination<CouponWebVo> page = new Pagination<CouponWebVo>();

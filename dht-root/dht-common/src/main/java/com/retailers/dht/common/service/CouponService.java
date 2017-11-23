@@ -87,7 +87,7 @@ public interface CouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize)throws AppException;
+	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize);
 
 
 }

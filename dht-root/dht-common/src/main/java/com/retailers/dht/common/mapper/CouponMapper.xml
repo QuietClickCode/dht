@@ -395,6 +395,66 @@
 			</if>
 			order BY cp_end_date DESC,cp_id asc
 	</select>
+
+	<!--取得当前有效的优惠卷列表 -->
+	<select id="queryUserCoupon" resultMap="rm_coupon_web_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		c.cp_id,
+		c.cp_name,
+		c.cp_coin_type,
+		c.cp_type,
+		c.cp_is_restricted,
+		c.cp_receive_condition,
+		c.cp_use_condition,
+		c.cp_start_date,
+		c.cp_end_date,
+		c.cp_is_overlap_use,
+		c.cp_is_first,
+		c.cp_send_start_date,
+		c.cp_send_end_date,
+		c.cp_num,
+		c.cp_surplus_num,
+		c.cp_min_discount,
+		c.cp_max_discount,
+		CONCAT(
+		'满',
+		ROUND(c.cp_use_condition / 100, 2),
+		'可用'
+		) useCondition,
+		CASE
+		WHEN c.cp_end_date IS NULL THEN
+		'长期有效'
+		ELSE
+		DATE_FORMAT(c.cp_end_date, '%Y-%m-%d')
+		END userTime,
+		CASE
+		WHEN cp_type = 0 THEN
+		ROUND(c.cp_money / 100, 2)
+		WHEN cp_type = 1 THEN
+		ROUND(c.cp_discount / 100, 2)
+		END couponVal,
+		a.show_url
+		FROM
+		t_coupon c
+		LEFT JOIN t_attachment a ON c.cp_logo = a.id
+		<if test="null != params.uid">
+			LEFT JOIN t_coupon_user u ON c.cp_id = u.cp_id 	AND u.cpu_uid =#{params.uid}
+		</if>
+		WHERE
+		(
+		c.cp_send_start_date &lt; SYSDATE()
+		OR c.cp_send_start_date IS NULL
+		)
+		AND (
+		c.cp_send_end_date > SYSDATE()
+		OR c.cp_send_end_date IS NULL
+		)
+		<if test="null != params.uid">
+			AND u.cpu_id IS NULL
+		</if>
+		order BY cp_end_date DESC,cp_id asc
+	</select>
+
 	<!--减小优惠卷剩余数量 -->
 	<update id="reduceCouponNum">
 		UPDATE t_coupon

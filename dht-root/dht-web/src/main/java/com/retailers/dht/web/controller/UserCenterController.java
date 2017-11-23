@@ -164,7 +164,7 @@ public class UserCenterController extends BaseController{
      * @param sex
      * @return
      */
-    @RequestMapping("updateUserName")
+    @RequestMapping("updateUserSex")
     @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp updateUserSex(HttpServletRequest request,Integer sex){
