@@ -95,6 +95,11 @@
                         </div>
                     </li>
                 </ul>
+                <div class="more" name="nogoodscldiv" style="display: none">
+                    <center>
+                        <a style="color: red;font-size: .3rem;margin-top: 10px">已全部加载</a>
+                    </center>
+                </div>
             </div>
             <div class="box2 displayN" id="jrtj">
                 <div class="special-title">
@@ -136,6 +141,11 @@
                         </div>
                     </li>
                 </ul>
+                <div class="more" name="nogoodscldiv" style="display: none">
+                    <center>
+                        <a style="color: red;font-size: .3rem;margin-top: 10px">已全部加载</a>
+                    </center>
+                </div>
             </div>
             <div class="box2 displayN" id="hykj">
                 <div class="special-title">
@@ -273,8 +283,9 @@
     <script>
         var path = window.location.pathname;
         var type = parseInt(path.substring(9,path.indexOf('.html')));
+        var flag = false;
 
-        if(type==1){
+        if(type==0){
             document.getElementById('sepciala').click();
         }else{
             document.getElementById('seckilla').click();
@@ -336,6 +347,7 @@
         function loadsecspedata(spType) {
             var element;
             var gotopath;
+            flag = false;
             if(spType==0){
                 element = $('#specialul');
                 gotopath = '/specialp/';
@@ -350,10 +362,14 @@
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
                 async:false,
-                data:{now:date,spType:spType,pageNo:pageNo,pageSize:pageSize},
+                data:{now:date,spType:spType,pageNo:pageNo,pageSize:10},
                 success:function(data){
                     var rows = data.rows;
                     if(rows!=null&&rows.length>0){
+                        if(spType==1){
+                            timestape = data.rows[0].timestap*1000;
+                            timegoing();
+                        }
                         element.html('');
                         var html = '';
                         for(var i=0;i<rows.length;i++){
@@ -376,7 +392,11 @@
                                 '</li>';
                             element.append(html);
                         }
+                        pageNo++;
+                        flag = true;
+                        runloadgoods(spType);
                         $("img").lazyload({effect: "fadeIn"});
+
                     }
 
 
@@ -384,17 +404,20 @@
             });
         }
 
-        var flag = true;
         <!--滚动加载商品-->
         function runloadgoods(spType) {
                 var range = 50;             //距下边界长度/单位px
                 var totalheight = 0;
                 var main;
+                var gotopath;
                 if(spType==0){
-                    main = $("#usercommentdiv");                     //主体元素
+                    main = $("#specialul");                     //主体元素
+                    gotopath = '/specialp/';
                 }else{
-                    main = $("#usercommentdiv");                     //主体元素
+                    main = $("#seckillul");                     //主体元素
+                    gotopath = '/seckillp/';
                 }
+
 
                 $(window).scroll(function(){
                     var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
@@ -405,43 +428,41 @@
                         flag = false;
                         $.ajax({
                             type:"post",
-                            url:'/goodsUggclrel/queryGoodsUggclrel',
+                            url:'/openSalePromotion/querySalePromotionLists',
                             dataType: "json",
                             async :false,
-                            data:{gid:gid,pageNo:pageNo,pageSize:pageSize},
+                            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:spType,pageNo:pageNo,pageSize:pageSize},
                             success:function(data){
-                                var html = '';
                                 var rows = data.rows;
                                 if(rows!=null&&rows.length>0){
+                                    main.html('');
+                                    var html = '';
                                     for(var i=0;i<rows.length;i++){
-                                        var gcllevel = parseInt(rows[i].gcllevel);
-                                        var gclnames = rows[i].gclname.split(' ');
-                                        html = '<div class="user-evaluate ">'+
-                                            '<div class="box2">'+
-                                            '<img src="'+rows[i].imgurl+'" class="img" alt="">'+
-                                            '<div class="text">'+rows[i].uname+'</div>'+
-                                            '<div class="stars2">';
-
-                                        for(var j=0;j<gcllevel;j++){
-                                            html += '<i></i>';
-                                        }
-
-                                        html += '</div>'+
+                                        html = '<li>'+
+                                            '<a href="'+gotopath+rows[i].goodsId+'.html" class="img">'+
+                                            '<img src="'+rows[i].imgurl+'" alt="">'+
+                                            '</a>'+
+                                            '<div class="text-box">'+
+                                            '<a href="'+gotopath+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                            '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                            '<div class="price">'+
+                                            '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>'+
+                                            '<s>￥'+rows[i].gprice+'/'+rows[i].gunitname+'</s>'+
                                             '</div>'+
-                                            '<div class="label2 box2">';
-
-                                        for(var j=0;j<gclnames.length;j++){
-                                            html += '<span>'+gclnames[j]+'</span>';
-                                        }
-                                        html += '</div>'+
-                                            '</div>';
+                                            '<div class="purchase">'+
+                                            '<a href="'+gotopath+rows[i].goodsId+'.html">马上抢购</a>'+
+                                            '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                                            '</div>'+
+                                            '</div>'+
+                                            '</li>';
                                         main.append(html);
                                     }
                                     pageNo++;
                                     flag = true;
+                                    $("img").lazyload({effect: "fadeIn"});
+                                    $('div[name=nogoodscldiv]').hide();
                                 }else{
-                                    html = '<a >已全部加载</a>';
-                                    $('#nogoodscldiv').html(html);
+                                    $('div[name=nogoodscldiv]').show();
                                 }
                             }
                         });
