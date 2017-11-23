@@ -89,6 +89,10 @@ public interface CouponService {
 	 */
 	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize);
 
+	/**
+	 * 清除过期优惠卷
+	 */
+	public void clearExpireCoupon();
 
 }
 

@@ -9,6 +9,7 @@ import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -64,6 +65,25 @@ public class CouponServiceTest extends TestBaseJunit {
             }).start();
         }
         Thread.sleep(1000*30);
+    }
+
+    /**
+     * 根据状态取得用户优惠卷列表
+     * @param uid
+     * @param type
+     * @param pageNo
+     * @param pageSize
+     * @return
+     * @throws AppException
+     */
+    @Test
+    public void queryUserCoupon()throws Exception{
+        Long uid=-1l;
+        int type=2;
+        int pageNo=1;
+        int pageSize=10;
+        Pagination<CouponWebVo> lists=couponService.queryUserCoupon(uid,type,pageNo,pageSize);
+        System.out.println(JSON.toJSON(lists));
     }
 
 }
