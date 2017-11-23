@@ -108,7 +108,7 @@
                 }
             }
             html+='<div class="item_box_right"><p class="term">'+row.useCondition+'</p>';
-            html+='<p class="time">'+row.userTime+'</p></div></div><p class="p1">服装类商品通用</p>';
+            html+='<p class="time">'+row.useTime+'</p></div></div><p class="p1">服装类商品通用</p>';
             html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即领取</span></a></li>';
             $(couponId).append(html);
         }
