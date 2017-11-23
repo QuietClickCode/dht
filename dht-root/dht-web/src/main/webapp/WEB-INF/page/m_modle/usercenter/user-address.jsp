@@ -24,12 +24,36 @@
 	margin:-2px 2px 1px 0px;
 	border:#999 1px solid;
 }
+
 input[type="checkbox"],input[type="radio"] {display:none;}
 input[type="radio"] + i {border-radius:16px;}
 input[type="checkbox"] + i {border-radius:16px;}
 input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}
 input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
+</style>
+
+<style>
+    #addressLists .add_address_footer{
+        position: fixed;
+    }
+
+    .my_address_item_bottom a{
+        font-size:.25rem;
+    }
+
+    #my_address_list{
+        margin-bottom: 1rem;
+    }
+
+    .order_back_btn{
+        width: 2.9rem;
+    }
+
+    .my_address_L .label_box i{
+        margin: 0;
+        margin-top: .2rem;
+    }
 </style>
 <body class="bge6">
     <div class="specialty-title2 borderB">
@@ -39,7 +63,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
     <div class="order_back_box" id="noAddressList">
         <img src="/img/max-address.png"/>
         <p class="p1">你还没有添加地址哦~</p>
-        <a href="/userAddress/openAddUserAddress" class="order_back_btn" style="color: #ea2f3e;width:120px;">添加收货地址</a>
+        <a href="/userAddress/openAddUserAddress" class="order_back_btn" style="color: #ea2f3e;">添加收货地址</a>
     </div>
     <div id="addressLists" style="display: none;">
         <ul class="my_address_list" id="my_address_list">
@@ -74,8 +98,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
 	            $this.addClass("active").siblings("li").removeClass("active");
 	            $(".replace_container > .replace_container_item").eq(index).addClass("active").siblings(".replace_container_item").removeClass("active");
 	        });
-            $("#noAddressList").show();
-            $("#addressLists").hide();
+
 	        //取得用户收货地址
             queryUserAddress(1,10);
 	    });
@@ -89,6 +112,10 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                     if(data&&data.rows){
                         $("#noAddressList").hide();
                         $("#addressLists").show();
+                        if(data.rows.length == 0){
+                            $("#noAddressList").show();
+                            $("#addressLists").hide();
+                        }
                         for(var row of data.rows){
                             let checked="";
                             if(row.uaIsDefault==0){
@@ -98,10 +125,26 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                             html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i>✓</i></label>';
                             html+='</div><div class="my_address_R"><p class="p1"><span class="span1">'+row.uaName+'</span>&emsp;';
                             html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>';
-                            html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a href="">删除</a></div></li>';
+                            html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a onclick="removeUserAddress('+row.uaId+')">删除</a></div></li>';
                             $("#my_address_list").append(html);
                         }
                     }
+                }
+            });
+        }
+
+
+        function removeUserAddress(uaId) {
+            $.ajax({
+                type:"post",
+                url:"/userAddress/removeUserAddress",
+                dataType:"json",
+                data:{
+                    uaId:uaId
+                },
+                success:function (data) {
+                    $("#my_address_list").html("");
+                    queryUserAddress(1,10);
                 }
             });
         }
