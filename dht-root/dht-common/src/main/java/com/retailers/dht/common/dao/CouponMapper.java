@@ -3,6 +3,9 @@ import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 /**
  * 描述：优惠卷DAO
@@ -74,4 +77,18 @@ public interface CouponMapper {
 	 * @return
 	 */
 	public int reduceCouponNum(long cpId);
+
+    /**
+     * 取得己过期优惠卷
+     * @param curDate
+     * @return
+     */
+    public List<Coupon> queryExpireCoupon(@Param("curDate")Date curDate);
+
+    /**
+     * 设置优惠卷己过期
+     * @param cpId
+     * @return
+     */
+    public List<Coupon> expireCoupn(Long cpId);
 }

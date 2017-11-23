@@ -62,4 +62,11 @@ public interface CouponUserMapper {
 	 */
 	public int checkCouponUser(@Param("cpId")Long cpId,@Param("uId")Long uId);
 
+	/**
+	 * 设置用户优惠卷己过期
+	 * @param cpId 优惠卷id
+	 * @return
+	 */
+	public int expireCouponUser(Long cpId);
+
 }

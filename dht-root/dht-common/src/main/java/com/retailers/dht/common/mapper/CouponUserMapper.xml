@@ -120,4 +120,11 @@
 	<select id="checkCouponUser" resultType="java.lang.Integer">
 		SELECT count(cpu_id) total FROM t_coupon_user where cp_id =#{cpId} and cpu_uid=#{uId}
 	</select>
+
+	<!--设置优惠卷过期 -->
+	<update id="expireCouponUser">
+		UPDATE t_coupon_user
+			SET  cpu_status =2
+		WHERE cp_id = #{cpuId} and cpu_status=0
+	</update>
 </mapper>
