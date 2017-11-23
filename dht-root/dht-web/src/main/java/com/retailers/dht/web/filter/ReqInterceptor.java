@@ -32,9 +32,11 @@ public class ReqInterceptor implements HandlerInterceptor {
     //reqLog
     public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
         req.setAttribute("sysManagerReqTime", new Date());
-        String userAgent = req.getHeader( "USER-AGENT" ).toLowerCase();
-        if(null == userAgent){
-            userAgent = "";
+        String userAgent= req.getHeader( "USER-AGENT" );
+        if(ObjectUtils.isNotEmpty(userAgent)){
+            userAgent = userAgent.toLowerCase();
+        }else{
+            userAgent="";
         }
         boolean isFromMobile= CheckMobile.check(userAgent);
         //判断是否为移动端访问
