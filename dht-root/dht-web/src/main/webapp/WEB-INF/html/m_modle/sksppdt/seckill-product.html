@@ -405,7 +405,7 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid},
+                data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid,pageNo:1,pageSize:1},
                 success:function(data){
                     if(data.rows!=null){
                         timestape = data.rows[0].timestap*1000;

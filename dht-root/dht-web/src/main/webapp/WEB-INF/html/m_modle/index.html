@@ -86,21 +86,21 @@
 
         <!-- banner -->
         <div id="banner2" class="focus">
-            <div class="hd">
-                <ul></ul>
-            </div>
-            <div class="bd">
-                <ul id="midbanner" style="height: 200px">
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                </ul>
-            </div>
+        <div class="hd">
+            <ul></ul>
         </div>
+        <div class="bd">
+            <ul id="midbanner" style="height: 200px">
+                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
+                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
+                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
+                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
+            </ul>
+        </div>
+    </div>
 
         <!-- 秒杀 -->
-        <div class="index-title">
+        <div class="index-title" onclick="gotosecspepage(1)">
             <span>限时秒杀</span>
             <a href="" class="more">全部<i class="icon-more"></i></a>
         </div>
@@ -166,9 +166,9 @@
         </div>
 
         <!-- 今日特价 -->
-        <div class="index-title">
+        <div class="index-title" onclick="gotosecspepage(0)">
             <span>今日特价</span>
-            <a href="" class="more">全部<i class="icon-more"></i></a>
+            <a  class="more">全部<i class="icon-more"></i></a>
         </div>
 
         <ul class="seckill box2" id="barginul">
@@ -447,7 +447,7 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{now:date,spType:1},
+                data:{now:date,spType:1,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
@@ -493,7 +493,7 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{now:date,spType:0},
+                data:{now:date,spType:0,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
@@ -527,6 +527,9 @@
             });
         }
 
+        function gotosecspepage(num) {
+            window.location.href='/secspep/'+num+'.html';
+        }
 
     </script>
 

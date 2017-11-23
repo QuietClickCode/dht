@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.SecspepAdvertisingMapper">
+
+	<resultMap id="rm_secspepAdvertising" type="com.retailers.dht.common.entity.SecspepAdvertising">
+			<result property="saId" column="sa_id"/>
+			<result property="imageId" column="image_id"/>
+			<result property="url" column="url"/>
+			<result property="saName" column="sa_name"/>
+			<result property="saOrder" column="sa_order"/>
+			<result property="saClient" column="sa_client"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_secspepAdvertising_vo" type="com.retailers.dht.common.vo.SecspepAdvertisingVo">
+		<result property="saId" column="sa_id"/>
+		<result property="imageId" column="image_id"/>
+		<result property="url" column="url"/>
+		<result property="saName" column="sa_name"/>
+		<result property="saOrder" column="sa_order"/>
+		<result property="saClient" column="sa_client"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="imageUrl" column="image_url"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="secspepAdvertising_columns">
+		sa_id,image_id,url,sa_name,sa_order,sa_client,is_show,is_delete,version
+	</sql>
+	<!-- 根据特价广告表主键取得数据 -->
+	<select id="querySecspepAdvertisingBySaId" resultMap="rm_secspepAdvertising" parameterType="java.lang.Long">
+		SELECT <include refid="secspepAdvertising_columns" />
+		FROM t_secspep_advertising WHERE sa_id = #{saId}
+	</select>
+	<!-- 特价广告表查询条件组合 -->
+	<sql id="secspepAdvertising_where">
+		<where>
+			<if test="null != params.saId">
+				AND t1.sa_id = #{params.saId}
+			</if>
+			<if test="null != params.imageId">
+				AND t1.image_id = #{params.imageId}
+			</if>
+			<if test="null != params.url and '' != params.url">
+				AND t1.url = #{params.url}
+			</if>
+			<if test="null != params.saName and '' != params.saName">
+				AND t1.sa_name like concat('%', #{params.saName} ,'%')
+			</if>
+			<if test="null != params.saOrder">
+				AND t1.sa_order = #{params.saOrder}
+			</if>
+			<if test="null != params.saClient">
+				AND t1.sa_client = #{params.saClient}
+			</if>
+			<if test="null != params.isShow">
+				AND t1.is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySecspepAdvertisingList" resultMap="rm_secspepAdvertising_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.show_url image_url from t_secspep_advertising t1
+		LEFT JOIN t_attachment t2 ON t1.image_id=t2.id
+		<include refid="secspepAdvertising_where"/>
+	</select>
+	<!--添加特价广告表 -->
+	<insert id="saveSecspepAdvertising" parameterType="com.retailers.dht.common.entity.SecspepAdvertising" useGeneratedKeys="true" keyProperty="saId">
+		INSERT INTO t_secspep_advertising (
+			image_id,url,sa_name,sa_order,sa_client,is_show,is_delete,version
+		) VALUES
+		(
+			#{imageId,jdbcType=BIGINT},#{url,jdbcType=VARCHAR},#{saName,jdbcType=VARCHAR},#{saOrder,jdbcType=BIGINT},#{saClient,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改特价广告表 -->
+	<update id="updateSecspepAdvertising" parameterType="com.retailers.dht.common.entity.SecspepAdvertising">
+		UPDATE t_secspep_advertising
+		<set>
+            <if test="null != imageId">
+                image_id = #{imageId},
+            </if>
+            <if test="null != url and '' != url">
+                url = #{url},
+            </if>
+            <if test="null != saName and '' != saName">
+                sa_name = #{saName},
+            </if>
+            <if test="null != saOrder">
+                sa_order = #{saOrder},
+            </if>
+            <if test="null != saClient">
+                sa_client = #{saClient},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE sa_id = #{saId} and version = #{version}
+	</update>
+	<!--删除特价广告表 -->
+	<delete id="deleteSecspepAdvertisingBySaId" parameterType="java.lang.Long">
+		DELETE FROM t_secspep_advertising WHERE sa_id = #{saId}
+	</delete>
+</mapper>

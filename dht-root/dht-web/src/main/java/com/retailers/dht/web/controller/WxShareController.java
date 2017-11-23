@@ -11,6 +11,7 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.IPUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
+import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.utils.WxHttpClientUtils;
 import com.retailers.wx.common.utils.wx.WXPayConstants;
 import com.retailers.wx.common.utils.wx.WXPayUtil;
@@ -69,13 +70,14 @@ public class WxShareController extends BaseController{
         String ip=request.getRemoteAddr();
         Date curDate=new Date();
 
-
+        String a = WxConfig.ACCESS_TOKEN;
 
         return null;
     }
 
     public static void main(String[] args){
         System.out.println(new WxShareController().getAcessData());
+
     }
 
     public String getAcessData(){
