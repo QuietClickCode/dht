@@ -19,4 +19,17 @@ public interface ProcedureToolsService {
      * 清除缓存数据
      */
     public void clearSequenceData();
+
+    /**
+     * 添加单线程锁
+     * @param key 锁的key
+     */
+    public void singleLockManager(String key)throws AppException;
+
+    /**
+     * 解除单线程锁
+     * @param key 锁的key
+     */
+    public void singleUnLockManager(String key);
+
 }

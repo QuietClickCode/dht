@@ -262,12 +262,36 @@ public class NumberUtils {
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		return  df.format(d);
 	}
-	public static String formaterNumberYuan(Long number,int len) {
+
+	/**
+	 * 格式化数字 （2位小数，传入数据除以100）
+	 * @param number
+	 * @return
+	 */
+	public static String formaterNumberPower(Long number){
+		return formaterNumberPower(number,2,2);
+	}
+	/**
+	 * 格式化数字 （2位小数，传入数据除以100）
+	 * @param number
+	 * @return
+	 */
+	public static String formaterNumberPower(Long number,int power){
+		return formaterNumberPower(number,2,power);
+	}
+	/**
+	 * 格式化数字
+	 * @param number 传入数据
+	 * @param decimalLen 小数位数
+	 * @param power 10的n次方（如果为传入为正数 剩，负数 除）
+	 * @return
+	 */
+	public static String formaterNumberPower(Long number,int decimalLen,int power) {
 		if(ObjectUtils.isEmpty(number)){
 			number=0l;
 		}
 		String STR_FORMAT = "##0.00";
-		double d=formaterNumber(priceChangeYuan(number),len);
+		double d=formaterNumber(number/Math.pow(10,power),decimalLen);
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		String rtn=df.format(d);
 		String[] num=rtn.split("\\.");
@@ -431,8 +455,6 @@ public class NumberUtils {
 		Long num=null;
 //		System.out.println(formaterNumberLong(num,2));
 
-		for(int i=0;i<100000;i++){
-			System.out.println(formaterNumberYuan((long)i,2));;
-		}
+		System.out.println(formaterNumberPower(10001l,1));
 	}
 }

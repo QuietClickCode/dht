@@ -5,6 +5,7 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
@@ -17,6 +18,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
@@ -61,13 +63,17 @@ public class CouponController extends BaseController{
     /**
      * 取得用户的优惠卷
      * @param request
+     * @param pageForm 分页信息
+     * @param type 查询类型（0 用户未使用的优惠卷，1 己使用，2 己过期）
      * @return
      */
     @RequestMapping("queryUserCoupon")
     @ResponseBody
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录")
-    public BaseResp queryUserCoupon(HttpServletRequest request){
-        return success(null);
+    public Map<String,Object> queryUserCoupon(HttpServletRequest request, PageUtils pageForm, long type){
+        long uid=getCurLoginUserId(request);
+        Pagination<CouponWebVo> pages=couponService.queryUserCoupon(uid,type,pageForm.getPageNo(),pageForm.getPageSize());
+        return queryPages(pages);
     }
 
     /**

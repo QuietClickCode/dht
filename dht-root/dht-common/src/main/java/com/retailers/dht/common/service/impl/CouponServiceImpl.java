@@ -212,5 +212,40 @@ public class CouponServiceImpl implements CouponService {
 		}
 	}
 
+	/**
+	 *
+	 * @param uid 用户id
+	 * @return
+	 * @throws AppException
+	 */
+	public Pagination<CouponWebVo> queryUserCoupon(Long uid,long type, int pageNo, int pageSize){
+		Map<String,Object> params=new HashMap<String, Object>();
+		params.put("uid",uid);
+		params.put("status",type);
+		Pagination<CouponWebVo> page = new Pagination<CouponWebVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		page.setData(couponMapper.queryUserCoupon(page));
+		return  page;
+	}
+
+	/**
+	 * 清除地期优惠卷
+	 */
+	public void clearExpireCoupon() {
+		Date curDate=new Date();
+		List<Coupon> lists = couponMapper.queryExpireCoupon(curDate);
+		for(Coupon coupon:lists){
+			try{
+				//设置用户拥有的优惠卷过期
+				couponUserMapper.expireCouponUser(coupon.getCpId());
+				//设置该优惠卷己过期
+				couponMapper.expireCoupn(coupon.getCpId());
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+		}
+	}
 }
 

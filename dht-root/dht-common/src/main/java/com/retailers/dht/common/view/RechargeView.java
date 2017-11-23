@@ -59,7 +59,7 @@ public class RechargeView {
 
     public String getRprice() {
 //        return rprice;
-        return NumberUtils.formaterNumberYuan(rprice,2);
+        return NumberUtils.formaterNumberPower(rprice);
     }
 
     public void setRprice(Long rprice) {
@@ -67,7 +67,7 @@ public class RechargeView {
     }
 
     public String getRdiscount() {
-        return NumberUtils.formaterNumberYuan(rdiscount,2);
+        return NumberUtils.formaterNumberPower(rdiscount);
     }
 
     public void setRdiscount(Long rdiscount) {

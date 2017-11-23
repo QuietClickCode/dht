@@ -2,7 +2,6 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.dht.common.entity.CityArea;
 import com.retailers.dht.common.entity.UserAddress;
 import com.retailers.dht.common.service.UserAddressService;
 import com.retailers.dht.web.base.BaseController;
@@ -16,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-import sun.security.krb5.internal.KdcErrException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -70,7 +68,7 @@ public class UserAddressController extends BaseController {
         Long uId=getCurLoginUserId(request);
         userAddress.setUaUid(uId);
         userAddressService.saveUserAddress(userAddress);
-        return success(null);
+        return success("新增收货地址成功");
     }
     /**
      * 编辑用户收货地址
@@ -107,5 +105,15 @@ public class UserAddressController extends BaseController {
         }catch(AppException e){
             return errorForSystem(e.getMessage());
         }
+    }
+
+    /*
+    * 删除收货地址
+    */
+    @RequestMapping("removeUserAddress")
+    @ResponseBody
+    public BaseResp removeUserAddress(HttpServletRequest request,Long uaId){
+        userAddressService.deleteUserAddressByUaId(uaId);
+        return success("删除收货地址成功");
     }
 }

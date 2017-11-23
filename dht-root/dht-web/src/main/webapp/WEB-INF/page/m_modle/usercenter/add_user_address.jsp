@@ -7,6 +7,18 @@
     <title>新加地址</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+	<style>
+		.add_adress_box_R .input_text{
+			height: 0.5rem;
+			margin-top: 0.25rem;
+			width: 3rem;
+		}
+
+		.add_adress_box_R select{
+			height: 0.5rem;
+			margin-top: 0.25rem;
+		}
+	</style>
 </head>
 
 <body class="bge6">

@@ -47,7 +47,7 @@ public class CouponWebVo {
     /**
      * 使用最后期限
      */
-    private String userTime;
+    private String useTime;
     /**
      * 优惠额度
      */
@@ -201,12 +201,12 @@ public class CouponWebVo {
         this.cpMaxDiscount = cpMaxDiscount;
     }
 
-    public String getUserTime() {
-        return userTime;
+    public String getUseTime() {
+        return useTime;
     }
 
-    public void setUserTime(String userTime) {
-        this.userTime = userTime;
+    public void setUseTime(String useTime) {
+        this.useTime = useTime;
     }
 
     public Double getCouponVal() {

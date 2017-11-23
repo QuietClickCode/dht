@@ -1,10 +1,10 @@
-package com.retailers.dht.manage.controller;
+package com.retailers.dht.web.controller;
 
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.upload.FileUploader;
 import com.retailers.dht.common.upload.UploadFacatory;
-import com.retailers.dht.manage.base.BaseController;
+import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,7 +27,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("file")
-public class FileUploadController extends BaseController{
+public class FileUploadController extends BaseController {
 
     Logger logger = LoggerFactory.getLogger(FileUploadController.class);
     @Autowired

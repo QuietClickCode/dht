@@ -1,6 +1,7 @@
 package com.retailers.dht.manage.job;
 
 import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ProcedureToolsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,8 @@ public class ManageTaskJob {
     private AttachmentService attachmentService;
     @Autowired
     private ProcedureToolsService procedureToolsService;
+    @Autowired
+    private CouponService couponService;
 
     /**
      * 每小时清除未被使用的附件资源
@@ -38,4 +41,14 @@ public class ManageTaskJob {
         procedureToolsService.clearSequenceData();
         logger.info("清除最近一小时生成的序列完毕");
     }
+
+    /**
+     * 清除过期优惠卷
+     */
+    public void clearExpireCoupon(){
+        logger.info("清除过期优惠卷开始");
+        couponService.clearExpireCoupon();
+        logger.info("清除过期优惠卷完毕");
+    }
+
 }
