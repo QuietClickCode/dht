@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.PayInfo;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.Map;
 /**
  * 描述：支付信息Service
@@ -60,6 +62,8 @@ public interface PayInfoService {
 	 * @param payInfo
 	 */
 	public void addPayInfo(PayInfo payInfo);
+
+
 
 }
 

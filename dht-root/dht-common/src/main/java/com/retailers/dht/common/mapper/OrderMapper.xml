@@ -49,6 +49,11 @@
 		SELECT <include refid="order_columns" />
 		FROM t_order WHERE id = #{id}
 	</select>
+	<!-- 根据订单主键取得数据 -->
+	<select id="queryOrderByOrderNo" resultMap="rm_order" parameterType="java.lang.String">
+		SELECT <include refid="order_columns" />
+		FROM t_order WHERE order_no = #{orderNo}
+	</select>
 	<!-- 订单查询条件组合 -->
 	<sql id="order_where">
 		<where>

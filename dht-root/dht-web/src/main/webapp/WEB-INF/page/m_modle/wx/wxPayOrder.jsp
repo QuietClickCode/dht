@@ -91,7 +91,6 @@
         }else{
             onBridgeReady();
         }
-
     }
 
     //开始支付

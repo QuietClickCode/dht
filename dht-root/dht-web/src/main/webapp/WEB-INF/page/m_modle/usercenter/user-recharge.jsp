@@ -17,7 +17,7 @@
 </head>
 <body class="bge6">
     <div class="specialty-title2 borderB">
-        <a href="" class="icon-return"></a>
+        <a href="" class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
         <span>充值</span>
     </div>
 	<div class="recharge_container">
@@ -31,11 +31,7 @@
 	<script>
 		var curSelectId="";
 		$(function(){
-			$(document).on("click",".recharge_container_item",function(){
-				$(".recharge_container_item").removeClass("active")
-				$(this).addClass("active")
-				curSelectId=$(this).attr("attr");
-			});
+
 			loadRechargeLists();
 		})
 		/**
@@ -63,6 +59,11 @@
 								$("#rechargeLists").append(html);
 							}
 						}
+                        $('.recharge_container_item').click(function(){
+                            $(".recharge_container_item").removeClass("active")
+                            $(this).addClass("active")
+                            curSelectId=$(this).attr("attr");
+                        });
 					}
 				}
 			});
@@ -81,7 +82,8 @@
 						isSubmit=false;
 						if(data.status==0){
 							let orderNo=data.data.orderNo;
-							window.location.href="/wxPay/openWxPayPage?orderNo="+orderNo;
+							let price=data.data.price;
+							window.location.href="/wxPay/payInfo?orderNo="+orderNo+"&price="+price;
 						}
 					}
 				});

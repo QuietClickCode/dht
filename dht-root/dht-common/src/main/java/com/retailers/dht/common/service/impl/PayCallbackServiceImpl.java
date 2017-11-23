@@ -22,9 +22,8 @@ public class PayCallbackServiceImpl implements PayCallbackService {
 	private PayCallbackMapper payCallbackMapper;
 
 	@Async
-	public boolean savePayCallback(PayCallback payCallback) {
-		int status = payCallbackMapper.savePayCallback(payCallback);
-		return status == 1 ? true : false;
+	public void savePayCallback(PayCallback payCallback) {
+		payCallbackMapper.savePayCallback(payCallback);
 	}
 	public boolean updatePayCallback(PayCallback payCallback) {
 		int status = payCallbackMapper.updatePayCallback(payCallback);

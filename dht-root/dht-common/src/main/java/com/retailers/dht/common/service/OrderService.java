@@ -56,7 +56,12 @@ public interface OrderService {
 	 * @date 2017-11-21 14:23:59
 	 */
 	public boolean deleteOrderById(Long id);
-
+	/**
+	 *  根据订单号取得订单
+	 * @param orderNo
+	 * @return
+	 */
+	public Order queryOrderByOrderNo(String orderNo);
 
 	/**
 	 * 购物订单
@@ -78,6 +83,8 @@ public interface OrderService {
 	 * @throws AppException
 	 */
 	public Map<String,Object> userRecharge(Long uid,Long rid)throws AppException;
+
+
 
 }
 
