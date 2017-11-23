@@ -7,6 +7,14 @@
     <title>会员中心</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #footer_user a .icon-user{
+            width: 0.33rem;
+            height: 00.37rem;
+            background-position: center;
+            background-size:0.33rem 00.37rem;
+        }
+    </style>
 </head>
 <body class="bge6">
     <div class="box2">
@@ -18,7 +26,7 @@
             </a>
             <p class="user-name">56dfsdf</p>
             <div class="vip">
-                <i class="icon-vip"></i>
+
                 <span>普通会员</span>
             </div>
             <i class="news">

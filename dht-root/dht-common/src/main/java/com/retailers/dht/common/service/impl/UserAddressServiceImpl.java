@@ -74,7 +74,9 @@ public class UserAddressServiceImpl implements UserAddressService {
 		return page;
 	}
 	public boolean deleteUserAddressByUaId(Long uaId) {
-		int status = userAddressMapper.deleteUserAddressByUaId(uaId);
+		UserAddress address = userAddressMapper.queryUserAddressByUaId(uaId);
+		address.setIsDelete(1);
+		int status = userAddressMapper.updateUserAddress(address);
 		return status == 1 ? true : false;
 	}
 
