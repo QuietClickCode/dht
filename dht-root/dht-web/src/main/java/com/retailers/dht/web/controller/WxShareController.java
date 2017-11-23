@@ -76,6 +76,7 @@ public class WxShareController extends BaseController{
 
     public static void main(String[] args){
         System.out.println(new WxShareController().getAcessData());
+
     }
 
     public String getAcessData(){
