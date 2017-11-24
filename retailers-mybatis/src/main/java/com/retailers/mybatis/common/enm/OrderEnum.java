@@ -1,4 +1,4 @@
-package com.retailers.dht.common.enm;
+package com.retailers.mybatis.common.enm;
 
 /**
  * 系统订单类型（包涵t_order,t_game_order)
@@ -6,7 +6,7 @@ package com.retailers.dht.common.enm;
  * @version 1.0
  * @date 2017-11-21
  */
-public enum  OrderEnum {
+public enum OrderEnum {
     RECHARGE("RECHARGE", "充值", "CZ"),
     SHOPPING("SHOPPING", "购买商品", "GM"),
     SECKILL("SECKILL", "秒杀", "MS"),

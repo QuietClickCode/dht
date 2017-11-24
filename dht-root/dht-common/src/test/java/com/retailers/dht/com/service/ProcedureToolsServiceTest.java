@@ -1,8 +1,8 @@
 package com.retailers.dht.com.service;
 
 import com.retailers.dht.com.base.TestBaseJunit;
-import com.retailers.dht.common.enm.OrderEnum;
-import com.retailers.dht.common.service.ProcedureToolsService;
+import com.retailers.mybatis.common.enm.OrderEnum;
+import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.tools.exception.AppException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;

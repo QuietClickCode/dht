@@ -1,4 +1,4 @@
-package com.retailers.wx.manage.job;
+package com.retailers.wx.common.job;
 
 import com.retailers.wx.common.service.WxAccessTokenService;
 import org.springframework.beans.factory.annotation.Autowired;

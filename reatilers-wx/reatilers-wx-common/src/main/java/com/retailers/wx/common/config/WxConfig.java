@@ -10,10 +10,16 @@ public class WxConfig {
     public static String APP_ID="";
     public static String APP_SECRET="";
     public static String ACCESS_TOKEN="nUd7jMakoJGO5QoAdOXgVedNGZcOqt3rLcLtjp6V_d1inAJ3pZb2l5CMbT0SG_2H6VyxZKyUfaHzgWe5flm8lVwPiWqJGYbHA5paSEBI7c-TwJ1y5bjN421ze4wf4MRVLFVjAFAGAQ";
+    //js-sdk 耍要的token
+    public static String ACCESS_TICKET="";
     /**
      * 取得微信token 访问链接
      */
     public static String REQ_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+    /**
+     * js-sdk token取得
+     */
+    public static String REQ_TICKET_TOKEN_URL="https://api.weixin.qq.com/cgi-bin/ticket/getticket?type=jsapi&access_token=%s";
     /**
      * 获取自定义菜单配置接口
      */
