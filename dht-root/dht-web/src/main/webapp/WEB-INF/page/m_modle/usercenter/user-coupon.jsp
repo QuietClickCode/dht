@@ -91,11 +91,13 @@
             },
             success:function (data) {
                 $(couponNum).text("("+data.rows.length+")");
+
                 for(let i = 0;i<data.rows.length;i++){
+                    console.log();
                     var html = '<li><a href="javascript:void(0)"> <div class="coupon_item_box clearfix"> <div class="item_box_left"> <span>￥</span>';
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
                     html += '<div class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
-                    html += '<p class="time">'+data.rows[i].cpSendStartDate+'</p></div></div>';
+                    html += '<p class="time">'+data.rows[i].cpStartDate.split(" ")[0]+'  -  '+data.rows[i].cpEndDate.split(" ")[0]+'</p></div></div>';
                     html += '<p class="coupon_list1_bg"></p><span class="btn_span" data-cpId="'+data.rows[i].cpId+'">立即使用</span>';
                     html += '<p class="coupon_list1_info"><img class="img_open" src="/img/icon_up.png" />';
                     html += ''+data.rows[i].cpIsRestricted+'</p></a></li>';

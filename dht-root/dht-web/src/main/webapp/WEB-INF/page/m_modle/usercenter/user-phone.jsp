@@ -15,11 +15,12 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-2.1.4.min.js"></script>
+    <script src="/js/layer/layer.js"></script>
 </head>
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back();return false;" class="icon-return"></a>
     <span>绑定手机号</span>
 </div>
 
@@ -37,7 +38,7 @@
                 <input type="number" class="input_text" name="" id="cod-input" value="" placeholder="请输入验证码" />
             </td>
             <td>
-                <input type="button" class="btn_cod" id="btn_cod" value="获取验证码" />
+                <input type="button" class="btn_cod" id="btn_cod" onclick="settime()" value="获取验证码" />
             </td>
         </tr>
         <tr>
@@ -57,10 +58,49 @@
 
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script>
+    var countdown=60;
+    function settime() {
+        let phone = $("#check-phone").val();
+        console.log(phone);
+        if(phone == ""){
+            layer.msg("手机号码不能为空");
+            return
+        }
+        else if(!phone.match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
+            layer.msg("手机号码格式不正确");
+            return;
+        }
+
+        $.ajax({
+            type:"post",
+            dataType:"json",
+            url:"/user/sendSmsValidCode",
+            data:{
+                phone:phone
+            },
+            success:function (data) {
+
+            }
+        });
+
+        /*if (countdown == 0) {
+
+                $("#btn_cod").removeAttr("disabled");
+                $("#btn_cod").val("获取验证码");
+                countdown = 60;
+                return;
+            } else {
+                $("#btn_cod").attr("disabled", true);
+                $("#btn_cod").val("重新发送(" + countdown + ")");
+                countdown--;
+            }
+            setTimeout(function() {
+                settime()
+            },1000)*/
+    }
 
 
-
-  /*  var finishBtn = document.getElementsByClassName('init_btn')[0];   //确定按钮
+    /*var finishBtn = document.getElementsByClassName('init_btn')[0];   //确定按钮
     var phoneValue = document.getElementById('check-phone');			//手机号输入框
     var codValue = document.getElementById('cod-input');   				//验证码输入框
     var codBtn = document.getElementById('btn_cod');					//获取验证码按钮
@@ -101,8 +141,7 @@
                 $(finishBtn).removeClass('finish_btn');
             }
         };
-    }
-*/
+    }*/
 
 </script>
 </body>

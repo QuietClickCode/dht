@@ -28,7 +28,7 @@
         </a>
     </div>
     <div class="my-data-list">
-        <a href="" class="displayB">
+        <a href="/user/UserNickName" class="displayB">
             <span class="name">昵称</span>
             <i class="icon-data-right"></i>
             <span class="text1">银卡会员</span>
@@ -63,7 +63,7 @@
         </a>
     </div>
     <div class="my-data-list">
-        <a href="" class="displayB">
+        <a href="/user/UserSafety" class="displayB">
             <span class="name">安全管理</span>
             <i class="icon-data-right"></i>
             <span class="text2">密码设置</span>
