@@ -4931,6 +4931,15 @@ public class StringUtils {
 		return verifyCode.toString();
 	}
 
+	public static String randomNumberCode(int length){
+		Random random=new Random();
+		String rtn="";
+		for(int i=0;i<length;i++){
+			rtn+=random.nextInt(10);
+		}
+		return  rtn;
+	}
+
 	/**
 	 * 将exception 转换成string
 	 * @param e
@@ -5037,6 +5046,9 @@ public class StringUtils {
 //		System.out.println(key.equals(key1));
 //		System.out.println(unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA"));
 //		System.out.println(formate("1",null));
-		System.out.println(StringUtils.formates("数据测试:{},datae:[{}],哈哈：{}","ok","oky"));
+//		System.out.println(StringUtils.formates("数据测试:{},datae:[{}],哈哈：{}","ok","oky"));
+		for(int i=0;i<1000;i++){
+			System.out.println(StringUtils.randomNumberCode(4));
+		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.PayInfo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：支付信息DAO
@@ -52,4 +54,12 @@ public interface PayInfoMapper {
 	 */
 	public List<PayInfo> queryPayInfoList(Pagination<PayInfo> pagination);
 
+	/**
+	 * 根据支付方式，方法和单号取得支付信息
+	 * @param piWay
+	 * @param piType
+	 * @param orderNo
+	 * @return
+	 */
+	public PayInfo queryPayInfo(@Param("piWay")int piWay, @Param("piType")int piType, @Param("orderNo") String orderNo);
 }

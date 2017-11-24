@@ -72,6 +72,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	/**
+	 * 根据订单号取得订单信息
+	 * @param orderNo
+	 * @return
+	 */
+	public Order queryOrderByOrderNo(String orderNo) {
+		return orderMapper.queryOrderByOrderNo(orderNo);
+	}
+
+	/**
 	 * 购物订单
 	 * @param uid 购买用户id
 	 * @param goodsIds 商品ids 多个商品用逗号隔开
@@ -130,6 +139,7 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderCreateDate(curDate);
 			orderMapper.saveOrder(order);
 			rtn.put("orderNo",orderNo);
+			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
 		}finally {
 			logger.info("用户充值处理结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
 		}

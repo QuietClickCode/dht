@@ -19,7 +19,7 @@ public interface PayCallbackService {
 	 * @author zhongp
 	 * @date 2017-11-14 21:56:27
 	 */
-	public boolean savePayCallback(PayCallback payCallback);
+	public void savePayCallback(PayCallback payCallback);
 	/**
 	 * 编辑支付回调信息
 	 * @param payCallback

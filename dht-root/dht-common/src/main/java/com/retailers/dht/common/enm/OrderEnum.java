@@ -45,7 +45,6 @@ public enum  OrderEnum {
         this.value = value;
         this.shorNm = shorNm;
     }
-
     public static OrderEnum getOrderType(String key) {
         OrderEnum[] typeEnumArray = OrderEnum.values();
         for (OrderEnum typeEnum : typeEnumArray) {

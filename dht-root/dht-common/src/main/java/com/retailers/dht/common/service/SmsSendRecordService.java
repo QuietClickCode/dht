@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.SmsSendRecord;
+import com.retailers.tools.exception.AppException;
+
 import java.util.Map;
 /**
  * 描述：短信发送列表Service
@@ -54,6 +56,16 @@ public interface SmsSendRecordService {
 	 * @date 2017-11-23 00:38:54
 	 */
 	public boolean deleteSmsSendRecordById(Long id);
+
+	/**
+	 * 发送短信
+	 * @param uid 用户id
+	 * @param phone 电话号码
+	 * @param type 发送短信类型（0 绑定短信，1 密码找回短信，2 解除绑定短信）
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean sendSmsCode(Long uid,String phone,long type)throws AppException;
 
 }
 

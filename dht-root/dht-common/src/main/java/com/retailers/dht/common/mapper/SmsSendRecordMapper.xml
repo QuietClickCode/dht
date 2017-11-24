@@ -4,6 +4,7 @@
 
 	<resultMap id="rm_smsSendRecord" type="com.retailers.dht.common.entity.SmsSendRecord">
 		<result property="id" column="id"/>
+		<result property="uid" column="u_id"/>
 		<result property="type" column="type"/>
 		<result property="status" column="status"/>
 		<result property="phone" column="phone"/>
@@ -17,7 +18,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="smsSendRecord_columns">
-		id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+		id,u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
 	</sql>
 	<!-- 根据短信发送列表主键取得数据 -->
 	<select id="querySmsSendRecordById" resultMap="rm_smsSendRecord" parameterType="java.lang.Long">
@@ -29,6 +30,9 @@
 		<where>
 			<if test="null != params.id">
 				AND id = #{params.id}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
 			</if>
 			<if test="null != params.type">
 				AND type = #{params.type}
@@ -80,16 +84,19 @@
 	<!--添加短信发送列表 -->
 	<insert id="saveSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_sms_send_record (
-		type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+		u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
 		) VALUES
 		(
-		#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{onceSendDate,jdbcType=TIMESTAMP},#{expireDate,jdbcType=TIMESTAMP},#{useDate,jdbcType=TIMESTAMP}
+		#{uid,jdbcType=BIGINT},#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{onceSendDate,jdbcType=TIMESTAMP},#{expireDate,jdbcType=TIMESTAMP},#{useDate,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<!--修改短信发送列表 -->
 	<update id="updateSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord">
 		UPDATE t_sms_send_record
 		<set>
+			<if test="null != uid">
+				u_id = #{uid},
+			</if>
 			<if test="null != type">
 				type = #{type},
 			</if>
@@ -140,4 +147,24 @@
 		id DESC
 		LIMIT 1
 	</select>
+	<!--分页查询 -->
+	<select id="checkSendSms" resultType="java.lang.Integer">
+		SELECT
+			count(phone) total
+		FROM
+			t_sms_send_record
+		WHERE
+
+			once_send_date > #{curDate}
+			AND type = #{type}
+			<if test="null != uid">
+				AND u_id = #{uid}
+			</if>
+			<if test="null == uid">
+				AND phone =#{phone}
+			</if>
+
+	</select>
+
+
 </mapper>

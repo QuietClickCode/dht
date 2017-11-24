@@ -101,4 +101,10 @@
 	<delete id="deletePayInfoByPiId" parameterType="java.lang.Long">
 		DELETE FROM t_pay_info WHERE pi_id = #{piId}
 	</delete>
+
+	<!-- 根据支付信息主键取得数据 -->
+	<select id="queryPayInfo" resultMap="rm_payInfo">
+		SELECT <include refid="payInfo_columns" />
+		FROM t_pay_info WHERE pi_way = #{piWay} and pi_type=#{piType} and pi_order_no=#{orderNo}
+	</select>
 </mapper>

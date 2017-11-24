@@ -43,6 +43,13 @@ public interface OrderMapper {
 	 * @date 2017-11-21 14:23:59
 	 */
 	public Order queryOrderById(Long id);
+
+	/**
+	 * 根据谭号取得订单
+	 * @param orderNo
+	 * @return
+	 */
+	public Order queryOrderByOrderNo(String orderNo);
 	/**
 	 * 查询订单列表
 	 * @param pagination 分页对象
