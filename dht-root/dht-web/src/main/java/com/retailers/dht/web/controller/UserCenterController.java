@@ -111,6 +111,22 @@ public class UserCenterController extends BaseController{
     }
 
     /**
+     *  安全管理
+     */
+    @RequestMapping("UserSafety")
+    public String openUserSafety(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-safety");
+    }
+
+    /**
+     *  修改昵称
+     */
+    @RequestMapping("UserNickName")
+    public String openUserNickName(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-nickname");
+    }
+
+    /**
      * 取得用户卡包信息
      * @param request
      * @return
@@ -123,6 +139,7 @@ public class UserCenterController extends BaseController{
         UserCardPackage user=userCardPackageService.queryUserCardPackage(uid);
         return success(user);
     }
+
 
 
     /**
