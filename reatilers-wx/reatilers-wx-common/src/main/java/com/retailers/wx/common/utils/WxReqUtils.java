@@ -2,6 +2,7 @@ package com.retailers.wx.common.utils;
 
 import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.wx.common.config.WxConfig;
+import sun.reflect.ReflectionFactory;
 
 /**
  * 微信请注公用类
@@ -29,5 +30,19 @@ public class WxReqUtils {
 //            }
 //        }
         return s;
+    }
+
+    public static String getTicket(String accessToken){
+        String url=String.format(WxConfig.REQ_TICKET_TOKEN_URL,accessToken);
+        System.out.println(url);
+        String s  = HttpClientUtil.doGet(url);
+        return s;
+    }
+
+    public static void main(String[] args) {
+        String s1=getToken("wxfd2628cfc7f6defb","89150c76c3925859cf95375fc901c047");
+        System.out.println(s1);
+//        String str=getTicket("xBii272xGz-Kbgk9vtyT-ChI51WgMdIvFZUkomC557sEcQ3YNQHyziPqZdQ8F_ZOcTHw7hwdMOO3gU8mu5ObxzXRIjMrMpmw996CXyr4RVuI4pnHDivqdd_9rnxPBLcvGFWaAHAJIZ");
+//        System.out.println(str);
     }
 }

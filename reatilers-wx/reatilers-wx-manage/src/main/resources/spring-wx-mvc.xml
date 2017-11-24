@@ -98,6 +98,6 @@
     <task:scheduled-tasks>
         <task:scheduled ref="wxTaskJob" method="queryWxToken" cron="0 0/3 * * * ?"/>
     </task:scheduled-tasks>
-    <context:component-scan base-package="com.retailers.wx.manage.job" />
+    <context:component-scan base-package="com.retailers.wx.common.job" />
 
 </beans>

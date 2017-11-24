@@ -22,6 +22,10 @@ public class WxAccessToken implements java.io.Serializable {
 	/**access_token是公众号的全局唯一接口调用凭据*/
 	@NotEmpty
 	private String watToken;
+	/**
+	 * js-sdk token取得
+	 */
+	private String watTicket;
 	/**申请时间*/
 	@NotEmpty
 	private Date watTokenCreateTime;
@@ -85,5 +89,11 @@ public class WxAccessToken implements java.io.Serializable {
 		return this.watTokenExpires;
 	}
 
+	public String getWatTicket() {
+		return watTicket;
+	}
 
+	public void setWatTicket(String watTicket) {
+		this.watTicket = watTicket;
+	}
 }

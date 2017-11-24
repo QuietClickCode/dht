@@ -1,10 +1,16 @@
 
 package com.retailers.wx.common.service.impl;
 
+import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGSelectQueryBlock;
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
+import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.dao.WxAccessTokenMapper;
 import com.retailers.wx.common.dao.WxManagerMapper;
@@ -31,11 +37,12 @@ import java.util.Map;
 @Service("wxaccesstokenService")
 public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 	Logger logger = LoggerFactory.getLogger(WxAccessTokenServiceImpl.class);
-
 	@Autowired
 	private WxAccessTokenMapper wxAccessTokenMapper;
 	@Autowired
 	private WxManagerMapper wxManagerMapper;
+	@Autowired
+	private ProcedureToolsService procedureToolsService;
 
 	public boolean saveWxAccessToken(WxAccessToken wxAccessToken) {
 		int status = wxAccessTokenMapper.saveWxAccessToken(wxAccessToken);
@@ -71,33 +78,62 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 		if(ObjectUtils.isNotEmpty(wxManager)){
 			WxConfig.APP_ID=wxManager.getAppId();
 			WxConfig.APP_SECRET=wxManager.getAppSecret();
-				//根据当前使用微信，取得token
+			//根据当前使用微信，取得token
 			WxAccessToken token=wxAccessTokenMapper.queryCurWxAccessTokenByWxId(wxManager.getWxId(),curDate);
 			//判断当前token是否为空 如果当前token 还处于有效期则不进行处理。
 			if(ObjectUtils.isNotEmpty(token)){
 				WxConfig.ACCESS_TOKEN=token.getWatToken();
+				WxConfig.ACCESS_TICKET=token.getWatTicket();
 			}else{
-				//取得最新token
-				String rtn = WxReqUtils.getToken(wxManager.getAppId(),wxManager.getAppSecret());
-				if(ObjectUtils.isNotEmpty(rtn)){
-					token = new WxAccessToken();
-					JSONObject obj = JSONObject.parseObject(rtn);
-					if(obj.containsKey("errcode")){
+				pullWxToken(wxManager.getAppId(),wxManager.getAppSecret(),wxManager.getWxId());
+			}
+			System.out.println("------------------------------------------------>"+WxConfig.ACCESS_TICKET);
+			System.out.println(WxConfig.ACCESS_TICKET);
+		}else{
+		}
+	}
 
-					}else{
-						int expires=obj.getIntValue("expires_in");
+	/**
+	 * 取得微信token 和jsapi token
+	 * @param appId
+	 * @param appSecret
+	 * @param wxId
+	 */
+	private void pullWxToken(String appId,String appSecret,Long wxId){
+		Date curDate=new Date();
+		String key= SingleThreadLockConstant.PULL_WX_TOKEN;
+		try{
+			procedureToolsService.singleLockManager(key);
+			//取得最新token
+			String rtn = WxReqUtils.getToken(appId,appSecret);
+			if(ObjectUtils.isNotEmpty(rtn)){
+				WxAccessToken token = new WxAccessToken();
+				JSONObject obj = JSONObject.parseObject(rtn);
+				if(obj.containsKey("errcode")){
+				}else{
+					int expires=obj.getIntValue("expires_in");
+					String jsapiTicket=WxReqUtils.getTicket(obj.getString("access_token"));
+					JSONObject ticketObj=JSONObject.parseObject(jsapiTicket);
+					if(ticketObj.containsKey("errcode")&&ticketObj.getIntValue("errcode")==0){
+						String ticket=ticketObj.getString("ticket");
+						//取得ticket
 						Date expiresTime= DateUtil.addSecond(curDate,(expires-60*10));
 						token.setWatToken(obj.getString("access_token"));
 						token.setWatTokenCreateTime(curDate);
 						token.setWatTokenExpiresTime(expiresTime);
 						token.setWatTokenExpires(expires);
-						token.setWatWxId(wxManager.getWxId());
+						token.setWatWxId(wxId);
+						token.setWatTicket(ticket);
 						WxConfig.ACCESS_TOKEN=token.getWatToken();
+						WxConfig.ACCESS_TICKET=ticket;
+						//取得js-sdk 的token
 						wxAccessTokenMapper.saveWxAccessToken(token);
 					}
 				}
 			}
-		}else{
+		}catch(AppException e){
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
 		}
 	}
 }

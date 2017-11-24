@@ -1,4 +1,4 @@
-package com.retailers.dht.common.constant;
+package com.retailers.mybatis.common.constant;
 
 /**
  * 单线程锁 常量
@@ -15,6 +15,10 @@ public class SingleThreadLockConstant {
      * 支付锁
      */
     public static  final String PAY_LOCK="payLock";
+    /**
+     * 取得微信token
+     */
+    public static final String PULL_WX_TOKEN="pullWxToken";
 
 
 

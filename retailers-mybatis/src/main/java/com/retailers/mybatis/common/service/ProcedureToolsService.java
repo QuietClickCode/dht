@@ -1,6 +1,6 @@
-package com.retailers.dht.common.service;
+package com.retailers.mybatis.common.service;
 
-import com.retailers.dht.common.enm.OrderEnum;
+import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.tools.exception.AppException;
 
 /**
