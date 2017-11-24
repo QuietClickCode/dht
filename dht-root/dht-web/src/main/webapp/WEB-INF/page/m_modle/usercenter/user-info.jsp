@@ -42,7 +42,7 @@
         </a>
     </div>
     <div class="my-data-list marginB2">
-        <a href="" class="displayB">
+        <a href="/user/UserPhone" class="displayB">
             <span class="name">我的手机号</span>
             <i class="icon-data-right"></i>
             <span class="text2">银卡会员</span>

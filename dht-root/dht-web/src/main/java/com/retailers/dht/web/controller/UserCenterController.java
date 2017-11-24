@@ -99,6 +99,14 @@ public class UserCenterController extends BaseController{
     }
 
     /**
+     *  绑定手机
+     */
+    @RequestMapping("UserPhone")
+    public String openUserPhone(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user-phone");
+    }
+
+    /**
      * 取得用户卡包信息
      * @param request
      * @return

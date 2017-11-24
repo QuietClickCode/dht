@@ -11,7 +11,7 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back();return false;" class="icon-return"></a>
     <span>优惠卷</span>
 </div>
 
@@ -34,7 +34,7 @@
 
     <div class="coupon-box" id="wsy">
         <div class="more-coupon">
-            <a href="">
+            <a href="/coupon/openCoupon">
                 <span class="icon-coupon"></span>
                 <span class="text">领取更多优惠券</span>
                 <i class="icon-coupon-right"></i>
@@ -96,7 +96,7 @@
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
                     html += '<div class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
                     html += '<p class="time">'+data.rows[i].cpSendStartDate+'</p></div></div>';
-                    html += '<p class="coupon_list1_bg"></p><span class="btn_span">立即使用</span>';
+                    html += '<p class="coupon_list1_bg"></p><span class="btn_span" data-cpId="'+data.rows[i].cpId+'">立即使用</span>';
                     html += '<p class="coupon_list1_info"><img class="img_open" src="/img/icon_up.png" />';
                     html += ''+data.rows[i].cpIsRestricted+'</p></a></li>';
                     $(couponList).append(html);
