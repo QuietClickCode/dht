@@ -2,7 +2,7 @@ package com.retailers.dht.manage.job;
 
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
-import com.retailers.dht.common.service.ProcedureToolsService;
+import com.retailers.mybatis.common.service.ProcedureToolsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
