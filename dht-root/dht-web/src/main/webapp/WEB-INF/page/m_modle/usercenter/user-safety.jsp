@@ -23,14 +23,14 @@
 </div>
 
 <div class="my-data-list">
-    <a href="" class="displayB">
+    <a href="/user/updateUserPhone" class="displayB">
         <span class="name">更改手机号码</span>
         <i class="icon-data-right"></i>
         <span class="text2">151****2828</span>
     </a>
 </div>
 <div class="my-data-list">
-    <a href="" class="displayB">
+    <a href="/user/updatePayPwd" class="displayB">
         <span class="name">修改支付密码</span>
         <i class="icon-data-right"></i>
         <span class="text2"></span>

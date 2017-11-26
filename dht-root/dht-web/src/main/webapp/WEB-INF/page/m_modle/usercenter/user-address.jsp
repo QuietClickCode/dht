@@ -100,7 +100,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
 	        });
 
 	        //取得用户收货地址
-            queryUserAddress(1,10);
+            queryUserAddress(pageNo,pageSize);
 	    });
 
 
@@ -118,10 +118,6 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                     if(data&&data.rows){
                         $("#noAddressList").hide();
                         $("#addressLists").show();
-                        if(data.rows.length == 0){
-                            $("#noAddressList").show();
-                            $("#addressLists").hide();
-                        }
                         for(var row of data.rows){
                             let checked="";
                             if(row.uaIsDefault==0){
@@ -134,9 +130,11 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                             html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a class="del_user_address" href="javascript:void(0)" onclick="delAddress('+row.uaId+',this)">删除</a></div></li>';
                             $("#my_address_list").append(html);
                         }
-                        flag = true;
-                        pageNo++;
-                        scrolladdress();
+                    }else{
+                        if($("#my_address_list").length == 0){
+                            $("#noAddressList").show();
+                            $("#addressLists").hide();
+                        }
                     }
                 }
             });
@@ -157,56 +155,18 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
             });
         }
 
-        var flag = true;
-        var pageNo=1;
-        var pageSize=10;
-        <!--滚动加载地址-->
-        function scrolladdress() {
-                var range = 450;             //距下边界长度/单位px
-                var totalheight = 0;
-                var main = $("#my_address_list");                     //主体元素
-                $(window).scroll(function(){
-                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
-
-                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
-
-                    if(($(document).height()-range) <= totalheight && flag) {
-                        flag = false;
-                        $.ajax({
-                            type:"post",
-                            url:'/userAddress/queryUserAddress',
-                            dataType: "json",
-                            async :false,
-                            data:{"pageSize":pageSize,"pageNo":pageNo},
-                            success:function(data){
-                                if(data&&data.rows){
-                                    $("#noAddressList").hide();
-                                    $("#addressLists").show();
-
-                                    for(var row of data.rows){
-                                        let checked="";
-                                        if(row.uaIsDefault==0){
-                                            checked='checked="checked"';
-                                        }
-                                        var html='<li><div class="my_address_item_top"><div class="my_address_L">';
-                                        html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i>✓</i></label>';
-                                        html+='</div><div class="my_address_R"><p class="p1"><span class="span1">'+row.uaName+'</span>&emsp;';
-                                        html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>';
-                                        html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a class="del_user_address" href="javascript:void(0)" onclick="delAddress('+row.uaId+',this)">删除</a></div></li>';
-                                        $("#my_address_list").append(html);
-                                    }
-                                    flag = true;
-                                    pageNo++;
-                                }
-                            }
-                        });
-
-                    }
-                });
-        }
-
-
-
+        var scrollTop;
+        var pageSize = 10;
+        var pageNo = 1;
+        $(window).scroll(function () {
+            var scrollT = $(window).scrollTop();
+            scrollTop = 250;
+            if(scrollT > scrollTop){
+                ++pageNo;
+                queryUserAddress(pageNo,pageSize);
+                scrollTop = scrollTop * 2;
+            }
+        })
 	</script>
 </body>
 

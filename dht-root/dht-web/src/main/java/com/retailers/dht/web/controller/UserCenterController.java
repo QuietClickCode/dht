@@ -127,6 +127,22 @@ public class UserCenterController extends BaseController{
     }
 
     /**
+     *  更改手机号
+     */
+    @RequestMapping("updateUserPhone")
+    public String openUpdateUserPhone(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/update_user_phone");
+    }
+
+    /**
+     *  修改支付密码
+     */
+    @RequestMapping("updatePayPwd")
+    public String openUpdatePayPwd(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/update_pay_password");
+    }
+
+    /**
      * 取得用户卡包信息
      * @param request
      * @return
