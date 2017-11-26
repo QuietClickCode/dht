@@ -23,6 +23,14 @@ public class SysParameterConfigConstant {
      * 短信验证码间隔时间 分
      */
     public static final String SMS_VALID_CODE_INTERVAL_TIME="SMS_VALID_CODE_INTERVAL_TIME";
+    /**
+     * 主服务器地址(pc访问）
+     */
+    public static final String MASTER_SERVER_PC_URL="MASTER_SERVER_PC_URL";
+    /**
+     * 主服务器地址（移动端）
+     */
+    public static final String MASTER_SERVER_MOBILE_URL="MASTER_SERVER_MOBILE_URL";
 
 
     //系统 参数对应的key值

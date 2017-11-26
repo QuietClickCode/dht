@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：用户卡包操作日志（钱包，积分）DAO
@@ -51,5 +53,20 @@ public interface WxAuthUserMapper {
 	 * @date 2017-11-22 23:23:16
 	 */
 	public List<WxAuthUser> queryWxAuthUserList(Pagination<WxAuthUser> pagination);
+
+	/**
+	 * 根据微信openid 取得登录信息
+	 * @param openId
+	 * @return
+	 */
+	public WxAuthUser queryWxAuthUserByOpenId(@Param("wxId")Long wxId,@Param("openId") String openId);
+
+	/**
+	 * 取得关联用户
+	 * @param unionid
+	 * @param openId
+	 * @return
+	 */
+	public Long queryRelationUserByUnionid(@Param("unionid")String unionid,@Param("openId") String openId);
 
 }

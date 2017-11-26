@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.WxAuthUser;
+import com.retailers.tools.exception.AppException;
+
 import java.util.Map;
 /**
  * 描述：用户卡包操作日志（钱包，积分）Service
@@ -54,6 +56,16 @@ public interface WxAuthUserService {
 	 * @date 2017-11-22 23:23:16
 	 */
 	public boolean deleteWxAuthUserByWauId(Long wauId);
+
+
+
+	/**
+	 * 根据code 取得当前 授权用户的微信信息
+	 * @param code
+	 * @return
+	 * @throws AppException
+	 */
+	public WxAuthUser queryWxAuthUser(String code);
 
 }
 

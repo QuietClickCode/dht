@@ -50,6 +50,16 @@ public class SystemConstant {
     public static final long SYSTEM_DEFAULT_LONG_VAL=0;
 
     /**
+     * 默认字符编码集
+     */
+    public static final String DEFAUT_CHARSET="UTF-8";
+
+    /**
+     * 微信访问页面授权原始请求地址
+     */
+    public static final String WX_ACCESS_ADDRESS_AUTH_URL="wxAccessAddressAuthUrl";
+
+    /**
      * 压缩类型（ small 小图，middle 中图 ，originalfile 原图)
      */
     public static List<String> compressTypes=new ArrayList<String>();

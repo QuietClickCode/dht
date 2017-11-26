@@ -143,4 +143,26 @@
 	<delete id="deleteWxAuthUserByWauId" parameterType="java.lang.Long">
 		DELETE FROM t_wx_auth_user WHERE wau_id = #{wauId}
 	</delete>
+
+	<!-- 根据微信openid 取得登录信息 -->
+	<select id="queryWxAuthUserByOpenId" resultMap="rm_wxAuthUser">
+		SELECT <include refid="wxAuthUser_columns" />
+		FROM t_wx_auth_user WHERE wau_openid = #{openId} and wau_wx_id=#{wxId}
+	</select>
+
+	<!-- 取得关联用户 -->
+	<select id="queryRelationUserByUnionid" resultType="java.lang.Long">
+		SELECT
+		  wau_u_id
+		FROM
+		  t_wx_auth_user
+		WHERE
+		  wau_unionid = #{unionid}
+		  AND wau_openid!=#{openId}
+		ORDER BY
+		  wau_create_date DESC
+		LIMIT 1
+	</select>
+
+
 </mapper>

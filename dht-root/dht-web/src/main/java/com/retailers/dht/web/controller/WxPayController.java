@@ -336,6 +336,6 @@ public class WxPayController extends BaseController{
 //        info.setPiCreateTime(new Date());
 //        info.setPiOrderNo(orderNo);
 //        info.setPcRemoteAdd(ip);
-//        payInfoService.addPayInfo(info);
+//        payInfoService.ad dPayInfo(info);
 //    }
 }
