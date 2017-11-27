@@ -32,4 +32,5 @@ public class SeckillSpecialProductController extends BaseController {
         System.out.println("id====================================>:"+id);
         return redirectUrl(request,"sksppdt/special");
     }
+
 }

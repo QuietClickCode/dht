@@ -117,5 +117,6 @@ public class GoodsServiceImpl implements GoodsService {
 		goods.setIsChecked(0L);
 		return updateGoods(goods,uploadpersonId);
 	}
+
 }
 

@@ -50,11 +50,13 @@
     	</li>
 
     </ul>
-    <div class="product-evaluate box2 displayN" id="evaluate">
-        <div class="more" id="nogoodsdiv">
-
+    <center>
+        <div id="nogoodsdiv" style="display: none;margin-top: 5px">
+            <a style="color: red;font-size: .3rem">已全部加载</a>
         </div>
-    </div>
+    </center>
+
+
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
@@ -193,8 +195,7 @@
                                     pageNo++;
                                     flag = true;
                                 }else{
-                                    html = '<a >已全部加载</a>';
-                                    $('#nogoodsdiv').html(html);
+                                    $('#nogoodsdiv').show();
                                 }
                                 $("img").lazyload({effect: "fadeIn"});
                             }
@@ -246,8 +247,7 @@
                         pageNo++;
                         flag = true;
                     }else{
-                        html = '<a >已全部加载</a>';
-                        $('#nogoodsdiv').html(html);
+                        $('#nogoodsdiv').show();
                     }
                     $("img").lazyload({effect: "fadeIn"});
                 }

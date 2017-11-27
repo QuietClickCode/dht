@@ -278,9 +278,9 @@
 	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
+	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
 	                <span class="num J_careNum" id="goodsnumber">1</span>
-	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
+	                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
 	            </div>
 	        </div>
 	        
@@ -361,7 +361,16 @@
     <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
-        var gid = parseInt(path.substring(7,path.indexOf('.html')));
+        var pathArr = path.substring(7,path.indexOf('.html')).split('~');
+        var gid = parseInt(pathArr[0]);
+        <!--邀请者Id-->
+        var inviterId;
+        <!--初始化微信配置所用到的path-->
+        var initSharePath;
+        initSharePath = path.substring(0,10)+gid;
+        if(pathArr.length==2){
+            inviterId = pathArr[1].split('_')[1];
+        }
         var isServiceGoods;
         <!--用户评论分页查询-->
         var pageNo=1;
@@ -889,7 +898,7 @@
                     type:"post",
                     url:"/buyCar/saveBuyCar",
                     dataType: "json",
-                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
+                    data:{gid:gid,bcInviterid:inviterId,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
                     success:function(data){
                         if(data.status==0){
                             layer.msg('成功加入购物车!');

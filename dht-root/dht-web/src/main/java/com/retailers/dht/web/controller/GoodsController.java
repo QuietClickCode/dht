@@ -5,6 +5,7 @@ import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -41,7 +42,7 @@ public class GoodsController extends BaseController {
         params.put("isDelete",0L);
         params.put("isShow",isShow);
         params.put("isChecked",isChecked);
-        Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,1,2);
+        Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,1,1);
         Map<String,Object> gtm = new HashMap<String,Object>();
         if(!ObjectUtils.isEmpty(pagination.getData())){
             gtm.put("row",pagination.getData().get(0));

@@ -2,6 +2,7 @@
 package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.SalePromotion;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.mybatis.pagination.Pagination;
 
@@ -62,6 +63,8 @@ public interface SalePromotionService {
 	public List<SalePromotionVo> querySalePromotionTree(List<SalePromotionVo> promotionVos);
 
 	public Pagination<SalePromotionVo> querySalePromotionListWeb(Map<String, Object> params, int pageNo, int pageSize);
+
+	public List<GoodsVo> queryHasNoSpGoods(String gname,Long parentId);
 }
 
 

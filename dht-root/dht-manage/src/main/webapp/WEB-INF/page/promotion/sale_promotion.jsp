@@ -541,7 +541,7 @@
 
 
     $(function () {
-        createSalePromotionTable("/goods/queryGoodsLists","salePromotionList","gid",goodsColumns,queryGoodsParams);
+        createSalePromotionTable("/openSalePromotion/getHasNoSpGoods","salePromotionList","gid",goodsColumns,queryGoodsParams);
     });
 
 
@@ -569,7 +569,7 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             gname:$("#inputGoodsName").val(),
-            isChecked:1
+            parentId:parentId
         };
     }
 
@@ -633,6 +633,7 @@
             return;
         }
         number = num;
+        queryGoodsName();
         $("#chooseGoodsList").modal("show");
     }
 
@@ -640,7 +641,7 @@
         $('#salePromotionList').bootstrapTable(
             "refresh",
             {
-                url:"/goods/queryGoodsLists"
+                url:"/openSalePromotion/getHasNoSpGoods"
             }
         );
     }

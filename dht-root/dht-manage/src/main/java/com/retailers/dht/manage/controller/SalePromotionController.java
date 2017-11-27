@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.SalePromotion;
 import com.retailers.dht.common.service.SalePromotionService;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -94,4 +95,12 @@ public class SalePromotionController extends BaseController{
         return promotion;
     }
 
+    @RequestMapping("/getHasNoSpGoods")
+    @ResponseBody
+    public Map<String,Object> getHasNoSpGoods(String gname,Long parentId){
+        List<GoodsVo> list = promotionService.queryHasNoSpGoods(gname,parentId);
+        Map map = new HashMap();
+        map.put("rows",list);
+        return map;
+    }
 }

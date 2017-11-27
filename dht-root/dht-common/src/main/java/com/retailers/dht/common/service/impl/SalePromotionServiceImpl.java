@@ -6,7 +6,9 @@ import com.retailers.dht.common.dao.SalePromotionMapper;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.entity.SalePromotion;
 import com.retailers.dht.common.service.GoodsGdsprelService;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.service.SalePromotionService;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.common.vo.SalePromotionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
@@ -29,7 +31,9 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 	@Autowired
 	private SalePromotionMapper salePromotionMapper;
 	@Autowired
-	GoodsGdsprelService goodsGdsprelService;
+	private GoodsGdsprelService goodsGdsprelService;
+	@Autowired
+	private GoodsService goodsService;
 	public SalePromotion saveSalePromotion(SalePromotion salePromotion) {
 		int status = salePromotionMapper.saveSalePromotion(salePromotion);
 		return status == 1 ? salePromotion : null;
@@ -137,5 +141,36 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 		page.setData(list);
 		return page;
 	}
+
+	public List<GoodsVo> queryHasNoSpGoods(String gname,Long parentId) {
+		Map params = new HashMap();
+		params.put("isChecked",1L);
+		params.put("gname",gname);
+		params.put("isDelete",0L);
+		List<GoodsVo> list = goodsService.queryGoodsList(params,1,10).getData();
+
+		Map spparams = new HashMap();
+		spparams.put("parentId",parentId);
+		spparams.put("isDelete",0L);
+		List<SalePromotionVo> spList = querySalePromotionList(spparams,1,100).getData();
+
+		List<GoodsVo> removeList = new ArrayList<GoodsVo>();
+		if(!ObjectUtils.isEmpty(spList)){
+			for(GoodsVo goodsVo:list){
+				for(SalePromotionVo salePromotionVo:spList){
+					Long gid = goodsVo.getGid();
+					Long goodsId = salePromotionVo.getGoodsId();
+					if(gid.equals(goodsId)){
+						removeList.add(goodsVo);
+					}
+				}
+			}
+		}
+
+		list.removeAll(removeList);
+
+		return list;
+	}
+
 }
 
