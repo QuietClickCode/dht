@@ -7,6 +7,7 @@
     <title>我的资料</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+
 </head>
 <body class="bge6">
     <div class="specialty-title2 borderB">
@@ -14,45 +15,45 @@
         <span>我的资料</span>
     </div>
     <div class="my-data-list">
-        <a href="" class="displayB">
+        <a href="javascript:void(0);" class="displayB">
             <span class="name">头像</span>
             <i class="icon-data-right"></i>
-            <img src="/img/data2.png" alt="">
+            <img class="user-header" src="" alt="..">
         </a>
     </div>
     <div class="my-data-list marginB2">
         <a href="" class="displayB">
             <span class="name">会员等级</span>
             <i class="icon-data-right"></i>
-            <span class="text1">银卡会员</span>
+            <span class="text1"></span>
         </a>
     </div>
     <div class="my-data-list">
         <a href="/user/UserNickName" class="displayB">
             <span class="name">昵称</span>
             <i class="icon-data-right"></i>
-            <span class="text1">银卡会员</span>
+            <span class="text1 nickName"></span>
         </a>
     </div>
-    <div class="my-data-list">
-        <a href="" class="displayB">
+    <div class="my-data-list" id="open_sex">
+        <a href="javascript:void(0);" class="displayB">
             <span class="name">性别</span>
             <i class="icon-data-right"></i>
-            <span class="text1">银卡会员</span>
+            <span class="text1" id="sex_name_box"></span>
         </a>
     </div>
     <div class="my-data-list marginB2">
         <a href="/user/UserPhone" class="displayB">
             <span class="name">我的手机号</span>
             <i class="icon-data-right"></i>
-            <span class="text2">银卡会员</span>
+            <span class="text2 user-phone"></span>
         </a>
     </div>
     <div class="my-data-list">
         <a href="/user/userAddress" class="displayB">
             <span class="name">收货地址</span>
             <i class="icon-data-right"></i>
-            <span class="text2">填写收货地址</span>
+            <span class="text2 user-address"></span>
         </a>
     </div>
     <div class="my-data-list">
@@ -69,5 +70,91 @@
             <span class="text2">密码设置</span>
         </a>
     </div>
+
+    <!--性别弹窗-->
+    <div class="sex_box" id="sex_box">
+        <div class="sex_box_btn">
+            <span class="male_box  sex_box_val" data-sex="0">男</span>
+            <span class="female_box  sex_box_val" data-sex="1">女</span>
+            <span class="cancel_box close_sex_box">取消</span>
+        </div>
+    </div>
+    <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript">
+        $("#open_sex").click(function(){
+            $("#sex_box").show()
+            var sex1 = $("#open_sex > .text1").val();
+        })
+        $(".close_sex_box").click(function(){
+            $("#sex_box").hide()
+        })
+
+        $(".sex_box_val").click(function(){
+            let $that = $(this);
+            let sex = $that.attr("data-sex");
+            $.ajax({
+                type:"post",
+                url:"/user/updateUserSex",
+                dataType:"json",
+                data:{
+                    sex:sex
+                },
+                success:function(data){
+                    let text = $that.text();
+                    $("#sex_name_box").text(text);
+                    $("#sex_box").hide();
+                }
+            });
+        })
+
+        $(function(){
+            $.ajax({
+                url:"/user/getUserInfo",
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    let userName = data.data.uname;
+                    let userPhone = data.data.uphone;
+                    let sex = data.data.usex;
+                    let imgid = data.data.uimgid;
+                    $(".nickName").text(userName);
+                    if(sex == 0)
+                        $("#sex_name_box").text("男");
+                    else if(sex == 1)
+                        $("#sex_name_box").text("女");
+
+
+                    if(userPhone == "")
+                        $(".user-phone").text("未设置");
+                    else
+                        $(".user-phone").text(userPhone);
+
+                    $.ajax({
+                        url:"/user/queryUserHeader",
+                        post:"post",
+                        dataType:"json",
+                        data:{
+                            attachmentId:imgid
+                        },
+                        success:function(data){
+                            $(".user-header").attr("src",data.msg);
+                        }
+                    });
+                }
+            });
+
+
+            $.ajax({
+                url:"/userAddress/queryDefaultUserAddress",
+                type:"post",
+                dataType:"json",
+                success:function(data){
+                    let msg = data.msg;
+                    $(".user-address").text(msg);
+                }
+            });
+
+        });
+    </script>
 </body>
 </html>

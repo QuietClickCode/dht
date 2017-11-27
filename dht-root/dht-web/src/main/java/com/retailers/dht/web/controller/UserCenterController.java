@@ -2,7 +2,10 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.SmsSendRecordConstant;
+import com.retailers.dht.common.entity.Attachment;
+import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.service.SmsSendRecordService;
 import com.retailers.dht.common.service.UserCardPackageService;
@@ -340,5 +343,41 @@ public class UserCenterController extends BaseController{
         }catch (AppException e){
             return errorForSystem(e.getMessage());
         }
+    }
+
+
+    /**
+     * 获取用户信息
+     * @param request
+     * @return
+     */
+    @RequestMapping("getUserInfo")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp getUserInfo(HttpServletRequest request){
+        long uid=getCurLoginUserId(request);
+        User user = userService.queryUserByUid(uid);
+        User u = new User();
+        String userUphone = user.getUphone();
+        userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        u.setUimgid(user.getUimgid());
+        u.setUphone(userUphone);
+        u.setUsex(user.getUsex());
+        u.setUname(user.getUname());
+        return success(u);
+    }
+
+    /**
+     * 获取用户头像
+     * @param request
+     * @param attachmentId
+     * @return
+     */
+    @RequestMapping("queryUserHeader")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryUserHeader(HttpServletRequest request,Long attachmentId){
+        Attachment attachment = userService.queryUserHeader(attachmentId);
+        return success(AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
     }
 }

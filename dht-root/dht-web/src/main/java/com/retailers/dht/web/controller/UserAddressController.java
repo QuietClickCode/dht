@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -107,13 +108,36 @@ public class UserAddressController extends BaseController {
         }
     }
 
-    /*
-    * 删除收货地址
-    */
+    /**
+     * 删除收货地址
+     */
     @RequestMapping("removeUserAddress")
     @ResponseBody
     public BaseResp removeUserAddress(HttpServletRequest request,Long uaId){
         userAddressService.deleteUserAddressByUaId(uaId);
         return success("删除收货地址成功");
+    }
+
+    /**
+     *  取得用户默认收货地址
+     */
+    @RequestMapping("queryDefaultUserAddress")
+    @ResponseBody
+    public BaseResp queryDefaultUserAddress(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        String address = userAddressService.queryDefaultUserAddress(uId);
+        return success(address);
+    }
+
+    /**
+     *  获取当前ID
+     */
+    @RequestMapping("queryLoginUserId")
+    @ResponseBody
+    public  Map<String,Object> queryLoginUserId(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("uId",uId);
+        return map;
     }
 }

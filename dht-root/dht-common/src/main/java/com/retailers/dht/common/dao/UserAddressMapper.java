@@ -59,4 +59,11 @@ public interface UserAddressMapper {
 	 */
 	public long clearUserDeafultAddress(Long uid);
 
+	/**
+	 * 设置地址为默认收货地址
+	 * @param userId 用户id
+	 * @return
+	 */
+	public String queryDefaultUserAddress(Long userId);
+
 }

@@ -108,5 +108,10 @@ public class UserAddressServiceImpl implements UserAddressService {
 		}
 		return true;
 	}
+
+	public String queryDefaultUserAddress(Long userId) {
+		String address = userAddressMapper.queryDefaultUserAddress(userId);
+		return address;
+	}
 }
 

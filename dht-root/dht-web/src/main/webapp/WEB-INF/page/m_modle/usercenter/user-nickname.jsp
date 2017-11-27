@@ -16,18 +16,6 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <style>
-        .sub_Name{
-            line-height: 1rem;
-            text-align: center;
-            font-size: 0.3rem;
-            border: 1px solid rgba(0,0,0,0.1);
-            margin-top: 1rem;
-            height: 1rem;
-            margin-left: 1rem;
-            margin-right: 1rem;
-            border-radius: 0.2rem;
-            background-color: rgba(255,0,0,0.3);
-        }
 
     </style>
 </head>
@@ -42,9 +30,7 @@
     <input type="text" class="modify_name_input" name="" id="" value="" />
     <span class="clear_input">x</span>
 </div>
-<div class="sub_Name">
-    <a href="javascript:void(0)">修改昵称</a>
-</div>
+
 
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/layer/layer.js"></script>
@@ -55,7 +41,7 @@
         });
     })
 
-    $(".sub_Name").click(function() {
+   /* $(".sub_Name").click(function() {
         let val = $(".modify_name_input").val();
         if(val == ""){
             layer.msg("昵称不能为空");
@@ -69,10 +55,15 @@
                 name:val
             },
             success:function (data) {
-                layer.msg(data.msg);
+                if(data.msg == "SUCCESS"){
+                    layer.msg("修改成功");
+                    setTimeout(function () {
+                        window.history.back();
+                    },2000);
+                }
             }
         });
-    });
+    });*/
 </script>
 </body>
 

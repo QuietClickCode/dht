@@ -7,6 +7,7 @@ import java.util.Map;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.SmsSendRecordConstant;
 import com.retailers.dht.common.dao.SmsSendRecordMapper;
+import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.SmsSendRecord;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.dao.UserMapper;
@@ -203,6 +204,13 @@ public class UserServiceImpl implements UserService {
 		}
 		userMapper.updateUser(user);
 		return true;
+	}
+
+	/**
+	 * 获取用户头像
+	 */
+	public Attachment queryUserHeader(Long attachmentId) {
+		return attachmentService.queryAttachmentById(attachmentId);
 	}
 }
 

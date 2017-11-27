@@ -74,6 +74,13 @@ public interface UserAddressService {
 	 */
 	public boolean defaultUserAddress(Long userId,Long uaId)throws AppException;
 
+
+	/**
+	 * 设置地址为默认收货地址
+	 * @param userId 用户id
+	 * @return
+	 */
+	public String queryDefaultUserAddress(Long userId);
 }
 
 

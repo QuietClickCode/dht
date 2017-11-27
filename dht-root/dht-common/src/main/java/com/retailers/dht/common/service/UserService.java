@@ -1,7 +1,9 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
+import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 
 import java.util.Map;
@@ -122,6 +124,12 @@ public interface UserService {
 	 * @throws AppException
 	 */
 	public boolean changePwd(Long uid,String oldPwd,String pwd,long type)throws AppException;
+
+	/**
+	 * 获取用户头像
+	 * @param attachmentId 图片附件ID
+	 */
+	public Attachment queryUserHeader(Long attachmentId);
 
 }
 

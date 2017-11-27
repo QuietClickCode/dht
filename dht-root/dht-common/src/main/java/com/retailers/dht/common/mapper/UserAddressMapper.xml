@@ -179,4 +179,9 @@
 		SET ua_is_default =1
 		WHERE ua_uid=#{uid} and is_delete=0
 	</update>
+
+	<!--查询用户默认收货地址-->
+	<select id="queryDefaultUserAddress" resultType="java.lang.String" parameterType="java.lang.Long">
+		SELECT ua_all_address FROM t_user_address WHERE ua_uid = #{userId} AND ua_is_default = 0
+	</select>
 </mapper>
