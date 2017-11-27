@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 用户个人中心
@@ -379,5 +381,17 @@ public class UserCenterController extends BaseController{
     public BaseResp queryUserHeader(HttpServletRequest request,Long attachmentId){
         Attachment attachment = userService.queryUserHeader(attachmentId);
         return success(AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
+    }
+
+    /**
+     *  获取当前ID
+     */
+    @RequestMapping("queryLoginUserId")
+    @ResponseBody
+    public Map<String,Object> queryLoginUserId(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("uId",uId);
+        return map;
     }
 }

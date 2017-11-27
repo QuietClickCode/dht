@@ -126,18 +126,7 @@ public class UserAddressController extends BaseController {
     public BaseResp queryDefaultUserAddress(HttpServletRequest request){
         Long uId=getCurLoginUserId(request);
         String address = userAddressService.queryDefaultUserAddress(uId);
-        return success(address);
-    }
-
-    /**
-     *  获取当前ID
-     */
-    @RequestMapping("queryLoginUserId")
-    @ResponseBody
-    public  Map<String,Object> queryLoginUserId(HttpServletRequest request){
-        Long uId=getCurLoginUserId(request);
         HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("uId",uId);
-        return map;
+        return success(address);
     }
 }
