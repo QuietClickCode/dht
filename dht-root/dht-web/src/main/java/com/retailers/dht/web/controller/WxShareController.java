@@ -1,6 +1,7 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
 import com.retailers.dht.common.entity.PayInfo;
@@ -8,6 +9,8 @@ import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayInfoService;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.encrypt.Sha1DESUtils;
+import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.IPUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
@@ -38,75 +41,65 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.PublicKey;
 import java.util.*;
 
 @Controller
 @RequestMapping("wxShare")
 public class WxShareController extends BaseController{
-    Logger logger= LoggerFactory.getLogger(WxShareController.class);
 
-    @Autowired
-    private PayInfoService payInfoService;
-    @Autowired
-    private PayCallbackService payCallbackService;
-
-    @RequestMapping("openWxPayPage")
-    public String openWxPayPage(){
-        return "m_modle/wx/wxPayOrder";
-    }
-
-    /**
-     * 微信公从号支付（根据订单号)
-     * @param request
-     * @param orderNo
-     * @return
-     */
     @RequestMapping("createWxShare")
-    public @ResponseBody Object createWxPay(HttpServletRequest request,String orderNo) {
-        orderNo="zp2017111423301235";
-        logger.info("微信公众号支付订单号:{}", orderNo);
-        String apiKey="CF26762CF05A42899F1681872CE3BC89";
-        String appId="wxfd2628cfc7f6defb";
-        String ip=request.getRemoteAddr();
-        Date curDate=new Date();
+    @ResponseBody
+    public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
 
-        String a = WxConfig.ACCESS_TOKEN;
+        Long uid = getCurLoginUserId(request);
+        String lastStr = "~inviter_"+uid+".html";
 
-        return null;
-    }
-
-    public static void main(String[] args){
-        System.out.println(new WxShareController().getAcessData());
-
-    }
-
-    public String getAcessData(){
-        //翻译的内容用encoder编译
-        String str= URLEncoder.encode("How old are you");
-        //接受反回的Json
-        String boty="";
-        //传参的类
-        List<NameValuePair> pair=new ArrayList<NameValuePair>();
-        //有道翻译api接口，需要自己申请生成key
-        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfd2628cfc7f6defb&secret=CF26762CF05A42899F1681872CE3BC89";
-        //实例化defaultHttpClient
-        DefaultHttpClient hc=new DefaultHttpClient();
+        String noncestr = createRandomString();
+        String jsapi_ticket = getTick(getAccessToken());;
+        Long timestamp = new Date().getTime()/1000;
+        String url = path+lastStr;
+        String signature = "";
+        String homePath = "http://test.iyoubang.com";
+        homePath = homePath+url;
         try {
-            //实例化post方式访问并且把路径放入
-            HttpGet httppost=new HttpGet(url);
-            //执行访问返回resp
-            HttpResponse resp=hc.execute(httppost);
-            //获取访问的结果
-            HttpEntity entity=resp.getEntity();
-            //把返回的结果转成字符串
-            boty= EntityUtils.toString(entity);
-
-        } catch (Exception e) {
+            signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);
+        }catch (Exception e){
             e.printStackTrace();
-        }//运行完后执行
-        finally {
-            hc.getConnectionManager().shutdown();
         }
-        return boty;
+
+        Map map = new HashMap();
+        map.put("homePath",homePath);
+
+        map.put("nonceStr",noncestr);
+        map.put("timestamp",timestamp);
+        map.put("appid","wxfd2628cfc7f6defb");
+        map.put("signature",signature);
+        return map;
     }
+
+    public String createRandomString(){
+        return WXPayUtil.getStringRandom(30);
+    }
+
+    public String getTick(String access_token){
+        Map map = new HashMap();
+        map.put("access_token",access_token);
+        map.put("type","jsapi");
+        String respStr = HttpClientUtil.doGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket",map);
+        JSONObject jsonObject = JSON.parseObject(respStr);
+
+        return jsonObject.getString("ticket");
+    }
+
+    public String getAccessToken(){
+        Map map = new HashMap();
+        map.put("grant_type","client_credential");
+        map.put("appid","wxfd2628cfc7f6defb");
+        map.put("secret","89150c76c3925859cf95375fc901c047");
+        String respStr = HttpClientUtil.doGet("https://api.weixin.qq.com/cgi-bin/token",map);
+        JSONObject jsonObject = JSON.parseObject(respStr);
+        return jsonObject.getString("access_token");
+    }
+
 }
