@@ -2,9 +2,12 @@
 package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.BuyCar;
 import com.retailers.dht.common.dao.BuyCarMapper;
 import com.retailers.dht.common.service.BuyCarService;
+import com.retailers.dht.common.vo.GoodsVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -45,6 +48,19 @@ public class BuyCarServiceImpl implements BuyCarService {
 		buyCar.setIsDelete(1L);
 		int status = buyCarMapper.updateBuyCar(buyCar);
 		return status == 1 ? true : false;
+	}
+
+	public List<GoodsVo> queryGoodsVoList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<GoodsVo> list = buyCarMapper.queryGoodsVoList(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+			goodsVo.setGdimgurl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getGdimgurl());
+		}
+		return list;
 	}
 }
 

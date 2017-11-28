@@ -662,8 +662,8 @@
     function loadgsval() {
         var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
         var gsvalactive = $('#gsdiv').find('.active');
-//            alert('gsdivs---'+gsdivs.length);
-//            alert('gsvalactive---'+gsvalactive.length);
+//            //alert('gsdivs---'+gsdivs.length);
+//            //alert('gsvalactive---'+gsvalactive.length);
         if(gsdivs.length==gsvalactive.length){
             var gsvids = '';
             for(var i=0;i<gsvalactive.length;i++){
@@ -872,7 +872,7 @@
                 description += '配送时间:'+servicetime;
             }
         }
-        alert(description);
+        //alert(description);
     }
 
     <!--验证-->
@@ -1041,7 +1041,7 @@
                     var signature = data.signature;
                     wx.config({
 
-                        //debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+                        //debug: true, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 
                         appId: appId, // 必填，公众号的唯一标识
 
@@ -1064,26 +1064,14 @@
     <!--调用初始化分享-->
     initShare();
 
-    <!--调用分享函数-->
-    function shareGoods() {
+    wx.ready(function(){
         var imgUrl = $('#banner').find('img')[0].src;
         var title = $('#goodsNameDiv').html();
         var link = homePath;
         var desc = removeHTMLTag($('#gdescription').html());
 
-        wx.checkJsApi({
 
-            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'], // 需要检测的JS接口列表，所有JS接口列表见附录2,
-
-            success: function(res) {
-
-                // 以键值对的形式返回，可用的api值true，不可用为false
-
-                // 如：{"checkResult":{"chooseImage":true},"errMsg":"checkJsApi:ok"}
-                alert(res);
-            }
-
-        });
+        //share to timeline
         // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
         wx.onMenuShareTimeline({
             title: title, // 分享标题
@@ -1091,11 +1079,9 @@
             link:link,
             imgUrl: imgUrl, // 分享图标
             success: function (res) {
-                alert("成功");
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
-                alert("取消");
             }
         });
         // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
@@ -1105,11 +1091,9 @@
             link:link,
             imgUrl: imgUrl, // 分享图标
             success: function (res) {
-                alert("成功");
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
-                alert("取消");
             }
         });
         // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
@@ -1119,11 +1103,9 @@
             link:link,
             imgUrl: imgUrl, // 分享图标
             success: function (res) {
-                alert("成功");
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
-                alert("取消");
             }
         });
         // 获取“分享到微博”按钮点击状态及自定义分享内容接口
@@ -1133,11 +1115,9 @@
             link:link,
             imgUrl: imgUrl, // 分享图标
             success: function (res) {
-                alert("成功");
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
-                alert("取消");
             }
         });
         // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
@@ -1147,16 +1127,33 @@
             link:link,
             imgUrl: imgUrl, // 分享图标
             success: function (res) {
-                alert("成功");
             },
             cancel: function () {
                 // 用户取消分享后执行的回调函数
-                alert("取消");
             }
         });
+    });
 
+    <!--调用分享函数-->
+    function shareGoods() {
+        $.ajax({
+            type:"post",
+            url:'/user/queryLoginUserId',
+            dataType: "json",
+            async :false,
+            data:{},
+            success:function(data){
+                var uid = data.uId;
+                if(uid!=null){
+                    var href = '';
+                    href += '/specialp/'+gid+'~inviter_'+uid+'.html';
+                    window.location.href=href;
+                }else{
+                    layer.msg('您还未登录！');
+                }
 
-
+            }
+        });
     }
 </script>
 </body>

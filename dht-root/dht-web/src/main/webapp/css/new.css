@@ -1,0 +1,39 @@
+
+html, body {
+    width: 100%;
+    height: 100%;
+}
+body {
+    position: relative;
+}
+.main-bd {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    overflow-y: scroll;
+}
+.guide-share {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #333333 url("../img/guide-user.png") no-repeat right top;
+    background-size: 4.37rem 2.17rem;
+    opacity: .8;
+    filter: Alpha(opacity=80);
+    z-index: 1000;
+}
+.guide-share .i-know {
+    display: block;
+    width: 2rem;
+    height: .8rem;
+    background: url("../img/i-know.png") no-repeat;
+    background-size: 100%;
+    border: none;
+    outline: none;
+    position: absolute;
+    top: 4.83rem;
+    left: 50%;
+    margin-left: -1rem;
+}

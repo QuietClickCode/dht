@@ -4,7 +4,9 @@ import com.retailers.dht.common.entity.BuyCar;
 import com.retailers.dht.common.service.BuyCarService;
 import com.retailers.dht.common.service.GoodsGdsprelService;
 import com.retailers.dht.common.vo.GoodsGdsprelVo;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,12 @@ public class BuyCarController extends BaseController{
     @Autowired
     BuyCarService buyCarService;
 
+    @RequestMapping("/gotoShoppingCar")
+    public String gotoShoppingCar(HttpServletRequest request){
+        return  redirectUrl(request,"shopcar/shopping-car");
+    }
+
+
     @RequestMapping("/saveBuyCar")
     @ResponseBody
     public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request){
@@ -32,6 +40,23 @@ public class BuyCarController extends BaseController{
         buyCar.setUid(getCurLoginUserId(request));
         boolean flag = buyCarService.saveBuyCar(buyCar);
         return  success(flag);
+    }
+
+    @RequestMapping("/queryBuyCarList")
+    @ResponseBody
+    public Map<String,Object> queryBuyCar(HttpServletRequest request,int pageNo,int pageSize,Long isPutway){
+        Long uid = getCurLoginUserId(request);
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("uid",uid);
+        params.put("isPutway",isPutway);
+
+        List<GoodsVo> list = buyCarService.queryGoodsVoList(params,pageNo,pageSize);
+        Map map = new HashMap();
+        if(!ObjectUtils.isEmpty(list)){
+            map.put("rows",list);
+        }
+        return  map;
     }
     
 }

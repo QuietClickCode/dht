@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.BuyCar;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -51,5 +52,7 @@ public interface BuyCarMapper {
 	 * @date 2017-11-20 15:01:54
 	 */
 	public List<BuyCar> queryBuyCarList(Pagination<BuyCar> pagination);
+
+	public List<GoodsVo> queryGoodsVoList(Pagination<GoodsVo> pagination);
 
 }

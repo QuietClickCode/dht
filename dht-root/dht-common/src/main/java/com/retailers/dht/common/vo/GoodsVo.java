@@ -11,6 +11,87 @@ public class GoodsVo extends Goods {
     private Float minprice;
     private Float maxprice;
     private Long inventory;
+    private Long gendbuy;
+    private Long gstartbuy;
+    private String gdimgurl;
+    private Long bcId;
+    private String bcGsval;
+    private String bcGsvalids;
+    private Float gdPrice;
+    private Long gcount;
+    private Long isMultiplebuy;
+
+    public String getBcGsvalids() {
+        return bcGsvalids;
+    }
+
+    public void setBcGsvalids(String bcGsvalids) {
+        this.bcGsvalids = bcGsvalids;
+    }
+
+    public Long getIsMultiplebuy() {
+        return isMultiplebuy;
+    }
+
+    public void setIsMultiplebuy(Long isMultiplebuy) {
+        this.isMultiplebuy = isMultiplebuy;
+    }
+
+    public Long getGcount() {
+        return gcount;
+    }
+
+    public void setGcount(Long gcount) {
+        this.gcount = gcount;
+    }
+
+    public Float getGdPrice() {
+        return gdPrice;
+    }
+
+    public void setGdPrice(Float gdPrice) {
+        this.gdPrice = gdPrice;
+    }
+
+    public String getBcGsval() {
+        return bcGsval;
+    }
+
+    public void setBcGsval(String bcGsval) {
+        this.bcGsval = bcGsval;
+    }
+
+    public Long getBcId() {
+        return bcId;
+    }
+
+    public void setBcId(Long bcId) {
+        this.bcId = bcId;
+    }
+
+    public String getGdimgurl() {
+        return gdimgurl;
+    }
+
+    public void setGdimgurl(String gdimgurl) {
+        this.gdimgurl = gdimgurl;
+    }
+
+    public Long getGstartbuy() {
+        return gstartbuy;
+    }
+
+    public void setGstartbuy(Long gstartbuy) {
+        this.gstartbuy = gstartbuy;
+    }
+
+    public Long getGendbuy() {
+        return gendbuy;
+    }
+
+    public void setGendbuy(Long gendbuy) {
+        this.gendbuy = gendbuy;
+    }
 
     public Float getMinprice() {
         return minprice;

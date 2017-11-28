@@ -74,7 +74,7 @@
                 <i class="icon-care"></i>
                 <span>购物车</span>
             </div>
-            <a href="">有12件商品在等你噢
+            <a href="/buyCar/gotoShoppingCar">有12件商品在等你噢
                 <span class="prompt"></span>
             </a>
         </div>

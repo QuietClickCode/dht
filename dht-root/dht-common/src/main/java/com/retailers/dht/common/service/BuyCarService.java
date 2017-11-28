@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.BuyCar;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：购物车表Service
@@ -55,6 +58,7 @@ public interface BuyCarService {
 	 */
 	public boolean deleteBuyCarByBcId(Long bcId);
 
+	public List<GoodsVo> queryGoodsVoList(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

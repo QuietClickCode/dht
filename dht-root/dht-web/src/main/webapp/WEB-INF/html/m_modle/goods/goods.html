@@ -36,7 +36,7 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;"><span id="gname">高家庄土蜂蜜</span><span id="servicespan" class="span_tip">预定服务</span></p>
+		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip">预定服务</span><span id="gname">高家庄土蜂蜜</span></p>
 		    <p class="p2"><span id="gdprice" style="font-size: .3rem">￥128.00/桌</span><s><span class="mr_4" id="gprice">￥500.00/桌</span></s></p>
 		</div>
 		<div class="norms" id="open_dis" style="margin-bottom: 0;">
@@ -220,7 +220,7 @@
     <div class="bargain-footer">
         <div class="special">
             <div class="share" style="width: 50%;">
-                <a href="">
+                <a onclick="shareGoods();">
                     <i></i>
                     <p>分享好友</p>
                 </a>
@@ -233,6 +233,7 @@
             </div>
         </div>
         <a href="" class="bargain-btn2">立即购买</a>
+        <a  class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
     </div>
     
     <div class="mark" id="J_mark" style="display:none;">
@@ -371,6 +372,7 @@
         if(pathArr.length==2){
             inviterId = pathArr[1].split('_')[1];
         }
+        alert(inviterId);
         var isServiceGoods;
         <!--用户评论分页查询-->
         var pageNo=1;
@@ -504,7 +506,13 @@
                         loadpersonaddress(isServiceGoods==1);
                         var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                         var isAdvancesale = goodsConfig.isAdvancesale;
+                        var isPutway = goodsConfig.isPutway;
 
+                        if(isPutway==0){
+                            $('.bargain-btn2').hide();
+                            $('.bargain-btn3').show();
+                            $('.special').hide();
+                        }
                         if(isServiceGoods==1){
                             $('.showaddressfreigh').hide();
                             $($('#open_time').find('span')[1]).html('请选择服务时间');
@@ -516,6 +524,7 @@
                         if(isAdvancesale==1){
                             $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
                             $('#isAdvancesalediv').show();
+                            $('#servicespan').html('预售');
                         }else{
                             $('#isAdvancesalediv').hide();
                         }
@@ -1076,6 +1085,140 @@
         <!--返回上一页-->
         function returnhistory() {
             window.history.go(-1);
+        }
+
+        var homePath;
+        <!--初始化分享-->
+        function initShare() {
+            $.ajax({
+                type:"post",
+                url:'/wxShare/createWxShare',
+                dataType: "json",
+                async :false,
+                data:{path:initSharePath},
+                success:function(data){
+                    if(data!=null){
+                        homePath = data.homePath;
+
+                        var appId = data.appid;
+                        var timestamp = data.timestamp;
+                        var nonceStr = data.nonceStr;
+                        var signature = data.signature;
+                        wx.config({
+
+                            //debug: true, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+
+                            appId: appId, // 必填，公众号的唯一标识
+
+                            timestamp: timestamp, // 必填，生成签名的时间戳
+
+                            nonceStr: nonceStr, // 必填，生成签名的随机串
+
+                            signature: signature,// 必填，签名，见附录1
+
+                            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+
+                        });
+
+                    }
+
+                }
+            });
+        }
+
+        <!--调用初始化分享-->
+        initShare();
+
+        wx.ready(function(){
+            var imgUrl = $('#banner').find('img')[0].src;
+            var title = $('#goodsNameDiv').html();
+            var link = homePath;
+            var desc = removeHTMLTag($('#gdescription').html());
+
+
+            //share to timeline
+            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
+            wx.onMenuShareTimeline({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:link,
+                imgUrl: imgUrl, // 分享图标
+                success: function (res) {
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
+            wx.onMenuShareAppMessage({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:link,
+                imgUrl: imgUrl, // 分享图标
+                success: function (res) {
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
+            wx.onMenuShareQQ({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:link,
+                imgUrl: imgUrl, // 分享图标
+                success: function (res) {
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            // 获取“分享到微博”按钮点击状态及自定义分享内容接口
+            wx.onMenuShareWeibo({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:link,
+                imgUrl: imgUrl, // 分享图标
+                success: function (res) {
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+            // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
+            wx.onMenuShareQZone({
+                title: title, // 分享标题
+                desc: desc, // 分享描述
+                link:link,
+                imgUrl: imgUrl, // 分享图标
+                success: function (res) {
+                },
+                cancel: function () {
+                    // 用户取消分享后执行的回调函数
+                }
+            });
+        });
+
+        <!--调用分享函数-->
+        function shareGoods() {
+            $.ajax({
+                type:"post",
+                url:'/user/queryLoginUserId',
+                dataType: "json",
+                async :false,
+                data:{},
+                success:function(data){
+                    var uid = data.uId;
+                    if(uid!=null){
+                        var href = '';
+                        href += '/goods/'+gid+'~inviter_'+uid+'.html';
+                        window.location.href=href;
+                    }else{
+                        layer.msg('您还未登录！');
+                    }
+
+                }
+            });
         }
     </script>
 
