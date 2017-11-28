@@ -16,7 +16,12 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <style>
-
+        #saveNickName{
+            position: absolute;
+            right: 0.2rem;
+            color: red;
+            font-size: 0.34rem;
+        }
     </style>
 </head>
 
@@ -24,10 +29,11 @@
 <div class="specialty-title2 borderB">
     <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>修改昵称</span>
+    <a href="javascript:void(0);" id="saveNickName">保存</a>
 </div>
 
 <div class="modify_name_box">
-    <input type="text" class="modify_name_input" name="" id="" value="" />
+    <input type="text" class="modify_name_input" />
     <span class="clear_input">x</span>
 </div>
 
@@ -41,10 +47,15 @@
         });
     })
 
-   /* $(".sub_Name").click(function() {
+    $("#saveNickName").click(function(){
         let val = $(".modify_name_input").val();
         if(val == ""){
             layer.msg("昵称不能为空");
+            return;
+        }
+
+        if(val == userName){
+            layer.msg("请输入新昵称");
             return;
         }
         $.ajax({
@@ -55,15 +66,24 @@
                 name:val
             },
             success:function (data) {
-                if(data.msg == "SUCCESS"){
-                    layer.msg("修改成功");
-                    setTimeout(function () {
-                        window.history.back();
-                    },2000);
-                }
+                layer.msg("修改昵称成功");
             }
         });
-    });*/
+    });
+
+    var userName;
+
+   $(function(){
+       $.ajax({
+           url:"/user/queryLoginUserName",
+           type:"post",
+           dataType:"json",
+           success:function(data){
+               $(".modify_name_input").val(data.uname);
+               userName = data.uname;
+           }
+       });
+   });
 </script>
 </body>
 

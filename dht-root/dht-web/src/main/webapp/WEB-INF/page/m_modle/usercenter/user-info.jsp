@@ -18,11 +18,11 @@
         <a href="javascript:void(0);" class="displayB">
             <span class="name">头像</span>
             <i class="icon-data-right"></i>
-            <img class="user-header" src="" alt="..">
+            <img class="user-head" src="" alt="..">
         </a>
     </div>
     <div class="my-data-list marginB2">
-        <a href="" class="displayB">
+        <a href="javascript:void(0)" class="displayB">
             <span class="name">会员等级</span>
             <i class="icon-data-right"></i>
             <span class="text1"></span>
@@ -113,47 +113,28 @@
                 type:"post",
                 dataType:"json",
                 success:function(data){
-                    let userName = data.data.uname;
-                    let userPhone = data.data.uphone;
-                    let sex = data.data.usex;
-                    let imgid = data.data.uimgid;
-                    $(".nickName").text(userName);
+                    let userAddress = data.userAddress;
+                    let userHeadSrc = data.UserHeaderSrc;
+                    let name = data.nickName;
+                    let sex = data.sex;
+                    let userPhone = data.userPhone;
+                    $(".nickName").text(name);
                     if(sex == 0)
                         $("#sex_name_box").text("男");
                     else if(sex == 1)
                         $("#sex_name_box").text("女");
 
-
                     if(userPhone == "")
                         $(".user-phone").text("未设置");
                     else
                         $(".user-phone").text(userPhone);
-
-                    $.ajax({
-                        url:"/user/queryUserHeader",
-                        post:"post",
-                        dataType:"json",
-                        data:{
-                            attachmentId:imgid
-                        },
-                        success:function(data){
-                            $(".user-header").attr("src",data.msg);
-                        }
-                    });
+                    if(userAddress == "")
+                        $(".user-address").text("填写收货地址");
+                    else
+                        $(".user-address").text(userAddress);
+                    $(".user-head").attr("src",userHeadSrc);
                 }
             });
-
-
-            $.ajax({
-                url:"/userAddress/queryDefaultUserAddress",
-                type:"post",
-                dataType:"json",
-                success:function(data){
-                    let msg = data.msg;
-                    $(".user-address").text(msg);
-                }
-            });
-
         });
     </script>
 </body>

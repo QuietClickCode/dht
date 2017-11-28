@@ -15,6 +15,12 @@
     <title>安全管理</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .my-data-list .setPayPassword .text2{
+            display: none;
+            color: dodgerblue;
+        }
+    </style>
 </head>
 <body class="bge6">
 <div class="specialty-title2 borderB">
@@ -30,14 +36,33 @@
     </a>
 </div>
 <div class="my-data-list">
-    <a href="/user/updatePayPwd" class="displayB">
-        <span class="name">修改支付密码</span>
+    <a href="/user/updatePayPwd" class="displayB setPayPassword">
+        <span class="name"></span>
         <i class="icon-data-right"></i>
-        <span class="text2"></span>
+        <span class="text2">立即设置</span>
     </a>
 </div>
 
-<script type="text/javascript" src="/js/1.10.2.jquery.min.js" ></script>
-
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script>
+    $(function () {
+        $.ajax({
+            url:"/user/queryLoginUserPayPwd",
+            type:"post",
+            dataType:"json",
+            success:function(data){
+                if(data.flag == true){
+                    $(".setPayPassword").attr("href","/user/setPayPwd");
+                    $(".setPayPassword").find(".name").text("支付密码");
+                    $(".setPayPassword .text2").show();
+                }else{
+                    $(".setPayPassword").attr("href","/user/updatePayPwd");
+                    $(".setPayPassword").find(".name").text("修改支付密码");
+                    $(".setPayPassword .text2").hide();
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
