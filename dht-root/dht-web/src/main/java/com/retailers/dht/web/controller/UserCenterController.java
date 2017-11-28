@@ -8,6 +8,7 @@ import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.service.SmsSendRecordService;
+import com.retailers.dht.common.service.UserAddressService;
 import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.web.base.BaseController;
@@ -38,6 +39,10 @@ public class UserCenterController extends BaseController{
     private UserService userService;
     @Autowired
     private SmsSendRecordService smsSendRecordService;
+
+    @Autowired
+    private UserAddressService addressService;
+
     /**
      * 打开用户中心
      * @param request
@@ -356,32 +361,22 @@ public class UserCenterController extends BaseController{
     @RequestMapping("getUserInfo")
     @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
-    public BaseResp getUserInfo(HttpServletRequest request){
+    public Map<String,Object> getUserInfo(HttpServletRequest request){
+        HashMap<String,Object> map = new HashMap<String,Object>();
         long uid=getCurLoginUserId(request);
         User user = userService.queryUserByUid(uid);
-        User u = new User();
         String userUphone = user.getUphone();
         userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
-        u.setUimgid(user.getUimgid());
-        u.setUphone(userUphone);
-        u.setUsex(user.getUsex());
-        u.setUname(user.getUname());
-        return success(u);
+        map.put("userPhone",userUphone);
+        map.put("sex",user.getUsex());
+        map.put("nickName",user.getUname());
+        Attachment attachment = userService.queryUserHeader(user.getUimgid());
+        map.put("UserHeaderSrc",AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
+        String userAddress = addressService.queryDefaultUserAddress(uid);
+        map.put("userAddress",userAddress);
+        return map;
     }
 
-    /**
-     * 获取用户头像
-     * @param request
-     * @param attachmentId
-     * @return
-     */
-    @RequestMapping("queryUserHeader")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
-    @ResponseBody
-    public BaseResp queryUserHeader(HttpServletRequest request,Long attachmentId){
-        Attachment attachment = userService.queryUserHeader(attachmentId);
-        return success(AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
-    }
 
     /**
      *  获取当前ID

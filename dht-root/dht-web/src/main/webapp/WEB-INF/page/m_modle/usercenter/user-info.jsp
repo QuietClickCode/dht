@@ -113,7 +113,7 @@
                 type:"post",
                 dataType:"json",
                 success:function(data){
-                    let userName = data.data.uname;
+                    /*let userName = data.data.uname;
                     let userPhone = data.data.uphone;
                     let sex = data.data.usex;
                     let imgid = data.data.uimgid;
@@ -127,33 +127,10 @@
                     if(userPhone == "")
                         $(".user-phone").text("未设置");
                     else
-                        $(".user-phone").text(userPhone);
+                        $(".user-phone").text(userPhone);*/
 
-                    $.ajax({
-                        url:"/user/queryUserHeader",
-                        post:"post",
-                        dataType:"json",
-                        data:{
-                            attachmentId:imgid
-                        },
-                        success:function(data){
-                            $(".user-header").attr("src",data.msg);
-                        }
-                    });
                 }
             });
-
-
-            $.ajax({
-                url:"/userAddress/queryDefaultUserAddress",
-                type:"post",
-                dataType:"json",
-                success:function(data){
-                    let msg = data.msg;
-                    $(".user-address").text(msg);
-                }
-            });
-
         });
     </script>
 </body>
