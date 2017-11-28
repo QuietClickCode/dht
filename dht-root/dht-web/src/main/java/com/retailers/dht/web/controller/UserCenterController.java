@@ -113,7 +113,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     *  绑定手机
+     *  绑定手机页面
      */
     @RequestMapping("UserPhone")
     public String openUserPhone(HttpServletRequest request){
@@ -121,7 +121,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     *  安全管理
+     *  安全管理页面
      */
     @RequestMapping("UserSafety")
     public String openUserSafety(HttpServletRequest request){
@@ -129,7 +129,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     *  修改昵称
+     *  修改昵称页面
      */
     @RequestMapping("UserNickName")
     public String openUserNickName(HttpServletRequest request){
@@ -137,7 +137,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     *  更改手机号
+     *  更改手机号页面
      */
     @RequestMapping("updateUserPhone")
     public String openUpdateUserPhone(HttpServletRequest request){
@@ -145,11 +145,19 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     *  修改支付密码
+     *  修改支付密码页面
      */
     @RequestMapping("updatePayPwd")
     public String openUpdatePayPwd(HttpServletRequest request){
         return redirectUrl(request,"usercenter/update_pay_password");
+    }
+
+    /**
+     *  设置支付密码页面
+     */
+    @RequestMapping("setPayPwd")
+    public String openSetPayPwd(HttpServletRequest request){
+        return redirectUrl(request,"usercenter/user_set_pay_password");
     }
 
     /**
@@ -164,31 +172,6 @@ public class UserCenterController extends BaseController{
         long uid=getCurLoginUserId(request);
         UserCardPackage user=userCardPackageService.queryUserCardPackage(uid);
         return success(user);
-    }
-
-
-
-    /**
-     * 设置支付密码
-     * @param request
-     * @param payPwd 支付密码
-     * @return
-     */
-    @RequestMapping("addPayPwd")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
-    @ResponseBody
-    public BaseResp addPayPwd(HttpServletRequest request,String payPwd){
-        long uid=getCurLoginUserId(request);
-        if(ObjectUtils.isEmpty(payPwd)){
-            return errorForSystem("支付密码不能为空");
-        }
-        try{
-            boolean flag = userService.addPwd(uid,payPwd,1);
-            return success(flag);
-        }catch (AppException e){
-            return errorForSystem(e.getMessage());
-        }
-
     }
 
     /**
@@ -328,7 +311,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     * 设置支付密码
+     * 修改支付密码
      * @param request
      * @param payPwd 支付密码
      * @return
@@ -350,6 +333,29 @@ public class UserCenterController extends BaseController{
         }catch (AppException e){
             return errorForSystem(e.getMessage());
         }
+    }
+
+    /**
+     * 设置支付密码
+     * @param request
+     * @param payPwd 支付密码
+     * @return
+     */
+    @RequestMapping("addPayPwd")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp addPayPwd(HttpServletRequest request,String payPwd){
+        long uid=getCurLoginUserId(request);
+        if(ObjectUtils.isEmpty(payPwd)){
+            return errorForSystem("支付密码不能为空");
+        }
+        try{
+            boolean flag = userService.addPwd(uid,payPwd,1);
+            return success(flag);
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
+
     }
 
 
@@ -379,14 +385,45 @@ public class UserCenterController extends BaseController{
 
 
     /**
-     *  获取当前ID
+     *  获取当前用户ID
      */
     @RequestMapping("queryLoginUserId")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public Map<String,Object> queryLoginUserId(HttpServletRequest request){
         Long uId=getCurLoginUserId(request);
         HashMap<String,Object> map = new HashMap<String,Object>();
         map.put("uId",uId);
+        return map;
+    }
+
+    /**
+     *  获取当前用户昵称
+     */
+    @RequestMapping("queryLoginUserName")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public Map<String,Object> queryLoginUserName(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        User user = userService.queryUserByUid(uId);
+        map.put("uname",user.getUname());
+        return map;
+    }
+
+    /**
+     *  获取当前用户支付密码是否为空
+     */
+    @RequestMapping("queryLoginUserPayPwd")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public Map<String,Object> queryLoginUserPayPwd(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        User user = userService.queryUserByUid(uId);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        System.out.println(user.getUpayPwd());
+        boolean flag = ObjectUtils.isEmpty(user.getUpayPwd());
+        map.put("flag",flag);
         return map;
     }
 }

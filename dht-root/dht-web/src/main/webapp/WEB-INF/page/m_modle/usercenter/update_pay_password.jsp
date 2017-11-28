@@ -24,30 +24,44 @@
     <span>修改支付密码</span>
 </div>
 
-<div class="set_pay_paw2">
-    <div class="set_pay_box">
-        <input type="" class="set_input_text" name="" id="" value="" placeholder="输入当前密码" />
+    <div class="set_pay_paw2">
+        <div class="set_pay_box">
+            <input type="password" maxlength="14" minlength="6" class="set_input_text"  id="oldPayPassword" value="" placeholder="输入当前密码" />
+        </div>
+
+        <div class="set_pay_box">
+            <input type="password" maxlength="14" minlength="6" class="set_input_text"  id="" value="" placeholder="输入密码" />
+        </div>
+
+        <div class="set_pay_box">
+            <input type="password" maxlength="14" minlength="6" class="set_input_text"  id="newPayPassword" value="" placeholder="确认新密码" />
+        </div>
+        <div class="set_pay_box">
+            <p class="p1">注:此密码仅用于大汇堂余额支付使用</p>
+        </div>
+        <div class="set_pay_box">
+            <button class="set_pay_btn" onclick="setPayPassword()">完成</button>
+        </div>
     </div>
 
-    <div class="set_pay_box">
-        <input type="" class="set_input_text" name="" id="" value="" placeholder="输入密码" />
-    </div>
-
-    <div class="set_pay_box">
-        <input type="" class="set_input_text" name="" id="" value="" placeholder="确认新密码" />
-    </div>
-    <div class="set_pay_box">
-        <p class="p1">注:此密码仅用于大汇堂余额支付使用</p>
-    </div>
-    <div class="set_pay_box">
-        <button class="set_pay_btn">完成</button>
-    </div>
-
-</div>
 
 <script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/layer/layer.js"></script>
 <script>
+    $(".set_input_text").blur(function(){
+        let val = $(this).val();
+        console.log(val.length);
+        if(val.length < 6 ||  val.length > 14){
+            $(".set_pay_btn").attr("disabled","disabled");
+            layer.msg("密码的长度应该大于6且小于14");
+        }else{
+            $(".set_pay_btn").removeAttr("disabled");
+        }
+    });
 
+    function setPayPassword() {
+
+    }
 </script>
 </body>
 

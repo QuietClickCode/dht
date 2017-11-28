@@ -46,6 +46,10 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
         margin-bottom: 1rem;
     }
 
+    #my_address_list li{
+        position: relative;
+    }
+
     .order_back_btn{
         width: 2.9rem;
     }
@@ -53,6 +57,19 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
     .my_address_L .label_box i{
         margin: 0;
         margin-top: .2rem;
+    }
+
+    #my_address_list .setDefaultAddress{
+        position: absolute;
+        top: 0.2rem;
+        right: 0.2rem;
+        color: red;
+    }
+
+    .defaultAddress{
+        position: absolute;
+        top: 0.2rem;
+        right: 0.2rem;
     }
 </style>
 <body class="bge6">
@@ -92,13 +109,6 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
 		}
 
 		$(function(){
-	        $("#replace_nav > li").click(function(){
-	            var $this = $(this),
-	                index = $this.index("#replace_nav > li");
-	            $this.addClass("active").siblings("li").removeClass("active");
-	            $(".replace_container > .replace_container_item").eq(index).addClass("active").siblings(".replace_container_item").removeClass("active");
-	        });
-
 	        //取得用户收货地址
             queryUserAddress(pageNo,pageSize);
 	    });
@@ -120,13 +130,15 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                         $("#addressLists").show();
                         for(var row of data.rows){
                             let checked="";
+                            let defaultAddress = '<a href="javascript:void(0)" onclick="defaultUserAddress('+row.uaId+')" class="setDefaultAddress">设为默认地址</a>';
                             if(row.uaIsDefault==0){
                                 checked='checked="checked"';
+                                defaultAddress = '<p href="javascript:void(0)" class="defaultAddress">默认地址</p>';
                             }
                             var html='<li><div class="my_address_item_top"><div class="my_address_L">';
                             html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i>✓</i></label>';
                             html+='</div><div class="my_address_R"><p class="p1"><span class="span1">'+row.uaName+'</span>&emsp;';
-                            html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>';
+                            html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>'+defaultAddress+'';
                             html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a class="del_user_address" href="javascript:void(0)" onclick="delAddress('+row.uaId+',this)">删除</a></div></li>';
                             $("#my_address_list").append(html);
                         }
@@ -155,6 +167,20 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
             });
         }
 
+        function defaultUserAddress(id){
+            $.ajax({
+                url:"/userAddress/defaultUserAddress",
+                type:"post",
+                dataType:"json",
+                data:{
+                    uaId:id
+                },
+                success:function(data){
+                    location.reload();
+                }
+            });
+        }
+        
         var scrollTop;
         var pageSize = 10;
         var pageNo = 1;
