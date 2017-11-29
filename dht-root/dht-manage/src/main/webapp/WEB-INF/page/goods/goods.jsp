@@ -15,14 +15,14 @@
     <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
 
 
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.all.min.js"> </script>
 
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/js/jquery.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/js/common/form.js"> </script>
     <style>
         li{
             list-style: none;
@@ -199,12 +199,15 @@
 
 
 <div id="addandeditgoods" style="display: none">
-    <button class="btn btn-default" type="button" onclick="returnback();">返回</button>
+
     <div class="" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser" >
         <div class="modal-dialog" role="document"  style="width: 85%;">
-            <div class="modal-content">
+            <button class="btn btn-default" type="button" onclick="returnback();" style="float: right;margin-right: 5px">返回</button>
+            <div class="modal-content" style="margin-top: 5px;float: right">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editorSysUserTitle"></h4>
+                    <h4 class="modal-title" id="editorSysUserTitle" style="float:left"></h4>
+
+                    <span id="bhspan" style="color: red;float: left;margin-left: 10px;display: none"></span>
                 </div>
                 <div class="container" style="width: 100%">
                     <ex:perm url="goods/checkGoods">
@@ -925,11 +928,11 @@
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
-<script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
-<script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
-<script type="text/javascript" src="/js/common/form.js"></script>
-<script src="/js/toast/js/toastr.js"></script>
-<script type="text/javascript" src="/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/common/bootstrap_table.js"></script>
+<script type="text/javascript" src="<%=path%>/js/common/form.js"></script>
+<script src="<%=path%>/js/toast/js/toastr.js"></script>
+<script type="text/javascript" src="<%=path%>/js/laydate/laydate.js"></script>
 <!--商品基本信息-->
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -1243,6 +1246,7 @@
      * 清除form 表单数据
      * */
     function clearFormData(){
+        $('#bhspan').hide();
         $("#gid").val('');
         $("#version").val('0');
         $("#isDelete").val('0');
@@ -1306,6 +1310,12 @@
         document.getElementById("nava1").click();
         clearFormValidation("editorGoodsForm",formValidater);
         if(rowData){
+            if(rowData.isChecked==2){
+                $('#bhspan').html('驳回原因:'+rowData.gcheckmessage);
+                $('#bhspan').show();
+            }else{
+                $('#bhspan').hide();
+            }
             $("#gid").val(rowData.gid);
             $("#version").val(rowData.version);
             $("#isDelete").val(rowData.isDelete);

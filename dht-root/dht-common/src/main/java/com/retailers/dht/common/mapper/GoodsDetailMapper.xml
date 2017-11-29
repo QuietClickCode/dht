@@ -107,7 +107,7 @@
 		SELECT COUNT(*) sumcount,t3.*,t4.show_url img_url,t5.g_unitname
 		from t_goods_ggsval_detail t1
 		LEFT JOIN t_goods_detail t3 ON t3.gd_id=t1.gd_id
-		LEFT JOIN t_attachment t4 ON t3.gd_imgid=t4.show_url
+		LEFT JOIN t_attachment t4 ON t3.gd_imgid=t4.id
 		LEFT JOIN t_goods t5 ON t5.g_id=t3.g_id
 		where t1.is_delete!=1
 		and t1.g_id=#{params[gid]}

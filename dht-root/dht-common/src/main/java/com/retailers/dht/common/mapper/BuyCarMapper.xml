@@ -122,30 +122,26 @@
 		<include refid="buyCar_where"/>
 	</select>
 	<select id="queryGoodsVoList" resultMap="rm_goods_vo"  parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT t1.bc_id,t1.g_count,t1.u_id,t1.bc_gsvalids,t1.bc_gsval,
+		select t1.*,t3.id,t3.show_url imgurl from
+		(select t1.bc_id,t1.g_count,t1.u_id,t1.bc_gsvalids,t1.bc_gsval,t1.bc_timmer,COUNT(*) sumcount ,
 		t2.gd_id,
-		t3.gd_price,t3.gd_residueinventory inventory,
-		COUNT(*) sumcount,
-		t4.g_startbuy gstartbuy,t4.g_endbuy gendbuy,t4.is_multiplebuy ,
-		t6.show_url imgurl,
+		t3.gd_price,t3.gd_residueinventory inventory,t4.g_startbuy gstartbuy,
+		t4.g_endbuy gendbuy,t4.is_multiplebuy ,
 		t7.show_url gdimgurl,
 		t8.*
 		from
-		t_buy_car t1
-		LEFT JOIN t_goods_image t5 ON t1.g_id=t5.g_id and t5.is_delete=0
-		LEFT JOIN t_attachment t6 ON t5.gi_id=t6.id ,
-		t_goods_ggsval_detail t2,
+		t_goods_ggsval_detail t2,t_buy_car t1,
 		t_goods_detail t3
 		LEFT JOIN t_attachment t7 ON t3.gd_imgid=t7.id,
 		t_goods_config t4,
 		t_goods t8
 		<where>
-			<if test="null != params.uid">
-				and t1.u_id=#{params.uid}
-			</if>
-			<if test="null != params.isPutway">
-				and t4.is_putway=#{params.isPutway}
-			</if>
+		<if test="null != params.uid">
+			and t1.u_id=#{params.uid}
+		</if>
+		<if test="null != params.isPutway">
+			and t4.is_putway=#{params.isPutway}
+		</if>
 		and t1.g_id=t2.g_id
 		and find_in_set(t2.gsv_id,replace(t1.bc_gsvalids,' ',','))>0
 		and t3.gd_id=t2.gd_id
@@ -157,8 +153,11 @@
 		and t3.is_delete=0
 		and t8.is_delete=0
 		</where>
-		GROUP BY t1.bc_id,t2.gd_id HAVING sumcount=LENGTH(t1.bc_gsvalids) - LENGTH( REPLACE(t1.bc_gsvalids,' ',''))+1
-		ORDER BY sumcount DESC
+		GROUP BY t1.bc_id,t2.gd_id HAVING sumcount=LENGTH(t1.bc_gsvalids) - LENGTH( REPLACE(t1.bc_gsvalids,' ',''))+1) t1
+		LEFT JOIN t_goods_image t2 ON t2.g_id=t1.g_id and t2.is_delete=0
+		LEFT JOIN t_attachment t3 ON t2.gi_id=t3.id
+		GROUP BY t1.bc_id
+		ORDER BY bc_id DESC
 	</select>
 	<!--添加购物车表 -->
 	<insert id="saveBuyCar" parameterType="com.retailers.dht.common.entity.BuyCar" useGeneratedKeys="true" keyProperty="bcId">

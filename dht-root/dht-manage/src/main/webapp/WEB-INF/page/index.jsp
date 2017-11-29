@@ -13,11 +13,12 @@
     <!--[if lt IE 9]>
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
+    <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="shortcut icon" href="/logo.ico">
-    <link href="/main/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
-    <link href="/main/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
-    <link href="/main/css/animate.min.css" rel="stylesheet">
-    <link href="/main/css/style.min862f.css?v=4.1.1" rel="stylesheet">
+    <link href="<%=path%>/main/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
+    <link href="<%=path%>/main/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
+    <link href="<%=path%>/main/css/animate.min.css" rel="stylesheet">
+    <link href="<%=path%>/main/css/style.min862f.css?v=4.1.1" rel="stylesheet">
 </head>
 <body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
 <div id="wrapper">
@@ -668,11 +669,11 @@
     onLoadMenu();
 </script>
 
-<script src="/main/js/bootstrap.min.js?v=3.3.6"></script>
-<script src="/main/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script type="text/javascript" src="/main/js/contabs.min.js"></script>
-<script src="/main/js/plugins/layer/layer.min.js"></script>
-<script src="/main/js/hplus.min.js?v=4.1.0"></script>
-<script src="/main/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+<script src="<%=path%>/main/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="<%=path%>/main/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+<script type="text/javascript" src="<%=path%>/main/js/contabs.min.js"></script>
+<script src="<%=path%>/main/js/plugins/layer/layer.min.js"></script>
+<script src="<%=path%>/main/js/hplus.min.js?v=4.1.0"></script>
+<script src="<%=path%>/main/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
 </body>
 </html>

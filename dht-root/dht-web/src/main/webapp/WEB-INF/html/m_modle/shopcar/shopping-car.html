@@ -13,9 +13,9 @@
 <body class="bge6">
 <div class="box">
     <div class="specialty-title2">
-        <a href="" class="icon-return"></a>
+        <a href="/user/userCenter" class="icon-return"></a>
         <span>购物车</span>
-        <a href="javascript: ;" class="shopping-care-change">
+        <a  class="shopping-care-change">
             <span class="text" id="edit-goods-detail">编辑</span>
             <i class="icon-change">
                 <span class="number">8</span>
@@ -107,50 +107,8 @@
         <div class="invalid-goods">
             <h1 class="invalid-tittle-box clearfix">
                 <span class="invalid-tittle">失效商品</span>
-                <button class="clear-all-invalid">清空无效商品</button>
+                <button onclick="deleteinvalidatebuycar()" class="clear-all-invalid">清空无效商品</button>
             </h1>
-
-            <div class="purchase J_product">
-                <div class="checkbox" style="visibility: hidden;">
-                </div>
-                <a href="" class="img-box">
-                    <img src="/img/care-icon6.png" alt="">
-                    <span class="invalid-bg">失效商品</span>
-                </a>
-                <div class="purchase-text">
-                    <a href="" class="title">
-                        <span class="label">特价</span>
-                        2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显
-                    </a>
-                    <p class="norms J_norms">颜色:黑色;尺码:M;</p>
-                    <div class="price-box">
-                        <span class="price">￥
-                            <span class="J_price">30.00</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="purchase J_product">
-                <div class="checkbox" style="visibility: hidden;">
-                </div>
-                <a href="" class="img-box">
-                    <img src="/img/care-icon6.png" alt="">
-                    <span class="invalid-bg">失效商品</span>
-                </a>
-                <div class="purchase-text">
-                    <a href="" class="title">
-                        <span class="label">特价</span>
-                        2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显
-                    </a>
-                    <p class="norms J_norms">颜色:黑色;尺码:M;</p>
-                    <div class="price-box">
-                        <span class="price">￥
-                            <span class="J_price">30.00</span>
-                        </span>
-                    </div>
-                </div>
-            </div>
 
             <!--无失效商品时，展示-->
             <div class="no-invalid-tip" style="display: none">恭喜您！暂无失效商品</div>
@@ -165,7 +123,7 @@
         </div>
     </div>
 
-    <ul class="care-groom box2">
+    <ul class="care-groom box2" style="display: none;">
         <li>
             <a href="" class="img">
                 <img src="/img/care-icon7.jpg" alt="">
@@ -227,11 +185,11 @@
 <div class="care-norms-checkbox J_careNormsCheckbox" style="display:none;">
     <i class="care-norms-close J_careNormsClose"></i>
     <div class="product">
-        <img src="/img/list2.jpg" alt="">
+        <img id="gsimg" src="/img/list2.jpg" alt="">
         <div class="text">
             <!--<p id="current-edit-price">￥168.00</p>-->
             <p id="current-edit-price"></p>
-            <span>库存60件</span>
+            <span id="inventoryspan">库存60件</span>
         </div>
     </div>
     <div id="gsdiv">
@@ -247,12 +205,12 @@
     <div class="care-checkbox" style="margin-top: 10px">
         <span class="name">数量</span>
         <div class="number number-box">
-            <span class="reduce J_careReduce"></span>
+            <span class="reduce J_careReduce" id="gsreducebtn"></span>
             <span class="num J_careNum" id="current-num"></span>
-            <span class="add J_careAdd"></span>
+            <span class="add J_careAdd" id="gsaddbtn"></span>
         </div>
     </div>
-    <a id="setgsvala" class="care-norms-checkbox-btn">确定</a>
+    <a onclick="suregsa()" id="setgsvala" class="care-norms-checkbox-btn">确定</a>
 </div>
 
 <!-- 删除提示 -->
@@ -481,7 +439,7 @@
                     $('#current-num').html($(this).parent().parent().find('.J_careNum').html());
 
                     //数量等于1的时候，减少按钮置灰
-                    autoJudgeCanReduce();
+                    //autoJudgeCanReduce();
 
                     //遮罩层显示打开
                     $('.J_careNormsCheckbox,#J_mark').show();
@@ -572,9 +530,25 @@
         $('#J_confirm')[0].onclick = function () {
             //找到当前勾选的删除项
             var goodsDelSelectedItems = $('.care-cont').find('.active');
+            var deleteBcids='';
             for(var i=0; i<goodsDelSelectedItems.length; i++){
-                $(goodsDelSelectedItems[i].parentNode.parentNode).remove()
+                deleteBcids+=','+$(goodsDelSelectedItems[i]).find('input')[0].value;
             }
+            deleteBcids=deleteBcids.substr(1);
+            $.ajax({
+                type:"post",
+                url:'/buyCar/deleteBuyCar',
+                dataType: "json",
+                async :false,
+                data:{buyCarIds:deleteBcids},
+                success:function(data){
+                    if(data.status==0){
+                        window.location.href='/buyCar/gotoShoppingCar';
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
             //关闭遮罩层
             $('#J_mark,#J_footprintPrompt').hide()
         }
@@ -601,7 +575,7 @@
             }
         }
 
-        toNumCanNotReduce(currentItemNum.parent().find('.J_careReduce'), currentItemNum.parent().find('.J_careAdd'), false)
+        //toNumCanNotReduce(currentItemNum.parent().find('.J_careReduce'), currentItemNum.parent().find('.J_careAdd'), false)
     }
 
     //公用的，数量按钮减到1，给按钮添加class，数量在2或以上就移除该class
@@ -667,21 +641,21 @@
         var shopCarColorWrap = $('.shop-car-color')[0]; //购物车颜色包裹
         var shopCarSizeWrap = $('.size-box')[0]; //购物车尺寸包裹
 
-        editCurrentComfirmBtn.onclick = function () {
-            $(o)[0].innerHTML = '颜色:' + $('.shop-car-color').find('.active').html() + ';尺码:' + $('.size-box').find('.active').html() + ';';;
-            $(o).parent().parent().find('.J_careNum').html($('#current-num').html());
-
-            //将遮罩层的颜色列表和尺寸列表清空
-            $(shopCarColorWrap).html('');
-            $(shopCarSizeWrap).html('');
-
-            //关闭遮罩层
-            $('.J_careNormsCheckbox,#J_mark').hide();
-
-            //编辑确定后再次判断数量是否为1
-//            debugger;
-            autoJudgeCanReduce();
-        }
+//        editCurrentComfirmBtn.onclick = function () {
+//            $(o)[0].innerHTML = '颜色:' + $('.shop-car-color').find('.active').html() + ';尺码:' + $('.size-box').find('.active').html() + ';';;
+//            $(o).parent().parent().find('.J_careNum').html($('#current-num').html());
+//
+//            //将遮罩层的颜色列表和尺寸列表清空
+//            $(shopCarColorWrap).html('');
+//            $(shopCarSizeWrap).html('');
+//
+//            //关闭遮罩层
+//            //$('.J_careNormsCheckbox,#J_mark').hide();
+//
+//            //编辑确定后再次判断数量是否为1
+////            debugger;
+//            autoJudgeCanReduce();
+//        }
 
     }
 
@@ -704,20 +678,20 @@
         var clearInvalidBtn = $('.invalid-goods').find('.clear-all-invalid');  //清空无效商品按钮
 
         //点击清楚失效商品
-        clearInvalidBtn[0].onclick = function () {
-            for(var i=0; i<invalidGoods.length; i++){
-                $(invalidGoods[i]).remove()
-            }
-
-            $(clearInvalidBtn).addClass('clear-disable');
-            $('.no-invalid-tip').show()
+//        clearInvalidBtn[0].onclick = function () {
+//            for(var i=0; i<invalidGoods.length; i++){
+//                $(invalidGoods[i]).remove()
+//            }
+//
+//            $(clearInvalidBtn).addClass('clear-disable');
+//            $('.no-invalid-tip').show()
         };
 
         //页面加载自动判断是否有失效商品，给button设置样式
-        if(invalidGoods.length < 1){
-            $(clearInvalidBtn).addClass('clear-disable');
-            $('.no-invalid-tip').show()
-        }
+//        if(invalidGoods.length < 1){
+//            $(clearInvalidBtn).addClass('clear-disable');
+//            $('.no-invalid-tip').show()
+//        }
     }
 
 
@@ -731,10 +705,10 @@
     //    }
 
     function init() {
-        autoJudgeCanReduce();
+//        //autoJudgeCanReduce();
         toCalculateTotal();
-        toRefrechTotalPrice();
-        //changeGoodsNum();
+//        toRefrechTotalPrice();
+//        //changeGoodsNum();
         editGoodsDetailBtn();
         clearInvalidGoods();
     }
@@ -762,7 +736,7 @@
                     for(var i=0;i<rows.length;i++){
                         html = '<div class="purchase J_product">'+
                             '<div class="checkbox">'+
-                            '<i class="icon-checkbox J_checkbox goods-item"></i>'+
+                            '<i class="icon-checkbox J_checkbox goods-item"><input type="hidden" value="'+rows[i].bcId+'"></i>'+
                             '</div>';
                         var goodsPath;
                         var gdImgurl = rows[i].gdimgurl;
@@ -781,7 +755,7 @@
                             rows[i].gname+
                         '</a>' +
                             '<input value="'+rows[i].bcGsvalids+'" type="hidden">'+
-                        '<p onclick="showgsmodal('+rows[i].gid+',\''+rows[i].bcGsvalids+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
+                        '<p onclick="showgsmodal('+rows[i].bcId+','+rows[i].gid+',\''+rows[i].bcGsvalids+'\',\''+goodsPath+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
                         '<div class="price-box">'+
                             '<span class="price">￥'+
                             '<span class="J_price">'+rows[i].gdPrice+'</span>'+'/'+rows[i].gunitname+
@@ -799,9 +773,9 @@
                         }else{
                             number=gcount;
                         }
-                        html += '<i class="icon-reduce J_careReduce" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this)"></i>'+
+                        html += '<i class="icon-reduce J_careReduce" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this,'+rows[i].bcId+')"></i>'+
                             '<span class="num J_careNum">'+number+'</span>'+
-                            '<i class="icon-add J_careAdd" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this)"></i>'+
+                            '<i class="icon-add J_careAdd" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this,'+rows[i].bcId+')"></i>'+
                             '</div>'+
                             '</div>'+
                             '</div>'+
@@ -810,9 +784,14 @@
                     }
                     $("img").lazyload({effect: "fadeIn"});
                     init();
-                    pageNo++;
-                    flag = true;
-                    scrollbuycar();
+                    if(rows.length<5){
+                        flag = false;
+                        loadinvalidategoods();
+                    }else{
+                        flag = true;
+                        pageNo++;
+                        scrollbuycar();
+                    }
                 }
             }
         });
@@ -840,7 +819,7 @@
                         data:{isPutway:1,pageNo:pageNo,pageSize:pageSize},
                         success:function(data){
                             var rows = data.rows;
-                            if(rows!=null&&rows.length>0&&isPutway==1){
+                            if(rows!=null&&rows.length>0){
                                 for(var i=0;i<rows.length;i++){
                                     html = '<div class="purchase J_product">'+
                                         '<div class="checkbox">'+
@@ -863,7 +842,7 @@
                                         rows[i].gname+
                                         '</a>' +
                                         '<input value="'+rows[i].bcGsvalids+'" type="hidden">'+
-                                        '<p onclick="showgsmodal('+rows[i].gid+',\''+rows[i].bcGsvalids+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
+                                        '<p onclick="showgsmodal('+rows[i].bcId+','+rows[i].gid+',\''+rows[i].bcGsvalids+'\',\''+goodsPath+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
                                         '<div class="price-box">'+
                                         '<span class="price">￥'+
                                         '<span class="J_price">'+rows[i].gdPrice+'</span>'+'/'+rows[i].gunitname+
@@ -881,9 +860,9 @@
                                     }else{
                                         number=gcount;
                                     }
-                                    html += '<i class="icon-reduce J_careReduce" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this)"></i>'+
+                                    html += '<i class="icon-reduce J_careReduce" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this,'+rows[i].bcId+')"></i>'+
                                         '<span class="num J_careNum">'+number+'</span>'+
-                                        '<i class="icon-add J_careAdd" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this)"></i>'+
+                                        '<i class="icon-add J_careAdd" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+inventory+',this,'+rows[i].bcId+')"></i>'+
                                         '</div>'+
                                         '</div>'+
                                         '</div>'+
@@ -894,6 +873,10 @@
                                 init();
                                 pageNo++;
                                 flag = true;
+                            }else{
+                                <!--加载失效商品-->
+                                pageNo=1;
+                                loadinvalidategoods();
                             }
                         }
                     });
@@ -903,57 +886,67 @@
         });
     }
 
-    function pdmaxinventory(ysf,gstartbuy,gendbuy,isMultiplebuy,inventory,obj) {
+    function pdmaxinventory(ysf,gstartbuy,gendbuy,isMultiplebuy,inventory,obj,bcid) {
         var goodsnumber;
         var numspan;
         if(ysf=='+'){
             numspan = $(obj).prev();
             goodsnumber = parseInt(numspan.html());
-            goodsnumber++;
         }else{
             numspan = $(obj).next();
             goodsnumber = parseInt(numspan.html());
-            goodsnumber--;
-            if(goodsnumber<=0){
-                goodsnumber=1;
-            }
-        }
-
-        if(goodsnumber>gendbuy){
-            layer.msg("最大购买"+gendbuy);
-            numspan.html(gendbuy);
-            return;
-        }
-        if(goodsnumber<gstartbuy){
-            layer.msg("最少购买"+gstartbuy);
-            numspan.html(gstartbuy);
-            return;
-        }
-        if(goodsnumber>inventory){
-            layer.msg("必须小于库存量"+inventory);
-            numspan.html(inventory);
-            return;
         }
 
         if(isMultiplebuy==1){
             if(ysf=='+'){
                 if(goodsnumber+gstartbuy>gendbuy){
+                    goodsnumber=gendbuy;
                     numspan.html(gendbuy);
                 }else{
-                    numspan.html(goodsnumber+gstartbuy-1);
+                    goodsnumber=goodsnumber+gstartbuy;
+                    numspan.html(goodsnumber+gstartbuy);
                 }
             }else{
                 if(goodsnumber<=gstartbuy){
+                    goodsnumber=gstartbuy;
                     numspan.html(gstartbuy);
                 }else{
-                    numspan.html(goodsnumber-gstartbuy+1);
+                    goodsnumber=goodsnumber-gstartbuy;
+                    numspan.html(goodsnumber-gstartbuy);
                 }
 
             }
-
         }else{
-            numspan.html(goodsnumber);
+            if(ysf=='+'){
+                goodsnumber++;
+            }else{
+                goodsnumber--;
+                if(goodsnumber<=0){
+                    goodsnumber=1;
+                }
+            }
         }
+
+
+
+        if(goodsnumber>=gendbuy&&gendbuy!=null){
+            layer.msg("最大购买"+gendbuy);
+            goodsnumber=gendbuy;
+            numspan.html(gendbuy);
+
+        }
+        if(goodsnumber<=gstartbuy&&gstartbuy!=null){
+            layer.msg("最少购买"+gstartbuy);
+            numspan.html(gstartbuy);
+            goodsnumber=gstartbuy;
+        }
+        if(goodsnumber>=inventory){
+            layer.msg("必须小于库存量"+inventory);
+            numspan.html(inventory);
+            goodsnumber=inventory;
+        }
+        numspan.html(goodsnumber);
+
         <!--计算总价-->
         totolPrice =0;   //点击之前将之前的数据置空
         totolNum =0;
@@ -961,9 +954,43 @@
         totolPriceBox.html(totolPrice.toFixed(2));   //将新运算的总价及总数量放入
         totolNumBox.html(totolNum);
 
+        $.ajax({
+            type:"post",
+            url:"/buyCar/updateBuyCar",
+            dataType: "json",
+            data:{gcount:goodsnumber,bcId:bcid},
+            success:function(data){
+
+            }
+        });
     }
 
-    function showgsmodal(gid,hasgsvalids,obj) {
+    var gstartbuy;
+    var gendbuy;
+    var isMultiplebuy;
+    var bcId;
+    function showgsmodal(bcId1,gid,hasgsvalids,goodsPath,obj) {
+        bcId=bcId1;
+        if(!$(obj).hasClass('change')){
+            return;
+        }
+        $.ajax({
+            type:"post",
+            url:'/goodsConfig/queryGoodsConfigBygid',
+            dataType: "json",
+            async:false,
+            data:{gid:gid,pageNo:1,pageSize:2},
+            success:function(data){
+                var goodsConfig = data.goodsConfig;
+                if(goodsConfig!=null){
+                    gstartbuy = goodsConfig.gstartbuy;
+                    gendbuy = goodsConfig.gendbuy;
+                    isMultiplebuy = goodsConfig.isMultiplebuy;
+                }
+
+            }
+        });
+
         $.ajax({
             type:"post",
             url:'/goodsGgsrel/queryGgsrelListsOnce',
@@ -1018,7 +1045,7 @@
                                     }
                                 }
 
-                                html += '<span class="checkbox_service '+activeclass+'" onclick="clickactive('+gid+',this,'+obj+')"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
+                                html += '<span class="checkbox_service '+activeclass+'" onclick="clickactive('+gid+',this,\''+goodsPath+'\')"><input value="'+gsvalid+'" type="hidden">'+gsvalname+'</span>&nbsp;';
                             }
                             html += '</div>';
                             $('#gsdiv').append(html);
@@ -1026,20 +1053,25 @@
                         $('.J_careNormsCheckbox,#J_mark').show();
                     }
                 }
+                clickactive(gid,null,goodsPath);
             }
         });
 
+
     }
 
-    function clickactive(gid,obj,obj1) {
-        $(obj).siblings().removeClass('active');
-        $(obj).addClass('active');
-        loadgavalmessage(gid,obj1);
+    function clickactive(gid,obj,goodsPath) {
+        if(obj!=null){
+            $(obj).siblings().removeClass('active');
+            $(obj).addClass('active');
+        }
+        loadgavalmessage(gid,goodsPath);
     }
 
-
+    var canbuy;
+    var ginventory;
     <!--点击规格加载信息-->
-    function loadgavalmessage(gid,obj) {
+    function loadgavalmessage(gid,goodsPath) {
         var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
         var gsvalactive = $('#gsdiv').find('.active');
 
@@ -1063,12 +1095,12 @@
                         var inventory = row.gdResidueinventory;
                         var gunitname = row.gunitname;
 
-                        var img = $('#product').find('img')[0];
-                        var pricespan = $('#product').find('span')[0];
-                        var inventoryspan = $('#product').find('span')[1];
+                        var img = $('#gsimg')[0];
+                        var pricespan = $('#current-edit-price')[0];
+                        var inventoryspan = $('#inventoryspan')[0];
 
                         if(imgUrl.substring(imgUrl.length-4,imgUrl.length)=='null'){
-                            img.src = $(obj).parent().prev().find('img')[0].src;
+                            img.src = goodsPath;
                         }else{
                             img.src = imgUrl;
                         }
@@ -1085,13 +1117,218 @@
                         $(pricespan).html('￥'+price+'/'+gunitname);
                         $(inventoryspan).html('库存'+inventory+gunitname);
                         ginventory = inventory;
-                        $('#goodscountdiv').show();
+
+                        var reducehtml='<span class="reduce J_careReduce" id="gsreducebtn" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')"></span>';
+                        var addhtml='<span class="add J_careAdd" id="gsaddbtn" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')"></span>';
+                        $('#current-num').prev().remove();
+                        $('#current-num').next().remove();
+
+                        $('#current-num').before(reducehtml);
+                        $('#current-num').after(addhtml);
                     }
                 }
             });
         }
     }
 
+    <!--确定规格-->
+    function suregsa() {
+        if(canbuy==0){
+            layer.msg('库存不足');
+            return;
+        }
+        var actives = $('#gsdiv').find('.active');
+        var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
+        if(actives.length>0&&actives.length==gsdivs.length){
+            var gsvalid = '';
+            var gsval = '';
+            for(var i=0;i<actives.length;i++){
+                gsvalid += ' '+$(actives[i]).find('input[type=hidden]')[0].value;
+                var gsname = $($(actives[i]).siblings()[0]).html()
+                gsval += ','+gsname+':'+removeHTMLTag($(actives[i]).html());
+            }
+            gsvalid = gsvalid.substr(1);
+            gsval = gsval.substr(1);
+            var gcount = $('#current-num').html();
+            $.ajax({
+                type:"post",
+                url:"/buyCar/updateBuyCar",
+                dataType: "json",
+                data:{bcGsvalids:gsvalid,bcGsval:gsval,gcount:gcount,bcId:bcId},
+                success:function(data){
+                    if(data.status==0){
+                        window.location.href='/buyCar/gotoShoppingCar';
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+        }else{
+            layer.msg("请选择规格");
+        }
+    }
+
+    var invalidateflag=false;
+    var invalidatebuycarids;
+    <!--加载失效商品-->
+    function loadinvalidategoods() {
+        $.ajax({
+            type:"post",
+            url:'/buyCar/queryBuyCarList',
+            dataType: "json",
+            async:false,
+            data:{isPutway:0,pageNo:pageNo,pageSize:pageSize},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    var html = '';
+                    var h1title=$('.no-invalid-tip');
+                    for(var i=0;i<rows.length;i++){
+                        invalidatebuycarids+=','+rows[i].bcId;
+                        html = '<div class="purchase J_product">'+
+                            '<div class="checkbox" style="visibility: hidden;">'+
+                            '</div>'+
+                            '<a  class="img-box">';
+                        var goodsPath;
+                        var gdImgurl = rows[i].gdimgurl;
+                        var imgUrl = rows[i].imgUrl;
+                        var flag1 = gdImgurl.substr(gdImgurl.length-4)=="null";
+                        if(!flag1){
+                            goodsPath = gdImgurl;
+                        }else{
+                            goodsPath = imgUrl;
+                        }
+                        html += '<img data-original="'+goodsPath+'" alt="">'+
+                            '<span class="invalid-bg">失效商品</span>'+
+                            '</a>'+
+                            '<div class="purchase-text">'+
+                            '<a  class="title">'+
+                            rows[i].gname+
+                        '</a>'+
+                        '<p class="norms J_norms">'+rows[i].bcGsval+'</p>'+
+                        '<div class="price-box">'+
+                            '<span class="price">￥'+
+                            '<span class="J_price">'+rows[i].gdPrice+'</span>'+'/'+rows[i].gunitname+
+                            '</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '</div>';
+                        h1title.before(html);
+                    }
+                    $("img").lazyload({effect: "fadeIn"});
+                    pageNo++;
+                    invalidateflag = true;
+                    gdloadinvalidategoods();
+                }else{
+                    alert(111);
+                    $('.clear-all-invalid').addClass('clear-disable');
+                    $('.no-invalid-tip').show();
+                }
+            }
+        });
+    }
+
+    <!--滚动加载失效商品-->
+    function gdloadinvalidategoods() {
+        $(document).ready(function(){
+            var range = 50;             //距下边界长度/单位px
+            var totalheight = 0;
+            var main = $($('.no-invalid-tip')[0]);                     //主体元素
+            $(window).scroll(function(){
+                var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                if(($(document).height()-range) <= totalheight && invalidateflag) {
+                    invalidateflag = false;
+                    $.ajax({
+                        type:"post",
+                        url:'/buyCar/queryBuyCarList',
+                        dataType: "json",
+                        async :false,
+                        data:{isPutway:0,pageNo:pageNo,pageSize:pageSize},
+                        success:function(data) {
+                            var rows = data.rows;
+                            if (rows != null && rows.length > 0) {
+                                for (var i = 0; i < rows.length; i++) {
+                                    invalidatebuycarids+=','+rows[i].bcId;
+                                    var html = '';
+                                    var h1title = $('.invalid-tittle-box');
+                                    for (var i = 0; i < rows.length; i++) {
+                                        html = '<div class="purchase J_product">' +
+                                            '<div class="checkbox" style="visibility: hidden;">' +
+                                            '</div>' +
+                                            '<a  class="img-box">';
+                                        var goodsPath;
+                                        var gdImgurl = rows[i].gdimgurl;
+                                        var imgUrl = rows[i].imgUrl;
+                                        var flag1 = gdImgurl.substr(gdImgurl.length - 4) == "null";
+                                        if (!flag1) {
+                                            goodsPath = gdImgurl;
+                                        } else {
+                                            goodsPath = imgUrl;
+                                        }
+                                        html += '<img data-original="' + goodsPath + '" alt="">' +
+                                            '<span class="invalid-bg">失效商品</span>' +
+                                            '</a>' +
+                                            '<div class="purchase-text">' +
+                                            '<a  class="title">' +
+                                            rows[i].gname +
+                                            '</a>' +
+                                            '<p class="norms J_norms">' + rows[i].bcGsval + '</p>' +
+                                            '<div class="price-box">' +
+                                            '<span class="price">￥' +
+                                            '<span class="J_price">' + rows[i].gdPrice + '</span>' + '/' + rows[i].gunitname +
+                                            '</span>' +
+                                            '</div>' +
+                                            '</div>' +
+                                            '</div>';
+                                        main.before(html);
+                                    }
+                                    $("img").lazyload({effect: "fadeIn"});
+                                    init();
+                                    pageNo++;
+                                    invalidateflag = true;
+                                }
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+    }
+
+    <!--删除失效购物车-->
+    function deleteinvalidatebuycar() {
+        if(invalidatebuycarids!=''){
+            invalidatebuycarids=invalidatebuycarids.substr(1);
+            $.ajax({
+                type:"post",
+                url:'/buyCar/deleteBuyCar',
+                dataType: "json",
+                async :false,
+                data:{buyCarIds:invalidatebuycarids},
+                success:function(data){
+                    if(data.status==0){
+                        window.location.href='/buyCar/gotoShoppingCar';
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+    <!--获取纯文本内容-->
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+        //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+        str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+        str=str.replace(/\s/g,''); //将空格去掉
+        return str;
+    }
 </script>
 
 <!--调用函数-->
