@@ -58,5 +58,19 @@ public class BuyCarController extends BaseController{
         }
         return  map;
     }
+
+    @RequestMapping("/updateBuyCar")
+    @ResponseBody
+    public BaseResp updateBuyCar(BuyCar buyCar){
+        boolean flag = buyCarService.updateBuyCar(buyCar);
+        return success(flag);
+    }
+
+    @RequestMapping("/deleteBuyCar")
+    @ResponseBody
+    public BaseResp deleteBuyCar(String buyCarIds){
+        boolean flag = buyCarService.deleteBuyCarByBcIds(buyCarIds);
+        return success(flag);
+    }
     
 }
