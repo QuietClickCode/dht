@@ -125,7 +125,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                 async:false,
                 data:{"pageSize":pageSize,"pageNo":pageNo},
                 success:function(data){
-                    if(data&&data.rows){
+                    if(data.rows.length != 0){
                         $("#noAddressList").hide();
                         $("#addressLists").show();
                         for(var row of data.rows){
@@ -163,6 +163,10 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                 },
                 success:function (data) {
                     $("#my_address_list li").eq(index).remove();
+                    if($("#my_address_list li").length == 0){
+                        $("#noAddressList").show();
+                        $("#addressLists").hide();
+                    }
                 }
             });
         }

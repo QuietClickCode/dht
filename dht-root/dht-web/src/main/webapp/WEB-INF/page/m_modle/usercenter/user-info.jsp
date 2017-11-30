@@ -43,7 +43,7 @@
         </a>
     </div>
     <div class="my-data-list marginB2">
-        <a href="/user/UserPhone" class="displayB">
+        <a href="/user/UserPhone" class="displayB phoneNumber">
             <span class="name">我的手机号</span>
             <i class="icon-data-right"></i>
             <span class="text2 user-phone"></span>
@@ -124,10 +124,12 @@
                     else if(sex == 1)
                         $("#sex_name_box").text("女");
 
-                    if(userPhone == "")
+                    if(userPhone == ""){
                         $(".user-phone").text("未设置");
-                    else
+                    } else{
                         $(".user-phone").text(userPhone);
+                        $(".phoneNumber").attr("href","javascript:void(0)");
+                    }
                     if(userAddress == "")
                         $(".user-address").text("填写收货地址");
                     else

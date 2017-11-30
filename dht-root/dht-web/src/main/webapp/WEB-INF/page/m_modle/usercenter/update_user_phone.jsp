@@ -106,7 +106,7 @@
             }
         });
     }
-    
+    var setTime;
     function settime(val) {
         if (countdown == 0) {
             val.removeAttribute("disabled");
@@ -118,7 +118,7 @@
             val.value="重新发送(" + countdown + ")";
             countdown--;
         }
-        setTimeout(function() {
+        setTime = setTimeout(function() {
             settime(val)
         },1000)
     }
@@ -158,6 +158,7 @@
                     layer.msg("验证成功",{time:1000});
                     setTimeout(function(){
                         layer.close();
+                        clearTimeout(setTime);
                         countdown = 60;
                         $("#replace_nav li").eq(1).addClass("active").siblings("#replace_nav li").removeClass("active");
                         $(".replace_container .replace_container_item").eq(1).
@@ -169,12 +170,12 @@
     });
     
     function getvalidCode($this) {
-        settime($this);
         let phoneNumber = $(".newPhoneNumber").val();
         if(phoneNumber == ""){
             layer.msg("请输入新手机号码",{time:1000});
             return;
         }
+        settime($this);
         $.ajax({
             url:"/user/sendSmsValidCode",
             type:"post",
