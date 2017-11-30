@@ -63,7 +63,7 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 		return status == 1 ? true : false;
 	}
 
-	public boolean sendSmsCode(Long uid, String phone, long type) throws AppException {
+	public SmsSendRecord sendSmsCode(Long uid, String phone, long type) throws AppException {
 		logger.info("开始发送短信，发送用户id:[{}],接收短信手机号码：[{}],短信类型:[{}]",uid,phone,type);
 		Date curDate= new Date();
 		String code= StringUtils.randomNumberCode(6);
@@ -74,6 +74,7 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 		String lockKey= StringUtils.formate(SingleThreadLockConstant.SEND_MSG_CODE,key);
 		//添加同步线程锁
 		procedureToolsService.singleLockManager(lockKey);
+		SmsSendRecord ssr;
 		try{
 			//判断发送短信间隔
 			int total = smsSendRecordMapper.checkSendSms(uid,phone,type,curDate);
@@ -84,7 +85,7 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 			Date onceSendDate= DateUtil.addMinute(curDate, SysParameterConfigConstant.getValue(SysParameterConfigConstant.SMS_VALID_CODE_INTERVAL_TIME,Integer.class));
 			//失效时间
 			Date expireDate= DateUtil.addMinute(curDate, SysParameterConfigConstant.getValue(SysParameterConfigConstant.SMS_VALID_CODE_VALID_TIME,Integer.class));
-			SmsSendRecord ssr=new SmsSendRecord();
+			ssr=new SmsSendRecord();
 			ssr.setUid(uid);
 			String context=SmsSendRecordEnum.getSmsSend(type).getContext();
 			context=StringUtils.formates(context,code);
@@ -101,7 +102,7 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 			logger.info("发送短信结束，发送用户id:[{}],接收短信手机号码：[{}],短信类型:[{}],执行时间:[{}],生成验证码：[{}]",uid,phone,type,(System.currentTimeMillis()-curDate.getTime()),code);
 			procedureToolsService.singleUnLockManager(lockKey);
 		}
-		return true;
+		return ssr;
 	}
 }
 

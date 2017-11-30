@@ -32,7 +32,7 @@
     <a href="/user/updateUserPhone" class="displayB">
         <span class="name">更改手机号码</span>
         <i class="icon-data-right"></i>
-        <span class="text2">151****2828</span>
+        <span class="text2 user-phone"></span>
     </a>
 </div>
 <div class="my-data-list">
@@ -60,6 +60,10 @@
                     $(".setPayPassword").find(".name").text("修改支付密码");
                     $(".setPayPassword .text2").hide();
                 }
+
+                var userPhone = data.userPhone;
+                let p = userPhone.substr(0, 3) + "****" + userPhone.substr(7, 11);
+                $(".user-phone").text(p);
             }
         });
     });

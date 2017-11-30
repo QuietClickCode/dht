@@ -30,7 +30,7 @@
         </div>
 
         <div class="set_pay_box">
-            <input type="password" maxlength="14" minlength="6" class="set_input_text"  id="" value="" placeholder="输入密码" />
+            <input type="password" maxlength="14" minlength="6" class="set_input_text"  id="payPassword" value="" placeholder="输入密码" />
         </div>
 
         <div class="set_pay_box">
@@ -50,17 +50,38 @@
 <script>
     $(".set_input_text").blur(function(){
         let val = $(this).val();
-        console.log(val.length);
-        if(val.length < 6 ||  val.length > 14){
+        if(val.length != 6){
             $(".set_pay_btn").attr("disabled","disabled");
-            layer.msg("密码的长度应该大于6且小于14");
+            layer.msg("请设置6位的支付密码");
         }else{
             $(".set_pay_btn").removeAttr("disabled");
         }
     });
 
     function setPayPassword() {
+        let paypwd = $("#payPassword").val();
+        let affirmpwd = $("#newPayPassword").val();
+        let olpwd = $("#oldPayPassword").val();
+        if(paypwd != affirmpwd){
+            layer.msg("两次输入的密码不一致");
+            return;
+        }
 
+        $.ajax({
+            url:"/user/changePayPwd",
+            type:"post",
+            dataType:"json",
+            data:{
+                oldPayPwd:olpwd,
+                payPwd:paypwd
+            },
+            success:function (data) {
+                layer.msg("修改支付密码成功");
+                setTimeout(function(){
+                    history.back(-1);
+                },1000);
+            }
+        });
     }
 </script>
 </body>

@@ -5,6 +5,7 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.SmsSendRecordConstant;
 import com.retailers.dht.common.entity.Attachment;
+import com.retailers.dht.common.entity.SmsSendRecord;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.service.SmsSendRecordService;
@@ -255,11 +256,27 @@ public class UserCenterController extends BaseController{
             return errorForParam("手机号不能为空");
         }
         try{
-            smsSendRecordService.sendSmsCode(uid,phone, SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE);
-            return success(null);
+            SmsSendRecord sendRecord = smsSendRecordService.sendSmsCode(uid,phone, SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE);
+            return success(sendRecord.getId());
         }catch (AppException e){
             return errorForSystem(e.getMessage());
         }
+    }
+
+    /**
+     * 验证验证码
+     * @param request
+     * @return
+     */
+    @RequestMapping("verifyValidCode")
+    @ResponseBody
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    public BaseResp verifyValidCode(HttpServletRequest request,Long id,String code){
+        SmsSendRecord sendRecord = smsSendRecordService.querySmsSendRecordById(id);
+        if (ObjectUtils.equalsIgnorecase(sendRecord.getCode(), code)) {
+            return success(true);
+        }
+        return success(false);
     }
 
     /**
@@ -289,7 +306,7 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     * 用户绑定手机
+     * 校验手机是否可用
      * @param request
      * @param phone 手机校验
      * @return
@@ -424,6 +441,7 @@ public class UserCenterController extends BaseController{
         System.out.println(user.getUpayPwd());
         boolean flag = ObjectUtils.isEmpty(user.getUpayPwd());
         map.put("flag",flag);
+        map.put("userPhone",user.getUphone());
         return map;
     }
 }
