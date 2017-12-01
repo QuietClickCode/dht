@@ -17,7 +17,7 @@
 </head>
 <body class="bge6">
     <div class="specialty-title2 borderB">
-        <a href="" class="icon-return"></a>
+        <a onclick="returnhistory()" class="icon-return"></a>
         <span>商品详情</span>
     </div>
 
@@ -27,9 +27,9 @@
         </div>
         <div class="bd" >
             <ul id="bannerul" style="height: 200px">
-                <li>
-                    <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-                </li>
+                <!--<li>-->
+                    <!--<img _src="/img/banner1.jpg" src="/img/bangain5.png" />-->
+                <!--</li>-->
             </ul>
         </div>
     </div>
@@ -109,7 +109,10 @@
         </div>
 
     </div>
-
+    <div class="loading_more">
+        <i></i>
+        上拉查看图文详情
+    </div>
     <div class="bargain-details box2">
         <div class="bargain-tab" id="J_bargainTab">
             <a href="#details" class="active">商品介绍</a>
@@ -127,7 +130,7 @@
                 </div>
 
                 <div id="gdescription">
-                    <img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">
+                    <!--<img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">-->
                 </div>
             </div>
 
@@ -135,43 +138,35 @@
                 <div class="title">
                     <span id="sumgclsspan">全部评价(1990) </span>
                     <div class="stars1" id="avgleveldiv">
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                        <i></i>
-                        <i></i>
+                        <!--<i></i>-->
                     </div>
                 </div>
                 <div class="label box2" id="singlegcldiv">
-                    <span>新鲜(1800)</span>
-                    <span>新鲜(1800)</span>
-                    <span>新鲜(1800)</span>
-                    <span>新鲜(1800)</span>
-                    <span>新鲜(1800)</span>
+                    <!--<span>新鲜(1800)</span>-->
                 </div>
 
                 <!-- 用户评价 -->
                 <div id="usercommentdiv">
 
-                    <div class="user-evaluate">
-                        <div class="box2">
-                            <img src="/img/class1.png" class="img" alt="">
-                            <div class="text">hz2375</div>
-                            <div class="stars2">
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                                <i></i>
-                            </div>
-                        </div>
-                        <div class="label2 box2">
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                            <span>新鲜</span>
-                        </div>
-                    </div>
+                    <!--<div class="user-evaluate">-->
+                        <!--<div class="box2">-->
+                            <!--<img src="/img/class1.png" class="img" alt="">-->
+                            <!--<div class="text">hz2375</div>-->
+                            <!--<div class="stars2">-->
+                                <!--<i></i>-->
+                                <!--<i></i>-->
+                                <!--<i></i>-->
+                                <!--<i></i>-->
+                                <!--<i></i>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                        <!--<div class="label2 box2">-->
+                            <!--<span>新鲜</span>-->
+                            <!--<span>新鲜</span>-->
+                            <!--<span>新鲜</span>-->
+                            <!--<span>新鲜</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
 
                 </div>
 
@@ -188,33 +183,16 @@
     
     <div class="recommend_box">
     	<p class="recommend_title">相似推荐</p>
-    	<ul class="like-list box2">
+    	<ul class="like-list box2" id="samegclassgoodsul" style="display: none;">
             <li>
                 <a href="" class="img"><img src="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
-            <li>
-                <a href="" class="img"><img src="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img src="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img src="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
+
         </ul>
     </div>
-    <div class="loading_more">
-            <i></i>
-            上拉查看图文详情
-        </div>
+
 
     <div class="placeholder-footer2"></div>
     <div class="bargain-footer">
@@ -240,17 +218,13 @@
     	<div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
 	        <i class="care-norms-close J_careNormsClose" id="closeaddress"></i>
 	        <p class="J_mark_title">送至</p>
-	        <ul class="address_list_box">
-	        	<li class="active">
-	        		<span class="address_img"></span>
-	        		<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>
-	        		<span  class="icon_choice"></span>
-	        	</li>
-	        	<li>
-	        		<span class="address_img"></span>
-	        		<div class="address_text">上海九龙坡区狮山大道巴南小区刚光华苑1栋</div>
-	        		<span  class="icon_choice"></span>
-	        	</li>
+	        <ul class="address_list_box" id="addresul">
+	        	<!--<li class="active">-->
+	        		<!--<span class="address_img"></span>-->
+	        		<!--<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>-->
+	        		<!--<span  class="icon_choice"></span>-->
+	        	<!--</li>-->
+
 	        </ul>
 	        <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
 	    </div>
@@ -279,9 +253,9 @@
 	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
+	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
 	                <span class="num J_careNum" id="goodsnumber">1</span>
-	                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
+	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
 	            </div>
 	        </div>
 	        
@@ -372,7 +346,7 @@
         if(pathArr.length==2){
             inviterId = pathArr[1].split('_')[1];
         }
-        alert(inviterId);
+        //alert(inviterId);
         var isServiceGoods;
         <!--用户评论分页查询-->
         var pageNo=1;
@@ -963,6 +937,49 @@
             document.getElementsByClassName('J_careNormsClose3')[0].click();
         }
 
+        <!--加入足迹-->
+        function addtofootprint() {
+            $.ajax({
+                type:"post",
+                url:"/userFootprint/saveUserFootprint",
+                dataType: "json",
+                data:{gid:gid},
+                success:function(data){
+                }
+            });
+        }
+
+        <!--加载地址-->
+        function loadAddress() {
+            $.ajax({
+                type:"post",
+                url:"/userAddress/queryUserAddress",
+                dataType: "json",
+                data:{pageNo:1,pageSize:100},
+                success:function(data){
+                    var rows= data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                            var active = '';
+//                            if(rows[i].){
+//
+//                            }
+                            html = '<li class="active">'+
+                                '<span class="address_img"></span>'+
+                                '<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>'+
+                                '<span  class="icon_choice"></span>'+
+                                '</li>';
+                        }
+
+                        $("#J_mark").show();
+                    }else{
+                        layer.msg('您还未登录');
+                    }
+                }
+            });
+        }
+
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {
@@ -998,18 +1015,6 @@
             return fmt;
         }
 
-        $(function(){
-            $("#open_car").click(function(){
-                $("#J_mark2").show()
-            });
-            $(".J_careNormsClose2").click(function(){
-                $("#J_mark2").hide()
-            });
-            $(".address_list_box>li").click(function(){
-                $(".address_list_box>li").removeClass("active")
-                $(this).addClass("active")
-            })
-        })
     </script>
 
     <!--初始化页面调用函数-->
@@ -1031,6 +1036,8 @@
 
         <!--加载商品规格-->
         loadgsonce();
+
+
     </script>
 
     <script>
@@ -1043,7 +1050,7 @@
     <script>
         $(function(){
             $("#open_address").click(function(){
-                $("#J_mark").show()
+                loadAddress();
             })
             $("#open_car").click(function(){
                 $("#J_mark2").show()
@@ -1087,7 +1094,7 @@
                 url:'/wxShare/createWxShare',
                 dataType: "json",
                 async :false,
-                data:{path:initSharePath},
+                data:{path:path},
                 success:function(data){
                     if(data!=null){
                         homePath = data.homePath;

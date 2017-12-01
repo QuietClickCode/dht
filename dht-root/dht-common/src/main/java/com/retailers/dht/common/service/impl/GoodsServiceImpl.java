@@ -6,8 +6,10 @@ import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsCopy;
+import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
@@ -34,10 +36,20 @@ public class GoodsServiceImpl implements GoodsService {
 	private GoodsCopyMapper goodsCopyMapper;
 	@Autowired
 	private GoodsClassificationService goodsClassificationService;
+	@Autowired
+	private AttachmentService attachmentService;
 	public Goods saveGoods(Goods goods,Long uploadpersonId) {
 		int status = goodsMapper.saveGoods(goods);
 		if(status==1){
 			copyGoods(goods,uploadpersonId);
+			Map<Long,Long> atts = AttachmentUploadImageUtils.findUploadImages(goods.getGdescription());
+			List<Long> list = new ArrayList<Long>();
+			if(!atts.isEmpty()){
+				for(Long id:atts.keySet()){
+					list.add(id);
+				}
+			}
+			attachmentService.editorAttachment(list);
 		}
 		goods.setVersion(1L);
 		return status == 1 ? goods : null;
@@ -48,6 +60,14 @@ public class GoodsServiceImpl implements GoodsService {
 		if(status==1){
 			goods.setVersion(goods.getVersion()+1);
 			copyGoods(goods,uploadpersonId);
+			Map<Long,Long> atts = AttachmentUploadImageUtils.findUploadImages(goods.getGdescription());
+			List<Long> list = new ArrayList<Long>();
+			if(!atts.isEmpty()){
+				for(Long id:atts.keySet()){
+					list.add(id);
+				}
+			}
+			attachmentService.editorAttachment(list);
 		}
 		return status == 1 ? true : false;
 	}

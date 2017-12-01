@@ -83,7 +83,7 @@
                 <i class="user-icon-list2"></i>
                 <span>足迹</span>
             </div>
-            <a href="">有12件商品在等你噢
+            <a href="/userFootprint/toUserFootprintpage">有12件商品在等你噢
                 <span class="prompt"></span>
             </a>
         </div>

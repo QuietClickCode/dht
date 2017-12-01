@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserFootprintMapper">
+
+	<resultMap id="rm_userFootprint" type="com.retailers.dht.common.entity.UserFootprint">
+			<result property="ufId" column="uf_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="creatTime" column="creat_time"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_goods_vo" type="com.retailers.dht.common.vo.GoodsVo">
+		<result property="gid" column="g_id"/>
+		<result property="gname" column="g_name"/>
+		<result property="gvender" column="g_vender"/>
+		<result property="gshop" column="g_shop"/>
+		<result property="gclassification" column="g_classification"/>
+		<result property="gbrand" column="g_brand"/>
+		<result property="garea" column="g_area"/>
+		<result property="gsalescope" column="g_salescope"/>
+		<result property="gmaindirection" column="g_maindirection"/>
+		<result property="gdescription" column="g_description"/>
+		<result property="gproductioninperson" column="g_productioninperson"/>
+		<result property="gproductioninaddress" column="g_productioninaddress"/>
+		<result property="gpickperson" column="g_pickperson"/>
+		<result property="gpickaddress" column="g_pickaddress"/>
+		<result property="gcopyid" column="g_copyid"/>
+		<result property="gprice" column="g_price"/>
+		<result property="gcheckperson" column="g_checkperson"/>
+		<result property="gcheckmessage" column="g_checkmessage"/>
+		<result property="gunitname" column="g_unitname"/>
+		<result property="isChecked" column="is_checked"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gclassificationName" column="gg_name"/>
+		<result property="gareaName" column="a_name"/>
+		<result property="minprice" column="minprice"/>
+		<result property="maxprice" column="maxprice"/>
+		<result property="imgUrl" column="imgurl"/>
+		<result property="inventory" column="inventory"/>
+		<result property="gendbuy" column="gendbuy"/>
+		<result property="gstartbuy" column="gstartbuy"/>
+		<result property="gdimgurl" column="gdimgurl"/>
+		<result property="bcId" column="bc_id"/>
+		<result property="bcGsval" column="bc_gsval"/>
+		<result property="gdPrice" column="gd_price"/>
+		<result property="gcount" column="g_count"/>
+		<result property="isMultiplebuy" column="is_multiplebuy"/>
+		<result property="bcGsvalids" column="bc_gsvalids"/>
+		<result property="ufId" column="uf_id"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userFootprint_columns">
+		uf_id,g_id,u_id,creat_time,is_delete,version
+	</sql>
+	<!-- 根据足迹表主键取得数据 -->
+	<select id="queryUserFootprintByUfId" resultMap="rm_userFootprint" parameterType="java.lang.Long">
+		SELECT <include refid="userFootprint_columns" />
+		FROM t_user_footprint WHERE uf_id = #{ufId}
+	</select>
+	<!-- 足迹表查询条件组合 -->
+	<sql id="userFootprint_where">
+		<where>
+			<if test="null != params.ufId">
+				AND uf_id = #{params.ufId}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.creatTimeBegin">
+				AND creat_time &gt;= #{params.creatTime}
+			</if>
+			<if test="null != params.creatTimeEnd">
+				AND creat_time &lt;= #{params.creatTime}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserFootprintList" resultMap="rm_userFootprint" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="userFootprint_columns" />
+		FROM t_user_footprint
+		<include refid="userFootprint_where"/>
+	</select>
+	<select id="queryTodayDate" resultMap="rm_userFootprint" parameterType="java.lang.Long">
+		select * from t_user_footprint where to_days(creat_time) = to_days(now()) and u_id=#{uid}
+	</select>
+
+	<select id="queryUserFootprintVoList" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT min(t2.gd_price) minprice,t1.uf_id,t2.*,t3.g_name,t3.g_description,t5.show_url imgurl
+		from t_user_footprint t1
+		LEFT JOIN t_goods_detail t2 ON t1.g_id=t2.g_id and t2.is_delete=0,
+		t_goods t3
+		LEFT JOIN t_goods_image t4 ON t4.g_id=t3.g_id and t4.is_delete=0
+		LEFT JOIN t_attachment t5 ON t4.gi_id=t5.id
+		WHERE
+		t1.u_id=#{params.uid}
+		and t3.g_id=t1.g_id
+		<if test="null!=params.isDelete">
+			and t1.is_delete=#{params.isDelete}
+		</if>
+		and t3.is_delete=0
+		GROUP BY t1.uf_id,t2.g_id
+		ORDER BY t1.creat_time DESC
+	</select>
+	<!--添加足迹表 -->
+	<insert id="saveUserFootprint" parameterType="com.retailers.dht.common.entity.UserFootprint" useGeneratedKeys="true" keyProperty="ufId">
+		INSERT INTO t_user_footprint (
+			g_id,u_id,creat_time,is_delete,version
+		) VALUES
+		(
+			#{gid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{creatTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改足迹表 -->
+	<update id="updateUserFootprint" parameterType="com.retailers.dht.common.entity.UserFootprint">
+		UPDATE t_user_footprint
+		<set>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != creatTime">
+                creat_time = #{creatTime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE uf_id = #{ufId} and version = #{version}
+	</update>
+	<!--删除足迹表 -->
+	<delete id="deleteUserFootprintByUfId" parameterType="java.lang.Long">
+		DELETE FROM t_user_footprint WHERE uf_id = #{ufId}
+	</delete>
+	<update id="delallfootprint" parameterType="java.lang.Long">
+		update t_user_footprint SET is_delete=1 WHERE u_id=#{uid}
+	</update>
+</mapper>

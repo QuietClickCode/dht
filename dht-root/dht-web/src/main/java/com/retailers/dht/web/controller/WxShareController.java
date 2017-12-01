@@ -2,6 +2,7 @@ package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.auth.annotation.CheckSession;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
 import com.retailers.dht.common.entity.PayInfo;
@@ -49,6 +50,7 @@ import java.util.*;
 public class WxShareController extends BaseController{
 
     @RequestMapping("createWxShare")
+    @CheckSession(key= com.retailers.auth.constant.SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
 
@@ -56,7 +58,8 @@ public class WxShareController extends BaseController{
         String lastStr = "~inviter_"+uid+".html";
 
         String noncestr = createRandomString();
-        String jsapi_ticket = getTick(getAccessToken());;
+        String jsapi_ticket = WxConfig.ACCESS_TOKEN;;
+        System.out.println("================"+WxConfig.ACCESS_TOKEN);
         Long timestamp = new Date().getTime()/1000;
         String url = path+lastStr;
         String signature = "";

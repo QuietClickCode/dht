@@ -20,6 +20,15 @@ public class GoodsVo extends Goods {
     private Float gdPrice;
     private Long gcount;
     private Long isMultiplebuy;
+    private Long ufId;
+
+    public Long getUfId() {
+        return ufId;
+    }
+
+    public void setUfId(Long ufId) {
+        this.ufId = ufId;
+    }
 
     public String getBcGsvalids() {
         return bcGsvalids;
