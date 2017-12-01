@@ -57,7 +57,7 @@
         </a>
     </div>
     <div class="my-data-list">
-        <a href="" class="displayB">
+        <a href="javascript:void(0)" onclick="queryPerformance()" class="displayB">
             <span class="name">业务管理</span>
             <i class="icon-data-right"></i>
             <span class="text2">查看我的推荐和我的销售业绩</span>
@@ -80,6 +80,7 @@
         </div>
     </div>
     <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="/js/layer/layer.js"></script>
     <script type="text/javascript">
         $("#open_sex").click(function(){
             $("#sex_box").show()
@@ -138,6 +139,10 @@
                 }
             });
         });
+        
+        function queryPerformance() {
+            layer.msg("敬请期待",{time:1000});
+        }
     </script>
 </body>
 </html>

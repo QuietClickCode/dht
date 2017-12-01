@@ -9,10 +9,11 @@
     <link rel="stylesheet" href="/css/style.css">
     <style>
         #footer_user a .icon-user{
-            width: 0.33rem;
-            height: 00.37rem;
-            background-position: center;
-            background-size:0.33rem 00.37rem;
+            background-size: 100%;
+        }
+
+        .user-icon-list7{
+            background-size: .36rem .34rem;
         }
     </style>
 </head>
@@ -133,7 +134,15 @@
             </a>
         </div>
 
-
+        <%--<div class="user-order">
+            <div class="title">
+                <i class="user-icon-list7"></i>
+                <span>消息中心</span>
+            </div>
+            <a href="">有12件商品在等你噢
+                <span class="prompt"></span>
+            </a>
+        </div>--%>
 
     </div>
     <!-- 底部 -->

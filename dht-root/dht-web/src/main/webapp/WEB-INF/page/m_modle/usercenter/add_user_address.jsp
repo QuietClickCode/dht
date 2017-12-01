@@ -87,7 +87,6 @@
     <script src="/js/dist/distpicker.data.js"></script>
     <script src="/js/dist/distpicker.js"></script>
 	<script src="/js/layer_mobile/layer.js"></script>
-	<script src="/js/layer/layer.js"></script>
 	<script>
 		var countdown=60;
 		function settime(val) {
