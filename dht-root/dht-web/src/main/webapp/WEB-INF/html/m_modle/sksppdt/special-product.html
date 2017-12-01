@@ -22,12 +22,9 @@
     </div>
     <div class="bd">
         <ul id="goodsImagesul" style="height: 200px">
-            <li>
-                <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-            </li>
-            <li>
-                <img _src="/img/banner1.jpg" src="/img/bangain5.png" />
-            </li>
+            <!--<li>-->
+                <!--<img _src="/img/banner1.jpg" src="/img/bangain5.png" />-->
+            <!--</li>-->
         </ul>
         <!-- 倒计时 -->
         <div class="product-countDown2">
@@ -1030,7 +1027,7 @@
             url:'/wxShare/createWxShare',
             dataType: "json",
             async :false,
-            data:{path:initSharePath},
+            data:{path:path},
             success:function(data){
                 if(data!=null){
                     homePath = data.homePath;

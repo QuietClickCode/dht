@@ -33,6 +33,9 @@
             text-decoration: none;
             color:#fff;
         }
+        .myactive{
+            background: #337AB7;
+        }
     </style>
 
 </head>
@@ -1360,10 +1363,10 @@
 
     function loadgclassdivspan(level,parentId,obj,ggName) {
         if(level!=1){
-            $(obj).siblings().css('background','none');
-            $(obj).css('background','#337AB7');
+            $(obj).siblings().removeClass('myactive');
+            $(obj).addClass('myactive');
 
-            $(obj).siblings().css('color','337AB7');
+            $(obj).siblings().css('color','#337AB7');
             $(obj).css('color','#fff');
         }
         var element;
@@ -1428,25 +1431,20 @@
         var flag2 = false;
         var flag3 = false;
 
-        var bkgd = 'rgb(51, 122, 183) none repeat scroll 0% 0%';
-
         for(var i=0;i<divspan1a.length;i++){
-            var background = divspan1a[i].style.background;
-            if(background==bkgd){
+            if($(divspan1a[i]).hasClass('myactive')){
                 flag1 = true;
                 break;
             }
         }
         for(var i=0;i<divspan2a.length;i++){
-            var background = divspan2a[i].style.background;
-            if(background==bkgd){
+            if($(divspan2a[i]).hasClass('myactive')){
                 flag2 = true;
                 break;
             }
         }
         for(var i=0;i<divspan3a.length;i++){
-            var background = divspan3a[i].style.background;
-            if(background==bkgd){
+            if($(divspan3a[i]).hasClass('myactive')){
                 flag3 = true;
                 break;
             }

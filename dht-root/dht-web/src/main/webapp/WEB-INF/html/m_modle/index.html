@@ -211,27 +211,13 @@
             </div>
         </div>
 
-        <ul class="like-list box2">
+        <ul class="like-list box2" id="gussyoulikeul">
             <li>
                 <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
                 <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
                 <p>￥189</p>
             </li>
-            <li>
-                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
+
         </ul>
 
         
@@ -611,6 +597,57 @@
         }
 
 
+    </script>
+
+    <!--猜你喜欢-->
+    <script>
+        var pageNo=1;
+        var pageSize=10;
+        var flag=true;
+        <!--滚动加载猜你喜欢-->
+        function scrollloadfootprint() {
+            $(document).ready(function(){
+                $('#gussyoulikeul').html('');
+                var range = 50;             //距下边界长度/单位px
+                var totalheight = 0;
+                var main = $("#gussyoulikeul");                     //主体元素
+                $(window).scroll(function(){
+                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                    if(($(document).height()-range) <= totalheight && flag) {
+                        flag = false;
+                        $.ajax({
+                            type:"post",
+                            url:'/userFootprint/queryUserFootprint',
+                            dataType: "json",
+                            async :false,
+                            data:{pageNo:pageNo,pageSize:pageSize},
+                            success:function(data){
+                                var html = '';
+                                var rows = data.rows;
+                                if(rows!=null&&rows.length>0){
+                                    for(var i=0;i<rows.length;i++){
+                                        html = '<li>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                                            '<p>￥'+rows[i].minprice+'</p>'+
+                                            '</li>';
+                                        main.append(html);
+                                    }
+                                    $("img").lazyload({effect: "fadeIn"});
+                                    pageNo++;
+                                    flag = true;
+                                }
+                            }
+                        });
+
+                    }
+                });
+            });
+        }
+        scrollloadfootprint();
     </script>
 </body>
 

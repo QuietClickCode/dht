@@ -1,5 +1,7 @@
 package com.retailers.dht.web.controller;
 
+import com.retailers.auth.annotation.CheckSession;
+import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.BuyCar;
 import com.retailers.dht.common.service.BuyCarService;
 import com.retailers.dht.common.service.GoodsGdsprelService;
@@ -28,11 +30,12 @@ public class BuyCarController extends BaseController{
 
     @RequestMapping("/gotoShoppingCar")
     public String gotoShoppingCar(HttpServletRequest request){
-        return  redirectUrl(request,"shopcar/shopping-car");
+        return  redirectUrl(request,"user/shopping-car");
     }
 
 
     @RequestMapping("/saveBuyCar")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request){
         buyCar.setIsDelete(0L);
@@ -43,6 +46,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/queryBuyCarList")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public Map<String,Object> queryBuyCar(HttpServletRequest request,int pageNo,int pageSize,Long isPutway){
         Long uid = getCurLoginUserId(request);
@@ -60,6 +64,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/updateBuyCar")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp updateBuyCar(BuyCar buyCar){
         boolean flag = buyCarService.updateBuyCar(buyCar);
@@ -67,6 +72,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/deleteBuyCar")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp deleteBuyCar(String buyCarIds){
         boolean flag = buyCarService.deleteBuyCarByBcIds(buyCarIds);

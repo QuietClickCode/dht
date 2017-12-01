@@ -8,6 +8,7 @@
     <title>购物车</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new.css">
 </head>
 
 <body class="bge6">
@@ -24,85 +25,32 @@
     </div>
 
     <div class="care-cont box2">
-        <div class="purchase J_product">
-            <div class="checkbox">
-                <i class="icon-checkbox J_checkbox goods-item"></i>
-            </div>
-            <a href="" class="img-box">
-                <img src="/img/care-icon6.png" alt="">
-            </a>
-            <div class="purchase-text">
-                <a href="" class="title">
-                    <span class="label">特价</span>
-                    2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显
-                </a>
-                <p class="norms J_norms item-detail">颜色:深灰色;尺码:XL;</p>
-                <div class="price-box">
-                        <span class="price">￥
-                            <span class="J_price">22.85</span>
-                        </span>
-                    <div class="number-box">
-                        <i class="icon-reduce J_careReduce"></i>
-                        <span class="num J_careNum">3</span>
-                        <i class="icon-add J_careAdd"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="purchase J_product">-->
+            <!--<div class="checkbox">-->
+                <!--<i class="icon-checkbox J_checkbox goods-item"></i>-->
+            <!--</div>-->
+            <!--<a href="" class="img-box">-->
+                <!--<img src="/img/care-icon6.png" alt="">-->
+            <!--</a>-->
+            <!--<div class="purchase-text">-->
+                <!--<a href="" class="title">-->
+                    <!--<span class="label">特价</span>-->
+                    <!--2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显-->
+                <!--</a>-->
+                <!--<p class="norms J_norms item-detail">颜色:深灰色;尺码:XL;</p>-->
+                <!--<div class="price-box">-->
+                        <!--<span class="price">￥-->
+                            <!--<span class="J_price">22.85</span>-->
+                        <!--</span>-->
+                    <!--<div class="number-box">-->
+                        <!--<i class="icon-reduce J_careReduce"></i>-->
+                        <!--<span class="num J_careNum">3</span>-->
+                        <!--<i class="icon-add J_careAdd"></i>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
-        <div class="purchase J_product">
-            <div class="checkbox">
-                <i class="icon-checkbox J_checkbox goods-item"></i>
-            </div>
-            <a href="" class="img-box">
-                <img src="/img/care-icon6.png" alt="">
-            </a>
-            <div class="purchase-text">
-                <a href="" class="title">
-                    <span class="label">特价</span>
-                    2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显
-                </a>
-                <p class="norms J_norms item-detail">颜色:卡其色;尺码:S;</p>
-                <div class="price-box">
-                        <span class="price">￥
-                            <span class="J_price">50.00</span>
-                        </span>
-                    <div class="number-box">
-                        <i class="icon-reduce J_careReduce"></i>
-                        <span class="num J_careNum">1</span>
-                        <i class="icon-add J_careAdd"></i>
-                    </div>
-                </div>
-            </div>
-            <!--<span class="care-close J_careClose">删除</span>-->
-        </div>
-
-        <div class="purchase J_product">
-            <div class="checkbox">
-                <i class="icon-checkbox J_checkbox goods-item"></i>
-            </div>
-            <a href="" class="img-box">
-                <img src="/img/care-icon6.png" alt="">
-            </a>
-            <div class="purchase-text">
-                <a href="" class="title">
-                    <span class="label">特价</span>
-                    2017年秋季新款简约黄色裙子系带显瘦短 2017年秋季新款简约黄色裙子系带显
-                </a>
-                <p class="norms J_norms item-detail">颜色:黑色;尺码:M;</p>
-                <div class="price-box">
-                        <span class="price">￥
-                            <span class="J_price">30.00</span>
-                        </span>
-                    <div class="number-box">
-                        <i class="icon-reduce J_careReduce"></i>
-                        <span class="num J_careNum">1</span>
-                        <i class="icon-add J_careAdd"></i>
-                    </div>
-                </div>
-            </div>
-            <!--<span class="care-close J_careClose">删除</span>-->
-        </div>
 
         <div class="invalid-goods">
             <h1 class="invalid-tittle-box clearfix">
@@ -685,7 +633,7 @@
 //
 //            $(clearInvalidBtn).addClass('clear-disable');
 //            $('.no-invalid-tip').show()
-        };
+//        };
 
         //页面加载自动判断是否有失效商品，给button设置样式
 //        if(invalidGoods.length < 1){
@@ -792,6 +740,8 @@
                         pageNo++;
                         scrollbuycar();
                     }
+                }else{
+                    loadinvalidategoods();
                 }
             }
         });
@@ -1169,7 +1119,7 @@
     }
 
     var invalidateflag=false;
-    var invalidatebuycarids;
+    var invalidatebuycarids='';
     <!--加载失效商品-->
     function loadinvalidategoods() {
         $.ajax({
@@ -1220,7 +1170,6 @@
                     invalidateflag = true;
                     gdloadinvalidategoods();
                 }else{
-                    alert(111);
                     $('.clear-all-invalid').addClass('clear-disable');
                     $('.no-invalid-tip').show();
                 }

@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="initial-scale=1.0,maximum-scale=1.0,width=device-width" name="viewport">
+    <meta name="apple-touch-fullscreen" content="YES">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta http-equiv="cache-control" content="no-cache">
+    <title>足迹</title>
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bge6">
+    <div class="specialty-title2 borderB">
+        <a onclick="returnhistory()" class="icon-return"></a>
+        <span>足迹列表</span>
+        <span class="footprint-all-close" id="J_allClose">清空</span>
+    </div>
+    <div class="box2" id="ufdiv">
+
+        <!--<div class="footprint-list J_footprintProduct">-->
+            <!--<a href="" class="img">-->
+                <!--<img src="/img/footprint.png" alt="">-->
+            <!--</a>-->
+            <!--<div class="text">-->
+                <!--<a href="">野生桃胶</a>-->
+                <!--<p>天然食用桃胶野生桃胶桃花泪</p>-->
+                <!--<span>￥29.8</span>-->
+            <!--</div>-->
+            <!--<div class="close-box J_closeList">删除</div>-->
+        <!--</div>-->
+
+
+    </div>
+
+    <!-- 遮罩层 -->
+    <div class="mark" id="J_mark"></div>
+    <div class="footprint-prompt" id="J_footprintPrompt">
+        <p>确定清空所有浏览记录？</p>
+        <div class="footprint-confirm">
+            <span class="cancel" id="J_cancel">取消</span>
+            <span class="confirm" id="J_confirm">确定</span>
+        </div>
+    </div>
+
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/touch.min.js"></script>
+    <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+    <script src="/js/layer/layer.js"></script>
+    <script>
+        showdeletebtn();
+        function showdeletebtn() {
+            // 产品列表向左滑动，显示删除按钮
+            touch.on('.J_footprintProduct', 'swipeleft', function (ev) {
+                ev.preventDefault();
+                $(this).parents('.J_footprintProduct').addClass('swiperLeft');
+            });
+            // 产品列表向左滑动，显示删除按钮
+            touch.on('.J_footprintProduct', 'swiperight', function (ev) {
+                ev.preventDefault();
+                $(this).parents('.J_footprintProduct').removeClass('swiperLeft')
+            });
+
+
+            $('.J_closeList').on('click', function () {
+                $(this).parents('.J_footprintProduct').remove();
+                delonefootprint(this);
+
+            });
+
+            // 清空所有
+            $('#J_allClose').on('click',function(){
+                var flag = $('#ufdiv').html()=='';
+                if(flag){
+                    layer.msg('您还没有足迹');
+                    return;
+                }
+                $('#J_footprintPrompt,#J_mark').show();
+            });
+
+            //取消
+            $('#J_cancel').on('click',function(){
+                $('#J_footprintPrompt,#J_mark').hide();
+            });
+
+            //确定
+            $('#J_confirm').on('click',function(){
+
+                $('.J_footprintProduct').remove();
+                $('#J_footprintPrompt,#J_mark').hide();
+                // 向后台发送数据
+                delallfootprint();
+            });
+        }
+    </script>
+    <!--定义函数-->
+    <script>
+        var pageNo=1;
+        var pageSize=10;
+
+        <!--获取纯文本内容-->
+        function removeHTMLTag(str) {
+            str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+            str=str.replace(/\s/g,''); //将空格去掉
+            return str;
+        }
+
+        <!--第一次加载足迹-->
+        function loadfootprint() {
+            $('#ufdiv').html('');
+            $.ajax({
+                type:"post",
+                url:"/userFootprint/queryUserFootprint",
+                dataType: "json",
+                async:false,
+                data:{pageNo:pageNo,pageSize:pageSize,isDelete:0},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                            html = '<div class="footprint-list J_footprintProduct">'+
+                                '<a href="/goods/'+rows[i].gid+'.html" class="img">'+
+                                '<img data-original="'+rows[i].imgUrl+'" alt="">'+
+                                '</a>'+
+                                '<div class="text">'+
+                                '<a href="/goods/'+rows[i].gid+'.html">'+rows[i].gname+'</a>'+
+                                '<p>'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<span>￥'+rows[i].minprice+'</span>'+
+                            '</div>'+
+                            '<div class="close-box J_closeList"><input type="hidden" value="'+rows[i].ufId+'">删除</div>'+
+                                '</div>';
+                            $('#ufdiv').append(html);
+                        }
+                        showdeletebtn();
+                        $("img").lazyload({effect: "fadeIn"});
+                        pageNo++;
+                        flag=true;
+                        scrollloadfootprint();
+                    }
+                }
+            });
+        }
+        var flag = false;
+        <!--滚动加载足迹-->
+        function scrollloadfootprint() {
+            $(document).ready(function(){
+                var range = 50;             //距下边界长度/单位px
+                var totalheight = 0;
+                var main = $("#ufdiv");                     //主体元素
+                $(window).scroll(function(){
+                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                    if(($(document).height()-range) <= totalheight && flag) {
+                        flag = false;
+                        $.ajax({
+                            type:"post",
+                            url:'/userFootprint/queryUserFootprint',
+                            dataType: "json",
+                            async :false,
+                            data:{pageNo:pageNo,pageSize:pageSize,isDelete:0},
+                            success:function(data){
+                                var html = '';
+                                var rows = data.rows;
+                                if(rows!=null&&rows.length>0){
+                                    for(var i=0;i<rows.length;i++){
+                                        html = '<div class="footprint-list J_footprintProduct">'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="img">'+
+                                            '<img data-original="'+rows[i].imgUrl+'" alt="">'+
+                                            '</a>'+
+                                            '<div class="text">'+
+                                            '<a href="/goods/'+rows[i].gid+'.html">'+rows[i].gname+'</a>'+
+                                            '<p>'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                            '<span>￥'+rows[i].minprice+'</span>'+
+                                            '</div>'+
+                                            '<div class="close-box J_closeList"><input type="hidden" value="'+rows[i].ufId+'">删除</div>'+
+                                            '</div>';
+                                        main.append(html);
+                                    }
+                                    showdeletebtn();
+                                    $("img").lazyload({effect: "fadeIn"});
+                                    pageNo++;
+                                    flag = true;
+                                }
+                            }
+                        });
+
+                    }
+                });
+            });
+        }
+
+        <!--删除一条足迹-->
+        function delonefootprint(obj) {
+            var ufId = $(obj).find('input')[0].value;
+            $.ajax({
+                type:"post",
+                url:'/userFootprint/delonefootprint',
+                dataType: "json",
+                async :false,
+                data:{ufId:ufId},
+                success:function(data){
+                    if(data.status==0){
+                        layer.msg('删除成功');
+                    }else{
+                        layer.msg('请稍后再试');
+                    }
+                }
+            });
+        }
+
+        <!--删除所有足迹-->
+        function delallfootprint() {
+            $.ajax({
+                type:"post",
+                url:'/userFootprint/delallfootprint',
+                dataType: "json",
+                async :false,
+                data:{},
+                success:function(data){
+                    if(data.status==0){
+                        layer.msg('删除成功');
+                    }else{
+                        layer.msg('请稍后再试');
+                    }
+                }
+            });
+        }
+
+        <!--返回上一页-->
+        function returnhistory() {
+            window.history.go(-1);
+        }
+    </script>
+    <!--调用函数-->
+    <script>
+        loadfootprint();
+    </script>
+</body>
+
+</html>
