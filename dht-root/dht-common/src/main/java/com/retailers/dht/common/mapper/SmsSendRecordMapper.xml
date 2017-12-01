@@ -157,6 +157,7 @@
 
 			once_send_date > #{curDate}
 			AND type = #{type}
+			AND status=0
 			<if test="null != uid">
 				AND u_id = #{uid}
 			</if>
