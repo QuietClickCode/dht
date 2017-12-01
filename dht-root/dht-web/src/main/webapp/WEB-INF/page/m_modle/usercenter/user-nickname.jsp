@@ -67,6 +67,9 @@
             },
             success:function (data) {
                 layer.msg("修改昵称成功");
+                setTimeout(function(){
+                    history.back(-1);
+                },2000);
             }
         });
     });

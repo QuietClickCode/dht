@@ -16,6 +16,12 @@
     <link rel="stylesheet" href="/css/style.css">
     <script src="/js/jquery-2.1.4.min.js"></script>
     <script src="/js/layer/layer.js"></script>
+    <style>
+        #init_btn{
+            background-color: #e83939;
+            color: #fff;
+        }
+    </style>
 </head>
 
 <body class="bge6">
@@ -29,7 +35,7 @@
         <tr>
             <td class="td1">手机号</td>
             <td class="td3" colspan="2">
-                <input type="number" class="input_text" name="" id="check-phone" value="" placeholder="请输入手机号" />
+                <input type="number" class="input_text user-phone" id="check-phone" placeholder="请输入手机号" />
             </td>
         </tr>
         <tr>
@@ -38,12 +44,12 @@
                 <input type="number" class="input_text" name="" id="cod-input" value="" placeholder="请输入验证码" />
             </td>
             <td>
-                <input type="button" class="btn_cod" id="btn_cod" onclick="settime()" value="获取验证码" />
+                <input type="button" class="btn_cod" id="btn_cod" onclick="getValidCode(this)" value="获取验证码" />
             </td>
         </tr>
         <tr>
             <td class="td4" colspan="3">
-                <span class="init_btn">确定</span>
+                <span class="init_btn" id="init_btn">确定</span>
             </td>
         </tr>
     </table>
@@ -57,54 +63,31 @@
 
 
 <script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/layer/layer.js"></script>
 <script>
-    var countdown=60;
-    function settime() {
-        let phone = $("#check-phone").val();
-        console.log(phone);
-        if(phone == ""){
-            layer.msg("手机号码不能为空");
-            return
-        }
-        else if(!phone.match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
-            layer.msg("手机号码格式不正确");
-            return;
-        }
 
+    var countdown=60;
+    var id = "";
+    function getValidCode($this) {
+        if(verifyForm() == false)
+            return;
+        settime($this);
+        phone = $(".user-phone").val();
         $.ajax({
+            url:"/user/sendSmsValidCode",
             type:"post",
             dataType:"json",
-            url:"/user/sendSmsValidCode",
             data:{
                 phone:phone
             },
             success:function (data) {
-
+                id = data.data;
+                layer.msg("短信已发送",{time:1000});
             }
         });
-
-        /*if (countdown == 0) {
-
-                $("#btn_cod").removeAttr("disabled");
-                $("#btn_cod").val("获取验证码");
-                countdown = 60;
-                return;
-            } else {
-                $("#btn_cod").attr("disabled", true);
-                $("#btn_cod").val("重新发送(" + countdown + ")");
-                countdown--;
-            }
-            setTimeout(function() {
-                settime()
-            },1000)*/
     }
-
-
-    /*var finishBtn = document.getElementsByClassName('init_btn')[0];   //确定按钮
-    var phoneValue = document.getElementById('check-phone');			//手机号输入框
-    var codValue = document.getElementById('cod-input');   				//验证码输入框
-    var codBtn = document.getElementById('btn_cod');					//获取验证码按钮
-    var countdown=60;
+    var setTime;
+    var phone;
     function settime(val) {
         if (countdown == 0) {
             val.removeAttribute("disabled");
@@ -116,32 +99,52 @@
             val.value="重新发送(" + countdown + ")";
             countdown--;
         }
-        setTimeout(function() {
+        setTime = setTimeout(function() {
             settime(val)
         },1000)
     }
-
-    //验证手机格式
-    codBtn.onclick = function () {
-        if(phoneValue.value == '' || !(/^(?:13\d|15[89])-?\d{5}(\d{3}|\*{3})$/.test(phoneValue.value))){
-            console.log('号码有误');
-//                this.removeAttribute('correct');
-        }else {
-//			    this.setAttribute('class', 'correct');
-            settime(this)
+    
+    
+    function verifyForm() {
+        if($(".user-phone").val() == ""){
+            layer.msg("手机号不能为空",{time:1000});
+            return false;
         }
-    };
 
-    //确定按钮状态改变
-    window.onload = function () {
-        phoneValue.onkeyup = codValue.onkeyup = function () {
-            if(phoneValue.value !== '' && /^(?:13\d|15[89])-?\d{5}(\d{3}|\*{3})$/.test(phoneValue.value) && codValue.value !==''){
-                $(finishBtn).addClass('finish_btn');
-            }else {
-                $(finishBtn).removeClass('finish_btn');
+        if(!$(".user-phone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
+            layer.msg("手机格式不正确",{time:1000});
+            return false;
+        }
+        return true;
+    }
+
+    $("#init_btn").click(function(){
+        let code = $("#cod-input").val();
+        if(code == "") {
+            layer.msg("验证码不能为空",{time:1000});
+            return;
+        }
+
+        $.ajax({
+            url:"/user/bindPhone",
+            type:"post",
+            dataType:"json",
+            data:{
+                phone:phone,
+                code:code
+            },
+            success:function(data){
+                if(data.data == true){
+                    layer.msg("绑定手机成功",{time:1000});
+                    setTimeout(function () {
+                        window.history.back();
+                    },1000);
+                }else{
+                    layer.msg("验证码错误",{time:1000});
+                }
             }
-        };
-    }*/
+        });
+    });
 
 </script>
 </body>

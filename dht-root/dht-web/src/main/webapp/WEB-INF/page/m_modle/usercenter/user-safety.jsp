@@ -29,10 +29,10 @@
 </div>
 
 <div class="my-data-list">
-    <a href="/user/updateUserPhone" class="displayB">
+    <a href="/user/updateUserPhone" class="displayB updateUserPhone">
         <span class="name">更改手机号码</span>
         <i class="icon-data-right"></i>
-        <span class="text2">151****2828</span>
+        <span class="text2 user-phone"></span>
     </a>
 </div>
 <div class="my-data-list">
@@ -44,6 +44,7 @@
 </div>
 
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/layer/layer.js"></script>
 <script>
     $(function () {
         $.ajax({
@@ -60,9 +61,23 @@
                     $(".setPayPassword").find(".name").text("修改支付密码");
                     $(".setPayPassword .text2").hide();
                 }
+
+                var userPhone = data.userPhone;
+                if(userPhone == ""){
+                    $(".updateUserPhone").attr("href","javascript:void(0)");
+                    $(".updateUserPhone").attr("onclick","littleTips()");
+                }else{
+                    let p = userPhone.substr(0, 3) + "****" + userPhone.substr(7, 11);
+                    $(".updateUserPhone").removeAttr("onclick");
+                    $(".user-phone").text(p);
+                }
             }
         });
     });
+    
+    function littleTips() {
+        layer.msg("请先去绑定手机",{time:1000});
+    }
 </script>
 </body>
 </html>

@@ -65,7 +65,7 @@ public interface SmsSendRecordService {
 	 * @return
 	 * @throws AppException
 	 */
-	public boolean sendSmsCode(Long uid,String phone,long type)throws AppException;
+	public SmsSendRecord sendSmsCode(Long uid,String phone,long type)throws AppException;
 
 }
 
