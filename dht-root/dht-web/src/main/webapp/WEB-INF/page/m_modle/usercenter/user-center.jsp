@@ -153,6 +153,16 @@
     <script>
         var curFooter="#footer_user";
     </script>
+
+    <script type="text/javascript">
+        $(".user-order").click(function(){
+            let index = $(this).index(".user-order");
+            if(index != 0){
+                let link = $(".user-order").eq(index).find("a").attr("href");
+                location.href = link;
+            }
+        });
+    </script>
 </body>
 
 </html>
