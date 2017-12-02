@@ -1,0 +1,1 @@
+ mvn install:install-file -Dfile=d:/aliyun-java-sdk-dysmsapi-1.0.0.jar -DgroupId=com.aliyuncs.dysmsapi -DartifactId=aliyun-java-sdk-dysmsapi -Dversion=1.0.0 -Dpackaging=jar
