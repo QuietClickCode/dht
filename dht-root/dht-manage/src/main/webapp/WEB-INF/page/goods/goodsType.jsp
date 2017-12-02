@@ -10,14 +10,7 @@
     <link rel="stylesheet" href="<%=path%>/js/timer/css/build.css">
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
-    <style>
-        #editorGtGb tr{
-            border: 1px #dddddd solid;
-        }
-        #editorGtGb td{
-            border: 1px #dddddd solid;
-        }
-    </style>
+
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -91,6 +84,18 @@
                                 <div class="controls">
                                     <div class="switch" tabindex="0">
                                         <input id="isParams" name="isParams" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                              <span class="input-group-addon">
+                                是否立即返现:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="isReturnnow" name="isReturnnow" type="checkbox" />
                                     </div>
                                 </div>
                             </div>
@@ -457,6 +462,7 @@
         $("#editorGoodsTypeForm #isParams").bootstrapSwitch();
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch();
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch();
+        $("#editorGoodsTypeForm #isReturnnow").bootstrapSwitch();
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch();
 
         $('#editorSysUser').on('hide.bs.modal', function () {
@@ -496,6 +502,12 @@
                 formData["isSpecification"]=1;
             }else{
                 formData["isSpecification"]=0;
+            }
+            var flag =$("#editorGoodsTypeForm #isReturnnow").bootstrapSwitch("state");
+            if(flag){
+                formData["isReturnnow"]=1;
+            }else{
+                formData["isReturnnow"]=0;
             }
             var flag =$("#editorGoodsTypeForm #isShow").bootstrapSwitch("state");
             if(flag){
@@ -664,12 +676,18 @@
             }
             $("#editorGoodsTypeForm #isShow").bootstrapSwitch("state",flag);
 
+            var flag =false;
+            if(rowData.isReturnnow==1){
+                flag=true;
+            }
+            $("#editorGoodsTypeForm #isReturnnow").bootstrapSwitch("state",flag);
         }else{
             $("#editorGoodsTypeForm #gtName").val('');
             $("#editorGoodsTypeForm #gtId").val('');
 //            $("#editorGoodsTypeForm #isParams").bootstrapSwitch("state",true);
             $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch("state",true);
             $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch("state",true);
+            $("#editorGoodsTypeForm #isReturnnow").bootstrapSwitch("state",false);
             $("#editorGoodsTypeForm #isShow").bootstrapSwitch("state",true);
         }
     }
@@ -681,6 +699,7 @@
         let orgId,orgPid;
         reloadOrgTree();
         initFormData();
+        $("#editorGoodsTypeForm #isReturnnow").bootstrapSwitch("state",false);
         $("#editorGoodsTypeForm #isShow").bootstrapSwitch("state",true);
         $("#editorGoodsTypeForm #isSpecification").bootstrapSwitch("state",true);
         $("#editorGoodsTypeForm #isTrademark").bootstrapSwitch("state",true);

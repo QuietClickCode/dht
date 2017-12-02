@@ -31,6 +31,9 @@ public class GoodsType implements java.io.Serializable {
 	/**是否关联规格 0代表没有关联规格 1代表有关联规格*/
 	@NotEmpty
 	private Long isSpecification;
+	/**是否立即返现*/
+	@NotEmpty
+	private Long isReturnnow;
 	/**是否显示*/
 	@NotEmpty
 	private Long isShow;
@@ -45,7 +48,15 @@ public class GoodsType implements java.io.Serializable {
 	public GoodsType(){
 	}
 
-	public GoodsType( Long gtId){
+	public Long getIsReturnnow() {
+		return isReturnnow;
+	}
+
+	public void setIsReturnnow(Long isReturnnow) {
+		this.isReturnnow = isReturnnow;
+	}
+
+	public GoodsType(Long gtId){
 		this.gtId = gtId;
 	}
 

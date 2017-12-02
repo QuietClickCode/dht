@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserSharedMapper">
+
+	<resultMap id="rm_userShared" type="com.retailers.dht.common.entity.UserShared">
+			<result property="usdId" column="usd_id"/>
+			<result property="usUid" column="us_uid"/>
+			<result property="uid" column="u_id"/>
+			<result property="creatTime" column="creat_time"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userShared_columns">
+		usd_id,us_uid,u_id,creat_time,is_delete,version
+	</sql>
+	<!-- 根据受邀记录表主键取得数据 -->
+	<select id="queryUserSharedByUsdId" resultMap="rm_userShared" parameterType="java.lang.Long">
+		SELECT <include refid="userShared_columns" />
+		FROM t_user_shared WHERE usd_id = #{usdId}
+	</select>
+	<!-- 受邀记录表查询条件组合 -->
+	<sql id="userShared_where">
+		<where>
+			<if test="null != params.usdId">
+				AND usd_id = #{params.usdId}
+			</if>
+			<if test="null != params.usUid">
+				AND us_uid = #{params.usUid}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.creatTimeBegin">
+				AND creat_time &gt;= #{params.creatTime}
+			</if>
+			<if test="null != params.creatTimeEnd">
+				AND creat_time &lt;= #{params.creatTime}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserSharedList" resultMap="rm_userShared" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="userShared_columns" />
+		FROM t_user_shared
+		<include refid="userShared_where"/>
+	</select>
+	<!--添加受邀记录表 -->
+	<insert id="saveUserShared" parameterType="com.retailers.dht.common.entity.UserShared" useGeneratedKeys="true" keyProperty="usdId">
+		INSERT INTO t_user_shared (
+			us_uid,u_id,creat_time,is_delete,version
+		) VALUES
+		(
+			#{usUid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{creatTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改受邀记录表 -->
+	<update id="updateUserShared" parameterType="com.retailers.dht.common.entity.UserShared">
+		UPDATE t_user_shared
+		<set>
+            <if test="null != usUid">
+                us_uid = #{usUid},
+            </if>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != creatTime">
+                creat_time = #{creatTime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE usd_id = #{usdId} and version = #{version}
+	</update>
+	<!--删除受邀记录表 -->
+	<delete id="deleteUserSharedByUsdId" parameterType="java.lang.Long">
+		DELETE FROM t_user_shared WHERE usd_id = #{usdId}
+	</delete>
+</mapper>

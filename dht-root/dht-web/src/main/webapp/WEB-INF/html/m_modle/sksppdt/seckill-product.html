@@ -1013,7 +1013,11 @@
 
         <!--返回上一页-->
         function returnhistory() {
-            window.history.go(-1);
+            if(document.referrer===''){
+                window.location.href='/';
+            }else{
+                window.history.go(-1);
+            }
         }
 
         var homePath;

@@ -980,6 +980,18 @@
             });
         }
 
+        <!--加入受邀名单-->
+        function addtousershared() {
+            $.ajax({
+                type:"post",
+                url:"/userShared/saveUserShared",
+                dataType: "json",
+                data:{},
+                success:function(data){
+                }
+            });
+        }
+
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {
@@ -1083,7 +1095,11 @@
 
         <!--返回上一页-->
         function returnhistory() {
-            window.history.go(-1);
+            if(document.referrer===''){
+                window.location.href='/';
+            }else{
+                window.history.go(-1);
+            }
         }
 
         var homePath;
@@ -1143,6 +1159,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
+                    saveShareRecord('朋友圈');
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1155,6 +1172,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
+                    saveShareRecord('好友');
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1167,6 +1185,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
+                    saveShareRecord('QQ');
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1179,6 +1198,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
+                    saveShareRecord('微博');
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1191,6 +1211,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
+                    saveShareRecord('QQ空间');
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1198,26 +1219,23 @@
             });
         });
 
-        <!--调用分享函数-->
-        function shareGoods() {
+        <!--记录分享-->
+        function saveShareRecord(usWhere) {
             $.ajax({
                 type:"post",
-                url:'/user/queryLoginUserId',
+                url:'/userShare/saveUserShare',
                 dataType: "json",
                 async :false,
-                data:{},
+                data:{usWhere:usWhere},
                 success:function(data){
-                    var uid = data.uId;
-                    if(uid!=null){
-                        var href = '';
-                        href += '/goods/'+gid+'~inviter_'+uid+'.html';
-                        window.location.href=href;
-                    }else{
-                        layer.msg('您还未登录！');
-                    }
-
                 }
             });
+        }
+
+        
+        <!--调用分享函数-->
+        function shareGoods() {
+
         }
     </script>
 

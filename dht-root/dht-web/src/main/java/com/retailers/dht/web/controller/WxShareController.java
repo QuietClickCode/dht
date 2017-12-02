@@ -55,16 +55,13 @@ public class WxShareController extends BaseController{
     public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
 
         Long uid = getCurLoginUserId(request);
-        String lastStr = "~inviter_"+uid+".html";
 
         String noncestr = createRandomString();
-        String jsapi_ticket = WxConfig.ACCESS_TOKEN;;
-        System.out.println("================"+WxConfig.ACCESS_TOKEN);
+        String jsapi_ticket = WxConfig.ACCESS_TOKEN;
         Long timestamp = new Date().getTime()/1000;
-        String url = path+lastStr;
         String signature = "";
-        String homePath = "http://test.iyoubang.com";
-        homePath = homePath+url;
+        String homePath = "http://www.kuaiyis.com";
+        homePath = homePath+path;
         try {
             signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);
         }catch (Exception e){
