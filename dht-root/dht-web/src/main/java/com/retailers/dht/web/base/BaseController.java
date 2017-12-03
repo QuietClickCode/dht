@@ -3,6 +3,7 @@ package com.retailers.dht.web.base;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.constant.WebSystemConstant;
 import com.retailers.mybatis.pagination.Pagination;
@@ -48,6 +49,26 @@ public class BaseController extends BaseWrite {
             return sysUser.getUid();
         }
         return null;
+    }
+    /**
+     * 取得分享用户 id
+     * @param request
+     * @return
+     */
+    protected Long getShareUserId(HttpServletRequest request){
+        Object obj =request.getSession().getAttribute(SystemConstant.Share_USER_SESSION_KEY);
+        if(ObjectUtils.isNotEmpty(obj)){
+            return (Long) obj;
+        }
+        return null;
+    }
+    /**
+     * 取得分享用户 id
+     * @param request
+     * @return
+     */
+    protected void setShareUserId(HttpServletRequest request,Long uid){
+        request.getSession().setAttribute(SystemConstant.Share_USER_SESSION_KEY,uid);
     }
     /**
      * 取得当前登陆用户

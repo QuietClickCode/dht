@@ -34,6 +34,10 @@ public class SystemConstant {
      */
     public static final String LOG_USER_SESSION_KEY="user";
     /**
+     * 分享用户session 存入key
+     */
+    public static final String Share_USER_SESSION_KEY="shareUser";
+    /**
      * 是否拉取得微信用户信息
      */
     public static final String IS_PULL_WX_USER_INFO="wxUser";

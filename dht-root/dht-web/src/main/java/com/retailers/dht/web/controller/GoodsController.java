@@ -6,6 +6,7 @@ import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +31,7 @@ public class GoodsController extends BaseController {
     @RequestMapping("/{id}.html")
     public String service(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
-        return redirectUrl(request,"goods/goods");
+        return getFinalReturnString(id,"goods","goods",request);
     }
 
 
@@ -50,4 +51,32 @@ public class GoodsController extends BaseController {
         return gtm;
     }
 
+    public String getFinalReturnString(String id,String controllerMapping,String page,HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
+        String path="";
+        String[] arr = id.split("~");
+        if(!ObjectUtils.isEmpty(uid)){
+            try {
+                String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
+                if(arr.length==1){
+                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
+                    return path;
+                }else{
+                    String ivr = id.split("_")[1];
+                    ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
+                    if(!ivr.equals(uid.toString())){
+                        Long ivrLong = Long.parseLong(ivr);
+                        setShareUserId(request,ivrLong);
+                        String gidstr = id.split("~")[0];
+                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+uid+".html";
+                        return path;
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return redirectUrl(request,controllerMapping+"/"+page);
+
+    }
 }

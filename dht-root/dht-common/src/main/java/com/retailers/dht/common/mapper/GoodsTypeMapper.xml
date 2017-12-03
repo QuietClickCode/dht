@@ -11,11 +11,12 @@
 			<result property="isShow" column="is_show"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
+			<result property="isReturnnow" column="is_returnnow"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsType_columns">
-		gt_id,gt_name,is_params,is_trademark,is_specification,is_show,is_delete,version
+		gt_id,gt_name,is_params,is_trademark,is_specification,is_returnnow,is_show,is_delete,version
 	</sql>
 	<!-- 根据商品大类表主键取得数据 -->
 	<select id="queryGoodsTypeByGtId" resultMap="rm_goodsType" parameterType="java.lang.Long">
@@ -40,6 +41,9 @@
 			<if test="null != params.isSpecification">
 				AND is_specification = #{params.isSpecification}
 			</if>
+			<if test="null != params.isReturnnow">
+				AND is_returnnow = #{params.isReturnnow}
+			</if>
 			<if test="null != params.isShow">
 				AND is_show = #{params.isShow}
 			</if>
@@ -61,10 +65,10 @@
 	<!--添加商品大类表 -->
 	<insert id="saveGoodsType" parameterType="com.retailers.dht.common.entity.GoodsType" useGeneratedKeys="true" keyProperty="gtId">
 		INSERT INTO t_goods_type (
-			gt_name,is_params,is_trademark,is_specification,is_show,is_delete,version
+			gt_name,is_params,is_trademark,is_specification,is_returnnonw,is_show,is_delete,version
 		) VALUES
 		(
-			#{gtName,jdbcType=VARCHAR},#{isParams,jdbcType=BIGINT},#{isTrademark,jdbcType=BIGINT},#{isSpecification,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gtName,jdbcType=VARCHAR},#{isParams,jdbcType=BIGINT},#{isTrademark,jdbcType=BIGINT},#{isSpecification,jdbcType=BIGINT},#{isReturnnow,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品大类表 -->
@@ -83,6 +87,9 @@
             <if test="null != isSpecification">
                 is_specification = #{isSpecification},
             </if>
+			<if test="null != isShow">
+				is_returnnow = #{isReturnnow},
+			</if>
             <if test="null != isShow">
                 is_show = #{isShow},
             </if>
