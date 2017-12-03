@@ -81,6 +81,14 @@ public interface SysUserService {
 	 */
 	public boolean delSysUser(Long uid);
 
+
+	/**
+	 * 根据账号查找员工
+	 * @param account
+	 * @return
+	 */
+	public SysUser querySyUserByAccount(String account);
+
 }
 
 

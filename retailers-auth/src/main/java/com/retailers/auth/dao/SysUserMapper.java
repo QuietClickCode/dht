@@ -69,4 +69,11 @@ public interface SysUserMapper {
 	 */
 	public int delSysUser(Long uid);
 
+	/**
+	 * 根据账号查找员工
+	 * @param account
+	 * @return
+	 */
+	public SysUser querySyUserByAccount(String account);
+
 }

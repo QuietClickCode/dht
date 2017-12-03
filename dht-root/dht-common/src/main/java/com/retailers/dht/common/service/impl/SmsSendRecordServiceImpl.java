@@ -104,5 +104,15 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 		}
 		return ssr;
 	}
+
+
+	public SmsSendRecord queryCurSmsSendRecordByPhone(String phone, int type, String code, Date curDate) {
+		SmsSendRecord sendRecord = smsSendRecordMapper.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
+		return sendRecord;
+	}
+
+	public int checkSendSms(Long uid, String phone, long type, Date curDate) {
+		return smsSendRecordMapper.checkSendSms(uid,phone,type,curDate);
+	}
 }
 

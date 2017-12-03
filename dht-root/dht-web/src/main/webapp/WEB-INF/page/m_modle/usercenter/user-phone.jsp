@@ -20,6 +20,11 @@
         #init_btn{
             background-color: #e83939;
             color: #fff;
+            width: 100%;
+            display: block;
+            text-align: center;
+            height: 0.8rem;
+            line-height: 0.8rem;
         }
     </style>
 </head>
@@ -63,7 +68,7 @@
 
 
 <script src="/js/jquery-1.9.1.min.js"></script>
-<script src="/js/layer/layer.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
 <script>
 
     var countdown=60;
@@ -82,7 +87,11 @@
             },
             success:function (data) {
                 id = data.data;
-                layer.msg("短信已发送",{time:1000});
+                layer.open({
+                    content: '短信已发送'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
             }
         });
     }
@@ -107,12 +116,20 @@
     
     function verifyForm() {
         if($(".user-phone").val() == ""){
-            layer.msg("手机号不能为空",{time:1000});
+            layer.open({
+                content: '手机号不能为空'
+                ,skin: 'msg'
+                ,time: 1
+            });
             return false;
         }
 
         if(!$(".user-phone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
-            layer.msg("手机格式不正确",{time:1000});
+            layer.open({
+                content: '手机格式不正确'
+                ,skin: 'msg'
+                ,time: 1
+            });
             return false;
         }
         return true;
@@ -121,7 +138,11 @@
     $("#init_btn").click(function(){
         let code = $("#cod-input").val();
         if(code == "") {
-            layer.msg("验证码不能为空",{time:1000});
+            layer.open({
+                content: '验证码不能为空'
+                ,skin: 'msg'
+                ,time: 1
+            });
             return;
         }
 
@@ -135,12 +156,20 @@
             },
             success:function(data){
                 if(data.data == true){
-                    layer.msg("绑定手机成功",{time:1000});
+                    layer.open({
+                        content: '绑定手机成功'
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
                     setTimeout(function () {
                         window.history.back();
                     },1000);
                 }else{
-                    layer.msg("验证码错误",{time:1000});
+                    layer.open({
+                        content: '验证码错误'
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
                 }
             }
         });

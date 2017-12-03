@@ -44,7 +44,8 @@
 </div>
 
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
-<script type="text/javascript" src="/js/layer/layer.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
+
 <script>
     $(function () {
         $.ajax({
@@ -76,7 +77,11 @@
     });
     
     function littleTips() {
-        layer.msg("请先去绑定手机",{time:1000});
+        layer.open({
+            content: '请先去绑定手机'
+            ,skin: 'msg'
+            ,time: 1
+        });
     }
 </script>
 </body>

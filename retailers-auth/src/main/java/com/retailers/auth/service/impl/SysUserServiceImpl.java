@@ -128,5 +128,14 @@ public class SysUserServiceImpl implements SysUserService {
 			orgUserMapper.saveOrgUsers(lists);
 		}
 	}
+
+	/**
+	 * 根据账号查找员工
+	 * @param account
+	 * @return
+	 */
+	public SysUser querySyUserByAccount(String account){
+		return sysUserMapper.querySyUserByAccount(account);
+	}
 }
 

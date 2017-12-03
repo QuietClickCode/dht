@@ -127,21 +127,37 @@
 
 		function verifyForm() {
 			if($("#uaName").val() == ""){
-                layer.msg("收货人不能为空",{time:1000});
+                layer.open({
+                    content: '收货人不能为空'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                });
                 return false;
 			}
 
 			if($("#uaPhone").val() == ""){
-                layer.msg("联系方式不能为空",{time:1000});
+                layer.open({
+                    content: '联系方式不能为空'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                });
                 return false;
 			}
 
 			if(!$("#uaPhone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
-                layer.msg("手机格式不正确",{time:1000});
+                layer.open({
+                    content: '手机格式不正确'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                });
                 return false;
 			}
 			if($("#uaAddress").val() == ""){
-                layer.msg("收货地址不能为空",{time:1000});
+                layer.open({
+                    content: '收货地址不能为空'
+                    ,skin: 'msg'
+                    ,time: 1 //2秒后自动关闭
+                });
                 return false;
 			}
             return true;
@@ -152,10 +168,10 @@
 		 * 保存用户地址
          */
 		function saveUserAddress(){
-			if(verifyForm() == false)
+            if(verifyForm() == false)
                 return;
-		    if(!isSaves){
-		        isSaves=true;
+            if(!isSaves){
+                isSaves=true;
                 let curIndex = layer.open({
                     type: 2,
                     shadeClose:false,

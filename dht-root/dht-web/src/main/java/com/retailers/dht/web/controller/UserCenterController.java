@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -264,20 +265,34 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     * 验证验证码
+     * 根据手机号，类型取得发送消息内容
      * @param request
      * @return
      */
     @RequestMapping("verifyValidCode")
     @ResponseBody
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
-    public BaseResp verifyValidCode(HttpServletRequest request,Long id,String code){
-        SmsSendRecord sendRecord = smsSendRecordService.querySmsSendRecordById(id);
+    public BaseResp verifyValidCode(HttpServletRequest request,String phone,int type,String code,Date curDate){
+        SmsSendRecord sendRecord = smsSendRecordService.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
         if (ObjectUtils.equalsIgnorecase(sendRecord.getCode(), code)) {
             return success(true);
         }
         return success(false);
     }
+
+    /**
+     *  校验短信是否可以发送（该时间周期内未发送过短信)
+     */
+
+    @RequestMapping("checkSendSms")
+    @ResponseBody
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    public BaseResp verifyValidCode(HttpServletRequest request,String phone,long type,Date curDate){
+        long uid=getCurLoginUserId(request);
+        int time = smsSendRecordService.checkSendSms(uid,phone,type,curDate);
+        return success(time);
+    }
+
 
     /**
      * 用户绑定手机

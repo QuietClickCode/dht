@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.service.SysUserService;
 import com.retailers.auth.vo.SysUserVo;
 import com.retailers.dht.manage.base.BaseController;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,6 +43,34 @@ public class SysUserController extends BaseController {
     public String openSysUserPage(){
         return "sys_user/sys_user";
     }
+
+
+    /**
+     * 打开登陆页面
+     * @return
+     */
+    @RequestMapping("openLoginPage")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    public String openLoginPage(){
+        return "sys_user/login";
+    }
+
+    /**
+     * 根据账号查找用户
+     * @return
+     */
+    @RequestMapping("querySyUserByAccount")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    public BaseResp querySyUserByAccount(HttpServletRequest request, String account){
+        SysUser sysUser = sysUserService.querySyUserByAccount(account);
+        if (sysUser == null) {
+            return success(false);
+        }else{
+            return success(true);
+        }
+    }
+
+
 
     /**
      * 取得职员列表

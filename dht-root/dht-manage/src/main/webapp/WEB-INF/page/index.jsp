@@ -47,7 +47,7 @@
                             <li><a class="menu_item" href="mailbox.html">信箱</a>
                             </li>
                             <li class="divider"></li>
-                            <li><a href="login.html">安全退出</a>
+                            <li><a href="sysUser/openLoginPage">安全退出</a>
                             </li>
                         </ul>
                     </div>

@@ -87,7 +87,7 @@
 
 
 <script src="/js/jquery-1.9.1.min.js"></script>
-<script src="/js/layer/layer.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
 <script>
     var countdown=60;
     var id = "";
@@ -102,7 +102,11 @@
             },
             success:function (data) {
                 id = data.data;
-                layer.msg("短信已发送");
+                layer.open({
+                    content: '短信已发送'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
             }
         });
     }
@@ -141,21 +145,31 @@
 
     $(".verifyValidCode").click(function () {
         let val = $(".validCode").val();
-        if(id == "")
-            return;
         $.ajax({
             url:"/user/verifyValidCode",
             type:"post",
             dataType:"json",
             data:{
-                id:id,
-                code:val
+                phone:phone,
+                type:0,
+                code:val,
+                curDate:new Date()
             },
             success:function (data) {
                 if(data.data == false) {
-                    layer.msg("验证码错误");
+                    layer.open({
+                        content: '验证码错误'
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
+
                 }else if(data.data == true) {
-                    layer.msg("验证成功",{time:1000});
+                    layer.open({
+                        content: '验证成功'
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
+
                     setTimeout(function(){
                         layer.close();
                         clearTimeout(setTime);
@@ -172,7 +186,12 @@
     function getvalidCode($this) {
         let phoneNumber = $(".newPhoneNumber").val();
         if(phoneNumber == ""){
-            layer.msg("请输入新手机号码",{time:1000});
+            layer.open({
+                content: '请输入新的手机号'
+                ,skin: 'msg'
+                ,time: 1
+            });
+
             return;
         }
         settime($this);
@@ -184,7 +203,12 @@
                 phone:phoneNumber
             },
             success:function (data) {
-                layer.msg("短信已发送",{time:1000});
+                layer.open({
+                    content: '短信已发送'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
+
             }
         });
     }
@@ -193,7 +217,12 @@
         let validCode = $(".newValidCode").val();
         let phoneNumber = $(".newPhoneNumber").val();
         if(validCode == "" || validCode.length != 6)
-            layer.msg("验证码不能为空,长度不能超过六位",{time:1000});
+            layer.open({
+                content: '验证码不能为空,长度不能超过六位'
+                ,skin: 'msg'
+                ,time: 1
+            });
+
         $.ajax({
             url:"/user/bindPhone",
             type:"post",
@@ -204,7 +233,12 @@
             },
             success:function (data) {
                 if(data.data == true){
-                    layer.msg("绑定手机号成功",{time:1000});
+                    layer.open({
+                        content: '绑定手机号成功'
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
+
                     setTimeout(function(){
                         history.back(-1);
                     },2000);

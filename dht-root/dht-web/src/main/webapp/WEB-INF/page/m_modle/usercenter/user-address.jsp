@@ -171,18 +171,23 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
             });
         }
 
+        var isSaves=false;
         function defaultUserAddress(id){
-            $.ajax({
-                url:"/userAddress/defaultUserAddress",
-                type:"post",
-                dataType:"json",
-                data:{
-                    uaId:id
-                },
-                success:function(data){
-                    location.reload();
-                }
-            });
+            if(!isSaves){
+                isSaves=true;
+                $.ajax({
+                    url:"/userAddress/defaultUserAddress",
+                    type:"post",
+                    dataType:"json",
+                    data:{
+                        uaId:id
+                    },
+                    success:function(data){
+                        location.reload();
+                        isSaves=false;
+                    }
+                });
+            }
         }
         
         var scrollTop;

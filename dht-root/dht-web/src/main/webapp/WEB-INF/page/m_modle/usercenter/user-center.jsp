@@ -84,7 +84,7 @@
                 <i class="user-icon-list2"></i>
                 <span>足迹</span>
             </div>
-            <a href="/userFootprint/toUserFootprintpage">有12件商品在等你噢
+            <a href="/userFootprint/toUserFootprintpage">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -93,7 +93,7 @@
                 <i class="user-icon-list3"></i>
                 <span>余额</span>
             </div>
-            <a href="/user/userWallet">有12件商品在等你噢
+            <a href="/user/userWallet">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -102,7 +102,7 @@
                 <i class="user-icon-list4"></i>
                 <span>会员卡</span>
             </div>
-            <a href="/user/userMember">有12件商品在等你噢
+            <a href="/user/userMember">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -111,7 +111,7 @@
                 <i class="user-icon-list5"></i>
                 <span>优惠券</span>
             </div>
-            <a href="/user/userCoupon">有12件商品在等你噢
+            <a href="/user/userCoupon">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -120,7 +120,7 @@
                 <i class="user-icon-list6"></i>
                 <span>返现</span>
             </div>
-            <a href="">有12件商品在等你噢
+            <a href="">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -129,7 +129,7 @@
                 <i class="user-icon-list7"></i>
                 <span>售后服务</span>
             </div>
-            <a href="">有12件商品在等你噢
+            <a href="">
                 <span class="prompt"></span>
             </a>
         </div>
@@ -155,6 +155,7 @@
     </script>
 
     <script type="text/javascript">
+        //给功能菜单添加点击事件
         $(".user-order").click(function(){
             let index = $(this).index(".user-order");
             if(index != 0){

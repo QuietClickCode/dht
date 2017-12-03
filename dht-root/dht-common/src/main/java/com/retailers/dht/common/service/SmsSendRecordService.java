@@ -1,9 +1,10 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.SmsSendRecord;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 
+import java.util.Date;
 import java.util.Map;
 /**
  * 描述：短信发送列表Service
@@ -67,6 +68,24 @@ public interface SmsSendRecordService {
 	 */
 	public SmsSendRecord sendSmsCode(Long uid,String phone,long type)throws AppException;
 
+	/**
+	 * 根据手机号，类型取得发送消息内容
+	 * @param phone
+	 * @param type
+	 * @param curDate
+	 * @return
+	 */
+	public SmsSendRecord queryCurSmsSendRecordByPhone(String phone,int type,String code,Date curDate);
+
+	/**
+	 * 校验短信是否可以发送（该时间周期内未发送过短信)
+	 * @param uid 用户id
+	 * @param phone 接收短信手机号
+	 * @param type 发送类型
+	 * @param curDate 失效时间
+	 * @return
+	 */
+	public int checkSendSms(Long uid,String phone,long type,Date curDate);
 }
 
 

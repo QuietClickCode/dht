@@ -47,31 +47,36 @@
         });
     })
 
+    var isSaves=false;
     $("#saveNickName").click(function(){
-        let val = $(".modify_name_input").val();
-        if(val == ""){
-            layer.msg("昵称不能为空");
-            return;
-        }
-
-        if(val == userName){
-            layer.msg("请输入新昵称");
-            return;
-        }
-        $.ajax({
-            type:"post",
-            url:"/user/updateUserName",
-            dataType:"json",
-            data:{
-                name:val
-            },
-            success:function (data) {
-                layer.msg("修改昵称成功");
-                setTimeout(function(){
-                    history.back(-1);
-                },2000);
+        if(!isSaves){
+            isSaves=true;
+            let val = $(".modify_name_input").val();
+            if(val == ""){
+                layer.msg("昵称不能为空");
+                return;
             }
-        });
+
+            if(val == userName){
+                layer.msg("请输入新昵称");
+                return;
+            }
+            $.ajax({
+                type:"post",
+                url:"/user/updateUserName",
+                dataType:"json",
+                data:{
+                    name:val
+                },
+                success:function (data) {
+                    layer.msg("修改昵称成功",{time:1000});
+                    isSaves=false;
+                    setTimeout(function(){
+                        history.back(-1);
+                    },2000);
+                }
+            });
+        }
     });
 
     var userName;

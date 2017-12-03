@@ -33,6 +33,11 @@
 		SELECT <include refid="sysUser_columns" />
 		FROM t_sys_user WHERE u_id = #{uid}
 	</select>
+	
+	<select id="querySyUserByAccount" resultMap="rm_sysUser" parameterType="java.lang.String">
+		SELECT <include refid="sysUser_columns" /> FROM t_sys_user WHERE u_account = #{account}
+	</select>
+	
 	<!-- 公司员工表查询条件组合 -->
 	<sql id="sysUser_where">
 		<where>
