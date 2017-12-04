@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.aliyun.sms.dao.AliyunSmsTemplateMapper">
+
+	<resultMap id="rm_aliyunSmsTemplate" type="com.retailers.aliyun.sms.entity.AliyunSmsTemplate">
+			<result property="id" column="id"/>
+			<result property="funCode" column="fun_code"/>
+			<result property="funName" column="fun_name"/>
+			<result property="code" column="code"/>
+			<result property="context" column="context"/>
+			<result property="param" column="param"/>
+			<result property="createUid" column="create_uid"/>
+			<result property="createTime" column="create_time"/>
+			<result property="isValid" column="is_valid"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="aliyunSmsTemplate_columns">
+		id,fun_code,fun_name,code,context,param,create_uid,create_time,is_valid
+	</sql>
+	<!-- 根据阿里云短信模版管理主键取得数据 -->
+	<select id="queryAliyunSmsTemplateById" resultMap="rm_aliyunSmsTemplate" parameterType="java.lang.Long">
+		SELECT <include refid="aliyunSmsTemplate_columns" />
+		FROM t_aliyun_sms_template WHERE id = #{id}
+	</select>
+	<!-- 阿里云短信模版管理查询条件组合 -->
+	<sql id="aliyunSmsTemplate_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.funCode and '' != params.funCode">
+				AND fun_code = #{params.funCode}
+			</if>
+			<if test="null != params.funName and '' != params.funName">
+				AND fun_name = #{params.funName}
+			</if>
+			<if test="null != params.code and '' != params.code">
+				AND code = #{params.code}
+			</if>
+			<if test="null != params.context and '' != params.context">
+				AND context = #{params.context}
+			</if>
+			<if test="null != params.param and '' != params.param">
+				AND param = #{params.param}
+			</if>
+			<if test="null != params.createUid">
+				AND create_uid = #{params.createUid}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= #{params.createTime}
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= #{params.createTime}
+			</if>
+			<if test="null != params.isValid">
+				AND is_valid = #{params.isValid}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryAliyunSmsTemplateList" resultMap="rm_aliyunSmsTemplate" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="aliyunSmsTemplate_columns" />
+		FROM t_aliyun_sms_template
+		<include refid="aliyunSmsTemplate_where"/>
+	</select>
+	<!--添加阿里云短信模版管理 -->
+	<insert id="saveAliyunSmsTemplate" parameterType="com.retailers.aliyun.sms.entity.AliyunSmsTemplate" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_aliyun_sms_template (
+			fun_code,fun_name,code,context,param,create_uid,create_time,is_valid
+		) VALUES
+		(
+			#{funCode,jdbcType=VARCHAR},#{funName,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{param,jdbcType=VARCHAR},#{createUid,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{isValid,jdbcType=INTEGER}
+		)
+	</insert>
+	<!--修改阿里云短信模版管理 -->
+	<update id="updateAliyunSmsTemplate" parameterType="com.retailers.aliyun.sms.entity.AliyunSmsTemplate">
+		UPDATE t_aliyun_sms_template
+		<set>
+            <if test="null != funCode and '' != funCode">
+                fun_code = #{funCode},
+            </if>
+            <if test="null != funName and '' != funName">
+                fun_name = #{funName},
+            </if>
+            <if test="null != code and '' != code">
+                code = #{code},
+            </if>
+            <if test="null != context and '' != context">
+                context = #{context},
+            </if>
+            <if test="null != param and '' != param">
+                param = #{param},
+            </if>
+            <if test="null != createUid">
+                create_uid = #{createUid},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != isValid">
+                is_valid = #{isValid},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除阿里云短信模版管理 -->
+	<delete id="deleteAliyunSmsTemplateById" parameterType="java.lang.Long">
+		DELETE FROM t_aliyun_sms_template WHERE id = #{id}
+	</delete>
+
+	<!-- 根据FunCode查询阿里云短信模版管理 -->
+	<select id="queryAliyunSmsTemplateByFunCode" resultMap="rm_aliyunSmsTemplate" parameterType="java.lang.String">
+		SELECT <include refid="aliyunSmsTemplate_columns" />
+		FROM t_aliyun_sms_template WHERE fun_code = #{funCode}
+	</select>
+
+</mapper>

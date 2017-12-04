@@ -13,6 +13,7 @@
         <module>retailers-auth</module>
         <module>retailers-static</module>
         <module>reatilers-wx</module>
+        <module>aliyun-sms</module>
     </modules>
     <packaging>pom</packaging>
     <name>大汇堂主工程</name>

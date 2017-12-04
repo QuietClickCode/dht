@@ -4,11 +4,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.retailers.aliyun.sms.constant.SmsSendRecordConstant;
+import com.retailers.aliyun.sms.dao.SmsSendRecordMapper;
+import com.retailers.aliyun.sms.entity.SmsSendRecord;
 import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.constant.SmsSendRecordConstant;
-import com.retailers.dht.common.dao.SmsSendRecordMapper;
 import com.retailers.dht.common.entity.Attachment;
-import com.retailers.dht.common.entity.SmsSendRecord;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.dao.UserMapper;
 import com.retailers.dht.common.service.AttachmentService;
@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
 	@Transactional(rollbackFor = Exception.class)
 	public boolean bindPhone(Long uid, String phone, String code) throws AppException {
 		Date curDate =new Date();
-		SmsSendRecord smsSendRecord=smsSendRecordMapper.queryCurSmsSendRecordByPhone(phone,SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE,code,curDate);
+		SmsSendRecord smsSendRecord=smsSendRecordMapper.queryCurSmsSendRecordByPhone(phone, SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE,code,curDate);
 		if(ObjectUtils.isEmpty(smsSendRecord)){
 			throw new AppException("验证码己失效");
 		}

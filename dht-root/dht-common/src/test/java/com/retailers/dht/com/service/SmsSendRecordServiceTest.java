@@ -1,8 +1,8 @@
 package com.retailers.dht.com.service;
 
+import com.retailers.aliyun.sms.constant.SmsSendRecordConstant;
+import com.retailers.aliyun.sms.service.SmsSendRecordService;
 import com.retailers.dht.com.base.TestBaseJunit;
-import com.retailers.dht.common.constant.SmsSendRecordConstant;
-import com.retailers.dht.common.service.SmsSendRecordService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

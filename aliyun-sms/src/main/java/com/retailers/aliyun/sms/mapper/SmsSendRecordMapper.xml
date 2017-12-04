@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.retailers.dht.common.dao.SmsSendRecordMapper">
+<mapper namespace="com.retailers.aliyun.sms.dao.SmsSendRecordMapper">
 
-	<resultMap id="rm_smsSendRecord" type="com.retailers.dht.common.entity.SmsSendRecord">
+	<resultMap id="rm_smsSendRecord" type="com.retailers.aliyun.sms.entity.SmsSendRecord">
 		<result property="id" column="id"/>
 		<result property="uid" column="u_id"/>
 		<result property="type" column="type"/>
@@ -14,11 +14,15 @@
 		<result property="onceSendDate" column="once_send_date"/>
 		<result property="expireDate" column="expire_date"/>
 		<result property="useDate" column="use_date"/>
+		<result property="outId" column="out_id"/>
+		<result property="outMsg" column="out_msg"/>
+		<result property="outDate" column="out_date"/>
+		<result property="params" column="params"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="smsSendRecord_columns">
-		id,u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+		id,u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date,out_id,out_msg,out_date,params
 	</sql>
 	<!-- 根据短信发送列表主键取得数据 -->
 	<select id="querySmsSendRecordById" resultMap="rm_smsSendRecord" parameterType="java.lang.Long">
@@ -50,28 +54,40 @@
 				AND context = #{params.context}
 			</if>
 			<if test="null != params.createDateBegin">
-				AND create_date &gt;= TO_DATE('${params.createDateBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND create_date &gt;= #{params.createDate}
 			</if>
 			<if test="null != params.createDateEnd">
-				AND create_date &lt;= TO_DATE('${params.createDateEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND create_date &lt;= #{params.createDate}
 			</if>
 			<if test="null != params.onceSendDateBegin">
-				AND once_send_date &gt;= TO_DATE('${params.onceSendDateBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND once_send_date &gt;= #{params.onceSendDate}
 			</if>
 			<if test="null != params.onceSendDateEnd">
-				AND once_send_date &lt;= TO_DATE('${params.onceSendDateEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND once_send_date &lt;= #{params.onceSendDate}
 			</if>
 			<if test="null != params.expireDateBegin">
-				AND expire_date &gt;= TO_DATE('${params.expireDateBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND expire_date &gt;= #{params.expireDate}
 			</if>
 			<if test="null != params.expireDateEnd">
-				AND expire_date &lt;= TO_DATE('${params.expireDateEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND expire_date &lt;= #{params.expireDate}
 			</if>
 			<if test="null != params.useDateBegin">
-				AND use_date &gt;= TO_DATE('${params.useDateBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND use_date &gt;= #{params.useDate}
 			</if>
 			<if test="null != params.useDateEnd">
-				AND use_date &lt;= TO_DATE('${params.useDateEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND use_date &lt;= #{params.useDate}
+			</if>
+			<if test="null != params.outId and '' != params.outId">
+				AND out_id = #{params.outId}
+			</if>
+			<if test="null != params.outMsg and '' != params.outMsg">
+				AND out_msg = #{params.outMsg}
+			</if>
+			<if test="null != params.outDateBegin">
+				AND out_date &gt;= #{params.outDate}
+			</if>
+			<if test="null != params.outDateEnd">
+				AND out_date &lt;= #{params.outDate}
 			</if>
 		</where>
 	</sql>
@@ -82,16 +98,16 @@
 		<include refid="smsSendRecord_where"/>
 	</select>
 	<!--添加短信发送列表 -->
-	<insert id="saveSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord" useGeneratedKeys="true" keyProperty="id">
+	<insert id="saveSmsSendRecord" parameterType="com.retailers.aliyun.sms.entity.SmsSendRecord" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_sms_send_record (
-		u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date
+			u_id,type,status,phone,code,context,create_date,once_send_date,expire_date,use_date,out_id,out_msg,out_date,params
 		) VALUES
 		(
-		#{uid,jdbcType=BIGINT},#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{onceSendDate,jdbcType=TIMESTAMP},#{expireDate,jdbcType=TIMESTAMP},#{useDate,jdbcType=TIMESTAMP}
+			#{uid,jdbcType=BIGINT},#{type,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{phone,jdbcType=VARCHAR},#{code,jdbcType=VARCHAR},#{context,jdbcType=VARCHAR},#{createDate,jdbcType=TIMESTAMP},#{onceSendDate,jdbcType=TIMESTAMP},#{expireDate,jdbcType=TIMESTAMP},#{useDate,jdbcType=TIMESTAMP},#{outId,jdbcType=VARCHAR},#{outMsg,jdbcType=VARCHAR},#{outDate,jdbcType=TIMESTAMP},#{params,jdbcType=VARCHAR}
 		)
 	</insert>
 	<!--修改短信发送列表 -->
-	<update id="updateSmsSendRecord" parameterType="com.retailers.dht.common.entity.SmsSendRecord">
+	<update id="updateSmsSendRecord" parameterType="com.retailers.aliyun.sms.entity.SmsSendRecord">
 		UPDATE t_sms_send_record
 		<set>
 			<if test="null != uid">
@@ -124,6 +140,18 @@
 			<if test="null != useDate">
 				use_date = #{useDate},
 			</if>
+			<if test="null != outId and '' != outId">
+				out_id = #{outId},
+			</if>
+			<if test="null != outMsg and '' != outMsg">
+				out_msg = #{outMsg},
+			</if>
+			<if test="null != outDate">
+				out_date = #{outDate},
+			</if>
+			<if test="null != params and '' != params">
+				params = #{params},
+			</if>
 		</set>
 		WHERE id = #{id}
 	</update>
@@ -131,41 +159,39 @@
 	<delete id="deleteSmsSendRecordById" parameterType="java.lang.Long">
 		DELETE FROM t_sms_send_record WHERE id = #{id}
 	</delete>
+
 	<!--分页查询 -->
 	<select id="queryCurSmsSendRecordByPhone" resultMap="rm_smsSendRecord">
 		SELECT
-			<include refid="smsSendRecord_columns" />
+		<include refid="smsSendRecord_columns" />
 		FROM
-			t_sms_send_record
+		t_sms_send_record
 		WHERE
-			phone = #{phone}
-			AND STATUS = 0
-			AND expire_date >#{curDate}
-			AND type = #{type}
-			and code=#{code}
+		phone = #{phone}
+		AND STATUS = 0
+		AND expire_date >#{curDate}
+		AND type = #{type}
+		and code=#{code}
 		ORDER BY
 		id DESC
 		LIMIT 1
 	</select>
+
 	<!--分页查询 -->
 	<select id="checkSendSms" resultType="java.lang.Integer">
 		SELECT
-			count(phone) total
+		count(phone) total
 		FROM
-			t_sms_send_record
+		t_sms_send_record
 		WHERE
-
-			once_send_date > #{curDate}
-			AND type = #{type}
-			AND status=0
-			<if test="null != uid">
-				AND u_id = #{uid}
-			</if>
-			<if test="null == uid">
-				AND phone =#{phone}
-			</if>
-
+		once_send_date > #{curDate}
+		AND type = #{type}
+		AND status=0
+		<if test="null != uid">
+			AND u_id = #{uid}
+		</if>
+		<if test="null == uid">
+			AND phone =#{phone}
+		</if>
 	</select>
-
-
 </mapper>

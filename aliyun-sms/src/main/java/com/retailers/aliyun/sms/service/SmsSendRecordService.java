@@ -1,6 +1,6 @@
 
-package com.retailers.dht.common.service;
-import com.retailers.dht.common.entity.SmsSendRecord;
+package com.retailers.aliyun.sms.service;
+import com.retailers.aliyun.sms.entity.SmsSendRecord;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 
@@ -11,7 +11,7 @@ import java.util.Map;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-23 00:38:54
+ * @date 2017-12-04 15:43:07
  */
 public interface SmsSendRecordService {
 
@@ -20,7 +20,7 @@ public interface SmsSendRecordService {
 	 * @param smsSendRecord
 	 * @return
 	 * @author zhongp
-	 * @date 2017-11-23 00:38:54
+	 * @date 2017-12-04 15:43:07
 	 */
 	public boolean saveSmsSendRecord(SmsSendRecord smsSendRecord);
 	/**
@@ -36,7 +36,7 @@ public interface SmsSendRecordService {
 	 * @param id
 	 * @return smsSendRecord
 	 * @author zhongp
-	 * @date 2017-11-23 00:38:54
+	 * @date 2017-12-04 15:43:07
 	 */
 	public SmsSendRecord querySmsSendRecordById(Long id);
 	/**
@@ -46,7 +46,7 @@ public interface SmsSendRecordService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author zhongp
-	 * @date 2017-11-23 00:38:54
+	 * @date 2017-12-04 15:43:07
 	 */
 	public Pagination<SmsSendRecord> querySmsSendRecordList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -54,10 +54,9 @@ public interface SmsSendRecordService {
 	 * @param id
 	 * @return
 	 * @author zhongp
-	 * @date 2017-11-23 00:38:54
+	 * @date 2017-12-04 15:43:07
 	 */
 	public boolean deleteSmsSendRecordById(Long id);
-
 	/**
 	 * 发送短信
 	 * @param uid 用户id
@@ -67,6 +66,17 @@ public interface SmsSendRecordService {
 	 * @throws AppException
 	 */
 	public SmsSendRecord sendSmsCode(Long uid,String phone,long type)throws AppException;
+
+	/**
+	 *
+	 * @param uid 用户id
+	 * @param phone 电话号码
+	 * @param type 发送短信类型（0 绑定短信，1 密码找回短信，2 解除绑定短信）
+	 * @param params 传入参数
+	 * @return
+	 * @throws AppException
+	 */
+	public SmsSendRecord sendSmsCode(Long uid,String phone,long type,Map<String,String> params)throws AppException;
 
 	/**
 	 * 根据手机号，类型取得发送消息内容
