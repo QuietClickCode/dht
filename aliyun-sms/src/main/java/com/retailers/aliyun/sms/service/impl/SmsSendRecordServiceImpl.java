@@ -130,7 +130,7 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 			ssr.setParams(JSON.toJSONString(params));
 			smsSendRecordMapper.saveSmsSendRecord(ssr);
 			//判断是否是
-			if(AppConfig.IS_DEBUG){
+			if(!AppConfig.IS_DEBUG){
 				aliyunSmsTemplateService.sendSMS(phone,aliyunSmsTemplate,params,ssr.getId());
 			}
 		}finally {
