@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-01 13:25:27
+ * @date 2017-12-02 14:10:15
  */
 public class UserShared implements java.io.Serializable {
 

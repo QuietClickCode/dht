@@ -6,6 +6,7 @@
 			<result property="usId" column="us_id"/>
 			<result property="uid" column="u_id"/>
 			<result property="usWhere" column="us_where"/>
+			<result property="usWhat" column="us_what"/>
 			<result property="createTime" column="create_time"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -13,14 +14,14 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="userShare_columns">
-		us_id,u_id,us_where,create_time,is_delete,version
+		us_id,u_id,us_where,us_what,create_time,is_delete,version
 	</sql>
-	<!-- 根据分享记录表主键取得数据 -->
+	<!-- 根据邀请记录表主键取得数据 -->
 	<select id="queryUserShareByUsId" resultMap="rm_userShare" parameterType="java.lang.Long">
 		SELECT <include refid="userShare_columns" />
 		FROM t_user_share WHERE us_id = #{usId}
 	</select>
-	<!-- 分享记录表查询条件组合 -->
+	<!-- 邀请记录表查询条件组合 -->
 	<sql id="userShare_where">
 		<where>
 			<if test="null != params.usId">
@@ -31,6 +32,9 @@
 			</if>
 			<if test="null != params.usWhere and '' != params.usWhere">
 				AND us_where = #{params.usWhere}
+			</if>
+			<if test="null != params.usWhat and '' != params.usWhat">
+				AND us_what = #{params.usWhat}
 			</if>
 			<if test="null != params.createTimeBegin">
 				AND create_time &gt;= #{params.createTime}
@@ -52,16 +56,16 @@
 		FROM t_user_share
 		<include refid="userShare_where"/>
 	</select>
-	<!--添加分享记录表 -->
+	<!--添加邀请记录表 -->
 	<insert id="saveUserShare" parameterType="com.retailers.dht.common.entity.UserShare" useGeneratedKeys="true" keyProperty="usId">
 		INSERT INTO t_user_share (
-			u_id,us_where,create_time,is_delete,version
+			u_id,us_where,us_what,create_time,is_delete,version
 		) VALUES
 		(
-			#{uid,jdbcType=BIGINT},#{usWhere,jdbcType=VARCHAR},#{createTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
+			#{uid,jdbcType=BIGINT},#{usWhere,jdbcType=VARCHAR},#{usWhat,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改分享记录表 -->
+	<!--修改邀请记录表 -->
 	<update id="updateUserShare" parameterType="com.retailers.dht.common.entity.UserShare">
 		UPDATE t_user_share
 		<set>
@@ -70,6 +74,9 @@
             </if>
             <if test="null != usWhere and '' != usWhere">
                 us_where = #{usWhere},
+            </if>
+            <if test="null != usWhat and '' != usWhat">
+                us_what = #{usWhat},
             </if>
             <if test="null != createTime">
                 create_time = #{createTime},
@@ -83,7 +90,7 @@
 		</set>
 		WHERE us_id = #{usId} and version = #{version}
 	</update>
-	<!--删除分享记录表 -->
+	<!--删除邀请记录表 -->
 	<delete id="deleteUserShareByUsId" parameterType="java.lang.Long">
 		DELETE FROM t_user_share WHERE us_id = #{usId}
 	</delete>

@@ -2,6 +2,7 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +37,14 @@ public class GoodsController extends BaseController {
         return getFinalReturnString(id,"goods","goods",request);
     }
 
+    @RequestMapping("/setinviter")
+    @ResponseBody
+    public  String setinviter(HttpServletRequest request){
+        UserInfoVIew u = new UserInfoVIew();
+        u.setUid(10L);
+        setCurLoginUser(request,u);
+        return "";
+    }
 
     @RequestMapping("/queryGoodsById")
     @ResponseBody
@@ -51,30 +62,57 @@ public class GoodsController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/querySamegclassGoods")
+    @ResponseBody
+    public  Map<String,Object> queryGoodsById(Long gid,int pageNo,int pageSize){
+        System.out.println(gid);
+        Map params = new HashMap();
+        params.put("gid",gid);
+        Pagination<GoodsVo> pagination = goodsService.querySamegclassGoods(params,pageNo,pageSize);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        if(!ObjectUtils.isEmpty(pagination.getData())){
+            gtm.put("rows",pagination.getData());
+        }
+        return gtm;
+    }
+
     public String getFinalReturnString(String id,String controllerMapping,String page,HttpServletRequest request){
         Long uid = getCurLoginUserId(request);
         String path="";
         String[] arr = id.split("~");
+        try {
         if(!ObjectUtils.isEmpty(uid)){
-            try {
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
+                encryuid = URLEncoder.encode(encryuid);
                 if(arr.length==1){
                     path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
+                    ivr = URLDecoder.decode(ivr);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     if(!ivr.equals(uid.toString())){
                         Long ivrLong = Long.parseLong(ivr);
                         setShareUserId(request,ivrLong);
                         String gidstr = id.split("~")[0];
-                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+uid+".html";
+                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html";
                         return path;
                     }
                 }
-            }catch (Exception e){
-                e.printStackTrace();
+        }else{
+            if(arr.length==2){
+                String ivr = id.split("_")[1];
+                ivr = URLDecoder.decode(ivr);
+                ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
+                Long ivrLong = Long.parseLong(ivr);
+                setShareUserId(request,ivrLong);
+                String gidstr = id.split("~")[0];
+                path = "redirect:/"+controllerMapping+"/"+gidstr+".html";
+                return path;
             }
+        }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return redirectUrl(request,controllerMapping+"/"+page);
 

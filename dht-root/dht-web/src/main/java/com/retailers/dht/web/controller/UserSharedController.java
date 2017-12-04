@@ -26,17 +26,16 @@ public class UserSharedController extends BaseController{
     UserSharedService userSharedService;
 
     @RequestMapping("/saveUserShared")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp saveUserShare(UserShared userShared, HttpServletRequest request){
         Long uid = getCurLoginUserId(request);
         Long shareUserId = getShareUserId(request);
-
         if(shareUserId==uid|| ObjectUtils.isEmpty(shareUserId)){
             return success(true);
         }
         userShared.setIsDelete(0L);
         userShared.setUid(uid);
+        userShared.setUsUid(shareUserId);
         userShared.setCreatTime(new Date());
         boolean flag = userSharedService.saveUserShared(userShared);
         return  success(flag);

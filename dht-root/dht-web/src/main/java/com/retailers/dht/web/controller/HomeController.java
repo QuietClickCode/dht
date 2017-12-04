@@ -34,4 +34,9 @@ public class HomeController extends BaseController {
     public String randomHome(HttpServletRequest request, @PathVariable("id")String id){
         return redirectUrl(request,"index");
     }
+
+    @RequestMapping("/home/lostHtml")
+    public String lostHtml(HttpServletRequest request){
+        return redirectUrl(request,"404");
+    }
 }

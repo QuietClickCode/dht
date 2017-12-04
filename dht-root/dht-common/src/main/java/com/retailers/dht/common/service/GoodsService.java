@@ -59,6 +59,9 @@ public interface GoodsService {
 	public boolean checkGoods(Goods goods);
 
 	public boolean updateGoodsSetNotChecked(Long gid,Long uploadpersonId);
+
+	public Pagination<GoodsVo> querySamegclassGoods(Map<String, Object> params, int pageNo, int pageSize);
+
 }
 
 

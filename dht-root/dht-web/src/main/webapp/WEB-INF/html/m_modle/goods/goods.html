@@ -7,8 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>商品详情</title>
     <script src="/js/Adaptive.js"></script>
+    <script src="/js/laydate/laydate.js"></script>
     <link rel="stylesheet" href="/css/style.css">
-    
+    <link rel="stylesheet" href="/css/new.css">
     <style>
     	.focus .hd.bargain{
     		bottom: .1rem;
@@ -16,6 +17,11 @@
     </style>
 </head>
 <body class="bge6">
+<!--分享引导-->
+<div class="guide-share" style="display: none;position: fixed" >
+    <button class="i-know" onclick="ikonw();"></button>
+</div>
+
     <div class="specialty-title2 borderB">
         <a onclick="returnhistory()" class="icon-return"></a>
         <span>商品详情</span>
@@ -36,8 +42,8 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip">预定服务</span><span id="gname">高家庄土蜂蜜</span></p>
-		    <p class="p2"><span id="gdprice" style="font-size: .3rem">￥128.00/桌</span><s><span class="mr_4" id="gprice">￥500.00/桌</span></s></p>
+		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip"></span><span id="gname"></span></p>
+		    <p class="p2"><span id="gdprice" style="font-size: .3rem"></span><s><span class="mr_4" id="gprice"></span></s></p>
 		</div>
 		<div class="norms" id="open_dis" style="margin-bottom: 0;">
             <span class="name">优惠</span>
@@ -56,11 +62,11 @@
         <ul class="norms_son2" id="personaddressul" style="display: none">
         	<li>
         		<span class="span1">商家</span>
-        		<span class="span2" id="servicegoodsgproductioninperson">刘喜大饭店</span>
+        		<span class="span2" id="servicegoodsgproductioninperson"></span>
         	</li>
         	<li>
         		<span class="span1">地址</span>
-        		<span class="span2" id="servicegoodsgproductioninaddress">重庆市石柱县××乡××村</span>
+        		<span class="span2" id="servicegoodsgproductioninaddress"></span>
         	</li>
         </ul>
 
@@ -76,7 +82,7 @@
             </div>
             <div class="text" >
                 <span class="seckill-address-title">采供</span>
-                <div class="name2" id="gpickperson">高达山</div>
+                <div class="name" id="gpickperson">高达山</div>
                 <span class="address-text">
                     <i></i>
                     <span id="gpickaddress">石柱县高家庄</span>
@@ -130,7 +136,7 @@
                 </div>
 
                 <div id="gdescription">
-                    <!--<img src="/img/bangain5.png" class="dispalyB" width="100%" alt="">-->
+
                 </div>
             </div>
 
@@ -183,12 +189,12 @@
     
     <div class="recommend_box">
     	<p class="recommend_title">相似推荐</p>
-    	<ul class="like-list box2" id="samegclassgoodsul" style="display: none;">
-            <li>
-                <a href="" class="img"><img src="/img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
+    	<ul class="like-list box2" id="samegclassgoodsul" >
+            <!--<li>-->
+                <!--<a href="" class="img"><img src="/img/list2.jpg" alt=""></a>-->
+                <!--<a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
+                <!--<p>￥189</p>-->
+            <!--</li>-->
 
         </ul>
     </div>
@@ -242,20 +248,20 @@
 	            </div>
 	        </div>
             <div id="gsdiv">
-                <div class="care-checkbox J_careCheckbox">
-                    <span class="name">规格</span>
-                    <span class="checkbox_service active">人工费(不包含食材、设备费用)</span>
-                    <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-                    <span class="checkbox_service ">人工费(包设备用具、不包食材)</span>
-                </div>
+                <!--<div class="care-checkbox J_careCheckbox">-->
+                    <!--<span class="name">规格</span>-->
+                    <!--<span class="checkbox_service active">人工费(不包含食材、设备费用)</span>-->
+                    <!--<span class="checkbox_service ">人工费(包设备用具、不包食材)</span>-->
+                    <!--<span class="checkbox_service ">人工费(包设备用具、不包食材)</span>-->
+                <!--</div>-->
             </div>
 
 	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
+	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
 	                <span class="num J_careNum" id="goodsnumber">1</span>
-	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
+	                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
 	            </div>
 	        </div>
 	        
@@ -274,6 +280,10 @@
 	            	<option value="周一至周五">周一至周五</option>
 	            	<option value="周末">周末</option>
 	            </select>
+                <center>
+                    <input type="text"  id="select_time" value="" style="border: 1px black solid;margin: 0 auto"/>
+                </center>
+
 	        </div>
 	        <a onclick="setpstime(this);" class="care-norms-checkbox-btn">确定</a>
 	    </div>
@@ -336,6 +346,7 @@
     <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
+
         var pathArr = path.substring(7,path.indexOf('.html')).split('~');
         var gid = parseInt(pathArr[0]);
         <!--邀请者Id-->
@@ -490,9 +501,13 @@
                         if(isServiceGoods==1){
                             $('.showaddressfreigh').hide();
                             $($('#open_time').find('span')[1]).html('请选择服务时间');
+                            $('.select_input').hide();
+                            $('#select_time').show();
                             $('#servicespan').show();
                         }else{
                             $('.showaddressfreigh').show();
+                            $('.select_input').show();
+                            $('#select_time').hide();
                             $('#servicespan').hide();
                         }
                         if(isAdvancesale==1){
@@ -538,11 +553,15 @@
                 type:"post",
                 url:'/city/queryCityListsByCityName',
                 dataType: "json",
+                saync:false,
                 data:{cityname:address.substr(0,2),pageNo:1,pageSize:2},
                 success:function(data){
                     var row = data.row;
                     if(row!=null){
                         var gfreigh = row.gfreigh;
+                        if(address.indexOf('石柱县')>0){
+                            gfreigh=0;
+                        }
                         $('#gfreigh').html(gfreigh+'元');
                     }
                 }
@@ -553,7 +572,7 @@
 
         <!--商品不存在 跳转页面-->
         function nogoods() {
-            //window.location.href='';
+            window.location.href='/home/lostHtml';
         }
 
         var flag = true;
@@ -561,7 +580,7 @@
         function scrollgoodsclm() {
             $(document).ready(function(){
                 $('#usercommentdiv').html('');
-                var range = 450;             //距下边界长度/单位px
+                var range = 50;             //距下边界长度/单位px
                 var totalheight = 0;
                 var main = $("#usercommentdiv");                     //主体元素
                 $(window).scroll(function(){
@@ -881,7 +900,7 @@
                     type:"post",
                     url:"/buyCar/saveBuyCar",
                     dataType: "json",
-                    data:{gid:gid,bcInviterid:inviterId,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
+                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
                     success:function(data){
                         if(data.status==0){
                             layer.msg('成功加入购物车!');
@@ -932,7 +951,16 @@
 
         <!--选择配送时间-->
         function setpstime(obj) {
-            var pstime = $(obj).prev().find('select')[0].value;
+            var pstime = '';
+            if(isServiceGoods==1){
+                pstime = $(obj).prev().find('input')[0].value;
+            }else{
+                pstime = $(obj).prev().find('select')[0].value;
+            }
+            if(pstime==''){
+                layer.msg('时间不能为空');
+                return;
+            }
             $($('#open_time').find('span')[1]).html(pstime);
             document.getElementsByClassName('J_careNormsClose3')[0].click();
         }
@@ -960,18 +988,20 @@
                     var rows= data.rows;
                     if(rows!=null&&rows.length>0){
                         var html = '';
+                        $('#addresul').html('');
                         for(var i=0;i<rows.length;i++){
                             var active = '';
-//                            if(rows[i].){
-//
-//                            }
-                            html = '<li class="active">'+
+                            if(rows[i].uaIsDefault==0){
+                                active = 'active';
+                            }
+                            html = '<li class="'+active+'">'+
                                 '<span class="address_img"></span>'+
-                                '<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>'+
+                                '<div class="address_text">'+rows[i].uaAllAddress+'</div>'+
                                 '<span  class="icon_choice"></span>'+
                                 '</li>';
+                            $('#addresul').append(html);
                         }
-
+                        initaddress();
                         $("#J_mark").show();
                     }else{
                         layer.msg('您还未登录');
@@ -989,6 +1019,62 @@
                 data:{},
                 success:function(data){
                 }
+            });
+        }
+
+        <!--初始化地址-->
+        function initaddress() {
+            $(".address_list_box>li").click(function(){
+                $(".address_list_box>li").removeClass("active")
+                $(this).addClass("active")
+            })
+        }
+
+        var gclasspageNo=1;
+        var gclasspageSize=10;
+        var samegclassFlag=true;
+        <!--滚动加载类似推荐-->
+        function scrollsamegclass() {
+            $(document).ready(function(){
+                $('#samegclassgoodsul').html('');
+                var range = 10;             //距下边界长度/单位px
+                var totalheight = 0;
+                var main = $("#samegclassgoodsul");                     //主体元素
+                $(window).scroll(function(){
+                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                    if(($(document).height()-range) <= totalheight && samegclassFlag) {
+                        samegclassFlag = false;
+                        $.ajax({
+                            type:"post",
+                            url:'/goods/querySamegclassGoods',
+                            dataType: "json",
+                            async :false,
+                            data:{gid:gid,pageNo:gclasspageNo,pageSize:gclasspageSize},
+                            success:function(data){
+                                var html = '';
+                                var rows = data.rows;
+                                if(rows!=null&&rows.length>0){
+//                                    alert(rows.length);
+                                    for(var i=0;i<rows.length;i++){
+                                        html = '<li>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                            '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                                            '<p>￥'+rows[i].minprice+'</p>'+
+                                            '</li>';
+                                        main.append(html);
+                                    }
+                                    $("img").lazyload({effect: "fadeIn"});
+                                    gclasspageNo++;
+                                    samegclassFlag = true;
+                                }
+                            }
+                        });
+
+                    }
+                });
             });
         }
 
@@ -1049,7 +1135,14 @@
         <!--加载商品规格-->
         loadgsonce();
 
+        <!--加入访客-->
+        addtousershared();
 
+        <!--加入足迹-->
+        addtofootprint();
+
+        <!--加载类似商品-->
+        scrollsamegclass();
     </script>
 
     <script>
@@ -1058,7 +1151,8 @@
             $("img").lazyload({effect: "fadeIn"});
         });
     </script>
-
+    <script type="text/javascript" src="/js/jweixin-1.2.0.js"></script>
+    <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
     <script>
         $(function(){
             $("#open_address").click(function(){
@@ -1087,10 +1181,7 @@
                 $("#J_mark4").hide()
             })
 
-            $(".address_list_box>li").click(function(){
-                $(".address_list_box>li").removeClass("active")
-                $(this).addClass("active")
-            })
+
         });
 
         <!--返回上一页-->
@@ -1119,6 +1210,7 @@
                         var timestamp = data.timestamp;
                         var nonceStr = data.nonceStr;
                         var signature = data.signature;
+
                         wx.config({
 
                             //debug: true, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
@@ -1131,7 +1223,11 @@
 
                             signature: signature,// 必填，签名，见附录1
 
-                            jsApiList: ['onMenuShareTimeline','onMenuShareAppMessage','onMenuShareQQ','onMenuShareWeibo','onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                            jsApiList: ['onMenuShareTimeline',
+                                'onMenuShareAppMessage',
+                                'onMenuShareQQ',
+                                'onMenuShareWeibo',
+                                'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
 
                         });
 
@@ -1145,12 +1241,11 @@
         initShare();
 
         wx.ready(function(){
-            var imgUrl = $('#banner').find('img')[0].src;
-            var title = $('#goodsNameDiv').html();
+            var imgUrl = $('#bannerul').find('img')[0].src;
+
+            var title = $('#gname').html();
             var link = homePath;
             var desc = removeHTMLTag($('#gdescription').html());
-
-
             //share to timeline
             // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
             wx.onMenuShareTimeline({
@@ -1159,7 +1254,8 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
-                    saveShareRecord('朋友圈');
+                    //alert('朋友圈');
+                    saveShareRecord('朋友圈',title);
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1172,7 +1268,8 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
-                    saveShareRecord('好友');
+                    //alert('好友');
+                    saveShareRecord('好友',title);
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1185,7 +1282,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
-                    saveShareRecord('QQ');
+                    saveShareRecord('QQ',title);
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1198,7 +1295,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
-                    saveShareRecord('微博');
+                    saveShareRecord('微博',title);
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1211,7 +1308,7 @@
                 link:link,
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
-                    saveShareRecord('QQ空间');
+                    saveShareRecord('QQ空间',title);
                 },
                 cancel: function () {
                     // 用户取消分享后执行的回调函数
@@ -1220,13 +1317,13 @@
         });
 
         <!--记录分享-->
-        function saveShareRecord(usWhere) {
+        function saveShareRecord(usWhere,usWhat) {
             $.ajax({
                 type:"post",
                 url:'/userShare/saveUserShare',
                 dataType: "json",
                 async :false,
-                data:{usWhere:usWhere},
+                data:{usWhere:usWhere,usWhat:usWhat},
                 success:function(data){
                 }
             });
@@ -1235,8 +1332,20 @@
         
         <!--调用分享函数-->
         function shareGoods() {
-
+            $('.bge6').css('overflow', 'hidden');
+            $('.guide-share').fadeIn('slow');
         }
+
+        <!--点击知道了-->
+        function ikonw() {
+            $('.bge6').css('overflow', 'auto');
+            $('.guide-share').fadeOut('slow');
+        }
+
+
+        laydate.render({
+            elem: '#select_time' //指定元素
+        });
     </script>
 
 </body>

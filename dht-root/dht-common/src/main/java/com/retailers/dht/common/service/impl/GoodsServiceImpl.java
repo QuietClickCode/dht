@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.Goods;
@@ -138,5 +139,17 @@ public class GoodsServiceImpl implements GoodsService {
 		return updateGoods(goods,uploadpersonId);
 	}
 
+	public Pagination<GoodsVo> querySamegclassGoods(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setParams(params);
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		List<GoodsVo> list = goodsMapper.querySamegclassGoods(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+		}
+		page.setData(list);
+		return page;
+	}
 }
 

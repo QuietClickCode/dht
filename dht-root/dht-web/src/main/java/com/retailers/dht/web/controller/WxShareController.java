@@ -50,14 +50,11 @@ import java.util.*;
 public class WxShareController extends BaseController{
 
     @RequestMapping("createWxShare")
-    @CheckSession(key= com.retailers.auth.constant.SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
-
-        Long uid = getCurLoginUserId(request);
-
+        System.out.println(path);
         String noncestr = createRandomString();
-        String jsapi_ticket = WxConfig.ACCESS_TOKEN;
+        String jsapi_ticket = WxConfig.ACCESS_TICKET;
         Long timestamp = new Date().getTime()/1000;
         String signature = "";
         String homePath = "http://www.kuaiyis.com";

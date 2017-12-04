@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>您的网页走丢了</title>
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .not-found-wrap {
+            width: 100%;
+            height: 100%;
+        }
+        .not-found-wrap .not-found-img {
+            display: block;
+            width: 2.24rem;
+            height: 2rem;
+            margin: 1rem auto .54rem;
+        }
+        .not-found-wrap .not-found-tip{
+            font-size: .34rem;
+            line-height: .34rem;
+            text-align: center;
+            color: #333333;
+            letter-spacing: .06rem;
+            margin-bottom: 3.2rem;
+        }
+        .not-found-wrap .back-btn {
+            display: block;
+            width: 4rem;
+            height: .8rem;
+            line-height: .8rem;
+            text-align: center;
+            color: #fefefe;
+            font-size: .34rem;
+            background-color: #f85039;
+            border-radius: .06rem;
+            letter-spacing: .06rem;
+            border: none;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="specialty-title2 borderB">
+        <a onclick="returnhistory();" class="icon-return"></a>
+        <!--<span></span>-->
+    </div>
+
+    <div class="not-found-wrap">
+        <img class="not-found-img" src="/img/not_found_bg.png">
+        <p class="not-found-tip">您访问的页面不存在</p>
+        <button onclick="returnhistory();" class="back-btn">返回</button>
+    </div>
+<script>
+    <!--返回上一页-->
+    function returnhistory() {
+        if(document.referrer===''){
+            window.location.href='/';
+        }else{
+            window.history.go(-1);
+        }
+    }
+</script>
+</body>
+</html>

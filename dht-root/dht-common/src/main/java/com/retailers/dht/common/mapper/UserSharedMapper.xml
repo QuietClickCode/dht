@@ -58,7 +58,7 @@
 			us_uid,u_id,creat_time,is_delete,version
 		) VALUES
 		(
-			#{usUid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{creatTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
+			#{usUid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{creatTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改受邀记录表 -->

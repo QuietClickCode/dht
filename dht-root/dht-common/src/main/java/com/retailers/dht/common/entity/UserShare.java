@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：分享记录表对象
+ * 描述：邀请记录表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-01 11:20:50
+ * @date 2017-12-04 10:16:52
  */
 public class UserShare implements java.io.Serializable {
 
@@ -21,6 +21,10 @@ public class UserShare implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 100)
 	private String usWhere;
+	/**分享名称*/
+	@NotEmpty
+	@Length(min = 1, max = 100)
+	private String usWhat;
 	/**创建时间*/
 	@NotEmpty
 	private Date createTime;
@@ -59,6 +63,13 @@ public class UserShare implements java.io.Serializable {
 
 	public String getUsWhere() {
 		return this.usWhere;
+	}
+	public void setUsWhat(String value) {
+		this.usWhat = value;
+	}
+
+	public String getUsWhat() {
+		return this.usWhat;
 	}
 	public void setCreateTime(Date value) {
 		this.createTime = value;

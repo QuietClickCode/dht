@@ -53,4 +53,6 @@ public interface GoodsMapper {
 	 */
 	public List<GoodsVo> queryGoodsList(Pagination<GoodsVo> pagination);
 
+	public List<GoodsVo> querySamegclassGoods(Pagination<GoodsVo> pagination);
+
 }
