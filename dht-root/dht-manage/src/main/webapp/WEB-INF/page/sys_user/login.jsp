@@ -1,15 +1,7 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: niconiconi
-  Date: 2017/12/3
-  Time: 12:29
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
     <title>Title</title>
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <style>
         body{
@@ -55,15 +47,15 @@
             <div class="form-group">
                 <input type="password" class="form-control single-line" placeholder="密码" required="">
             </div>
-            <button type="submit" onclick="event.stopPropagation();test()" class="btn btn-primary block full-width m-b">登 录</button>
+            <button type="button" onclick="test()" class="btn btn-primary full-width">登 录</button>
         </form>
     </div>
-    <script type="text/javascript" src="/js/bootstrap/bootbox.min.js"></script>
-    <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
+    <%--<script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>--%>
+    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
 
     <script type="text/javascript">
         function test() {
-            let name = $(".syUserAccount");
+            let name = $(".syUserAccount").val();
             $.ajax({
                 url:"/sysUser/querySyUserByAccount",
                 type:"post",
@@ -75,6 +67,8 @@
                     
                 }
             });
+
+            console.log(name);
         }
     </script>
 </body>

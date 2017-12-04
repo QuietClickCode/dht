@@ -7,6 +7,42 @@
     <title>优惠卷</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #time{
+            font-size: 0.2rem;
+            margin-top: 0.22rem;
+        }
+
+        .coupon_list2 li>a>.coupon_list1_info > .img_open {
+            display: block;
+            width: .2rem;
+            height: .1rem;
+            float: right;
+            margin-top: .2rem;
+            z-index: 999999;
+            position: absolute;
+            right: .2rem;
+            top: .05rem;
+        }
+
+        .coupon_list2 li>a>.coupon_list1_info {
+            width: 100%;
+            height: .6rem;
+            line-height: .6rem;
+            padding: 0 .4rem 0 .2rem;
+            border-radius: 0 0 5px 5px;
+            color: #fff;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
+            position: relative;
+            margin-top: 0.2rem;
+        }
+
+        #item_box_right{
+            padding-left: 2rem;
+        }
+    </style>
 </head>
 
 <body class="bge6">
@@ -96,8 +132,8 @@
                     console.log();
                     var html = '<li><a href="javascript:void(0)"> <div class="coupon_item_box clearfix"> <div class="item_box_left"> <span>￥</span>';
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
-                    html += '<div class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
-                    html += '<p class="time">'+data.rows[i].cpStartDate.split(" ")[0]+'  -  '+data.rows[i].cpEndDate.split(" ")[0]+'</p></div></div>';
+                    html += '<div id="item_box_right" class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
+                    html += '<p class="time" id="time">'+data.rows[i].cpStartDate.split(" ")[0]+'  -  '+data.rows[i].cpEndDate.split(" ")[0]+'</p></div></div>';
                     html += '<p class="coupon_list1_bg"></p><span class="btn_span" data-cpId="'+data.rows[i].cpId+'">立即使用</span>';
                     html += '<p class="coupon_list1_info"><img class="img_open" src="/img/icon_up.png" />';
                     html += ''+data.rows[i].cpIsRestricted+'</p></a></li>';

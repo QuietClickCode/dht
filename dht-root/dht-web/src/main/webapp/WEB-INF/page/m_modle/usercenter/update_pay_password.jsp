@@ -110,12 +110,12 @@
 </style>
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>修改支付密码</span>
 </div>
 <div class="wrap">
-    <div class="wrap_title">验证原有的支付密码</div>
-    <div class="inputBoxContainer" id="inputBoxContainer">
+    <div class="wrap_title">请输入原有的支付密码</div>
+    <div class="inputBoxContainer" data-id="0" id="inputBoxContainer">
         <input type="text" class="realInput"/>
         <div class="bogusInput">
             <input type="password" maxlength="6" disabled/>
@@ -134,6 +134,7 @@
 
 
 <script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
 <script>
     (function(){
         var container = document.getElementById("inputBoxContainer");
@@ -183,12 +184,54 @@
     boxInput.init(function(){
         getValue();
     });
-    document.getElementById("confirmButton").onclick = function(){
-        getValue();
-    }
     function getValue(){
         return boxInput.getBoxInputValue();
     }
+    var oldPayPwd;
+    var newPayPwd;
+    $("#confirmButton").click(function () {
+        let id = $(".inputBoxContainer").attr("data-id");
+        if(id == 0){
+            oldPayPwd = getValue();
+            $(".bogusInput input").val("");
+            $(".realInput").val("");
+            $(".wrap_title").text("请输入新的支付密码");
+            $(".inputBoxContainer").attr("data-id",1);
+        }else if(id == 1){
+            newPayPwd = getValue();
+            $.ajax({
+                url:"/user/changePayPwd",
+                type:"post",
+                dataType:"json",
+                data:{
+                    oldPayPwd:oldPayPwd,
+                    payPwd:newPayPwd
+                },
+                success:function (data) {
+                    if(data.status == 0){
+                        layer.open({
+                            content: '修改支付密码成功'
+                            ,skin: 'msg'
+                            ,time: 1
+                        });
+                        setTimeout(function(){
+                         history.back(-1);
+                         },1000);
+                    }else if(data.status == -1){
+                        layer.open({
+                            content: data.msg
+                            ,skin: 'msg'
+                            ,time: 1
+                        });
+                        $(".bogusInput input").val("");
+                        $(".realInput").val("");
+                        $(".wrap_title").text("请输入原有的支付密码");
+                        $(".inputBoxContainer").attr("data-id",0);
+                    }
+                }
+            });
+        }
+    });
 </script>
 </body>
 

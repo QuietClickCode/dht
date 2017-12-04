@@ -60,13 +60,15 @@ public class SysUserController extends BaseController {
      * @return
      */
     @RequestMapping("querySyUserByAccount")
+    @Function(label="取得登陆用户", description = "取得登陆用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @ResponseBody
     public BaseResp querySyUserByAccount(HttpServletRequest request, String account){
         SysUser sysUser = sysUserService.querySyUserByAccount(account);
         if (sysUser == null) {
-            return success(false);
+            return success(null);
         }else{
-            return success(true);
+            return success(sysUser);
         }
     }
 

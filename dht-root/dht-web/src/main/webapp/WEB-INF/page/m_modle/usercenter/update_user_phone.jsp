@@ -16,6 +16,11 @@
     <title>更换手机号</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        #replace_nav li{
+            font-size: 0.25rem;
+        }
+    </style>
 </head>
 
 <body class="bge6">

@@ -7,7 +7,12 @@
     <title>我的资料</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
-
+    <style>
+        #sex_box_val {
+            background-color: #BCD2EE;
+            color: #1a1a1aa3;
+        }
+    </style>
 </head>
 <body class="bge6">
     <div class="specialty-title2 borderB">
@@ -90,9 +95,13 @@
             $("#sex_box").hide()
         })
 
+        var data_sex;
+
         $(".sex_box_val").click(function(){
             let $that = $(this);
             let sex = $that.attr("data-sex");
+            if(sex == data_sex)
+                return;
             $.ajax({
                 type:"post",
                 url:"/user/updateUserSex",
@@ -101,6 +110,8 @@
                     sex:sex
                 },
                 success:function(data){
+                    $that.attr("id","sex_box_val").siblings(".sex_box_val").removeAttr("id");
+                    data_sex = sex;
                     let text = $that.text();
                     $("#sex_name_box").text(text);
                     $("#sex_box").hide();
@@ -117,13 +128,17 @@
                     let userAddress = data.userAddress;
                     let userHeadSrc = data.UserHeaderSrc;
                     let name = data.nickName;
-                    let sex = data.sex;
+                    data_sex = data.sex;
                     let userPhone = data.userPhone;
                     $(".nickName").text(name);
-                    if(sex == 0)
+                    if(data_sex == 0){
                         $("#sex_name_box").text("男");
-                    else if(sex == 1)
+                        $(".sex_box_val").eq(0).attr("id","sex_box_val");
+                    }
+                    else if(data_sex == 1){
                         $("#sex_name_box").text("女");
+                        $(".sex_box_val").eq(1).attr("id","sex_box_val");
+                    }
 
                     if(userPhone == ""){
                         $(".user-phone").text("未设置");

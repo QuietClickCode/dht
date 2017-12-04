@@ -183,6 +183,8 @@ public class UserServiceImpl implements UserService {
 		}
 		String md5Pwd=Md5Encrypt.md5(StringUtils.concat(user.getUid()+"",pwd));
 		String oldMd5=Md5Encrypt.md5(StringUtils.concat(user.getUid()+"",oldPwd));
+		System.out.println(oldMd5);
+		System.out.println(user.getUpayPwd());
 		//登录密码
 		if(type==0){
 			if(ObjectUtils.isEmpty(user.getUpwd())){

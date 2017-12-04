@@ -9,6 +9,8 @@ import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.service.SysUserService;
 import com.retailers.auth.vo.SysUserVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
@@ -19,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -135,7 +138,17 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @return
 	 */
 	public SysUser querySyUserByAccount(String account){
-		return sysUserMapper.querySyUserByAccount(account);
+		SysUser sysUser = sysUserMapper.querySyUserByAccount(account);
+		String upassword = sysUser.getUpassword();
+		try {
+			/*String pwd = DESUtils.decryptUserField(upassword);
+			*/
+			String pwd = DESUtils.decryptDES(URLDecoder.decode(upassword, "utf-8"), DesKey.WEB_KEY);
+			sysUser.setUpassword(pwd);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return sysUser;
 	}
 }
 
