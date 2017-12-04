@@ -1,5 +1,5 @@
-package com.retailers.dht.common.dao;
-import com.retailers.dht.common.entity.SmsSendRecord;
+package com.retailers.aliyun.sms.dao;
+import com.retailers.aliyun.sms.entity.SmsSendRecord;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-23 00:38:54
+ * @date 2017-12-04 15:43:07
  */
 public interface SmsSendRecordMapper {
 
@@ -62,7 +62,7 @@ public interface SmsSendRecordMapper {
 	 * @param curDate
 	 * @return
 	 */
-	public SmsSendRecord queryCurSmsSendRecordByPhone(@Param("phone")String phone, @Param("type")int type,@Param("code")String code,@Param("curDate")Date curDate);
+	public SmsSendRecord queryCurSmsSendRecordByPhone(@Param("phone")String phone, @Param("type")int type, @Param("code")String code, @Param("curDate")Date curDate);
 
 	/**
 	 * 校验短信是否可以发送（该时间周期内未发送过短信)

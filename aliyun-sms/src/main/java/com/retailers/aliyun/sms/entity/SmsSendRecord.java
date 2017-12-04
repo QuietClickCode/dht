@@ -1,4 +1,4 @@
-package com.retailers.dht.common.entity;
+package com.retailers.aliyun.sms.entity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
@@ -7,34 +7,34 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-23 23:12:58
+ * @date 2017-12-04 15:43:07
  */
 public class SmsSendRecord implements java.io.Serializable {
 
 	/**id*/
 	@NotEmpty
-	private Long id;
+	private java.lang.Long id;
 	/**发送短信用户*/
 	@NotEmpty
-	private Long uid;
+	private java.lang.Long uid;
 	/**发送类型（0 绑定手机号码，1 密码找回，2 动态密码登录）*/
 	@NotEmpty
-	private Integer type;
+	private java.lang.Integer type;
 	/**短信状态（0 未使用，1 己使用）*/
 	@NotEmpty
-	private Integer status;
+	private java.lang.Integer status;
 	/**手机号码*/
 	@NotEmpty
 	@Length(min = 1, max = 15)
-	private String phone;
+	private java.lang.String phone;
 	/**随机code*/
 	@NotEmpty
 	@Length(min = 1, max = 10)
-	private String code;
+	private java.lang.String code;
 	/**短信内容*/
 	@NotEmpty
 	@Length(min = 1, max = 500)
-	private String context;
+	private java.lang.String context;
 	/**创建时间*/
 	@NotEmpty
 	private Date createDate;
@@ -47,6 +47,21 @@ public class SmsSendRecord implements java.io.Serializable {
 	/**使用时间*/
 	@NotEmpty
 	private Date useDate;
+	/**发送短信回执号*/
+	@NotEmpty
+	@Length(min = 1, max = 64)
+	private java.lang.String outId;
+	/**返回消息*/
+	@NotEmpty
+	@Length(min = 1, max = 255)
+	private java.lang.String outMsg;
+	/**发送返回时间*/
+	@NotEmpty
+	private Date outDate;
+	/**矬信模版所要参数*/
+	@NotEmpty
+	@Length(min = 1, max = 1000)
+	private java.lang.String params;
 	//columns END
 
 	public SmsSendRecord(){
@@ -133,6 +148,33 @@ public class SmsSendRecord implements java.io.Serializable {
 	public Date getUseDate() {
 		return this.useDate;
 	}
+	public void setOutId(String value) {
+		this.outId = value;
+	}
 
+	public String getOutId() {
+		return this.outId;
+	}
+	public void setOutMsg(String value) {
+		this.outMsg = value;
+	}
 
+	public String getOutMsg() {
+		return this.outMsg;
+	}
+	public void setOutDate(Date value) {
+		this.outDate = value;
+	}
+
+	public Date getOutDate() {
+		return this.outDate;
+	}
+
+	public String getParams() {
+		return params;
+	}
+
+	public void setParams(String params) {
+		this.params = params;
+	}
 }

@@ -1,4 +1,4 @@
-package com.retailers.dht.common.enm;
+package com.retailers.aliyun.sms.enm;
 
 /**
  * 短信类型枚举
@@ -7,25 +7,27 @@ package com.retailers.dht.common.enm;
  * @data 2017/11/23
  */
 public enum SmsSendRecordEnum {
-    BIND_PHONE_CODE(0, "你正在大汇堂平台绑定手机号码，此次验证码是：{}");
-    String context;
+    BIND_PHONE_CODE(0, "binding_phone");
+    String funCode;
     long type;
 
-    public String getContext() {
-        return context;
+    public String getFunCode() {
+        return funCode;
     }
-    public void setContext(String context) {
-        this.context = context;
+
+    public void setFunCode(String funCode) {
+        this.funCode = funCode;
     }
+
     public long getType() {
         return type;
     }
     public void setType(long type) {
         this.type = type;
     }
-    SmsSendRecordEnum(long type, String context){
+    SmsSendRecordEnum(long type, String funCode){
         this.type=type;
-        this.context=context;
+        this.funCode=funCode;
     }
 
     public static SmsSendRecordEnum getSmsSend(long type) {

@@ -1,4 +1,4 @@
-package com.retailers.dht.common.constant;
+package com.retailers.aliyun.sms.constant;
 
 /**
  * @author zhongp
