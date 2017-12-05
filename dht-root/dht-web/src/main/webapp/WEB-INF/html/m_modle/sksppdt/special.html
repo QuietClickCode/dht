@@ -7,7 +7,6 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>特价/秒杀</title>
     <script src="/js/Adaptive.js"></script>
-    <script src="/js/footer.js"></script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -200,6 +199,7 @@
     <script src="/js/public.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+    <script src="/js/footer.js"></script>
     <script>
     	$(function(){
         	$(".open_car").click(function(){
@@ -210,7 +210,9 @@
         	})
         })
     </script>
-
+    <script>
+        var curFooter="#footer_special";
+    </script>
     <script>
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
@@ -251,7 +253,7 @@
     <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
-        var type = parseInt(path.substring(9,path.indexOf('.html')));
+        var type = parseInt(path.substring(9,path.indexOf('.special')));
         var flag = false;
 
         if(type==0){

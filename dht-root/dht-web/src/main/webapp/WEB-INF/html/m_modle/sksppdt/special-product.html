@@ -217,6 +217,7 @@
         </div> -->
     </div>
     <a onclick="buynow()" class="bargain-btn2">立即购买</a>
+    <a  class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
 </div>
 <!--选择规格弹框-->
 <div class="mark" id="J_mark2" style="display:none;">
@@ -336,7 +337,7 @@
     if(pathArr.length==2){
         inviterId = pathArr[1].split('_')[1];
     }
-    alert(inviterId);
+//    alert(inviterId);
     var isServiceGoods;
     <!--用户评论分页查询-->
     var pageNo=1;
@@ -458,7 +459,13 @@
                     isServiceGoods = goodsConfig.isServicegoods;
                     var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                     var isAdvancesale = goodsConfig.isAdvancesale;
+                    var isPutway = goodsConfig.isPutway;
 
+                    if(isPutway==0){
+                        $('.bargain-btn2').hide();
+                        $('.bargain-btn3').show();
+                        $('.special').hide();
+                    }
                     if(isAdvancesale==1){
                         $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
                         $('#isAdvancesalediv').show();
