@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CutPriceMapper">
+
+	<resultMap id="rm_cutPrice" type="com.retailers.dht.common.entity.CutPrice">
+			<result property="cpId" column="cp_id"/>
+			<result property="cpName" column="cp_name"/>
+			<result property="gid" column="g_id"/>
+			<result property="parentId" column="parent_id"/>
+			<result property="spOrder" column="sp_order"/>
+			<result property="cpLestpseson" column="cp_lestpseson"/>
+			<result property="cpMostperson" column="cp_mostperson"/>
+			<result property="isCoupon" column="is_coupon"/>
+			<result property="cpRegion" column="cp_region"/>
+			<result property="cpStartTime" column="cp_start_time"/>
+			<result property="cpEndTime" column="cp_end_time"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_cutPrice_vo" type="com.retailers.dht.common.vo.CutPriceVo">
+		<result property="cpId" column="cp_id"/>
+		<result property="cpName" column="cp_name"/>
+		<result property="gid" column="g_id"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="spOrder" column="sp_order"/>
+		<result property="cpLestpseson" column="cp_lestpseson"/>
+		<result property="cpMostperson" column="cp_mostperson"/>
+		<result property="isCoupon" column="is_coupon"/>
+		<result property="cpRegion" column="cp_region"/>
+		<result property="cpStartTime" column="cp_start_time"/>
+		<result property="cpEndTime" column="cp_end_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gname" column="gname"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="cutPrice_columns">
+		cp_id,cp_name,g_id,parent_id,sp_order,cp_lestpseson,cp_mostperson,is_coupon,cp_region,cp_start_time,cp_end_time,is_delete,version
+	</sql>
+	<!-- 根据砍价表主键取得数据 -->
+	<select id="queryCutPriceByCpId" resultMap="rm_cutPrice" parameterType="java.lang.Long">
+		SELECT <include refid="cutPrice_columns" />
+		FROM t_cut_price WHERE cp_id = #{cpId}
+	</select>
+	<!-- 砍价表查询条件组合 -->
+	<sql id="cutPrice_where">
+		<where>
+			<if test="null != params.cpId">
+				AND cp_id = #{params.cpId}
+			</if>
+			<if test="null != params.cpName and '' != params.cpName">
+				AND cp_name = #{params.cpName}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+			<if test="null != params.spOrder">
+				AND sp_order = #{params.spOrder}
+			</if>
+			<if test="null != params.cpLestpseson">
+				AND cp_lestpseson = #{params.cpLestpseson}
+			</if>
+			<if test="null != params.cpMostperson">
+				AND cp_mostperson = #{params.cpMostperson}
+			</if>
+			<if test="null != params.isCoupon">
+				AND is_coupon = #{params.isCoupon}
+			</if>
+			<if test="null != params.cpRegion">
+				AND cp_region = #{params.cpRegion}
+			</if>
+			<if test="null != params.cpStartTimeBegin">
+				AND cp_start_time &gt;= #{params.cpStartTime}
+			</if>
+			<if test="null != params.cpStartTimeEnd">
+				AND cp_start_time &lt;= #{params.cpStartTime}
+			</if>
+			<if test="null != params.cpEndTimeBegin">
+				AND cp_end_time &gt;= #{params.cpEndTime}
+			</if>
+			<if test="null != params.cpEndTimeEnd">
+				AND cp_end_time &lt;= #{params.cpEndTime}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCutPriceList" resultMap="rm_cutPrice" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="cutPrice_columns" />
+		FROM t_cut_price
+		<include refid="cutPrice_where"/>
+	</select>
+	<select id="queryCutPriceTree" resultMap="rm_cutPrice_vo">
+		SELECT t1.*,t2.g_name gname
+		from t_cut_price t1
+		LEFT JOIN t_goods t2 ON t1.g_id=t2.g_id and t2.is_delete=0
+		WHERE
+		t1.is_delete=0
+		ORDER BY t1.cp_end_time DESC
+	</select>
+	<!--添加砍价表 -->
+	<insert id="saveCutPrice" parameterType="com.retailers.dht.common.entity.CutPrice" useGeneratedKeys="true" keyProperty="cpId">
+		INSERT INTO t_cut_price (
+			cp_name,g_id,parent_id,sp_order,cp_lestpseson,cp_mostperson,is_coupon,cp_region,cp_start_time,cp_end_time,is_delete,version
+		) VALUES
+		(
+			#{cpName,jdbcType=VARCHAR},#{gid,jdbcType=BIGINT},#{parentId,jdbcType=BIGINT},#{spOrder,jdbcType=BIGINT},#{cpLestpseson,jdbcType=BIGINT},#{cpMostperson,jdbcType=BIGINT},#{isCoupon,jdbcType=BIGINT},#{cpRegion,jdbcType=BIGINT},#{cpStartTime,jdbcType=TIMESTAMP},#{cpEndTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改砍价表 -->
+	<update id="updateCutPrice" parameterType="com.retailers.dht.common.entity.CutPrice">
+		UPDATE t_cut_price
+		<set>
+            <if test="null != cpName and '' != cpName">
+                cp_name = #{cpName},
+            </if>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != parentId">
+                parent_id = #{parentId},
+            </if>
+            <if test="null != spOrder">
+                sp_order = #{spOrder},
+            </if>
+            <if test="null != cpLestpseson">
+                cp_lestpseson = #{cpLestpseson},
+            </if>
+            <if test="null != cpMostperson">
+                cp_mostperson = #{cpMostperson},
+            </if>
+            <if test="null != isCoupon">
+                is_coupon = #{isCoupon},
+            </if>
+            <if test="null != cpRegion">
+                cp_region = #{cpRegion},
+            </if>
+            <if test="null != cpStartTime">
+                cp_start_time = #{cpStartTime},
+            </if>
+            <if test="null != cpEndTime">
+                cp_end_time = #{cpEndTime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cp_id = #{cpId} and version = #{version}
+	</update>
+	<!--删除砍价表 -->
+	<delete id="deleteCutPriceByCpId" parameterType="java.lang.Long">
+		DELETE FROM t_cut_price WHERE cp_id = #{cpId}
+	</delete>
+</mapper>
