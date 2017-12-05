@@ -40,35 +40,46 @@
 </head>
 <body>
     <div class="middle-box">
-        <form class="loginForm" role="form" action="/">
+        <form class="loginForm" role="form">
             <div class="form-group">
                 <input type="text" class="form-control syUserAccount single-line" placeholder="用户名" required="">
             </div>
             <div class="form-group">
-                <input type="password" class="form-control single-line" placeholder="密码" required="">
+                <input type="password" class="form-control single-line sysUserPwd" placeholder="密码" required="">
             </div>
             <button type="button" onclick="test()" class="btn btn-primary full-width">登 录</button>
         </form>
     </div>
     <%--<script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>--%>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
-
+    <script type="text/javascript" src="/js/layer/layer.js"></script>
     <script type="text/javascript">
-        function test() {
-            let name = $(".syUserAccount").val();
-            $.ajax({
-                url:"/sysUser/querySyUserByAccount",
-                type:"post",
-                dataType:"json",
-                data:{
-                    account:name
-                },
-                success:function (data) {
-                    
-                }
-            });
 
-            console.log(name);
+        var isSaves=false;
+        function test() {
+            if(!isSaves){
+                isSaves=true;
+                let name = $(".syUserAccount").val();
+                let pwd = $(".sysUserPwd").val();
+                $.ajax({
+                    url:"/sysUser/querySyUserByAccount",
+                    type:"post",
+                    dataType:"json",
+                    data:{
+                        account:name,
+                        sysUserPwd:pwd
+                    },
+                    success:function (data) {
+                        isSaves=false;
+                        if(data.status == 0){
+                            layer.msg("登陆成功",{time:1000});
+                            window.location.href = "/index";
+                        }else{
+                            layer.msg(data.msg,{time:1000});
+                        }
+                    }
+                });
+            }
         }
     </script>
 </body>

@@ -4,7 +4,6 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.service.SysUserService;
 import com.retailers.auth.vo.SysUserVo;
 import com.retailers.dht.manage.base.BaseController;
@@ -60,19 +59,17 @@ public class SysUserController extends BaseController {
      * @return
      */
     @RequestMapping("querySyUserByAccount")
-    @Function(label="取得登陆用户", description = "取得登陆用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
+    @Function(label="根据账号查找用户", description = "根据账号查找用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
     @ResponseBody
-    public BaseResp querySyUserByAccount(HttpServletRequest request, String account){
-        SysUser sysUser = sysUserService.querySyUserByAccount(account);
-        if (sysUser == null) {
-            return success(null);
-        }else{
-            return success(sysUser);
+    public BaseResp querySyUserByAccount(HttpServletRequest request, String account,String sysUserPwd){
+        try {
+            sysUserService.querySyUserByAccount(account,sysUserPwd);
+        } catch (AppException e) {
+            return errorForSystem(e.getMessage());
         }
+        return success("/index");
     }
-
-
 
     /**
      * 取得职员列表
