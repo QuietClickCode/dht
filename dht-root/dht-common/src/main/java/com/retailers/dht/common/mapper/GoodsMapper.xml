@@ -140,7 +140,6 @@
 			</if>
 			<if test="null != params.isShow">
 				and t1.g_id=t7.g_id
-				and t7.is_putway=1
 			</if>
 		</where>
 	</sql>

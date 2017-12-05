@@ -32,9 +32,8 @@ public class GoodsClassificationController extends BaseController {
         return gtm;
     }
 
-    @RequestMapping("/{id}.html")
-    public String seckillp(HttpServletRequest request, @PathVariable("id")String id){
-        System.out.println("id====================================>:"+id);
+    @RequestMapping("/goodsClassification.html")
+    public String seckillp(HttpServletRequest request){
         return redirectUrl(request,"classify/classify");
     }
 

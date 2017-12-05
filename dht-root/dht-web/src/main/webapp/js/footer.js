@@ -13,5 +13,7 @@ $("#footer").html() || $.get("/footer.html").then(function(t) {
  */
 function selectFooter(id){
     $("#footer_div li").removeClass("active");
-    $("#footer_div "+id).addClass("active");
+    if(id!='#footer_special'){
+        $("#footer_div "+id).addClass("active");
+    }
 }
