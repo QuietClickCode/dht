@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.mybatis.pagination.PageInterceptor;
 import com.retailers.mybatis.pagination.Pagination;
@@ -20,20 +21,20 @@ public interface CouponService {
 
 	/**
 	 * 添加优惠卷
-	 * @param coupon
+	 * @param couponVo
 	 * @return
 	 * @author zhongp
 	 * @date 2017-10-11 20:34:20
 	 */
-	public boolean saveCoupon(Coupon coupon);
+	public boolean saveCoupon(CouponVo couponVo,Long optionId);
 	/**
 	 * 编辑优惠卷
-	 * @param coupon
+	 * @param couponVo
 	 * @return
 	 * @author zhongp
 	 * @date
 	 */
-	public boolean updateCoupon(Coupon coupon)throws AppException;
+	public boolean updateCoupon(CouponVo couponVo,Long optionId)throws AppException;
 	/**
 	 * 根据id查询优惠卷
 	 * @param cpId

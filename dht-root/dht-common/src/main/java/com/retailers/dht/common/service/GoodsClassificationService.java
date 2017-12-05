@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
@@ -63,6 +64,14 @@ public interface GoodsClassificationService {
 	public List<GoodsClassificationVo> queryGoodsClassificationTree();
 
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
+
+	/**
+	 * 取得商品子类
+	 * @param couponId 优惠卷id
+	 * @param gids 商品大类Ids
+	 * @return
+	 */
+	public List<ZTreeVo> queryAllGoodsClassificationByGtId(Long couponId, List<Long> gids);
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
 }

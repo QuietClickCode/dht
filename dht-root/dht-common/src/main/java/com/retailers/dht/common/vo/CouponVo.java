@@ -80,6 +80,18 @@ public class CouponVo {
     private Integer isValid;
     /**数据版本*/
     private Integer version;
+    /**
+     * 优惠卷使用范围 商品类型名称
+     */
+    private String spzlNames;
+    //商品类型id
+    private String spzlIds;
+
+    //商品名称
+    private String spIds;
+    //商品id
+    private String spNames;
+
 
     public Long getCpId() {
         return cpId;
@@ -324,5 +336,37 @@ public class CouponVo {
             return DateUtil.stringToDate(date,DateUtil.DATE_WITHSECOND_FORMAT);
         }
         return null;
+    }
+
+    public String getSpzlNames() {
+        return spzlNames;
+    }
+
+    public void setSpzlNames(String spzlNames) {
+        this.spzlNames = spzlNames;
+    }
+
+    public String getSpzlIds() {
+        return spzlIds;
+    }
+
+    public void setSpzlIds(String spzlIds) {
+        this.spzlIds = spzlIds;
+    }
+
+    public String getSpIds() {
+        return spIds;
+    }
+
+    public void setSpIds(String spIds) {
+        this.spIds = spIds;
+    }
+
+    public String getSpNames() {
+        return spNames;
+    }
+
+    public void setSpNames(String spNames) {
+        this.spNames = spNames;
     }
 }

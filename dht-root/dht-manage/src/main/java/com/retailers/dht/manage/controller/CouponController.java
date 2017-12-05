@@ -82,12 +82,7 @@ public class CouponController extends BaseController{
             return errorForParam(e.getMessage());
         }
         try{
-            goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-            goodsCoupon.setCpCreate(new Date());
-            Coupon cp = new Coupon();
-            BeanUtils.copyProperties(goodsCoupon,cp);
-            cp.setCpCreateSid(getCurLoginUserId(request));
-            boolean flag = couponService.saveCoupon(cp);
+            boolean flag = couponService.saveCoupon(goodsCoupon,getCurLoginUserId(request));
             if(flag){
                 return success("优惠卷添加成功");
             }else{
@@ -99,7 +94,7 @@ public class CouponController extends BaseController{
         }
     }
     /**
-     * 添加商品优惠
+     * 修改商品优惠
      * @param goodsCoupon 商品优惠数据
      * @return
      */
@@ -113,10 +108,7 @@ public class CouponController extends BaseController{
             return errorForParam(e.getMessage());
         }
         try{
-            Coupon cp = new Coupon();
-            BeanUtils.copyProperties(goodsCoupon,cp);
-            cp.setCpCreateSid(getCurLoginUserId(request));
-            boolean flag = couponService.updateCoupon(cp);
+            boolean flag = couponService.updateCoupon(goodsCoupon,getCurLoginUserId(request));
             if(flag){
                 return success("编辑优惠成功");
             }else{

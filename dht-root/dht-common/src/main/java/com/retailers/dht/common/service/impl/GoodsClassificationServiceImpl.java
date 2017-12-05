@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsClassificationMapper;
 import com.retailers.dht.common.entity.GoodsClassification;
@@ -139,6 +140,39 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	}
 
 	/**
+	 *
+	 * @param couponId 优惠卷id
+	 * @param gids 商品大类Ids
+	 * @return
+	 */
+	public List<ZTreeVo> queryAllGoodsClassificationByGtId(Long couponId, List<Long> gids) {
+		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId(gids);
+		List<ZTreeVo> rtnList=new ArrayList<ZTreeVo>();
+		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
+		queryChildNodes(list,child);
+		Map<Long,Long> alloShow=new HashMap<Long, Long>();
+		queryAllowGoodsClassification(null,child,alloShow);
+		for(GoodsClassification gcf:list){
+			if(ObjectUtils.isEmpty(gcf.getParentId())){
+				ZTreeVo ztv=new ZTreeVo();
+				ztv.setId(gcf.getGgId());
+				ztv.setName(gcf.getGgName());
+				ztv.setpId(-gcf.getGgHome());
+				rtnList.add(ztv);
+			}else{
+				if(alloShow.containsKey(gcf.getParentId())){
+					ZTreeVo ztv=new ZTreeVo();
+					ztv.setId(gcf.getGgId());
+					ztv.setName(gcf.getGgName());
+					ztv.setpId(gcf.getParentId());
+					rtnList.add(ztv);
+				}
+			}
+		}
+		return rtnList;
+	}
+
+	/**
 	 * 取得节点下的所有子节点
 	 * @param list 树型菜单
 	 * @param child
@@ -158,7 +192,26 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 			}
 		}
 	}
-
+	/**
+	 * 取得节点下的所有子节点
+	 * @param list 树型菜单
+	 * @param child
+	 */
+	private void queryChildNodes(List<GoodsClassification> list,Map<Long,Map<Long,Long>> child){
+		for(GoodsClassification gcf:list){
+			Long parentId=gcf.getParentId();
+			if(ObjectUtils.isEmpty(parentId)){
+				parentId=-1l;
+			}
+			if(child.containsKey(parentId)){
+				child.get(parentId).put(gcf.getGgId(),gcf.getIsDelete());
+			}else{
+				Map<Long,Long> maps=new HashMap<Long, Long>();
+				maps.put(gcf.getGgId(),gcf.getIsDelete());
+				child.put(parentId,maps);
+			}
+		}
+	}
 	/**
 	 * 取得允许展示节点，排除无节点的数据
 	 * @param ggManager

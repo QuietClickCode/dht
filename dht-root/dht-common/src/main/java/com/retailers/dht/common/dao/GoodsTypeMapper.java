@@ -55,4 +55,10 @@ public interface GoodsTypeMapper {
 	 */
 	public List<GoodsType> queryGoodsTypeList(Pagination<GoodsType> pagination);
 
+	/**
+	 * 取得有效的商品类型
+	 * @return
+	 */
+	public List<GoodsType> queryValidateGoodsTypes();
+
 }

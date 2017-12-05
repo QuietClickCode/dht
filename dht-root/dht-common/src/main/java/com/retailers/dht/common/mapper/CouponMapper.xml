@@ -66,6 +66,8 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="isValid" column="is_valid"/>
 		<result property="version" column="version"/>
+		<result property="relevanceId" column="relevanceId"/>
+		<result property="relevanceNm" column="relevanceNm"/>
 	</resultMap>
 
 	<resultMap id="rm_coupon_web_vo" type="com.retailers.dht.common.vo.CouponWebVo">
@@ -211,8 +213,39 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryCouponList" resultMap="rm_coupon_showVo" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT c.*,a.show_url
-		FROM t_coupon c LEFT JOIN t_attachment a on c.cp_logo = a.id
+		SELECT
+			c.*, a.show_url,fw.relevanceId,fw.`NAME` relevanceNm
+		FROM
+			t_coupon c
+			LEFT JOIN t_attachment a ON c.cp_logo = a.id
+			LEFT JOIN (
+				SELECT
+					cp_id,
+					GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
+					GROUP_CONCAT(q. NAME) NAME
+				FROM
+					(
+					SELECT	cp_id,cpur_type,cpur_relevance_id,
+						CASE WHEN cpur_type = 1 THEN
+							CASE WHEN cpur_relevance_id &lt; 0 THEN
+								gt.gt_name
+							ELSE
+								gc.gg_name
+							END
+						ELSE
+							g.g_name
+						  END NAME
+					FROM
+					t_coupon_use_range cur
+					LEFT JOIN t_goods_type gt ON cur.cpur_relevance_id =- gt.gt_id
+					AND cpur_type = 1
+					LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id
+					AND cpur_type = 1
+					LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id
+					AND cpur_type = 2
+					) q
+			GROUP BY cp_id
+			) fw ON c.cp_id = fw.cp_id
 		<where>
 			<if test="null != params.cpName and '' != params.cpName">
 				AND c.cp_name = #{params.cpName}
@@ -241,93 +274,35 @@
 	<update id="updateCoupon" parameterType="com.retailers.dht.common.entity.Coupon">
 		UPDATE t_coupon
 		<set>
-            <if test="null != cpName and '' != cpName">
                 cp_name = #{cpName},
-            </if>
-            <if test="null != cpCoinType">
                 cp_coin_type = #{cpCoinType},
-            </if>
-            <if test="null != cpType">
                 cp_type = #{cpType},
-            </if>
-            <if test="null != cpLogo">
                 cp_logo = #{cpLogo},
-            </if>
-            <if test="null != cpIsRestricted">
                 cp_is_restricted = #{cpIsRestricted},
-            </if>
-            <if test="null != cpReceiveCondition and '' != cpReceiveCondition">
                 cp_receive_condition = #{cpReceiveCondition},
-            </if>
-            <if test="null != cpUseCondition">
                 cp_use_condition = #{cpUseCondition},
-            </if>
-            <if test="null != cpStartDate">
                 cp_start_date = #{cpStartDate},
-            </if>
-            <if test="null != cpEndDate">
                 cp_end_date = #{cpEndDate},
-            </if>
-            <if test="null != cpIsOverlapUse">
                 cp_is_overlap_use = #{cpIsOverlapUse},
-            </if>
-            <if test="null != cpIsFirst">
                 cp_is_first = #{cpIsFirst},
-            </if>
-            <if test="null != cpSendWay">
                 cp_send_way = #{cpSendWay},
-            </if>
-            <if test="null != cpSendStartDate">
                 cp_send_start_date = #{cpSendStartDate},
-            </if>
-            <if test="null != cpSendEndDate">
                 cp_send_end_date = #{cpSendEndDate},
-            </if>
-            <if test="null != cpCycleSendType">
                 cp_cycle_send_type = #{cpCycleSendType},
-            </if>
-            <if test="null != cpSendNum">
                 cp_send_num = #{cpSendNum},
-            </if>
-            <if test="null != cpNum">
                 cp_num = #{cpNum},
-            </if>
-			<if test="null != cpSurplusNum">
 				cp_surplus_num = #{cpSurplusNum},
-			</if>
-            <if test="null != cpMoney">
                 cp_money = #{cpMoney},
-            </if>
-            <if test="null != cpDiscount">
                 cp_discount = #{cpDiscount},
-            </if>
-            <if test="null != cpTotalMoney">
                 cp_total_money = #{cpTotalMoney},
-            </if>
-            <if test="null != cpMinDiscount">
                 cp_min_discount = #{cpMinDiscount},
-            </if>
-            <if test="null != cpMaxDiscount">
                 cp_max_discount = #{cpMaxDiscount},
-            </if>
-            <if test="null != cpContext and '' != cpContext">
                 cp_context = #{cpContext},
-            </if>
-            <if test="null != cpCreateSid">
                 cp_create_s_id = #{cpCreateSid},
-            </if>
-            <if test="null != cpCreate">
                 cp_create = #{cpCreate},
-            </if>
-            <if test="null != isDelete">
                 is_delete = #{isDelete},
-            </if>
-            <if test="null != isValid">
                 is_valid = #{isValid},
-            </if>
-            <if test="null != version">
                 version = version+1,
-            </if>
 		</set>
 		WHERE cp_id = #{cpId} and version = #{version}
 	</update>
