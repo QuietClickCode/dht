@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsGdcprelMapper">
+
+	<resultMap id="rm_goodsGdcprel" type="com.retailers.dht.common.entity.GoodsGdcprel">
+			<result property="gdcpId" column="gdcp_id"/>
+			<result property="gdId" column="gd_id"/>
+			<result property="cpId" column="cp_id"/>
+			<result property="cpSale" column="cp_sale"/>
+			<result property="cpInventory" column="cp_inventory"/>
+			<result property="cpBounds" column="cp_bounds"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsGdcprel_columns">
+		gdcp_id,gd_id,cp_id,cp_sale,cp_inventory,cp_bounds,is_delete,version
+	</sql>
+	<!-- 根据商品详情与砍价关系表主键取得数据 -->
+	<select id="queryGoodsGdcprelByGdcpId" resultMap="rm_goodsGdcprel" parameterType="java.lang.Long">
+		SELECT <include refid="goodsGdcprel_columns" />
+		FROM t_goods_gdcprel WHERE gdcp_id = #{gdcpId}
+	</select>
+	<!-- 商品详情与砍价关系表查询条件组合 -->
+	<sql id="goodsGdcprel_where">
+		<where>
+			<if test="null != params.gdcpId">
+				AND gdcp_id = #{params.gdcpId}
+			</if>
+			<if test="null != params.gdId">
+				AND gd_id = #{params.gdId}
+			</if>
+			<if test="null != params.cpId">
+				AND cp_id = #{params.cpId}
+			</if>
+			<if test="null != params.cpSale">
+				AND cp_sale = #{params.cpSale}
+			</if>
+			<if test="null != params.cpInventory">
+				AND cp_inventory = #{params.cpInventory}
+			</if>
+			<if test="null != params.cpBounds">
+				AND cp_bounds = #{params.cpBounds}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsGdcprelList" resultMap="rm_goodsGdcprel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsGdcprel_columns" />
+		FROM t_goods_gdcprel
+		<include refid="goodsGdcprel_where"/>
+	</select>
+	<!--添加商品详情与砍价关系表 -->
+	<insert id="saveGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel" useGeneratedKeys="true" keyProperty="gdcpId">
+		INSERT INTO t_goods_gdcprel (
+			gd_id,cp_id,cp_sale,cp_inventory,cp_bounds,is_delete,version
+		) VALUES
+		(
+			#{gdId,jdbcType=BIGINT},#{cpId,jdbcType=BIGINT},#{cpSale,jdbcType=REAL},#{cpInventory,jdbcType=BIGINT},#{cpBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改商品详情与砍价关系表 -->
+	<update id="updateGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel">
+		UPDATE t_goods_gdcprel
+		<set>
+            <if test="null != gdId">
+                gd_id = #{gdId},
+            </if>
+            <if test="null != cpId">
+                cp_id = #{cpId},
+            </if>
+            <if test="null != cpSale">
+                cp_sale = #{cpSale},
+            </if>
+            <if test="null != cpInventory">
+                cp_inventory = #{cpInventory},
+            </if>
+            <if test="null != cpBounds">
+                cp_bounds = #{cpBounds},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE gdcp_id = #{gdcpId} and version = #{version}
+	</update>
+	<!--删除商品详情与砍价关系表 -->
+	<delete id="deleteGoodsGdcprelByGdcpId" parameterType="java.lang.Long">
+		DELETE FROM t_goods_gdcprel WHERE gdcp_id = #{gdcpId}
+	</delete>
+</mapper>

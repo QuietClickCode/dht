@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsIsbuyspMapper">
+
+	<resultMap id="rm_goodsIsbuysp" type="com.retailers.dht.common.entity.GoodsIsbuysp">
+			<result property="ibsp" column="ibsp"/>
+			<result property="spId" column="sp_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsIsbuysp_columns">
+		ibsp,sp_id,u_id,is_delete,version
+	</sql>
+	<!-- 根据是否购买活动商品表主键取得数据 -->
+	<select id="queryGoodsIsbuyspByIbsp" resultMap="rm_goodsIsbuysp" parameterType="java.lang.Long">
+		SELECT <include refid="goodsIsbuysp_columns" />
+		FROM t_goods_isbuysp WHERE ibsp = #{ibsp}
+	</select>
+	<!-- 是否购买活动商品表查询条件组合 -->
+	<sql id="goodsIsbuysp_where">
+		<where>
+			<if test="null != params.ibsp">
+				AND ibsp = #{params.ibsp}
+			</if>
+			<if test="null != params.spId">
+				AND sp_id = #{params.spId}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsIsbuyspList" resultMap="rm_goodsIsbuysp" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsIsbuysp_columns" />
+		FROM t_goods_isbuysp
+		<include refid="goodsIsbuysp_where"/>
+	</select>
+	<!--添加是否购买活动商品表 -->
+	<insert id="saveGoodsIsbuysp" parameterType="com.retailers.dht.common.entity.GoodsIsbuysp" useGeneratedKeys="true" keyProperty="ibsp">
+		INSERT INTO t_goods_isbuysp (
+			sp_id,u_id,is_delete,version
+		) VALUES
+		(
+			#{spId,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改是否购买活动商品表 -->
+	<update id="updateGoodsIsbuysp" parameterType="com.retailers.dht.common.entity.GoodsIsbuysp">
+		UPDATE t_goods_isbuysp
+		<set>
+            <if test="null != spId">
+                sp_id = #{spId},
+            </if>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ibsp = #{ibsp} and version = #{version}
+	</update>
+	<!--删除是否购买活动商品表 -->
+	<delete id="deleteGoodsIsbuyspByIbsp" parameterType="java.lang.Long">
+		DELETE FROM t_goods_isbuysp WHERE ibsp = #{ibsp}
+	</delete>
+</mapper>
