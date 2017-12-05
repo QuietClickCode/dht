@@ -137,18 +137,19 @@ public class SysUserServiceImpl implements SysUserService {
 	 * @param account
 	 * @return
 	 */
-	public SysUser querySyUserByAccount(String account){
+	public boolean querySyUserByAccount(String account,String sysUserPwd) throws AppException {
 		SysUser sysUser = sysUserMapper.querySyUserByAccount(account);
-		String upassword = sysUser.getUpassword();
-		try {
-			/*String pwd = DESUtils.decryptUserField(upassword);
-			*/
-			String pwd = DESUtils.decryptDES(URLDecoder.decode(upassword, "utf-8"), DesKey.WEB_KEY);
-			sysUser.setUpassword(pwd);
-		} catch (Exception e) {
-			e.printStackTrace();
+
+		if(sysUser == null){
+			throw new AppException("请输入正确的账号");
 		}
-		return sysUser;
+
+		String pwd = Md5Encrypt.md5(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
+
+		if(!pwd.equals(sysUser.getUpassword())) {
+			throw new AppException("密码不正确");
+		}
+		return true;
 	}
 }
 

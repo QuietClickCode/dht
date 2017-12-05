@@ -140,9 +140,16 @@ public class SmsSendRecordServiceImpl implements SmsSendRecordService {
 		return ssr;
 	}
 
-	public SmsSendRecord queryCurSmsSendRecordByPhone(String phone, int type, String code, Date curDate) {
+	public boolean queryCurSmsSendRecordByPhone(String phone, int type, String code, Date curDate){
 		SmsSendRecord sendRecord = smsSendRecordMapper.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
-		return sendRecord;
+		if (!ObjectUtils.equalsIgnorecase(sendRecord.getCode(), code)) {
+			return false;
+		}
+		Date date = new Date();
+		sendRecord.setStatus(SmsSendRecordConstant.SMS_SEND_STAUTS_USE);
+		sendRecord.setUseDate(date);
+		smsSendRecordMapper.updateSmsSendRecord(sendRecord);
+		return true;
 	}
 
 	public int checkSendSms(Long uid, String phone, long type, Date curDate) {
