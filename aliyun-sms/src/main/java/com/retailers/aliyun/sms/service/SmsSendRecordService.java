@@ -85,7 +85,7 @@ public interface SmsSendRecordService {
 	 * @param curDate
 	 * @return
 	 */
-	public SmsSendRecord queryCurSmsSendRecordByPhone(String phone,int type,String code,Date curDate);
+	public boolean queryCurSmsSendRecordByPhone(String phone,int type,String code,Date curDate);
 
 	/**
 	 * 校验短信是否可以发送（该时间周期内未发送过短信)

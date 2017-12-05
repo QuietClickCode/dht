@@ -148,44 +148,57 @@
         });
     });
 
+    var isSaves=false;
     $(".verifyValidCode").click(function () {
         let val = $(".validCode").val();
-        $.ajax({
-            url:"/user/verifyValidCode",
-            type:"post",
-            dataType:"json",
-            data:{
-                phone:phone,
-                type:0,
-                code:val,
-                curDate:new Date()
-            },
-            success:function (data) {
-                if(data.data == false) {
-                    layer.open({
-                        content: '验证码错误'
-                        ,skin: 'msg'
-                        ,time: 1
-                    });
-
-                }else if(data.data == true) {
-                    layer.open({
-                        content: '验证成功'
-                        ,skin: 'msg'
-                        ,time: 1
-                    });
-
-                    setTimeout(function(){
-                        layer.close();
-                        clearTimeout(setTime);
-                        countdown = 60;
-                        $("#replace_nav li").eq(1).addClass("active").siblings("#replace_nav li").removeClass("active");
-                        $(".replace_container .replace_container_item").eq(1).
+        if(val == ""){
+            layer.open({
+                content: '请输入验证码'
+                ,skin: 'msg'
+                ,time: 1
+            });
+            return;
+        }
+        if(!isSaves){
+            isSaves=true;
+            $.ajax({
+                url:"/user/verifyValidCode",
+                type:"post",
+                dataType:"json",
+                data:{
+                    phone:phone,
+                    type:0,
+                    code:val,
+                    curDate:new Date()
+                },
+                success:function (data) {
+                    if(data.data == false) {
+                        layer.open({
+                            content: '验证码错误'
+                            ,skin: 'msg'
+                            ,time: 1
+                        });
+                        isSaves = false;
+                    }else if(data.data == true) {
+                        layer.open({
+                            content: '验证成功'
+                            ,skin: 'msg'
+                            ,time: 1
+                        });
+                        setTimeout(function(){
+                            isSaves = false;
+                            layer.close();
+                            clearTimeout(setTime);
+                            countdown = 60;
+                            $("#replace_nav li").eq(1).addClass("active").siblings("#replace_nav li").removeClass("active");
+                            $(".replace_container .replace_container_item").eq(1).
                             addClass("active").siblings(".replace_container .replace_container_item").removeClass("active");
-                    },1000);
+                        },1000);
+                    }
                 }
-            }
-        });
+            });
+        }
+
     });
     
     function getvalidCode($this) {
@@ -218,6 +231,7 @@
         });
     }
 
+    var bind_flag = false;
     $(".bind_phone").click(function () {
         let validCode = $(".newValidCode").val();
         let phoneNumber = $(".newPhoneNumber").val();

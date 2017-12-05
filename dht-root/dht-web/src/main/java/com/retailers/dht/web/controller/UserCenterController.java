@@ -273,11 +273,8 @@ public class UserCenterController extends BaseController{
     @ResponseBody
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
     public BaseResp verifyValidCode(HttpServletRequest request,String phone,int type,String code,Date curDate){
-        SmsSendRecord sendRecord = smsSendRecordService.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
-        if (ObjectUtils.equalsIgnorecase(sendRecord.getCode(), code)) {
-            return success(true);
-        }
-        return success(false);
+        boolean flag = smsSendRecordService.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
+        return success(flag);
     }
 
     /**
@@ -290,6 +287,7 @@ public class UserCenterController extends BaseController{
     public BaseResp verifyValidCode(HttpServletRequest request,String phone,long type,Date curDate){
         long uid=getCurLoginUserId(request);
         int time = smsSendRecordService.checkSendSms(uid,phone,type,curDate);
+        System.out.println(time);
         return success(time);
     }
 
