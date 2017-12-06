@@ -206,7 +206,7 @@
     <div class="" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser" >
         <div class="modal-dialog" role="document"  style="width: 85%;">
             <button class="btn btn-default" type="button" onclick="returnback();" style="float: right;margin-right: 5px">返回</button>
-            <div class="modal-content" style="margin-top: 5px;float: right">
+            <div class="modal-content" style="margin-top: 5px;float: right;width: 100%">
                 <div class="modal-header">
                     <h4 class="modal-title" id="editorSysUserTitle" style="float:left"></h4>
 

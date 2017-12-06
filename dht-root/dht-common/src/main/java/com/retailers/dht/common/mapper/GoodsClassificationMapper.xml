@@ -118,6 +118,20 @@
 		</foreach>
 		ORDER BY parent_id asc,gg_order ASC
 	</select>
+	<select id="queryAllGoodsClassificationByGtId" resultMap="rm_goodsClassification_vo">
+		SELECT <include refid="goodsClassification_columns" />
+		FROM t_goods_classification
+		where is_delete!=1
+		<if test="gtIds != null and gtIds.size>0">
+			and gg_home IN
+			<foreach collection="gtIds" item="item" index="index"
+					 open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+		and is_show=1
+	</select>
+
 	<!--添加商品子类表 -->
 	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">
 		INSERT INTO t_goods_classification (

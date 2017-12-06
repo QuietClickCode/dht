@@ -106,4 +106,10 @@
 	<delete id="deleteGoodsTypeByGtId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_type WHERE gt_id = #{gtId}
 	</delete>
+
+	<!--分页查询 -->
+	<select id="queryValidateGoodsTypes" resultMap="rm_goodsType">
+		SELECT <include refid="goodsType_columns" />
+		 FROM t_goods_type WHERE is_delete=0 and is_show=1
+	</select>
 </mapper>

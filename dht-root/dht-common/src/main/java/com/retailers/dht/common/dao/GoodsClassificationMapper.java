@@ -3,6 +3,7 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -60,6 +61,9 @@ public interface GoodsClassificationMapper {
 	public List<GoodsClassificationVo> queryGoodsClassificationTree();
 
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
+
+	//根据商品大类取得所有子类
+	public List<GoodsClassification> queryAllGoodsClassificationByGtId(@Param("gtIds") List<Long> gtIds);
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Map map);
 

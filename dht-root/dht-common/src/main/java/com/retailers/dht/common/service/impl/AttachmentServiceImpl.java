@@ -66,11 +66,14 @@ public class AttachmentServiceImpl implements AttachmentService {
 	}
 
 	public boolean editorAttachment(List<Long> attachmentIds, Long status) {
-		long total = attachmentMapper.editorAttachment(attachmentIds,status);
-		if(total>0){
-			return true;
+		if(ObjectUtils.isNotEmpty(attachmentIds)){
+			long total = attachmentMapper.editorAttachment(attachmentIds,status);
+			if(total>0){
+				return true;
+			}
+			return false;
 		}
-		return false;
+		return true;
 	}
 
 	/**

@@ -7,6 +7,8 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="<%=path%>/js/filestyle/open-iconic/font/css/open-iconic-bootstrap.css">
+    <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -296,7 +298,7 @@
                                     指定商品种类:
                                 </span>
                                 <input type="hidden" class="form-control" name="spzlIds" id="spzlIds">
-                                <input type="text" class="form-control" name="spzlNames" id="spzlNames">
+                                <input type="text" class="form-control" name="spzlNames" id="spzlNames" onclick="showGoodsTypeTrees(); return false;">
                             </div>
                         </div>
                         <!-- 优惠卷指定商品 -->
@@ -339,8 +341,8 @@
     </div>
 </div>
 <!-- 公用下拉择树 -->
-<div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
+<div id="goodsTypeContext" class="goodsTypeContext" style="display:none; position: absolute;z-index:1059">
+    <ul id="goodsTypeTrees" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -352,6 +354,8 @@
 <script type="text/javascript" src="<%=path%>/ueditor/ueditor.all.min.js"> </script>
 <script type="text/javascript" src="<%=path%>/ueditor/lang/zh-cn/zh-cn.js"></script>
 <script type="text/javascript" src="<%=path%>/js/filestyle/bootstrap-filestyle.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -728,7 +732,9 @@
         editorCouponType=1;
         initFormData(cpId);
         $("#editorCouponTitle").text("编辑优惠卷");
-        $('#editorCoupon').modal("show")
+        $('#editorCoupon').modal("show");
+        //加载商品类型树
+        queryGoodsTyps(cpId);
     }
     /**
      * 清除form 表单数据
@@ -758,7 +764,6 @@
      * */
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
-        console.log(rowData)
         if(rowData){
             $("#editorCouponForm #cpId").val(rowData.cpId);
             $("#editorCouponForm #version").val(rowData.version);
@@ -817,6 +822,16 @@
             $("#editorCouponForm #cpMinDiscount").val(rowData.cpMinDiscount);
             $("#editorCouponForm #cpMaxDiscount").val(rowData.cpMaxDiscount);
             UE.getEditor('cpContext').setContent(rowData.cpContext);
+            //设置数据
+            if(rowData.cpIsRestricted==1){
+                $("#editorCouponForm #spzlIds").val(rowData.relevanceId);
+                $("#editorCouponForm #spzlNames").val(rowData.relevanceNm);
+
+            }if(rowData.cpIsRestricted==2){
+                $("#editorCouponForm #spIds").val(rowData.relevanceId);
+                $("#editorCouponForm #spNames").val(rowData.relevanceNm);
+            }
+
         }else{
             $("#editorCouponForm #cpType").val("0");
             $("#editorCouponForm #cpLogoDiv").show();
@@ -827,9 +842,14 @@
             $("#editorCouponForm #cpSendWay").val(0);
             $("#cpImagesForm #cpLogoDiv").show();
             $("#cpImagesForm #clearCpLogoDiv").hide();
+            $("#editorCouponForm #spzlIds").val('');
+            $("#editorCouponForm #spzlNames").val('');
+            $("#editorCouponForm #spIds").val('');
+            $("#editorCouponForm #spNames").val('');
         }
         cpCoinTypeChange();
         cpSendWayChange();
+        syfwChange();
     }
     /**
      * 编辑部门
@@ -842,6 +862,7 @@
         $("#editorCouponForm #isValid").bootstrapSwitch("state",true);
         $("#editorCouponTitle").text("添加优惠卷");
         $('#editorCoupon').modal("show")
+        queryGoodsTyps();
     }
     /**
      * 优惠卷优惠额度变更
@@ -853,8 +874,8 @@
         $("#editorCouponForm #ptzzkDiv").hide();
         $("#editorCouponForm #psqzjeDiv").hide();
         $("#editorCouponForm #psqzzkDiv").hide();
-        $("#editorCouponForm #yhjzdspzl").hide();
-        $("#editorCouponForm #yhjzdsp").hide();
+//        $("#editorCouponForm #yhjzdspzl").hide();
+//        $("#editorCouponForm #yhjzdsp").hide();
         //常规优惠卷
         if(parseInt(selectCpCoinType,10)==0){
             //判断优惠倦类型 现金卷
@@ -1009,17 +1030,109 @@
         let selectVal=$("#editorCouponForm #cpIsRestricted").val();
         $("#editorCouponForm #yhjzdspzl").hide();
         $("#editorCouponForm #yhjzdsp").hide();
-        $("#editorCouponForm #spzlIds").val("");
-        $("#editorCouponForm #spzlNames").val("");
-        $("#editorCouponForm #spIds").val("");
-        $("#editorCouponForm #spNames").val("");
         if(selectVal==1){
             $("#editorCouponForm #yhjzdspzl").show();
+            $("#editorCouponForm #spIds").val("");
+            $("#editorCouponForm #spNames").val("");
         }if(selectVal==2){
             $("#editorCouponForm #yhjzdsp").show();
+            $("#editorCouponForm #spzlIds").val("");
+            $("#editorCouponForm #spzlNames").val("");
         }
     }
+    //当前选中优惠卷id
+    var selectCurCouponId;
+    //
+    var goodsTypsTreesObj;
+    var zNodes;
+    /**
+     * 取得商品类型
+     **/
+    function queryGoodsTyps(couponId){
+        selectCurCouponId=couponId;
+        $.fn.zTree.init($("#goodsTypeTrees"), setting, zNodes);
+        $.ajax({
+            type:"post",//请求方式
+            url:"/goods/goodsTypeTree",//发送请求地址
+            dataType:"json",
+            data:{//发送给数据库的数据
+                couponId:couponId
+            },
+            //请求成功后的回调函数有两个参数
+            success:function(data,textStatus){
+                if(data.status==0){
+                    let zNodes = data.data;
+                    var zTree=$.fn.zTree.init($("#goodsTypeTrees"), setting, zNodes);
+                }else{
+                    alert(data.msg);
+                }
+            },error:function(data,textStatus){
+                alert(data);
+            }
+        });
+    }
+    /***********************************树型菜单********************************************************/
+//
+//    var orgPermissionTreeSetting = {
+//        check: {
+//            enable: true
+//        },
+//        data: {
+//            simpleData: {
+//                enable: true
+//            }
+//        }
+//    };
+    /***********************************************************************************/
+    var setting = {
+        check: {
+            enable: true,
+            chkboxType: { "Y" : "s", "N" : "s" }
+        },
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: onClick
+        }
+    };
+    function onClick(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("goodsTypeTrees"),
+            nodes = zTree.getCheckedNodes(),
+            v = "",vId="";
+        nodes.sort(function compare(a,b){return a.id-b.id;});
+        for (var i=0, l=nodes.length; i<l; i++) {
+            if(!nodes[i].getCheckStatus().half){
+                v += nodes[i].name+",";
+                vId += nodes[i].id+",";
+            }
+        }
+        var orgPname = $("#spzlNames");
+        var orgPid_ = $("#spzlIds");
+        orgPname.val(v);
+        orgPid_.val(vId);
+    }
 
+    function showGoodsTypeTrees() {
+        var cityObj = $("#spzlNames");
+        var cityOffset = $("#spzlNames").offset();
+        $("#goodsTypeContext").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+        $("body").bind("mousedown", onBodyDown);
+    }
+    function hideOrgTree() {
+        $("#goodsTypeContext").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "goodsTypeContext" || $(event.target).parents("#goodsTypeContext").length>0)) {
+            hideOrgTree();
+        }
+    }
 </script>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.GoodsType;
 import com.retailers.dht.common.service.GoodsTypeService;
 import com.retailers.dht.manage.base.BaseController;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -85,6 +87,20 @@ public class GoodsTypeController extends BaseController {
         goodsType.setIsDelete(0L);
         boolean flag=goodsTypeService.saveGoodsType(goodsType);
         return success(flag);
+    }
+
+
+    /**
+     * 根据优惠卷id 取得商品类型树
+     * @param couponId
+     * @return
+     */
+    @RequestMapping("/goodsTypeTree")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryGoodsTypeTree(Long couponId){
+        List<ZTreeVo> rtn = goodsTypeService.queryGoodsTypeTree(couponId);
+        return success(rtn);
     }
 
 }

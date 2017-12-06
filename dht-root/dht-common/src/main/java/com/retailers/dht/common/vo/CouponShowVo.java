@@ -81,6 +81,10 @@ public class CouponShowVo {
     private Integer isValid;
     /**数据版本*/
     private Integer version;
+    //优惠卷使用范围id
+    private String relevanceId;
+    //优惠卷使用范围名称
+    private String relevanceNm;
 
     public Long getCpId() {
         return cpId;
@@ -330,5 +334,21 @@ public class CouponShowVo {
 
     public void setCpSurplusNum(Long cpSurplusNum) {
         this.cpSurplusNum = cpSurplusNum;
+    }
+
+    public String getRelevanceId() {
+        return relevanceId;
+    }
+
+    public void setRelevanceId(String relevanceId) {
+        this.relevanceId = relevanceId;
+    }
+
+    public String getRelevanceNm() {
+        return relevanceNm;
+    }
+
+    public void setRelevanceNm(String relevanceNm) {
+        this.relevanceNm = relevanceNm;
     }
 }

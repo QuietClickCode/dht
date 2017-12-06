@@ -4,12 +4,15 @@ import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.ExecuteQueueConstant;
+import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.CouponUserMapper;
 import com.retailers.dht.common.dao.ExecuteQueueMapper;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.dao.CouponMapper;
+import com.retailers.dht.common.entity.CouponUseRange;
 import com.retailers.dht.common.entity.CouponUser;
 import com.retailers.dht.common.entity.ExecuteQueue;
 import com.retailers.dht.common.service.AttachmentService;
@@ -17,12 +20,15 @@ import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.CouponShowVo;
+import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,30 +56,93 @@ public class CouponServiceImpl implements CouponService {
 	private ExecuteQueueMapper executeQueueMapper;
 	@Autowired
 	private ExecuteQueueService executeQueueService;
+	@Autowired
+	private CouponUseRangeMapper couponUseRangeMapper;
 
-	public boolean saveCoupon(Coupon coupon) {
-		coupon.setCpSurplusNum(coupon.getCpNum());
-		int status = couponMapper.saveCoupon(coupon);
+	@Transactional(rollbackFor = Exception.class)
+	public boolean saveCoupon(CouponVo couponVo,Long optionId) {
+		couponVo.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+		couponVo.setCpCreate(new Date());
+		Coupon cp = new Coupon();
+		BeanUtils.copyProperties(couponVo,cp);
+		cp.setCpSurplusNum(cp.getCpNum());
+		int status = couponMapper.saveCoupon(cp);
 		List<Long> attachmentIds= new ArrayList<Long>();
-		attachmentIds.add(coupon.getCpLogo());
-		Map<Long,Long> atts= AttachmentUploadImageUtils.findUploadImages(coupon.getCpContext());
+		if(ObjectUtils.isNotEmpty(cp.getCpLogo())){
+			attachmentIds.add(cp.getCpLogo());
+		}
+		Map<Long,Long> atts= AttachmentUploadImageUtils.findUploadImages(cp.getCpContext());
 		if(!atts.isEmpty()){
 			for(Long id:atts.keySet()){
 				attachmentIds.add(id);
 			}
 		}
 		attachmentService.editorAttachment(attachmentIds);
+		couponVo.setCpId(cp.getCpId());
+		saveCouponUseRange(couponVo);
 		return status == 1 ? true : false;
 	}
-	public boolean updateCoupon(Coupon coupon) throws AppException{
-		Coupon cu=couponMapper.queryCouponByCpId(coupon.getCpId());
+	@Transactional(rollbackFor = Exception.class)
+	public boolean updateCoupon(CouponVo couponVo,Long optionId) throws AppException{
+		Coupon cp = new Coupon();
+		BeanUtils.copyProperties(couponVo,cp);
+		cp.setCpCreateSid(optionId);
+		Coupon cu=couponMapper.queryCouponByCpId(cp.getCpId());
 		if(cu.getCpNum().intValue()!=cu.getCpSurplusNum().intValue()){
 			throw new AppException("优惠卷己被领取过，不能进行编辑");
 		}
-		coupon.setCpSurplusNum(coupon.getCpNum());
-		int status = couponMapper.updateCoupon(coupon);
+		cp.setCpSurplusNum(cp.getCpNum());
+		cp.setIsDelete(cu.getIsDelete());
+		cp.setCpCreate(cu.getCpCreate());
+		int status = couponMapper.updateCoupon(cp);
+		//设置优惠卷使用范围
+		couponUseRangeMapper.clearCouponUseRangeByCpId(cp.getCpId());
+		saveCouponUseRange(couponVo);
+		//优惠卷附件管理
+		List<Long> clearAtt=new ArrayList<Long>();
+		List<Long> addAtt= new ArrayList<Long>();
+		if(ObjectUtils.isEmpty(couponVo.getCpLogo())){
+			if(ObjectUtils.isNotEmpty(cu.getCpLogo())){
+				clearAtt.add(cu.getCpLogo());
+			}
+		}else{
+			if(!ObjectUtils.compare(cu.getCpLogo(),couponVo.getCpLogo())){
+				if(ObjectUtils.isNotEmpty(couponVo.getCpLogo())){
+					addAtt.add(couponVo.getCpLogo());
+				}
+				if(ObjectUtils.isNotEmpty(cu.getCpLogo())){
+					clearAtt.add(cu.getCpLogo());
+				}
+			}
+		}
+		Map<Long,Long> curAtts= AttachmentUploadImageUtils.findUploadImages(couponVo.getCpContext());
+		Map<Long,Long> oldAtts= AttachmentUploadImageUtils.findUploadImages(cu.getCpContext());
+		if(ObjectUtils.isEmpty(curAtts)){
+			if(ObjectUtils.isNotEmpty(oldAtts)){
+				for(long key:oldAtts.keySet()){
+					clearAtt.add(key);
+				}
+			}
+		}else{
+			for(long key:curAtts.keySet()){
+				addAtt.add(key);
+			}
+			if(ObjectUtils.isNotEmpty(oldAtts)){
+				for(Long key:oldAtts.keySet()){
+					if(!curAtts.containsKey(key)){
+						clearAtt.add(key);
+					}
+				}
+			}
+		}
+		attachmentService.editorAttachment(addAtt);
+		attachmentService.editorAttachment(clearAtt, AttachmentConstant.ATTACHMENT_STATUS_NO);
+
+
 		return status == 1 ? true : false;
 	}
+
+
 	public Coupon queryCouponByCpId(Long cpId) {
 		return couponMapper.queryCouponByCpId(cpId);
 	}
@@ -109,7 +178,7 @@ public class CouponServiceImpl implements CouponService {
 	}
 
 	/**
-	 *
+	 *抢夺优惠卷
 	 * @param userId 用户id
 	 * @param cpId 优惠卷id
 	 * @return
@@ -132,7 +201,6 @@ public class CouponServiceImpl implements CouponService {
 			if(ObjectUtils.isEmpty(coupon)){
 				throw new AppException("优惠卷不存在");
 			}
-
 			//判断优惠卷是否异常
 			checkCoupon(coupon,userId);
 			//设置用户获得优惠卷
@@ -245,6 +313,40 @@ public class CouponServiceImpl implements CouponService {
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+		}
+	}
+
+	/**
+	 * 保存使用范围
+	 * @param couponVo
+	 */
+	private void saveCouponUseRange(CouponVo couponVo){
+		List<Long> ids=new ArrayList<Long>();
+		//优惠卷使用范围 1 指定商品种类
+		if(couponVo.getCpIsRestricted().intValue()==CouponConstant.COUPON_USED_RANGE_GOODS_TYPE){
+			String[] cids=couponVo.getSpzlIds().split(",");
+			for(String id:cids){
+				ids.add(Long.parseLong(id));
+			}
+		}
+		if(couponVo.getCpIsRestricted().intValue()==CouponConstant.COUPON_USED_RANGE_GOODS){
+			String[] cids=couponVo.getSpIds().split(",");
+			for(String id:cids){
+				ids.add(Long.parseLong(id));
+			}
+		}
+		if(ObjectUtils.isNotEmpty(ids)){
+			List<CouponUseRange> curs=new ArrayList<CouponUseRange>();
+			for(long id:ids){
+				CouponUseRange cur=new CouponUseRange();
+				cur.setCpId(couponVo.getCpId());
+				cur.setCpurIsAllow(0);
+				cur.setCpurRelevanceId(id);
+				cur.setCpurType(couponVo.getCpIsRestricted());
+				curs.add(cur);
+			}
+			//批量添加使用范围
+			couponUseRangeMapper.saveCouponUseRanges(curs);
 		}
 	}
 }

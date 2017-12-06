@@ -1,9 +1,12 @@
 
 package com.retailers.dht.common.service;
 
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.GoodsType;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,6 +60,14 @@ public interface GoodsTypeService {
 	 * @date 2017-09-29 14:57:58
 	 */
 	public boolean deleteGoodsTypeByGtId(Long gtId);
+
+	/**
+	 * 取得商品类型树
+	 * @param couponId
+	 * @return
+	 * @throws AppException
+	 */
+	public List<ZTreeVo> queryGoodsTypeTree(Long couponId);
 
 }
 

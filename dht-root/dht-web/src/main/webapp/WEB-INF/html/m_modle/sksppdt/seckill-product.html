@@ -217,7 +217,8 @@
             </div> -->
         </div>
         <a onclick="buynow()" class="bargain-btn2">立即购买</a>
-        <a  class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
+        <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
+        <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
     </div>
     <!--选择规格弹框-->
     <div class="mark" id="J_mark2" style="display:none;">
@@ -391,6 +392,8 @@
                 }
             });
         }
+
+        var spId;
         <!--加载剩余时间-->
         function loadtimestape() {
             $.ajax({
@@ -400,6 +403,9 @@
                 data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid,pageNo:1,pageSize:1},
                 success:function(data){
                     if(data.rows!=null){
+                        spId=data.rows[0].spId;
+                        <!--查询用户是否购买此商品-->
+                        queryuserisbuygoods();
                         timestape = data.rows[0].timestap*1000;
                         $('#gprice').html('￥'+data.rows[0].gprice);
                         $('#goodsNameDiv').html(data.rows[0].goodsName);
@@ -463,7 +469,8 @@
 
                         if(isPutway==0){
                             $('.bargain-btn2').hide();
-                            $('.bargain-btn3').show();
+                            $('#putdown').show();
+                            $('#hasBuy').hide();
                             $('.special').hide();
                         }
                         if(isAdvancesale==1){
@@ -955,6 +962,25 @@
             })
         }
 
+        <!--查询用户是否购买此商品-->
+        function queryuserisbuygoods() {
+            $.ajax({
+                type:"post",
+                url:"/goodsIsbuysp/queryGoodsIsbuysp",
+                dataType: "json",
+                data:{spId:spId},
+                success:function(data){
+                    var row = data.row;
+                    if(row!=null){
+                        $('.bargain-btn2').hide();
+                        $('#putdown').hide();
+                        $('#hasBuy').show();
+                        $('.special').hide();
+                    }
+                }
+            });
+        }
+
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {
@@ -1006,6 +1032,7 @@
 
     <!--初始化页面调用函数-->
     <script>
+
         <!--加载图片-->
         loadgoodsimage();
 
