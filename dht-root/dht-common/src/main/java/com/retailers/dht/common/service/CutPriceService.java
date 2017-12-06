@@ -1,6 +1,8 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.vo.CutPriceVo;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.CutPrice;
 
@@ -22,7 +24,7 @@ public interface CutPriceService {
 	 * @author fanghui
 	 * @date 2017-12-05 16:14:43
 	 */
-	public boolean saveCutPrice(CutPrice cutPrice);
+	public CutPrice saveCutPrice(CutPrice cutPrice);
 	/**
 	 * 编辑砍价表
 	 * @param cutPrice
@@ -59,6 +61,10 @@ public interface CutPriceService {
 	public boolean deleteCutPriceByCpId(Long cpId);
 
 	public List<CutPriceVo> queryCutPriceTree();
+
+	public List<Goods> queryHasNoSpGoods(String gname, Long parentId);
+
+	public List<CutPriceVo> queryCutPriceListsByGid(Map params);
 }
 
 

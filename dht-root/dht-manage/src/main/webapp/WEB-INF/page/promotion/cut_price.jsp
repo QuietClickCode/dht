@@ -171,13 +171,13 @@
                         <div class="col-sm-10">
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="spRegion" class="spRegion" value="0">
+                                    <input type="radio" name="cpRegion" class="spRegion" value="0">
                                     乡村
                                 </label>
                             </div>
                             <div class="radio">
                                 <label>
-                                    <input type="radio" name="spRegion" class="spRegion" value="1">
+                                    <input type="radio" name="cpRegion" class="spRegion" value="1">
                                     城市
                                 </label>
                             </div>
@@ -187,7 +187,7 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">最少砍价人数</label>
                         <div class="col-sm-10">
-                            <input type="text" name="cpLestperson" class="form-control">
+                            <input type="text" name="cpLestpseson" class="form-control">
                         </div>
                     </div>
                     <div class="form-group">
@@ -223,7 +223,7 @@
                     <div class="form-group" style="display: none">
                         <label for="" class="col-sm-2 control-label">商品ID</label>
                         <div class="col-sm-10">
-                            <input type="text" name="goodsId" class="form-control goodsId" readonly >
+                            <input type="text" name="gid" class="form-control goodsId" readonly >
                         </div>
                     </div>
 
@@ -233,7 +233,7 @@
                             <label class="sr-only">Amount (in dollars)</label>
                             <div class="input-group">
                                 <div style="cursor: pointer" onclick="chooseGoodsModal(1)" class="input-group-addon">选择商品</div>
-                                <input type="text"  class="form-control goodsName"  name="goodsName" readonly>
+                                <input type="text"  class="form-control goodsName"  name="gname" readonly>
                             </div>
                         </div>
                     </div>
@@ -254,18 +254,24 @@
                         <label for="" class="col-sm-2 control-label">推送对象</label>
                         <div class="col-sm-10">
                             <label class="radio-inline">
-                                <input type="radio" name="spRegion" class="spRegion" value="0">乡村
+                                <input type="radio" name="cpRegion" class="cpRegion" value="0">乡村
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="spRegion" class="spRegion" value="1">城市
+                                <input type="radio" name="cpRegion" class="cpRegion" value="1">城市
                             </label>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">排序</label>
+                        <label for="" class="col-sm-2 control-label">最少人数</label>
                         <div class="col-sm-10">
-                            <input type="text" name="spOrder" id="setAdvertOrder" class="form-control">
+                            <input type="text" name="cpLestpseson"  class="form-control">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">最多人数</label>
+                        <div class="col-sm-10">
+                            <input type="text" name="cpMostperson" class="form-control">
                         </div>
                     </div>
                 </form>
@@ -477,7 +483,7 @@
 
 
     $(function () {
-        createSalePromotionTable("/openSalePromotion/getHasNoSpGoods","salePromotionList","gid",goodsColumns,queryGoodsParams);
+        createSalePromotionTable("/openCutPrice/getHasNocpGoods","salePromotionList","gid",goodsColumns,queryGoodsParams);
     });
 
 
@@ -577,7 +583,7 @@
         $('#salePromotionList').bootstrapTable(
             "refresh",
             {
-                url:"/openSalePromotion/getHasNoSpGoods"
+                url:"/openCutPrice/getHasNocpGoods"
             }
         );
     }
@@ -613,22 +619,31 @@
                 return;
             }
         }
+        var cpBounds = $('#addgdspTabel input[name=cpBounds]');
+        for(var i=0;i<cpBounds.length;i++){
+            var preval = $(cpBounds[i]).parent().prev().find('input[type=text]').val();
+            if(parseInt(preval) <parseInt(cpBounds[i].value)){
+                layer.msg('限购量应小于砍价数量');
+                return;
+            }
+        }
 
         var goodsId = $('.goodsId')[0].value;
         var goodsName = $('.goodsName')[0].value;
         var isCoupon = $('input[name=isCoupon]:checked')[0].value;
-        var spRegion = $('input[name=spRegion]:checked')[0].value;
-        var spOrder = $('#addSalePromotionGoods input[name=spOrder]')[0].value;
+        var cpRegion = $('input[name=cpRegion]:checked')[0].value;
+        var cpLestpseson = $('#addSalePromotionGoods input[name=cpLestpseson]')[0].value;
+        var cpMostperson = $('#addSalePromotionGoods input[name=cpMostperson]')[0].value;
         $.ajax({
-            url:"/openSalePromotion/addSalePromotion",
+            url:"/openCutPrice/addCutPrice",
             type:"post",
             dataType: "json",
-            data:{goodsId:goodsId,goodsName:goodsName,isCoupon:isCoupon,spRegion:spRegion,spOrder:spOrder,isDelete:0,parentId:parentId},
+            data:{gid:goodsId,cpMostperson:cpMostperson,isCoupon:isCoupon,cpRegion:cpRegion,cpLestpseson:cpLestpseson,isDelete:0,parentId:parentId},
             success:function (data) {
                 if(data.row!=null){
-                    id=data.row.spId;
+                    id=data.row.cpId;
                 }
-                uploadaddgdspdata();
+                uploadaddgdcpdata();
                 refreshTableData();
                 $("#addSalePromotion").modal("hide");
                 $("#addSalePromotionGoods").data('bootstrapValidator').resetForm(true);
@@ -653,7 +668,7 @@
             let goods = $("#goodsClassificationTable").bootstrapTable("getRowByUniqueId",spid);
             setInfo("updateSalePromotionGoodsFrom",goods);
             radioChoose("#updateSalePromotionGoodsFrom .isCoupon",goods.isCoupon);
-            radioChoose("#updateSalePromotionGoodsFrom .spRegion",goods.spRegion);
+            radioChoose("#updateSalePromotionGoodsFrom .cpRegion",goods.cpRegion);
 
             refreshinnerTableData();
             $("#updateSalePromotionGoods").modal("show");
@@ -686,6 +701,14 @@
                 var preval = $(gdResidueinventory[i]).prev().val();
                 if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
                     layer.msg('砍价数量不可大于最大数量');
+                    return;
+                }
+            }
+            var cpBounds = $('#gdspTabel input[name=cpBounds]');
+            for(var i=0;i<cpBounds.length;i++){
+                var preval = $(cpBounds[i]).parent().prev().find('input[type=text]').val();
+                if(parseInt(preval) <parseInt(cpBounds[i].value)){
+                    layer.msg('限购量不可超过砍价数量');
                     return;
                 }
             }
@@ -780,8 +803,8 @@
             valign : 'middle'
         },
         {
-            field: 'spDiscountRate',
-            title: '折扣率',
+            field: 'cpSale',
+            title: '底价',
             align : 'center',
             valign : 'middle',
             formatter:function(value,row,index){
@@ -790,28 +813,13 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="hidden" value="'+row.gdId+'">' +
-                    '<input type="text" class="form-controller" value="'+val+'" onblur="changspsale(this)">';
+                html = '<input type="text" class="form-controller" value="'+val+'">' +
+                    '<input type="hidden" value="'+row.gdId+'">';
                 return html;
             }
         },
         {
-            field: 'spSale',
-            title: '砍价',
-            align : 'center',
-            valign : 'middle',
-            formatter:function(value,row,index){
-                let html='';
-                var val = '';
-                if(value!=null){
-                    val = value;
-                }
-                html = '<input type="text" class="form-controller" value="'+val+'" onblur="changsprate(this);">';
-                return html;
-            }
-        },
-        {
-            field: 'spInventory',
+            field: 'cpInventory',
             title: '砍价数量',
             align : 'center',
             valign : 'middle',
@@ -821,13 +829,13 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input  type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
-                    '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'">';
+                html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                    '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'" >';
                 return html;
             }
         },
         {
-            field: 'spBounds',
+            field: 'cpBounds',
             title: '限购量',
             align : 'center',
             valign : 'middle',
@@ -837,7 +845,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" class="form-controller" value="'+val+'">';
+                html = '<input type="text" name="cpBounds" class="form-controller" value="'+val+'">';
                 return html;
             }
         }
@@ -870,7 +878,7 @@
         $('#gdspTabel').bootstrapTable(
             "refresh",
             {
-                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid+'&spId='+id
+                url:"/openGoodsGdcprel/queryGoodsGdcprelListsByGid?gid="+gid+'&cpId='+id
             }
         );
     }
@@ -888,36 +896,45 @@
             }
 
             var trs = $('#gdspTabel').find('tr');
-            if(trs!=null&&trs.length>0){
-                for(var i=1;i<trs.length;i++){
-                    loadtrdata(trs[i],i,trs.length-1);
-                }
+            if(trs!=null&&trs.length>1){
+                loadtabeldata(trs);
             }
         }
     }
-
-    function loadtrdata(obj,x,y) {
-        var $obj = $(obj);
-        var tds = $obj.children();
-
-        var gdId = $(tds[2]).find('input[type=hidden]').get(0).value;
-        var spDiscountRate = $(tds[2]).find('input[type=text]').get(0).value;
-        var spSale = $(tds[3]).find('input[type=text]').get(0).value;
-        var spInventory = $(tds[4]).find('input[type=text]').get(0).value;
-        var spBounds = $(tds[5]).find('input[type=text]').get(0).value;
-        var spId = id;
-        $.ajax({
-            url:"/openGoodsGdsprel/addGoodsGdsprel",
-            type:"post",
-            dataType: "json",
-            data:{spId:spId,gdId:gdId,spDiscountRate:spDiscountRate,spSale:spSale,spInventory:spInventory,spBounds:spBounds,spId:id},
-            success:function (data) {
-                if(x==y){
-                    layer.msg('操作成功');
-                }
+    function loadtabeldata(trs) {
+        if(trs.length>1){
+            var data='';
+            for(var i=1;i<trs.length;i++){
+                var tds = $(trs[i]).children();
+                var gdId = $( tds[2]).find('input[type=hidden]').get(0).value;
+                var cpSale = $(tds[2]).find('input[type=text]').get(0).value;
+                var cpInventory = $(tds[3]).find('input[type=text]').get(0).value;
+                var cpBounds = $(tds[4]).find('input[type=text]').get(0).value;
+                var cpId = id;
+                data+=',{';
+                data+='gdId:'+gdId+',';
+                data+='cpSale:'+cpSale+',';
+                data+='cpInventory:'+cpInventory+',';
+                data+='cpBounds:'+cpBounds+',';
+                data+='cpId:'+cpId+'}';
             }
-        });
+            data = data.substr(1);
+            data = '['+data+']';
 
+            $.ajax({
+                url:"/openGoodsGdcprel/addGoodsGdcprelByJson",
+                type:"post",
+                dataType: "json",
+                data:{data:data},
+                success:function (data) {
+                    if(data.status==0){
+                        layer.msg('操作成功');
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
+        }
     }
 
     function checkspInventory(obj) {
@@ -971,8 +988,8 @@
             valign : 'middle'
         },
         {
-            field: 'spDiscountRate',
-            title: '折扣率',
+            field: 'cpSale',
+            title: '底价',
             align : 'center',
             valign : 'middle',
             formatter:function(value,row,index){
@@ -981,28 +998,13 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="hidden" value="'+row.gdId+'">' +
-                    '<input type="text" class="form-controller" value="'+val+'" onblur="changspsale(this)">';
+                html = '<input type="text" class="form-controller" value="'+val+'">' +
+                    '<input type="hidden" value="'+row.gdId+'">';
                 return html;
             }
         },
         {
-            field: 'spSale',
-            title: '砍价',
-            align : 'center',
-            valign : 'middle',
-            formatter:function(value,row,index){
-                let html='';
-                var val = '';
-                if(value!=null){
-                    val = value;
-                }
-                html = '<input type="text" class="form-controller" value="'+val+'" onblur="changsprate(this);">';
-                return html;
-            }
-        },
-        {
-            field: 'spInventory',
+            field: 'cpInventory',
             title: '砍价数量',
             align : 'center',
             valign : 'middle',
@@ -1018,7 +1020,7 @@
             }
         },
         {
-            field: 'spBounds',
+            field: 'cpBounds',
             title: '限购量',
             align : 'center',
             valign : 'middle',
@@ -1028,7 +1030,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" class="form-controller" value="'+val+'">';
+                html = '<input type="text" name="cpBounds" class="form-controller" value="'+val+'">';
                 return html;
             }
         }
@@ -1061,12 +1063,12 @@
         $('#addgdspTabel').bootstrapTable(
             "refresh",
             {
-                url:"/openGoodsGdsprel/queryGoodsGdsprelListsByGid?gid="+gid+'&spId='+id
+                url:"/openGoodsGdcprel/queryGoodsGdcprelListsByGid?gid="+gid+'&cpId='+id
             }
         );
     }
 
-    function uploadaddgdspdata() {
+    function uploadaddgdcpdata() {
         if(gid!=''){
             var inputs = $('#addgdspTabel').find('input[type=text]');
             if(inputs!=null&&inputs.length>0){
@@ -1080,9 +1082,7 @@
 
             var trs = $('#addgdspTabel').find('tr');
             if(trs!=null&&trs.length>0){
-                for(var i=1;i<trs.length;i++){
-                    loadtrdata(trs[i],i,trs.length-1);
-                }
+                loadtabeldata(trs);
             }
         }
     }
@@ -1242,7 +1242,7 @@
                         }
                     }
                 },
-                cpLestperson: {
+                cpLestpseson: {
                     validators: {
                         notEmpty: {
                             message: '最少人数不能为空'

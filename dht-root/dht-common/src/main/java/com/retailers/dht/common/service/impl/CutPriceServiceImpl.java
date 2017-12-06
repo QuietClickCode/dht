@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Map;
 import com.retailers.dht.common.entity.CutPrice;
 import com.retailers.dht.common.dao.CutPriceMapper;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.CutPriceService;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.CutPriceVo;
+import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +26,11 @@ import com.retailers.mybatis.pagination.Pagination;
 public class CutPriceServiceImpl implements CutPriceService {
 	@Autowired
 	private CutPriceMapper cutPriceMapper;
-	public boolean saveCutPrice(CutPrice cutPrice) {
+	@Autowired
+	private GoodsService goodsService;
+	public CutPrice saveCutPrice(CutPrice cutPrice) {
 		int status = cutPriceMapper.saveCutPrice(cutPrice);
-		return status == 1 ? true : false;
+		return status == 1 ? cutPrice : null;
 	}
 	public boolean updateCutPrice(CutPrice cutPrice) {
 		int status = cutPriceMapper.updateCutPrice(cutPrice);
@@ -104,5 +109,20 @@ public class CutPriceServiceImpl implements CutPriceService {
 		}
 	}
 
+	public List<Goods> queryHasNoSpGoods(String gname,Long parentId){
+		Map params = new HashMap();
+		params.put("gname",gname);
+		params.put("parentId",parentId);
+		Pagination<Goods> page = new Pagination<Goods>();
+		page.setPageNo(1);
+		page.setPageSize(10);
+		page.setParams(params);
+		List<Goods> list = cutPriceMapper.queryHasNoSpGoods(page);
+		return list;
+	}
+	public List<CutPriceVo> queryCutPriceListsByGid(Map params){
+		List<CutPriceVo> list = cutPriceMapper.queryCutPriceListsByGid(params);
+		return list;
+	}
 }
 

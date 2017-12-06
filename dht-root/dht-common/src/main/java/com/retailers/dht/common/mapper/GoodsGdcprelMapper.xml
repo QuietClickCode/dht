@@ -12,6 +12,22 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_goodsGdcprel_vo" type="com.retailers.dht.common.vo.GoodsGdcprelVo">
+		<result property="gdcpId" column="gdcp_id"/>
+		<result property="gdId" column="gd_id"/>
+		<result property="cpId" column="cp_id"/>
+		<result property="cpSale" column="cp_sale"/>
+		<result property="cpInventory" column="cp_inventory"/>
+		<result property="cpBounds" column="cp_bounds"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="gsName" column="gsName"/>
+		<result property="gdPrice" column="gdPrice"/>
+		<result property="gdResidueinventory" column="gdResidueinventory"/>
+		<result property="sumcount" column="sumcount"/>
+		<result property="imgurl" column="imgurl"/>
+		<result property="gunitname" column="gunitname"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGdcprel_columns">
@@ -56,6 +72,21 @@
 		SELECT <include refid="goodsGdcprel_columns" />
 		FROM t_goods_gdcprel
 		<include refid="goodsGdcprel_where"/>
+	</select>
+	<select id="queryGoodsGdcprelListsByGid" resultMap="rm_goodsGdcprel_vo">
+		SELECT t1.gd_id,t1.gd_price gdPrice,t1.gd_residueinventory gdResidueinventory,
+		GROUP_CONCAT(t3.gsv_val ORDER BY t3.gsv_id separator ' ') gsname,
+		t4.cp_id,t4.cp_sale,t4.cp_inventory,t4.cp_bounds
+		from
+		t_goods_detail t1
+		LEFT JOIN t_goods_ggsval_detail t2 ON t1.gd_id=t2.gd_id and t2.is_delete=0
+		LEFT JOIN t_goods_gsval t3 ON t3.gsv_id=t2.gsv_id and t3.is_delete=0
+		LEFT JOIN t_goods_gdcprel t4 ON t1.gd_id=t4.gd_id and t4.cp_id=#{cpId} and t4.is_delete=0
+		LEFT JOIN t_cut_price t5 ON t4.cp_id=t5.cp_id
+		where
+		t1.g_id=#{gid}
+		and t1.is_delete=0
+		GROUP BY t1.gd_id
 	</select>
 	<!--添加商品详情与砍价关系表 -->
 	<insert id="saveGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel" useGeneratedKeys="true" keyProperty="gdcpId">

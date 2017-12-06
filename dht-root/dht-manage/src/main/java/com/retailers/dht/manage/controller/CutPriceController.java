@@ -3,6 +3,7 @@ package com.retailers.dht.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.CutPrice;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.CutPriceService;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.common.vo.CutPriceVo;
@@ -39,10 +40,12 @@ public class CutPriceController extends BaseController{
     @RequestMapping("/addCutPrice")
     @Function(label = "添加砍价名单",description = "添加砍价名单",resourse = "openCutPrice.addCutPrice",sort = 3,parentRes = "openCutPrice.CutPriceMapping")
     @ResponseBody
-    public BaseResp addCutPrice(CutPrice cutPrice,String cpStartTimes,String cpEndTimes){
+    public Map<String,Object> addCutPrice(CutPrice cutPrice,String cpStartTimes,String cpEndTimes){
         cutPrice = addDate(cutPrice, cpStartTimes, cpEndTimes);
-        boolean flag = cutPriceService.saveCutPrice(cutPrice);
-        return success(flag);
+        cutPrice = cutPriceService.saveCutPrice(cutPrice);
+        Map map = new HashMap();
+        map.put("row",cutPrice);
+        return map;
     }
 
     @RequestMapping("/updateCutPrice")
@@ -89,12 +92,12 @@ public class CutPriceController extends BaseController{
         return cutPrice;
     }
 
-//    @RequestMapping("/getHasNocpGoods")
-//    @ResponseBody
-//    public Map<String,Object> getHasNoSpGoods(String gname,Long parentId){
-//        List<GoodsVo> list = promotionService.queryHasNoSpGoods(gname,parentId);
-//        Map map = new HashMap();
-//        map.put("rows",list);
-//        return map;
-//    }
+    @RequestMapping("/getHasNocpGoods")
+    @ResponseBody
+    public Map<String,Object> getHasNoSpGoods(String gname,Long parentId){
+        List<Goods> list = cutPriceService.queryHasNoSpGoods(gname,parentId);
+        Map map = new HashMap();
+        map.put("rows",list);
+        return map;
+    }
 }

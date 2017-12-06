@@ -31,7 +31,11 @@ public class SeckillSpecialProductController extends BaseController {
         System.out.println("id====================================>:"+id);
         return getFinalReturnString(id,"specialp","sksppdt","special-product",request);
     }
-
+    @RequestMapping("/bargainp/{id}.html")
+    public String bargainp(HttpServletRequest request, @PathVariable("id")String id){
+        System.out.println("id====================================>:"+id);
+        return getFinalReturnString(id,"bargainp","sksppdt","bargain-product",request);
+    }
     @RequestMapping("/secspep/{id}.special")
     public String test(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id===="+id);

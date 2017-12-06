@@ -1,6 +1,9 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGdcprel;
+import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品详情与砍价关系表DAO
@@ -52,4 +55,5 @@ public interface GoodsGdcprelMapper {
 	 */
 	public List<GoodsGdcprel> queryGoodsGdcprelList(Pagination<GoodsGdcprel> pagination);
 
+	public List<GoodsGdcprelVo> queryGoodsGdcprelListsByGid(@Param("gid") Long gid, @Param("cpId") Long cpId);
 }
