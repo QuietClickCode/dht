@@ -67,11 +67,11 @@ public interface GoodsClassificationService {
 
 	/**
 	 * 取得商品子类
-	 * @param couponId 优惠卷id
-	 * @param gids 商品大类Ids
+	 * @param gids 大类id
+	 * @param map 选中的子类
 	 * @return
 	 */
-	public List<ZTreeVo> queryAllGoodsClassificationByGtId(Long couponId, List<Long> gids);
+	public List<ZTreeVo> queryAllGoodsClassificationByGtId(List<Long> gids,Map<Long,Long> map);
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
 }

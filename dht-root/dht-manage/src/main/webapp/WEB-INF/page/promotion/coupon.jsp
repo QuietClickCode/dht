@@ -1107,8 +1107,10 @@
             v = "",vId="";
         nodes.sort(function compare(a,b){return a.id-b.id;});
         for (var i=0, l=nodes.length; i<l; i++) {
-            v += nodes[i].name+",";
-            vId += nodes[i].id+",";
+            if(!nodes[i].getCheckStatus().half){
+                v += nodes[i].name+",";
+                vId += nodes[i].id+",";
+            }
         }
         var orgPname = $("#spzlNames");
         var orgPid_ = $("#spzlIds");

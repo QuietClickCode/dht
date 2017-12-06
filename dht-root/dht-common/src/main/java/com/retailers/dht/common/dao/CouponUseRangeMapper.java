@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.CouponUseRange;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：优惠卷使用范围DAO
@@ -64,5 +66,11 @@ public interface CouponUseRangeMapper {
 	 * @param cpId
 	 */
 	public void clearCouponUseRangeByCpId(Long cpId);
+
+	/**
+	 * 根据优惠卷id取得所有使用范围
+	 * @param cpId
+	 */
+	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("cpId") Long cpId,@Param("cpurType") Integer cpurType);
 
 }

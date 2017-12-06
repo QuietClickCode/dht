@@ -141,11 +141,11 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 
 	/**
 	 *
-	 * @param couponId 优惠卷id
-	 * @param gids 商品大类Ids
+	 * @param gids 大类id
+	 * @param map 选中的子类
 	 * @return
 	 */
-	public List<ZTreeVo> queryAllGoodsClassificationByGtId(Long couponId, List<Long> gids) {
+	public List<ZTreeVo> queryAllGoodsClassificationByGtId(List<Long> gids,Map<Long,Long> map) {
 		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId(gids);
 		List<ZTreeVo> rtnList=new ArrayList<ZTreeVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
@@ -158,6 +158,11 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				ztv.setId(gcf.getGgId());
 				ztv.setName(gcf.getGgName());
 				ztv.setpId(-gcf.getGgHome());
+				if(map.containsKey(gcf.getGgId())){
+					ztv.setChecked(true);
+				}else{
+					ztv.setChecked(false);
+				}
 				rtnList.add(ztv);
 			}else{
 				if(alloShow.containsKey(gcf.getParentId())){
@@ -166,6 +171,11 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 					ztv.setName(gcf.getGgName());
 					ztv.setpId(gcf.getParentId());
 					rtnList.add(ztv);
+					if(map.containsKey(gcf.getGgId())){
+						ztv.setChecked(true);
+					}else{
+						ztv.setChecked(false);
+					}
 				}
 			}
 		}
