@@ -88,19 +88,4 @@ public class GoodsTypeController extends BaseController {
         boolean flag=goodsTypeService.saveGoodsType(goodsType);
         return success(flag);
     }
-
-
-    /**
-     * 根据优惠卷id 取得商品类型树
-     * @param couponId
-     * @return
-     */
-    @RequestMapping("/goodsTypeTree")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
-    @ResponseBody
-    public BaseResp queryGoodsTypeTree(Long couponId){
-        List<ZTreeVo> rtn = goodsTypeService.queryGoodsTypeTree(couponId);
-        return success(rtn);
-    }
-
 }

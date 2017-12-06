@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
@@ -125,4 +126,17 @@ public class GoodsClassificationController extends BaseController {
 
         return list;
     }
+    /**
+     * 根据优惠卷id 取得商品类型树
+     * @param couponId
+     * @return
+     */
+    @RequestMapping("/goodsTypeTree")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryGoodsTypeTree(Long couponId){
+        List<ZTreeVo> rtn = goodsClassificationService.querGoodsClassificationTree(couponId);
+        return success(rtn);
+    }
+
 }

@@ -3,7 +3,10 @@ package com.retailers.dht.common.service.impl;
 
 import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.constant.CouponConstant;
+import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.GoodsClassificationMapper;
+import com.retailers.dht.common.entity.CouponUseRange;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
@@ -32,6 +35,10 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	private GoodsClassificationMapper goodsClassificationMapper;
 	@Autowired
 	private AttachmentService attachmentService;
+	@Autowired
+	private CouponUseRangeMapper couponUseRangeMapper;
+
+
 	public boolean saveGoodsClassification(GoodsClassification goodsClassification) {
 		Long parentId = goodsClassification.getParentId();
 		Long isTop = goodsClassification.getIsTop();
@@ -140,13 +147,25 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	}
 
 	/**
-	 *
-	 * @param gids 大类id
-	 * @param map 选中的子类
+	 * 取得商品类型树
+	 * @param cpId 优惠卷id
 	 * @return
 	 */
-	public List<ZTreeVo> queryAllGoodsClassificationByGtId(List<Long> gids,Map<Long,Long> map) {
-		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId(gids);
+	public List<ZTreeVo> querGoodsClassificationTree(Long cpId) {
+		//该优惠卷下选中的项
+		Map<Long,Long> map=new HashMap<Long, Long>();
+		//判断是否有优惠卷id
+		if(ObjectUtils.isNotEmpty(cpId)){
+			//取得优惠卷所有商品类型
+			List<CouponUseRange> curs=couponUseRangeMapper.queryCouponUseRangeByCpId(cpId, CouponConstant.COUPON_USED_RANGE_GOODS_TYPE);
+			for(CouponUseRange cur:curs){
+				if(cur.getCpurIsAllow()==0){
+					map.put(cur.getCpurRelevanceId(),cur.getCpurRelevanceId());
+				}
+			}
+		}
+
+		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId();
 		List<ZTreeVo> rtnList=new ArrayList<ZTreeVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
 		queryChildNodes(list,child);

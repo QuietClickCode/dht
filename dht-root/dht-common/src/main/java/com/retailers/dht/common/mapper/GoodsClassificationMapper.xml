@@ -122,13 +122,6 @@
 		SELECT <include refid="goodsClassification_columns" />
 		FROM t_goods_classification
 		where is_delete!=1
-		<if test="gtIds != null and gtIds.size>0">
-			and gg_home IN
-			<foreach collection="gtIds" item="item" index="index"
-					 open="(" close=")" separator=",">
-				#{item}
-			</foreach>
-		</if>
 		and is_show=1
 	</select>
 

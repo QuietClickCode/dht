@@ -67,47 +67,5 @@ public class GoodsTypeServiceImpl implements GoodsTypeService {
 		int status = goodsTypeMapper.updateGoodsType(goodsType);
 		return status == 1 ? true : false;
 	}
-
-	/**
-	 * 取得商品类型树型结构
-	 * @param couponId
-	 * @return
-	 */
-	public List<ZTreeVo> queryGoodsTypeTree(Long couponId) {
-		//该优惠卷下选中的项
-		Map<Long,Long> map=new HashMap<Long, Long>();
-		//判断是否有优惠卷id
-		if(ObjectUtils.isNotEmpty(couponId)){
-			//取得优惠卷所有商品类型
-			List<CouponUseRange> curs=couponUseRangeMapper.queryCouponUseRangeByCpId(couponId, CouponConstant.COUPON_USED_RANGE_GOODS_TYPE);
-			for(CouponUseRange cur:curs){
-				if(cur.getCpurIsAllow()==0){
-					map.put(cur.getCpurRelevanceId(),cur.getCpurRelevanceId());
-				}
-			}
-		}
-
-		//取得所有有效的商品大类
-		List<GoodsType> nodes=goodsTypeMapper.queryValidateGoodsTypes();
-		List<Long> gids=new ArrayList<Long>();
-		List<ZTreeVo> rtnLists=new ArrayList<ZTreeVo>();
-		for(GoodsType gt: nodes){
-			gids.add(gt.getGtId());
-			ZTreeVo ztv=new ZTreeVo();
-			ztv.setId(-gt.getGtId());
-			ztv.setName(gt.getGtName());
-			if(map.containsKey(-gt.getGtId())){
-				ztv.setChecked(true);
-			}else{
-				ztv.setChecked(false);
-			}
-			rtnLists.add(ztv);
-		}
-		//取得所有的商品子类
-		List<ZTreeVo> childs=goodsClassificationService.queryAllGoodsClassificationByGtId(gids,map);
-		rtnLists.addAll(childs);
-		return rtnLists;
-	}
-
 }
 

@@ -63,7 +63,7 @@ public interface GoodsClassificationMapper {
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
 
 	//根据商品大类取得所有子类
-	public List<GoodsClassification> queryAllGoodsClassificationByGtId(@Param("gtIds") List<Long> gtIds);
+	public List<GoodsClassification> queryAllGoodsClassificationByGtId();
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Map map);
 

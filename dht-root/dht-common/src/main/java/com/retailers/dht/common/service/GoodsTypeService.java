@@ -61,14 +61,6 @@ public interface GoodsTypeService {
 	 */
 	public boolean deleteGoodsTypeByGtId(Long gtId);
 
-	/**
-	 * 取得商品类型树
-	 * @param couponId
-	 * @return
-	 * @throws AppException
-	 */
-	public List<ZTreeVo> queryGoodsTypeTree(Long couponId);
-
 }
 
 

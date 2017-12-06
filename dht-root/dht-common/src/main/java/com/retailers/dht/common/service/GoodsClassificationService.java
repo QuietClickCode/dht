@@ -5,6 +5,7 @@ import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 
 import java.util.List;
 import java.util.Map;
@@ -66,14 +67,14 @@ public interface GoodsClassificationService {
 	public List<GoodsClassificationVo> queryGoodsClassificationNode(List<Long> ggIds);
 
 	/**
-	 * 取得商品子类
-	 * @param gids 大类id
-	 * @param map 选中的子类
+	 * 取得商品类型树
+	 * @param cpId 优惠卷id
 	 * @return
 	 */
-	public List<ZTreeVo> queryAllGoodsClassificationByGtId(List<Long> gids,Map<Long,Long> map);
+	public List<ZTreeVo> querGoodsClassificationTree(Long cpId);
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
+
 }
 
 
