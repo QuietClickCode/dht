@@ -112,7 +112,7 @@
                     <input type="hidden" name="version" id="version">
                     <input type="hidden" name="idDelete" id="idDelete" value="0">
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 商品子类名称:
@@ -121,7 +121,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否为顶级元素:
@@ -136,7 +136,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-lg-12"  id="parentNmElement" style="display: none">
+                        <div class="col-lg-6"  id="parentNmElement" style="display: none">
                             <br>
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -151,7 +151,7 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 所属商品大类:
@@ -167,7 +167,7 @@
                     </div>
                     <br>
                     <div class="row">
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 图片:
@@ -179,20 +179,32 @@
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                              <span class="input-group-addon">
+                                是否立即返现:
+                              </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0" id="isReturnnowSwitch">
+                                        <input id="isReturnnow" name="isReturnnow" type="checkbox" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 是否显示:
                               </span>
                                 <div class="controls">
                                     <div class="switch" tabindex="0" id="isShowSwitch">
-                                        <input id="isShow" name="isTop" type="checkbox" />
+                                        <input id="isShow" name="isShow" type="checkbox" />
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br>
-                        <div class="col-lg-12">
+                        <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 排序:
@@ -336,6 +348,7 @@
 
         //初始化选择器开关
         $("#editGoodsClassificationForm #isTop").bootstrapSwitch();
+        $("#editGoodsClassificationForm #isReturnnow").bootstrapSwitch();
         $("#editGoodsClassificationForm #isShow").bootstrapSwitch();
 
         //编辑按钮提交操作
@@ -351,6 +364,12 @@
                 formData["isTop"]=1;
             }else{
                 formData["isTop"]=0;
+            }
+            flag =$("#editGoodsClassificationForm #isReturnnow").bootstrapSwitch("state");
+            if(flag){
+                formData["isReturnnow"]=1;
+            }else{
+                formData["isReturnnow"]=0;
             }
             flag =$("#editGoodsClassificationForm #isShow").bootstrapSwitch("state");
             if(flag){
@@ -590,6 +609,12 @@
             }
             $("#editGoodsClassificationForm #isShow").bootstrapSwitch("state",flag);
 
+            flag = false;
+            if(rowData.isReturnnow==1){
+                flag=true;
+            }
+            $("#editGoodsClassificationForm #isReturnnow").bootstrapSwitch("state",flag);
+
             if(rowData.isTop==0){
                 $("#editGoodsClassificationForm #parentId").val(rowData.parentId);
                 $("#editGoodsClassificationForm #parentNm").val(rowData.parentName);
@@ -602,6 +627,7 @@
             }
         }else{
             $("#editGoodsClassificationForm #isTop").bootstrapSwitch("state",true);
+            $("#editGoodsClassificationForm #isReturnnow").bootstrapSwitch("state",false);
             $("#editGoodsClassificationForm #isShow").bootstrapSwitch("state",true);
             $("#editGoodsClassificationForm #ggName").val('');
             $("#editGoodsClassificationForm #ggHomeNm").val('');

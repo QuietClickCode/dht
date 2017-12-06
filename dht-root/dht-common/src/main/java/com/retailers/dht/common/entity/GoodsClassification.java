@@ -34,6 +34,9 @@ public class GoodsClassification implements java.io.Serializable {
 	/**是否是顶级元素*/
 	@NotEmpty
 	private Long isTop;
+	/**是否立即返现 0不立即返现 1立即返现*/
+	@NotEmpty
+	private Long isReturnnow;
 	/**是否显示*/
 	@NotEmpty
 	private Long isShow;
@@ -48,7 +51,15 @@ public class GoodsClassification implements java.io.Serializable {
 	public GoodsClassification(){
 	}
 
-	public GoodsClassification( Long ggId){
+	public Long getIsReturnnow() {
+		return isReturnnow;
+	}
+
+	public void setIsReturnnow(Long isReturnnow) {
+		this.isReturnnow = isReturnnow;
+	}
+
+	public GoodsClassification(Long ggId){
 		this.ggId = ggId;
 	}
 

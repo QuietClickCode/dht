@@ -33,7 +33,30 @@
 		<result property="version" column="version"/>
 		<result property="gname" column="gname"/>
 	</resultMap>
-
+	<resultMap id="rm_goods" type="com.retailers.dht.common.entity.Goods">
+		<result property="gid" column="g_id"/>
+		<result property="gname" column="g_name"/>
+		<result property="gvender" column="g_vender"/>
+		<result property="gshop" column="g_shop"/>
+		<result property="gclassification" column="g_classification"/>
+		<result property="gbrand" column="g_brand"/>
+		<result property="garea" column="g_area"/>
+		<result property="gsalescope" column="g_salescope"/>
+		<result property="gmaindirection" column="g_maindirection"/>
+		<result property="gdescription" column="g_description"/>
+		<result property="gproductioninperson" column="g_productioninperson"/>
+		<result property="gproductioninaddress" column="g_productioninaddress"/>
+		<result property="gpickperson" column="g_pickperson"/>
+		<result property="gpickaddress" column="g_pickaddress"/>
+		<result property="gcopyid" column="g_copyid"/>
+		<result property="gprice" column="g_price"/>
+		<result property="gcheckperson" column="g_checkperson"/>
+		<result property="gcheckmessage" column="g_checkmessage"/>
+		<result property="gunitname" column="g_unitname"/>
+		<result property="isChecked" column="is_checked"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="cutPrice_columns">
 		cp_id,cp_name,g_id,parent_id,sp_order,cp_lestpseson,cp_mostperson,is_coupon,cp_region,cp_start_time,cp_end_time,is_delete,version
@@ -106,6 +129,17 @@
 		WHERE
 		t1.is_delete=0
 		ORDER BY t1.cp_end_time DESC
+	</select>
+	<select id="queryHasNoSpGoods" resultMap="rm_goods" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT *
+		from t_goods t1
+		where
+		t1.g_id not in (SELECT t1.g_id from t_cut_price t1 where parent_id=#{params.parentId} and t1.is_delete=0)
+		and t1.is_delete=0
+		and t1.is_checked=1
+		<if test="null!=params.gname and ''!=params.gname">
+			and t1.g_name like concat('%', #{params.gname} ,'%')
+		</if>
 	</select>
 	<!--添加砍价表 -->
 	<insert id="saveCutPrice" parameterType="com.retailers.dht.common.entity.CutPrice" useGeneratedKeys="true" keyProperty="cpId">

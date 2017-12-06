@@ -677,6 +677,14 @@
                 return;
             }
         }
+        var spBounds = $('#addgdspTabel input[name=spBounds]');
+        for(var i=0;i<spBounds.length;i++){
+            var preval = $(spBounds[i]).parent().prev().find('input[type=text]').val();
+            if(parseInt(preval) <parseInt(spBounds[i].value)){
+                layer.msg('限购量应小于特价数量');
+                return;
+            }
+        }
 
         var goodsId = $('.goodsId')[0].value;
         var goodsName = $('.goodsName')[0].value;
@@ -902,7 +910,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" class="form-controller" value="'+val+'">';
+                html = '<input type="text" name="spBounds" class="form-controller" value="'+val+'">';
                 return html;
             }
         }

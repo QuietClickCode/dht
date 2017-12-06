@@ -10,6 +10,7 @@
 			<result property="ggImgpath" column="gg_imgpath"/>
 			<result property="ggOrder" column="gg_order"/>
 			<result property="isTop" column="is_top"/>
+			<result property="isReturnnow" column="is_returnnow"/>
 			<result property="isShow" column="is_show"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -23,6 +24,7 @@
 		<result property="ggImgpath" column="gg_imgpath"/>
 		<result property="ggOrder" column="gg_order"/>
 		<result property="isTop" column="is_top"/>
+		<result property="isReturnnow" column="is_returnnow"/>
 		<result property="isShow" column="is_show"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
@@ -33,7 +35,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsClassification_columns">
-		gg_id,gg_name,parent_id,gg_home,gg_imgpath,gg_order,is_top,is_show,is_delete,version
+		gg_id,gg_name,parent_id,gg_home,gg_imgpath,gg_order,is_top,is_returnnow,is_show,is_delete,version
 	</sql>
 	<!-- 根据商品子类表主键取得数据 -->
 	<select id="queryGoodsClassificationByGgId" resultMap="rm_goodsClassification" parameterType="java.lang.Long">
@@ -66,6 +68,9 @@
 			</if>
 			<if test="null != params.isTop">
 				AND is_top = #{params.isTop}
+			</if>
+			<if test="null != params.isReturnnow">
+				AND is_returnnow = #{params.isReturnnow}
 			</if>
 			<if test="null != params.isShow">
 				AND is_show = #{params.isShow}
@@ -128,10 +133,10 @@
 	<!--添加商品子类表 -->
 	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">
 		INSERT INTO t_goods_classification (
-			gg_name,parent_id,gg_home,gg_imgpath,gg_order,is_top,is_show,is_delete,version
+			gg_name,parent_id,gg_home,gg_imgpath,gg_order,is_top,is_returnnow,is_show,is_delete,version
 		) VALUES
 		(
-			#{ggName,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT},#{ggHome,jdbcType=BIGINT},#{ggImgpath,jdbcType=VARCHAR},#{ggOrder,jdbcType=BIGINT},#{isTop,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{ggName,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT},#{ggHome,jdbcType=BIGINT},#{ggImgpath,jdbcType=VARCHAR},#{ggOrder,jdbcType=BIGINT},#{isTop,jdbcType=BIGINT},#{isReturnnow,jdbcType=BIGINT},#{isShow,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品子类表 -->
@@ -156,6 +161,9 @@
             <if test="null != isTop">
                 is_top = #{isTop},
             </if>
+			<if test="null != isReturnnow">
+				is_returnnow = #{isReturnnow},
+			</if>
             <if test="null != isShow">
                 is_show = #{isShow},
             </if>

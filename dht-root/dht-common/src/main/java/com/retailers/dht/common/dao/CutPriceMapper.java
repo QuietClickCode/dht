@@ -1,8 +1,11 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.CutPrice;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.vo.CutPriceVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：砍价表DAO
  * @author fanghui
@@ -54,4 +57,8 @@ public interface CutPriceMapper {
 	public List<CutPrice> queryCutPriceList(Pagination<CutPrice> pagination);
 
 	public List<CutPriceVo> queryCutPriceTree();
+
+	public  List<Goods> queryHasNoSpGoods(Pagination<Goods> pagination);
+
+	public List<CutPriceVo> queryCutPriceListsByGid(Map params);
 }
