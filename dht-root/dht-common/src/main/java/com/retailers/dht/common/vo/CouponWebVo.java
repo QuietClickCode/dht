@@ -56,6 +56,10 @@ public class CouponWebVo {
      * 使用条件 （中文展示）
      */
     private String useCondition;
+    /**
+     * 优惠卷使用范围
+     */
+    private String useRange;
 
     public Long getCpId() {
         return cpId;
@@ -223,5 +227,13 @@ public class CouponWebVo {
 
     public void setUseCondition(String useCondition) {
         this.useCondition = useCondition;
+    }
+
+    public String getUseRange() {
+        return useRange;
+    }
+
+    public void setUseRange(String useRange) {
+        this.useRange = useRange;
     }
 }

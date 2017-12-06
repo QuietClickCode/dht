@@ -91,6 +91,7 @@
 		<result property="cpMaxDiscount" column="cp_max_discount"/>
 		<result property="couponVal" column="couponVal"/>
 		<result property="useCondition" column="useCondition"/>
+		<result property="useRange" column="useRange"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -220,31 +221,22 @@
 			LEFT JOIN t_attachment a ON c.cp_logo = a.id
 			LEFT JOIN (
 				SELECT
-					cp_id,
-					GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
-					GROUP_CONCAT(q. NAME) NAME
+				cp_id,
+				GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
+				GROUP_CONCAT(q. NAME) NAME
 				FROM
-					(
-					SELECT	cp_id,cpur_type,cpur_relevance_id,
+					(SELECT 	cp_id,cpur_type,cpur_relevance_id,
 						CASE WHEN cpur_type = 1 THEN
-							CASE WHEN cpur_relevance_id &lt; 0 THEN
-								gt.gt_name
-							ELSE
-								gc.gg_name
-							END
+							gc.gg_name
 						ELSE
 							g.g_name
-						  END NAME
-					FROM
+						END NAME
+				FROM
 					t_coupon_use_range cur
-					LEFT JOIN t_goods_type gt ON cur.cpur_relevance_id =- gt.gt_id
-					AND cpur_type = 1
-					LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id
-					AND cpur_type = 1
-					LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id
-					AND cpur_type = 2
-					) q
-			GROUP BY cp_id
+					LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+					LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+				) q
+				GROUP BY cp_id
 			) fw ON c.cp_id = fw.cp_id
 		<where>
 			<if test="null != params.cpName and '' != params.cpName">
@@ -349,10 +341,30 @@
 			WHEN cp_type = 1 THEN
 			ROUND(c.cp_discount / 100, 2)
 			END couponVal,
-			a.show_url
+			a.show_url,
+			ifnull(fw.NAME,'全场通用') useRange
 		FROM
 			t_coupon c
 			LEFT JOIN t_attachment a ON c.cp_logo = a.id
+			LEFT JOIN (
+				SELECT
+				cp_id,
+				GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
+				GROUP_CONCAT(q. NAME) NAME
+				FROM
+				(SELECT 	cp_id,cpur_type,cpur_relevance_id,
+				CASE WHEN cpur_type = 1 THEN
+				gc.gg_name
+				ELSE
+				g.g_name
+				END NAME
+				FROM
+				t_coupon_use_range cur
+				LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+				LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+				) q
+				GROUP BY cp_id
+			)fw on  c.cp_id = fw.cp_id
 			<if test="null != params.uid">
 				LEFT JOIN t_coupon_user u ON c.cp_id = u.cp_id 	AND u.cpu_uid =#{params.uid}
 			</if>
@@ -402,20 +414,42 @@
 			ELSE
 			DATE_FORMAT(c.cp_end_date, '%Y-%m-%d')
 			END useTime,
-			CASE
-			WHEN cp_type = 0 THEN
-			ROUND(c.cp_money / 100, 2)
-			WHEN cp_type = 1 THEN
-			ROUND(c.cp_discount / 100, 2)
-			END couponVal,
-			a.show_url
+-- 			CASE
+-- 			WHEN cp_type = 0 THEN
+-- 			ROUND(c.cp_money / 100, 2)
+-- 			WHEN cp_type = 1 THEN
+-- 			ROUND(c.cp_discount / 100, 2)
+-- 			END couponVal,
+			ROUND(u.cpu_val / 100, 2) couponVal,
+			a.show_url,
+			ifnull(fw.NAME,'全场通用') useRange
 		FROM
 			t_coupon_user u,
 			t_coupon c
 			LEFT JOIN t_attachment a ON c.cp_logo = a.id
+			LEFT JOIN (
+				SELECT
+				cp_id,
+				GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
+				GROUP_CONCAT(q. NAME) NAME
+				FROM
+				(SELECT 	cp_id,cpur_type,cpur_relevance_id,
+				CASE WHEN cpur_type = 1 THEN
+				gc.gg_name
+				ELSE
+				g.g_name
+				END NAME
+				FROM
+				t_coupon_use_range cur
+				LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+				LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+				) q
+				GROUP BY cp_id
+			)fw on  c.cp_id = fw.cp_id
 		WHERE
 			u.cp_id = c.cp_id
 			AND u.cpu_status=#{params.status}
+			AND u.cpu_uid=#{params.uid}
 		ORDER by c.cp_end_date ASC
 	</select>
 
