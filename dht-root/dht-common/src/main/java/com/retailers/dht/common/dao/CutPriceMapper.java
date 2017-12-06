@@ -3,6 +3,8 @@ import com.retailers.dht.common.entity.CutPrice;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.vo.CutPriceVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 import java.util.Map;
 
@@ -60,5 +62,5 @@ public interface CutPriceMapper {
 
 	public  List<Goods> queryHasNoSpGoods(Pagination<Goods> pagination);
 
-	public List<CutPriceVo> queryCutPriceListsByGid(Map params);
+	public List<CutPriceVo> queryCutPriceListsByGid(@Param("params") Map params);
 }

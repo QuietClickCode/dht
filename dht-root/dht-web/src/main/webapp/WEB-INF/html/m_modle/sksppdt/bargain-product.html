@@ -7,7 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>砍价商品</title>
     <script src="/js/Adaptive.js"></script>
+    <script src="/js/laydate/laydate.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new.css">
 </head>
 
 <body class="bge6">
@@ -45,23 +47,41 @@
     <div class="current-price">
             <span class="title-now">
                 现价:¥
-                <span>1280.00</span>
+                <span id="minprice">1280.00</span>
             </span>
         <span class="bargain-more">
-                最高可砍掉
-                <span>¥</span>
-                580.80
+                最高可砍掉¥
+                <span id="cutdownprice">580.80</span>
+                &nbsp;
             </span>
     </div>
-    <div class="title">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+    <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+    <div class="seckill-address" id="personaddressdiv">
+        <div class="text" >
+            <span class="seckill-address-title">产自</span>
+            <div class="name" id="gproductioninperson"></div>
+            <span class="address-text">
+                    <i></i>
+                    <span id="gproductioninaddress"></span>
+                </span>
+        </div>
+        <div class="text" >
+            <span class="seckill-address-title">采供</span>
+            <div class="name" id="gpickperson"></div>
+            <span class="address-text">
+                    <i></i>
+                    <span id="gpickaddress"></span>
+                </span>
+        </div>
+    </div>
     <div class="norms">
         <span class="name">已选</span>
-        <span class="text overflow"> 一斤装（玻璃瓶），数量×1</span>
+        <span class="text overflow"> 请选择规格<!--一斤装（玻璃瓶），数量×1--></span>
         <span class="checkbox"></span>
     </div>
     <div class="norms">
         <span class="name">送至</span>
-        <span class="text overflow"> 重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...</span>
+        <span class="text overflow"> 请选择地址<!--重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...--></span>
         <span class="checkbox"></span>
     </div>
     <div class="norms">
@@ -71,9 +91,9 @@
     </div>
     <div class="norms">
         <span class="name">运费</span>
-        <span class="text overflow"> 12.0元</span>
+        <span class="text overflow"> 0.0元</span>
     </div>
-    <div class="ensure">
+    <div class="ensure" style="display: none;">
             <span>
                 <i class="icon-yes"></i>
                 农家自产
@@ -191,19 +211,30 @@
     function timegoing() {
         var interval = setInterval(function () {
             var date = new Date(timestape);
-            var shi1 = Math.floor((date.getHours()-8)/10);
-            var shi2 = Math.floor((date.getHours()-8)%10);
-            var fen1 = Math.floor(date.getMinutes()/10);
-            var fen2 = Math.floor(date.getMinutes()%10);
-            var miao1 = Math.floor(date.getSeconds()/10);
-            var miao2 = Math.floor(date.getSeconds()%10);
-
-            $('#shi1').html(shi1);
-            $('#shi2').html(shi2);
-            $('#fen1').html(fen1);
-            $('#fen2').html(fen2);
-            $('#miao1').html(miao1);
-            $('#miao2').html(miao2);
+            var tian = Math.floor(timestape/(24*3600*1000));
+            var shi = Math.floor((date.getHours()-8));
+            var fen = Math.floor(date.getMinutes());
+            var miao = Math.floor(date.getSeconds());
+            if(tian<10){
+                $('#tian').html('0'+tian);
+            }else{
+                $('#tian').html(tian);
+            }
+            if(shi<10){
+                $('#shi').html('0'+shi);
+            }else{
+                $('#shi').html(shi);
+            }
+            if(fen<10){
+                $('#fen').html('0'+fen);
+            }else{
+                $('#fen').html(fen);
+            }
+            if(miao<10){
+                $('#miao').html('0'+miao);
+            }else{
+                $('#miao').html(miao);
+            }
 
             timestape -= 1000;
             if(timestape<0){
@@ -283,23 +314,24 @@
         });
     }
 
-    var spId;
+    var cpId;
     <!--加载剩余时间-->
     function loadtimestape() {
         $.ajax({
             type:"post",
-            url:'/openSalePromotion/querySalePromotionLists',
+            url:'/openCutPrice/queryCutPriceListsByGid',
             dataType: "json",
-            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid,pageNo:1,pageSize:1},
+            data:{gid:gid},
             success:function(data){
                 if(data.rows!=null){
-                    spId=data.rows[0].spId;
+                    cpId=data.rows[0].cpId;
                     <!--查询用户是否购买此商品-->
                     queryuserisbuygoods();
                     timestape = data.rows[0].timestap*1000;
-                    $('#gprice').html('￥'+data.rows[0].gprice);
-                    $('#goodsNameDiv').html(data.rows[0].goodsName);
-                    $('#minprice').html('￥'+data.rows[0].minprice);
+                    var cpSale = data.rows[0].cpSale;
+                    var minprice = data.rows[0].minprice;
+                    $('#minprice').html(minprice);
+                    $('#cutdownprice').html(minprice-cpSale);
                     parentId = data.rows[0].parentId;
                     timegoing();
                 }else{
@@ -333,6 +365,9 @@
                         $('#gpickaddress').html(gpickaddress);
                     }
                     $('#gdescription').html(row.gdescription);
+
+                    $('#goodsNameDiv').html(row.gname);
+
                 }else{
                     nogoods();
                 }
@@ -858,7 +893,7 @@
             type:"post",
             url:"/goodsIsbuysp/queryGoodsIsbuysp",
             dataType: "json",
-            data:{spId:spId},
+            data:{cpId:cpId},
             success:function(data){
                 var row = data.row;
                 if(row!=null){

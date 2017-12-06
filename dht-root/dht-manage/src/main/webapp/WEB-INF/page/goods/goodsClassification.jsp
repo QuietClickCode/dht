@@ -17,7 +17,11 @@
     <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
-
+    <style>
+        .col-lg-6{
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
 <script type="text/plain" id="j_ueditorupload" style="height:5px;display:none;" ></script>
@@ -120,7 +124,7 @@
                                 <input type="text" class="form-control" name="ggName" id="ggName">
                             </div>
                         </div>
-                        <br>
+
                         <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -133,11 +137,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="row">
                         <div class="col-lg-6"  id="parentNmElement" style="display: none">
-                            <br>
                             <div class="input-group">
                               <span class="input-group-addon">
                                 上级分类:
@@ -150,7 +150,6 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
                         <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -164,10 +163,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <br>
-                    <div class="row">
-                        <div class="col-lg-6">
+                        <div class="col-lg-6" style="height: 34px;">
                             <div class="input-group">
                               <span class="input-group-addon">
                                 图片:
@@ -178,7 +174,6 @@
                                 <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
                             </div>
                         </div>
-                        <br>
                         <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -203,7 +198,6 @@
                                 </div>
                             </div>
                         </div>
-                        <br>
                         <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -217,7 +211,6 @@
                             </div>
                         </div>
                     </div>
-                    <br>
 
                 </form>
             </div>

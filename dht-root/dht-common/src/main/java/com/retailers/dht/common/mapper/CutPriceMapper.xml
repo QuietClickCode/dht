@@ -32,6 +32,8 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="gname" column="gname"/>
+		<result property="timestap" column="timestap"/>
+		<result property="cpSale" column="cp_sale"/>
 	</resultMap>
 	<resultMap id="rm_goods" type="com.retailers.dht.common.entity.Goods">
 		<result property="gid" column="g_id"/>
@@ -140,6 +142,22 @@
 		<if test="null!=params.gname and ''!=params.gname">
 			and t1.g_name like concat('%', #{params.gname} ,'%')
 		</if>
+	</select>
+	<select id="queryCutPriceListsByGid" parameterType="java.util.Map" resultMap="rm_cutPrice_vo">
+		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.cp_end_time) timestap,
+		t2.*,t3.cp_sale,min(t4.gd_price) minprice
+		from
+		t_cut_price t1,
+		t_cut_price t2
+		LEFT JOIN t_goods_gdcprel t3 ON t2.cp_id=t3.cp_id and t3.is_delete=0
+		LEFT JOIN t_goods_detail t4 ON t3.gd_id=t4.gd_id and t4.is_delete=0
+		where
+		t1.cp_end_time>CURRENT_TIME()
+		and CURRENT_TIME()>t1.cp_start_time
+		and t1.cp_id=t2.parent_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+		and t2.g_id=#{params.gid}
 	</select>
 	<!--添加砍价表 -->
 	<insert id="saveCutPrice" parameterType="com.retailers.dht.common.entity.CutPrice" useGeneratedKeys="true" keyProperty="cpId">

@@ -16,6 +16,15 @@ public class CutPriceVo extends CutPrice {
     private Float gprice;
     private String gunitname;
     private String gdescription;
+    private Float cpSale;
+
+    public Float getCpSale() {
+        return cpSale;
+    }
+
+    public void setCpSale(Float cpSale) {
+        this.cpSale = cpSale;
+    }
 
     public String getGname() {
         return gname;
