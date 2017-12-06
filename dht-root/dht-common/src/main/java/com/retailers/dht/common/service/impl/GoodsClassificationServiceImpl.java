@@ -176,7 +176,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 				ZTreeVo ztv=new ZTreeVo();
 				ztv.setId(gcf.getGgId());
 				ztv.setName(gcf.getGgName());
-				ztv.setpId(-gcf.getGgHome());
+				ztv.setpId(-1l);
 				if(map.containsKey(gcf.getGgId())){
 					ztv.setChecked(true);
 				}else{
