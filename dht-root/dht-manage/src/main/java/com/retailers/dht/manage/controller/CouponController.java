@@ -3,6 +3,7 @@ package com.retailers.dht.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.vo.CouponShowVo;
@@ -60,6 +61,7 @@ public class CouponController extends BaseController{
         params.put("isValid",isValid);
         params.put("cpSendWay",sendWay);
         params.put("cpCoinType",coupouType);
+        params.put("type", CouponUseRangeConstant.TYPE_COUPON);
         params.put("cpName",name);
         params.put("isDelete",0);
         Pagination<CouponShowVo> pages= couponService.queryCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());

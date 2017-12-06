@@ -36,9 +36,9 @@ public class CouponConstant {
     /**
      * 优惠卷使用范围 1 指定商品种类
      */
-    public static final  int COUPON_USED_RANGE_GOODS_TYPE=1;
+    public static final  long COUPON_USED_RANGE_GOODS_TYPE=1;
     /**
      * 优惠卷使用范围 2 指定商品
      */
-    public static final  int COUPON_USED_RANGE_GOODS=2;
+    public static final  long COUPON_USED_RANGE_GOODS=2;
 }

@@ -14,6 +14,10 @@ public class CouponUseRange implements java.io.Serializable {
 	/**cpurId*/
 	@NotEmpty
 	private Long cpurId;
+	/**
+	 * 类型（0 商品优惠，1 优惠卷）
+	 */
+	private Long type;
 	/**优惠卷id*/
 	@NotEmpty
 	private Long cpId;
@@ -71,5 +75,11 @@ public class CouponUseRange implements java.io.Serializable {
 		return this.cpurIsAllow;
 	}
 
+	public Long getType() {
+		return type;
+	}
 
+	public void setType(Long type) {
+		this.type = type;
+	}
 }

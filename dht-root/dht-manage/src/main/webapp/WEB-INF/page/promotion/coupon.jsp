@@ -1056,7 +1056,8 @@
             url:"/goods/goodsTypeTree",//发送请求地址
             dataType:"json",
             data:{//发送给数据库的数据
-                couponId:couponId
+                id:couponId,
+                type:1
             },
             //请求成功后的回调函数有两个参数
             success:function(data,textStatus){

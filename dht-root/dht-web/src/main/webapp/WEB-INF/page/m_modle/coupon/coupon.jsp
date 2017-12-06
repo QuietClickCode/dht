@@ -74,17 +74,6 @@
         }
         $(function () {
             queryCoupon(1,10);
-
-
-            $.ajax({
-                type:"post",
-                url:'/coupon/webAsyncTask',
-                dataType: "json",
-                success:function(data){
-                    console.log(data)
-                }
-            });
-
         })
 
         /**

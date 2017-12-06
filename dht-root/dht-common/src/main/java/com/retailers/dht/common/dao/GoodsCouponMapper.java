@@ -1,6 +1,9 @@
 package com.retailers.dht.common.dao;
+
 import com.retailers.dht.common.entity.GoodsCoupon;
+import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.List;
 /**
  * 描述：商品优惠活动DAO
@@ -50,6 +53,6 @@ public interface GoodsCouponMapper {
 	 * @author zhongp
 	 * @date 2017-10-09 20:29:50
 	 */
-	public List<GoodsCoupon> queryGoodsCouponList(Pagination<GoodsCoupon> pagination);
+	public List<GoodsCouponShowVo> queryGoodsCouponList(Pagination<GoodsCouponShowVo> pagination);
 
 }

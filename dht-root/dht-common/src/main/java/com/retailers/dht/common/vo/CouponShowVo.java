@@ -157,7 +157,7 @@ public class CouponShowVo {
     }
 
     public String getCpUseCondition() {
-        return NumberUtils.formaterNumberLong(cpUseCondition,2);
+        return NumberUtils.formaterNumberPower(cpUseCondition);
     }
 
     public void setCpUseCondition(Long cpUseCondition) {
@@ -242,14 +242,14 @@ public class CouponShowVo {
         this.cpNum = cpNum;
     }
     public String getCpMoney() {
-        return NumberUtils.formaterNumberLong(cpMoney,2,true);
+        return NumberUtils.formaterNumberPower(cpMoney);
     }
     public void setCpMoney(Long cpMoney) {
         this.cpMoney = cpMoney;
     }
 
     public String getCpDiscount() {
-        return NumberUtils.formaterNumberLong(cpDiscount,2,true);
+        return NumberUtils.formaterNumberPower(cpDiscount);
     }
 
     public void setCpDiscount(Long cpDiscount) {
@@ -257,7 +257,7 @@ public class CouponShowVo {
     }
 
     public String getCpTotalMoney() {
-        return NumberUtils.formaterNumberLong(cpTotalMoney,2,true);
+        return NumberUtils.formaterNumberPower(cpTotalMoney);
     }
 
     public void setCpTotalMoney(Long cpTotalMoney) {
@@ -265,7 +265,7 @@ public class CouponShowVo {
     }
 
     public String getCpMinDiscount() {
-        return NumberUtils.formaterNumberLong(cpMinDiscount,2,true);
+        return NumberUtils.formaterNumberPower(cpMinDiscount);
     }
 
     public void setCpMinDiscount(Long cpMinDiscount) {
@@ -273,7 +273,7 @@ public class CouponShowVo {
     }
 
     public String getCpMaxDiscount() {
-        return NumberUtils.formaterNumberLong(cpMaxDiscount,2,true);
+        return NumberUtils.formaterNumberPower(cpMaxDiscount);
     }
 
     public void setCpMaxDiscount(Long cpMaxDiscount) {

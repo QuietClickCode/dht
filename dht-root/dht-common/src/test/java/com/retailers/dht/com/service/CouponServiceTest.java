@@ -8,6 +8,8 @@ import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponWebVo;
+import com.retailers.dht.common.vo.GoodsCouponShowVo;
+import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import org.junit.Test;
@@ -35,7 +37,8 @@ public class CouponServiceTest extends TestBaseJunit {
         Map<String,Object> params=new HashMap<String, Object>();
         params.put("isDelete",0);
         params.put("nowDate",new Date());
-        Pagination<GoodsCoupon> pages= goodsCouponService.queryGoodsCouponList(params,1,100);
+        params.put("type",0);
+        Pagination<GoodsCouponShowVo> pages= goodsCouponService.queryGoodsCouponList(params,1,100);
         System.out.println(pages.getData().size());
     }
 

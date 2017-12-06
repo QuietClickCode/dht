@@ -95,6 +95,13 @@ public interface CouponService {
 	 */
 	public void clearExpireCoupon();
 
+	/**
+	 * 取得用户在该 商品下的可用优惠卷
+	 * @param gid 商品id
+	 * @return
+	 */
+	public List<CouponShowVo> queryCouponByGid(Long gid);
+
 }
 
 

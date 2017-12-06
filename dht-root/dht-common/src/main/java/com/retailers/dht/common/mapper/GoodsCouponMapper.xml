@@ -6,6 +6,7 @@
 		<result property="gcpId" column="gcp_id"/>
 		<result property="gcpName" column="gcp_name"/>
 		<result property="gcpType" column="gcp_type"/>
+		<result property="gcpIsRestricted" column="gcp_is_restricted"/>
 		<result property="gcpCondition" column="gcp_condition"/>
 		<result property="gcpUnits" column="gcp_units"/>
 		<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
@@ -18,10 +19,30 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_goodsCouponShowVo" type="com.retailers.dht.common.vo.GoodsCouponShowVo">
+		<result property="gcpId" column="gcp_id"/>
+		<result property="gcpName" column="gcp_name"/>
+		<result property="gcpType" column="gcp_type"/>
+		<result property="gcpIsRestricted" column="gcp_is_restricted"/>
+		<result property="gcpCondition" column="gcp_condition"/>
+		<result property="gcpUnits" column="gcp_units"/>
+		<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
+		<result property="gcpStartTime" column="gcp_start_time"/>
+		<result property="gcpEndTime" column="gcp_end_time"/>
+		<result property="gcpMoney" column="gcp_money"/>
+		<result property="gcpDiscount" column="gcp_discount"/>
+		<result property="gcpCreateTime" column="gcp_create_time"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="spzlId" column="spzlId"/>
+		<result property="spzlNm" column="spzlNm"/>
+		<result property="spId" column="spId"/>
+		<result property="spNm" column="spNm"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCoupon_columns">
-		gcp_id,gcp_name,gcp_type,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,gcp_create_time,is_valid,is_delete,version
+		gcp_id,gcp_name,gcp_type,gcp_is_restricted,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,gcp_create_time,is_valid,is_delete,version
 	</sql>
 	<!-- 根据商品优惠活动主键取得数据 -->
 	<select id="queryGoodsCouponByGcpId" resultMap="rm_goodsCoupon" parameterType="java.lang.Long">
@@ -85,18 +106,42 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryGoodsCouponList" resultMap="rm_goodsCoupon" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="goodsCoupon_columns" />
-		FROM t_goods_coupon
+	<select id="queryGoodsCouponList" resultMap="rm_goodsCouponShowVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT gcp_id,gcp_name,gcp_type,gcp_is_restricted,gcp_condition,gcp_units,
+				gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,
+				gcp_create_time,is_valid,is_delete,version,
+				fw.spzlId,fw.spzlNm,fw.spId,fw.spNm
+		FROM t_goods_coupon c
+		LEFT JOIN (
+				SELECT
+				cp_id,
+				GROUP_CONCAT(q.spzlId) spzlId,
+				GROUP_CONCAT(q. spzlNm) spzlNm,
+				GROUP_CONCAT(q. spId) spId,
+				GROUP_CONCAT(q. spNm) spNm
+				FROM
+				(SELECT 	cp_id,cpur_type,
+				gc.gg_id spzlId,
+				gc.gg_name spzlNm,
+				g.g_id spId,
+				g.g_name spNm
+				FROM
+				t_coupon_use_range cur
+				LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+				LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+				WHERE  type=#{params.type}
+				) q
+				GROUP BY cp_id
+		) fw ON c.gcp_id = fw.cp_id
 		<include refid="goodsCoupon_where"/>
 	</select>
 	<!--添加商品优惠活动 -->
 	<insert id="saveGoodsCoupon" parameterType="com.retailers.dht.common.entity.GoodsCoupon" useGeneratedKeys="true" keyProperty="gcpId">
 		INSERT INTO t_goods_coupon (
-			gcp_name,gcp_type,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,gcp_discount,is_valid,is_delete,version
+			gcp_name,gcp_type,gcp_is_restricted,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_create_time,gcp_end_time,gcp_money,gcp_discount,is_valid,is_delete,version
 		) VALUES
 		(
-			#{gcpName,jdbcType=VARCHAR},#{gcpType,jdbcType=INTEGER},#{gcpCondition,jdbcType=BIGINT},#{gcpUnits,jdbcType=BIGINT},#{gcpIsOverlapUse,jdbcType=INTEGER},#{gcpStartTime,jdbcType=TIMESTAMP},#{gcpCreateTime,jdbcType=TIMESTAMP},#{gcpEndTime,jdbcType=TIMESTAMP},#{gcpMoney,jdbcType=BIGINT},#{gcpDiscount,jdbcType=DECIMAL},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{gcpName,jdbcType=VARCHAR},#{gcpType,jdbcType=INTEGER},#{gcpIsRestricted,jdbcType=INTEGER},#{gcpCondition,jdbcType=BIGINT},#{gcpUnits,jdbcType=BIGINT},#{gcpIsOverlapUse,jdbcType=INTEGER},#{gcpStartTime,jdbcType=TIMESTAMP},#{gcpCreateTime,jdbcType=TIMESTAMP},#{gcpEndTime,jdbcType=TIMESTAMP},#{gcpMoney,jdbcType=BIGINT},#{gcpDiscount,jdbcType=DECIMAL},#{isValid,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改商品优惠活动 -->
@@ -109,6 +154,9 @@
             <if test="null != gcpType">
                 gcp_type = #{gcpType},
             </if>
+			<if test="null != gcpIsRestricted">
+				gcp_is_restricted = #{gcpIsRestricted},
+			</if>
             <if test="null != gcpCondition">
                 gcp_condition = #{gcpCondition},
             </if>

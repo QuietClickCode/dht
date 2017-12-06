@@ -71,6 +71,6 @@ public interface CouponUseRangeMapper {
 	 * 根据优惠卷id取得所有使用范围
 	 * @param cpId
 	 */
-	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("cpId") Long cpId,@Param("cpurType") Integer cpurType);
+	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("type") Long type,@Param("cpId") Long cpId,@Param("cpurType") Long cpurType);
 
 }

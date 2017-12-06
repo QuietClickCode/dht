@@ -1,30 +1,29 @@
 package com.retailers.dht.common.vo;
 
-import com.retailers.tools.utils.DateUtil;
+import com.alibaba.fastjson.annotation.JSONField;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.hibernate.validator.constraints.Length;
 
-import javax.validation.constraints.Digits;
 import java.util.Date;
 
 /**
- *
+ * @author zhongp
+ * @version 1.0.1
+ * @data 2017/12/7
  */
-public class GoodsCouponVo {
+public class GoodsCouponShowVo {
     /**gcpId*/
     private Long gcpId;
     /**商品优惠活动名称*/
-    @Length(min = 2, max = 50)
     private String gcpName;
     /**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
     private Integer gcpType;
     /**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
     private Long gcpIsRestricted;
     /**商品优惠活动触发条件*/
-    @Digits(integer=10,fraction = 2,message = "优惠条件只允许在10位整数和2位小数范围内")
-    private Double gcpCondition;
-
+    @JSONField(serialize = false)
+    private Long gcpCondition;
     /**
      * 优惠条件计量单位（0 元，1 件）
      */
@@ -32,21 +31,22 @@ public class GoodsCouponVo {
     /**是否重叠使用*/
     private Integer gcpIsOverlapUse;
     /**商品优惠开始时间*/
-    private String gcpStartTime;
+    private Date gcpStartTime;
     /**商品优惠结束时间*/
-    private String gcpEndTime;
+    private Date gcpEndTime;
     /**优惠金额*/
-    @Digits(integer=10,fraction = 2,message = "优惠金额只允许在10位整数和2位小数范围内")
-    private Double gcpMoney;
+    @JSONField(serialize = false)
+    private Long gcpMoney;
     /**优惠折扣*/
-    @Digits(integer=1,fraction = 2,message = "优惠折扣只允许在2位整数和2位小数范围内")
-    private Double gcpDiscount;
+    @JSONField(serialize = false)
+    private Long gcpDiscount;
     /**创建时间*/
     private Date gcpCreateTime;
     /**是否有效*/
     private Integer isValid;
     /**是否删除*/
     private Integer isDelete;
+
     /**数据版本*/
     private Integer version;
     /**
@@ -90,14 +90,19 @@ public class GoodsCouponVo {
         this.gcpType = gcpType;
     }
 
-    public Long getGcpCondition() {
-        if(ObjectUtils.isNotEmpty(gcpCondition)){
-            return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(gcpCondition,2));
-        }
-        return null;
+    public Long getGcpIsRestricted() {
+        return gcpIsRestricted;
     }
 
-    public void setGcpCondition(Double gcpCondition) {
+    public void setGcpIsRestricted(Long gcpIsRestricted) {
+        this.gcpIsRestricted = gcpIsRestricted;
+    }
+
+    public Long getGcpCondition() {
+        return gcpCondition;
+    }
+
+    public void setGcpCondition(Long gcpCondition) {
         this.gcpCondition = gcpCondition;
     }
 
@@ -118,46 +123,34 @@ public class GoodsCouponVo {
     }
 
     public Date getGcpStartTime() {
-        if(ObjectUtils.isNotEmpty(gcpStartTime)){
-            return DateUtil.stringToDate(gcpEndTime,DateUtil.DATE_WITHSECOND_FORMAT);
-        }
-        return null;
+        return gcpStartTime;
     }
 
-    public void setGcpStartTime(String gcpStartTime) {
+    public void setGcpStartTime(Date gcpStartTime) {
         this.gcpStartTime = gcpStartTime;
     }
 
     public Date getGcpEndTime() {
-        if(ObjectUtils.isNotEmpty(gcpEndTime)){
-            return DateUtil.stringToDate(gcpEndTime,DateUtil.DATE_WITHSECOND_FORMAT);
-        }
-        return null;
+        return gcpEndTime;
     }
 
-    public void setGcpEndTime(String gcpEndTime) {
+    public void setGcpEndTime(Date gcpEndTime) {
         this.gcpEndTime = gcpEndTime;
     }
 
     public Long getGcpMoney() {
-        if(ObjectUtils.isNotEmpty(gcpMoney)){
-            return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(gcpMoney,2));
-        }
-        return null;
+        return gcpMoney;
     }
 
-    public void setGcpMoney(Double gcpMoney) {
+    public void setGcpMoney(Long gcpMoney) {
         this.gcpMoney = gcpMoney;
     }
 
     public Long getGcpDiscount() {
-        if(ObjectUtils.isNotEmpty(gcpDiscount)){
-            return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(gcpDiscount,2));
-        }
-        return null;
+        return gcpDiscount;
     }
 
-    public void setGcpDiscount(Double gcpDiscount) {
+    public void setGcpDiscount(Long gcpDiscount) {
         this.gcpDiscount = gcpDiscount;
     }
 
@@ -193,14 +186,6 @@ public class GoodsCouponVo {
         this.version = version;
     }
 
-    public Long getGcpIsRestricted() {
-        return gcpIsRestricted;
-    }
-
-    public void setGcpIsRestricted(Long gcpIsRestricted) {
-        this.gcpIsRestricted = gcpIsRestricted;
-    }
-
     public String getSpzlId() {
         return spzlId;
     }
@@ -231,5 +216,20 @@ public class GoodsCouponVo {
 
     public void setSpNm(String spNm) {
         this.spNm = spNm;
+    }
+    public String getGcpConditions() {
+        return NumberUtils.formaterNumberPower(gcpCondition);
+    }
+    public String getGcpMoneys() {
+        if(ObjectUtils.isNotEmpty(gcpMoney)){
+            return NumberUtils.formaterNumberPower(gcpMoney);
+        }
+        return null;
+    }
+    public String getGcpDiscounts() {
+        if(ObjectUtils.isNotEmpty(gcpDiscount)){
+            return NumberUtils.formaterNumberPower(gcpDiscount);
+        }
+        return null;
     }
 }
