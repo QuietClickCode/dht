@@ -126,16 +126,18 @@ public class GoodsClassificationController extends BaseController {
 
         return list;
     }
+
     /**
      * 根据优惠卷id 取得商品类型树
-     * @param couponId
+     * @param id 优惠卷id/商品优惠id
+     * @param type 类型（0 商品优惠，1 优惠卷)
      * @return
      */
     @RequestMapping("/goodsTypeTree")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
-    public BaseResp queryGoodsTypeTree(Long couponId){
-        List<ZTreeVo> rtn = goodsClassificationService.querGoodsClassificationTree(couponId);
+    public BaseResp queryGoodsTypeTree(Long type,Long id){
+        List<ZTreeVo> rtn = goodsClassificationService.querGoodsClassificationTree(type,id);
         return success(rtn);
     }
 

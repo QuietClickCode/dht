@@ -248,10 +248,10 @@ public class NumberUtils {
 		return  df.format(number);
 	}
 
-	public static String formaterNumberLong(Long number,int len) {
-		return formaterNumberLong(number,len,false);
+	public static String formaterNumberLongs(Long number,int len) {
+		return formaterNumberLongs(number,len,false);
 	}
-	public static String formaterNumberLong(Long number,int len,boolean isNull) {
+	public static String formaterNumberLongs(Long number,int len,boolean isNull) {
 		if(isNull){
 			if(ObjectUtils.isEmpty(number)){
 				return null;

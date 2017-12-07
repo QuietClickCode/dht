@@ -235,6 +235,7 @@
 					t_coupon_use_range cur
 					LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
 					LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+				WHERE  type=#{params.type}
 				) q
 				GROUP BY cp_id
 			) fw ON c.cp_id = fw.cp_id

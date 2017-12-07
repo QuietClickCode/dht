@@ -21,6 +21,8 @@ public class GoodsCoupon implements java.io.Serializable {
 	private String gcpName;
 	/**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
 	private Integer gcpType;
+	/**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
+	private Long gcpIsRestricted;
 	/**商品优惠活动触发条件*/
 	@JSONField(serialize = false)
 	private Long gcpCondition;
@@ -48,6 +50,8 @@ public class GoodsCoupon implements java.io.Serializable {
 	private Integer isDelete;
 	/**数据版本*/
 	private Integer version;
+
+
 	//columns END
 
 	public GoodsCoupon(){
@@ -87,7 +91,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 
 	public String getGcpConditions() {
-		return NumberUtils.formaterNumberLong(gcpCondition,2);
+		return NumberUtils.formaterNumberPower(gcpCondition);
 	}
 
 	public Long getGcpUnits() {
@@ -128,7 +132,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 	public String getGcpMoneys() {
 		if(ObjectUtils.isNotEmpty(gcpMoney)){
-			return NumberUtils.formaterNumberLong(gcpMoney,2);
+			return NumberUtils.formaterNumberPower(gcpMoney);
 		}
 		return null;
 	}
@@ -141,7 +145,7 @@ public class GoodsCoupon implements java.io.Serializable {
 	}
 	public String getGcpDiscounts() {
 		if(ObjectUtils.isNotEmpty(gcpDiscount)){
-			return NumberUtils.formaterNumberLong(gcpDiscount,2);
+			return NumberUtils.formaterNumberPower(gcpDiscount);
 		}
 		return null;
 	}
@@ -174,5 +178,11 @@ public class GoodsCoupon implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getGcpIsRestricted() {
+		return gcpIsRestricted;
+	}
 
+	public void setGcpIsRestricted(Long gcpIsRestricted) {
+		this.gcpIsRestricted = gcpIsRestricted;
+	}
 }

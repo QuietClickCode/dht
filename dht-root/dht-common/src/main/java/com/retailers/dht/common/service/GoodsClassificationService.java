@@ -71,7 +71,7 @@ public interface GoodsClassificationService {
 	 * @param cpId 优惠卷id
 	 * @return
 	 */
-	public List<ZTreeVo> querGoodsClassificationTree(Long cpId);
+	public List<ZTreeVo> querGoodsClassificationTree(Long id,Long cpId);
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
 

@@ -4,8 +4,10 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
+import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.service.GoodsCouponService;
+import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -63,6 +65,7 @@ public class GoodsCouponController extends BaseController{
         params.put("gcpType",gcpType);
         params.put("isValid",isValid);
         params.put("isDelete",0);
+        params.put("type", CouponUseRangeConstant.TYPE_GOODS_COUPON);
         System.out.println(now);
         if(!ObjectUtils.isEmpty(now)){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
@@ -75,7 +78,7 @@ public class GoodsCouponController extends BaseController{
             }
         }
 
-        Pagination<GoodsCoupon> pages= goodsCouponService.queryGoodsCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<GoodsCouponShowVo> pages= goodsCouponService.queryGoodsCouponList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
     }
 
@@ -93,10 +96,7 @@ public class GoodsCouponController extends BaseController{
         }catch(Exception e){
             return errorForParam(e.getMessage());
         }
-        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-        GoodsCoupon gcp = new GoodsCoupon();
-        BeanUtils.copyProperties(goodsCoupon,gcp);
-        boolean flag = goodsCouponService.saveGoodsCoupon(gcp);
+        boolean flag = goodsCouponService.saveGoodsCoupon(goodsCoupon);
         if(flag){
             return success("商品优惠添加成功");
         }else{
@@ -105,22 +105,19 @@ public class GoodsCouponController extends BaseController{
     }
     /**
      * 添加商品优惠
-     * @param goodsCoupon 商品优惠数据
+     * @param goodsCouponVo 商品优惠数据
      * @return
      */
     @RequestMapping("editorGoodsCoupon")
     @Function(label="编辑商品优惠", description = "编辑商品优惠", resourse = "goodsCoupon.editorGoodsCoupon",sort=3,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
-    public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCoupon){
+    public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCouponVo){
         try{
-            validateParams(goodsCoupon);
+            validateParams(goodsCouponVo);
         }catch(Exception e){
             return errorForParam(e.getMessage());
         }
-        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-        GoodsCoupon gcp = new GoodsCoupon();
-        BeanUtils.copyProperties(goodsCoupon,gcp);
-        boolean flag = goodsCouponService.editorGoodsCoupon(gcp);
+        boolean flag = goodsCouponService.editorGoodsCoupon(goodsCouponVo);
         if(flag){
             return success("商品优惠编辑成功");
         }else{

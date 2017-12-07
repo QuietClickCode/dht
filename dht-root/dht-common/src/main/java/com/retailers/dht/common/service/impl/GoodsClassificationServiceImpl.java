@@ -151,13 +151,13 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	 * @param cpId 优惠卷id
 	 * @return
 	 */
-	public List<ZTreeVo> querGoodsClassificationTree(Long cpId) {
+	public List<ZTreeVo> querGoodsClassificationTree(Long type,Long cpId) {
 		//该优惠卷下选中的项
 		Map<Long,Long> map=new HashMap<Long, Long>();
 		//判断是否有优惠卷id
 		if(ObjectUtils.isNotEmpty(cpId)){
 			//取得优惠卷所有商品类型
-			List<CouponUseRange> curs=couponUseRangeMapper.queryCouponUseRangeByCpId(cpId, CouponConstant.COUPON_USED_RANGE_GOODS_TYPE);
+			List<CouponUseRange> curs=couponUseRangeMapper.queryCouponUseRangeByCpId(type,cpId, CouponConstant.COUPON_USED_RANGE_GOODS_TYPE);
 			for(CouponUseRange cur:curs){
 				if(cur.getCpurIsAllow()==0){
 					map.put(cur.getCpurRelevanceId(),cur.getCpurRelevanceId());

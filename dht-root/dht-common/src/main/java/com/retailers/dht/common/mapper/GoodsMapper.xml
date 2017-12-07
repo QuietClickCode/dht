@@ -264,4 +264,10 @@
 	<delete id="deleteGoodsByGid" parameterType="java.lang.Long">
 		DELETE FROM t_goods WHERE g_id = #{gid}
 	</delete>
+
+	<!-- 根据商品表主键取得数据 -->
+	<select id="queryGoodsByGt" resultMap="rm_goods" parameterType="java.lang.Long">
+		SELECT <include refid="goods_columns" />
+		FROM t_goods WHERE g_classification = #{gt} and is_delete=0 and is_checked=1
+	</select>
 </mapper>

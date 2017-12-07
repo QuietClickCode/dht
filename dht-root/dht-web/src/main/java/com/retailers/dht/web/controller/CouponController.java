@@ -9,6 +9,7 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
+import org.apache.http.protocol.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -122,5 +123,19 @@ public class CouponController extends BaseController{
         };
         System.out.println("已交给服务线程处理");
         return asyncTask;
+    }
+
+    /**
+     * 根据商品id取得支持的优惠卷列表
+     * @param request
+     * @param gid
+     * @return
+     */
+    @RequestMapping("queryCouponByGid")
+    @CheckSession(key =SystemConstant.LOG_USER_SESSION_KEY)
+    public @ResponseBody BaseResp queryCouponByGid(HttpServletRequest request, String gid){
+        //取得当前用户
+        Long curUid=getCurLoginUserId(request);
+        return null;
     }
 }

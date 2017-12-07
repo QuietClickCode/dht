@@ -63,14 +63,15 @@ public interface CouponUseRangeMapper {
 
 	/**
 	 * 清除该优惠卷下所有用范围
-	 * @param cpId
+	 * @param type 类型
+	 * @param cpId 优惠id
 	 */
-	public void clearCouponUseRangeByCpId(Long cpId);
+	public void clearCouponUseRangeByCpId(@Param("type")Long type,@Param("cpId") Long cpId);
 
 	/**
 	 * 根据优惠卷id取得所有使用范围
 	 * @param cpId
 	 */
-	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("cpId") Long cpId,@Param("cpurType") Integer cpurType);
+	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("type") Long type,@Param("cpId") Long cpId,@Param("cpurType") Long cpurType);
 
 }

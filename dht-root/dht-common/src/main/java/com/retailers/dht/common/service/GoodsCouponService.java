@@ -1,7 +1,11 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.dht.common.entity.GoodsCoupon;
+import com.retailers.dht.common.vo.GoodsCouponShowVo;
+import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.Map;
 /**
  * 描述：商品优惠活动Service
@@ -14,12 +18,12 @@ public interface GoodsCouponService {
 
 	/**
 	 * 添加商品优惠活动
-	 * @param goodsCoupon
+	 * @param goodsCouponVo
 	 * @return
 	 * @author zhongp
 	 * @date 2017-10-09 20:29:50
 	 */
-	public boolean saveGoodsCoupon(GoodsCoupon goodsCoupon);
+	public boolean saveGoodsCoupon(GoodsCouponVo goodsCouponVo);
 	/**
 	 * 编辑商品优惠活动
 	 * @param goodsCoupon
@@ -45,7 +49,7 @@ public interface GoodsCouponService {
 	 * @author zhongp
 	 * @date 2017-10-09 20:29:50
 	 */
-	public Pagination<GoodsCoupon> queryGoodsCouponList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<GoodsCouponShowVo> queryGoodsCouponList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据gcpId删除商品优惠活动
 	 * @param gcpId
@@ -57,10 +61,10 @@ public interface GoodsCouponService {
 
 	/**
 	 * 编辑商品优惠
-	 * @param goodsCoupon
+	 * @param goodsCouponvo
 	 * @return
 	 */
-	public boolean editorGoodsCoupon(GoodsCoupon goodsCoupon);
+	public boolean editorGoodsCoupon(GoodsCouponVo goodsCouponvo);
 
 }
 

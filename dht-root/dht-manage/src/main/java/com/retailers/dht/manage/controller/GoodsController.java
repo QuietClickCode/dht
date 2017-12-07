@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsVo;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,4 +121,16 @@ public class GoodsController extends BaseController {
         return success(flag);
     }
 
+    /**
+     *根据商品类型取得商品
+     * @param request
+     * @param gt 商品类型
+     * @return
+     */
+    @RequestMapping("queryGoodsByGt")
+    @ResponseBody
+    public BaseResp queryGoodsByGt(HttpServletRequest request,Long gt){
+        List<ZTreeVo> list = goodsService.queryGoodsByGt(gt);
+        return success(list);
+    }
 }

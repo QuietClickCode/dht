@@ -4,6 +4,7 @@
 
 	<resultMap id="rm_couponUseRange" type="com.retailers.dht.common.entity.CouponUseRange">
 			<result property="cpurId" column="cpur_id"/>
+			<result property="type" column="type"/>
 			<result property="cpId" column="cp_id"/>
 			<result property="cpurType" column="cpur_type"/>
 			<result property="cpurRelevanceId" column="cpur_relevance_id"/>
@@ -12,7 +13,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="couponUseRange_columns">
-		cpur_id,cp_id,cpur_type,cpur_relevance_id,cpur_is_allow
+		cpur_id,type,cp_id,cpur_type,cpur_relevance_id,cpur_is_allow
 	</sql>
 	<!-- 根据优惠卷使用范围主键取得数据 -->
 	<select id="queryCouponUseRangeByCpurId" resultMap="rm_couponUseRange" parameterType="java.lang.Long">
@@ -48,21 +49,22 @@
 	<!--添加优惠卷使用范围 -->
 	<insert id="saveCouponUseRange" parameterType="com.retailers.dht.common.entity.CouponUseRange" useGeneratedKeys="true" keyProperty="cpurId">
 		INSERT INTO t_coupon_use_range (
-			cp_id,cpur_type,cpur_relevance_id,cpur_is_allow
+			cp_id,type,cpur_type,cpur_relevance_id,cpur_is_allow
 		) VALUES
 		(
-			#{cpId,jdbcType=BIGINT},#{cpurType,jdbcType=BIGINT},#{cpurRelevanceId,jdbcType=BIGINT},#{cpurIsAllow,jdbcType=INTEGER}
+			#{cpId,jdbcType=BIGINT},#{type,jdbcType=BIGINT},#{cpurType,jdbcType=BIGINT},#{cpurRelevanceId,jdbcType=BIGINT},#{cpurIsAllow,jdbcType=INTEGER}
 		)
 	</insert>
 
 	<!--批量添加优惠卷使用范围 -->
 	<insert id="saveCouponUseRanges" parameterType="com.retailers.dht.common.entity.CouponUseRange">
 		INSERT INTO t_coupon_use_range (
-		cp_id,cpur_type,cpur_relevance_id,cpur_is_allow
+		cp_id,type,cpur_type,cpur_relevance_id,cpur_is_allow
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator=",">
 			(
 			#{item.cpId,jdbcType=BIGINT},
+			#{item.type,jdbcType=BIGINT},
 			#{item.cpurType,jdbcType=BIGINT},
 			#{item.cpurRelevanceId,jdbcType=BIGINT},
 			#{item.cpurIsAllow,jdbcType=INTEGER}
@@ -95,12 +97,12 @@
 	</delete>
 	<!--清除该优惠卷下所有用范围 -->
 	<delete id="clearCouponUseRangeByCpId" parameterType="java.lang.Long">
-		DELETE FROM t_coupon_use_range WHERE cp_id = #{cpId}
+		DELETE FROM t_coupon_use_range WHERE cp_id = #{cpId} and type=#{type}
 	</delete>
 
 	<!-- 根据优惠卷id取得所有使用范围 -->
 	<select id="queryCouponUseRangeByCpId" resultMap="rm_couponUseRange">
 		SELECT <include refid="couponUseRange_columns" />
-		FROM t_coupon_use_range WHERE cp_id = #{cpId} and cpur_type=#{cpurType}
+		FROM t_coupon_use_range WHERE type=#{type} and cp_id = #{cpId} and cpur_type=#{cpurType}
 	</select>
 </mapper>

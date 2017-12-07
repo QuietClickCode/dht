@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
@@ -150,6 +151,19 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		page.setData(list);
 		return page;
+	}
+
+	public List<ZTreeVo> queryGoodsByGt(Long gt) {
+		List<Goods> lists =goodsMapper.queryGoodsByGt(gt);
+		List<ZTreeVo> rtn=new ArrayList<ZTreeVo>();
+		for(Goods g:lists){
+			ZTreeVo vo = new ZTreeVo();
+			vo.setId(g.getGid());
+			vo.setName(g.getGname());
+			vo.setpId(-gt);
+			rtn.add(vo);
+		}
+		return rtn;
 	}
 }
 

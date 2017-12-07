@@ -6,15 +6,10 @@ import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.CouponConstant;
+import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.constant.ExecuteQueueConstant;
-import com.retailers.dht.common.dao.CouponUseRangeMapper;
-import com.retailers.dht.common.dao.CouponUserMapper;
-import com.retailers.dht.common.dao.ExecuteQueueMapper;
-import com.retailers.dht.common.entity.Coupon;
-import com.retailers.dht.common.dao.CouponMapper;
-import com.retailers.dht.common.entity.CouponUseRange;
-import com.retailers.dht.common.entity.CouponUser;
-import com.retailers.dht.common.entity.ExecuteQueue;
+import com.retailers.dht.common.dao.*;
+import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
@@ -58,6 +53,8 @@ public class CouponServiceImpl implements CouponService {
 	private ExecuteQueueService executeQueueService;
 	@Autowired
 	private CouponUseRangeMapper couponUseRangeMapper;
+	@Autowired
+	private GoodsMapper goodsMapper;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveCoupon(CouponVo couponVo,Long optionId) {
@@ -96,8 +93,10 @@ public class CouponServiceImpl implements CouponService {
 		cp.setCpCreate(cu.getCpCreate());
 		int status = couponMapper.updateCoupon(cp);
 		//设置优惠卷使用范围
-		couponUseRangeMapper.clearCouponUseRangeByCpId(cp.getCpId());
-		saveCouponUseRange(couponVo);
+		couponUseRangeMapper.clearCouponUseRangeByCpId(CouponUseRangeConstant.TYPE_COUPON,cp.getCpId());
+		if(cp.getCpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL){
+			saveCouponUseRange(couponVo);
+		}
 		//优惠卷附件管理
 		List<Long> clearAtt=new ArrayList<Long>();
 		List<Long> addAtt= new ArrayList<Long>();
@@ -137,8 +136,6 @@ public class CouponServiceImpl implements CouponService {
 		}
 		attachmentService.editorAttachment(addAtt);
 		attachmentService.editorAttachment(clearAtt, AttachmentConstant.ATTACHMENT_STATUS_NO);
-
-
 		return status == 1 ? true : false;
 	}
 
@@ -340,7 +337,8 @@ public class CouponServiceImpl implements CouponService {
 			for(long id:ids){
 				CouponUseRange cur=new CouponUseRange();
 				cur.setCpId(couponVo.getCpId());
-				cur.setCpurIsAllow(0);
+				cur.setCpurIsAllow(CouponUseRangeConstant.IS_ALLOW_USE_YES);
+				cur.setType(CouponUseRangeConstant.TYPE_COUPON);
 				cur.setCpurRelevanceId(id);
 				cur.setCpurType(couponVo.getCpIsRestricted());
 				curs.add(cur);
@@ -348,6 +346,21 @@ public class CouponServiceImpl implements CouponService {
 			//批量添加使用范围
 			couponUseRangeMapper.saveCouponUseRanges(curs);
 		}
+	}
+
+	/**
+	 * 取得商品可用的优惠卷
+	 * @param gid 商品id
+	 * @return
+	 */
+	public List<CouponShowVo> queryCouponByGid(Long gid) {
+		if(ObjectUtils.isNotEmpty(gid)){
+			Goods goods =goodsMapper.queryGoodsByGid(gid);
+			if(ObjectUtils.isNotEmpty(goods)){
+
+			}
+		}
+		return null;
 	}
 }
 

@@ -6,6 +6,8 @@
     <title>商品优惠</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
+    <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
 </head>
 <body>
 <div id="toolbar" class="form-inline">
@@ -144,6 +146,37 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    是否限制范围:
+                                </span>
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="gcpIsRestricted" name="gcpIsRestricted" type="checkbox" />
+                                    </div>
+                                </div>
+                                <%--<select id="gcpIsRestricted" name="gcpIsRestricted" class="form-control" onclick="syfwChange()">
+                                    <option value="0">无限制</option>
+                                    <option value="1">指定商品种类</option>
+                                    <option value="2">指定商品</option>
+                                </select>--%>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="syfwxzDiv" style="display: none;">
+                        <br>
+                        <div class="form-group">
+                            <label for="spzlNm" class="control-label">指定商品子类:</label>
+                            <input type="hidden" id="spzlId" name="spzlId"/>
+                            <textarea class="form-control" id="spzlNm" name="spzlNm" onclick="showGoodsTypeTrees();"></textarea>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="spNm" class="control-label">指定商品:</label>
+                            <input type="hidden" id="spId" name="spId"/>
+                            <textarea class="form-control" id="spNm" name="spNm"></textarea>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -155,8 +188,8 @@
     </div>
 </div>
 <!-- 公用下拉择树 -->
-<div id="orgNodeContent" class="orgNodeContent" style="display:none; position: absolute;z-index:1059">
-    <ul id="orgTree" class="ztree" style="margin-top:0; width:320px;"></ul>
+<div id="goodsTypeContext" class="goodsTypeContext" style="display:none; position: absolute;z-index:1059">
+    <ul id="goodsTypeTrees" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -164,6 +197,8 @@
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script type="text/javascript"  src="/js/daterangepicker/moment.js"></script>
 <script type="text/javascript"  src="/js/daterangepicker/daterangepicker.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -254,6 +289,17 @@
         //初始华开关选择器
         $("#editorGoodsCouponForm #isValid").bootstrapSwitch();
         $("#editorGoodsCouponForm #gcpIsOverlapUse").bootstrapSwitch();
+        $("#editorGoodsCouponForm #gcpIsRestricted").bootstrapSwitch({
+            onText:'限制',
+            offText:'不限制'
+        });
+        $('#editorGoodsCouponForm #gcpIsRestricted').on('switchChange.bootstrapSwitch', function (event,state) {
+            if(state){
+                $("#editorGoodsCouponForm #syfwxzDiv").show();
+            }else{
+                $("#editorGoodsCouponForm #syfwxzDiv").hide();
+            }
+        });
         $('#editorGoodsCoupon').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
@@ -274,6 +320,7 @@
             var formData=$("#editorGoodsCouponForm").serializeObject();
             var flag =$("#editorGoodsCouponForm #isValid").bootstrapSwitch("state");
             var gcpIsOverlapUse =$("#editorGoodsCouponForm #gcpIsOverlapUse").bootstrapSwitch("state");
+            let gcpIsRestricted =$("#editorGoodsCouponForm #gcpIsRestricted").bootstrapSwitch("state");
             if(flag){
                 formData["isValid"]=0;
             }else{
@@ -283,6 +330,11 @@
                 formData["gcpIsOverlapUse"]=0;
             }else{
                 formData["gcpIsOverlapUse"]=1;
+            }
+            if(gcpIsRestricted){
+                formData["gcpIsRestricted"]=1
+            }else{
+                formData["gcpIsRestricted"]=0
             }
             let url="/goodsCoupon/addGoodsCoupon";
             if(editorGoodsCouponType==1){
@@ -438,14 +490,14 @@
         layer.confirm('确定要删除选中的数据吗？', {
             btn: ['确认','取消'] //按钮
         }, function(){
-            removeSysUser(gcpId);
+            removeGoodsCoupon(gcpId);
         }, function(){
         });
     }
     /**
-     * 删除部门
+     * 删除商品优惠
      **/
-    function removeSysUser(gcpId){
+    function removeGoodsCoupon(gcpId){
         $.ajax({
             type:"post",
             url:'/goodsCoupon/delGoodsCoupon',
@@ -468,6 +520,7 @@
         initFormData(gcpId);
         $("#editorGoodsCouponTitle").text("编辑商品优惠");
         $('#editorGoodsCoupon').modal("show")
+        queryGoodsTyps(gcpId);
     }
     /**
      * 清除form 表单数据
@@ -482,6 +535,10 @@
         $("#editorGoodsCouponForm #gcpValidTime").val("");
         $("#editorGoodsCouponForm #gcpMoney").val("");
         $("#editorGoodsCouponForm #gcpDiscount").val("");
+        $("#editorGoodsCouponForm #spzlNm").val("");
+        $("#editorGoodsCouponForm #spzlId").val("");
+        $("#editorGoodsCouponForm #spId").val("");
+        $("#editorGoodsCouponForm #spNm").val("");
     }
     /**
      * 清除form 表单数据
@@ -497,6 +554,10 @@
             $("#editorGoodsCouponForm #gcpUnits").val(rowData.gcpUnits);
             $("#editorGoodsCouponForm #gcpStartTime").val(rowData.gcpStartTime);
             $("#editorGoodsCouponForm #gcpEndTime").val(rowData.gcpEndTime);
+            $("#editorGoodsCouponForm #spzlId").val(rowData.spzlId);
+            $("#editorGoodsCouponForm #spzlNm").val(rowData.spzlNm);
+            $("#editorGoodsCouponForm #spId").val(rowData.spId);
+            $("#editorGoodsCouponForm #spNm").val(rowData.spNm);
             if(rowData.gcpStartTime){
                 $("#editorGoodsCouponForm #gcpValidTime").val(rowData.gcpStartTime+" - "+rowData.gcpEndTime);
             }else{
@@ -509,18 +570,28 @@
                 flag=true;
             }
             $("#editorGoodsCouponForm #isValid").bootstrapSwitch("state",flag);
+            var gcpIsRestrictedFlag=false;
+            $("#editorGoodsCouponForm #syfwxzDiv").hide();
+            if(rowData.gcpIsRestricted==1){
+                gcpIsRestrictedFlag=true;
+                $("#editorGoodsCouponForm #syfwxzDiv").show();
+            }
+            $("#editorGoodsCouponForm #gcpIsRestricted").bootstrapSwitch("state",gcpIsRestrictedFlag);
 
             var gcpIsOverlapUse =false;
             if(rowData.gcpIsOverlapUse==0){
                 gcpIsOverlapUse=true;
             }
             $("#editorGoodsCouponForm #gcpIsOverlapUse").bootstrapSwitch("state",flag);
+
             gcpTypeChange();
         }else{
             $("#editorGoodsCouponForm #gcpType").val("0");
             $("#editorGoodsCouponForm #gcpMoneyDiv").show();
             $("#editorGoodsCouponForm #gcpDiscountDiv").hide();
             $("#editorGoodsCouponForm #gcpValidTime").val("");
+            $("#editorGoodsCouponForm #syfwxzDiv").hide();
+            $("#editorGoodsCouponForm #gcpIsRestricted").bootstrapSwitch("state",false);
         }
     }
     /**
@@ -533,6 +604,7 @@
         $("#editorGoodsCouponForm #isValid").bootstrapSwitch("state",true);
         $("#editorGoodsCouponTitle").text("添加商品优惠");
         $('#editorGoodsCoupon').modal("show")
+        queryGoodsTyps();
     }
     function gcpTypeChange(){
         let selectValue = $("#editorGoodsCouponForm #gcpType").val();
@@ -552,6 +624,90 @@
         }
     }
 
+    //当前选中优惠卷id
+    var selectCurGoodsCouponId;
+    //
+    var goodsTypsTreesObj;
+    var zNodes;
+
+    /**
+     * 取得商品类型
+     **/
+    function queryGoodsTyps(gcpId){
+        selectCurGoodsCouponId=gcpId;
+        $.fn.zTree.init($("#goodsTypeTrees"), setting, zNodes);
+        $.ajax({
+            type:"post",//请求方式
+            url:"/goods/goodsTypeTree",//发送请求地址
+            dataType:"json",
+            data:{//发送给数据库的数据
+                id:gcpId,
+                type:0
+            },
+            //请求成功后的回调函数有两个参数
+            success:function(data,textStatus){
+                if(data.status==0){
+                    let zNodes = data.data;
+                    var zTree=$.fn.zTree.init($("#goodsTypeTrees"), setting, zNodes);
+                }else{
+                    alert(data.msg);
+                }
+            },error:function(data,textStatus){
+                alert(data);
+            }
+        });
+    }
+
+    /***********************************************************************************/
+    var setting = {
+        check: {
+            enable: true,
+            chkboxType: { "Y" : "s", "N" : "s" }
+        },
+        view: {
+            dblClickExpand: false
+        },
+        data: {
+            simpleData: {
+                enable: true
+            }
+        },
+        callback: {
+            onCheck: onClick
+        }
+    };
+    function onClick(e, treeId, treeNode) {
+        var zTree = $.fn.zTree.getZTreeObj("goodsTypeTrees"),
+            nodes = zTree.getCheckedNodes(),
+            v = "",vId="";
+        nodes.sort(function compare(a,b){return a.id-b.id;});
+        for (var i=0, l=nodes.length; i<l; i++) {
+            if(!nodes[i].getCheckStatus().half){
+                v += nodes[i].name+",";
+                vId += nodes[i].id+",";
+            }
+        }
+        var orgPname = $("#spzlNm");
+        var orgPid_ = $("#spzlId");
+        orgPname.val(v);
+        orgPid_.val(vId);
+    }
+
+    function showGoodsTypeTrees() {
+        var cityObj = $("#spzlNm");
+        var cityOffset = $("#spzlNm").offset();
+        $("#goodsTypeContext").css({left:cityOffset.left + "px", top:cityOffset.top + cityObj.outerHeight() + "px"}).slideDown("fast");
+        $("body").bind("mousedown", onBodyDown);
+    }
+    function hideOrgTree() {
+        $("#goodsTypeContext").fadeOut("fast");
+        $("body").unbind("mousedown", onBodyDown);
+    }
+    function onBodyDown(event) {
+        if (!(event.target.id == "menuBtn" || event.target.id == "goodsTypeContext" || $(event.target).parents("#goodsTypeContext").length>0)) {
+            hideOrgTree();
+        }
+    }
 </script>
 </body>
 </html>

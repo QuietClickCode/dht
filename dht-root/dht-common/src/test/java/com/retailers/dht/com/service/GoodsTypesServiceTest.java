@@ -26,7 +26,7 @@ public class GoodsTypesServiceTest extends TestBaseJunit {
     @Test
     public void queryGoodsTypeTree(){
         long couponId=6;
-        List<ZTreeVo> lists = goodsClassificationService.querGoodsClassificationTree(couponId);
+        List<ZTreeVo> lists = goodsClassificationService.querGoodsClassificationTree(0l,couponId);
         System.out.println(JSON.toJSON(lists));
     }
 
