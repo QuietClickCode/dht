@@ -36,7 +36,9 @@ public class CutPriceController extends BaseController{
         params.put("gid",gid);
         List<CutPriceVo> list = cutPriceService.queryCutPriceListsByGid(params);
         Map gtm = new HashMap();
-        gtm.put("rows",list);
+        if(!ObjectUtils.isEmpty(list)){
+            gtm.put("rows",list);
+        }
         return gtm;
     }
 

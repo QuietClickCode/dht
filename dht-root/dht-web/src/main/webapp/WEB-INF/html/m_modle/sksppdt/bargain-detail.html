@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>邀请砍价</title>
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bge6">
+    <div class="specialty-title2 borderB">
+        <a href="" class="icon-return"></a>
+        <span>邀请砍价</span>
+    </div>
+
+    <div id="banner" class="focus">
+        <div class="hd bargain">
+            <ul></ul>
+        </div>
+        <div class="bd">
+            <ul id="goodsImagesul" style="height: 200px">
+                <!--<li>-->
+                    <!--<img _src="img/banner1.jpg" src="img/bangain5.png" />-->
+                <!--</li>-->
+            </ul>
+            <!-- 倒计时 -->
+            <div class="product-countDown">
+                活动倒计时：
+                <span id="tian">00</span>
+                天
+                <span id="shi">00</span>
+                时
+                <span id="fen">00</span>
+                分
+                <span id="miao">00</span>
+                秒
+            </div>
+        </div>
+    </div>
+
+    <div class="bargain-text box2">
+        <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+    </div>
+	
+	<div class="progress_bar_box">
+		<p class="p1">已砍2刀，现价，<span>￥120.00</span></p>
+		<div class="progress_bar">
+			<div class="progress_bar_son" style="width: 50%;"></div>
+		</div>
+		<p class="p2">
+			<span class="span1">￥1280.00</span>
+			<span class="span2">￥9800.00</span>
+		</p>
+	</div>
+
+    <div class="bargain-details box2">
+        <div class="bargain-tab" id="J_bargainTab" style="border-bottom: 1px solid #e6e6e6;">
+            <a href="#details" class="active">砍价规则</a>
+            <a href="#evaluate">砍价明细</a>
+        </div>
+
+        <div class="box2">
+
+            <div class="product-details" id="details">
+				<p class="bargain_ruler">砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则</p>
+            </div>
+
+            <div class="product-evaluate box2 displayN" id="evaluate">
+				<ul class="bargain_info_list">
+					<li>
+						<img class="photo" src="img/data2.png"/>
+						<span class="name">张三</span>
+						<span class="info">自砍了</span>
+						<span class="money">-￥320.00</span>
+					</li>
+					<li>
+						<img class="photo" src="img/data2.png"/>
+						<span class="name">张三</span>
+						<span class="info">自砍了</span>
+						<span class="money">-￥320.00</span>
+					</li>
+					<li>
+						<img class="photo" src="img/data2.png"/>
+						<span class="name">张三</span>
+						<span class="info">自砍了</span>
+						<span class="money">-￥320.00</span>
+					</li>
+				</ul>
+            </div>
+
+        </div>
+    </div>
+	<div class="box2" style="background: #fff;margin-top: .2rem;">
+        <div class="product-details" id="">
+            <!-- 商品信息 -->
+            <div class="like">
+                <div class="cont">
+                    <span class="bargain-like">商品信息</span>
+                </div>
+            </div>
+            <div id="gdescription">
+
+            </div>
+        </div>
+    </div>
+
+
+    <script src="/js/jquery-1.9.1.min.js"></script>
+    <script src="/js/public.js"></script>
+    <script src="/js/TouchSlide.1.1.js"></script>
+    <script src="/js/tabs.js"></script>
+    <script src="/js/layer/layer.js"></script>
+    <!--时间减少-->
+    <script>
+        var timestape = 0;
+        function timegoing() {
+            var interval = setInterval(function () {
+                var date = new Date(timestape);
+                var tian = Math.floor(timestape/(24*3600*1000));
+                var shi = Math.floor((date.getHours()-8));
+                var fen = Math.floor(date.getMinutes());
+                var miao = Math.floor(date.getSeconds());
+                if(tian<10){
+                    $('#tian').html('0'+tian);
+                }else{
+                    $('#tian').html(tian);
+                }
+                if(shi<10){
+                    $('#shi').html('0'+shi);
+                }else{
+                    $('#shi').html(shi);
+                }
+                if(fen<10){
+                    $('#fen').html('0'+fen);
+                }else{
+                    $('#fen').html(fen);
+                }
+                if(miao<10){
+                    $('#miao').html('0'+miao);
+                }else{
+                    $('#miao').html(miao);
+                }
+
+                timestape -= 1000;
+                if(timestape<0){
+                    clearInterval(interval);
+//                $('#shi1').parent().parent().next().remove();
+//                $('#shi1').parent().parent().remove();
+                }
+            },1000);
+        }
+
+    </script>
+    <script>
+        var path = window.location.pathname;
+        var pathArr = path.substring(11,path.indexOf('.html')).split('~');
+        var gid = parseInt(pathArr[0]);
+        <!--初始化banner-->
+        function initbanner() {
+            TouchSlide({
+                slideCell: "#banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+        <!--获取纯文本内容-->
+        function removeHTMLTag(str) {
+            str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+            str=str.replace(/\s/g,''); //将空格去掉
+            return str;
+        }
+
+        <!--加载商品图片-->
+        function loadgoodsimage() {
+            $.ajax({
+                type:"post",
+                url:'/goodsImage/queryGoodsImages',
+                dataType: "json",
+                data:{gid:gid,pageNo:1,pageSize:100},
+                success:function(data){
+                    var goodsImages = data.goodsImages;
+                    if(goodsImages!=null&&goodsImages.length>0){
+                        var html = '';
+                        $('#goodsImagesul').html(html);
+                        for(var i=0;i<goodsImages.length;i++){
+                            html = '<li>'+
+                                '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" style="height: 200px" />'+
+                                '</li>';
+                            $('#goodsImagesul').append(html);
+                        }
+                    }
+                    initbanner();
+                }
+            });
+        }
+
+        var cpId;
+        <!--加载剩余时间-->
+        function loadtimestape() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPrice/queryCutPriceListsByGid',
+                dataType: "json",
+                data:{gid:gid},
+                success:function(data){
+                    if(data.rows!=null){
+                        cpId=data.rows[0].cpId;
+                        <!--查询用户是否购买此商品-->
+//                        queryuserisbuygoods();
+                        timestape = data.rows[0].timestap*1000;
+                        timegoing();
+                        var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
+                        $('.bargain_ruler').html(rule);
+                    }else{
+                        nogoods();
+                    }
+
+                }
+            });
+        }
+
+        <!--加载商品信息-->
+        function loadpersonaddress() {
+            $.ajax({
+                type:"post",
+                url:'/goods/queryGoodsById',
+                dataType: "json",
+                data:{gid:gid,isShow:1,isChecked:1},
+                success:function(data){
+                    var row = data.row;
+                    if(row!=null){
+                        $('#gdescription').html(row.gdescription);
+
+                        $('#goodsNameDiv').html(row.gname);
+
+                    }else{
+                        nogoods();
+                    }
+                }
+            });
+        }
+
+
+        <!--商品不存在 跳转页面-->
+        function nogoods() {
+//            window.location.href='/home/lostHtml';
+        }
+    </script>
+
+    <!--调用函数-->
+    <script>
+        <!--加载商品图片-->
+        loadgoodsimage();
+        <!--加载剩余时间-->
+        loadtimestape();
+        <!--加载商品信息-->
+        loadpersonaddress();
+    </script>
+</body>
+
+</html>

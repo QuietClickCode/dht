@@ -1422,6 +1422,7 @@
         }
     }
 
+
     function surechosegclass() {
         var divspan1a = $('#divspan1').find('a');
         var divspan2a = $('#divspan2').find('a');

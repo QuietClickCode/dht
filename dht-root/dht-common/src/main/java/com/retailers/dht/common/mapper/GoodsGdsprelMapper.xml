@@ -107,6 +107,7 @@
 		</foreach>
 		and t6.sp_id=t2.sp_id
 		and t6.parent_id=#{params[parentId]}
+		and t6.is_delete=0
 		GROUP BY t1.gd_id
 		ORDER BY sumcount DESC
 	</select>
