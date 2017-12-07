@@ -105,22 +105,19 @@ public class GoodsCouponController extends BaseController{
     }
     /**
      * 添加商品优惠
-     * @param goodsCoupon 商品优惠数据
+     * @param goodsCouponVo 商品优惠数据
      * @return
      */
     @RequestMapping("editorGoodsCoupon")
     @Function(label="编辑商品优惠", description = "编辑商品优惠", resourse = "goodsCoupon.editorGoodsCoupon",sort=3,parentRes="goodsCoupon.openGoodsCouponPage")
     @ResponseBody
-    public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCoupon){
+    public BaseResp editorGoodsCoupon(GoodsCouponVo goodsCouponVo){
         try{
-            validateParams(goodsCoupon);
+            validateParams(goodsCouponVo);
         }catch(Exception e){
             return errorForParam(e.getMessage());
         }
-        goodsCoupon.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
-        GoodsCoupon gcp = new GoodsCoupon();
-        BeanUtils.copyProperties(goodsCoupon,gcp);
-        boolean flag = goodsCouponService.editorGoodsCoupon(gcp);
+        boolean flag = goodsCouponService.editorGoodsCoupon(goodsCouponVo);
         if(flag){
             return success("商品优惠编辑成功");
         }else{

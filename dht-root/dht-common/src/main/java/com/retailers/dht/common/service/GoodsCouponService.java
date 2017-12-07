@@ -61,10 +61,10 @@ public interface GoodsCouponService {
 
 	/**
 	 * 编辑商品优惠
-	 * @param goodsCoupon
+	 * @param goodsCouponvo
 	 * @return
 	 */
-	public boolean editorGoodsCoupon(GoodsCoupon goodsCoupon);
+	public boolean editorGoodsCoupon(GoodsCouponVo goodsCouponvo);
 
 }
 

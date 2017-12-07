@@ -629,6 +629,7 @@
     //
     var goodsTypsTreesObj;
     var zNodes;
+
     /**
      * 取得商品类型
      **/

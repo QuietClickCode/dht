@@ -93,8 +93,10 @@ public class CouponServiceImpl implements CouponService {
 		cp.setCpCreate(cu.getCpCreate());
 		int status = couponMapper.updateCoupon(cp);
 		//设置优惠卷使用范围
-		couponUseRangeMapper.clearCouponUseRangeByCpId(cp.getCpId());
-		saveCouponUseRange(couponVo);
+		couponUseRangeMapper.clearCouponUseRangeByCpId(CouponUseRangeConstant.TYPE_COUPON,cp.getCpId());
+		if(cp.getCpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL){
+			saveCouponUseRange(couponVo);
+		}
 		//优惠卷附件管理
 		List<Long> clearAtt=new ArrayList<Long>();
 		List<Long> addAtt= new ArrayList<Long>();
@@ -134,8 +136,6 @@ public class CouponServiceImpl implements CouponService {
 		}
 		attachmentService.editorAttachment(addAtt);
 		attachmentService.editorAttachment(clearAtt, AttachmentConstant.ATTACHMENT_STATUS_NO);
-
-
 		return status == 1 ? true : false;
 	}
 

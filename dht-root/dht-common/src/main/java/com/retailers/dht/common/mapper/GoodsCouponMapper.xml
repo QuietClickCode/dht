@@ -148,45 +148,19 @@
 	<update id="updateGoodsCoupon" parameterType="com.retailers.dht.common.entity.GoodsCoupon">
 		UPDATE t_goods_coupon
 		<set>
-            <if test="null != gcpName and '' != gcpName">
                 gcp_name = #{gcpName},
-            </if>
-            <if test="null != gcpType">
                 gcp_type = #{gcpType},
-            </if>
-			<if test="null != gcpIsRestricted">
 				gcp_is_restricted = #{gcpIsRestricted},
-			</if>
-            <if test="null != gcpCondition">
                 gcp_condition = #{gcpCondition},
-            </if>
-            <if test="null != gcpIsOverlapUse">
                 gcp_is_overlap_use = #{gcpIsOverlapUse},
-            </if>
-            <if test="null != gcpStartTime">
                 gcp_start_time = #{gcpStartTime},
-            </if>
-            <if test="null != gcpCreateTime">
                 gcp_create_time = #{gcpCreateTime},
-            </if>
-            <if test="null != gcpEndTime">
                 gcp_end_time = #{gcpEndTime},
-            </if>
-            <if test="null != gcpMoney">
                 gcp_money = #{gcpMoney},
-            </if>
-            <if test="null != gcpDiscount">
                 gcp_discount = #{gcpDiscount},
-            </if>
-            <if test="null != isValid">
                 is_valid = #{isValid},
-            </if>
-            <if test="null != isDelete">
                 is_delete = #{isDelete},
-            </if>
-            <if test="null != version">
                 version = version+1,
-            </if>
 		</set>
 		WHERE gcp_id = #{gcpId} and version = #{version}
 	</update>

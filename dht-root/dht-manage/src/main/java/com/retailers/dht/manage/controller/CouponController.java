@@ -128,6 +128,5 @@ public class CouponController extends BaseController{
      * @throws AppException
      */
     private void validateParams(CouponVo couponVo)throws AppException{
-
     }
 }

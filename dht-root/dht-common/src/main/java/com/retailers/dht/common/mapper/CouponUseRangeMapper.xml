@@ -97,7 +97,7 @@
 	</delete>
 	<!--清除该优惠卷下所有用范围 -->
 	<delete id="clearCouponUseRangeByCpId" parameterType="java.lang.Long">
-		DELETE FROM t_coupon_use_range WHERE cp_id = #{cpId}
+		DELETE FROM t_coupon_use_range WHERE cp_id = #{cpId} and type=#{type}
 	</delete>
 
 	<!-- 根据优惠卷id取得所有使用范围 -->

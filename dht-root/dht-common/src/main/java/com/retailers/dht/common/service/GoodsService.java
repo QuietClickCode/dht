@@ -1,8 +1,11 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Goods;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品表Service
@@ -61,6 +64,13 @@ public interface GoodsService {
 	public boolean updateGoodsSetNotChecked(Long gid,Long uploadpersonId);
 
 	public Pagination<GoodsVo> querySamegclassGoods(Map<String, Object> params, int pageNo, int pageSize);
+
+	/**
+	 * 根据商品类型取得商品
+	 * @param gt 商品类型
+	 * @return
+	 */
+	public List<ZTreeVo> queryGoodsByGt(Long gt);
 
 }
 

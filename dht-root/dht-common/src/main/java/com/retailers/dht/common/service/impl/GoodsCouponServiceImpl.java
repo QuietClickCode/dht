@@ -70,8 +70,16 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	}
 
 	@Transactional(rollbackFor = Exception.class)
-	public boolean editorGoodsCoupon(GoodsCoupon goodsCoupon) {
-		int status = goodsCouponMapper.updateGoodsCoupon(goodsCoupon);
+	public boolean editorGoodsCoupon(GoodsCouponVo goodsCouponVo) {
+		GoodsCoupon gcp = new GoodsCoupon();
+		goodsCouponVo.setIsDelete(SystemConstant.SYS_IS_DELETE_NO);
+		BeanUtils.copyProperties(goodsCouponVo,gcp);
+		int status = goodsCouponMapper.updateGoodsCoupon(gcp);
+		//清除该优惠下的使用范围
+		couponUseRangeMapper.clearCouponUseRangeByCpId(CouponUseRangeConstant.TYPE_GOODS_COUPON,gcp.getGcpId());
+		if(gcp.getGcpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL){
+			saveCouponUseRange(goodsCouponVo);
+		}
 		return status == 1 ? true : false;
 	}
 
