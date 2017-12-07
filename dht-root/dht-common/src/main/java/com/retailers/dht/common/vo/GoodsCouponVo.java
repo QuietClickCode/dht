@@ -19,7 +19,7 @@ public class GoodsCouponVo {
     private String gcpName;
     /**商品优惠活动类型(0 优惠现金，1 总价折扣）*/
     private Integer gcpType;
-    /**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
+    /**是否限制使用（0 无限制，1限制使用（指定商品种类/ 指定商品）)**/
     private Long gcpIsRestricted;
     /**商品优惠活动触发条件*/
     @Digits(integer=10,fraction = 2,message = "优惠条件只允许在10位整数和2位小数范围内")

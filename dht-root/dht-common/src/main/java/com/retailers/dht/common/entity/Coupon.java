@@ -27,7 +27,7 @@ public class Coupon implements java.io.Serializable {
 	/**卡券图片（关联附件id）*/
 	@NotEmpty
 	private Long cpLogo;
-	/**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
+	/**是否限制使用（0 无限制，1限制使用（指定商品种类/ 指定商品）)**/
 	@NotEmpty
 	private Long cpIsRestricted;
 	/**领取条件*/

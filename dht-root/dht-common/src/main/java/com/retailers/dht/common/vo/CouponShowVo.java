@@ -29,7 +29,7 @@ public class CouponShowVo {
     private Long cpLogo;
     /**卡卷图片地址*/
     private String cpLogoUrl;
-    /**是否限制使用（0 无限制，1 指定商品种类，2 指定商品）*/
+    /**是否限制使用（0 无限制，1限制使用（指定商品种类/ 指定商品）)**/
     private Long cpIsRestricted;
     /**领取条件*/
     private String cpReceiveCondition;
