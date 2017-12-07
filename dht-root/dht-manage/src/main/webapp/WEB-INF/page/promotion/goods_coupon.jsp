@@ -175,7 +175,7 @@
                         <div class="form-group">
                             <label for="spNm" class="control-label">指定商品:</label>
                             <input type="hidden" id="spId" name="spId"/>
-                            <textarea class="form-control" id="spNm" name="spNm"></textarea>
+                            <textarea class="form-control" id="spNm" name="spNm" onclick="openGoodsSelectDialog()"></textarea>
                         </div>
                     </div>
                 </form>
@@ -192,6 +192,7 @@
     <ul id="goodsTypeTrees" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
+<%@include file="/common/goods_select.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
@@ -391,7 +392,15 @@
                $("#editorGoodsCouponForm #gcpEndTime").val(end.format('YYYY-MM-DD HH:mm:ss'));
                $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
            });
+       //加载公用商品选择器
+       onloadGoodsSelectDialog('#spId','#spNm',callbackFun);
     });
+
+    function callbackFun(sIds,sNms){
+        $("#spId").val(sIds);
+        $("#spNm").val(sNms);
+    }
+
     /**
      * form 校验
      * */
