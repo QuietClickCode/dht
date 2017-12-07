@@ -25,40 +25,25 @@ public class GoodsGdcprelController extends BaseController{
     @Autowired
     GoodsGdcprelService goodsGdcprelService;
 
-    @RequestMapping("/addGoodsGdcprel")
+    @RequestMapping("/queryGoodsGdcprelVoList")
     @ResponseBody
-    public BaseResp addGoodsGdcprel(GoodsGdcprel GoodsGdcprel){
-        GoodsGdcprel.setIsDelete(0L);
-        boolean flag = goodsGdcprelService.saveGoodsGdcprel(GoodsGdcprel);
-        return success(flag);
-    }
-
-    @RequestMapping("/addGoodsGdcprelByJson")
-    @ResponseBody
-    public BaseResp addGoodsGdcprelByJson(String data){
-        boolean flag = goodsGdcprelService.saveGoodsGdcprelByJson(data);
-        return success(flag);
-    }
-
-    @RequestMapping("/updateGoodsGdcprel")
-    @ResponseBody
-    public BaseResp updateGoodsGdcprel(GoodsGdcprel GoodsGdcprel){
-        boolean flag = goodsGdcprelService.updateGoodsGdcprel(GoodsGdcprel);
-        if(flag)
-            return success("修改成功");
-        else
-            return errorForSystem("修改失败");
-    }
-
-    @RequestMapping("/queryGoodsGdcprelListsByGid")
-    @ResponseBody
-    public Map<String,Object> queryGoodsGdcprelListsByGid(Long gid,Long cpId){
-        List<GoodsGdcprelVo> list = new ArrayList<GoodsGdcprelVo>();
-        if(!ObjectUtils.isEmpty(gid)){
-            list = goodsGdcprelService.queryGoodsGdcprelListsByGid(gid,cpId);
+    public Map<String,Object> queryGoodsGdcprelListsByGid(Long gid,String gsvalIds,Long parentId){
+        Map params = new HashMap();
+        params.put("gid",gid);
+        params.put("parentId",parentId);
+        if(!ObjectUtils.isEmpty(gsvalIds)){
+            String[] gsvalIdsArr = gsvalIds.split(",");
+            List<Long> l = new ArrayList<Long>();
+            for(String str:gsvalIdsArr){
+                Long a = Long.parseLong(str);
+                l.add(a);
+            }
+            params.put("gsvId",l);
         }
+        GoodsGdcprelVo goodsGdsprelVo = goodsGdcprelService.queryGoodsGdcprelVoLists(params);
+
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("rows",list);
+        gtm.put("row",goodsGdsprelVo);
         return gtm;
     }
     

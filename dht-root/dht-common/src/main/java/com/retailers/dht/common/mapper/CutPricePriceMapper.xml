@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CutPricePriceMapper">
+
+	<resultMap id="rm_cutPricePrice" type="com.retailers.dht.common.entity.CutPricePrice">
+			<result property="cppId" column="cpp_id"/>
+			<result property="gdcpId" column="gdcp_id"/>
+			<result property="usId" column="us_id"/>
+			<result property="cppPrice" column="cpp_price"/>
+			<result property="gcount" column="g_count"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="cutPricePrice_columns">
+		cpp_id,gdcp_id,us_id,cpp_price,g_count,is_delete,version
+	</sql>
+	<!-- 根据砍价价格初始化表主键取得数据 -->
+	<select id="queryCutPricePriceByCppId" resultMap="rm_cutPricePrice" parameterType="java.lang.Long">
+		SELECT <include refid="cutPricePrice_columns" />
+		FROM t_cut_price_price WHERE cpp_id = #{cppId}
+	</select>
+	<!-- 砍价价格初始化表查询条件组合 -->
+	<sql id="cutPricePrice_where">
+		<where>
+			<if test="null != params.cppId">
+				AND cpp_id = #{params.cppId}
+			</if>
+			<if test="null != params.gdcpId">
+				AND gdcp_id = #{params.gdcpId}
+			</if>
+			<if test="null != params.usId">
+				AND us_id = #{params.usId}
+			</if>
+			<if test="null != params.cppPrice">
+				AND cpp_price = #{params.cppPrice}
+			</if>
+			<if test="null != params.gcount">
+				AND g_count = #{params.gcount}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCutPricePriceList" resultMap="rm_cutPricePrice" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*
+		from
+		t_cut_price_price t1,
+		t_goods_gdcprel t2,
+		t_cut_price t3
+		WHERE
+		t1.gdcp_id=t2.gdcp_id
+		and t2.cp_id=t3.cp_id
+		and t3.g_id=#{params.gid}
+		and t1.us_id=#{params.uid}
+	</select>
+	<!--添加砍价价格初始化表 -->
+	<insert id="saveCutPricePrice" parameterType="com.retailers.dht.common.entity.CutPricePrice" useGeneratedKeys="true" keyProperty="cppId">
+		INSERT INTO t_cut_price_price (
+			gdcp_id,us_id,cpp_price,g_count,is_delete,version
+		) VALUES
+		(
+			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{cppPrice,jdbcType=REAL},#{gcount,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改砍价价格初始化表 -->
+	<update id="updateCutPricePrice" parameterType="com.retailers.dht.common.entity.CutPricePrice">
+		UPDATE t_cut_price_price
+		<set>
+            <if test="null != gdcpId">
+                gdcp_id = #{gdcpId},
+            </if>
+            <if test="null != usId">
+                us_id = #{usId},
+            </if>
+            <if test="null != cppPrice">
+                cpp_price = #{cppPrice},
+            </if>
+            <if test="null != gcount">
+                g_count = #{gcount},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cpp_id = #{cppId} and version = #{version}
+	</update>
+	<!--删除砍价价格初始化表 -->
+	<delete id="deleteCutPricePriceByCppId" parameterType="java.lang.Long">
+		DELETE FROM t_cut_price_price WHERE cpp_id = #{cppId}
+	</delete>
+</mapper>

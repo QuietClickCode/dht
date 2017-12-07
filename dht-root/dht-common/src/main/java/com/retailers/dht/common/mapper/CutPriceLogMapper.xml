@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CutPriceLogMapper">
+
+	<resultMap id="rm_cutPriceLog" type="com.retailers.dht.common.entity.CutPriceLog">
+			<result property="cplId" column="cpl_id"/>
+			<result property="gdcpId" column="gdcp_id"/>
+			<result property="usId" column="us_id"/>
+			<result property="usdId" column="usd_id"/>
+			<result property="cplCutdownprice" column="cpl_cutdownprice"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="cutPriceLog_columns">
+		cpl_id,gdcp_id,us_id,usd_id,cpl_cutdownprice,is_delete,version
+	</sql>
+	<!-- 根据砍价日志表主键取得数据 -->
+	<select id="queryCutPriceLogByCplId" resultMap="rm_cutPriceLog" parameterType="java.lang.Long">
+		SELECT <include refid="cutPriceLog_columns" />
+		FROM t_cut_price_log WHERE cpl_id = #{cplId}
+	</select>
+	<!-- 砍价日志表查询条件组合 -->
+	<sql id="cutPriceLog_where">
+		<where>
+			<if test="null != params.cplId">
+				AND cpl_id = #{params.cplId}
+			</if>
+			<if test="null != params.gdcpId">
+				AND gdcp_id = #{params.gdcpId}
+			</if>
+			<if test="null != params.usId">
+				AND us_id = #{params.usId}
+			</if>
+			<if test="null != params.usdId">
+				AND usd_id = #{params.usdId}
+			</if>
+			<if test="null != params.cplCutdownprice">
+				AND cpl_cutdownprice = #{params.cplCutdownprice}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCutPriceLogList" resultMap="rm_cutPriceLog" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="cutPriceLog_columns" />
+		FROM t_cut_price_log
+		<include refid="cutPriceLog_where"/>
+	</select>
+	<!--添加砍价日志表 -->
+	<insert id="saveCutPriceLog" parameterType="com.retailers.dht.common.entity.CutPriceLog" useGeneratedKeys="true" keyProperty="cplId">
+		INSERT INTO t_cut_price_log (
+			gdcp_id,us_id,usd_id,cpl_cutdownprice,is_delete,version
+		) VALUES
+		(
+			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{usdId,jdbcType=BIGINT},#{cplCutdownprice,jdbcType=REAL},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改砍价日志表 -->
+	<update id="updateCutPriceLog" parameterType="com.retailers.dht.common.entity.CutPriceLog">
+		UPDATE t_cut_price_log
+		<set>
+            <if test="null != gdcpId">
+                gdcp_id = #{gdcpId},
+            </if>
+            <if test="null != usId">
+                us_id = #{usId},
+            </if>
+            <if test="null != usdId">
+                usd_id = #{usdId},
+            </if>
+            <if test="null != cplCutdownprice">
+                cpl_cutdownprice = #{cplCutdownprice},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cpl_id = #{cplId} and version = #{version}
+	</update>
+	<!--删除砍价日志表 -->
+	<delete id="deleteCutPriceLogByCplId" parameterType="java.lang.Long">
+		DELETE FROM t_cut_price_log WHERE cpl_id = #{cplId}
+	</delete>
+</mapper>

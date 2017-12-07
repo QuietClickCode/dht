@@ -7,6 +7,7 @@ import java.util.Map;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.dao.GoodsGdcprelMapper;
 import com.retailers.dht.common.service.GoodsGdcprelService;
@@ -94,6 +95,15 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 				updateGoodsGdcprel(goodsGdcprel);
 			}
 		}
+	}
+	public GoodsGdcprelVo queryGoodsGdcprelVoLists(Map params){
+		List<GoodsGdcprelVo> list = goodsGdcprelMapper.queryGoodsGdcprelVoLists(params);
+		if(!ObjectUtils.isEmpty(list)){
+			GoodsGdcprelVo goodsGdcprelVo = list.get(0);
+			goodsGdcprelVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+goodsGdcprelVo.getImgurl());
+			return goodsGdcprelVo;
+		}
+		return null;
 	}
 }
 

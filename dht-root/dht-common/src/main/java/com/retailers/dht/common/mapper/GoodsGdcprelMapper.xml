@@ -26,7 +26,7 @@
 		<result property="gdResidueinventory" column="gdResidueinventory"/>
 		<result property="sumcount" column="sumcount"/>
 		<result property="imgurl" column="imgurl"/>
-		<result property="gunitname" column="gunitname"/>
+		<result property="gunitname" column="g_unitname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -87,6 +87,28 @@
 		t1.g_id=#{gid}
 		and t1.is_delete=0
 		GROUP BY t1.gd_id
+	</select>
+	<select id="queryGoodsGdcprelVoLists" resultMap="rm_goodsGdcprel_vo" parameterType="java.util.Map">
+		SELECT COUNT(*) sumcount,t2.*,t4.show_url imgurl,t5.g_unitname,t3.gd_price gdPrice
+		from t_goods_ggsval_detail t1
+		LEFT JOIN t_goods_gdcprel t2 ON t1.gd_id=t2.gd_id and t2.is_delete!=1
+		LEFT JOIN t_goods_detail t3 ON t3.gd_id=t2.gd_id and t3.is_delete!=1
+		LEFT JOIN t_attachment t4 ON t3.gd_imgid=t4.show_url
+		LEFT JOIN t_goods t5 ON t5.g_id=t3.g_id and t5.is_delete!=1,
+		t_cut_price t6
+		where
+		t1.is_delete!=1
+		and t1.g_id=#{params[gid]}
+		and t1.gsv_id IN
+		<foreach collection="params.gsvId" item="gsvid" index="index"
+				 open="(" close=")" separator=",">
+			#{gsvid}
+		</foreach>
+		and t6.cp_id=t2.cp_id
+		and t6.parent_id=#{params[parentId]}
+		and t6.is_delete=0
+		GROUP BY t1.gd_id
+		ORDER BY sumcount DESC
 	</select>
 	<!--添加商品详情与砍价关系表 -->
 	<insert id="saveGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel" useGeneratedKeys="true" keyProperty="gdcpId">

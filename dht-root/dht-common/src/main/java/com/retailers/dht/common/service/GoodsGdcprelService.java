@@ -61,6 +61,8 @@ public interface GoodsGdcprelService {
 	public List<GoodsGdcprelVo> queryGoodsGdcprelListsByGid(Long gid, Long cpId);
 
 	public boolean saveGoodsGdcprelByJson(String data);
+
+	public GoodsGdcprelVo queryGoodsGdcprelVoLists(Map params);
 }
 
 

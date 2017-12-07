@@ -7,14 +7,16 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>砍价商品</title>
     <script src="/js/Adaptive.js"></script>
-    <script src="/js/laydate/laydate.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/new.css">
 </head>
 
 <body class="bge6">
+<div class="guide-share" style="display: none;position: fixed">
+    <button class="i-know" onclick="ikonw();"></button>
+</div>
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a onclick="returnhistory();" class="icon-return"></a>
     <span>商品详情</span>
 </div>
 
@@ -50,12 +52,16 @@
                 <span id="minprice">1280.00</span>
             </span>
         <span class="bargain-more">
-                最高可砍掉¥
+                每件最高可砍掉¥
                 <span id="cutdownprice">580.80</span>
                 &nbsp;
             </span>
     </div>
     <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+    <div class="norms" id="rule" style="height: 48px">
+        <span class="name">规则</span>
+        <span class="text overflow" ></span>
+    </div>
     <div class="seckill-address" id="personaddressdiv">
         <div class="text" >
             <span class="seckill-address-title">产自</span>
@@ -74,25 +80,32 @@
                 </span>
         </div>
     </div>
-    <div class="norms">
+
+    <div class="norms" id="open_car" onclick="loadgsval();">
         <span class="name">已选</span>
-        <span class="text overflow"> 请选择规格<!--一斤装（玻璃瓶），数量×1--></span>
+        <span class="text overflow" id="nowhasgsvalspan"> 请选择规格</span>
         <span class="checkbox"></span>
+        <input type="hidden" id="gdcpId">
     </div>
-    <div class="norms">
+    <div class="norms showaddressfreigh" onclick="loadAddress();">
         <span class="name">送至</span>
-        <span class="text overflow"> 请选择地址<!--重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...--></span>
+        <span class="text overflow" id="open_address">请选择地址 <!--重庆市九龙坡区狮山大道巴南小区刚光华苑1栋...--></span>
         <span class="checkbox"></span>
     </div>
-    <div class="norms">
+    <div class="norms showaddressfreigh">
+        <span class="name">运费</span>
+        <span class="text overflow" id="gfreigh"> 0.0元</span>
+    </div>
+    <div class="norms" id="open_time">
         <span class="name">配送</span>
         <span class="text overflow"> 选择配送时间</span>
         <span class="checkbox"></span>
     </div>
-    <div class="norms">
-        <span class="name">运费</span>
-        <span class="text overflow"> 0.0元</span>
+    <div class="norms" id="isAdvancesalediv">
+        <span class="name">预售</span>
+        <span class="text overflow"> 预售时间xxxx</span>
     </div>
+
     <div class="ensure" style="display: none;">
             <span>
                 <i class="icon-yes"></i>
@@ -111,6 +124,7 @@
                 农家自产
             </span>
     </div>
+
     <div class="loading-more">
         <i></i>
         上拉查看图文详情
@@ -194,8 +208,79 @@
 
 <div class="placeholder-footer2"></div>
 <div class="bargain-footer">
-    <a href="" class="bargain-btn1">自砍一刀</a>
-    <a href="" class="bargain-btn2">请朋友补刀</a>
+    <a onclick="cutmyself();" class="bargain-btn1">自砍一刀</a>
+    <a onclick="shareGoods();" class="bargain-btn2">请朋友补刀</a>
+    <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
+    <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
+</div>
+
+
+<div class="mark" id="J_mark2" style="display:none;">
+    <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+        <i class="care-norms-close J_careNormsClose2" id="closegsdiv"></i>
+        <div class="product" id="product">
+            <img src="" alt="">
+            <div class="text">
+                <span class="mr_4" style="color: #ec3c3c;"></span>
+                <br />
+                <span></span>
+            </div>
+        </div>
+        <div id="gsdiv">
+            <!--<div class="care-checkbox J_careCheckbox">-->
+            <!--<span class="name">规格1</span>-->
+            <!--<span class="checkbox_service">人工费=</span>-->
+            <!--<span class="checkbox_service">人工</span>-->
+            <!--<span class="checkbox_service" >材)</span>-->
+            <!--</div>-->
+
+        </div>
+
+        <div class="care-checkbox" style="margin-top: .2rem;">
+            <span class="name">数量</span>
+            <div class="number number-box">
+                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
+                <span class="num J_careNum" id="goodsnumber">1</span>
+                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
+            </div>
+        </div>
+
+        <div class="car_footer_box">
+            <a id="setgsvala" onclick="suregsa();" class="add_car_btn2" style="width: 100%">确定</a>
+        </div>
+    </div>
+</div>
+
+<div class="mark" id="J_mark3" style="display:none;">
+    <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+        <i class="care-norms-close J_careNormsClose3"></i>
+        <p class="J_mark_title">选择配送时间</p>
+        <div class="care-checkbox J_careCheckbox">
+            <select name="" class="select_input" id="pstimeselect">
+                <option value="周一至周五">周一至周五</option>
+                <option value="周末">周末</option>
+            </select>
+            <center>
+                <input type="text"  id="select_time" value="" style="border: 1px black solid;margin: 0 auto"/>
+            </center>
+        </div>
+        <a onclick="setpstime(this)" class="care-norms-checkbox-btn">确定</a>
+    </div>
+</div>
+
+<div class="mark" id="J_mark" style="display:none;">
+    <div class="care-norms-checkbox J_careNormsCheckbox" style="display:block;">
+        <i class="care-norms-close J_careNormsClose" id="closeaddress"></i>
+        <p class="J_mark_title">送至</p>
+        <ul class="address_list_box" id="addresul">
+            <!--<li class="active">-->
+            <!--<span class="address_img"></span>-->
+            <!--<div class="address_text">重庆市九龙坡区狮山大道巴南小区刚光华苑1栋</div>-->
+            <!--<span  class="icon_choice"></span>-->
+            <!--</li>-->
+        </ul>
+        <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
+    </div>
 </div>
 
 
@@ -334,6 +419,8 @@
                     $('#cutdownprice').html(minprice-cpSale);
                     parentId = data.rows[0].parentId;
                     timegoing();
+                    var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
+                    $($('#rule').find('span')[1]).html(rule);
                 }else{
                     nogoods();
                 }
@@ -407,6 +494,7 @@
                     if(isServiceGoods==1){
                         $('.showaddressfreigh').hide();
                         $($('#open_time').find('span')[1]).html('请选择服务时间');
+                        $('.J_mark_title').html('请选择服务时间');
                         $('.select_input').hide();
                         $('#select_time').show();
                         $('#isAdvancesalediv').hide();
@@ -584,6 +672,8 @@
         loadgsval();
     }
 
+    var cpSale;
+    var gdcpId;
     <!--规格加载信息-->
     function loadgsval() {
         var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
@@ -596,7 +686,7 @@
             gsvids = gsvids.substr(1);
             $.ajax({
                 type:"post",
-                url:'/openGoodsGdsprel/queryGoodsGdsprelVoLists',
+                url:'/openGoodsGdcprel/queryGoodsGdcprelVoList',
                 dataType: "json",
                 async :false,
                 data:{gid:gid,gsvalIds:gsvids,parentId:parentId},
@@ -604,10 +694,11 @@
                     var row = data.row;
                     if(row!=null){
                         var imgUrl = row.imgurl;
-                        var price = row.spSale;
-                        var inventory = row.spInventory;
+                        var price = row.gdPrice;
+                        cpSale = row.cpSale;
+                        gdcpId = row.gdcpId;
+                        var inventory = row.cpInventory;
                         var gunitname = row.gunitname;
-
                         var img = $('#product').find('img')[0];
                         var pricespan = $('#product').find('span')[0];
                         var inventoryspan = $('#product').find('span')[1];
@@ -630,7 +721,22 @@
                         $(pricespan).html('￥'+price+'/'+gunitname);
                         $(inventoryspan).html('库存'+inventory+gunitname);
                         ginventory = inventory;
-                        spBounds = row.spBounds;
+                        spBounds = row.cpBounds;
+
+                        var nownumber = parseInt($('#goodsnumber').html());
+                        if(startbuy!=0&&nownumber<startbuy){
+                            nownumber=startbuy;
+                            $('#goodsnumber').html(startbuy);
+                        }
+                        if(nownumber>ginventory){
+                            nownumber = ginventory;
+                            $('#goodsnumber').html(ginventory);
+                        }
+                        if(nownumber>spBounds){
+                            nownumber = spBounds;
+                            $('#goodsnumber').html(spBounds);
+                        }
+
                     }
                 }
             });
@@ -703,47 +809,54 @@
     <!--判断库存-->
     function pdmaxinventory(ysf) {
         var goodsnumber = parseInt($('#goodsnumber').html());
-        if(ysf=='+'){
-            goodsnumber++;
-            pdindex++;
-        }else{
-            goodsnumber--;
-            pdindex--;
-            if(pdindex<=0){
-                pdindex = 1;
-            }
-        }
-        if(goodsnumber>spBounds&&spBounds!=0){
-            layer.msg("最大购买"+spBounds);
-            $('#goodsnumber').html(spBounds-1);
-            pdindex--;
-            return;
-        }
-        if(goodsnumber>ginventory&&ginventory!=0){
-            layer.msg("必须小于库存量"+ginventory);
-            $('#goodsnumber').html(ginventory-1);
-            pdindex--;
-            return;
-        }
 
         if(goodsisMultiplebuy==1){
             if(ysf=='+'){
+                pdindex++;
                 if(pdindex*startbuy>spBounds){
+                    layer.msg('最多购买数'+spBounds);
                     $('#goodsnumber').html(spBounds-1);
+                    pdindex--;
                 }else{
                     $('#goodsnumber').html(pdindex*startbuy-1);
                 }
             }else{
-                if(pdindex==1){
-                    layer.msg('最少购买'+startbuy);
-                    $('#goodsnumber').html(startbuy+1);
+                pdindex--;
+                if(pdindex==0){
+                    pdindex=1;
+                    if(startbuy<spBounds){
+                        $('#goodsnumber').html(startbuy+1);
+                        layer.msg('最少购买数'+startbuy);
+                    }else{
+                        $('#goodsnumber').html(spBounds);
+                        layer.msg('必须小于库存'+spBounds);
+                    }
+
                 }else{
-                    $('#goodsnumber').html(goodsnumber - startbuy+2);
+                    $('#goodsnumber').html(goodsnumber - startbuy+1);
                 }
 
             }
-
+        }else{
+            if(ysf=='+'){
+                goodsnumber++;
+            }else{
+                goodsnumber--;
+            }
+            if(goodsnumber>spBounds&&spBounds!=0){
+                layer.msg("最大购买"+spBounds);
+                $('#goodsnumber').html(spBounds-1);
+                return;
+            }
+            if(goodsnumber>ginventory&&ginventory!=0){
+                layer.msg("必须小于库存量"+ginventory);
+                $('#goodsnumber').html(ginventory-1);
+                return;
+            }
         }
+
+
+
 
     }
 
@@ -772,7 +885,8 @@
             $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
             document.getElementById('closegsdiv').click();
             $('#minprice').html('￥'+bcPrice);
-
+            $('#cutdownprice').html(parseInt(bcPrice)-cpSale);
+            $('#gdcpId').val(gdcpId);
         }else{
             layer.msg("请选择规格");
         }
@@ -816,8 +930,17 @@
     }
 
     <!--设置配送时间-->
-    function setpstime() {
-        var pstime = $('#pstimeselect').val();
+    function setpstime(obj) {
+        var pstime = '';
+        if(isServiceGoods==1){
+            pstime = $(obj).prev().find('input')[0].value;
+        }else{
+            pstime = $(obj).prev().find('select')[0].value;
+        }
+        if(pstime==''){
+            layer.msg('时间不能为空');
+            return;
+        }
         $($('#open_time').find('span')[1]).html(pstime);
         document.getElementsByClassName('J_careNormsClose3')[0].click();
     }
@@ -889,18 +1012,36 @@
 
     <!--查询用户是否购买此商品-->
     function queryuserisbuygoods() {
+//        $.ajax({
+//            type:"post",
+//            url:"/goodsIsbuysp/queryGoodsIsbuysp",
+//            dataType: "json",
+//            data:{cpId:cpId},
+//            success:function(data){
+//                var row = data.row;
+//                if(row!=null){
+//                    $('.bargain-btn2').hide();
+//                    $('#putdown').hide();
+//                    $('#hasBuy').show();
+//                    $('.special').hide();
+//                }
+//            }
+//        });
+    }
+
+    <!--查询是否已经初始化砍价价格-->
+    function querycpp() {
         $.ajax({
             type:"post",
-            url:"/goodsIsbuysp/queryGoodsIsbuysp",
+            url:'/openCutPricePrice/queryCutPricePrice',
             dataType: "json",
-            data:{cpId:cpId},
+            async :false,
+            data:{gid:gid},
             success:function(data){
-                var row = data.row;
-                if(row!=null){
-                    $('.bargain-btn2').hide();
-                    $('#putdown').hide();
-                    $('#hasBuy').show();
-                    $('.special').hide();
+                var rows = data.rows;
+                if(rows!=null){
+                    layer.msg('开始跳转');
+                    window.location.href='/bargainpd/'+gid+'.html';
                 }
             }
         });
@@ -958,6 +1099,8 @@
 <!--初始化页面调用函数-->
 <script>
 
+    querycpp();
+
     <!--加载图片-->
     loadgoodsimage();
 
@@ -997,6 +1140,7 @@
 </script>
 
 <script type="text/javascript" src="/js/jweixin-1.2.0.js"></script>
+<script src="/js/laydate/laydate.js"></script>
 <script>
     $(function(){
         $("#open_address").click(function(){
@@ -1179,6 +1323,10 @@
 
     <!--调用分享函数-->
     function shareGoods() {
+        var flag = validatedate();
+        if(!flag){
+            return;
+        }
         $('.bge6').css('overflow', 'hidden');
         $('.guide-share').fadeIn('slow');
     }
@@ -1194,6 +1342,54 @@
     });
 </script>
 
+<script>
+    <!--自砍一刀函数-->
+    function cutmyself() {
+        var flag = validatedate();
+        if(!flag){
+            return;
+        }
+        createcpp(savecutmyselflog);
+    }
+    function savecutmyselflog() {
+        $.ajax({
+            type:"post",
+            url:'/openCutPriceLog/saveCutPriceLog',
+            dataType: "json",
+            async :false,
+            data:{gdcpId:gdcpId},
+            success:function(data){
+                if(data.status==3){
+                    layer.msg('请登录');
+                }else{
+                    layer.msg('成功自砍一刀');
+                }
+            }
+        });
+    }
+    <!--砍价价格初始化-->
+    function createcpp(func) {
+        var nowhasgsvalhtml = $('#nowhasgsvalspan').html();
+        var gcount = parseInt(nowhasgsvalhtml.substr(nowhasgsvalhtml.indexOf(':x')+2));
+        $.ajax({
+            type:"post",
+            url:'/openCutPricePrice/saveCutPricePrice',
+            dataType: "json",
+            async :false,
+            data:{gdcpId:gdcpId,gcount:gcount},
+            success:function(data){
+                if(data.status==3){
+                    layer.msg('请登录');
+                }else{
+                    func();
+                }
+            }
+        });
+    }
+
+
+
+</script>
 </body>
 
 </html>

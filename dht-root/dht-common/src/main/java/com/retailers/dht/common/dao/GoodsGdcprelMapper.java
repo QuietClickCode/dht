@@ -5,6 +5,8 @@ import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：商品详情与砍价关系表DAO
  * @author fanghui
@@ -56,4 +58,6 @@ public interface GoodsGdcprelMapper {
 	public List<GoodsGdcprel> queryGoodsGdcprelList(Pagination<GoodsGdcprel> pagination);
 
 	public List<GoodsGdcprelVo> queryGoodsGdcprelListsByGid(@Param("gid") Long gid, @Param("cpId") Long cpId);
+
+	public List<GoodsGdcprelVo> queryGoodsGdcprelVoLists(@Param("params")Map params);
 }

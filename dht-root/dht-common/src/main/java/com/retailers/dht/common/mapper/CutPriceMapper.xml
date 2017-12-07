@@ -145,7 +145,7 @@
 	</select>
 	<select id="queryCutPriceListsByGid" parameterType="java.util.Map" resultMap="rm_cutPrice_vo">
 		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.cp_end_time) timestap,
-		t2.*,t3.cp_sale,min(t4.gd_price) minprice
+		t2.*,min(t3.cp_sale) cp_sale,min(t4.gd_price) minprice
 		from
 		t_cut_price t1,
 		t_cut_price t2
