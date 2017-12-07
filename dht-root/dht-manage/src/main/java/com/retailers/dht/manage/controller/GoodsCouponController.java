@@ -144,6 +144,10 @@ public class GoodsCouponController extends BaseController{
             }
             goodsCoupon.setGcpMoney(null);
         }
+        //优惠受限 指定商品种类或指定商品不能全部为空
+        if(goodsCoupon.getGcpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL&&ObjectUtils.isEmpty(goodsCoupon.getSpId())&&ObjectUtils.isEmpty(goodsCoupon.getSpzlId())){
+            throw new AppException("使用范围受限时，指定商品种类或指定商品不能全部为空");
+        }
         //包邮时清除金额以及折扣卷值
         if(goodsCoupon.getGcpType().intValue()== CouponConstant.GCP_TYPE_FREE_SHIPPING){
             goodsCoupon.setGcpDiscount(null);
