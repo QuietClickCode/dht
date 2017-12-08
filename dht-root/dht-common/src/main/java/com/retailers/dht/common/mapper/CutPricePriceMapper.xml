@@ -49,14 +49,23 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryCutPricePriceList" resultMap="rm_cutPricePrice" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="cutPricePrice_columns" />
+		FROM t_cut_price_price
+		<include refid="cutPricePrice_where"/>
+	</select>
+	<select id="queryGdcpIdList" resultMap="rm_cutPricePrice" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT t1.*
 		from
 		t_cut_price_price t1,
 		t_goods_gdcprel t2,
-		t_cut_price t3
+		t_cut_price t3,
+		t_cut_price t4
 		WHERE
 		t1.gdcp_id=t2.gdcp_id
 		and t2.cp_id=t3.cp_id
+		and t3.parent_id=t4.cp_id
+		and CURRENT_TIME()>t4.cp_start_time
+		and t4.cp_end_time>CURRENT_TIME()
 		and t3.g_id=#{params.gid}
 		and t1.us_id=#{params.uid}
 	</select>

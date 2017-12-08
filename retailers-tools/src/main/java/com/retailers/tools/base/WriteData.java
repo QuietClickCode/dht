@@ -19,6 +19,8 @@ public class WriteData {
 	public static final int LOGIN_OUT=3;
 	//成功
 	public static final int SUCCESS = 0;
+	//验证码错误
+	public static final int VALIDATE_CODE_ERROR=9;
 	/**
 	 * 权限认证未通过
 	 */

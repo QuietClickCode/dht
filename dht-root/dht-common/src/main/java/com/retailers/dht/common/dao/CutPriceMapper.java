@@ -63,4 +63,6 @@ public interface CutPriceMapper {
 	public  List<Goods> queryHasNoSpGoods(Pagination<Goods> pagination);
 
 	public List<CutPriceVo> queryCutPriceListsByGid(@Param("params") Map params);
+
+	public List<CutPriceVo> queryCutPriceGoodsList(Pagination<CutPriceVo> pagination);
 }

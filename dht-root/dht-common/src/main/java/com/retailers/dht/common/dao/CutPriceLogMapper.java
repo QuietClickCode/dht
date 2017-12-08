@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.CutPriceLog;
+import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -52,4 +53,5 @@ public interface CutPriceLogMapper {
 	 */
 	public List<CutPriceLog> queryCutPriceLogList(Pagination<CutPriceLog> pagination);
 
+	public List<CutPriceLogVo> queryCutPriceLogVoList(Pagination<CutPriceLogVo> pagination);
 }

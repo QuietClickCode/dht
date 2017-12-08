@@ -76,7 +76,9 @@ public class CouponServiceImpl implements CouponService {
 		}
 		attachmentService.editorAttachment(attachmentIds);
 		couponVo.setCpId(cp.getCpId());
-		saveCouponUseRange(couponVo);
+		if(cp.getCpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL){
+			saveCouponUseRange(couponVo);
+		}
 		return status == 1 ? true : false;
 	}
 	@Transactional(rollbackFor = Exception.class)
@@ -318,31 +320,29 @@ public class CouponServiceImpl implements CouponService {
 	 * @param couponVo
 	 */
 	private void saveCouponUseRange(CouponVo couponVo){
-		List<Long> ids=new ArrayList<Long>();
+
 		//优惠卷使用范围 1 指定商品种类
-		if(couponVo.getCpIsRestricted().intValue()==CouponConstant.COUPON_USED_RANGE_GOODS_TYPE){
+		List<CouponUseRange> curs=new ArrayList<CouponUseRange>();
+		if(ObjectUtils.isNotEmpty(couponVo.getSpzlIds())){
 			String[] cids=couponVo.getSpzlIds().split(",");
 			for(String id:cids){
-				ids.add(Long.parseLong(id));
+				if(ObjectUtils.isNotEmpty(id)){
+					CouponUseRange cur=createCouponUseRange(couponVo.getCpId(),Long.parseLong(id),CouponConstant.COUPON_USED_RANGE_GOODS_TYPE);
+					curs.add(cur);
+				}
 			}
 		}
-		if(couponVo.getCpIsRestricted().intValue()==CouponConstant.COUPON_USED_RANGE_GOODS){
+		//优惠卷使用范围 2 指定商品
+		if(ObjectUtils.isNotEmpty(couponVo.getSpIds())){
 			String[] cids=couponVo.getSpIds().split(",");
 			for(String id:cids){
-				ids.add(Long.parseLong(id));
+				if(ObjectUtils.isNotEmpty(id)){
+					CouponUseRange cur=createCouponUseRange(couponVo.getCpId(),Long.parseLong(id),CouponConstant.COUPON_USED_RANGE_GOODS);
+					curs.add(cur);
+				}
 			}
 		}
-		if(ObjectUtils.isNotEmpty(ids)){
-			List<CouponUseRange> curs=new ArrayList<CouponUseRange>();
-			for(long id:ids){
-				CouponUseRange cur=new CouponUseRange();
-				cur.setCpId(couponVo.getCpId());
-				cur.setCpurIsAllow(CouponUseRangeConstant.IS_ALLOW_USE_YES);
-				cur.setType(CouponUseRangeConstant.TYPE_COUPON);
-				cur.setCpurRelevanceId(id);
-				cur.setCpurType(couponVo.getCpIsRestricted());
-				curs.add(cur);
-			}
+		if(ObjectUtils.isNotEmpty(curs)){
 			//批量添加使用范围
 			couponUseRangeMapper.saveCouponUseRanges(curs);
 		}
@@ -361,6 +361,16 @@ public class CouponServiceImpl implements CouponService {
 			}
 		}
 		return null;
+	}
+
+	private CouponUseRange createCouponUseRange(Long gcpId,Long relevanceId,Long isRestricted){
+		CouponUseRange cur=new CouponUseRange();
+		cur.setCpId(gcpId);
+		cur.setCpurIsAllow(CouponUseRangeConstant.IS_ALLOW_USE_YES);
+		cur.setCpurRelevanceId(relevanceId);
+		cur.setType(CouponUseRangeConstant.TYPE_COUPON);
+		cur.setCpurType(isRestricted);
+		return cur;
 	}
 }
 

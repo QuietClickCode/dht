@@ -34,6 +34,10 @@
 		<result property="gname" column="gname"/>
 		<result property="timestap" column="timestap"/>
 		<result property="cpSale" column="cp_sale"/>
+		<result property="minCpSale" column="minCpSale"/>
+		<result property="imgurl" column="imgurl"/>
+		<result property="minprice" column="minprice"/>
+		<result property="gdescription" column="gdescription"/>
 	</resultMap>
 	<resultMap id="rm_goods" type="com.retailers.dht.common.entity.Goods">
 		<result property="gid" column="g_id"/>
@@ -123,6 +127,29 @@
 		SELECT <include refid="cutPrice_columns" />
 		FROM t_cut_price
 		<include refid="cutPrice_where"/>
+	</select>
+	<select id="queryCutPriceGoodsList" resultMap="rm_cutPrice_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t2.*,
+		t3.g_name gname,t3.g_description gdescription,
+		min(t4.gd_price) minprice,
+		t6.show_url imgurl,
+		min(t7.cp_sale) minCpSale
+		FROM
+		t_cut_price t1,
+		t_cut_price t2
+		LEFT JOIN t_goods t3 ON t2.g_id=t3.g_id and t3.is_delete=0
+		LEFT JOIN t_goods_detail t4 ON t2.g_id=t4.g_id and t4.is_delete=0
+		LEFT JOIN t_goods_image t5 ON t2.g_id=t5.g_id and t5.is_delete=0
+		LEFT JOIN t_attachment t6 ON t5.gi_id=t6.id
+		LEFT JOIN t_goods_gdcprel t7 ON t2.cp_id=t7.cp_id and t7.is_delete=0
+		WHERE
+		t1.cp_end_time>CURRENT_TIME()
+		and CURRENT_TIME()>t1.cp_start_time
+		and t2.parent_id=t1.cp_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+		GROUP BY t2.g_id
 	</select>
 	<select id="queryCutPriceTree" resultMap="rm_cutPrice_vo">
 		SELECT t1.*,t2.g_name gname

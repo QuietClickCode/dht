@@ -55,6 +55,7 @@ public interface CutPricePriceService {
 	 */
 	public boolean deleteCutPricePriceByCppId(Long cppId);
 
+	public Pagination<CutPricePrice> queryGdcpIdList(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

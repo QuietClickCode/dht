@@ -8,9 +8,13 @@
     <title>邀请砍价</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/new.css">
 </head>
 
 <body class="bge6">
+<div class="guide-share" style="display: none;position: fixed">
+    <button class="i-know" onclick="ikonw();"></button>
+</div>
     <div class="specialty-title2 borderB">
         <a href="" class="icon-return"></a>
         <span>邀请砍价</span>
@@ -42,17 +46,17 @@
     </div>
 
     <div class="bargain-text box2">
-        <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
+        <div class="title" id="goodsNameDiv"><!--2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸--></div>
     </div>
 	
 	<div class="progress_bar_box">
-		<p class="p1">已砍2刀，现价，<span>￥120.00</span></p>
+		<p class="p1">已砍0刀,现价:<span>￥0.00</span></p>
 		<div class="progress_bar">
-			<div class="progress_bar_son" style="width: 50%;"></div>
+			<div class="progress_bar_son" style="width: 0%;"></div>
 		</div>
 		<p class="p2">
-			<span class="span1">￥1280.00</span>
-			<span class="span2">￥9800.00</span>
+			<span class="span1">￥0.00</span>
+			<span class="span2">￥0.00</span>
 		</p>
 	</div>
 
@@ -65,29 +69,17 @@
         <div class="box2">
 
             <div class="product-details" id="details">
-				<p class="bargain_ruler">砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则砍价规则</p>
+				<p class="bargain_ruler">规则</p>
             </div>
 
             <div class="product-evaluate box2 displayN" id="evaluate">
 				<ul class="bargain_info_list">
-					<li>
-						<img class="photo" src="img/data2.png"/>
-						<span class="name">张三</span>
-						<span class="info">自砍了</span>
-						<span class="money">-￥320.00</span>
-					</li>
-					<li>
-						<img class="photo" src="img/data2.png"/>
-						<span class="name">张三</span>
-						<span class="info">自砍了</span>
-						<span class="money">-￥320.00</span>
-					</li>
-					<li>
-						<img class="photo" src="img/data2.png"/>
-						<span class="name">张三</span>
-						<span class="info">自砍了</span>
-						<span class="money">-￥320.00</span>
-					</li>
+					<!--<li>-->
+						<!--<img class="photo" src="img/data2.png"/>-->
+						<!--<span class="name">张/三</span>-->
+						<!--<span class="info">自砍了</span>-->
+						<!--<span class="money">-￥320.00</span>-->
+					<!--</li>-->
 				</ul>
             </div>
 
@@ -106,7 +98,26 @@
             </div>
         </div>
     </div>
-
+    <div class="bargain-footer">
+        <!--<a onclick=""   style="display: none">立即购买</a>-->
+        <div class="special" style="display: block">
+            <div class="care" style="display: none;padding-top: 0px" id="buynow">
+                <a class="bargain-btn1">
+                    <i></i>
+                    <p style="color: white">立即购买</p>
+                </a>
+            </div>
+            <div class="care" onclick="savecutmyselflog();" style="width: 50%;display: none" id="cutmyself">
+                <a class="bargain-btn1">
+                    自砍一刀
+                </a>
+            </div>
+        </div>
+        <!--<a onclick="savecutmyselflog();" id="cutmyself" class="bargain-btn1 " style="display: none">自砍一刀</a>-->
+        <a onclick="shareGoods();" id="askforhelp" class="bargain-btn2 " >请朋友补刀</a>
+        <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
+        <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
+    </div>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
@@ -230,6 +241,28 @@
             });
         }
 
+        <!--加载商品配置-->
+        function loadgoodsconfig() {
+            $.ajax({
+                type:"post",
+                url:'/goodsConfig/queryGoodsConfigBygid',
+                dataType: "json",
+                data:{gid:gid,pageNo:1,pageSize:2},
+                success:function(data){
+                    var goodsConfig = data.goodsConfig;
+                    if(goodsConfig!=null){
+                        var isPutway = goodsConfig.isPutway;
+                        if(isPutway==0){
+                            $('#putdown').sibling().remove();
+                            $('#putdown').show();
+                        }
+                    }else{
+                        nogoods();
+                    }
+                }
+            });
+        }
+
         <!--加载商品信息-->
         function loadpersonaddress() {
             $.ajax({
@@ -251,6 +284,109 @@
             });
         }
 
+        <!--加载砍价日志-->
+        function loadcutpricrlog() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPriceLog/queryCutPriceLog',
+                dataType: "json",
+                data:{gid:gid},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null){
+                        var times = 0;
+                        var gdPrice = rows[0].gdPrice;
+                        var cpPrice = rows[0].cpPrice;
+                        var cpMostperson = rows[0].cpMostperson;
+                        var cpLestperson = rows[0].cpLestperson;
+                        var logul = $('.bargain_info_list');
+                        logul.html('');
+                        var cpindex=0;
+                        if(rows[0].usdId!=null){
+                            times = rows.length;
+                            var flag = false;
+                            for(var i=0;i<rows.length;i++){
+                                var html = '<li>' +
+                                    '<img class="photo" src="'+rows[i].uimgurl+'"/>' +
+                                    '<span class="name">'+rows[i].uname+'</span>';
+                                var usId = rows[i].usId;
+                                var usdId = rows[i].usdId;
+                                var cplCutdownprice = rows[i].cplCutdownprice;
+                                cpindex += cplCutdownprice;
+                                var howcp='';
+                                if(usId==usdId){
+                                    howcp='自砍';
+                                    flag=true;
+                                }else{
+                                    howcp='帮砍';
+                                }
+                                html += '<span class="info">'+howcp+'</span>' +
+                                    '<span class="money">-￥'+cplCutdownprice+'</span>' +
+                                    '</li>';
+                                logul.append(html);
+                            }
+
+                            if(cpLestperson<rows.length){
+                                alert(1);
+                                $('#askforhelp').css('width','50%');
+                                $('#buynow').show();
+                            }
+
+                        }
+                        var nowprice = gdPrice-cpindex;
+                        $('.p1').html('已砍'+times+'刀，现价，<span>￥'+nowprice+'</span>');
+                        $('.span1').html('￥'+gdPrice);
+                        $('.span2').html('￥'+cpPrice);
+                        $('.progress_bar_son').css('width',times/cpMostperson*100+'%');
+                        if(flag){
+                            $('#cutmyself').siblings().css('width','100%');
+                            $('#cutmyself').remove();
+                            // $('#askforhelp').css('width','100%');
+                        }else{
+                            $('#cutmyself').show();
+                            // $('#askforhelp').css('width','50%');
+                        }
+                    }else{
+
+                    }
+                }
+            });
+        }
+
+        <!--自砍一刀-->
+        function savecutmyselflog() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPriceLog/saveCutPriceLog',
+                dataType: "json",
+                async :false,
+                data:{gid:gid},
+                success:function(data){
+                    if(data.status==3){
+                        layer.msg('请登录');
+                    }else{
+                        $('#cutmyself').hide();
+                        $('#askforhelp').css('width','100%');
+                        layer.msg('成功自砍一刀');
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000);
+                    }
+                }
+            });
+        }
+
+
+        <!--调用分享函数-->
+        function shareGoods() {
+            $('.bge6').css('overflow', 'hidden');
+            $('.guide-share').fadeIn('slow');
+        }
+        <!--点击知道了-->
+        function ikonw() {
+            $('.bge6').css('overflow', 'auto');
+            $('.guide-share').fadeOut('slow');
+        }
 
         <!--商品不存在 跳转页面-->
         function nogoods() {
@@ -262,10 +398,17 @@
     <script>
         <!--加载商品图片-->
         loadgoodsimage();
+
         <!--加载剩余时间-->
         loadtimestape();
+        <!--商品下架-->
+        loadgoodsconfig();
+
         <!--加载商品信息-->
         loadpersonaddress();
+
+        <!--加载砍价日志-->
+        loadcutpricrlog();
     </script>
 </body>
 

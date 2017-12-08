@@ -208,10 +208,10 @@
 
 <div class="placeholder-footer2"></div>
 <div class="bargain-footer">
-    <a onclick="cutmyself();" class="bargain-btn1">自砍一刀</a>
+    <a id="cutmyself" onclick="cutmyself();" class="bargain-btn1">自砍一刀</a>
     <a onclick="shareGoods();" class="bargain-btn2">请朋友补刀</a>
-    <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
-    <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
+    <a id="putdown" class="bargain-btn1" style="width: 100%;display: none">商品已下架</a>
+    <a id="hasBuy" class="bargain-btn1" style="width: 100%;display: none">您已购买该商品</a>
 </div>
 
 
@@ -480,10 +480,10 @@
                     var isPutway = goodsConfig.isPutway;
 
                     if(isPutway==0){
+                        $('#cutmyself').hide();
                         $('.bargain-btn2').hide();
                         $('#putdown').show();
                         $('#hasBuy').hide();
-                        $('.special').hide();
                     }
                     if(isAdvancesale==1){
                         $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
@@ -1039,8 +1039,9 @@
             data:{gid:gid},
             success:function(data){
                 var rows = data.rows;
-                if(rows!=null){
-                    layer.msg('开始跳转');
+                console.log(JSON.toString(rows[0]));
+                if(rows!=null&&rows.length>0){
+                    // layer.msg('开始跳转');
                     window.location.href='/bargainpd/'+gid+'.html';
                 }
             }
@@ -1363,12 +1364,16 @@
                     layer.msg('请登录');
                 }else{
                     layer.msg('成功自砍一刀');
+                    setTimeout(function () {
+                        window.location.href='/bargainpd/'+gid+'.html';
+                    },1000);
                 }
             }
         });
     }
     <!--砍价价格初始化-->
     function createcpp(func) {
+        var gdcpId = $('#gdcpId').val();
         var nowhasgsvalhtml = $('#nowhasgsvalspan').html();
         var gcount = parseInt(nowhasgsvalhtml.substr(nowhasgsvalhtml.indexOf(':x')+2));
         $.ajax({

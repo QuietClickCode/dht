@@ -44,7 +44,7 @@ public class CutPricePriceController extends BaseController{
         Map params = new HashMap();
         params.put("gid",gid);
         params.put("uid",uid);
-        Pagination<CutPricePrice> pagination = cutPricePriceService.queryCutPricePriceList(params,1,1);
+        Pagination<CutPricePrice> pagination = cutPricePriceService.queryGdcpIdList(params,1,1);
         return queryPages(pagination);
     }
 }
