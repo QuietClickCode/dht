@@ -60,6 +60,11 @@ public class SystemConstant {
     public static final String WX_ACCESS_ADDRESS_AUTH_URL="wxAccessAddressAuthUrl";
 
     /**
+     * 验证码
+     */
+    public static final String LOGIN_VALIDATE_CODE="VALIDATE_CODE";
+
+    /**
      * 压缩类型（ small 小图，middle 中图 ，originalfile 原图)
      */
     public static List<String> compressTypes=new ArrayList<String>();

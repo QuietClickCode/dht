@@ -66,8 +66,10 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="isValid" column="is_valid"/>
 		<result property="version" column="version"/>
-		<result property="relevanceId" column="relevanceId"/>
-		<result property="relevanceNm" column="relevanceNm"/>
+		<result property="spzlIds" column="spzlIds"/>
+		<result property="spzlNms" column="spzlNms"/>
+		<result property="spIds" column="spIds"/>
+		<result property="spNms" column="spNms"/>
 	</resultMap>
 
 	<resultMap id="rm_coupon_web_vo" type="com.retailers.dht.common.vo.CouponWebVo">
@@ -215,27 +217,23 @@
 	<!--分页查询 -->
 	<select id="queryCouponList" resultMap="rm_coupon_showVo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
-			c.*, a.show_url,fw.relevanceId,fw.`NAME` relevanceNm
+			c.*, a.show_url,fw.spzlIds,fw.spzlNms,fw.spIds,fw.spNms
 		FROM
 			t_coupon c
 			LEFT JOIN t_attachment a ON c.cp_logo = a.id
 			LEFT JOIN (
 				SELECT
 				cp_id,
-				GROUP_CONCAT(q.cpur_relevance_id) relevanceId,
-				GROUP_CONCAT(q. NAME) NAME
+				GROUP_CONCAT(q.gg_id) spzlIds,
+				GROUP_CONCAT(q.gg_name) spzlNms,
+				GROUP_CONCAT(q.g_id) spIds,
+				GROUP_CONCAT(q.g_name) spNms
 				FROM
-					(SELECT 	cp_id,cpur_type,cpur_relevance_id,
-						CASE WHEN cpur_type = 1 THEN
-							gc.gg_name
-						ELSE
-							g.g_name
-						END NAME
-				FROM
-					t_coupon_use_range cur
-					LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
-					LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
-				WHERE  type=#{params.type}
+				(SELECT cp_id,cpur_type,gc.gg_id,gc.gg_name,g.g_id,g.g_name
+					FROM t_coupon_use_range cur
+						LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+						LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+					WHERE  type=#{params.type}
 				) q
 				GROUP BY cp_id
 			) fw ON c.cp_id = fw.cp_id
