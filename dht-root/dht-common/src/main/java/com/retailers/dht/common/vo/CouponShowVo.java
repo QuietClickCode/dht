@@ -82,9 +82,13 @@ public class CouponShowVo {
     /**数据版本*/
     private Integer version;
     //优惠卷使用范围id
-    private String relevanceId;
+    private String spzlIds;
     //优惠卷使用范围名称
-    private String relevanceNm;
+    private String spzlNms;
+    //优惠卷使用范围id
+    private String spIds;
+    //优惠卷使用范围名称
+    private String spNms;
 
     public Long getCpId() {
         return cpId;
@@ -336,19 +340,35 @@ public class CouponShowVo {
         this.cpSurplusNum = cpSurplusNum;
     }
 
-    public String getRelevanceId() {
-        return relevanceId;
+    public String getSpzlIds() {
+        return spzlIds;
     }
 
-    public void setRelevanceId(String relevanceId) {
-        this.relevanceId = relevanceId;
+    public void setSpzlIds(String spzlIds) {
+        this.spzlIds = spzlIds;
     }
 
-    public String getRelevanceNm() {
-        return relevanceNm;
+    public String getSpzlNms() {
+        return spzlNms;
     }
 
-    public void setRelevanceNm(String relevanceNm) {
-        this.relevanceNm = relevanceNm;
+    public void setSpzlNms(String spzlNms) {
+        this.spzlNms = spzlNms;
+    }
+
+    public String getSpIds() {
+        return spIds;
+    }
+
+    public void setSpIds(String spIds) {
+        this.spIds = spIds;
+    }
+
+    public String getSpNms() {
+        return spNms;
+    }
+
+    public void setSpNms(String spNms) {
+        this.spNms = spNms;
     }
 }

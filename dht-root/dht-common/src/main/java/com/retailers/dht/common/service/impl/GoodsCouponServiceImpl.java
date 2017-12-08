@@ -100,6 +100,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 				}
 			}
 		}
+		//优惠卷使用范围2 指定商品
 		if(ObjectUtils.isNotEmpty(couponVo.getSpId())){
 			String[] cids=couponVo.getSpId().split(",");
 			for(String id:cids){

@@ -126,18 +126,6 @@
                         <div class="col-lg-4">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
-                                    使用范围:
-                                </span>
-                                <select id="cpIsRestricted" name="cpIsRestricted" class="form-control" onclick="syfwChange()">
-                                    <option value="0">无限制</option>
-                                    <option value="1">指定商品种类</option>
-                                    <option value="2">指定商品</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-lg-4">
-                            <div class="input-group form-group">
-                                <span class="input-group-addon">
                                     优惠卷时效:
                                 </span>
                                 <input type="hidden" name="cpStartDate" id="cpStartDate">
@@ -291,25 +279,31 @@
                                 <span class="form-control" style="width:40px;padding-right:0px;">折</span>
                             </div>
                         </div>
-                        <!-- 优惠卷指定商品种类 -->
-                        <div class="col-lg-4" id="yhjzdspzl">
+                        <div class="col-lg-4">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
-                                    指定商品种类:
+                                     是否限制范围:
                                 </span>
-                                <input type="hidden" class="form-control" name="spzlIds" id="spzlIds">
-                                <input type="text" class="form-control" name="spzlNames" id="spzlNames" onclick="showGoodsTypeTrees(); return false;">
+                                <div class="controls">
+                                    <div class="switch" tabindex="0">
+                                        <input id="cpIsRestricted" name="cpIsRestricted" type="checkbox" />
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <!-- 优惠卷指定商品 -->
-                        <div class="col-lg-4" id="yhjzdsp">
-                            <div class="input-group form-group">
-                                <span class="input-group-addon">
-                                    指定商品:
-                                </span>
-                                <input type="hidden" class="form-control" name="spIds" id="spIds">
-                                <input type="text" class="form-control" name="spNames" id="spNames">
-                            </div>
+                    </div>
+                    <div id="syfwxzDiv" style="display: none;">
+                        <br>
+                        <div class="form-group">
+                            <label for="spzlNames" class="control-label">指定商品子类:</label>
+                            <input type="hidden" id="spzlIds" name="spzlIds"/>
+                            <textarea class="form-control" id="spzlNames" name="spzlNames" onclick="showGoodsTypeTrees();"></textarea>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <label for="spNames" class="control-label">指定商品:</label>
+                            <input type="hidden" id="spIds" name="spIds"/>
+                            <textarea class="form-control" id="spNames" name="spNames" onclick="openGoodsSelectDialog()"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
@@ -345,6 +339,7 @@
     <ul id="goodsTypeTrees" class="ztree" style="margin-top:0; width:320px;"></ul>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
+<%@include file="/common/goods_select.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="<%=path%>/js/common/form.js"></script>
@@ -530,6 +525,7 @@
             var flag =$("#editorCouponForm #isValid").bootstrapSwitch("state");
             var cpIsOverlapUse =$("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch("state");
             var cpIsFirst =$("#editorCouponForm #cpIsFirst").bootstrapSwitch("state");
+            let cpIsRestricted =$("#editorCouponForm #cpIsRestricted").bootstrapSwitch("state");
             if(flag){
                 formData["isValid"]=0;
             }else{
@@ -544,6 +540,11 @@
                 formData["cpIsFirst"]=0;
             }else{
                 formData["cpIsFirst"]=1;
+            }
+            if(cpIsRestricted){
+                formData["cpIsRestricted"]=1
+            }else{
+                formData["cpIsRestricted"]=0
             }
 
             let url="/coupon/addCoupon";
@@ -601,7 +602,27 @@
                 cpImagesFormSummit();
             }
         });
+        $("#editorCouponForm #cpIsRestricted").bootstrapSwitch({
+            onText:'限制',
+            offText:'不限制'
+        });
+        $('#editorCouponForm #cpIsRestricted').on('switchChange.bootstrapSwitch', function (event,state) {
+            if(state){
+                $("#editorCouponForm #syfwxzDiv").show();
+            }else{
+                $("#editorCouponForm #syfwxzDiv").hide();
+            }
+        });
+
+
+        //加载公用商品选择器
+        onloadGoodsSelectDialog('#spIds','#spNames',callbackFun);
     });
+
+    function callbackFun(sIds,sNms){
+        $("#spIds").val(sIds);
+        $("#spNames").val(sNms);
+    }
     /**
      * form 校验
      * */
@@ -705,7 +726,7 @@
         });
     }
     /**
-     * 删除部门
+     * 删除优惠卷
      **/
     function removeSysUser(cpId){
         $.ajax({
@@ -749,6 +770,10 @@
         $("#editorCouponForm #cpValidDate").val("");
         $("#editorCouponForm #gcpMoney").val("");
         $("#editorCouponForm #gcpDiscount").val("");
+        $("#editorCouponForm #spzlIds").val("");
+        $("#editorCouponForm #spzlNames").val("");
+        $("#editorCouponForm #spIds").val("");
+        $("#editorCouponForm #spNames").val("");
         //清空富文本内容
         UE.getEditor('cpContext').setContent('');
         //清空草稿箱
@@ -758,6 +783,10 @@
         $("#cpImagesForm #uploadImageDiv").hide();
         $("#cpImagesForm #cpLogoDiv").show();
         $("#cpImagesForm #clearCpLogoDiv").hide();
+        $("#editorCouponForm #syfwxzDiv").hide();
+        $("#editorCouponForm #cpIsOverlapUse").bootstrapSwitch("state",false);
+        $("#editorCouponForm #cpIsFirst").bootstrapSwitch("state",false);
+        $("#editorCouponForm #cpIsRestricted").bootstrapSwitch("state",false);
     }
     /**
      * 清除form 表单数据
@@ -805,6 +834,13 @@
                 cpIsFirst=true;
             }
             $("#editorCouponForm #cpIsFirst").bootstrapSwitch("state",cpIsFirst);
+
+            var cpIsRestrictedFlag=false;
+            if(rowData.cpIsRestricted==1){
+                cpIsRestrictedFlag=true;
+                $("#editorCouponForm #syfwxzDiv").show();
+            }
+            $("#editorCouponForm #cpIsRestricted").bootstrapSwitch("state",cpIsRestrictedFlag);
             //发放方式
             $("#editorCouponForm #cpSendWay").val(rowData.cpSendWay);
             //周期发送类型
@@ -823,15 +859,10 @@
             $("#editorCouponForm #cpMaxDiscount").val(rowData.cpMaxDiscount);
             UE.getEditor('cpContext').setContent(rowData.cpContext);
             //设置数据
-            if(rowData.cpIsRestricted==1){
-                $("#editorCouponForm #spzlIds").val(rowData.relevanceId);
-                $("#editorCouponForm #spzlNames").val(rowData.relevanceNm);
-
-            }if(rowData.cpIsRestricted==2){
-                $("#editorCouponForm #spIds").val(rowData.relevanceId);
-                $("#editorCouponForm #spNames").val(rowData.relevanceNm);
-            }
-
+            $("#editorCouponForm #spzlIds").val(rowData.spzlIds);
+            $("#editorCouponForm #spzlNames").val(rowData.spzlNms);
+            $("#editorCouponForm #spIds").val(rowData.spIds);
+            $("#editorCouponForm #spNames").val(rowData.spNms);
         }else{
             $("#editorCouponForm #cpType").val("0");
             $("#editorCouponForm #cpLogoDiv").show();
@@ -842,6 +873,7 @@
             $("#editorCouponForm #cpSendWay").val(0);
             $("#cpImagesForm #cpLogoDiv").show();
             $("#cpImagesForm #clearCpLogoDiv").hide();
+            $("#gcpIsRestricted #syfwxzDiv").hide();
             $("#editorCouponForm #spzlIds").val('');
             $("#editorCouponForm #spzlNames").val('');
             $("#editorCouponForm #spIds").val('');
@@ -849,7 +881,6 @@
         }
         cpCoinTypeChange();
         cpSendWayChange();
-        syfwChange();
     }
     /**
      * 编辑部门
@@ -1023,23 +1054,7 @@
         $("#cpImagesForm #clearCpLogoDiv").hide();
         $("#editorCouponForm #cpLogo").val('');
     }
-    /**
-     * 优惠卷使用范围改变事件
-     */
-    function syfwChange(){
-        let selectVal=$("#editorCouponForm #cpIsRestricted").val();
-        $("#editorCouponForm #yhjzdspzl").hide();
-        $("#editorCouponForm #yhjzdsp").hide();
-        if(selectVal==1){
-            $("#editorCouponForm #yhjzdspzl").show();
-            $("#editorCouponForm #spIds").val("");
-            $("#editorCouponForm #spNames").val("");
-        }if(selectVal==2){
-            $("#editorCouponForm #yhjzdsp").show();
-            $("#editorCouponForm #spzlIds").val("");
-            $("#editorCouponForm #spzlNames").val("");
-        }
-    }
+
     //当前选中优惠卷id
     var selectCurCouponId;
     //

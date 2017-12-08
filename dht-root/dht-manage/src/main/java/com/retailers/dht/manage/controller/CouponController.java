@@ -3,6 +3,7 @@ package com.retailers.dht.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.dht.common.service.CouponService;
@@ -12,6 +13,7 @@ import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,5 +130,22 @@ public class CouponController extends BaseController{
      * @throws AppException
      */
     private void validateParams(CouponVo couponVo)throws AppException{
+        validateForm(couponVo);
+        if(couponVo.getCpType().intValue()== CouponConstant.GCP_TYPE_MONEY){
+            if(ObjectUtils.isEmpty(couponVo.getCpMoney())){
+                throw new AppException("优惠卷为代金卷时优惠金额不能为空");
+            }
+            couponVo.setCpDiscount(null);
+        }
+        if(couponVo.getCpType().intValue()== CouponConstant.GCP_TYPE_DISCOUNT){
+            if(ObjectUtils.isEmpty(couponVo.getCpDiscount())){
+                throw new AppException("优惠活动为折扣卷时折扣额不能为空");
+            }
+            couponVo.setCpMoney(null);
+        }
+        //优惠受限 指定商品种类或指定商品不能全部为空
+        if(couponVo.getCpIsRestricted().intValue()!=CouponConstant.COUPON_USED_RANGE_ALL&&ObjectUtils.isEmpty(couponVo.getSpIds())&&ObjectUtils.isEmpty(couponVo.getSpzlIds())){
+            throw new AppException("使用范围受限时，指定商品种类或指定商品不能全部为空");
+        }
     }
 }
