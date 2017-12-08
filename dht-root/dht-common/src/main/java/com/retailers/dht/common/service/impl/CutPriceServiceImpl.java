@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.CutPrice;
 import com.retailers.dht.common.dao.CutPriceMapper;
 import com.retailers.dht.common.entity.Goods;
@@ -12,6 +14,7 @@ import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.CutPriceVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.tools.utils.ObjectUtils;
+import com.sun.jdi.connect.AttachingConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -123,6 +126,18 @@ public class CutPriceServiceImpl implements CutPriceService {
 	public List<CutPriceVo> queryCutPriceListsByGid(Map params){
 		List<CutPriceVo> list = cutPriceMapper.queryCutPriceListsByGid(params);
 		return list;
+	}
+	public Pagination<CutPriceVo> queryCutPriceGoodsList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<CutPriceVo> page = new Pagination<CutPriceVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<CutPriceVo> list = cutPriceMapper.queryCutPriceGoodsList(page);
+		for(CutPriceVo cutPriceVo:list){
+			cutPriceVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+cutPriceVo.getImgurl());
+		}
+		page.setData(list);
+		return page;
 	}
 }
 

@@ -17,6 +17,15 @@ public class CutPriceVo extends CutPrice {
     private String gunitname;
     private String gdescription;
     private Float cpSale;
+    private Float minCpSale;
+
+    public Float getMinCpSale() {
+        return minCpSale;
+    }
+
+    public void setMinCpSale(Float minCpSale) {
+        this.minCpSale = minCpSale;
+    }
 
     public Float getCpSale() {
         return cpSale;

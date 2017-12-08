@@ -52,4 +52,5 @@ public interface CutPricePriceMapper {
 	 */
 	public List<CutPricePrice> queryCutPricePriceList(Pagination<CutPricePrice> pagination);
 
+	public List<CutPricePrice> queryGdcpIdList(Pagination<CutPricePrice> pagination);
 }

@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.CutPriceService;
 import com.retailers.dht.common.vo.CutPriceVo;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,4 +43,16 @@ public class CutPriceController extends BaseController{
         return gtm;
     }
 
+    @RequestMapping("/queryCutPriceGoodsList")
+    @ResponseBody
+    public Map<String,Object> queryCutPriceList(int pageNo,int pageSize){
+        Map params = new HashMap();
+        params.put("now",new Date());
+        List<CutPriceVo> list = cutPriceService.queryCutPriceGoodsList(params,pageNo,pageSize).getData();
+        Map gtm = new HashMap();
+        if(!ObjectUtils.isEmpty(list)){
+            gtm.put("rows",list);
+        }
+        return gtm;
+    }
 }

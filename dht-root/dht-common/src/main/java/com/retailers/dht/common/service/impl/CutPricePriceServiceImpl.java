@@ -70,6 +70,15 @@ public class CutPricePriceServiceImpl implements CutPricePriceService {
 		page.setData(list);
 		return page;
 	}
+	public Pagination<CutPricePrice> queryGdcpIdList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<CutPricePrice> page = new Pagination<CutPricePrice>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<CutPricePrice> list = cutPricePriceMapper.queryGdcpIdList(page);
+		page.setData(list);
+		return page;
+	}
 	public boolean deleteCutPricePriceByCppId(Long cppId) {
 		int status = cutPricePriceMapper.deleteCutPricePriceByCppId(cppId);
 		return status == 1 ? true : false;

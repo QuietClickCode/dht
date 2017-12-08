@@ -65,6 +65,8 @@ public interface CutPriceService {
 	public List<Goods> queryHasNoSpGoods(String gname, Long parentId);
 
 	public List<CutPriceVo> queryCutPriceListsByGid(Map params);
+
+	public Pagination<CutPriceVo> queryCutPriceGoodsList(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

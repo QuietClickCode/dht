@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.CutPriceLog;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：砍价日志表Service
@@ -55,6 +58,7 @@ public interface CutPriceLogService {
 	 */
 	public boolean deleteCutPriceLogByCplId(Long cplId);
 
+	public List<CutPriceLogVo> queryCutPriceLog(Long gid, Long uid);
 }
 
 
