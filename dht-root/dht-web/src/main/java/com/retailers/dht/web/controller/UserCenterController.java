@@ -12,6 +12,7 @@ import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.service.UserAddressService;
 import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.service.UserService;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
@@ -20,6 +21,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -456,5 +458,56 @@ public class UserCenterController extends BaseController{
         map.put("flag",flag);
         map.put("userPhone",user.getUphone());
         return map;
+    }
+
+    /**
+     * 用户登录
+     * @param request
+     * @param redirectUrl 跳转过来地址
+     *
+     * @return
+     */
+    @RequestMapping("userLoginPage")
+    public ModelAndView userLoginPage(HttpServletRequest request, String redirectUrl){
+        ModelAndView model=new ModelAndView(redirectUrl(request,"usercenter/login"));
+        model.addObject("redirectUrl",redirectUrl);
+        return model;
+    }
+
+    /**
+     * 用户登录
+     * @param request
+     * @param account 帐号
+     * @param pwd 密码
+     * @param redirectUrl 成功后跳转跳径
+     * @param validateCode 验证码
+     * @return
+     */
+    @RequestMapping("userLogin")
+    public BaseResp userLogin(HttpServletRequest request,String account,String pwd,String redirectUrl,String validateCode){
+        if(ObjectUtils.isEmpty(account)){
+            return errorForParam("请输入登录帐号");
+        }
+        if(ObjectUtils.isEmpty(pwd)){
+            return errorForParam("请输入密码");
+        }
+        if(ObjectUtils.isEmpty(validateCode)){
+            return errorForParam("请输入验证码");
+        }
+
+        String serverCode="";
+        if(ObjectUtils.isNotEmpty(request.getSession().getAttribute(com.retailers.dht.common.constant.SystemConstant.LOGIN_VALIDATE_CODE))){
+            serverCode = request.getSession().getAttribute(com.retailers.dht.common.constant.SystemConstant.LOGIN_VALIDATE_CODE).toString();
+        }
+        if(!validateCode.equalsIgnoreCase(serverCode)){
+            return errorForValidateCode("验证码错误");
+        }
+        try{
+            UserInfoVIew userInfoVIew= userService.userLogin(account,pwd);
+            request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,userInfoVIew);
+        }catch(AppException e){
+            return errorForSystem(e.getMessage());
+        }
+        return success(null);
     }
 }

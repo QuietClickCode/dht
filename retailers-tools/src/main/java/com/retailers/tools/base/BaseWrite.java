@@ -37,6 +37,19 @@ public class BaseWrite {
 	}
 
 	/**
+	 * 验证码错误 提示
+	 * @param msg
+	 * @param info
+	 * @return
+	 */
+	public BaseResp errorForValidateCode(String msg,Object... info){
+		BaseResp baseResp = new BaseResp();
+		baseResp.setStatus(WriteData.VALIDATE_CODE_ERROR);
+		baseResp.setMsg(getMessage(msg, info));
+		return baseResp;
+	}
+
+	/**
 	 * 业务错误
 	 * @param msg
 	 * @param info

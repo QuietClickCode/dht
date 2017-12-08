@@ -3,6 +3,7 @@ package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 
@@ -130,6 +131,15 @@ public interface UserService {
 	 * @param attachmentId 图片附件ID
 	 */
 	public Attachment queryUserHeader(Long attachmentId);
+
+	/**
+	 * 用户登录
+	 * @param account 帐号
+	 * @param pwd 密码
+	 * @return
+	 * @throws AppException
+	 */
+	public UserInfoVIew userLogin(String account,String pwd)throws AppException;
 
 }
 

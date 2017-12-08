@@ -13,6 +13,7 @@ import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.dao.UserMapper;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.UserService;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
@@ -213,6 +214,10 @@ public class UserServiceImpl implements UserService {
 	 */
 	public Attachment queryUserHeader(Long attachmentId) {
 		return attachmentService.queryAttachmentById(attachmentId);
+	}
+
+	public UserInfoVIew userLogin(String account, String pwd) throws AppException {
+		return null;
 	}
 }
 
