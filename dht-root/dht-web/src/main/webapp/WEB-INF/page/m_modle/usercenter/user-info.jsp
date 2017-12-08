@@ -150,7 +150,12 @@
                         $(".user-address").text("填写收货地址");
                     else
                         $(".user-address").text(userAddress);
-                    $(".user-head").attr("src",userHeadSrc);
+
+                    if(userHeadSrc == ""){
+                        $(".user-head").remove();
+                    }else{
+                        $(".user-head").attr("src",userHeadSrc);
+                    }
                 }
             });
         });

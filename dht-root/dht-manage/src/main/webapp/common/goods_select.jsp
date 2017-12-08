@@ -1,15 +1,61 @@
 <%@page pageEncoding="UTF-8"%>
+
+<style>
+    .goods_group{
+        width: 100%;
+        margin-top: 10px;
+        background-color: #f4f5f9;
+        padding: 5px;
+        overflow: hidden;
+        text-align: center;
+    }
+
+    #remove_goods{
+        padding: 3px 30px;
+        text-decoration: none;
+    }
+
+    #commonSelectGoods li{
+        width: 80%;
+        margin-left: 10%;
+        margin-right: 10%;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        border: 1px solid rgba(0,0,0,0.1);
+        list-style: none;
+        margin-top: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        position: relative;
+    }
+
+    .remove_icon{
+        width: 15px;
+        height: 15px;
+        background: url(/img/remove_icon.png)no-repeat center;
+        background-size: 15px 15px;
+        display: block;
+        text-decoration: none;
+        color: #D4D4D4;
+        position: absolute;
+        display: none;
+        right: -6px;
+        top: -6px;
+        cursor: pointer;
+    }
+</style>
 <!--公用商品选择器 -->
 <div class="modal fade" id="commonGoodsSelectDialog"  role="dialog" aria-hidden="true">
-    <div class="modal-dialog" style="width: 60%;height: 60%">
+    <div class="modal-dialog" style="width: 70%;height: 60%">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title" id="modaltitle"><i class="fa fa-envelope-o"></i>商品选择</h4>
             </div>
             <div class="row">
-                <div class="col-lg-2" style="overflow:auto;">
-                    <ul id="goodsSelectTree" class="ztree" style="width: auto;"></ul>
+                <div class="col-lg-2" style="overflow:auto;padding-right: 0px;">
+                    <ul id="goodsSelectTree" class="ztree" style="width: auto;margin-top: 56px;height: 450px;"></ul>
                 </div>
                 <!-- 商品下拉列表-->
                 <div class="col-lg-8">
@@ -21,27 +67,52 @@
                             <option value="1">已审核</option>
                             <option value="2">未通过审核</option>
                         </select>
-                        <button class="btn btn-default" style="margin-top: 5px" type="button" onclick="refreshCommonGoodsSelectData()">查询</button>
+                        <button class="btn btn-default" type="button" onclick="refreshCommonGoodsSelectData()">查询</button>
                     </div>
                     <div>
                         <table id="commonGoodsSelectTableDatas" ></table>
                     </div>
                 </div>
-                <div class="col-lg-2">
+                <div class="col-lg-2" style="padding-left: 0px;">
+                    <div class="goods_group">
+                        <a class="btn btn-default" id="remove_goods" href="#" role="button">清空</a>
+                    </div>
                     <ul id="commonSelectGoods">
 
                     </ul>
+
                 </div>
             </div>
 
             <div class="modal-footer clearfix">
+
                 <button type="button" class="btn btn-danger" onclick="cancelCommonGoodsSelectButton();"><i class="fa fa-times"></i> 取消</button>
                 <button type="button" class="btn btn-primary pull-left" onclick="confirmCommonGoodsSelectButton();"><i class="fa fa-envelope"></i>确认</button>
+
             </div>
         </div>
     </div>
 </div>
 <script>
+
+    $("#remove_goods").click(function () {
+        $("#commonSelectGoods li").remove();
+    });
+   
+    function test($this) {
+        let len = $($this).find(".remove_icon").length;
+        if (len == 0){
+            $($this).append('<span class="remove_icon" onclick="remove_icon_goods(this)"></span>');
+            $($this).find(".remove_icon").show();
+        }
+        return;
+    }
+
+    function remove_icon_goods($this) {
+        let index = $($this).index(".remove_icon");
+        $("#commonSelectGoods li").eq(index).remove();
+    }
+
     //用于缓存资源表格数据
     var commonGoodsSelectDatas=new Map();
     var commonGoodsSelectGtId;
@@ -234,7 +305,7 @@
                 //判断是否己经存在
                 if(!commonGoodsSelectValuesMaps.has(row.gid)){
                     commonGoodsSelectValuesMaps.set(row.gid,row.gname);
-                    let child="<li id='"+row.gid+"'>"+row.gname+"</li>";
+                    let child="<li id='"+row.gid+"' onmouseover='test(this)' '>"+row.gname+"</li>";
                     $("#commonSelectGoods").append(child);
                 }
             },
@@ -289,4 +360,6 @@
         commonGoodsSelectGtId=treeNode.id;
         refreshCommonGoodsSelectData();
     }
+
 </script>
+
