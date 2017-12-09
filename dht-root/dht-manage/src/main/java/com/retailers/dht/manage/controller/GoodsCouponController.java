@@ -170,4 +170,24 @@ public class GoodsCouponController extends BaseController{
         boolean flag = goodsCouponService.deleteGoodsCouponByGcpId(gcpId);
         return success(flag);
     }
+
+    /**
+     * 根据商品id取得所有的商品优惠
+     * @param goodsId
+     * @return
+     */
+    public BaseResp queryGoodsCouponByGid(Long goodsId){
+
+        return null;
+    }
+    /**
+     *根据商品id 和 优惠名称 取得所有的优惠列表（排除该 商品己存在的）
+     * @param goodsId
+     * @param couponNm
+     * @return
+     */
+    public BaseResp queryGoodsCouponByGid(String couponNm,Long goodsId){
+        return null;
+    }
+
 }

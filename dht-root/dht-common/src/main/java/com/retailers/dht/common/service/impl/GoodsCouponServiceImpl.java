@@ -8,14 +8,18 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
+import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.CouponUseRange;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.dao.GoodsCouponMapper;
 import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -36,6 +40,10 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	private GoodsCouponMapper goodsCouponMapper;
 	@Autowired
 	private CouponUseRangeMapper couponUseRangeMapper;
+	@Autowired
+	private GoodsMapper goodsMapper;
+	@Autowired
+	private GoodsClassificationService goodsClassificationService;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveGoodsCoupon(GoodsCouponVo goodsCouponVo) {
@@ -124,6 +132,25 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		cur.setType(CouponUseRangeConstant.TYPE_GOODS_COUPON);
 		cur.setCpurType(isRestricted);
 		return cur;
+	}
+
+	/**
+	 * 根据商品取得该商品下的所有优惠
+	 * @param goodsId
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId)throws AppException{
+
+		return null;
+	}
+	/**
+	 * 根据优惠名称取得优惠列表（排除己存在的）
+	 * @param couponNm 优惠名称
+	 * @param goodsId 商品id
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(String couponNm,Long goodsId){
+		return null;
 	}
 }
 

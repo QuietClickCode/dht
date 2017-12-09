@@ -5,7 +5,9 @@ import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品优惠活动Service
@@ -65,6 +67,20 @@ public interface GoodsCouponService {
 	 * @return
 	 */
 	public boolean editorGoodsCoupon(GoodsCouponVo goodsCouponvo);
+
+	/**
+	 * 根据商品取得该商品下的所有优惠
+	 * @param goodsId
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId)throws AppException;
+	/**
+	 * 根据优惠名称取得优惠列表（排除己存在的）
+	 * @param couponNm 优惠名称
+	 * @param goodsId 商品id
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(String couponNm,Long goodsId);
 
 }
 
