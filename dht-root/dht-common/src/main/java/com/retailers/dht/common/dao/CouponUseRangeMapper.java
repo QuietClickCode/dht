@@ -36,6 +36,14 @@ public interface CouponUseRangeMapper {
 	 * @date 2017-12-06 00:57:03
 	 */
 	public int updateCouponUseRange(CouponUseRange couponUseRange);
+
+	/**
+	 * 根据优惠使用范围限制
+	 * @param cpurIds
+	 * @param allowStatus
+	 * @return
+	 */
+	public int updateCouponUseRangeAllow(@Param("cpurIds")List<Long> cpurIds,@Param("allowStatus")Integer allowStatus);
 	/**
 	 * 根据CpurId删除优惠卷使用范围
 	 * @param cpurId
@@ -73,5 +81,14 @@ public interface CouponUseRangeMapper {
 	 * @param cpId
 	 */
 	public List<CouponUseRange> queryCouponUseRangeByCpId(@Param("type") Long type,@Param("cpId") Long cpId,@Param("cpurType") Long cpurType);
+
+	/**
+	 * 取得优惠范围例表
+	 * @param type
+	 * @param cpIds
+	 * @param goodsId
+	 * @return
+	 */
+	public List<CouponUseRange> queryCouponUseRangeByGid(@Param("type") Long type,@Param("cpIds") List<Long> cpIds,@Param("gid")Long goodsId);
 
 }

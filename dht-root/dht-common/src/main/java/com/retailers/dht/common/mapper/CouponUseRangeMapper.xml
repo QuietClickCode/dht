@@ -91,6 +91,18 @@
 		</set>
 		WHERE cpur_id = #{cpurId}
 	</update>
+
+	<!--修改优惠卷使用范围 -->
+	<update id="updateCouponUseRangeAllow">
+		UPDATE t_coupon_use_range
+		<set>
+			cpur_is_allow = #{allowStatus},
+		</set>
+		WHERE cpur_id in
+		<foreach collection="cpurIds" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 	<!--删除优惠卷使用范围 -->
 	<delete id="deleteCouponUseRangeByCpurId" parameterType="java.lang.Long">
 		DELETE FROM t_coupon_use_range WHERE cpur_id = #{cpurId}
@@ -104,5 +116,16 @@
 	<select id="queryCouponUseRangeByCpId" resultMap="rm_couponUseRange">
 		SELECT <include refid="couponUseRange_columns" />
 		FROM t_coupon_use_range WHERE type=#{type} and cp_id = #{cpId} and cpur_type=#{cpurType}
+	</select>
+
+	<!-- 取得优惠范围例表 -->
+	<select id="queryCouponUseRangeByGid" resultMap="rm_couponUseRange">
+		SELECT <include refid="couponUseRange_columns" />
+		FROM t_coupon_use_range WHERE type=#{type} and cp_id in
+		<foreach collection="cpIds" item="item" index="index" separator="," close=")" open="(">
+			#{item}
+		</foreach>
+		and cpur_type=2
+		and cpur_relevance_id=#{gid}
 	</select>
 </mapper>

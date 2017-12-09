@@ -38,4 +38,25 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         List<GoodsCouponShowVo> lists = goodsCouponService.queryUnBindGoodsCouponByGid(couponNm,goodsIds);
         System.out.println(JSON.toJSON(lists));
     }
+    /**
+     * 取得所有子集
+     */
+    @Test
+    public void  goodsBindCoupon()throws Exception{
+        long goodsId=51;
+        String gcpIds="9,10,11";
+        boolean flag = goodsCouponService.goodsBindCoupon(goodsId,gcpIds);
+        System.out.println(flag);
+    }
+    /**
+     * 取得所有子集
+     */
+    @Test
+    public void  goodsUnBindCoupon()throws Exception{
+        long goodsId=51;
+        String gcpIds="9,10";
+        boolean flag = goodsCouponService.goodsUnBindCoupon(goodsId,gcpIds);
+        System.out.println(flag);
+    }
+
 }
