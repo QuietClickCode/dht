@@ -164,8 +164,100 @@
 		</set>
 		WHERE gcp_id = #{gcpId} and version = #{version}
 	</update>
-	<!--删除商品优惠活动 -->
+	<!--根据商品类型和商品id取得该商品下允许的优惠 -->
 	<update id="deleteGoodsCouponByGcpId" parameterType="java.lang.Long">
 		UPDATE t_goods_coupon set is_delete =1,version = version+1  WHERE gcp_id = #{gcpId}
 	</update>
+
+	<!--分页查询 -->
+	<select id="queryAllowGoodsCouponByGid" resultMap="rm_goodsCouponShowVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT * FROM (SELECT
+			gcp_id,
+			gcp_name,
+			gcp_type,
+			gcp_is_restricted,
+			gcp_condition,
+			gcp_units,
+			gcp_is_overlap_use,
+			gcp_start_time,
+			gcp_end_time,
+			gcp_money,
+			gcp_discount,
+			gcp_create_time,
+			is_valid,
+			is_delete,
+			version,
+			GROUP_CONCAT(allow) allow
+		FROM
+			(
+				SELECT
+					*, '0' allow
+				FROM
+					t_goods_coupon c
+				WHERE
+					c.gcp_is_restricted = 0
+				AND gcp_end_time >  #{curDate}
+				AND is_valid = 0
+				AND is_delete = 0
+				UNION
+					SELECT
+						c.*, q.allow
+					FROM
+						t_goods_coupon c,
+						(
+							SELECT
+								cp_id,
+								GROUP_CONCAT(p.cpur_is_allow) allow
+							FROM
+								(
+									SELECT
+										*
+									FROM
+										t_coupon_use_range
+									WHERE
+										type = 1
+									AND cpur_type = 1
+									AND cpur_relevance_id = #{goodsType}
+									UNION
+										SELECT
+											*
+										FROM
+											t_coupon_use_range
+										WHERE
+											type = 1
+										AND cpur_type = 2
+										AND cpur_relevance_id = #{goodsId}
+								) p
+							GROUP BY
+								cp_id
+						) q
+					WHERE
+						c.gcp_is_restricted = 1
+					AND gcp_end_time > #{curDate}
+					AND is_valid = 0
+					AND is_delete = 0
+					AND c.gcp_id = q.cp_id
+			) al
+		GROUP BY
+			gcp_id) gcp where gcp.allow not like '%1%'
+	</select>
+
+
+	<!--分页查询 -->
+	<select id="queryUnBindGoodsCuoponByGid" resultMap="rm_goodsCouponShowVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsCoupon_columns" />
+		FROM t_goods_coupon WHERE
+			is_valid = 0
+			AND is_delete = 0
+			AND gcp_end_time > #{curDate}
+		<if test="null != couponNm and ''!=couponNm">
+			AND gcp_name like  concat('%', #{couponNm}, '%')
+		</if>
+		<if test="null != gcpIds and gcpIds.size>0">
+			and gcp_id not in
+			<foreach collection="gcpIds" item="item" index="index"  open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 </mapper>

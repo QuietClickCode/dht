@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -139,9 +140,11 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 * @param goodsId
 	 * @return
 	 */
-	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId)throws AppException{
-
-		return null;
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId){
+        //取得允许的商品优惠
+        Goods goods=goodsMapper.queryGoodsByGid(goodsId);
+        List<GoodsCouponShowVo> list = goodsCouponMapper.queryAllowGoodsCouponByGid(goods.getGclassification(),goodsId,new Date());
+		return list;
 	}
 	/**
 	 * 根据优惠名称取得优惠列表（排除己存在的）
@@ -149,9 +152,22 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 * @param goodsId 商品id
 	 * @return
 	 */
-	public List<GoodsCouponShowVo> queryGoodsCouponByGid(String couponNm,Long goodsId){
-		return null;
+	public List<GoodsCouponShowVo> queryUnBindGoodsCouponByGid(String couponNm,Long goodsId){
+	    List<GoodsCouponShowVo> lists = queryGoodsCouponByGid(goodsId);
+        List<Long> gcIds=new ArrayList<Long>();
+        for(GoodsCouponShowVo vo:lists){
+            gcIds.add(vo.getGcpId());
+        }
+		return goodsCouponMapper.queryUnBindGoodsCuoponByGid(couponNm,gcIds,new Date());
 	}
+
+    public boolean goodsBindCoupon(Long goodsId, String gcpIds) throws AppException {
+        return false;
+    }
+
+    public boolean goodsUnBindCoupon(Long goodsId, String gcpIds) throws AppException {
+        return false;
+    }
 }
 
 

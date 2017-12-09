@@ -73,14 +73,32 @@ public interface GoodsCouponService {
 	 * @param goodsId
 	 * @return
 	 */
-	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId)throws AppException;
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId);
 	/**
 	 * 根据优惠名称取得优惠列表（排除己存在的）
 	 * @param couponNm 优惠名称
 	 * @param goodsId 商品id
 	 * @return
 	 */
-	public List<GoodsCouponShowVo> queryGoodsCouponByGid(String couponNm,Long goodsId);
+	public List<GoodsCouponShowVo> queryUnBindGoodsCouponByGid(String couponNm,Long goodsId);
+
+	/**
+	 * 商品绑定优惠
+	 * @param goodsId 商品id
+	 * @param gcpIds 优惠ids（多个之间用逗号隔开)
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean goodsBindCoupon(Long goodsId,String gcpIds)throws AppException;
+
+	/**
+	 * 商品取消绑定优惠
+	 * @param goodsId 商品id
+	 * @param gcpIds 优惠ids（多个之间用逗号隔开)
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean goodsUnBindCoupon(Long goodsId,String gcpIds)throws AppException;
 
 }
 
