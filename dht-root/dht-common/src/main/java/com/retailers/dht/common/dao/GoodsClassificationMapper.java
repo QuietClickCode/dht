@@ -67,4 +67,5 @@ public interface GoodsClassificationMapper {
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Map map);
 
+	public List<GoodsClassification> selectAllGClassList();
 }

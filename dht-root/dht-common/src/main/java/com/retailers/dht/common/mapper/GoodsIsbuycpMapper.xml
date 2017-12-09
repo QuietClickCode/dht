@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.GoodsIsbuycpMapper">
+
+	<resultMap id="rm_goodsIsbuycp" type="com.retailers.dht.common.entity.GoodsIsbuycp">
+			<result property="ibcp" column="ibcp"/>
+			<result property="cpId" column="cp_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="goodsIsbuycp_columns">
+		ibcp,cp_id,u_id,is_delete,version
+	</sql>
+	<!-- 根据是否购买砍价商品表主键取得数据 -->
+	<select id="queryGoodsIsbuycpByIbcp" resultMap="rm_goodsIsbuycp" parameterType="java.lang.Long">
+		SELECT <include refid="goodsIsbuycp_columns" />
+		FROM t_goods_isbuycp WHERE ibcp = #{ibcp}
+	</select>
+	<!-- 是否购买砍价商品表查询条件组合 -->
+	<sql id="goodsIsbuycp_where">
+		<where>
+			<if test="null != params.ibcp">
+				AND ibcp = #{params.ibcp}
+			</if>
+			<if test="null != params.cpId">
+				AND cp_id = #{params.cpId}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryGoodsIsbuycpList" resultMap="rm_goodsIsbuycp" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="goodsIsbuycp_columns" />
+		FROM t_goods_isbuycp
+		<include refid="goodsIsbuycp_where"/>
+	</select>
+	<!--添加是否购买砍价商品表 -->
+	<insert id="saveGoodsIsbuycp" parameterType="com.retailers.dht.common.entity.GoodsIsbuycp" useGeneratedKeys="true" keyProperty="ibcp">
+		INSERT INTO t_goods_isbuycp (
+			cp_id,u_id,is_delete,version
+		) VALUES
+		(
+			#{cpId,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改是否购买砍价商品表 -->
+	<update id="updateGoodsIsbuycp" parameterType="com.retailers.dht.common.entity.GoodsIsbuycp">
+		UPDATE t_goods_isbuycp
+		<set>
+            <if test="null != cpId">
+                cp_id = #{cpId},
+            </if>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ibcp = #{ibcp} and version = #{version}
+	</update>
+	<!--删除是否购买砍价商品表 -->
+	<delete id="deleteGoodsIsbuycpByIbcp" parameterType="java.lang.Long">
+		DELETE FROM t_goods_isbuycp WHERE ibcp = #{ibcp}
+	</delete>
+</mapper>
