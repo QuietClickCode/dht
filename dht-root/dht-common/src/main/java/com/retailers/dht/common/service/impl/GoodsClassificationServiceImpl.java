@@ -273,6 +273,9 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		}
 		return list;
 	}
+	public List<GoodsClassification> selectAllGClassList(){
+		return goodsClassificationMapper.selectAllGClassList();
+	}
 
 	/**
 	 *

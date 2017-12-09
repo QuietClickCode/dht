@@ -9,6 +9,76 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/new.css">
+    <style type="text/css">
+        .main_ft{
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            overflow: hidden;
+            color: #fff;
+        }
+        .main_ft .ft_item{
+            width: 50%;
+            float: left;
+            text-align: center;
+        }
+
+        .main_ft .ft_item:first-child{
+            background-color: #000;
+        }
+
+        .main_ft #askforhelp{
+            height: 1.2rem;
+            line-height: 1.2rem;
+            font-size: 0.3rem;
+            background-color: #ed5547;
+            width: 100%;
+        }
+        .main_ft #putdown{
+            height: 1.2rem;
+            line-height: 1.2rem;
+            font-size: 0.3rem;
+            background-color: #000;
+            width: 100%;
+        }
+        .main_ft #hasBuy{
+            height: 1.2rem;
+            line-height: 1.2rem;
+            font-size: 0.3rem;
+            background-color: #000;
+            width: 100%;
+        }
+
+        .main_ft .ft_item:last-child a{
+            width: 100%;
+            display: block;
+        }
+
+        .item_box{
+            float: left;
+            width: 50%;
+        }
+
+        .item_box a{
+            line-height: 1rem;
+            height: 1.2rem;
+            display: block;
+            font-size: 0.28rem;
+        }
+
+        .item_box:last-child a{
+            line-height: 1.2rem;
+        }
+
+        .item_box:first-child a{
+            font-size: 0.25rem;
+            padding-top: 0.4rem;
+            background: url(/img/shopping.png)no-repeat center;
+            background-position:center 5px;
+            background-size: 0.6rem 0.6rem;
+
+        }
+    </style>
 </head>
 
 <body class="bge6">
@@ -98,26 +168,47 @@
             </div>
         </div>
     </div>
-    <div class="bargain-footer">
-        <!--<a onclick=""   style="display: none">立即购买</a>-->
-        <div class="special" style="display: block">
-            <div class="care" style="display: none;padding-top: 0px" id="buynow">
-                <a class="bargain-btn1">
-                    <i></i>
-                    <p style="color: white">立即购买</p>
-                </a>
+    <div class="main_ft">
+        <div class="ft_item" style="display: none">
+            <div class="item_box" id="buynow" style="display: none;">
+                <a href="">立即购买</a>
             </div>
-            <div class="care" onclick="savecutmyselflog();" style="width: 50%;display: none" id="cutmyself">
-                <a class="bargain-btn1">
-                    自砍一刀
-                </a>
+            <div class="item_box" onclick="savecutmyselflog();" id="cutmyself" style="display: none;">
+                <a >自砍一刀</a>
             </div>
         </div>
-        <!--<a onclick="savecutmyselflog();" id="cutmyself" class="bargain-btn1 " style="display: none">自砍一刀</a>-->
-        <a onclick="shareGoods();" id="askforhelp" class="bargain-btn2 " >请朋友补刀</a>
-        <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
-        <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
+        <div class="ft_item" onclick="shareGoods();" id="askforhelp">
+            <a>请朋友补刀</a>
+        </div>
+        <div class="ft_item" id="putdown" style="width: 100%;display: none">
+            <a>商品已下架</a>
+        </div>
+        <div class="ft_item" id="hasBuy" style="width: 100%;display: none">
+            <a>您已购买该商品</a>
+        </div>
     </div>
+
+
+    <!--<div class="bargain-footer">-->
+        <!--<a onclick=""   style="display: none">立即购买</a>-->
+        <!--<div class="special" style="display: block">-->
+            <!--<div class="care" style="display: none;padding-top: 0px" id="buynow">-->
+                <!--<a class="bargain-btn1">-->
+                    <!--<i></i>-->
+                    <!--<p style="color: white">立即购买</p>-->
+                <!--</a>-->
+            <!--</div>-->
+            <!--<div class="care" onclick="savecutmyselflog();" style="width: 50%;display: none" id="cutmyself">-->
+                <!--<a class="bargain-btn1">-->
+                    <!--自砍一刀-->
+                <!--</a>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<a onclick="savecutmyselflog();" id="cutmyself" class="bargain-btn1 " style="display: none">自砍一刀</a>-->
+        <!--<a onclick="shareGoods();" id="askforhelp" class="bargain-btn2 " >请朋友补刀</a>-->
+        <!--<a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>-->
+        <!--<a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>-->
+    <!--</div>-->
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
@@ -253,7 +344,7 @@
                     if(goodsConfig!=null){
                         var isPutway = goodsConfig.isPutway;
                         if(isPutway==0){
-                            $('#putdown').sibling().remove();
+                            $('#putdown').siblings().remove();
                             $('#putdown').show();
                         }
                     }else{
@@ -325,14 +416,18 @@
                                     '</li>';
                                 logul.append(html);
                             }
-
-                            if(cpLestperson<rows.length){
-                                alert(1);
+                            if(cpLestperson<=rows.length){
                                 $('#askforhelp').css('width','50%');
+                                $('#askforhelp').prev().show();
                                 $('#buynow').show();
                             }
-
+                            if(cpMostperson<=rows.length){
+                                $('#cutmyself').siblings().css('width','100%');
+                                $('#cutmyself').remove();
+                            }
                         }
+
+
                         var nowprice = gdPrice-cpindex;
                         $('.p1').html('已砍'+times+'刀，现价，<span>￥'+nowprice+'</span>');
                         $('.span1').html('￥'+gdPrice);
@@ -343,8 +438,19 @@
                             $('#cutmyself').remove();
                             // $('#askforhelp').css('width','100%');
                         }else{
+                            if(cpLestperson>rows.length){
+                                $('#cutmyself').css('width','100%');
+                            }else{
+                                $('#cutmyself').css('width','50%');
+                            }
+                            $('#askforhelp').css('width','50%');
+                            $('#cutmyself').parent().show();
                             $('#cutmyself').show();
                             // $('#askforhelp').css('width','50%');
+                        }
+                        if(cpLestperson>rows.length&&flag){
+                            $('#buynow').parent().hide();
+                            $('#askforhelp').css('width','100%');
                         }
                     }else{
 
@@ -365,7 +471,7 @@
                     if(data.status==3){
                         layer.msg('请登录');
                     }else{
-                        $('#cutmyself').hide();
+                        $('#cutmyself').parent().hide();
                         $('#askforhelp').css('width','100%');
                         layer.msg('成功自砍一刀');
                         setTimeout(function () {

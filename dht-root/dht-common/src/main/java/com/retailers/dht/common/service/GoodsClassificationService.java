@@ -75,6 +75,7 @@ public interface GoodsClassificationService {
 
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Long ggId);
 
+	public List<GoodsClassification> selectAllGClassList();
 	/**
 	 * 取得传入节点的所有父级节点（包括当前 节点）
 	 * @param curNode 当前节点

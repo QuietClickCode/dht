@@ -86,21 +86,15 @@ public class GoodsServiceImpl implements GoodsService {
 			List<Long> gclassIds = new ArrayList<Long>();
 			gclassIds.add(gclassification);
 
-			Map map1 = new HashMap();
-			map1.put("parentId",gclassification);
-			map1.put("isDelete",0L);
-			Pagination<GoodsClassification> pagination1 = goodsClassificationService.queryGoodsClassificationList(map1,1,1000);
-			if(!ObjectUtils.isEmpty(pagination1.getData())){
-				for(GoodsClassification goodsClassification:pagination1.getData()){
-					gclassIds.add(goodsClassification.getGgId());
-
-					Map map2 = new HashMap();
-					map2.put("parentId",goodsClassification.getGgId());
-					map2.put("isDelete",0L);
-					Pagination<GoodsClassification> pagination2 = goodsClassificationService.queryGoodsClassificationList(map2,1,1000);
-					if(!ObjectUtils.isEmpty(pagination2.getData())){
-						for(GoodsClassification goodsClassification2:pagination2.getData()){
-							gclassIds.add(goodsClassification2.getGgId());
+			List<GoodsClassification> list = goodsClassificationService.selectAllGClassList();
+			if(!ObjectUtils.isEmpty(list)){
+				for(GoodsClassification goodsClassification1:list){
+					if(gclassification.equals(goodsClassification1.getParentId())){
+						gclassIds.add(goodsClassification1.getGgId());
+						for(GoodsClassification goodsClassification2:list){
+							if(goodsClassification1.getGgId().equals(goodsClassification2.getParentId())){
+								gclassIds.add(goodsClassification2.getGgId());
+							}
 						}
 					}
 				}
