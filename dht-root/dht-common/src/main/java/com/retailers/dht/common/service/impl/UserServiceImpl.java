@@ -8,13 +8,20 @@ import com.retailers.aliyun.sms.constant.SmsSendRecordConstant;
 import com.retailers.aliyun.sms.dao.SmsSendRecordMapper;
 import com.retailers.aliyun.sms.entity.SmsSendRecord;
 import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.constant.UserConstant;
+import com.retailers.dht.common.dao.UserCardPackageMapper;
+import com.retailers.dht.common.dao.WxAuthUserMapper;
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.dao.UserMapper;
+import com.retailers.dht.common.entity.UserCardPackage;
+import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
@@ -38,6 +45,10 @@ public class UserServiceImpl implements UserService {
 	private AttachmentService attachmentService;
 	@Autowired
 	private SmsSendRecordMapper smsSendRecordMapper;
+	@Autowired
+	private WxAuthUserMapper wxAuthUserMapper;
+	@Autowired
+	private UserCardPackageMapper userCardPackageMapper;
 
 	public boolean saveUser(User user) {
 		int status = userMapper.saveUser(user);
@@ -216,8 +227,58 @@ public class UserServiceImpl implements UserService {
 		return attachmentService.queryAttachmentById(attachmentId);
 	}
 
-	public UserInfoVIew userLogin(String account, String pwd) throws AppException {
-		return null;
+	@Transactional(rollbackFor = Exception.class)
+	public UserInfoVIew userLogin(String account,String pwd,Boolean isBindWx,Long wxId)throws AppException{
+		User user=userMapper.queryUserByAccount(account);
+		if(ObjectUtils.isEmpty(user)){
+			throw new AppException("用户名或密码错误");
+		}
+		//输和密码进行加密
+		String inPwd="";
+		if(user.getUisOld().intValue()== SystemConstant.USER_IS_OLD_YES){
+			//判断密码是否相同
+			inPwd=Md5Encrypt.md5(pwd,SystemConstant.DEFAUT_CHARSET);
+		}else{
+			inPwd=Md5Encrypt.md5(StringUtils.concat(pwd, DateUtil.dateToString(user.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)),SystemConstant.DEFAUT_CHARSET);
+		}
+		if(!inPwd.equalsIgnoreCase(user.getUpwd())){
+			throw new AppException("用户名或密码错误");
+		}
+		if(user.getUstatus().intValue()!= UserConstant.USER_STATUS_NORMAL){
+			throw new AppException("用户登陆状态异常");
+		}
+
+		//判断是否是绑定操作
+		if(ObjectUtils.isNotEmpty(isBindWx)&&isBindWx){
+			//根据微信id 取得当前登陆微信数据
+			WxAuthUser wxAuthUser=wxAuthUserMapper.queryWxAuthUserByWauId(wxId);
+			if(ObjectUtils.isNotEmpty(wxAuthUser)&&ObjectUtils.isEmpty(wxAuthUser.getWauUid())){
+				//设备微信关联用户
+				wxAuthUser.setWauUid(user.getUid());
+				wxAuthUserMapper.updateWxAuthUser(wxAuthUser);
+			}
+		}
+		//判断是否存在卡包信息
+		UserCardPackage userCardPackage=userCardPackageMapper.queryUserCardPackageById(user.getUid());
+		if(ObjectUtils.isEmpty(userCardPackage)){
+			userCardPackage = new UserCardPackage();
+			userCardPackage.setUtotalWallet(0l);
+			userCardPackage.setUcurWallet(0l);
+			userCardPackage.setUtotalIntegral(0l);
+			userCardPackage.setUcurIntegral(0l);
+			userCardPackage.setId(user.getUid());
+			userCardPackageMapper.saveUserCardPackage(userCardPackage);
+		}
+		//判断是老用户登陆 重新设置老用户密码加密方式
+		if(user.getUoldPwd().intValue()== SystemConstant.USER_IS_OLD_YES){
+			inPwd=Md5Encrypt.md5(StringUtils.concat(pwd, DateUtil.dateToString(user.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)),SystemConstant.DEFAUT_CHARSET);
+			user.setUpwd(inPwd);
+			user.setUoldPwd(SystemConstant.USER_IS_OLD_NO);
+			userMapper.updateUser(user);
+		}
+		//根据用户取得相应的登陆信息
+		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
+		return info;
 	}
 }
 

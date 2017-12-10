@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.User;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
@@ -45,6 +46,13 @@ public interface UserMapper {
 	 * @date 2017-11-23 00:47:29
 	 */
 	public User queryUserByUid(Long uid);
+
+	/**
+	 * 登陆帐号
+	 * @param account
+	 * @return
+	 */
+	public User queryUserByAccount(String account);
 	/**
 	 * 查询平台会员列表
 	 * @param pagination 分页对象
@@ -60,5 +68,12 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User checkPhone(@Param("phone")String phone);
+
+	/**
+	 * 根据用户id 取得缓存数据
+	 * @param uId
+	 * @return
+	 */
+	public UserInfoVIew queryLoginUserInfoView(@Param("uid")Long uId);
 
 }

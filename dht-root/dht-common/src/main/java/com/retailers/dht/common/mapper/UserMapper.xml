@@ -3,25 +3,45 @@
 <mapper namespace="com.retailers.dht.common.dao.UserMapper">
 
 	<resultMap id="rm_user" type="com.retailers.dht.common.entity.User">
-			<result property="uid" column="u_id"/>
-			<result property="urecommendId" column="u_recommend_id"/>
-			<result property="uaccount" column="u_account"/>
-			<result property="uphone" column="u_phone"/>
-			<result property="uemail" column="u_email"/>
-			<result property="uname" column="u_name"/>
-			<result property="upwd" column="u_pwd"/>
-			<result property="upayPwd" column="u_pay_pwd"/>
-			<result property="uimgid" column="u_imgid"/>
-			<result property="utype" column="u_type"/>
-			<result property="ustatus" column="u_status"/>
-			<result property="isDelete" column="is_delete"/>
-			<result property="ucreateTime" column="u_create_time"/>
-			<result property="uisOld" column="u_is_old"/>
-			<result property="uoldPwd" column="u_old_pwd"/>
-			<result property="usex" column="u_sex"/>
-			<result property="version" column="version"/>
+		<result property="uid" column="u_id"/>
+		<result property="urecommendId" column="u_recommend_id"/>
+		<result property="uaccount" column="u_account"/>
+		<result property="uphone" column="u_phone"/>
+		<result property="uemail" column="u_email"/>
+		<result property="uname" column="u_name"/>
+		<result property="upwd" column="u_pwd"/>
+		<result property="upayPwd" column="u_pay_pwd"/>
+		<result property="uimgid" column="u_imgid"/>
+		<result property="utype" column="u_type"/>
+		<result property="ustatus" column="u_status"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="ucreateTime" column="u_create_time"/>
+		<result property="uisOld" column="u_is_old"/>
+		<result property="uoldPwd" column="u_old_pwd"/>
+		<result property="usex" column="u_sex"/>
+		<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_user_info_view" type="com.retailers.dht.common.view.UserInfoVIew">
+		<result property="uid" column="u_id"/>
+		<result property="urecommendId" column="u_recommend_id"/>
+		<result property="uaccount" column="u_account"/>
+		<result property="uphone" column="u_phone"/>
+		<result property="uemail" column="u_email"/>
+		<result property="uname" column="u_name"/>
+		<result property="uimgid" column="u_imgid"/>
+		<result property="headUrl" column="headUrl"/>
+		<result property="utype" column="u_type"/>
+		<result property="ustatus" column="u_status"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="ucreateTime" column="u_create_time"/>
+		<result property="uisOld" column="u_is_old"/>
+		<result property="usex" column="u_sex"/>
+		<result property="utotalWallet" column="u_total_wallet"/>
+		<result property="ucurWallet" column="u_cur_wallet"/>
+		<result property="utotalIntegral" column="u_total_integral"/>
+		<result property="ucurIntegral" column="u_cur_integral"/>
+		<result property="wauOpenid" column="wau_openid"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="user_columns">
 		u_id,u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
@@ -30,6 +50,11 @@
 	<select id="queryUserByUid" resultMap="rm_user" parameterType="java.lang.Long">
 		SELECT <include refid="user_columns" />
 		FROM t_user WHERE u_id = #{uid}
+	</select>
+	<!-- 登陆帐号 -->
+	<select id="queryUserByAccount" resultMap="rm_user">
+		SELECT <include refid="user_columns" />
+		FROM t_user WHERE (u_account = #{account} or u_phone=#{account} or u_email=#{account}) limit 1
 	</select>
 	<!-- 平台会员查询条件组合 -->
 	<sql id="user_where">
@@ -168,5 +193,42 @@
 	<select id="checkPhone" resultMap="rm_user" parameterType="java.lang.String">
 		SELECT <include refid="user_columns" />
 		FROM t_user WHERE u_phone = #{phone}
+	</select>
+
+	<!-- 校验手机号是否存在-->
+	<select id="queryLoginUserInfoView" resultMap="rm_user_info_view">
+		SELECT
+			u.u_id,
+			u.u_recommend_id,
+			u.u_account,
+			u.u_phone,
+			u.u_email,
+			u.u_name,
+			u.u_imgid,
+			ifnull(
+				a.show_url,
+				wu.wau_headimgurl
+			) headUrl,
+			u.u_type,
+			u.u_status,
+			u.is_delete,
+			u.u_create_time,
+			u.u_is_old,
+			u.u_old_pwd,
+			u.u_sex,
+			uc.u_total_integral,
+			uc.u_total_wallet,
+			uc.u_cur_wallet,
+			uc.u_cur_integral,
+			wu.wau_openid
+		FROM
+			t_user_card_package uc,
+			t_user u
+		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id
+		AND wu.wau_wx_id = 1
+		LEFT JOIN t_attachment a ON a.id = u.u_imgid
+		WHERE
+			uc.id = u.u_id
+		AND u.u_id = #{uid}
 	</select>
 </mapper>

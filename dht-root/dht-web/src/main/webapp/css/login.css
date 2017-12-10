@@ -1,0 +1,181 @@
+.login{
+    width: 100%;
+    text-align: center;
+    font-size: 0.35rem;
+}
+
+.login span{
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.user_login{
+    margin-right: 0.3rem;
+}
+
+.active{
+    color: #ff2D2D;
+    border-bottom: 2px solid #ff2D2D;
+}
+
+.user_register{
+    margin-left: 0.3rem;
+}
+
+.form{
+    margin-top: 0.5rem;
+}
+
+.input-wrp{
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+    width: 90%;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    margin-left: 5%;
+    margin-top: 0.4rem;
+}
+
+.input-wrp input{
+    margin-left: 0.3rem;
+    padding-left: 0.6rem;
+    height: 0.5rem;
+    line-height: 0.5rem;
+    font-size: 0.28rem;
+    letter-spacing: 1px;
+}
+
+.username input{
+    background:url(img/user-icon.png)no-repeat left;
+    background-size: 0.4rem 0.4rem;
+}
+
+.password input{
+    background:url(img/password-icon.png)no-repeat left;
+    background-position:0 1px;
+    background-size: 0.4rem 0.4rem;
+}
+
+.code input{
+    background:url(img/code-icon.png)no-repeat left;
+    vertical-align: bottom;
+    display: inline-block;
+    background-size: 0.4rem 0.4rem;
+}
+
+.code img{
+    width: 1.6rem;
+    height: 0.6rem;
+    display: inline-block;
+    vertical-align: bottom;
+    margin-left: 0.3rem;
+}
+
+.sub_box{
+    margin-top: 1rem;
+    width: 80%;
+    margin-left: 10%;
+}
+.change_password{
+    font-size: 0.28rem;
+    float: right;
+    display: block;
+}
+
+.sub{
+    width: 100%;
+    text-align: center;
+    display: block;
+    float: left;
+    padding-top: 0.35rem;
+    padding-bottom: 0.35rem;
+    background-color: #ff5151;
+    margin-top: 0.2rem;
+    font-size: 0.31rem;
+    letter-spacing: 2px;
+}
+
+.login_box{
+    
+}
+
+.input-wrp .phone_number{
+    padding-left: 0px;
+}
+
+.input-wrp .verify_code{
+    padding-left: 0px;
+}
+
+.get_verify_code{
+    float: right;
+    height: 0.7rem;
+    display: block;
+    background-color: #D0D0D0;
+    line-height:0.7rem;
+    width: 2rem;
+    text-align: center;
+    font-size: 0.25rem;
+    color: #4f4f4f;
+}
+
+.register_box{
+    display: none;
+    overflow: hidden;
+}
+
+
+/*弹窗样式*/
+.ui_draggable{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.75);
+    z-index: 9998;
+}
+
+.popover{
+    z-index: 9999;
+    position: fixed;
+    margin-left: 15%;
+    width: 70%;
+
+}
+
+.dialog{
+    background-color: #fff;
+    text-align: center;
+    display: block;
+    border-radius: 0.15rem;
+}
+
+.dialog_hd{
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    font-size: 0.33rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.dialog_ft{
+    overflow: hidden;
+}
+
+.dialog_ft .dialog_ft_box{
+    float: left;
+    width: 50%;
+    padding-top: 0.29rem;
+    padding-bottom: 0.29rem;
+    font-size: 0.3rem;
+    font-weight: 600;
+    color: #272727;
+}
+
+.dialog_ft .dialog_ft_box:last-child{
+    border-left: 1px solid rgba(0,0,0,0.1);
+    color: #ff5151;
+}
