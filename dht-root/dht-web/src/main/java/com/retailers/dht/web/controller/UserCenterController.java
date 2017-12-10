@@ -68,7 +68,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userMember")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirect = "/loginPage",isOpenPage = true)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirect = "/loginPage")
     public String openUserMember(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-member");
     }
