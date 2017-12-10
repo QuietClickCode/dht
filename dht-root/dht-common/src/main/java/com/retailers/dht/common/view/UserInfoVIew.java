@@ -25,12 +25,12 @@ public class UserInfoVIew {
     private String uemail;
     /**会员姓名*/
     private String uname;
-    /**登录密码*/
-    private String upwd;
-    /**支付密码*/
-    private String upayPwd;
     /**用户头像Id*/
     private Integer uimgid;
+    /**
+     * 用户头像
+     */
+    private String headUrl;
     /**用户类型*/
     private Integer utype;
     /**用户状态（0 正常，1 禁用）*/
@@ -41,8 +41,6 @@ public class UserInfoVIew {
     private Date ucreateTime;
     /**是否是老板用户（0 新平台用户，1 老平台用户）*/
     private Integer uisOld;
-    /**是否是新加密规则（0 是，1 否 )老平台用户迁移用户*/
-    private Integer uoldPwd;
     /**姓别（0 男，1 女）*/
     private Integer usex;
     /**充值总金额*/
@@ -106,28 +104,20 @@ public class UserInfoVIew {
         this.uname = uname;
     }
 
-    public String getUpwd() {
-        return upwd;
-    }
-
-    public void setUpwd(String upwd) {
-        this.upwd = upwd;
-    }
-
-    public String getUpayPwd() {
-        return upayPwd;
-    }
-
-    public void setUpayPwd(String upayPwd) {
-        this.upayPwd = upayPwd;
-    }
-
     public Integer getUimgid() {
         return uimgid;
     }
 
     public void setUimgid(Integer uimgid) {
         this.uimgid = uimgid;
+    }
+
+    public String getHeadUrl() {
+        return headUrl;
+    }
+
+    public void setHeadUrl(String headUrl) {
+        this.headUrl = headUrl;
     }
 
     public Integer getUtype() {
@@ -170,14 +160,6 @@ public class UserInfoVIew {
         this.uisOld = uisOld;
     }
 
-    public Integer getUoldPwd() {
-        return uoldPwd;
-    }
-
-    public void setUoldPwd(Integer uoldPwd) {
-        this.uoldPwd = uoldPwd;
-    }
-
     public Integer getUsex() {
         return usex;
     }
@@ -194,8 +176,8 @@ public class UserInfoVIew {
         this.utotalWallet = utotalWallet;
     }
 
-    public String getUcurWallet() {
-        return NumberUtils.formaterNumberPower(ucurWallet);
+    public Long getUcurWallet() {
+        return ucurWallet;
     }
 
     public void setUcurWallet(Long ucurWallet) {

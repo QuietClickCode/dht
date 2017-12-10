@@ -52,10 +52,10 @@
 	<!--添加用户钱包，积分 -->
 	<insert id="saveUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_user_card_package (
-			u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
+			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
 		) VALUES
 		(
-			#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},0
+			#{id,jdbcType=BIGINT},#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改用户钱包，积分 -->

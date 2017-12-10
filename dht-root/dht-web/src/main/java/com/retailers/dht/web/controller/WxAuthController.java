@@ -107,12 +107,21 @@ public class WxAuthController {
         Map<String,Object> parms = WebUtils.getParametersStartingWith(request,"");
         logger.info("取得访问参数：{}", JSON.toJSON(parms));
         WxAuthUser wxAuthUser=wxAuthUserService.queryWxAuthUser(code);
+        ModelAndView modelAndView=new ModelAndView();
         if(ObjectUtils.isNotEmpty(wxAuthUser)){
-            UserInfoVIew userInfoVIew=new UserInfoVIew();
-            userInfoVIew.setWauOpenid(wxAuthUser.getWauOpenid());
+            //判断该微信用户是否绑定用户
+            if(ObjectUtils.isEmpty(wxAuthUser.getWauUid())){
+                request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.CUR_LOGIN_WXUSER_INFO,wxAuthUser);
+                modelAndView.addObject("wx","isBindWx");
+                modelAndView.addObject("redirectUrl",redUrl);
+                redUrl="/loginPage";
+            }else{
+                UserInfoVIew userInfoVIew=new UserInfoVIew();
+                userInfoVIew.setWauOpenid(wxAuthUser.getWauOpenid());
+                request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
+            }
         }
-        request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
-        ModelAndView modelAndView=new ModelAndView("redirect:"+redUrl);
+        modelAndView.setViewName("redirect:"+redUrl);
         return modelAndView;
     }
 }

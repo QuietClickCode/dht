@@ -130,6 +130,7 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 				wxAuthUser=new WxAuthUser();
 				isAdd=true;
 				wxAuthUser.setWauCreateDate(new Date());
+				wxAuthUser.setWauWxId(1l);
 			}
 			wxAuthUser.setWauOpenid(userInfo.get("openid").toString().replaceAll("\"", ""));
 			wxAuthUser.setWauNickname(userInfo.get("nickname").toString().replaceAll("\"", ""));
