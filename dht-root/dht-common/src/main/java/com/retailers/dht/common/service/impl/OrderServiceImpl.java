@@ -211,6 +211,7 @@ public class OrderServiceImpl implements OrderService {
 			Order order=new Order();
 			order.setOrderType(oe.getKey());
 			order.setOrderNo(orderNo);
+			order.setOrderStatus(OrderConstant.ORDER_STATUS_CREATE);
 			//出售用户
 			order.setOrderSellUid(com.retailers.dht.common.constant.SystemConstant.GOODS_SHOP_USER);
 			//购买者
