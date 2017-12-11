@@ -39,7 +39,7 @@
                 <i class="icon-special2"></i>
                 <p>今日特价</p>
             </a>
-            <a href="#hykj" onclick="loadcpgoods();">
+            <a href="#hykj" onclick="loadcpgoods();" id="kja">
                 <i class="icon-special3"></i>
                 <p>好友砍价</p>
             </a>
@@ -249,8 +249,10 @@
 
         if(type==0){
             document.getElementById('sepciala').click();
-        }else{
+        }else if(type=1){
             document.getElementById('seckilla').click();
+        }else{
+            document.getElementById('kja').click();
         }
 
         <!--滑动分页-->

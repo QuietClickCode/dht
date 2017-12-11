@@ -3165,27 +3165,27 @@
         $('#deleteggcouponrelbtn').show();
         $.ajax({
             type:"post",
-            url:"/goods/queryGoodsGgcouponrelLists",
+            url:"/goodsCoupon/queryGoodsCouponByGid",
             dataType: "json",
-            data:{gid:gid,pageNo:1,pageSize:100},
+            data:{goodsId:gid},
             success:function(data){
-                var rows = data.rows;
+                var rows = data.data;
                 var html = '';
                 if(rows!=null && rows.length>0){
                     for(var i=0; i<rows.length; i++){
                         html   +=  '<tr>'+
                             '<td>'+
                             '<div class="checkbox checkbox-info">'+
-                            '<input id="checkbox'+i+'" name="ggccheckbox" class="styled" type="checkbox" value="'+rows[i].ggcId+'">'+
+                            '<input id="checkbox'+i+'" name="ggccheckbox" class="styled" type="checkbox" value="'+rows[i].gcpId+'">'+
                             '<label for="checkbox'+i+'">'+
                             '</label>'+
                             '</div>'+
                             '</td>'+
                             '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                            '<span style="line-height: 100%">'+rows[i].gcname+'</span>'+
+                            '<span style="line-height: 100%">'+rows[i].gcpName+'</span>'+
                             '</td>'+
                             '</tr>';
-                        initgcdataArr.push(rows[i].gcId);
+                        initgcdataArr.push(rows[i].gcpId);
                     }
                 }else{
                     html += '<tr>'+
@@ -3213,40 +3213,28 @@
         $('#deleteggcouponrelbtn').hide();
         $.ajax({
             type: "post",
-            url: "/goodsCoupon/queryGoodsCoupons",
+            url: "/goodsCoupon/queryUnBindGoodsCouponByGid",
             dataType: "json",
-            data: {gcpName: gcName,now:new Date().format("yyyy-MM-dd hh:mm:ss"),pageNo: 1, pageSize: 100},
+            data: {couponNm: gcName,goodsId: gid},
             success: function (data) {
-                var rows = data.rows;
+                var rows = data.data;
                 var html = '';
-                if(rows!=null){
-                    for(var i=0; i<rows.length; i++){
-                        var flag = 0;
-                        if (initgcdataArr.length>0){
-                            for (var j=0; j<initgcdataArr.length; j++){
-                                if (rows[i].gcpId==initgcdataArr[j]){
-                                    flag = 1;
-                                }
-                            }
-                        }
-
-                        if(flag == 0){
-                            html += '<tr>'+
-                                '<td>'+
-                                '<div class="checkbox checkbox-info">'+
-                                '<input name="ggccheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gcpId+'">'+
-                                '<label for="checkbox'+i+'">'+
-                                '</label>'+
-                                '</div>'+
-                                '</td>'+
-                                '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
-                                '<span style="line-height: 100%">'+rows[i].gcpName+'</span>'+
-                                '</td>'+
-                                '</tr>';
-                        }
-
+                if(rows!=null&&rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        html += '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input name="ggccheckbox" id="checkbox'+i+'" class="styled" type="checkbox" value="'+rows[i].gcpId+'">'+
+                            '<label for="checkbox'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%">'+rows[i].gcpName+'</span>'+
+                            '</td>'+
+                            '</tr>';
                     }
-                }
+                    }
 
                 if(html == ''){
                     html += '<tr>'+
@@ -3276,11 +3264,12 @@
                     addggc += ","+checkboxs[i].value;
                 }
             }
+            addggc = addggc.substr(1);
             $.ajax({
                 type: "post",
-                url: "/goods/addGoodsGgcouponrel",
+                url: "/goodsCoupon/goodsBindCoupon",
                 dataType: "json",
-                data: {gcIds: addggc,gid:gid},
+                data: {gcpIds: addggc,goodsId:gid},
                 success: function (data) {
                     toastr.success('新增成功!');
                     refreshmygcTbody();
@@ -3295,20 +3284,21 @@
     }
 
     function deleteggcrel() {
+        var gid = $('#gid').val();
         var checkboxs = $('input:checkbox[name="ggccheckbox"]:checked');
         if(checkboxs.length > 0){
             var ggcIds = "";
             for(var i=0; i<checkboxs.length; i++){
                 if(checkboxs[i].checked){
-                    ggcIds += checkboxs[i].value + ",";
+                    ggcIds += ","+checkboxs[i].value;
                 }
             }
-
+            ggcIds=ggcIds.substr(1);
             $.ajax({
                 type: "post",
-                url: "/goods/removeGoodsGgcouponrel",
+                url: "/goodsCoupon/goodsUnBindCoupon",
                 dataType: "json",
-                data: {ggcIds: ggcIds},
+                data: {gcpIds: ggcIds,goodsId:gid},
                 success: function (data) {
                     toastr.success('删除成功!');
                     refreshmygcTbody();

@@ -42,22 +42,18 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip"></span><span id="gname"></span></p>
+		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip">预订服务</span><span id="gname"></span></p>
 		    <p class="p2"><span id="gdprice" style="font-size: .3rem"></span><s><span class="mr_4" id="gprice"></span></s></p>
 		</div>
-		<div class="norms" id="open_dis" style="margin-bottom: 0;">
+		<div class="norms" id="" style="margin-bottom: 0;">
             <span class="name">优惠</span>
             <span class="checkbox"></span>
         </div>
-        <ul class="norms_son">
-        	<li>
-        		<span class="span1">促销</span>
-        		<span class="span2">满200减90</span>
-        	</li>
-        	<li>
-        		<span class="span1">赠品</span>
-        		<span class="span2">买就送</span>
-        	</li>
+        <ul class="norms_son" id="counponul">
+        	<!--<li>-->
+        		<!--<span class="span1">促销</span>-->
+        		<!--<span class="span2">满200减90</span>-->
+        	<!--</li>-->
         </ul>
         <ul class="norms_son2" id="personaddressul" style="display: none">
         	<li>
@@ -217,7 +213,7 @@
             </div>
         </div>
         <a href="" class="bargain-btn2">立即购买</a>
-        <a  class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
+        <a  class="bargain-btn1" style="width: 100%;display: none">商品已下架</a>
     </div>
     
     <div class="mark" id="J_mark" style="display:none;">
@@ -259,9 +255,9 @@
 	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
+	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
 	                <span class="num J_careNum" id="goodsnumber">1</span>
-	                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
+	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
 	            </div>
 	        </div>
 	        
@@ -475,7 +471,7 @@
         }
 
 
-        var startbuy = 1;
+        var startbuy = -1;
         var goodsisMultiplebuy = 0;
         <!--加载商品配置-->
         function loadgoodsconfig() {
@@ -572,7 +568,7 @@
 
         <!--商品不存在 跳转页面-->
         function nogoods() {
-//            window.location.href='/home/lostHtml';
+            window.location.href='/home/lostHtml';
         }
 
         var flag = true;
@@ -686,7 +682,7 @@
 
 
         var ginventory=0;
-        var spBounds = 0;
+        var spBounds = -1;
         var canbuy = 0;
         <!--样式规格值改变-->
         function clickactive(obj) {
@@ -743,6 +739,24 @@
                             $(inventoryspan).html('库存'+inventory+gunitname);
                             ginventory = inventory;
                             $('#goodscountdiv').show();
+
+                            var nownumber = parseInt($('#goodsnumber').html());
+                            if(nownumber<=0){
+                                nownumber=1;
+                                $('#goodsnumber').html(nownumber);
+                            }
+                            if(startbuy!=-1&&nownumber<startbuy){
+                                nownumber=startbuy;
+                                $('#goodsnumber').html(startbuy);
+                            }
+                            if(nownumber>ginventory){
+                                nownumber = ginventory;
+                                $('#goodsnumber').html(ginventory);
+                            }
+                            if(nownumber>spBounds&&spBounds!=-1){
+                                nownumber = spBounds;
+                                $('#goodsnumber').html(spBounds);
+                            }
                         }
                     }
                 });
@@ -817,46 +831,54 @@
         <!--判断库存-->
         function pdmaxinventory(ysf) {
             var goodsnumber = parseInt($('#goodsnumber').html());
-            if(ysf=='+'){
-                goodsnumber++;
-                pdindex++;
-            }else{
-                goodsnumber--;
-                pdindex--;
-                if(pdindex<=0){
-                    pdindex = 1;
-                }
-            }
-            if(goodsnumber>spBounds&&spBounds!=0){
-                layer.msg("最大购买"+spBounds);
-                $('#goodsnumber').html(spBounds-1);
-                pdindex--;
-                return;
-            }
-            if(goodsnumber>ginventory&&ginventory!=0){
-                layer.msg("必须小于库存量"+ginventory);
-                $('#goodsnumber').html(ginventory-1);
-                pdindex--;
-                return;
-            }
 
             if(goodsisMultiplebuy==1){
                 if(ysf=='+'){
-                    if(pdindex*startbuy>spBounds){
+                    pdindex++;
+                    if(pdindex*startbuy>spBounds&&spBounds!=-1){
+                        layer.msg('最多购买数'+spBounds);
                         $('#goodsnumber').html(spBounds-1);
+                        pdindex--;
                     }else{
                         $('#goodsnumber').html(pdindex*startbuy-1);
                     }
                 }else{
-                    if(pdindex==1){
-                        $('#goodsnumber').html(startbuy+1);
+                    pdindex--;
+                    if(pdindex==0){
+                        pdindex=1;
+                        if(startbuy<spBounds&&spBounds!=-1){
+                            $('#goodsnumber').html(startbuy+1);
+                            layer.msg('最少购买数'+startbuy);
+                        }else{
+                            $('#goodsnumber').html(spBounds);
+                            layer.msg('必须小于库存'+spBounds);
+                        }
+
                     }else{
-                        $('#goodsnumber').html(goodsnumber - startbuy+2);
+                        $('#goodsnumber').html(goodsnumber - startbuy+1);
                     }
 
                 }
-
+            }else{
+                if(ysf=='+'){
+                    goodsnumber++;
+                }else{
+                    goodsnumber--;
+                }
+                if(goodsnumber>spBounds&&spBounds!=-1){
+                    layer.msg("最大购买"+spBounds);
+                    $('#goodsnumber').html(spBounds-1);
+                    return;
+                }
+                if(goodsnumber>ginventory&&ginventory!=0){
+                    layer.msg("必须小于库存量"+ginventory);
+                    $('#goodsnumber').html(ginventory-1);
+                    return;
+                }
             }
+
+
+
 
         }
 
@@ -1078,6 +1100,34 @@
             });
         }
 
+        <!--加载优惠-->
+        function loadcoupon() {
+            $.ajax({
+                type:"post",
+                url:'/goodsCoupon/queryGoodsCouponByGid',
+                dataType: "json",
+                async :false,
+                data:{goodsId:gid},
+                success:function(data){
+                    var rows = data.data;
+                    $('#counponul').html('');
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                           html = '<li>'+
+                               '<span class="span1">优惠'+(i+1)+'</span>'+
+                                '<span class="span2">'+rows[i].gcpName+'</span>'+
+                                '</li>';
+                           $('#counponul').append(html);
+                        }
+                    }else{
+                        $('#counponul').hide();
+                        $('#counponul').prev().hide();
+                    }
+                }
+            });
+        }
+
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {
@@ -1119,6 +1169,9 @@
     <script>
         <!--加载图片-->
         loadgoodsimage();
+
+        <!--加载商品优惠-->
+        loadcoupon();
 
         <!--加载配置信息-->
         loadgoodsconfig();

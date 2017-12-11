@@ -32,7 +32,7 @@
             line-height: 1.2rem;
             font-size: 0.3rem;
             background-color: #ed5547;
-            width: 100%;
+            width: 50%;
         }
         .main_ft #putdown{
             height: 1.2rem;
@@ -40,6 +40,13 @@
             font-size: 0.3rem;
             background-color: #000;
             width: 100%;
+        }
+        .main_ft #hadhelp{
+            height: 1.2rem;
+            line-height: 1.2rem;
+            font-size: 0.3rem;
+            background-color: #000;
+            width: 50%;
         }
         .main_ft #hasBuy{
             height: 1.2rem;
@@ -82,9 +89,7 @@
 </head>
 
 <body class="bge6">
-<div class="guide-share" style="display: none;position: fixed">
-    <button class="i-know" onclick="ikonw();"></button>
-</div>
+
     <div class="specialty-title2 borderB">
         <a onclick="returnhistory();" class="icon-return"></a>
         <span>邀请砍价</span>
@@ -169,22 +174,19 @@
         </div>
     </div>
     <div class="main_ft">
-        <div class="ft_item" style="display: none">
-            <div class="item_box" id="buynow" style="display: none;">
-                <a href="">立即购买</a>
-            </div>
-            <div class="item_box" onclick="savecutmyselflog();" id="cutmyself" style="display: none;">
-                <a >自砍一刀</a>
+        <div class="ft_item" style="">
+            <div class="item_box" id="cutmyself" style="width: 100%;">
+                <a href="/bargainp/">自砍一刀</a>
             </div>
         </div>
-        <div class="ft_item" onclick="shareGoods();" id="askforhelp">
-            <a>请朋友补刀</a>
+        <div class="ft_item" onclick="helpFriend();"id="askforhelp">
+            <a>帮朋友补刀</a>
+        </div>
+        <div class="ft_item" id="hadhelp" style="display: none;">
+            <a>已帮朋友补刀</a>
         </div>
         <div class="ft_item" id="putdown" style="width: 100%;display: none">
             <a>商品已下架</a>
-        </div>
-        <div class="ft_item" id="hasBuy" style="width: 100%;display: none">
-            <a>您已购买该商品</a>
         </div>
     </div>
 
@@ -195,7 +197,6 @@
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/tabs.js"></script>
     <script src="/js/layer/layer.js"></script>
-    <script type="text/javascript" src="/js/jweixin-1.2.0.js"></script>
     <!--时间减少-->
     <script>
         var timestape = 0;
@@ -241,6 +242,7 @@
         var path = window.location.pathname;
         var pathArr = path.substring(11,path.indexOf('.html')).split('~');
         var gid = parseInt(pathArr[0]);
+        $('#cutmyself').html('<a href="/bargainp/'+gid+'.html">自砍一刀</a>');
         <!--初始化banner-->
         function initbanner() {
             TouchSlide({
@@ -252,16 +254,6 @@
                 autoPage: true, //自动分页
                 switchLoad: "_src" //切换加载，真实图片路径为"_src"
             });
-        }
-
-        <!--获取纯文本内容-->
-        function removeHTMLTag(str) {
-            str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
-            str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
-            //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
-            str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
-            str=str.replace(/\s/g,''); //将空格去掉
-            return str;
         }
 
         <!--加载商品图片-->
@@ -299,8 +291,6 @@
                 success:function(data){
                     if(data.rows!=null){
                         cpId=data.rows[0].cpId;
-                        <!--查询用户是否购买此商品-->
-                        queryuserisbuygoods();
                         timestape = data.rows[0].timestap*1000;
                         timegoing();
                         var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
@@ -356,14 +346,19 @@
             });
         }
 
+        var uid;
         <!--加载砍价日志-->
         function loadcutpricrlog() {
             $.ajax({
                 type:"post",
-                url:'/openCutPriceLog/queryCutPriceLog',
+                url:'/openCutPriceLog/queryOtherCutPriceLog',
                 dataType: "json",
                 data:{gid:gid},
                 success:function(data){
+                    if(data==null){
+                        layer.msg('您没有邀请者');
+                        return;
+                    }
                     var rows = data.rows;
                     if(rows!=null){
                         var times = 0;
@@ -391,20 +386,15 @@
                                     flag=true;
                                 }else{
                                     howcp='帮砍';
+                                    if(uid==usdId){
+                                        $('#hadhelp').prev().remove();
+                                        $('#hadhelp').show();
+                                    }
                                 }
                                 html += '<span class="info">'+howcp+'</span>' +
                                     '<span class="money">-￥'+cplCutdownprice+'</span>' +
                                     '</li>';
                                 logul.append(html);
-                            }
-                            if(cpLestperson<=rows.length){
-                                $('#askforhelp').css('width','50%');
-                                $('#askforhelp').prev().show();
-                                $('#buynow').show();
-                            }
-                            if(cpMostperson<=rows.length){
-                                $('#cutmyself').siblings().css('width','100%');
-                                $('#cutmyself').remove();
                             }
                         }
 
@@ -414,81 +404,50 @@
                         $('.span1').html('￥'+gdPrice);
                         $('.span2').html('￥'+cpPrice);
                         $('.progress_bar_son').css('width',times/cpMostperson*100+'%');
-                        if(flag){
-                            $('#cutmyself').siblings().css('width','100%');
-                            $('#cutmyself').remove();
-                            // $('#askforhelp').css('width','100%');
-                        }else{
-                            if(cpLestperson>rows.length){
-                                $('#cutmyself').css('width','100%');
-                            }else{
-                                $('#cutmyself').css('width','50%');
-                            }
-                            $('#askforhelp').css('width','50%');
-                            $('#cutmyself').parent().show();
-                            $('#cutmyself').show();
-                            // $('#askforhelp').css('width','50%');
-                        }
-                        if(cpLestperson>rows.length&&flag){
-                            $('#buynow').parent().hide();
-                            $('#askforhelp').css('width','100%');
-                        }
                     }else{
 
-                    }
-                }
-            });
-        }
-
-        <!--自砍一刀-->
-        function savecutmyselflog() {
-            $.ajax({
-                type:"post",
-                url:'/openCutPriceLog/saveCutPriceLog',
-                dataType: "json",
-                async :false,
-                data:{gid:gid},
-                success:function(data){
-                    if(data.status==3){
-                        layer.msg('请登录');
-                    }else{
-                        $('#cutmyself').parent().hide();
-                        $('#askforhelp').css('width','100%');
-                        layer.msg('成功自砍一刀');
-                        setTimeout(function () {
-                            window.location.reload();
-                        },1000);
-                    }
-                }
-            });
-        }
-
-        <!--查询用户是否购买此商品-->
-        function queryuserisbuygoods() {
-            $.ajax({
-                type:"post",
-                url:"/goodsIsbuycp/querygoodsIsbuycp",
-                dataType: "json",
-                data:{cpId:cpId},
-                success:function(data){
-                    var row = data.row;
-                    if(row!=null){
-                        $('#hasBuy').siblings().remove();
-                        $('#hasBuy').show();
                     }
                 }
             });
         }
 
         <!--调用分享函数-->
-        function shareGoods() {
-            $('.bge6').css('overflow', 'hidden');
-            $('.guide-share').fadeIn('slow');
+        function helpFriend() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPriceLog/saveOtherCutPriceLog',
+                dataType: "json",
+                async :false,
+                data:{gid:gid},
+                success:function(data){
+                    if(data.status==3){
+                        layer.msg('请登录');
+                    }else if(data.status==0){
+                        $('#hadhelp').show();
+                        $('#askforhelp').hide();
+                        layer.msg('成功补刀');
+                        alert(data.status);
+                        setTimeout(function () {
+                            window.location.reload();
+                        },1000);
+                    }else{
+                        layer.msg(data.msg);
+                    }
+                }
+            });
         }
-        <!--点击知道了-->
-        function ikonw() {
-            $('.bge6').css('overflow', 'auto');
-            $('.guide-share').fadeOut('slow');
+
+        function getuid() {
+            $.ajax({
+                type:"post",
+                url:'/user/queryLoginUserId',
+                dataType: "json",
+                async:false,
+                data:{},
+                success:function(data){
+                    uid = data.uId;
+                }
+            });
         }
 
         <!--商品不存在 跳转页面-->
@@ -501,13 +460,14 @@
             if(document.referrer===''){
                 window.location.href='/';
             }else{
-                window.history.go(-2);
+                window.history.go(-1);
             }
         }
     </script>
 
     <!--调用函数-->
     <script>
+        getuid();
         <!--加载商品图片-->
         loadgoodsimage();
 
@@ -521,144 +481,7 @@
 
         <!--加载砍价日志-->
         loadcutpricrlog();
-    </script>
-    <script>
-        var homePath;
-        <!--初始化分享-->
-        function initShare() {
-            $.ajax({
-                type:"post",
-                url:'/wxShare/createWxShare',
-                dataType: "json",
-                async :false,
-                data:{path:path},
-                success:function(data){
-                    if(data!=null){
-                        homePath = data.homePath;
-                        alert(homePath);
-                        var appId = data.appid;
-                        var timestamp = data.timestamp;
-                        var nonceStr = data.nonceStr;
-                        var signature = data.signature;
-                        wx.config({
 
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-
-                            appId: appId, // 必填，公众号的唯一标识
-
-                            timestamp: timestamp, // 必填，生成签名的时间戳
-
-                            nonceStr: nonceStr, // 必填，生成签名的随机串
-
-                            signature: signature,// 必填，签名，见附录1
-
-                            jsApiList: ['onMenuShareTimeline',
-                                'onMenuShareAppMessage',
-                                'onMenuShareQQ',
-                                'onMenuShareWeibo',
-                                'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-
-                        });
-
-                    }
-
-                }
-            });
-        }
-
-        <!--调用初始化分享-->
-        initShare();
-
-        wx.ready(function(){
-            var imgUrl = $('#goodsImagesul').find('img')[0].src;
-            alert(imgUrl);
-            var title = $('#goodsNameDiv').html();
-            var link = homePath;
-            var desc = removeHTMLTag($('#gdescription').html());
-            //share to timeline
-            // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
-            wx.onMenuShareTimeline({
-                title: title, // 分享标题
-                desc: desc, // 分享描述
-                link:link,
-                imgUrl: imgUrl, // 分享图标
-                success: function (res) {
-                    //alert('朋友圈');
-
-                    saveShareRecord('朋友圈',title);
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-            // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
-            wx.onMenuShareAppMessage({
-                title: title, // 分享标题
-                desc: desc, // 分享描述
-                link:link,
-                imgUrl: imgUrl, // 分享图标
-                success: function (res) {
-                    //alert('好友');
-                    alert(title);
-                    saveShareRecord('好友',title);
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-            // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
-            wx.onMenuShareQQ({
-                title: title, // 分享标题
-                desc: desc, // 分享描述
-                link:link,
-                imgUrl: imgUrl, // 分享图标
-                success: function (res) {
-                    saveShareRecord('QQ',title);
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-            // 获取“分享到微博”按钮点击状态及自定义分享内容接口
-            wx.onMenuShareWeibo({
-                title: title, // 分享标题
-                desc: desc, // 分享描述
-                link:link,
-                imgUrl: imgUrl, // 分享图标
-                success: function (res) {
-                    saveShareRecord('微博',title);
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-            // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
-            wx.onMenuShareQZone({
-                title: title, // 分享标题
-                desc: desc, // 分享描述
-                link:link,
-                imgUrl: imgUrl, // 分享图标
-                success: function (res) {
-                    saveShareRecord('QQ空间',title);
-                },
-                cancel: function () {
-                    // 用户取消分享后执行的回调函数
-                }
-            });
-        });
-
-        <!--记录分享-->
-        function saveShareRecord(usWhere,usWhat) {
-            $.ajax({
-                type:"post",
-                url:'/userShare/saveUserShare',
-                dataType: "json",
-                async :false,
-                data:{usWhere:usWhere,usWhat:usWhat},
-                success:function(data){
-                }
-            });
-        }
     </script>
 </body>
 

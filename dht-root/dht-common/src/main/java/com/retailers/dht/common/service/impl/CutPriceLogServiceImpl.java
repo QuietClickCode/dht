@@ -32,6 +32,7 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 	private CutPricePriceService cutPricePriceService;
 	public boolean saveCutPriceLog(CutPriceLog cutPriceLog) {
 		Long gdcpId = cutPriceLog.getGdcpId();
+		cutPriceLog.setIsDelete(0L);
 		Map params = new HashMap();
 		params.put("gdcpId",gdcpId);
 		params.put("usId",cutPriceLog.getUsId());

@@ -239,9 +239,9 @@
         <div class="care-checkbox" style="margin-top: .2rem;">
             <span class="name">数量</span>
             <div class="number number-box">
-                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
+                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
                 <span class="num J_careNum" id="goodsnumber">1</span>
-                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
+                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
             </div>
         </div>
 
@@ -410,8 +410,6 @@
             success:function(data){
                 if(data.rows!=null){
                     cpId=data.rows[0].cpId;
-                    <!--查询用户是否购买此商品-->
-                    queryuserisbuygoods();
                     timestape = data.rows[0].timestap*1000;
                     var cpSale = data.rows[0].cpSale;
                     var minprice = data.rows[0].minprice;
@@ -462,7 +460,7 @@
         });
     }
 
-    var startbuy = 1;
+    var startbuy = -1;
     var goodsisMultiplebuy = 0;
     <!--加载商品配置-->
     function loadgoodsconfig() {
@@ -661,9 +659,8 @@
         });
     }
 
-
-    var ginventory=0;
-    var spBounds = 0;
+    var ginventory=-1;
+    var spBounds = -1;
     var canbuy = 0;
     <!--点击修改规格样式-->
     function clickactive(obj) {
@@ -724,7 +721,11 @@
                         spBounds = row.cpBounds;
 
                         var nownumber = parseInt($('#goodsnumber').html());
-                        if(startbuy!=0&&nownumber<startbuy){
+                        if(nownumber<=0){
+                            nownumber=1;
+                            $('#goodsnumber').html(nownumber);
+                        }
+                        if(startbuy!=-1&&nownumber<startbuy){
                             nownumber=startbuy;
                             $('#goodsnumber').html(startbuy);
                         }
@@ -843,12 +844,12 @@
             }else{
                 goodsnumber--;
             }
-            if(goodsnumber>spBounds&&spBounds!=0){
+            if(goodsnumber>spBounds&&spBounds!=-1){
                 layer.msg("最大购买"+spBounds);
                 $('#goodsnumber').html(spBounds-1);
                 return;
             }
-            if(goodsnumber>ginventory&&ginventory!=0){
+            if(goodsnumber>ginventory&&ginventory!=-1){
                 layer.msg("必须小于库存量"+ginventory);
                 $('#goodsnumber').html(ginventory-1);
                 return;
@@ -1010,25 +1011,6 @@
         })
     }
 
-    <!--查询用户是否购买此商品-->
-    function queryuserisbuygoods() {
-//        $.ajax({
-//            type:"post",
-//            url:"/goodsIsbuysp/queryGoodsIsbuysp",
-//            dataType: "json",
-//            data:{cpId:cpId},
-//            success:function(data){
-//                var row = data.row;
-//                if(row!=null){
-//                    $('.bargain-btn2').hide();
-//                    $('#putdown').hide();
-//                    $('#hasBuy').show();
-//                    $('.special').hide();
-//                }
-//            }
-//        });
-    }
-
     <!--查询是否已经初始化砍价价格-->
     function querycpp() {
         $.ajax({
@@ -1039,7 +1021,6 @@
             data:{gid:gid},
             success:function(data){
                 var rows = data.rows;
-                console.log(JSON.toString(rows[0]));
                 if(rows!=null&&rows.length>0){
                     // layer.msg('开始跳转');
                     window.location.href='/bargainpd/'+gid+'.html';
@@ -1185,157 +1166,20 @@
         }
     }
 
-    var homePath;
-    <!--初始化分享-->
-    function initShare() {
-        $.ajax({
-            type:"post",
-            url:'/wxShare/createWxShare',
-            dataType: "json",
-            async :false,
-            data:{path:path},
-            success:function(data){
-                if(data!=null){
-                    homePath = data.homePath;
-
-                    var appId = data.appid;
-                    var timestamp = data.timestamp;
-                    var nonceStr = data.nonceStr;
-                    var signature = data.signature;
-                    wx.config({
-
-                        debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-
-                        appId: appId, // 必填，公众号的唯一标识
-
-                        timestamp: timestamp, // 必填，生成签名的时间戳
-
-                        nonceStr: nonceStr, // 必填，生成签名的随机串
-
-                        signature: signature,// 必填，签名，见附录1
-
-                        jsApiList: ['onMenuShareTimeline',
-                            'onMenuShareAppMessage',
-                            'onMenuShareQQ',
-                            'onMenuShareWeibo',
-                            'onMenuShareQZone'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-
-                    });
-
-                }
-
-            }
-        });
-    }
-
-    <!--调用初始化分享-->
-    initShare();
-
-    wx.ready(function(){
-        var imgUrl = $('#goodsImagesul').find('img')[0].src;
-
-        var title = $('#goodsNameDiv').html();
-        var link = homePath;
-        var desc = removeHTMLTag($('#gdescription').html());
-        //share to timeline
-        // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
-        wx.onMenuShareTimeline({
-            title: title, // 分享标题
-            desc: desc, // 分享描述
-            link:link,
-            imgUrl: imgUrl, // 分享图标
-            success: function (res) {
-                //alert('朋友圈');
-
-                saveShareRecord('朋友圈',title);
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-        // 获取“分享给朋友”按钮点击状态及自定义分享内容接口
-        wx.onMenuShareAppMessage({
-            title: title, // 分享标题
-            desc: desc, // 分享描述
-            link:link,
-            imgUrl: imgUrl, // 分享图标
-            success: function (res) {
-                //alert('好友');
-                alert(title);
-                saveShareRecord('好友',title);
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-        // 获取“分享到QQ”按钮点击状态及自定义分享内容接口
-        wx.onMenuShareQQ({
-            title: title, // 分享标题
-            desc: desc, // 分享描述
-            link:link,
-            imgUrl: imgUrl, // 分享图标
-            success: function (res) {
-                saveShareRecord('QQ',title);
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-        // 获取“分享到微博”按钮点击状态及自定义分享内容接口
-        wx.onMenuShareWeibo({
-            title: title, // 分享标题
-            desc: desc, // 分享描述
-            link:link,
-            imgUrl: imgUrl, // 分享图标
-            success: function (res) {
-                saveShareRecord('微博',title);
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-        // 获取“分享到QQ空间”按钮点击状态及自定义分享内容接口
-        wx.onMenuShareQZone({
-            title: title, // 分享标题
-            desc: desc, // 分享描述
-            link:link,
-            imgUrl: imgUrl, // 分享图标
-            success: function (res) {
-                saveShareRecord('QQ空间',title);
-            },
-            cancel: function () {
-                // 用户取消分享后执行的回调函数
-            }
-        });
-    });
-
-    <!--记录分享-->
-    function saveShareRecord(usWhere,usWhat) {
-        $.ajax({
-            type:"post",
-            url:'/userShare/saveUserShare',
-            dataType: "json",
-            async :false,
-            data:{usWhere:usWhere,usWhat:usWhat},
-            success:function(data){
-            }
-        });
-    }
-
     <!--调用分享函数-->
     function shareGoods() {
         var flag = validatedate();
         if(!flag){
             return;
         }
-        $('.bge6').css('overflow', 'hidden');
-        $('.guide-share').fadeIn('slow');
+        createcpp(shareresult);
     }
 
-    <!--点击知道了-->
-    function ikonw() {
-        $('.bge6').css('overflow', 'auto');
-        $('.guide-share').fadeOut('slow');
+    function shareresult() {
+        layer.msg('准备跳转分享页面');
+        setTimeout(function () {
+            window.location.href='/bargainpd/'+gid+'.html';
+        },1000);
     }
 
     laydate.render({
@@ -1371,6 +1215,7 @@
             }
         });
     }
+
     <!--砍价价格初始化-->
     function createcpp(func) {
         var gdcpId = $('#gdcpId').val();

@@ -62,11 +62,12 @@
     <div id="footer"></div>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/iscroll.js"></script>
-    <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/public.js"></script>
+    <script src="/js/TouchSlide.1.1.js"></script>
+    <script src="/js/iscroll.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
     <script src="/js/footer.js"></script>
+
     <script>
         var curFooter="#footer_classify";
     </script>
@@ -88,10 +89,18 @@
             });
         };
 
-        var touchSlide;
         function configbanner() {
-            touchSlide = null;
-            touchSlide = TouchSlide({
+            TouchSlide({
+                slideCell: "#banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: false, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+
+            TouchSlide({
                 slideCell: "#banner",
                 titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
                 mainCell: ".bd ul",
@@ -166,11 +175,11 @@
                 var html = '<ul class="box2">';
                 for(var i=0;i<gclass.length;i++){
                     html +='<li>'+
-                        '<a href="" class="img">'+
+                        '<a href="/goods/goodsList/'+null+'~'+gclass[i].ggId+'.html" class="img">'+
                         '<img data-original="'+gclass[i].imgUrl+'">'+
                         '</a>'+
                         '<p>'+
-                        '<a href="">'+gclass[i].ggName+'</a>'+
+                        '<a href="/goods/goodsList/'+null+'~'+gclass[i].ggId+'.html">'+gclass[i].ggName+'</a>'+
                         '</p>'+
                         '</li>';
                 }

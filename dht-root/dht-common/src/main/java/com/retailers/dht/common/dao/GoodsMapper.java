@@ -62,4 +62,5 @@ public interface GoodsMapper {
 	 */
 	public List<Goods> queryGoodsByGt(Long gt);
 
+	public List<GoodsVo> queryGoodsListByGclass(Pagination<GoodsVo> pagination);
 }

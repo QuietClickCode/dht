@@ -72,6 +72,7 @@ public interface GoodsService {
 	 */
 	public List<ZTreeVo> queryGoodsByGt(Long gt);
 
+	public List<GoodsVo> queryGoodsListByGclass(Map params,int pageNo,int paeSize);
 }
 
 
