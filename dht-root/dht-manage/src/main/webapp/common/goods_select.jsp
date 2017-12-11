@@ -44,6 +44,11 @@
         top: -6px;
         cursor: pointer;
     }
+
+    #commonSelectGoods{
+        height: 400px;
+        overflow: auto;
+    }
 </style>
 <!--公用商品选择器 -->
 <div class="modal fade" id="commonGoodsSelectDialog"  role="dialog" aria-hidden="true">
@@ -95,23 +100,6 @@
 </div>
 <script>
 
-    $("#remove_goods").click(function () {
-        $("#commonSelectGoods li").remove();
-    });
-   
-    function test($this) {
-        let len = $($this).find(".remove_icon").length;
-        if (len == 0){
-            $($this).append('<span class="remove_icon" onclick="remove_icon_goods(this)"></span>');
-            $($this).find(".remove_icon").show();
-        }
-        return;
-    }
-
-    function remove_icon_goods($this) {
-        let index = $($this).index(".remove_icon");
-        $("#commonSelectGoods li").eq(index).remove();
-    }
 
     //用于缓存资源表格数据
     var commonGoodsSelectDatas=new Map();
@@ -215,7 +203,7 @@
             for(var i=0;i<sids_.length;i++){
                 if(sids_[i]){
                     commonGoodsSelectValuesMaps.set(parseInt(sids_[i],10),sNms_[i]);
-                    let child="<li id='"+sids_[i]+"'>"+sNms_[i]+"</li>";
+                    let child="<li id='"+sids_[i]+"' onmouseover='add_remove_icon(this)'>"+sNms_[i]+"</li>";
                     $("#commonSelectGoods").append(child);
                 }
             }
@@ -286,7 +274,7 @@
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
-            uniqueId: 'gbId',                     //每一行的唯一标识，一般为主键列
+            uniqueId: 'gid',                     //每一行的唯一标识，一般为主键列
             showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
             selectItemName: 'parentItem',
             dataType: "json",
@@ -295,7 +283,7 @@
                 for(var row of rows){
                     if(!commonGoodsSelectValuesMaps.has(row.gid)){
                         commonGoodsSelectValuesMaps.set(row.gid,row.gname);
-                        let child="<li id='"+row.gid+"'>"+row.gname+"</li>";
+                        let child="<li id='"+row.gid+"' onmouseover='add_remove_icon(this)'>"+row.gname+"</li>";
                         $("#commonSelectGoods").append(child);
                     }
                 }
@@ -305,7 +293,7 @@
                 //判断是否己经存在
                 if(!commonGoodsSelectValuesMaps.has(row.gid)){
                     commonGoodsSelectValuesMaps.set(row.gid,row.gname);
-                    let child="<li id='"+row.gid+"' onmouseover='test(this)' '>"+row.gname+"</li>";
+                    let child="<li id='"+row.gid+"' onmouseover='add_remove_icon(this)' >"+row.gname+"</li>";
                     $("#commonSelectGoods").append(child);
                 }
             },
@@ -359,6 +347,47 @@
     function goodsSelectTreeClick(e, treeId, treeNode) {
         commonGoodsSelectGtId=treeNode.id;
         refreshCommonGoodsSelectData();
+    }
+
+
+    $("#remove_goods").click(function () {
+        $("#commonSelectGoods li").remove();
+        commonGoodsSelectValuesMaps.clear();
+        $("#commonGoodsSelectTableDatas tbody tr").removeClass("selected");
+        $(".bs-checkbox .th-inner input").removeAttr("checked");
+        $("#commonGoodsSelectTableDatas tbody tr :input[name='parentItem']").each(function () {
+            $(this).removeAttr("checked");
+        });
+    });
+
+    //鼠标移动到元素上添加删除图标
+    function add_remove_icon($this) {
+        let len = $($this).find(".remove_icon").length;
+        if (len == 0){
+            $($this).append('<span class="remove_icon" onclick="remove_icon_goods(this)"></span>');
+            $($this).find(".remove_icon").show();
+        }
+        return;
+    }
+
+    //删除选中的商品
+    function remove_icon_goods($this) {
+        let id = $($this).parent().attr("id");
+        $($this).parent().remove();
+        $("#commonGoodsSelectTableDatas tbody .selected").each(function () {
+            let gid = $(this).attr("data-uniqueid");
+             if(id == gid){
+                $(this).removeClass("selected");
+                $(this).find(":input[name='parentItem']").removeAttr("checked");
+                $(".bs-checkbox .th-inner input").removeAttr("checked");
+             }
+         });
+        for(var key of commonGoodsSelectValuesMaps.keys()){
+            if(key == id){
+                commonGoodsSelectValuesMaps.delete(key);
+                console.log(commonGoodsSelectValuesMaps.size);
+            }
+        }
     }
 
 </script>
