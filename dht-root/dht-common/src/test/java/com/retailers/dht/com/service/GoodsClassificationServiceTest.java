@@ -1,5 +1,6 @@
 package com.retailers.dht.com.service;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
@@ -9,7 +10,9 @@ import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,5 +33,25 @@ public class GoodsClassificationServiceTest extends TestBaseJunit{
         System.out.println(pagination1.size());
     }
 
+    /**
+     *取得所有父级
+     */
+    @Test
+    public void  queryGoodsClassificationParents(){
+        long curNode=46;
+        List<Long> lists = goodsClassificationService.queryGoodsClassificationParents(curNode);
+        System.out.println(JSON.toJSON(lists));
+    }
+
+    /**
+     * 取得所有子集
+     */
+    @Test
+    public void  queryGoodsClassificationChilds(){
+        long curNode=30;
+        List<Long> lists = goodsClassificationService.queryGoodsClassificationChilds(curNode);
+        Collections.sort(lists);
+        System.out.println(JSON.toJSON(lists));
+    }
 
 }

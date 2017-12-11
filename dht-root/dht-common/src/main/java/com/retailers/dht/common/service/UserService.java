@@ -134,12 +134,14 @@ public interface UserService {
 
 	/**
 	 * 用户登录
-	 * @param account 帐号
+	 * @param account 登陆帐号
 	 * @param pwd 密码
+	 * @param isBindWx 是否绑定微信
+	 * @param wxId 当前微信id
 	 * @return
 	 * @throws AppException
 	 */
-	public UserInfoVIew userLogin(String account,String pwd)throws AppException;
+	public UserInfoVIew userLogin(String account,String pwd,Boolean isBindWx,Long wxId)throws AppException;
 
 }
 

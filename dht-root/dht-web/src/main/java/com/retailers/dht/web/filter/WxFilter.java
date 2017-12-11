@@ -55,7 +55,7 @@ public class WxFilter implements Filter {
                 //判断是否己授权登录
                 Object obj =  request.getSession().getAttribute(SystemConstant.IS_PULL_WX_USER_INFO);
                 //未登录 页面重定向 获取用户openid
-                if(ObjectUtils.isEmpty(obj)&&!uri.endsWith("wx/userLogin")){
+                if(ObjectUtils.isEmpty(obj)&&!uri.endsWith("wx/userLogin")&&!uri.endsWith("/loginPage")){
                     //跳转至公众号授权注册页面
                     RequestDispatcher dispatcher = request.getRequestDispatcher("/wx/toAuth?"+
                             com.retailers.dht.common.constant.SystemConstant.WX_ACCESS_ADDRESS_AUTH_URL+"="+
@@ -63,6 +63,7 @@ public class WxFilter implements Filter {
                     dispatcher.forward(request, response);
                     return;
                 }
+                //判断是否绑定用户
             }
         }
         chain.doFilter(servletRequest, servletResponse);

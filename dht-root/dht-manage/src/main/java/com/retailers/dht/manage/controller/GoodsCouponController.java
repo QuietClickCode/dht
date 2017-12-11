@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -169,5 +170,74 @@ public class GoodsCouponController extends BaseController{
         }
         boolean flag = goodsCouponService.deleteGoodsCouponByGcpId(gcpId);
         return success(flag);
+    }
+
+    /**
+     * 根据商品id取得所有的商品优惠
+     * @param goodsId
+     * @return
+     */
+    @RequestMapping("queryGoodsCouponByGid")
+    @ResponseBody
+    public BaseResp queryGoodsCouponByGid(Long goodsId){
+        List<GoodsCouponShowVo> list = goodsCouponService.queryGoodsCouponByGid(goodsId);
+        return success(list);
+    }
+    /**
+     *根据商品id 和 优惠名称 取得所有的优惠列表（排除该 商品己存在的）
+     * @param goodsId
+     * @param couponNm
+     * @return
+     */
+    @RequestMapping("queryUnBindGoodsCouponByGid")
+    @ResponseBody
+    public BaseResp queryUnBindGoodsCouponByGid(String couponNm,Long goodsId){
+        List<GoodsCouponShowVo> list = goodsCouponService.queryUnBindGoodsCouponByGid(couponNm,goodsId);
+        return success(list);
+    }
+
+    /**
+     * 商品绑了定优惠
+     * @param goodsId 商品id
+     * @param gcpIds 优惠ids（多个之间用逗号隔开)
+     * @return
+     */
+    @RequestMapping("goodsBindCoupon")
+    @ResponseBody
+    public BaseResp goodsBindCoupon(Long goodsId,String gcpIds){
+        if(ObjectUtils.isEmpty(goodsId)){
+            return errorForParam("商品id不能为空");
+        }
+        if(ObjectUtils.isEmpty(gcpIds)){
+            return errorForParam("优惠id不能为空");
+        }
+        try{
+            boolean flag = goodsCouponService.goodsBindCoupon(goodsId,gcpIds);
+            return success(flag);
+        }catch(AppException e){
+            return errorForSystem(e.getMessage());
+        }
+    }
+    /**
+     * 商品绑了定优惠
+     * @param goodsId 商品id
+     * @param gcpIds 优惠ids（多个之间用逗号隔开)
+     * @return
+     */
+    @RequestMapping("goodsUnBindCoupon")
+    @ResponseBody
+    public BaseResp goodsUnBindCoupon(Long goodsId,String gcpIds){
+        if(ObjectUtils.isEmpty(goodsId)){
+            return errorForParam("商品id不能为空");
+        }
+        if(ObjectUtils.isEmpty(gcpIds)){
+            return errorForParam("优惠id不能为空");
+        }
+        try{
+            boolean flag = goodsCouponService.goodsUnBindCoupon(goodsId,gcpIds);
+            return success(flag);
+        }catch(AppException e){
+            return errorForSystem(e.getMessage());
+        }
     }
 }

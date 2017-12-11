@@ -1,21 +1,24 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
+import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.CouponUseRange;
+import com.retailers.dht.common.entity.CouponUser;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.dao.GoodsCouponMapper;
 import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -36,6 +39,10 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	private GoodsCouponMapper goodsCouponMapper;
 	@Autowired
 	private CouponUseRangeMapper couponUseRangeMapper;
+	@Autowired
+	private GoodsMapper goodsMapper;
+	@Autowired
+	private GoodsClassificationService goodsClassificationService;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveGoodsCoupon(GoodsCouponVo goodsCouponVo) {
@@ -125,6 +132,96 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		cur.setCpurType(isRestricted);
 		return cur;
 	}
+
+	/**
+	 * 根据商品取得该商品下的所有优惠
+	 * @param goodsId
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryGoodsCouponByGid(Long goodsId){
+        //取得允许的商品优惠
+        Goods goods=goodsMapper.queryGoodsByGid(goodsId);
+        List<GoodsCouponShowVo> list = goodsCouponMapper.queryAllowGoodsCouponByGid(goods.getGclassification(),goodsId,new Date());
+		return list;
+	}
+	/**
+	 * 根据优惠名称取得优惠列表（排除己存在的）
+	 * @param couponNm 优惠名称
+	 * @param goodsId 商品id
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryUnBindGoodsCouponByGid(String couponNm,Long goodsId){
+	    List<GoodsCouponShowVo> lists = queryGoodsCouponByGid(goodsId);
+        List<Long> gcIds=new ArrayList<Long>();
+        for(GoodsCouponShowVo vo:lists){
+            gcIds.add(vo.getGcpId());
+        }
+		return goodsCouponMapper.queryUnBindGoodsCuoponByGid(couponNm,gcIds,new Date());
+	}
+
+	/**
+	 * 商品绑定优惠
+	 * @param goodsId 商品id
+	 * @param gcpIds 优惠ids（多个之间用逗号隔开)
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+    public boolean goodsBindCoupon(Long goodsId, String gcpIds) throws AppException {
+		return bindOptions(goodsId,gcpIds,CouponUseRangeConstant.IS_ALLOW_USE_YES);
+    }
+
+	/**
+	 * 解绑商品优惠卷
+	 * @param goodsId 商品id
+	 * @param gcpIds 优惠ids（多个之间用逗号隔开)
+	 * @return
+	 * @throws AppException
+	 */
+    public boolean goodsUnBindCoupon(Long goodsId, String gcpIds) throws AppException {
+    	return bindOptions(goodsId,gcpIds,CouponUseRangeConstant.IS_ALLOW_USE_NO);
+    }
+
+    private boolean bindOptions(Long goodsId, String gcpIds,Integer allowStatus){
+		String[] gcpIds_ = gcpIds.split(",");
+		List<Long> gcpLists=new ArrayList<Long>();
+		Map<Long,Long> gcpMaps=new HashMap<Long, Long>();
+		List<Long> bindcpurIds=new ArrayList<Long>();
+		for(String id:gcpIds_){
+			gcpMaps.put(Long.parseLong(id),Long.parseLong(id));
+			gcpLists.add(Long.parseLong(id));
+		}
+		List<CouponUseRange> curs=couponUseRangeMapper.queryCouponUseRangeByGid(CouponUseRangeConstant.TYPE_GOODS_COUPON,gcpLists,goodsId);
+		if(ObjectUtils.isNotEmpty(curs)){
+			for(CouponUseRange cur:curs){
+				gcpMaps.remove(cur.getCpId());
+				bindcpurIds.add(cur.getCpurId());
+			}
+		}
+		List<CouponUseRange> batchAddCurs=new ArrayList<CouponUseRange>();
+		//判断是否有新增
+		if(ObjectUtils.isNotEmpty(gcpMaps)){
+			for(Long key:gcpMaps.keySet()){
+				CouponUseRange cur=new CouponUseRange();
+				cur.setCpurIsAllow(allowStatus);
+				cur.setCpId(key);
+				cur.setType(CouponUseRangeConstant.TYPE_GOODS_COUPON);
+				cur.setCpurType(CouponConstant.COUPON_USED_RANGE_GOODS);
+				cur.setCpurRelevanceId(goodsId);
+				batchAddCurs.add(cur);
+			}
+		}
+		// 判断优惠是否有新增
+		if(ObjectUtils.isNotEmpty(batchAddCurs)){
+			couponUseRangeMapper.saveCouponUseRanges(batchAddCurs);
+		}
+		if(ObjectUtils.isNotEmpty(bindcpurIds)){
+			//判断是否存在修改数据
+			couponUseRangeMapper.updateCouponUseRangeAllow(bindcpurIds,allowStatus);
+		}
+		return true;
+	}
+
 }
 
 

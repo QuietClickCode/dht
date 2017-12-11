@@ -276,5 +276,63 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 	public List<GoodsClassification> selectAllGClassList(){
 		return goodsClassificationMapper.selectAllGClassList();
 	}
+
+	/**
+	 *
+	 * @param curNode 当前节点
+	 * @return
+	 */
+	public List<Long> queryGoodsClassificationParents(Long curNode) {
+		List<GoodsClassification> lists =goodsClassificationMapper.queryAllGoodsClassificationByGtId();
+		Map<Long,Long> map = new HashMap<Long, Long>();
+		for(GoodsClassification gc: lists){
+			map.put(gc.getGgId(),gc.getParentId());
+		}
+		List<Long> rtnList = new ArrayList<Long>();
+		rtnList.add(curNode);
+		long loopNode=curNode;
+		while (map.containsKey(loopNode)){
+			if(ObjectUtils.isNotEmpty(map.get(loopNode))){
+				loopNode=map.get(loopNode);
+				rtnList.add(loopNode);
+			}else{
+				break;
+			}
+
+		}
+
+		return rtnList;
+	}
+
+	/**
+	 * 取得所有叶子节点
+	 * @param curNode 当前节点
+	 * @return
+	 */
+	public List<Long> queryGoodsClassificationChilds(Long curNode) {
+		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId();
+		List<Long> rtnList=new ArrayList<Long>();
+		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
+		queryChildNodes(list,child);
+		Map<Long,Long> alloShow=new HashMap<Long, Long>();
+		queryAllowGoodsClassification(null,child,alloShow);
+		rtnList.add(curNode);
+		queryAllChild(curNode,child,alloShow,rtnList);
+		return rtnList;
+	}
+
+	private void queryAllChild(Long curNode,Map<Long,Map<Long,Long>> tree,Map<Long,Long> allow,List<Long> childList){
+		if(tree.containsKey(curNode)){
+			Map<Long,Long> childMap=tree.get(curNode);
+			for(Long childs:childMap.keySet()){
+				if(allow.containsKey(childs)){
+					childList.add(childs);
+					if(tree.containsKey(childs)){
+						queryAllChild(childs,tree,allow,childList);
+					}
+				}
+			}
+		}
+	}
 }
 

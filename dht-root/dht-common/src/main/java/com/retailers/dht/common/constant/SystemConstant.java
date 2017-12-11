@@ -68,6 +68,14 @@ public class SystemConstant {
      * 压缩类型（ small 小图，middle 中图 ，originalfile 原图)
      */
     public static List<String> compressTypes=new ArrayList<String>();
+    /**
+     * 用户是旧平台用户（未变更密码）
+     */
+    public static final int USER_IS_OLD_YES=1;
+    /**
+     * 用户是新平台用户（新的加密方式）
+     */
+    public static final int USER_IS_OLD_NO=0;
 
     static {
         compressTypes.add("small");

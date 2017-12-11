@@ -42,6 +42,10 @@ public class SystemConstant {
      */
     public static final String IS_PULL_WX_USER_INFO="wxUser";
     /**
+     * 当前登陆微信用户信息
+     */
+    public static final String CUR_LOGIN_WXUSER_INFO="curLoginWxUser";
+    /**
      * 后台职工默认密码
      */
     public static final String SYS_USER_DEFAULT_PASSWORD="123456";

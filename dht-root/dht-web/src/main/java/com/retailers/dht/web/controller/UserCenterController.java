@@ -1,5 +1,6 @@
 package com.retailers.dht.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.aliyun.sms.constant.SmsSendRecordConstant;
 import com.retailers.aliyun.sms.entity.SmsSendRecord;
 import com.retailers.aliyun.sms.service.SmsSendRecordService;
@@ -9,6 +10,7 @@ import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.UserCardPackage;
+import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.UserAddressService;
 import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.service.UserService;
@@ -17,6 +19,8 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,6 +41,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("user")
 public class UserCenterController extends BaseController{
+    Logger logger= LoggerFactory.getLogger(UserCenterController.class);
     @Autowired
     private UserCardPackageService userCardPackageService;
     @Autowired
@@ -58,11 +63,12 @@ public class UserCenterController extends BaseController{
     }
 
     /**
-     * 用户余额
+     * 我的会员卡
      * @param request
      * @return
      */
     @RequestMapping("userMember")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirect = "/loginPage")
     public String openUserMember(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-member");
     }
@@ -463,28 +469,15 @@ public class UserCenterController extends BaseController{
     /**
      * 用户登录
      * @param request
-     * @param redirectUrl 跳转过来地址
-     *
-     * @return
-     */
-    @RequestMapping("userLoginPage")
-    public ModelAndView userLoginPage(HttpServletRequest request, String redirectUrl){
-        ModelAndView model=new ModelAndView(redirectUrl(request,"usercenter/login"));
-        model.addObject("redirectUrl",redirectUrl);
-        return model;
-    }
-
-    /**
-     * 用户登录
-     * @param request
      * @param account 帐号
      * @param pwd 密码
-     * @param redirectUrl 成功后跳转跳径
+     * @param isBindWx 成功后跳转跳径
      * @param validateCode 验证码
      * @return
      */
     @RequestMapping("userLogin")
-    public BaseResp userLogin(HttpServletRequest request,String account,String pwd,String redirectUrl,String validateCode){
+    @ResponseBody
+    public BaseResp userLogin(HttpServletRequest request,String account,String pwd,String validateCode,Boolean isBindWx){
         if(ObjectUtils.isEmpty(account)){
             return errorForParam("请输入登录帐号");
         }
@@ -503,9 +496,16 @@ public class UserCenterController extends BaseController{
             return errorForValidateCode("验证码错误");
         }
         try{
-            UserInfoVIew userInfoVIew= userService.userLogin(account,pwd);
-            request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,userInfoVIew);
+            Long wxId=null;
+            if(isBindWx){
+                WxAuthUser wxAuthUser=(WxAuthUser)request.getSession().getAttribute(SystemConstant.CUR_LOGIN_WXUSER_INFO);
+                wxId=wxAuthUser.getWauId();
+            }
+            UserInfoVIew userInfoVIew= userService.userLogin(account,pwd,isBindWx,wxId);
+            logger.info("取得用户登陆信息:{}", JSON.toJSON(userInfoVIew));
+            setCurLoginUser(request,userInfoVIew);
         }catch(AppException e){
+            e.printStackTrace();
             return errorForSystem(e.getMessage());
         }
         return success(null);
