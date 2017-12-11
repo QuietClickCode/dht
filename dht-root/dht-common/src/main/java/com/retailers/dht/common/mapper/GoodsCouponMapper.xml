@@ -215,7 +215,7 @@
 									FROM
 										t_coupon_use_range
 									WHERE
-										type = 1
+										type = 0
 									AND cpur_type = 1
 									AND cpur_relevance_id = #{goodsType}
 									UNION
@@ -224,7 +224,7 @@
 										FROM
 											t_coupon_use_range
 										WHERE
-											type = 1
+											type =0
 										AND cpur_type = 2
 										AND cpur_relevance_id = #{goodsId}
 								) p

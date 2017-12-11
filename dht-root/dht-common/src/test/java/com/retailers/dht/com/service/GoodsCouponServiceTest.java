@@ -24,7 +24,7 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
      */
     @Test
     public void  queryGoodsCouponByGid()throws Exception{
-        long goodsIds=51;
+        long goodsIds=40;
         List<GoodsCouponShowVo> lists = goodsCouponService.queryGoodsCouponByGid(goodsIds);
         System.out.println(JSON.toJSON(lists));
     }
