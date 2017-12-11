@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.OrderDetailMapper">
+
+	<resultMap id="rm_orderDetail" type="com.retailers.dht.common.entity.OrderDetail">
+			<result property="id" column="id"/>
+			<result property="odOrderId" column="od_order_id"/>
+			<result property="odGoodsId" column="od_goods_id"/>
+			<result property="odGoodsPrice" column="od_goods_price"/>
+			<result property="odActualPrice" column="od_actual_price"/>
+			<result property="odBuyNumber" column="od_buy_number"/>
+			<result property="odIsRefund" column="od_is_refund"/>
+			<result property="remark" column="remark"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orderDetail_columns">
+		id,od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_is_refund,remark
+	</sql>
+	<!-- 根据订单详情主键取得数据 -->
+	<select id="queryOrderDetailById" resultMap="rm_orderDetail" parameterType="java.lang.Long">
+		SELECT <include refid="orderDetail_columns" />
+		FROM t_order_detail WHERE id = #{id}
+	</select>
+	<!-- 订单详情查询条件组合 -->
+	<sql id="orderDetail_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.odOrderId">
+				AND od_order_id = #{params.odOrderId}
+			</if>
+			<if test="null != params.odGoodsId">
+				AND od_goods_id = #{params.odGoodsId}
+			</if>
+			<if test="null != params.odGoodsPrice">
+				AND od_goods_price = #{params.odGoodsPrice}
+			</if>
+			<if test="null != params.odActualPrice">
+				AND od_actual_price = #{params.odActualPrice}
+			</if>
+			<if test="null != params.odBuyNumber">
+				AND od_buy_number = #{params.odBuyNumber}
+			</if>
+			<if test="null != params.odIsRefund">
+				AND od_is_refund = #{params.odIsRefund}
+			</if>
+			<if test="null != params.remark and '' != params.remark">
+				AND remark = #{params.remark}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrderDetailList" resultMap="rm_orderDetail" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="orderDetail_columns" />
+		FROM t_order_detail
+		<include refid="orderDetail_where"/>
+	</select>
+	<!--添加订单详情 -->
+	<insert id="saveOrderDetail" parameterType="com.retailers.dht.common.entity.OrderDetail" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order_detail (
+			od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_is_refund,remark
+		) VALUES
+		(
+			#{odOrderId,jdbcType=BIGINT},#{odGoodsId,jdbcType=BIGINT},#{odGoodsPrice,jdbcType=BIGINT},#{odActualPrice,jdbcType=BIGINT},#{odBuyNumber,jdbcType=INTEGER},#{odIsRefund,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改订单详情 -->
+	<update id="updateOrderDetail" parameterType="com.retailers.dht.common.entity.OrderDetail">
+		UPDATE t_order_detail
+		<set>
+            <if test="null != odOrderId">
+                od_order_id = #{odOrderId},
+            </if>
+            <if test="null != odGoodsId">
+                od_goods_id = #{odGoodsId},
+            </if>
+            <if test="null != odGoodsPrice">
+                od_goods_price = #{odGoodsPrice},
+            </if>
+            <if test="null != odActualPrice">
+                od_actual_price = #{odActualPrice},
+            </if>
+            <if test="null != odBuyNumber">
+                od_buy_number = #{odBuyNumber},
+            </if>
+            <if test="null != odIsRefund">
+                od_is_refund = #{odIsRefund},
+            </if>
+            <if test="null != remark and '' != remark">
+                remark = #{remark},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除订单详情 -->
+	<delete id="deleteOrderDetailById" parameterType="java.lang.Long">
+		DELETE FROM t_order_detail WHERE id = #{id}
+	</delete>
+</mapper>
