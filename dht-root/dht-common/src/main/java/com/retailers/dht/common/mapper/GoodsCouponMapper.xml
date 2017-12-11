@@ -232,8 +232,7 @@
 								cp_id
 						) q
 					WHERE
-						c.gcp_is_restricted = 1
-					AND gcp_end_time > #{curDate}
+						gcp_end_time > #{curDate}
 					AND is_valid = 0
 					AND is_delete = 0
 					AND c.gcp_id = q.cp_id
