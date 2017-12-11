@@ -89,7 +89,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @throws AppException
 	 */
     @Transactional(rollbackFor = Exception.class)
-	public Map<String, Object> shoppingOrder(Long uid, String goodsIds, String numbers, String orderRemark, Long uaId) throws AppException {
+	public Map<String,Object> shoppingOrder(Long uid,String goodsIds,String numbers,String specs,String orderRemark,Long uaId)throws AppException{
         logger.info("创建购物订单,购买用户:[{}],商品列表:[{}],数量列表:[{}],订单备注:[{}],收货人地址:[{}]",uid,goodsIds,numbers,orderRemark,uaId);
         Date curDate=new Date();
         Map<String,Object> rtnMap=new HashMap<String,Object>();

@@ -68,12 +68,13 @@ public interface OrderService {
 	 * @param uid 购买用户id
 	 * @param goodsIds 商品ids 多个商品用逗号隔开
 	 * @param numbers 购买商品数量多个用逗号隔开
+	 * @param specs 商品规格
 	 * @param orderRemark 备注
 	 * @param uaId 收货人id
 	 * @return 返回订单号和总金额
 	 * @throws AppException
 	 */
-	public Map<String,Object> shoppingOrder(Long uid,String goodsIds,String numbers,String orderRemark,Long uaId)throws AppException;
+	public Map<String,Object> shoppingOrder(Long uid,String goodsIds,String numbers,String specs,String orderRemark,Long uaId)throws AppException;
 
 	/**
 	 * 用户充值

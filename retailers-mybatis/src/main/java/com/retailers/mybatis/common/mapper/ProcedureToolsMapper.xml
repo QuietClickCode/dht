@@ -8,7 +8,7 @@
 	</resultMap>
 
 	<!--添加Price -->
-	<insert id="queryCurSequence" parameterType="com.retailers.dht.common.entity.Sequence" useGeneratedKeys="true" keyProperty="id">
+	<insert id="queryCurSequence" parameterType="com.retailers.mybatis.common.entity.Sequence" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_sequence(time) VALUES (#{time})
 	</insert>
 	<!--删除Price -->
