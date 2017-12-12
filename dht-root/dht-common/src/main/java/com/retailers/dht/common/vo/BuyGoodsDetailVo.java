@@ -1,5 +1,9 @@
 package com.retailers.dht.common.vo;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,5 +47,13 @@ public class BuyGoodsDetailVo {
 
     public void setAddress(Long address) {
         this.address = address;
+    }
+    public static void main(String[] args) {
+        BuyGoodsDetailVo vo =new BuyGoodsDetailVo();
+        BuyGoodsVo v=new BuyGoodsVo();
+        List<BuyGoodsVo> vs=new ArrayList<BuyGoodsVo>();
+        vs.add(v);
+        vo.setBuyGoods(vs);
+        System.out.println(JSON.toJSONString(vo, SerializerFeature.WriteMapNullValue));
     }
 }

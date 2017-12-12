@@ -51,4 +51,11 @@ public class ManageTaskJob {
         logger.info("清除过期优惠卷完毕");
     }
 
+    /**
+     * 执行过期未付款的订单
+     */
+    public void executeOverdueUnPayOrder(){
+
+    }
+
 }
