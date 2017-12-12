@@ -691,6 +691,7 @@
             loadgavalmessage();
         }
 
+        var gdId;
         <!--点击规格加载信息-->
         function loadgavalmessage() {
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
@@ -715,6 +716,7 @@
                             var price = row.gdPrice;
                             var inventory = row.gdResidueinventory;
                             var gunitname = row.gunitname;
+                            gdId = row.gdId;
 
                             var img = $('#product').find('img')[0];
                             var pricespan = $('#product').find('span')[0];
@@ -922,7 +924,7 @@
                     type:"post",
                     url:"/buyCar/saveBuyCar",
                     dataType: "json",
-                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:path,bcDescription:bcDescription},
+                    data:{gid:gid,gcount:gcount,bcGsvalids:gsvalid,bcGsval:gsval,bcPrice:bcPrice,bcUrl:gdId,bcDescription:bcDescription},
                     success:function(data){
                         if(data.status==0){
                             layer.msg('成功加入购物车!');

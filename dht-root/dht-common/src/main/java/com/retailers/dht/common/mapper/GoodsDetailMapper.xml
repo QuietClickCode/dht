@@ -119,6 +119,19 @@
 		GROUP BY t1.gd_id
 		ORDER BY sumcount DESC
 	</select>
+	<select id="queryGoodsDetailByGdIds" resultMap="rm_goodsDetail">
+		SELECT
+		*
+		from
+		t_goods_detail t1
+		WHERE
+		t1.is_delete=0
+		and t1.gd_id in
+		<foreach collection="gdIds" item="gdId" index="index"
+				 open="(" close=")" separator=",">
+			#{gdId}
+		</foreach>
+	</select>
 	<!--添加商品详情表 -->
 	<insert id="saveGoodsDetail" parameterType="com.retailers.dht.common.entity.GoodsDetail" useGeneratedKeys="true" keyProperty="gdId">
 		INSERT INTO t_goods_detail (

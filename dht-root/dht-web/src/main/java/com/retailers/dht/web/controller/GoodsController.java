@@ -83,6 +83,15 @@ public class GoodsController extends BaseController {
         }
         return gtm;
     }
+
+    /**
+     * 根据条件或者所选子类查询商品
+     * @param condition
+     * @param gclass
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
     @RequestMapping("/queryGoodsList/queryGoodsList")
     @ResponseBody
     public BaseResp queryGoodsList( String condition, Long gclass, int pageNo, int pageSize){

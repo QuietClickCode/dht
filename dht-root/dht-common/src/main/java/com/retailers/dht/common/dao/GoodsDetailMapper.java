@@ -60,4 +60,7 @@ public interface GoodsDetailMapper {
 	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
 
 	public List<GoodsDetailVo> queryGoodsDetailVoLists(@Param("params") Map params);
+
+	public List<GoodsDetail> queryGoodsDetailByGdIds(@Param("gdIds") List gdIds);
+
 }
