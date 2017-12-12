@@ -163,6 +163,17 @@
                 location.href = link;
             }
         });
+
+        $.ajax({
+            type:"post",
+            url:'/goods/setinviter',
+            dataType: "json",
+            async :false,
+            data:{},
+            success:function(data){
+
+            }
+        });
     </script>
 </body>
 

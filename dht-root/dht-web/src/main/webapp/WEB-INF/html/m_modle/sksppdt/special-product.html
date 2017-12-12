@@ -217,8 +217,8 @@
         </div> -->
     </div>
     <a onclick="buynow()" class="bargain-btn2">立即购买</a>
-    <a id="putdown" class="bargain-btn3" style="width: 100%;display: none">商品已下架</a>
-    <a id="hasBuy" class="bargain-btn3" style="width: 100%;display: none">您已购买该商品</a>
+    <a id="putdown" class="bargain-btn1" style="width: 100%;display: none">商品已下架</a>
+    <a id="hasBuy" class="bargain-btn1" style="width: 100%;display: none">您已购买该商品</a>
 </div>
 <!--选择规格弹框-->
 <div class="mark" id="J_mark2" style="display:none;">
@@ -245,9 +245,9 @@
         <div class="care-checkbox" style="margin-top: .2rem;">
             <span class="name">数量</span>
             <div class="number number-box">
-                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');"></span>
+                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
                 <span class="num J_careNum" id="goodsnumber">1</span>
-                <span class="add J_careAdd" onclick="pdmaxinventory('+');"></span>
+                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
             </div>
         </div>
 
@@ -449,7 +449,7 @@
         });
     }
 
-    var startbuy = 1;
+    var startbuy = -1;
     var goodsisMultiplebuy = 0;
     <!--加载商品配置-->
     function loadgoodsconfig() {
@@ -707,6 +707,24 @@
                         $(inventoryspan).html('库存'+inventory+gunitname);
                         ginventory = inventory;
                         spBounds = row.spBounds;
+
+                        var nownumber = parseInt($('#goodsnumber').html());
+                        if(nownumber<=0){
+                            nownumber=1;
+                            $('#goodsnumber').html(nownumber);
+                        }
+                        if(startbuy!=-1&&nownumber<startbuy){
+                            nownumber=startbuy;
+                            $('#goodsnumber').html(startbuy);
+                        }
+                        if(nownumber>ginventory){
+                            nownumber = ginventory;
+                            $('#goodsnumber').html(ginventory);
+                        }
+                        if(nownumber>spBounds){
+                            nownumber = spBounds;
+                            $('#goodsnumber').html(spBounds);
+                        }
                     }
                 }
             });
@@ -779,47 +797,54 @@
     <!--判断库存-->
     function pdmaxinventory(ysf) {
         var goodsnumber = parseInt($('#goodsnumber').html());
-        if(ysf=='+'){
-            goodsnumber++;
-            pdindex++;
-        }else{
-            goodsnumber--;
-            pdindex--;
-            if(pdindex<=0){
-                pdindex = 1;
-            }
-        }
-        if(goodsnumber>spBounds&&spBounds!=0){
-            layer.msg("最大购买"+spBounds);
-            $('#goodsnumber').html(spBounds-1);
-            pdindex--;
-            return;
-        }
-        if(goodsnumber>ginventory&&ginventory!=0){
-            layer.msg("必须小于库存量"+ginventory);
-            $('#goodsnumber').html(ginventory-1);
-            pdindex--;
-            return;
-        }
 
         if(goodsisMultiplebuy==1){
             if(ysf=='+'){
+                pdindex++;
                 if(pdindex*startbuy>spBounds){
+                    layer.msg('最多购买数'+spBounds);
                     $('#goodsnumber').html(spBounds-1);
+                    pdindex--;
                 }else{
                     $('#goodsnumber').html(pdindex*startbuy-1);
                 }
             }else{
-                if(pdindex==1){
-                    layer.msg('最少购买'+startbuy);
-                    $('#goodsnumber').html(startbuy+1);
+                pdindex--;
+                if(pdindex==0){
+                    pdindex=1;
+                    if(startbuy<spBounds){
+                        $('#goodsnumber').html(startbuy+1);
+                        layer.msg('最少购买数'+startbuy);
+                    }else{
+                        $('#goodsnumber').html(spBounds);
+                        layer.msg('必须小于库存'+spBounds);
+                    }
+
                 }else{
-                    $('#goodsnumber').html(goodsnumber - startbuy+2);
+                    $('#goodsnumber').html(goodsnumber - startbuy+1);
                 }
 
             }
-
+        }else{
+            if(ysf=='+'){
+                goodsnumber++;
+            }else{
+                goodsnumber--;
+            }
+            if(goodsnumber>spBounds&&spBounds!=0){
+                layer.msg("最大购买"+spBounds);
+                $('#goodsnumber').html(spBounds-1);
+                return;
+            }
+            if(goodsnumber>ginventory&&ginventory!=0){
+                layer.msg("必须小于库存量"+ginventory);
+                $('#goodsnumber').html(ginventory-1);
+                return;
+            }
         }
+
+
+
 
     }
 

@@ -6,6 +6,7 @@ import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.ObjectUtils;
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -35,6 +38,11 @@ public class GoodsController extends BaseController {
     public String service(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
         return getFinalReturnString(id,"goods","goods",request);
+    }
+    @RequestMapping("/goodsList/{condition}~{gclass}.html")
+    public String goodsList(HttpServletRequest request, @PathVariable("condition")String condition,@PathVariable("gclass")Long gclass){
+
+        return redirectUrl(request,"goods/goods-list");
     }
 
     @RequestMapping("/setinviter")
@@ -74,6 +82,21 @@ public class GoodsController extends BaseController {
             gtm.put("rows",pagination.getData());
         }
         return gtm;
+    }
+    @RequestMapping("/queryGoodsList/queryGoodsList")
+    @ResponseBody
+    public BaseResp queryGoodsList( String condition, Long gclass, int pageNo, int pageSize){
+        List<GoodsVo> list = new ArrayList<GoodsVo>();
+        if(!ObjectUtils.isEmpty(condition)){
+            //根据输入的条件来查询商品
+        }else if(!ObjectUtils.isEmpty(gclass)){
+            Map params = new HashMap();
+            params.put("gclass",gclass);
+            list = goodsService.queryGoodsListByGclass(params,pageNo,pageSize);
+        }else{
+            return null;
+        }
+        return success(list);
     }
 
     public String getFinalReturnString(String id,String controllerMapping,String page,HttpServletRequest request){

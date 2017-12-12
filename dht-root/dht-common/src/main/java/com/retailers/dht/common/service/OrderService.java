@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.tools.exception.AppException;
@@ -66,14 +67,18 @@ public interface OrderService {
 	/**
 	 * 购物订单
 	 * @param uid 购买用户id
-	 * @param goodsIds 商品ids 多个商品用逗号隔开
-	 * @param numbers 购买商品数量多个用逗号隔开
-	 * @param orderRemark 备注
-	 * @param uaId 收货人id
+	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"spec":1,"remark":"说明"}],"address":123}
+	 *                   				buyGoods 购买商品列表
+	 *                   				goodsId 商品id
+	 *                   				num 购买数量
+	 *                   				gcpId 商品优惠id
+	 *                   				cpId 优惠卷id
+	 *                   				spec 规则id
+	 *                   				address 收货人地址id
 	 * @return 返回订单号和总金额
 	 * @throws AppException
 	 */
-	public Map<String,Object> shoppingOrder(Long uid,String goodsIds,String numbers,String orderRemark,Long uaId)throws AppException;
+	public Map<String,Object> shoppingOrder(Long uid, JSONObject buyDetails)throws AppException;
 
 	/**
 	 * 用户充值

@@ -39,7 +39,12 @@ public class SeckillSpecialProductController extends BaseController {
     @RequestMapping("/bargainpd/{id}.html")
     public String bargainpd(HttpServletRequest request, @PathVariable("id")String id){
         System.out.println("id====================================>:"+id);
-        return getFinalReturnString(id,"bargainpd","sksppdt","bargain-detail",request);
+        return getOtherFinalReturnString(id,"bargainpd","sksppdt","bargain-detail",request);
+    }
+    @RequestMapping("/bargainpsd/{id}.html")
+    public String bargainpsd(HttpServletRequest request, @PathVariable("id")String id){
+        System.out.println("id====================================>:"+id);
+        return getOtherFinalReturnString(id,"bargainpsd","sksppdt","bargain-sharedetail",request);
     }
     @RequestMapping("/secspep/{id}.special")
     public String test(HttpServletRequest request, @PathVariable("id")String id){
@@ -87,5 +92,45 @@ public class SeckillSpecialProductController extends BaseController {
         return redirectUrl(request,dir+"/"+page);
     }
 
+    public String getOtherFinalReturnString(String id,String controllerMapping,String dir,String page,HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
+        String path="";
+        String[] arr = id.split("~");
+        try {
+            if(!ObjectUtils.isEmpty(uid)){
+                String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
+                encryuid = URLEncoder.encode(encryuid);
+                if(arr.length==1){
+                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
+                    return path;
+                }else{
 
+                    String ivr = id.split("_")[1];
+                    System.out.println("uid:::::"+uid);
+                    System.out.println("ivr:::::"+ivr);
+                    ivr = URLDecoder.decode(ivr);
+                    ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
+                    if(!ivr.equals(uid.toString())){
+                        Long ivrLong = Long.parseLong(ivr);
+                        setShareUserId(request,ivrLong);
+                        return redirectUrl(request,dir+"/bargain-sharedetail");
+                    }
+                }
+            }else{
+                if(arr.length==2){
+                    String ivr = id.split("_")[1];
+                    ivr = URLDecoder.decode(ivr);
+                    ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
+                    Long ivrLong = Long.parseLong(ivr);
+                    setShareUserId(request,ivrLong);
+                    String gidstr = id.split("~")[0];
+                    path = "redirect:/"+controllerMapping+"/"+gidstr+".html";
+                    return path;
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return redirectUrl(request,dir+"/"+page);
+    }
 }

@@ -59,4 +59,11 @@ public interface OrderMapper {
 	 */
 	public List<Order> queryOrderList(Pagination<Order> pagination);
 
+	/**
+	 * 校验用户是否存在未付款订单
+	 * @param uid 用户id
+	 * @return
+	 */
+	public int checkUserUnPayOrder(Long uid);
+
 }

@@ -159,5 +159,17 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		return rtn;
 	}
+
+	public List<GoodsVo> queryGoodsListByGclass(Map params,int pageNo,int pageSize){
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setParams(params);
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		List<GoodsVo> list = goodsMapper.queryGoodsListByGclass(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+		}
+		return list;
+	}
 }
 

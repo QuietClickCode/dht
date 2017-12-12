@@ -14,6 +14,7 @@
         <module>retailers-static</module>
         <module>reatilers-wx</module>
         <module>aliyun-sms</module>
+        <module>hnc-root</module>
     </modules>
     <packaging>pom</packaging>
     <name>大汇堂主工程</name>

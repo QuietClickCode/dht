@@ -19,6 +19,10 @@ public class SingleThreadLockConstant {
      * 取得微信token
      */
     public static final String PULL_WX_TOKEN="pullWxToken";
+    /**
+     * 用户购买商品
+     */
+    public static final String USER_BUY_GOODS="buyGoods";
 
 
 

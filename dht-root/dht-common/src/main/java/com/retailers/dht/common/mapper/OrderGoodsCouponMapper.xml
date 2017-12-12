@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.OrderGoodsCouponMapper">
+
+	<resultMap id="rm_orderGoodsCoupon" type="com.retailers.dht.common.entity.OrderGoodsCoupon">
+			<result property="ocId" column="oc_id"/>
+			<result property="ocOrderId" column="oc_order_id"/>
+			<result property="ocGoodsId" column="oc_goods_id"/>
+			<result property="ocGcId" column="oc_gc_id"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orderGoodsCoupon_columns">
+		oc_id,oc_order_id,oc_goods_id,oc_gc_id
+	</sql>
+	<!-- 根据订单商品优惠关联主键取得数据 -->
+	<select id="queryOrderGoodsCouponByOcId" resultMap="rm_orderGoodsCoupon" parameterType="java.lang.Long">
+		SELECT <include refid="orderGoodsCoupon_columns" />
+		FROM t_order_goods_coupon WHERE oc_id = #{ocId}
+	</select>
+	<!-- 订单商品优惠关联查询条件组合 -->
+	<sql id="orderGoodsCoupon_where">
+		<where>
+			<if test="null != params.ocId">
+				AND oc_id = #{params.ocId}
+			</if>
+			<if test="null != params.ocOrderId">
+				AND oc_order_id = #{params.ocOrderId}
+			</if>
+			<if test="null != params.ocGoodsId">
+				AND oc_goods_id = #{params.ocGoodsId}
+			</if>
+			<if test="null != params.ocGcId">
+				AND oc_gc_id = #{params.ocGcId}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrderGoodsCouponList" resultMap="rm_orderGoodsCoupon" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="orderGoodsCoupon_columns" />
+		FROM t_order_goods_coupon
+		<include refid="orderGoodsCoupon_where"/>
+	</select>
+	<!--添加订单商品优惠关联 -->
+	<insert id="saveOrderGoodsCoupon" parameterType="com.retailers.dht.common.entity.OrderGoodsCoupon" useGeneratedKeys="true" keyProperty="ocId">
+		INSERT INTO t_order_goods_coupon (
+			oc_order_id,oc_goods_id,oc_gc_id
+		) VALUES
+		(
+			#{ocOrderId,jdbcType=BIGINT},#{ocGoodsId,jdbcType=BIGINT},#{ocGcId,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改订单商品优惠关联 -->
+	<update id="updateOrderGoodsCoupon" parameterType="com.retailers.dht.common.entity.OrderGoodsCoupon">
+		UPDATE t_order_goods_coupon
+		<set>
+            <if test="null != ocOrderId">
+                oc_order_id = #{ocOrderId},
+            </if>
+            <if test="null != ocGoodsId">
+                oc_goods_id = #{ocGoodsId},
+            </if>
+            <if test="null != ocGcId">
+                oc_gc_id = #{ocGcId},
+            </if>
+		</set>
+		WHERE oc_id = #{ocId}
+	</update>
+	<!--删除订单商品优惠关联 -->
+	<delete id="deleteOrderGoodsCouponByOcId" parameterType="java.lang.Long">
+		DELETE FROM t_order_goods_coupon WHERE oc_id = #{ocId}
+	</delete>
+</mapper>
