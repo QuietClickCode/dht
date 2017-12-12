@@ -280,5 +280,10 @@ public class UserServiceImpl implements UserService {
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
 		return info;
 	}
+
+	public UserInfoVIew queryUserInfoByUid(Long uid) {
+		UserInfoVIew info=userMapper.queryLoginUserInfoView(uid);
+		return info;
+	}
 }
 
