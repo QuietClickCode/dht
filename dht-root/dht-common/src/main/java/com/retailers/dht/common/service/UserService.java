@@ -143,6 +143,13 @@ public interface UserService {
 	 */
 	public UserInfoVIew userLogin(String account,String pwd,Boolean isBindWx,Long wxId)throws AppException;
 
+	/**
+	 * 根据用户id取得登陆信息
+	 * @param uid 用户id
+	 * @return
+	 */
+	public UserInfoVIew queryUserInfoByUid(Long uid);
+
 }
 
 
