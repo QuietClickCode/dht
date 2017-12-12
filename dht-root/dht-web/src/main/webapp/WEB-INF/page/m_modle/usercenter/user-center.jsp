@@ -15,6 +15,7 @@
         .user-icon-list7{
             background-size: .36rem .34rem;
         }
+
     </style>
 </head>
 <body class="bge6">
@@ -173,6 +174,10 @@
             success:function(data){
 
             }
+        });
+        
+        $(function () {
+            console.log($("html").css("font-size","46px"));
         });
     </script>
 </body>
