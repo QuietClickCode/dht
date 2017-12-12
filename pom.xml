@@ -175,16 +175,16 @@
         </profile>
         <!-- 线下50环境 -->
         <profile>
-            <id>offline</id>
+            <id>hnc</id>
             <properties>
-                <env>offline</env>
+                <env>hnc</env>
             </properties>
         </profile>
         <!-- 正式环境 -->
         <profile>
-            <id>online</id>
+            <id>dht</id>
             <properties>
-                <env>online</env>
+                <env>dht</env>
             </properties>
         </profile>
     </profiles>
