@@ -156,6 +156,9 @@
                     }else{
                         $(".user-head").attr("src",userHeadSrc);
                     }
+
+                    if($(".user-head").attr("src") == "")
+                        $(".user-head").remove();
                 }
             });
         });
