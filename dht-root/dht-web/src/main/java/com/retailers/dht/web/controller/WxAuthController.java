@@ -118,6 +118,8 @@ public class WxAuthController {
             }else{
                 UserInfoVIew userInfoVIew=new UserInfoVIew();
                 userInfoVIew.setWauOpenid(wxAuthUser.getWauOpenid());
+                userInfoVIew.setUid(wxAuthUser.getWauUid());
+                request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.CUR_LOGIN_WXUSER_INFO,userInfoVIew);
                 request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
             }
         }
