@@ -359,6 +359,7 @@ public class WxMsgUtils {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         org.w3c.dom.Document doc = documentBuilder.parse(inputStream);
+        System.out.println(doc.getTextContent());
         doc.getDocumentElement().normalize();
         NodeList nodeList = doc.getDocumentElement().getChildNodes();
         for (int idx = 0; idx < nodeList.getLength(); ++idx) {
@@ -402,15 +403,28 @@ public class WxMsgUtils {
 //        }
 //    });
 
-//    /**
-//     * 文本消息对象转换成xml
-//     * @param wxMsgTextVo 文本消息对象
-//     * @return xml
-//     */
-//    public static String textMessageToXml(WxMsgTextVo wxMsgTextVo) {
+    /**
+     * 文本消息对象转换成xml
+     * @param wxMsgTextVo 文本消息对象
+     * @return xml
+     */
+    public static String textMessageToXml(WxMsgTextVo wxMsgTextVo) {
+        String xml ="<xml>" +
+                "<ToUserName><![CDATA["+wxMsgTextVo.getToUserName()+"]]></ToUserName>" +
+                "<FromUserName><![CDATA["+wxMsgTextVo.getFromUserName()+"]]></FromUserName>" +
+                "<CreateTime>"+wxMsgTextVo.getCreateTime()+"</CreateTime>" +
+                "<MsgType><![CDATA["+wxMsgTextVo.getMsgType()+"]]></MsgType>" +
+                "<Content><![CDATA[【深圳】天气实况 温度：27℃ 湿度：59% 风速：东北风3级" +
+                "11月03日 周日 27℃~23℃ 小雨 东北风4-5级" +
+                "11月04日 周一 26℃~21℃ 阵雨 微风" +
+                "11月05日 周二 27℃~22℃ 阴 微风]]></Content>" +
+                "<FuncFlag>0</FuncFlag>" +
+                "</xml>";
+            return xml;
+
 //        xstream.alias("xml", wxMsgTextVo.getClass());
 //        return xstream.toXML(wxMsgTextVo);
-//    }
+    }
 
 //    /**
 //     * 图片消息对象转换成xml
