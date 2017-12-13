@@ -3,6 +3,7 @@ package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
+import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
@@ -142,6 +143,20 @@ public interface UserService {
 	 * @throws AppException
 	 */
 	public UserInfoVIew userLogin(String account,String pwd,Boolean isBindWx,Long wxId)throws AppException;
+
+	/**
+	 * 根据用户id取得登陆信息
+	 * @param uid 用户id
+	 * @return
+	 */
+	public UserInfoVIew queryUserInfoByUid(Long uid);
+
+	/**
+	 * 微信登陆未注删微信
+	 * @param wxAuthUser
+	 * @return
+	 */
+	public UserInfoVIew wxLoginNoUser(WxAuthUser wxAuthUser);
 
 }
 

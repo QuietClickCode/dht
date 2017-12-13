@@ -158,7 +158,7 @@
 		  t_wx_auth_user
 		WHERE
 		  wau_unionid = #{unionid}
-		  AND wau_openid!=#{openId}
+		  AND wau_openid=#{openId}
 		ORDER BY
 		  wau_create_date DESC
 		LIMIT 1

@@ -291,4 +291,7 @@
 		SELECT <include refid="goods_columns" />
 		FROM t_goods WHERE g_classification = #{gt} and is_delete=0 and is_checked=1
 	</select>
+	<!--批量出售商品-->
+	<update id="sellGoods" parameterType="java.util.Map">
+	</update>
 </mapper>

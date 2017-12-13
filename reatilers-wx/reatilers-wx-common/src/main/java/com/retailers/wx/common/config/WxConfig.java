@@ -13,6 +13,28 @@ public class WxConfig {
     //js-sdk 耍要的token
     public static String ACCESS_TICKET="";
 
+
+    /** 请求消息类型：文本 */
+    public static String REQ_MESSAGE_TYPE_TEXT = "text";
+
+    /** 请求消息类型：图片 */
+    public static final String REQ_MESSAGE_TYPE_IMAGE = "image";
+
+    /**  请求消息类型：推送 */
+    public static final String REQ_MESSAGE_TYPE_EVENT = "event";
+
+    /** 事件类型：subscribe(订阅) */
+    public static final String EVENT_TYPE_SUBSCRIBE = "subscribe";
+
+    /** 事件类型：unsubscribe(取消订阅) */
+    public static final String EVENT_TYPE_UNSUBSCRIBE = "unsubscribe";
+
+    /** 事件类型：CLICK(自定义菜单点击事件) */
+    public static final String EVENT_TYPE_CLICK = "CLICK";
+
+    /** 事件类型：SCAN(自定义二维码扫描 -微信用户已关注该服务号) */
+    public static final String EVENT_TYPE_SCAN = "SCAN";
+
     //微信访问根地址
     public static final String BASE_WX_API_URL="https://api.weixin.qq.com";
     public static final String BASE_WX_OPEN_URL="https://open.weixin.qq.com";
@@ -135,4 +157,30 @@ public class WxConfig {
      * 取得永久素材列表(带分页)
      */
     public static String GET_BATCHGET_MATERIAL_URL=BASE_WX_API_URL+"/cgi-bin/material/batchget_material";
+
+    /**
+     * 创建带参数的二维码URL
+     */
+    public static final String WEIXIN_QRCODE_CREATE_URL = BASE_WX_API_URL+"/cgi-bin/qrcode/create?access_token={}";
+    /**
+     * 上传文件至微信服务器URL
+     */
+    public static final String WEIXIN_UPLOAD_FILE_URL = "http://file.api.weixin.qq.com/cgi-bin/media/upload?access_token={}&type={}";
+    /**
+     * 客服发送信息给微信用户URL
+     */
+    public static final String WEIXIN_KF_SEND_MSG_URL = BASE_WX_API_URL+"/cgi-bin/message/custom/send?access_token={}";
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

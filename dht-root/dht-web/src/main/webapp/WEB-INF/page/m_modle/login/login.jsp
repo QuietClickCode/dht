@@ -65,7 +65,7 @@
         </div>
     </div>
 </div>
-<c:if test="${isBindWx}>
+<c:if test="${isBindWx}">
     <div class="ui_draggable" style="display: none;"></div>
     <div class="popover" style="display: none;">
         <div class="dialog">
@@ -74,7 +74,7 @@
             </div>
             <div class="dialog_ft">
                 <div class="dialog_ft_box">
-                    <a href="">无账号</a>
+                    <a href="javascript:void(0);" onclick="wxLoginUnUser()">无账号</a>
                 </div>
 
                 <div class="dialog_ft_box">
@@ -156,6 +156,38 @@
         var time = date.getFullYear()+""+(date.getMonth()+1)+""+date.getDate()+""+date.getHours()+""+date.getMinutes()+""+date.getSeconds();
         var url = "/pcrimg?time="+time;
         $("#validateCodeImg").attr("src",url);
+    }
+    /**
+     * 微信登陆 没有关联用户时 无帐号选择
+     * @type {boolean}
+     */
+    var wxLoginFlag = false;
+    function wxLoginUnUser(){
+        if(!wxLoginFlag){
+            wxLoginFlag=true;
+            $.ajax({
+                url: "/user/wxLoginUnUser",
+                type: "post",
+                dataType: "json",
+                success: function (data) {
+                    wxLoginFlag=false;
+                    if(data.status==0){
+                        let redirectUrl=$("#redirectUrl").val();
+                        if(redirectUrl){
+                            window.location.href=redirectUrl;
+                        }else{
+                            window.location.href="/";
+                        }
+                    }
+                    //提示
+                    layer.open({
+                        content: data.msg,
+                        skin: 'msg',
+                        time: 2 //2秒后自动关闭
+                    });
+                }
+            });
+        }
     }
 </script>
 </body>

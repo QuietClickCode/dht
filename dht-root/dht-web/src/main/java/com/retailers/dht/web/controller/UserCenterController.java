@@ -510,4 +510,22 @@ public class UserCenterController extends BaseController{
         }
         return success(null);
     }
+
+    /**
+     *微信登陆未关联用户
+     * @return
+     */
+    @RequestMapping("wxLoginNoUser")
+    @ResponseBody
+    public BaseResp wxLoginNoUser(HttpServletRequest request){
+        Object obj=request.getSession().getAttribute(com.retailers.auth.constant.SystemConstant.CUR_LOGIN_WXUSER_INFO);
+        if(ObjectUtils.isEmpty(obj)){
+            WxAuthUser wxAuthUser= (WxAuthUser)obj;
+            UserInfoVIew userInfoVIew=userService.wxLoginNoUser(wxAuthUser);
+            setCurLoginUser(request,userInfoVIew);
+            return success("新建用户成功");
+        }else{
+            return errorForSystem("关联微信登陆帐号异常");
+        }
+    }
 }

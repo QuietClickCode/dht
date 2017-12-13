@@ -7,7 +7,7 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-12-11 23:38:12
+ * @date 2017-12-13 00:13:42
  */
 public class OrderDetail implements java.io.Serializable {
 
@@ -29,6 +29,9 @@ public class OrderDetail implements java.io.Serializable {
 	/**购买商品数量*/
 	@NotEmpty
 	private Integer odBuyNumber;
+	/**商品详情表（关联了价格和库存，与t_goods_ggsval_detail 关联，能找到对应的商品规格）*/
+	@NotEmpty
+	private Long odGdId;
 	/**是否退款(0 正常，1 申请退款，2 退款驳回，3退款成功）*/
 	@NotEmpty
 	private Integer odIsRefund;
@@ -86,6 +89,13 @@ public class OrderDetail implements java.io.Serializable {
 
 	public Integer getOdBuyNumber() {
 		return this.odBuyNumber;
+	}
+	public void setOdGdId(Long value) {
+		this.odGdId = value;
+	}
+
+	public Long getOdGdId() {
+		return this.odGdId;
 	}
 	public void setOdIsRefund(Integer value) {
 		this.odIsRefund = value;

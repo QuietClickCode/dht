@@ -280,5 +280,35 @@ public class UserServiceImpl implements UserService {
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
 		return info;
 	}
+
+	public UserInfoVIew queryUserInfoByUid(Long uid) {
+		UserInfoVIew info=userMapper.queryLoginUserInfoView(uid);
+		return info;
+	}
+
+	public UserInfoVIew wxLoginNoUser(WxAuthUser wxAuthUser) {
+		//创建新有用户
+		User user = new User();
+		user.setIsDelete(com.retailers.auth.constant.SystemConstant.SYS_IS_DELETE_NO);
+		user.setUcreateTime(new Date());
+		user.setUstatus(UserConstant.USER_STATUS_NORMAL);
+		user.setUsex(wxAuthUser.getWauSex());
+		user.setUname(wxAuthUser.getWauNickname());
+		userMapper.saveUser(user);
+		//创建用户卡包
+		UserCardPackage userCardPackage=new UserCardPackage();
+		userCardPackage.setUtotalWallet(0l);
+		userCardPackage.setUcurWallet(0l);
+		userCardPackage.setUtotalIntegral(0l);
+		userCardPackage.setUcurIntegral(0l);
+		userCardPackage.setId(user.getUid());
+		userCardPackageMapper.saveUserCardPackage(userCardPackage);
+		wxAuthUser.setWauUid(user.getUid());
+		//修改微信关联用户
+		wxAuthUserMapper.updateWxAuthUser(wxAuthUser);
+		//根据用户取得相应的登陆信息
+		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
+		return info;
+	}
 }
 

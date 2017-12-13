@@ -1,14 +1,13 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.constant.SystemConstant;
-import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.WxAuthUser;
+import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.service.WxAuthUserService;
 import com.retailers.dht.common.view.UserInfoVIew;
-import com.retailers.tools.utils.HttpClientUtil;
+import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
@@ -26,7 +25,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -36,10 +34,12 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("wx")
-public class WxAuthController {
+public class WxAuthController extends BaseController{
     Logger logger = LoggerFactory.getLogger(WxAuthController.class);
     @Autowired
     private WxAuthUserService wxAuthUserService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 获得用户授权确认
@@ -116,8 +116,9 @@ public class WxAuthController {
                 modelAndView.addObject("redirectUrl",redUrl);
                 redUrl="/loginPage";
             }else{
-                UserInfoVIew userInfoVIew=new UserInfoVIew();
-                userInfoVIew.setWauOpenid(wxAuthUser.getWauOpenid());
+                UserInfoVIew userInfoVIew= userService.queryUserInfoByUid(wxAuthUser.getWauUid());
+                logger.info("取得用户登陆信息:{}", JSON.toJSON(userInfoVIew));
+                setCurLoginUser(request,userInfoVIew);
                 request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
             }
         }

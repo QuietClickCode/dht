@@ -19,6 +19,13 @@ public interface OrderGoodsCouponMapper {
 	 * @date 2017-12-11 23:32:56
 	 */
 	public int saveOrderGoodsCoupon(OrderGoodsCoupon orderGoodsCoupon);
+
+	/**
+	 * 批量添加订单商品优惠关联
+	 * @param orderGoodsCoupons
+	 * @return
+	 */
+	public int saveOrderGoodsCoupons(List<OrderGoodsCoupon> orderGoodsCoupons);
 	/**
 	 * 编辑订单商品优惠关联
 	 * @param orderGoodsCoupon

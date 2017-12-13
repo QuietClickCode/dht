@@ -1,5 +1,8 @@
 package com.retailers.dht.common.vo;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+
 /**
  * 购买商品详情
  * @author zhongp
@@ -16,9 +19,9 @@ public class BuyGoodsVo {
      */
     private Integer num;
     /**
-     * 规则id
+     * 商品详情表（关联了价格和库存，与t_goods_ggsval_detail 关联，能找到对应的商品规格）
      */
-    private Long spec;
+    private Long gdId;
     /**
      * 商品优惠id
      */
@@ -44,12 +47,12 @@ public class BuyGoodsVo {
         this.num = num;
     }
 
-    public Long getSpec() {
-        return spec;
+    public Long getGdId() {
+        return gdId;
     }
 
-    public void setSpec(Long spec) {
-        this.spec = spec;
+    public void setGdId(Long gdId) {
+        this.gdId = gdId;
     }
 
     public String getGcpIds() {
@@ -67,4 +70,6 @@ public class BuyGoodsVo {
     public void setRemark(String remark) {
         this.remark = remark;
     }
+
+
 }

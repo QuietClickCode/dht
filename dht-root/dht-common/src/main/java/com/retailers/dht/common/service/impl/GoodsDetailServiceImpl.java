@@ -17,6 +17,7 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 /**
@@ -126,6 +127,19 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 			GoodsDetailVo goodsDetailVo = list.get(0);
 			goodsDetailVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsDetailVo.getImgUrl());
 			return  goodsDetailVo;
+		}
+		return null;
+	}
+	public List<GoodsDetail> queryGoodsDetailByGdIds(String gdIds){
+		String[] gdIdsArr = gdIds.split(",");
+		if(!ObjectUtils.isEmpty(gdIds)){
+			List<Long> gdIdsList = new ArrayList<Long>();
+			for(String gdId:gdIdsArr){
+				Long gdIdLong = Long.parseLong(gdId);
+				gdIdsList.add(gdIdLong);
+			}
+			List<GoodsDetail> list = goodsDetailMapper.queryGoodsDetailByGdIds(gdIdsList);
+			return list;
 		}
 		return null;
 	}

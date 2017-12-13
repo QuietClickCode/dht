@@ -67,13 +67,13 @@ public interface OrderService {
 	/**
 	 * 购物订单
 	 * @param uid 购买用户id
-	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"spec":1,"remark":"说明"}],"address":123}
+	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"specs":1,"remark":"说明"}],"address":123}
 	 *                   				buyGoods 购买商品列表
 	 *                   				goodsId 商品id
 	 *                   				num 购买数量
 	 *                   				gcpId 商品优惠id
 	 *                   				cpId 优惠卷id
-	 *                   				spec 规则id
+	 *                   				specs 规格ids 多个间用逗号隔开
 	 *                   				address 收货人地址id
 	 * @return 返回订单号和总金额
 	 * @throws AppException
