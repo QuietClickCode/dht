@@ -117,7 +117,7 @@
 			gd_id,sp_id,sp_sale,sp_inventory,sp_discount_rate,sp_bounds,is_delete,version
 		) VALUES
 		(
-			#{gdId,jdbcType=BIGINT},#{spId,jdbcType=BIGINT},#{spSale,jdbcType=REAL},#{spInventory,jdbcType=BIGINT},#{spDiscountRate,jdbcType=REAL},#{spBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gdId,jdbcType=BIGINT},#{spId,jdbcType=BIGINT},#{spSale,jdbcType=BIGINT},#{spInventory,jdbcType=BIGINT},#{spDiscountRate,jdbcType=BIGINT},#{spBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品与特价关系表 -->

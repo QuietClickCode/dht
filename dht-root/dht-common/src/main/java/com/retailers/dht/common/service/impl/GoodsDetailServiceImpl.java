@@ -7,17 +7,21 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsDetailMapper;
 import com.retailers.dht.common.entity.GoodsDetail;
+import com.retailers.dht.common.entity.GoodsDetailCopy;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
 import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.dht.common.service.GoodsDetailCopyService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 /**
@@ -35,7 +39,9 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 	private AttachmentService attachmentService;
 	@Autowired
 	private GoodsGgsvalDetailService goodsGgsvalDetailService;
-	public GoodsDetail saveGoodsDetail(GoodsDetail goodsDetail) {
+	@Autowired
+	private GoodsDetailCopyService goodsDetailCopyService;
+	public GoodsDetail saveGoodsDetail(GoodsDetail goodsDetail,Long uploadpersonId) {
 		Long gdImgid = goodsDetail.getGdImgid();
 		int status = goodsDetailMapper.saveGoodsDetail(goodsDetail);
 		if(!ObjectUtils.isEmpty(gdImgid)){
@@ -43,11 +49,12 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 				attachmentService.editorAttachment(gdImgid);
 			}
 		}
-
+		copyGoodsDetail(goodsDetail,status,uploadpersonId);
 		return status == 1 ? goodsDetail : null;
 	}
-	public boolean updateGoodsDetail(GoodsDetail goodsDetail) {
+	public boolean updateGoodsDetail(GoodsDetail goodsDetail,Long uploadpersonId) {
 		int status = goodsDetailMapper.updateGoodsDetail(goodsDetail);
+		copyGoodsDetail(goodsDetail,status,uploadpersonId);
 		return status == 1 ? true : false;
 	}
 	public GoodsDetailVo queryGoodsDetailByGdId(Long gdId) {
@@ -65,9 +72,10 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteGoodsDetailByGdId(Long gdId) {
-		int status = goodsDetailMapper.deleteGoodsDetailByGdId(gdId);
-		return status == 1 ? true : false;
+	public boolean deleteGoodsDetailByGdId(Long gdId,Long uploadpersonId) {
+		GoodsDetail goodsDetail = queryGoodsDetailByGdId(gdId);
+		goodsDetail.setIsDelete(1L);
+		return updateGoodsDetail(goodsDetail,uploadpersonId);
 	}
 
 	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid){
@@ -78,7 +86,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 		return list;
 	}
 
-	public boolean addMyData(String mydata,Long gid){
+	public boolean addMyData(String mydata,Long gid,Long uploadpersonId){
 		JSONArray jsonArray = JSON.parseArray(mydata);
 		GoodsDetail goodsDetail = new GoodsDetail();
 		goodsDetail.setGid(gid);
@@ -92,29 +100,34 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 			Long gdImgid = jsonObject.getLong("gdImgid");
 			Long gdResidueinventory = jsonObject.getLong("gdResidueinventory");
 			Long gdInventory = jsonObject.getLong("gdInventory");
-			Float gdCostprice = jsonObject.getFloat("gdCostprice");
-			Float gdPrice = jsonObject.getFloat("gdPrice");
+			Long gdCostprice = jsonObject.getLong("gdCostprice");
+			Long gdPrice = jsonObject.getLong("gdPrice");
 
 			goodsDetail.setGdImgid(gdImgid);
 			goodsDetail.setGdResidueinventory(gdResidueinventory);
 			goodsDetail.setGdInventory(gdInventory);
 			goodsDetail.setGdCostprice(gdCostprice);
 			goodsDetail.setGdPrice(gdPrice);
-			goodsDetail = saveGoodsDetail(goodsDetail);
-			System.out.println("gdid:"+goodsDetail.getGdId());
+			goodsDetail = saveGoodsDetail(goodsDetail,uploadpersonId);
+
 			if(!ObjectUtils.isEmpty(gsids)&&!ObjectUtils.isEmpty(gsvalids)){
 				String[] gsidsArr = gsids.split("_");
 				String[] gsvalidsArr = gsvalids.split("_");
-
+				List<GoodsGgsvalDetail> list = new ArrayList<GoodsGgsvalDetail>();
 				for(int j=0;j<gsidsArr.length;j++){
 					Long gsidLong = Long.parseLong(gsidsArr[j]);
 					Long gsvalidLong = Long.parseLong(gsvalidsArr[j]);
+
 					goodsGgsvalDetail.setGsId(gsidLong);
 					goodsGgsvalDetail.setGsvId(gsvalidLong);
+
+					System.out.println("gsidLong:"+gsidLong+",gsvalidLong:"+gsvalidLong);
+
 					goodsGgsvalDetail.setGid(gid);
 					goodsGgsvalDetail.setGdId(goodsDetail.getGdId());
 					goodsGgsvalDetailService.saveGoodsGgsvalDetail(goodsGgsvalDetail);
 				}
+//				goodsGgsvalDetailService.saveGoodsGgsvalDetails(list);
 			}
 		}
 
@@ -142,6 +155,21 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 			return list;
 		}
 		return null;
+	}
+
+	public void copyGoodsDetail(GoodsDetail goodsDetail,int status,Long uploadpersonId){
+		if(status==1){
+			GoodsDetailCopy goodsDetailCopy = new GoodsDetailCopy();
+			BeanUtils.copyProperties(goodsDetail,goodsDetailCopy);
+
+			goodsDetailCopy.setCreateTime(new Date());
+			goodsDetailCopy.setGdUploadpersionId(uploadpersonId);
+			goodsDetailCopyService.saveGoodsDetailCopy(goodsDetailCopy);
+		}
+	}
+	public boolean deleteGoodsDetailByGid(Long gid){
+		int status = goodsDetailMapper.deleteGoodsDetailByGid(gid);
+		return status>0 ? true:false;
 	}
 }
 

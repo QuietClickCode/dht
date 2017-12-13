@@ -68,5 +68,9 @@ public class GoodsGgsvalServiceImpl implements GoodsGgsvalService {
 
 		return status==gsIdsArr.length?true:false;
 	}
+	public boolean deleteGoodsGgsvalByGid(Long gid){
+		int status = goodsGgsvalMapper.deleteGoodsGgsvalByGid(gid);
+		return status>0?true:false;
+	}
 }
 

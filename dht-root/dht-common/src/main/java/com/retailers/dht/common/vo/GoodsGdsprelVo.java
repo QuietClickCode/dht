@@ -7,7 +7,7 @@ import com.retailers.dht.common.entity.GoodsGdsprel;
  */
 public class GoodsGdsprelVo extends GoodsGdsprel {
     private String gsName;
-    private Float gdPrice;
+    private Long gdPrice;
     private Long gdResidueinventory;
     private Long sumcount;
     private String imgurl;
@@ -21,11 +21,11 @@ public class GoodsGdsprelVo extends GoodsGdsprel {
         this.gsName = gsName;
     }
 
-    public Float getGdPrice() {
+    public Long getGdPrice() {
         return gdPrice;
     }
 
-    public void setGdPrice(Float gdPrice) {
+    public void setGdPrice(Long gdPrice) {
         this.gdPrice = gdPrice;
     }
 

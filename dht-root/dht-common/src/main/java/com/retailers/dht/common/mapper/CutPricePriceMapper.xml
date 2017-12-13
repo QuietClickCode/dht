@@ -75,7 +75,7 @@
 			gdcp_id,us_id,cpp_price,g_count,is_delete,version
 		) VALUES
 		(
-			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{cppPrice,jdbcType=REAL},#{gcount,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{cppPrice,jdbcType=BIGINT},#{gcount,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改砍价价格初始化表 -->

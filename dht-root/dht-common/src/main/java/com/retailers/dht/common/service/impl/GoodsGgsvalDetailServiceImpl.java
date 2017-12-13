@@ -61,53 +61,19 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
 		return status == 1 ? true : false;
 	}
 
-	public  boolean clearAllGgsrel(Long gid,Long updatepersonId){
-	    Map<String,Object> map = new HashMap<String,Object>();
-	    map.put("gid",gid);
-	    map.put("isDelete",0);
-	    int index = 0;
-	    int status = 0;
-        boolean flag =false;
-
+	public  boolean clearAllGgsrel(Long gid,Long updatepersonId){;
         Goods goods = goodsService.queryGoodsByGid(gid);
-        System.out.println(gid);
         goods.setIsChecked(0L);
         goodsService.updateGoods(goods,updatepersonId);
 
-        Pagination<GoodsGgsval> paginationGoodsGgsval = goodsGgsvalService.queryGoodsGgsvalList(map,1,1000);
-        index += paginationGoodsGgsval.getData().size();
-        for(int i=0; i<paginationGoodsGgsval.getData().size(); i++){
-            GoodsGgsval goodsGgsval = paginationGoodsGgsval.getData().get(i);
-            goodsGgsval.setIsDelete(1L);
-            flag =goodsGgsvalService.updateGoodsGgsval(goodsGgsval);
-            if(flag){
-                status ++;
-            }
-        }
+        boolean goodsGgsvalFlag = goodsGgsvalService.deleteGoodsGgsvalByGid(gid);
 
-        Pagination<GoodsDetail> paginationGoodsDetail = goodsDetailService.queryGoodsDetailList(map,1,1000);
-        index += paginationGoodsDetail.getData().size();
-        for(int i=0; i<paginationGoodsDetail.getData().size(); i++){
-            GoodsDetail goodsDetail = paginationGoodsDetail.getData().get(i);
-            goodsDetail.setIsDelete(1L);
-            flag = goodsDetailService.updateGoodsDetail(goodsDetail);
-            if(flag){
-                status ++;
-            }
-        }
+        boolean goodsDetailFlag = goodsDetailService.deleteGoodsDetailByGid(gid);
 
-        Pagination<GoodsGgsvalDetail> paginationGoodsGgsvalDetail = queryGoodsGgsvalDetailList(map,1,1000);
-        index += paginationGoodsGgsvalDetail.getData().size();
-        for(int i=0; i<paginationGoodsGgsvalDetail.getData().size(); i++){
-            GoodsGgsvalDetail goodsGgsvalDetail = paginationGoodsGgsvalDetail.getData().get(i);
-            goodsGgsvalDetail.setIsDelete(1L);
-            flag = updateGoodsGgsvalDetail(goodsGgsvalDetail);
-            if(flag){
-                status ++;
-            }
-        }
+        boolean goodsGgsvalDetailFlag = deleteGoodsGgsvalDetailByGid(gid);
 
-	    return index==status?true:false;
+
+	    return goodsGgsvalFlag&&goodsDetailFlag&&goodsGgsvalDetailFlag;
     }
 
     public Pagination<GoodsInventoryVo> queryGoodsInventoryLists(Map<String, Object> params,int pageNo,int pageSize){
@@ -120,13 +86,22 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return page;
     }
 
-    public boolean editGoodsInventory(Long gdId,Long inventory){
+    public boolean editGoodsInventory(Long gdId,Long inventory,Long updatepersonId){
         GoodsDetail goodsDetail = goodsDetailService.queryGoodsDetailByGdId(gdId);
         if(inventory>0){
             goodsDetail.setGdInventory(goodsDetail.getGdInventory()+inventory);
         }
         goodsDetail.setGdResidueinventory(goodsDetail.getGdResidueinventory()+inventory);
-        return goodsDetailService.updateGoodsDetail(goodsDetail);
+        return goodsDetailService.updateGoodsDetail(goodsDetail,updatepersonId);
+    }
+
+    public boolean deleteGoodsGgsvalDetailByGid(Long gid){
+        int status = goodsGgsvalDetailMapper.deleteGoodsGgsvalDetailByGid(gid);
+        return status>0?true:false;
+    }
+    public boolean saveGoodsGgsvalDetails( List<GoodsGgsvalDetail> list){
+        int status = goodsGgsvalDetailMapper.saveGoodsGgsvalDetails(list);
+        return status>0?true:false;
     }
 }
 

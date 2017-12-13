@@ -116,7 +116,7 @@
 			gd_id,cp_id,cp_sale,cp_inventory,cp_bounds,is_delete,version
 		) VALUES
 		(
-			#{gdId,jdbcType=BIGINT},#{cpId,jdbcType=BIGINT},#{cpSale,jdbcType=REAL},#{cpInventory,jdbcType=BIGINT},#{cpBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gdId,jdbcType=BIGINT},#{cpId,jdbcType=BIGINT},#{cpSale,jdbcType=BIGINT},#{cpInventory,jdbcType=BIGINT},#{cpBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品详情与砍价关系表 -->

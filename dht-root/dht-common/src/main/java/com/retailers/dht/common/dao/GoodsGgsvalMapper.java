@@ -3,6 +3,8 @@ import com.retailers.dht.common.entity.GoodsGgsval;
 import com.retailers.dht.common.vo.GoodsGgsvalOnceVo;
 import com.retailers.dht.common.vo.GoodsGgsvalVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品与规格值关系表DAO
@@ -55,4 +57,6 @@ public interface GoodsGgsvalMapper {
 	public List<GoodsGgsval> queryGoodsGgsvalList(Pagination<GoodsGgsval> pagination);
 
 	public List<GoodsGgsvalOnceVo> queryGgsrelListsOnce(Long gid);
+
+	public int deleteGoodsGgsvalByGid(@Param("gid") Long gid);
 }

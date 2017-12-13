@@ -13,6 +13,7 @@ import com.retailers.dht.common.service.GoodsGdcprelService;
 import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sun.util.resources.cldr.ga.LocaleNames_ga;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -42,11 +43,11 @@ public class CutPricePriceServiceImpl implements CutPricePriceService {
 		GoodsDetail goodsDetail = goodsDetailService.queryGoodsDetailByGdId(goodsGdcprel.getGdId());
 
 		Long cpMostperson = cutPrice.getCpMostperson();
-		Float gdPrice = goodsDetail.getGdPrice();
-		Float cpSale = goodsGdcprel.getCpSale();
+		Long gdPrice = goodsDetail.getGdPrice();
+		Long cpSale = goodsGdcprel.getCpSale();
 		int status =0;
-		List<Float> list = getCutDownPrice(cpMostperson,gdPrice,cpSale);
-		for(Float cutDownPrice:list){
+		List<Long> list = getCutDownPrice(cpMostperson,gdPrice,cpSale);
+		for(Long cutDownPrice:list){
 			cutPricePrice.setCppPrice(cutDownPrice);
 			status += cutPricePriceMapper.saveCutPricePrice(cutPricePrice);
 		}
@@ -85,19 +86,18 @@ public class CutPricePriceServiceImpl implements CutPricePriceService {
 	}
 
 
-	public List<Float> getCutDownPrice(Long cpMostperson,Float gdPrice,Float cpSale) {
-		Float cj = gdPrice-cpSale;
-		Float avg = cj/cpMostperson;
-		List<Float> list = new ArrayList<Float>();
-		Float index = 0F;
+	public List<Long> getCutDownPrice(Long cpMostperson,Long gdPrice,Long cpSale) {
+		Long cj = gdPrice-cpSale;
+		Long avg = cj/cpMostperson;
+		List<Long> list = new ArrayList<Long>();
+		Long index = 0L;
 		for(int i=0;i<cpMostperson-1;i++){
-			Double cutDownPrice = (Math.random()*0.3+0.9)*avg;
-			DecimalFormat   df   =new DecimalFormat("#.00");
-			Float cdp = Float.parseFloat(df.format(cutDownPrice).toString());
+			Double  cutDownPrice= (Math.random()*0.3+0.9)*avg;
+			Long cdp = Math.round(cutDownPrice);
 			index += cdp;
 			list.add(cdp);
 		}
-		Float lastone = cj-index;
+		Long lastone = cj-index;
 		if(lastone>0){
 			list.add(lastone);
 			return list;

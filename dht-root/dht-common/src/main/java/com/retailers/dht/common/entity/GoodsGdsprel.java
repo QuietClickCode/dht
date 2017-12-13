@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品与特价关系表对象
+ * 描述：商品详情与特教秒杀关系表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-11-08 17:29:16
+ * @date 2017-12-13 11:09:40
  */
 public class GoodsGdsprel implements java.io.Serializable {
 
@@ -22,20 +22,20 @@ public class GoodsGdsprel implements java.io.Serializable {
 	private Long spId;
 	/**特价*/
 	@NotEmpty
-	private Float spSale;
+	private Long spSale;
 	/**活动最多库存*/
 	@NotEmpty
 	private Long spInventory;
 	/**折扣率*/
 	@NotEmpty
-	private Float spDiscountRate;
+	private Long spDiscountRate;
 	/**限购量*/
 	@NotEmpty
 	private Long spBounds;
-	/**isDelete*/
+	/**是否删除（0代表未删除，1代表已删除）*/
 	@NotEmpty
 	private Long isDelete;
-	/**version*/
+	/**版本号*/
 	@NotEmpty
 	private Long version;
 	//columns END
@@ -68,11 +68,11 @@ public class GoodsGdsprel implements java.io.Serializable {
 	public Long getSpId() {
 		return this.spId;
 	}
-	public void setSpSale(Float value) {
+	public void setSpSale(Long value) {
 		this.spSale = value;
 	}
 
-	public Float getSpSale() {
+	public Long getSpSale() {
 		return this.spSale;
 	}
 	public void setSpInventory(Long value) {
@@ -82,11 +82,11 @@ public class GoodsGdsprel implements java.io.Serializable {
 	public Long getSpInventory() {
 		return this.spInventory;
 	}
-	public void setSpDiscountRate(Float value) {
+	public void setSpDiscountRate(Long value) {
 		this.spDiscountRate = value;
 	}
 
-	public Float getSpDiscountRate() {
+	public Long getSpDiscountRate() {
 		return this.spDiscountRate;
 	}
 	public void setSpBounds(Long value) {

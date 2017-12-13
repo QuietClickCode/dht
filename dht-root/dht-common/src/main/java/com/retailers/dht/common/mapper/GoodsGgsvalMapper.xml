@@ -116,6 +116,14 @@
 		</set>
 		WHERE ggs_id = #{ggsId} and version = #{version}
 	</update>
+	<update id="deleteGoodsGgsvalByGid">
+		UPDATE t_goods_ggsval
+		SET
+		is_delete = 1
+		WHERE
+		g_id = #{gid}
+		and is_delete=0
+	</update>
 	<!--删除商品与规格值关系表 -->
 	<delete id="deleteGoodsGgsvalByGgsId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_ggsval WHERE ggs_id = #{ggsId}

@@ -800,7 +800,15 @@
             field: 'gdPrice',
             title: '原价',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = parseFloat(value/100).toFixed(2);
+                }
+                return val;
+            }
         },
         {
             field: 'cpSale',
@@ -811,7 +819,7 @@
                 let html='';
                 var val = '';
                 if(value!=null){
-                    val = value;
+                    val = parseFloat(value/100).toFixed(2);
                 }
                 html = '<input type="text" class="form-controller" value="'+val+'">' +
                     '<input type="hidden" value="'+row.gdId+'">';
@@ -907,7 +915,7 @@
             for(var i=1;i<trs.length;i++){
                 var tds = $(trs[i]).children();
                 var gdId = $( tds[2]).find('input[type=hidden]').get(0).value;
-                var cpSale = $(tds[2]).find('input[type=text]').get(0).value;
+                var cpSale = parseInt($(tds[2]).find('input[type=text]').get(0).value*100) ;
                 var cpInventory = $(tds[3]).find('input[type=text]').get(0).value;
                 var cpBounds = $(tds[4]).find('input[type=text]').get(0).value;
                 var cpId = id;
@@ -985,7 +993,15 @@
             field: 'gdPrice',
             title: '原价',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val = '';
+                if(value!=null){
+                    val = parseFloat(value/100).toFixed(2);
+                }
+                return val;
+            }
         },
         {
             field: 'cpSale',
@@ -996,7 +1012,7 @@
                 let html='';
                 var val = '';
                 if(value!=null){
-                    val = value;
+                    val = parseFloat(value/100).toFixed(2);
                 }
                 html = '<input type="text" class="form-controller" value="'+val+'">' +
                     '<input type="hidden" value="'+row.gdId+'">';

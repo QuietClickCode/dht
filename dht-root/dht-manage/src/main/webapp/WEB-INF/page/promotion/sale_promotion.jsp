@@ -850,7 +850,13 @@
             field: 'gdPrice',
             title: '原价',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val;
+                val = parseFloat(value/100).toFixed(2);
+                return val;
+            }
         },
         {
             field: 'spDiscountRate',
@@ -861,7 +867,7 @@
                 let html='';
                 var val = '';
                 if(value!=null){
-                    val = value;
+                    val = parseFloat(value/100).toFixed(2);
                 }
                 html = '<input type="hidden" value="'+row.gdId+'">' +
                     '<input type="text" class="form-controller" value="'+val+'" onblur="changspsale(this)">';
@@ -877,7 +883,7 @@
                 let html='';
                 var val = '';
                 if(value!=null){
-                    val = value;
+                    val = parseFloat(value/100).toFixed(2);
                 }
                 html = '<input type="text" class="form-controller" value="'+val+'" onblur="changsprate(this);">';
                 return html;
@@ -974,8 +980,8 @@
         var tds = $obj.children();
 
         var gdId = $(tds[2]).find('input[type=hidden]').get(0).value;
-        var spDiscountRate = $(tds[2]).find('input[type=text]').get(0).value;
-        var spSale = $(tds[3]).find('input[type=text]').get(0).value;
+        var spDiscountRate = parseInt($(tds[2]).find('input[type=text]').get(0).value*100) ;
+        var spSale = parseInt($(tds[3]).find('input[type=text]').get(0).value*100) ;
         var spInventory = $(tds[4]).find('input[type=text]').get(0).value;
         var spBounds = $(tds[5]).find('input[type=text]').get(0).value;
         var spId = id;
@@ -1041,7 +1047,13 @@
             field: 'gdPrice',
             title: '原价',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html='';
+                var val;
+                val = parseFloat(value/100).toFixed(2);
+                return val;
+            }
         },
         {
             field: 'spDiscountRate',

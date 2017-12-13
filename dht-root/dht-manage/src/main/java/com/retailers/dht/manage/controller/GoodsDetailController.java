@@ -43,9 +43,10 @@ public class GoodsDetailController extends BaseController {
 
     @RequestMapping("/addGoodsDetail")
     @ResponseBody
-    public Map<String,Object> addGoodsDetail(GoodsDetail goodsDetail){
+    public Map<String,Object> addGoodsDetail(GoodsDetail goodsDetail,HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
         goodsDetail.setIsDelete(0L);
-        goodsDetail=goodsDetailService.saveGoodsDetail(goodsDetail);
+        goodsDetail=goodsDetailService.saveGoodsDetail(goodsDetail,uid);
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("goodsDetail",goodsDetail);
         return gtm;
@@ -63,9 +64,10 @@ public class GoodsDetailController extends BaseController {
     @RequestMapping("/addMyData")
     @ResponseBody
     public BaseResp addMyData(String uploaddata,Long gid, HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
         boolean f = goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));
         if(f){
-            boolean flag = goodsDetailService.addMyData(uploaddata,gid);
+            boolean flag = goodsDetailService.addMyData(uploaddata,gid,uid);
             return success(flag);
         }else{
             return success(false);

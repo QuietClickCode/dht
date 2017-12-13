@@ -138,7 +138,7 @@
 			g_id,gd_price,gd_costprice,gd_inventory,gd_residueinventory,gd_imgid,is_delete,version
 		) VALUES
 		(
-			#{gid,jdbcType=BIGINT},#{gdPrice,jdbcType=REAL},#{gdCostprice,jdbcType=REAL},#{gdInventory,jdbcType=BIGINT},#{gdResidueinventory,jdbcType=BIGINT},#{gdImgid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gid,jdbcType=BIGINT},#{gdPrice,jdbcType=BIGINT},#{gdCostprice,jdbcType=BIGINT},#{gdInventory,jdbcType=BIGINT},#{gdResidueinventory,jdbcType=BIGINT},#{gdImgid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品详情表 -->
@@ -171,6 +171,14 @@
             </if>
 		</set>
 		WHERE gd_id = #{gdId} and version = #{version}
+	</update>
+	<update id="deleteGoodsDetailByGid">
+		UPDATE t_goods_detail
+		SET
+		is_delete = 1
+		WHERE
+		g_id = #{gid}
+		and is_delete=0
 	</update>
 	<!--删除商品详情表 -->
 	<delete id="deleteGoodsDetailByGdId" parameterType="java.lang.Long">

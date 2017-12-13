@@ -37,3 +37,106 @@ body {
     left: 50%;
     margin-left: -1rem;
 }
+
+
+
+
+/*购物车失效商品*/
+.invalid-goods {
+    margin-top: .8rem;
+}
+.invalid-goods .invalid-tittle-box {
+    height: 1rem;
+    line-height: 1rem;
+    padding: 0 .3rem;
+    background-color: #c9c8c5;
+}
+.invalid-goods .invalid-tittle {
+    display: inline-block;
+    width: 2rem;
+    height: .32rem;
+    color: #e43f46;
+    float: left;
+    font-size: 0.32rem;
+    font-weight: bold;
+}
+.invalid-goods .clear-all-invalid {
+    display: inline-block;
+    padding: .12rem .18rem;
+    font-size: .26rem;
+    /*height: .32rem;*/
+    line-height: .4rem;
+    background-color: #e43f46;
+    color: #fff;
+    float: right;
+    border: none;
+    outline: none;
+    border-radius: .06rem;
+    margin-top: .18rem;
+}
+.invalid-goods .clear-disable {
+    display: inline-block;
+    padding: .12rem .18rem;
+    font-size: .26rem;
+    /*height: .32rem;*/
+    line-height: .4rem;
+    background-color: #a09f9c;
+    color: #000000;
+    float: right;
+    border: none;
+    outline: none;
+    border-radius: .06rem;
+    margin-top: .18rem;
+}
+.invalid-goods .img-box {
+    position: relative;
+}
+.invalid-goods .img-box .invalid-bg {
+    width: 1.2rem;
+    height: 1.2rem;
+    line-height: 1.2rem;
+    color: #fff;
+    background-color: #7c766a;
+    border-radius: 50%;
+    position: absolute;
+    top: .15rem;
+    left: .15rem;
+    text-align: center;
+    opacity: .8;
+    filter: Alpha(opacity=50)
+}
+.invalid-goods .no-invalid-tip {
+    line-height: 1.4rem;
+    background-color: #e6e6e6;
+    font-size: .32rem;
+    text-align: center;
+    color: #525151;
+}
+/*砍价商品*/
+.current-price {
+    background-color: #fff;
+    height: .7rem;
+    line-height: .7rem;
+    padding-left: .2rem;
+}
+.current-price > .title-now {
+    font-size: .26rem;
+    color: #ed5547;
+    letter-spacing: 1px;
+}
+.current-price > .title-now > span {
+    font-size: .38rem;
+    color: #ed5547;
+    font-weight: bold;
+}
+.current-price > .bargain-more {
+    font-size: .24rem;
+    color: #fbf9fc;
+    background-color: #e64966;
+    padding: .04rem .08rem;
+    letter-spacing: 1px;
+}
+.current-price > .bargain-more > span {
+    /*font-size: .12rem;*/
+    margin: 0 -.06rem;
+}

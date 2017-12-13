@@ -8,8 +8,8 @@ public class GoodsVo extends Goods {
     private String gclassificationName;
     private String gareaName;
     private String imgUrl;
-    private Float minprice;
-    private Float maxprice;
+    private Long minprice;
+    private Long maxprice;
     private Long inventory;
     private Long gendbuy;
     private Long gstartbuy;
@@ -102,19 +102,19 @@ public class GoodsVo extends Goods {
         this.gendbuy = gendbuy;
     }
 
-    public Float getMinprice() {
+    public Long getMinprice() {
         return minprice;
     }
 
-    public void setMinprice(Float minprice) {
+    public void setMinprice(Long minprice) {
         this.minprice = minprice;
     }
 
-    public Float getMaxprice() {
+    public Long getMaxprice() {
         return maxprice;
     }
 
-    public void setMaxprice(Float maxprice) {
+    public void setMaxprice(Long maxprice) {
         this.maxprice = maxprice;
     }
 

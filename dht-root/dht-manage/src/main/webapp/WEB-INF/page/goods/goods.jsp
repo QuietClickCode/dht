@@ -1047,6 +1047,7 @@
             var formData=$("#editorGoodsForm").serializeObject();
             formData["gdescription"]=UE.getEditor('editor').getContent();
             formData["garea"]=1;
+            formData["gprice"] = parseInt(formData["gprice"]*100);
             let url="/goods/addGoods";
             if(editorGoodsType==1){
                 url="/goods/editGoods";
@@ -1328,7 +1329,7 @@
             $("#garea").val(rowData.garea);
             $("#gareaName").val(rowData.gareaName);
             $("#gsalescope").val(rowData.gsalescope);
-            $("#gprice").val(rowData.gprice);
+            $("#gprice").val(parseFloat(rowData.gprice/100).toFixed(2));
             $("#gunitname").val(rowData.gunitname);
             $("#gproductioninaddress").val(rowData.gproductioninaddress);
             $("#gproductioninperson").val(rowData.gproductioninperson);
@@ -2079,8 +2080,8 @@
                         for(var j=0;j<hasgsvalid.length;j++){
                             html += '<td> <input value="'+hasgsvalid[j]+'" type="hidden" /> '+hasgsval[j]+' </td>';
                         }
-                        html += '<td> <input value="'+rows[i].gdPrice+'" class="form-control" placeholder="售价" type="text" /> </td>'+
-                            '<td> <input value="'+rows[i].gdCostprice+'" class="form-control" placeholder="成本" type="text" /> </td>'+
+                        html += '<td> <input value="'+ parseFloat(rows[i].gdPrice/100).toFixed(2)+'" class="form-control" placeholder="售价" type="text" /> </td>'+
+                            '<td> <input value="'+parseFloat(rows[i].gdCostprice/100).toFixed(2)+'" class="form-control" placeholder="成本" type="text" /> </td>'+
                             '<td> <input value="'+rows[i].gdInventory+'" class="form-control" placeholder="库存" disabled="disabled" type="text" /> </td>'+
                             '<td> <input value="'+rows[i].gdResidueinventory+'" class="form-control" placeholder="剩余库存" disabled="disabled" type="text" /> </td>'+
                             '<td>'+
@@ -2408,8 +2409,8 @@
                    var gdImgid = $(ggsvaldetailTtds[ggsvaldetailTtds.length-2]).find('input').get(0).value;
                    var gdResidueinventory = $(ggsvaldetailTtds[ggsvaldetailTtds.length-3]).find('input').get(0).value;
                    var gdInventory = $(ggsvaldetailTtds[ggsvaldetailTtds.length-4]).find('input').get(0).value;
-                   var gdCostprice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-5]).find('input').get(0).value;
-                   var gdPrice = $(ggsvaldetailTtds[ggsvaldetailTtds.length-6]).find('input').get(0).value;
+                   var gdCostprice =  parseInt($(ggsvaldetailTtds[ggsvaldetailTtds.length-5]).find('input').get(0).value*100) ;
+                   var gdPrice = parseInt($(ggsvaldetailTtds[ggsvaldetailTtds.length-6]).find('input').get(0).value*100);
 
                    uploaddata += '\"gdImgid\":'+gdImgid+',';
                    uploaddata += '\"gdResidueinventory\":'+gdResidueinventory+',';

@@ -406,9 +406,9 @@
                     <!--查询用户是否购买此商品-->
                     queryuserisbuygoods();
                     timestape = data.rows[0].timestap*1000;
-                    $('#gprice').html('￥'+data.rows[0].gprice);
+                    $('#gprice').html('￥'+parseFloat(data.rows[0].gprice/100).toFixed(2));
                     $('#goodsNameDiv').html(data.rows[0].goodsName);
-                    $('#minprice').html('￥'+data.rows[0].minprice);
+                    $('#minprice').html('￥'+parseFloat(data.rows[0].minprice/100).toFixed(2));
                     parentId = data.rows[0].parentId;
                     timegoing();
                 }else{
@@ -535,7 +535,7 @@
 
     <!--商品不存在 跳转页面-->
     function nogoods() {
-        //window.location.href='';
+        window.location.href='/home/lostHtml';
     }
 
     var flag = true;
@@ -680,7 +680,7 @@
                     var row = data.row;
                     if(row!=null){
                         var imgUrl = row.imgurl;
-                        var price = row.spSale;
+                        var price = parseFloat(row.spSale/100).toFixed(2);
                         var inventory = row.spInventory;
                         var gunitname = row.gunitname;
 

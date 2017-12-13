@@ -7,14 +7,14 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-10-12 17:29:40
+ * @date 2017-12-13 10:30:30
  */
 public class Goods implements java.io.Serializable {
 
-	/**商品副本ID*/
+	/**商品ID*/
 	@NotEmpty
 	private Long gid;
-	/**商品副本名称*/
+	/**商品名称*/
 	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String gname;
@@ -64,7 +64,7 @@ public class Goods implements java.io.Serializable {
 	private Long gcopyid;
 	/**商品原价*/
 	@NotEmpty
-	private Float gprice;
+	private Long gprice;
 	/**审核人*/
 	@NotEmpty
 	private Long gcheckperson;
@@ -82,7 +82,7 @@ public class Goods implements java.io.Serializable {
 	/**是否被删除 0没有删除 1已删除*/
 	@NotEmpty
 	private Long isDelete;
-	/**version*/
+	/**版本号*/
 	@NotEmpty
 	private Long version;
 	//columns END
@@ -199,11 +199,11 @@ public class Goods implements java.io.Serializable {
 	public Long getGcopyid() {
 		return this.gcopyid;
 	}
-	public void setGprice(Float value) {
+	public void setGprice(Long value) {
 		this.gprice = value;
 	}
 
-	public Float getGprice() {
+	public Long getGprice() {
 		return this.gprice;
 	}
 	public void setGcheckperson(Long value) {

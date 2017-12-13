@@ -11,8 +11,8 @@ public class CutPriceLogVo extends CutPriceLog {
     private String uimgurl;
     private Long cpMostperson;
     private Long cpLestperson;
-    private Float gdPrice;
-    private Float cpPrice;
+    private Long gdPrice;
+    private Long cpPrice;
 
     public Long getCpLestperson() {
         return cpLestperson;
@@ -46,19 +46,19 @@ public class CutPriceLogVo extends CutPriceLog {
         this.cpMostperson = cpMostperson;
     }
 
-    public Float getGdPrice() {
+    public Long getGdPrice() {
         return gdPrice;
     }
 
-    public void setGdPrice(Float gdPrice) {
+    public void setGdPrice(Long gdPrice) {
         this.gdPrice = gdPrice;
     }
 
-    public Float getCpPrice() {
+    public Long getCpPrice() {
         return cpPrice;
     }
 
-    public void setCpPrice(Float cpPrice) {
+    public void setCpPrice(Long cpPrice) {
         this.cpPrice = cpPrice;
     }
 }

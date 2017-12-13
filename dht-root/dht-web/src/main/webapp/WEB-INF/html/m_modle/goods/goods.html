@@ -461,8 +461,8 @@
 
                         $('#gdescription').html(row.gdescription);
                         $('#gname').html(gname);
-                        $('#gprice').html('￥'+row.gprice+'/'+row.gunitname);
-                        $('#gdprice').html('￥'+row.minprice+'/'+row.gunitname);
+                        $('#gprice').html('￥'+parseFloat(row.gprice/100).toFixed(2) +'/'+row.gunitname);
+                        $('#gdprice').html('￥'+parseFloat(row.minprice/100).toFixed(2)+'/'+row.gunitname);
                     }else{
                         nogoods();
                     }
@@ -713,7 +713,7 @@
                         var row = data.row;
                         if(row!=null){
                             var imgUrl = row.imgUrl;
-                            var price = row.gdPrice;
+                            var price = parseFloat(row.gdPrice/100).toFixed(2) ;
                             var inventory = row.gdResidueinventory;
                             var gunitname = row.gunitname;
                             gdId = row.gdId;
@@ -930,7 +930,7 @@
                             layer.msg('成功加入购物车!');
 
                         }else{
-                            layer.msg(data.msg);
+                            layer.msg('请登录');
                         }
 
                     }

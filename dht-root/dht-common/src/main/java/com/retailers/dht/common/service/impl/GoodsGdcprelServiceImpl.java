@@ -68,7 +68,7 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 			JSONObject jsonObject = jsonArray.getJSONObject(i);
 			Long gdId = jsonObject.getLong("gdId");
 			Long cpId = jsonObject.getLong("cpId");
-			Float cpSale = jsonObject.getFloat("cpSale");
+			Long cpSale = jsonObject.getLong("cpSale");
 			Long cpInventory = jsonObject.getLong("cpInventory");
 			Long cpBounds = jsonObject.getLong("cpBounds");
 			goodsGdcprel.setGdId(gdId);

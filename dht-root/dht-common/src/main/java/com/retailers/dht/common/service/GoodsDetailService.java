@@ -22,7 +22,7 @@ public interface GoodsDetailService {
 	 * @author fanghui
 	 * @date 2017-10-21 10:51:10
 	 */
-	public GoodsDetail saveGoodsDetail(GoodsDetail goodsDetail);
+	public GoodsDetail saveGoodsDetail(GoodsDetail goodsDetail,Long uploadpersonId);
 	/**
 	 * 编辑商品详情表
 	 * @param goodsDetail
@@ -30,7 +30,7 @@ public interface GoodsDetailService {
 	 * @author fanghui
 	 * @date
 	 */
-	public boolean updateGoodsDetail(GoodsDetail goodsDetail);
+	public boolean updateGoodsDetail(GoodsDetail goodsDetail,Long uploadpersonId);
 	/**
 	 * 根据id查询商品详情表
 	 * @param gdId
@@ -56,15 +56,17 @@ public interface GoodsDetailService {
 	 * @author fanghui
 	 * @date 2017-10-21 10:51:10
 	 */
-	public boolean deleteGoodsDetailByGdId(Long gdId);
+	public boolean deleteGoodsDetailByGdId(Long gdId,Long uploadpersonId);
 
 	public List<GoodsDetailVo> queryGoodsDetailOnce(Long gid);
 
-	public boolean addMyData(String mydata,Long gid);
+	public boolean addMyData(String mydata,Long gid,Long uploadpersonId);
 
 	public GoodsDetailVo queryGoodsDetailVoLists(Map map);
 
 	public List<GoodsDetail> queryGoodsDetailByGdIds(String gdIds);
+
+	public boolean deleteGoodsDetailByGid(Long gid);
 }
 
 

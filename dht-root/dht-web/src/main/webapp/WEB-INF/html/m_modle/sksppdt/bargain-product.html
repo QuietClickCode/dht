@@ -57,8 +57,8 @@
                 &nbsp;
             </span>
     </div>
-    <div class="title" id="goodsNameDiv">2017墨镜男士方形偏光眼镜大框太阳镜女潮人近视墨镜圆脸</div>
-    <div class="norms" id="rule" style="height: 48px">
+    <div class="title" id="goodsNameDiv"></div>
+    <div class="norms" id="rule" style="height: 60px">
         <span class="name">规则</span>
         <span class="text overflow" ></span>
     </div>
@@ -411,8 +411,8 @@
                 if(data.rows!=null){
                     cpId=data.rows[0].cpId;
                     timestape = data.rows[0].timestap*1000;
-                    var cpSale = data.rows[0].cpSale;
-                    var minprice = data.rows[0].minprice;
+                    var cpSale = parseFloat(data.rows[0].cpSale/100).toFixed(2);
+                    var minprice = parseFloat(data.rows[0].minprice/100).toFixed(2);
                     $('#minprice').html(minprice);
                     $('#cutdownprice').html(minprice-cpSale);
                     parentId = data.rows[0].parentId;
@@ -691,8 +691,8 @@
                     var row = data.row;
                     if(row!=null){
                         var imgUrl = row.imgurl;
-                        var price = row.gdPrice;
-                        cpSale = row.cpSale;
+                        var price = parseFloat(row.gdPrice/100).toFixed(2);
+                        cpSale = parseFloat(row.cpSale/100).toFixed(2);
                         gdcpId = row.gdcpId;
                         var inventory = row.cpInventory;
                         var gunitname = row.gunitname;
@@ -885,8 +885,8 @@
             var bcPrice = parseFloat(bcPriceHtml.substr(1,bcPriceHtml.indexOf('/')));
             $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
             document.getElementById('closegsdiv').click();
-            $('#minprice').html('￥'+bcPrice);
-            $('#cutdownprice').html(parseInt(bcPrice)-cpSale);
+            $('#minprice').html(bcPrice);
+            $('#cutdownprice').html((parseFloat(bcPrice).toFixed(2)-cpSale).toFixed(2));
             $('#gdcpId').val(gdcpId);
         }else{
             layer.msg("请选择规格");

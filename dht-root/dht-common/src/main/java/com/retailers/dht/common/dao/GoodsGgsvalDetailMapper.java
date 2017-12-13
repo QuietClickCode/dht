@@ -2,6 +2,8 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品与规格值详情表DAO
@@ -20,6 +22,7 @@ public interface GoodsGgsvalDetailMapper {
 	 * @date 2017-10-20 09:52:11
 	 */
 	public int saveGoodsGgsvalDetail(GoodsGgsvalDetail goodsGgsvalDetail);
+	public int saveGoodsGgsvalDetails(@Param("list") List<GoodsGgsvalDetail> list);
 	/**
 	 * 编辑商品与规格值详情表
 	 * @param goodsGgsvalDetail
@@ -54,4 +57,6 @@ public interface GoodsGgsvalDetailMapper {
 	public List<GoodsGgsvalDetail> queryGoodsGgsvalDetailList(Pagination<GoodsGgsvalDetail> pagination);
 
 	public List<GoodsInventoryVo> queryGoodsInventoryLists(Pagination<GoodsInventoryVo> pagination);
+
+	public int deleteGoodsGgsvalDetailByGid(@Param("gid") Long gid);
 }

@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-05 16:15:28
+ * @date 2017-12-13 11:34:42
  */
 public class GoodsGdcprel implements java.io.Serializable {
 
@@ -22,17 +22,17 @@ public class GoodsGdcprel implements java.io.Serializable {
 	private Long cpId;
 	/**底价*/
 	@NotEmpty
-	private Float cpSale;
+	private Long cpSale;
 	/**活动最多库存*/
 	@NotEmpty
 	private Long cpInventory;
 	/**限购量*/
 	@NotEmpty
 	private Long cpBounds;
-	/**isDelete*/
+	/**是否删除（0代表未删除，1代表已删除）*/
 	@NotEmpty
 	private Long isDelete;
-	/**version*/
+	/**版本号*/
 	@NotEmpty
 	private Long version;
 	//columns END
@@ -65,11 +65,11 @@ public class GoodsGdcprel implements java.io.Serializable {
 	public Long getCpId() {
 		return this.cpId;
 	}
-	public void setCpSale(Float value) {
+	public void setCpSale(Long value) {
 		this.cpSale = value;
 	}
 
-	public Float getCpSale() {
+	public Long getCpSale() {
 		return this.cpSale;
 	}
 	public void setCpInventory(Long value) {

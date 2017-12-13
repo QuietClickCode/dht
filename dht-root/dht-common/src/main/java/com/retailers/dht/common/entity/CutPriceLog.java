@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-07 15:50:55
+ * @date 2017-12-13 11:51:48
  */
 public class CutPriceLog implements java.io.Serializable {
 
@@ -25,7 +25,7 @@ public class CutPriceLog implements java.io.Serializable {
 	private Long usdId;
 	/**降价*/
 	@NotEmpty
-	private Float cplCutdownprice;
+	private Long cplCutdownprice;
 	/**是否删除 0不删除  1删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -69,11 +69,11 @@ public class CutPriceLog implements java.io.Serializable {
 	public Long getUsdId() {
 		return this.usdId;
 	}
-	public void setCplCutdownprice(Float value) {
+	public void setCplCutdownprice(Long value) {
 		this.cplCutdownprice = value;
 	}
 
-	public Float getCplCutdownprice() {
+	public Long getCplCutdownprice() {
 		return this.cplCutdownprice;
 	}
 	public void setIsDelete(Long value) {

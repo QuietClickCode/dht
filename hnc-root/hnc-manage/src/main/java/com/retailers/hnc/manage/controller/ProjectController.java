@@ -8,12 +8,21 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.PageUtils;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,5 +144,40 @@ public class ProjectController extends BaseController {
     public String queryProjectByGt(String url){
         String respStr = HttpClientUtil.doGet(url);
         return respStr;
+    }
+
+    public static void main (String[] a){
+//        String url = "https://api.weixin.qq.com/sns/jscode2session" ;
+//        Map params = new HashMap();
+//        params.put("appid","wx3e1ce3039c616778");
+//        params.put("secret","dae5052f2a8667bc420d76924da6a144");
+//        params.put("grant_type","authorization_code");
+//        params.put("js_code","013YqqeQ1M1y991v1TeQ1IIfeQ1YqqeW");
+//        url = URLEncoder.encode(url);
+//        String respStr = HttpClientUtil.doGet(url,params);
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx3e1ce3039c616778" +
+                "&secret=dae5052f2a8667bc420d76924da6a144&grant_type=authorization_code" +
+                "&js_code=013caAc91YBD8Q13mYc91bbNc91caAcI";
+        String respStr = GetFromServer(url);
+        System.out.println(respStr);
+    }
+
+    public static String GetFromServer(String url) {
+        String retStr="";
+        ClientConnectionManager connManager = new PoolingClientConnectionManager();
+        DefaultHttpClient client = new DefaultHttpClient(connManager);
+
+        HttpGet get = new HttpGet(url);
+        try {
+            HttpResponse response = client.execute(get);
+            HttpEntity entity = response.getEntity();
+            retStr = EntityUtils.toString(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(url);
+            return "";
+        }
+        return retStr;
+
     }
 }

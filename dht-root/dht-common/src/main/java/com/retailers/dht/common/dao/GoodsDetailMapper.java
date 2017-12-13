@@ -63,4 +63,5 @@ public interface GoodsDetailMapper {
 
 	public List<GoodsDetail> queryGoodsDetailByGdIds(@Param("gdIds") List gdIds);
 
+	public int deleteGoodsDetailByGid(@Param("gid") Long gid);
 }

@@ -61,6 +61,8 @@ public interface GoodsGgsvalService {
 	public List<GoodsGgsvalOnceVo> queryGgsrelListsOnce(Long gid);
 
 	public boolean addGoodsGgsvalByMyData(String gsIds,String gsvalIds,Long gid);
+
+	public boolean deleteGoodsGgsvalByGid(Long gid);
 }
 
 

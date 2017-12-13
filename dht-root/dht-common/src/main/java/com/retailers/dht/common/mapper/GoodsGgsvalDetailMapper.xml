@@ -87,6 +87,17 @@
 			#{gid,jdbcType=BIGINT},#{gsId,jdbcType=BIGINT},#{gsvId,jdbcType=BIGINT},#{gdId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
+	<insert id="saveGoodsGgsvalDetails" parameterType="com.retailers.dht.common.entity.GoodsGgsvalDetail" useGeneratedKeys="true" keyProperty="ggdId">
+		INSERT INTO t_goods_ggsval_detail (
+		g_id,gs_id,gsv_id,gd_id,is_delete,version
+		) VALUES
+		<foreach collection ="list" item="ggd" index= "index" separator =",">
+			(
+			#{ggd.gid,jdbcType=BIGINT},#{ggd.gsId,jdbcType=BIGINT},#{ggd.gsvId,jdbcType=BIGINT},#{ggd.gdId,jdbcType=BIGINT},#{ggd.isDelete,jdbcType=BIGINT},0
+			)
+		</foreach>
+
+	</insert>
 	<!--修改商品与规格值详情表 -->
 	<update id="updateGoodsGgsvalDetail" parameterType="com.retailers.dht.common.entity.GoodsGgsvalDetail">
 		UPDATE t_goods_ggsval_detail
@@ -111,6 +122,14 @@
             </if>
 		</set>
 		WHERE ggd_id = #{ggdId} and version = #{version}
+	</update>
+	<update id="deleteGoodsGgsvalDetailByGid">
+		UPDATE t_goods_ggsval_detail
+		SET
+		is_delete = 1
+		WHERE
+		g_id = #{gid}
+		and is_delete=0
 	</update>
 	<!--删除商品与规格值详情表 -->
 	<delete id="deleteGoodsGgsvalDetailByGgdId" parameterType="java.lang.Long">

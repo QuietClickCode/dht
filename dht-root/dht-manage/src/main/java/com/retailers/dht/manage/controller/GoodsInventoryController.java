@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,8 +49,9 @@ public class GoodsInventoryController extends BaseController {
     @RequestMapping("/editGoodsInventory")
     @Function(label="编辑库存", description = "编辑库存", resourse = "goods.editGoodsInventory",sort=1,parentRes="goods.openGoodsInventory")
     @ResponseBody
-    public  BaseResp editGoodsInventory(Long gdId,Long inventory){
-        boolean flag = goodsGgsvalDetailService.editGoodsInventory(gdId,inventory);
+    public  BaseResp editGoodsInventory(Long gdId, Long inventory, HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
+        boolean flag = goodsGgsvalDetailService.editGoodsInventory(gdId,inventory,uid);
         return success(flag);
     }
 }

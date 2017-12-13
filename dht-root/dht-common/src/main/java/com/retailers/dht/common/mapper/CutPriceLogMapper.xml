@@ -94,7 +94,7 @@
 			gdcp_id,us_id,usd_id,cpl_cutdownprice,is_delete,version
 		) VALUES
 		(
-			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{usdId,jdbcType=BIGINT},#{cplCutdownprice,jdbcType=REAL},#{isDelete,jdbcType=BIGINT},0
+			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{usdId,jdbcType=BIGINT},#{cplCutdownprice,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改砍价日志表 -->

@@ -3,14 +3,17 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：商品详情表对象
+ * 描述：商品详情副本表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-13 10:49:34
+ * @date 2017-12-13 13:28:42
  */
-public class GoodsDetail implements java.io.Serializable {
+public class GoodsDetailCopy implements java.io.Serializable {
 
+	/**gdcId*/
+	@NotEmpty
+	private Long gdcId;
 	/**商品详情ID*/
 	@NotEmpty
 	private Long gdId;
@@ -32,6 +35,12 @@ public class GoodsDetail implements java.io.Serializable {
 	/**图片ID*/
 	@NotEmpty
 	private Long gdImgid;
+	/**操作人id*/
+	@NotEmpty
+	private Long gdUploadpersionId;
+	/**操作时间*/
+	@NotEmpty
+	private Date createTime;
 	/**是否删除（0代表未删除，1代表已删除）*/
 	@NotEmpty
 	private Long isDelete;
@@ -40,13 +49,20 @@ public class GoodsDetail implements java.io.Serializable {
 	private Long version;
 	//columns END
 
-	public GoodsDetail(){
+	public GoodsDetailCopy(){
 	}
 
-	public GoodsDetail( Long gdId){
-		this.gdId = gdId;
+	public GoodsDetailCopy( Long gdcId){
+		this.gdcId = gdcId;
 	}
 
+	public void setGdcId(Long value) {
+		this.gdcId = value;
+	}
+
+	public Long getGdcId() {
+		return this.gdcId;
+	}
 	public void setGdId(Long value) {
 		this.gdId = value;
 	}
@@ -95,6 +111,20 @@ public class GoodsDetail implements java.io.Serializable {
 
 	public Long getGdImgid() {
 		return this.gdImgid;
+	}
+	public void setGdUploadpersionId(Long value) {
+		this.gdUploadpersionId = value;
+	}
+
+	public Long getGdUploadpersionId() {
+		return this.gdUploadpersionId;
+	}
+	public void setCreateTime(Date value) {
+		this.createTime = value;
+	}
+
+	public Date getCreateTime() {
+		return this.createTime;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

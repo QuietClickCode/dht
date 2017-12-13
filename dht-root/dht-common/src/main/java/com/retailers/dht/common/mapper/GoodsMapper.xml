@@ -210,7 +210,7 @@
 			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=REAL},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=BIGINT},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品表 -->

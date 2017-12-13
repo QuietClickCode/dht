@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.ProjectMapper">
+
+	<resultMap id="rm_project" type="com.retailers.hnc.common.entity.Project">
+			<result property="pid" column="p_id"/>
+			<result property="pname" column="p_name"/>
+			<result property="plogoid" column="p_logoid"/>
+			<result property="paddress" column="p_address"/>
+			<result property="plon" column="p_lon"/>
+			<result property="plat" column="p_lat"/>
+			<result property="parea" column="p_area"/>
+			<result property="pnum" column="p_num"/>
+			<result property="pdescription" column="p_description"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="project_columns">
+		p_id,p_name,p_logoid,p_address,p_lon,p_lat,p_area,p_num,p_description,is_delete,version
+	</sql>
+	<!-- 根据项目表主键取得数据 -->
+	<select id="queryProjectByPid" resultMap="rm_project" parameterType="java.lang.Long">
+		SELECT <include refid="project_columns" />
+		FROM t_project WHERE p_id = #{pid}
+	</select>
+	<!-- 项目表查询条件组合 -->
+	<sql id="project_where">
+		<where>
+			<if test="null != params.pid">
+				AND p_id = #{params.pid}
+			</if>
+			<if test="null != params.pname and '' != params.pname">
+				AND p_name = #{params.pname}
+			</if>
+			<if test="null != params.plogoid">
+				AND p_logoid = #{params.plogoid}
+			</if>
+			<if test="null != params.paddress and '' != params.paddress">
+				AND p_address = #{params.paddress}
+			</if>
+			<if test="null != params.plon">
+				AND p_lon = #{params.plon}
+			</if>
+			<if test="null != params.plat">
+				AND p_lat = #{params.plat}
+			</if>
+			<if test="null != params.parea">
+				AND p_area = #{params.parea}
+			</if>
+			<if test="null != params.pnum">
+				AND p_num = #{params.pnum}
+			</if>
+			<if test="null != params.pdescription and '' != params.pdescription">
+				AND p_description = #{params.pdescription}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryProjectList" resultMap="rm_project" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="project_columns" />
+		FROM t_project
+		<include refid="project_where"/>
+	</select>
+	<!--添加项目表 -->
+	<insert id="saveProject" parameterType="com.retailers.hnc.common.entity.Project" useGeneratedKeys="true" keyProperty="pid">
+		INSERT INTO t_project (
+			p_name,p_logoid,p_address,p_lon,p_lat,p_area,p_num,p_description,is_delete,version
+		) VALUES
+		(
+			#{pname,jdbcType=VARCHAR},#{plogoid,jdbcType=BIGINT},#{paddress,jdbcType=VARCHAR},#{plon,jdbcType=DOUBLE},#{plat,jdbcType=DOUBLE},#{parea,jdbcType=BIGINT},#{pnum,jdbcType=BIGINT},#{pdescription,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改项目表 -->
+	<update id="updateProject" parameterType="com.retailers.hnc.common.entity.Project">
+		UPDATE t_project
+		<set>
+            <if test="null != pname and '' != pname">
+                p_name = #{pname},
+            </if>
+            <if test="null != plogoid">
+                p_logoid = #{plogoid},
+            </if>
+            <if test="null != paddress and '' != paddress">
+                p_address = #{paddress},
+            </if>
+            <if test="null != plon">
+                p_lon = #{plon},
+            </if>
+            <if test="null != plat">
+                p_lat = #{plat},
+            </if>
+            <if test="null != parea">
+                p_area = #{parea},
+            </if>
+            <if test="null != pnum">
+                p_num = #{pnum},
+            </if>
+            <if test="null != pdescription and '' != pdescription">
+                p_description = #{pdescription},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE p_id = #{pid} and version = #{version}
+	</update>
+	<!--删除项目表 -->
+	<delete id="deleteProjectByPid" parameterType="java.lang.Long">
+		DELETE FROM t_project WHERE p_id = #{pid}
+	</delete>
+</mapper>
