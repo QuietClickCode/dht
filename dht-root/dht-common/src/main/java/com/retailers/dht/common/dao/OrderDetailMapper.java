@@ -19,6 +19,13 @@ public interface OrderDetailMapper {
 	 * @date 2017-12-11 23:38:12
 	 */
 	public int saveOrderDetail(OrderDetail orderDetail);
+
+	/**
+	 * 批量添加订单详情
+	 * @param orderDetails
+	 * @return
+	 */
+	public int saveOrderDetails(List<OrderDetail> orderDetails);
 	/**
 	 * 编辑订单详情
 	 * @param orderDetail

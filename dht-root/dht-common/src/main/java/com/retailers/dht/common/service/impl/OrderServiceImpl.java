@@ -5,10 +5,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.OrderConstant;
-import com.retailers.dht.common.dao.OrderMapper;
-import com.retailers.dht.common.dao.RechargeMapper;
-import com.retailers.dht.common.dao.UserAddressMapper;
+import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
+import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.BuyGoodsVo;
@@ -41,13 +40,22 @@ public class OrderServiceImpl implements OrderService {
 
     @Autowired
 	private OrderMapper orderMapper;
+    @Autowired
+	private OrderDetailMapper orderDetailMapper;
+    @Autowired
+	private OrderGoodsCouponMapper orderGoodsCouponMapper;
 	@Autowired
 	private RechargeMapper rechargeMapper;
 	@Autowired
 	private UserAddressMapper userAddressMapper;
-
+	@Autowired
+	private GoodsDetailService goodsDetailService;
     @Autowired
     private ProcedureToolsService procedureToolsService;
+    @Autowired
+	private GoodsMapper goodsMapper;
+
+
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -87,13 +95,13 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 购物订单
 	 * @param uid 购买用户id
-	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"spec":1,"remark":"说明"}],"address":123}
+	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"specs":1,"remark":"说明"}],"address":123}
 	 *                   				buyGoods 购买商品列表
 	 *                   				goodsId 商品id
 	 *                   				num 购买数量
 	 *                   				gcpId 商品优惠id
 	 *                   				cpId 优惠卷id
-	 *                   				spec 规则id
+	 *                   				specs 规格ids
 	 *                   				address 收货人地址id
 	 * @return
 	 * @throws AppException
@@ -130,6 +138,17 @@ public class OrderServiceImpl implements OrderService {
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			//商品优惠使用情况
 			List<OrderGoodsCoupon> ogcs=new ArrayList<OrderGoodsCoupon>();
+			String gdIds="";
+			//取得对应价格
+			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
+				gdIds+=bgVo.getGdId()+",";
+			}
+			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+			Map<Long,Float> goodsPrice=new HashMap<Long, Float>();
+			for(GoodsDetail gd:gds){
+				goodsPrice.put(gd.getGid(),gd.getGdPrice());
+			}
+			long totalPrice = 0;
 			//生成订单详情
 			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
 				OrderDetail od=new OrderDetail();
@@ -137,8 +156,11 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdBuyNumber(bgVo.getNum());
 				od.setOdGoodsId(bgVo.getGoodsId());
 				od.setRemark(bgVo.getRemark());
+				double p=goodsPrice.get(bgVo.getGoodsId()).doubleValue();
+				od.setOdGoodsPrice(NumberUtils.priceChangeFen(NumberUtils.formaterNumber(p,2))*bgVo.getNum());
+				totalPrice+=od.getOdGoodsPrice();
+				od.setOdGdId(bgVo.getGdId());
 				od.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
-				ods.add(od);
 				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
 					String[] gcpIds=bgVo.getGcpIds().split(",");
 					for(String gcpId:gcpIds){
@@ -149,7 +171,15 @@ public class OrderServiceImpl implements OrderService {
 						ogcs.add(ogc);
 					}
 				}
+				//实际支付金额
+				od.setOdActualPrice(totalPrice);
+				ods.add(od);
 			}
+			//批量添加订单详情
+			orderDetailMapper.saveOrderDetails(ods);
+			//批量添加订单商品优惠
+			orderGoodsCouponMapper.saveOrderGoodsCoupons(ogcs);
+			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			rtnMap.put("orderNo",orderNo);
 		}finally {

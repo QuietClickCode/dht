@@ -50,6 +50,19 @@
 			#{ocOrderId,jdbcType=BIGINT},#{ocGoodsId,jdbcType=BIGINT},#{ocGcId,jdbcType=BIGINT}
 		)
 	</insert>
+	<!--批量添加订单商品优惠关联-->
+	<insert id="saveOrderGoodsCoupons" parameterType="com.retailers.dht.common.entity.OrderGoodsCoupon" useGeneratedKeys="true" keyProperty="ocId">
+		INSERT INTO t_order_goods_coupon (
+		oc_order_id,oc_goods_id,oc_gc_id
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.ocOrderId,jdbcType=BIGINT},
+				#{item.ocGoodsId,jdbcType=BIGINT},
+				#{item.ocGcId,jdbcType=BIGINT}
+			)
+		</foreach>
+	</insert>
 	<!--修改订单商品优惠关联 -->
 	<update id="updateOrderGoodsCoupon" parameterType="com.retailers.dht.common.entity.OrderGoodsCoupon">
 		UPDATE t_order_goods_coupon
