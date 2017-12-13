@@ -58,9 +58,14 @@ public class WxAuthUser implements java.io.Serializable {
 	/**创建时间*/
 	@NotEmpty
 	private Date wauCreateDate;
+	/**
+	 * 推荐人Id
+	 */
+	private Long wauRefereeId;
 	/**数据乐观锁*/
 	@NotEmpty
 	private Integer version;
+
 	//columns END
 
 	public WxAuthUser(){
@@ -169,5 +174,11 @@ public class WxAuthUser implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getWauRefereeId() {
+		return wauRefereeId;
+	}
 
+	public void setWauRefereeId(Long wauRefereeId) {
+		this.wauRefereeId = wauRefereeId;
+	}
 }

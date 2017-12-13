@@ -69,4 +69,12 @@ public interface WxAuthUserMapper {
 	 */
 	public Long queryRelationUserByUnionid(@Param("unionid")String unionid,@Param("openId") String openId);
 
+	/**
+	 * 微信用户关联用户
+	 * @param wauId 微信id
+	 * @param uid 用户id
+	 * @return
+	 */
+	public long relationUser(@Param("wauId")Long wauId,@Param("uid")Long uid);
+
 }

@@ -16,12 +16,13 @@
 			<result property="wauHeadimgurl" column="wau_headimgurl"/>
 			<result property="wauUnionid" column="wau_unionid"/>
 			<result property="wauCreateDate" column="wau_create_date"/>
+			<result property="wauRefereeId" column="wau_referee_id"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="wxAuthUser_columns">
-		wau_id,wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,version
+		wau_id,wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,wau_referee_id,version
 	</sql>
 	<!-- 根据用户卡包操作日志（钱包，积分）主键取得数据 -->
 	<select id="queryWxAuthUserByWauId" resultMap="rm_wxAuthUser" parameterType="java.lang.Long">
@@ -87,10 +88,12 @@
 	<!--添加用户卡包操作日志（钱包，积分） -->
 	<insert id="saveWxAuthUser" parameterType="com.retailers.dht.common.entity.WxAuthUser" useGeneratedKeys="true" keyProperty="wauId">
 		INSERT INTO t_wx_auth_user (
-			wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,version
+			wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,wau_referee_id,version
 		) VALUES
 		(
-			#{wauWxId,jdbcType=BIGINT},#{wauUid,jdbcType=BIGINT},#{wauOpenid,jdbcType=VARCHAR},#{wauNickname,jdbcType=VARCHAR},#{wauSex,jdbcType=INTEGER},#{wauLanguage,jdbcType=VARCHAR},#{wauCity,jdbcType=VARCHAR},#{wauProvince,jdbcType=VARCHAR},#{wauCountry,jdbcType=VARCHAR},#{wauHeadimgurl,jdbcType=VARCHAR},#{wauUnionid,jdbcType=VARCHAR},#{wauCreateDate,jdbcType=TIMESTAMP},0
+			#{wauWxId,jdbcType=BIGINT},#{wauUid,jdbcType=BIGINT},#{wauOpenid,jdbcType=VARCHAR},#{wauNickname,jdbcType=VARCHAR},#{wauSex,jdbcType=INTEGER},#{wauLanguage,jdbcType=VARCHAR},
+			#{wauCity,jdbcType=VARCHAR},#{wauProvince,jdbcType=VARCHAR},#{wauCountry,jdbcType=VARCHAR},#{wauHeadimgurl,jdbcType=VARCHAR},#{wauUnionid,jdbcType=VARCHAR},
+			#{wauCreateDate,jdbcType=TIMESTAMP},#{wauRefereeId,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改用户卡包操作日志（钱包，积分） -->
@@ -163,6 +166,11 @@
 		  wau_create_date DESC
 		LIMIT 1
 	</select>
-
+	<!--微信用户关联用户 -->
+	<update id="relationUser">
+		UPDATE t_wx_auth_user
+			SET wau_u_id = #{uid}
+		WHERE wau_id = #{wauId}
+	</update>
 
 </mapper>

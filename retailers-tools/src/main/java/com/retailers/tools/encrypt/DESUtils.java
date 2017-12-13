@@ -2,6 +2,7 @@ package com.retailers.tools.encrypt;
 
 
 import com.retailers.tools.utils.Base64;
+import com.retailers.tools.utils.StringUtils;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
@@ -118,6 +119,6 @@ public class DESUtils{
 //        System.out.println(encryptDES("16",DesKey.WEB_KEY));
 //        System.out.println(URLEncoder.encode(encryptDES("16",DesKey.WEB_KEY),"utf-8"));
 //        System.out.println(decryptDES("pHRW0BbLWzg=",DesKey.WEB_KEY));
-
+        encryptDES(StringUtils.formate("123",System.currentTimeMillis()+""),DesKey.WEB_KEY);
     }
 }

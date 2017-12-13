@@ -65,25 +65,23 @@
         </div>
     </div>
 </div>
-<c:if test="${isBindWx}">
-    <div class="ui_draggable" style="display: none;"></div>
-    <div class="popover" style="display: none;">
-        <div class="dialog">
-            <div class="dialog_hd">
-                <a>是否存在账号?</a>
-            </div>
-            <div class="dialog_ft">
-                <div class="dialog_ft_box">
-                    <a href="javascript:void(0);" onclick="wxLoginUnUser()">无账号</a>
-                </div>
 
-                <div class="dialog_ft_box">
-                    <a href="">已有账号</a>
-                </div>
+<div class="ui_draggable" id="sfczzhDiv"></div>
+<div class="popover" id="sfczzhtsDiv">
+    <div class="dialog">
+        <div class="dialog_hd">
+            <a>是否存在账号?</a>
+        </div>
+        <div class="dialog_ft">
+            <div class="dialog_ft_box">
+                <a href="javascript:void(0);" onclick="wxLoginNoUser()">无账号</a>
+            </div>
+            <div class="dialog_ft_box">
+                <a href="javascript:void(0);" onclick="haveUser()">已有账号</a>
             </div>
         </div>
     </div>
-</c:if>
+</div>
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/layer_mobile/layer.js"></script>
 <script>
@@ -102,8 +100,13 @@
         }
     });
     $(function(){
+        let isBindWx=${isBindWx};
+        if(isBindWx){
+            haveUser();
+        }
         changeCode();
     });
+
     var isLoging=false;
     /**
      * 用户登陆
@@ -162,11 +165,11 @@
      * @type {boolean}
      */
     var wxLoginFlag = false;
-    function wxLoginUnUser(){
+    function wxLoginNoUser(){
         if(!wxLoginFlag){
             wxLoginFlag=true;
             $.ajax({
-                url: "/user/wxLoginUnUser",
+                url: "/user/wxLoginNoUser",
                 type: "post",
                 dataType: "json",
                 success: function (data) {
@@ -188,6 +191,11 @@
                 }
             });
         }
+    }
+
+    function haveUser(){
+        $("#sfczzhDiv").hide();
+        $("#sfczzhtsDiv").hide();
     }
 </script>
 </body>

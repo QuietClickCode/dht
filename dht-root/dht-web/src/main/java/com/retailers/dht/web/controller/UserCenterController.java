@@ -519,7 +519,7 @@ public class UserCenterController extends BaseController{
     @ResponseBody
     public BaseResp wxLoginNoUser(HttpServletRequest request){
         Object obj=request.getSession().getAttribute(com.retailers.auth.constant.SystemConstant.CUR_LOGIN_WXUSER_INFO);
-        if(ObjectUtils.isEmpty(obj)){
+        if(ObjectUtils.isNotEmpty(obj)){
             WxAuthUser wxAuthUser= (WxAuthUser)obj;
             UserInfoVIew userInfoVIew=userService.wxLoginNoUser(wxAuthUser);
             setCurLoginUser(request,userInfoVIew);

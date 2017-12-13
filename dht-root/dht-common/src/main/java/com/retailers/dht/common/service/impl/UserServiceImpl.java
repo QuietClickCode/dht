@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.aliyun.sms.constant.SmsSendRecordConstant;
 import com.retailers.aliyun.sms.dao.SmsSendRecordMapper;
 import com.retailers.aliyun.sms.entity.SmsSendRecord;
@@ -286,6 +287,7 @@ public class UserServiceImpl implements UserService {
 		return info;
 	}
 
+	@Transactional(rollbackFor = Exception.class)
 	public UserInfoVIew wxLoginNoUser(WxAuthUser wxAuthUser) {
 		//创建新有用户
 		User user = new User();
@@ -304,8 +306,9 @@ public class UserServiceImpl implements UserService {
 		userCardPackage.setId(user.getUid());
 		userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		wxAuthUser.setWauUid(user.getUid());
+		System.out.println(JSON.toJSON(wxAuthUser));
 		//修改微信关联用户
-		wxAuthUserMapper.updateWxAuthUser(wxAuthUser);
+		wxAuthUserMapper.relationUser(wxAuthUser.getWauId(),user.getUid());
 		//根据用户取得相应的登陆信息
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
 		return info;

@@ -47,8 +47,11 @@ public class WxFilter implements Filter {
         }
 
         boolean isFromMobile= CheckMobile.check(userAgent);
+
         //判断是否为移动端访问 移动端访问
         if(isFromMobile){
+            System.out.println("request.getRequestURI()------------------------------>:"+request.getRequestURI());
+            System.out.println("---------------------------------->>>"+request.getContextPath());
             //判断是否是微信
             if(userAgent.indexOf("micromessenger")>0){
                 String uri = request.getRequestURI();

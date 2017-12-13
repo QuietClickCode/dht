@@ -119,9 +119,9 @@ public class WxAuthController extends BaseController{
                 UserInfoVIew userInfoVIew= userService.queryUserInfoByUid(wxAuthUser.getWauUid());
                 logger.info("取得用户登陆信息:{}", JSON.toJSON(userInfoVIew));
                 setCurLoginUser(request,userInfoVIew);
-                request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
             }
         }
+        request.getSession().setAttribute(com.retailers.auth.constant.SystemConstant.IS_PULL_WX_USER_INFO,"yes");
         modelAndView.setViewName("redirect:"+redUrl);
         return modelAndView;
     }

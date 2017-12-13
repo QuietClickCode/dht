@@ -131,6 +131,8 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 				isAdd=true;
 				wxAuthUser.setWauCreateDate(new Date());
 				wxAuthUser.setWauWxId(1l);
+				//推荐人ID
+				wxAuthUser.setWauRefereeId(null);
 			}
 			wxAuthUser.setWauOpenid(userInfo.get("openid").toString().replaceAll("\"", ""));
 			wxAuthUser.setWauNickname(userInfo.get("nickname").toString().replaceAll("\"", ""));

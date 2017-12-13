@@ -144,7 +144,7 @@ public class OrderServiceImpl implements OrderService {
 				gdIds+=bgVo.getGdId()+",";
 			}
 			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-			Map<Long,Float> goodsPrice=new HashMap<Long, Float>();
+			Map<Long,Long> goodsPrice=new HashMap<Long, Long>();
 			for(GoodsDetail gd:gds){
 				goodsPrice.put(gd.getGid(),gd.getGdPrice());
 			}
@@ -156,8 +156,8 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdBuyNumber(bgVo.getNum());
 				od.setOdGoodsId(bgVo.getGoodsId());
 				od.setRemark(bgVo.getRemark());
-				double p=goodsPrice.get(bgVo.getGoodsId()).doubleValue();
-				od.setOdGoodsPrice(NumberUtils.priceChangeFen(NumberUtils.formaterNumber(p,2))*bgVo.getNum());
+				long p=goodsPrice.get(bgVo.getGoodsId());
+				od.setOdGoodsPrice(p*bgVo.getNum());
 				totalPrice+=od.getOdGoodsPrice();
 				od.setOdGdId(bgVo.getGdId());
 				od.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
