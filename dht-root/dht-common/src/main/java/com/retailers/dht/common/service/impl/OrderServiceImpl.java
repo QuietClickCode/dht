@@ -132,8 +132,32 @@ public class OrderServiceImpl implements OrderService {
 			if(userAddress.getUaUid().intValue()!=uid.intValue()){
 				throw new AppException("请填写收货人地址");
 			}
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress);
-			orderMapper.saveOrder(order);
+			//商品对应使用的商品优惠
+			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
+			//购买商品列表
+			List<Long> buyGIds=new ArrayList<Long>();
+			//取得购买商中使用了商品优惠的
+			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
+				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
+					String gcpIds=bgVo.getGcpIds();
+					List<Long> gcps=new ArrayList<Long>();
+					for(String gcp:gcpIds.split(",")){
+						gcps.add(Long.parseLong(gcp));
+					}
+					gcpMaps.put(bgVo.getGoodsId(),gcps);
+				}
+				buyGIds.add(bgVo.getGoodsId());
+			}
+			//判断是否使用了商品优惠
+			if(ObjectUtils.isNotEmpty(gcpMaps)){
+				//校验商品优惠是否异常
+			}
+			//取得使用的优惠卷
+			String couponIds=bgVos.getCpIds();
+			//判断是否使用优卷
+			if(ObjectUtils.isNotEmpty(couponIds)){
+			//校验优惠卷是否异常
+			}
 			//订单详情
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			//商品优惠使用情况
@@ -152,7 +176,6 @@ public class OrderServiceImpl implements OrderService {
 			//生成订单详情
 			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
 				OrderDetail od=new OrderDetail();
-				od.setOdOrderId(order.getId());
 				od.setOdBuyNumber(bgVo.getNum());
 				od.setOdGoodsId(bgVo.getGoodsId());
 				od.setRemark(bgVo.getRemark());
@@ -166,7 +189,6 @@ public class OrderServiceImpl implements OrderService {
 					for(String gcpId:gcpIds){
 						OrderGoodsCoupon ogc=new OrderGoodsCoupon();
 						ogc.setOcGoodsId(bgVo.getGoodsId());
-						ogc.setOcOrderId(order.getId());
 						ogc.setOcGcId(Long.parseLong(gcpId));
 						ogcs.add(ogc);
 					}
@@ -175,10 +197,9 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
-			//批量添加订单详情
-			orderDetailMapper.saveOrderDetails(ods);
-			//批量添加订单商品优惠
-			orderGoodsCouponMapper.saveOrderGoodsCoupons(ogcs);
+
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,ods,ogcs);
+
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			rtnMap.put("orderNo",orderNo);
@@ -189,14 +210,22 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return rtnMap;
 	}
+	//订单创建(购特，秒杀，团购，砍价，预购）
 
 	/**
-	 * 订单创建(购特，秒杀，团购，砍价，预购）
+	 * 创建订单
 	 * @param orderEnum 订单类型
-	 * @param userAddress 收货人地址
+	 * @param userAddress 用户收货地址
+	 * @param totalPrice 总金额
+	 * @param cPrice 优惠卷金额
+	 * @param gcPrice 商品优惠金额
+	 * @param actualPrice 实际金额
+	 * @param ods 商品详情
+	 * @param ogcs 商品优惠详情
 	 * @return
 	 */
-	private Order createOrder(OrderEnum orderEnum,UserAddress userAddress){
+	private Order createOrder(OrderEnum orderEnum,UserAddress userAddress,Long totalPrice,Long cPrice,Long gcPrice,
+							  Long actualPrice,List<OrderDetail>ods,List<OrderGoodsCoupon> ogcs){
 		Order order=new Order();
 		String orderNo=procedureToolsService.executeOrderNo(orderEnum);
 		order.setOrderType(orderEnum.getKey());
@@ -213,6 +242,22 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_NO);
 		order.setOrderSellDel(SystemConstant.SYS_IS_DELETE_NO);
 		order.setIsReal(OrderConstant.ORDER_IS_REAL_YES);
+		order.setOrderTradePrice(totalPrice);
+		order.setOrderGoodsActualPayPrice(actualPrice);
+		order.setOrderGoodsCouponPrice(cPrice);
+		order.setOrderGoodsCouponPrice(gcPrice);
+		orderMapper.saveOrder(order);
+		long orderId=order.getId();
+		for(OrderDetail od:ods){
+			od.setOdOrderId(orderId);
+		}
+		for(OrderGoodsCoupon ogc:ogcs){
+			ogc.setOcOrderId(orderId);
+		}
+		//批量添加订单详情
+		orderDetailMapper.saveOrderDetails(ods);
+		//批量添加订单商品优惠
+		orderGoodsCouponMapper.saveOrderGoodsCoupons(ogcs);
 		return order;
 	}
 
@@ -247,7 +292,7 @@ public class OrderServiceImpl implements OrderService {
 			//购买者
 			order.setOrderBuyUid(uid);
 			order.setOrderTradePrice(recharge.getRprice());
-			order.setOrderShopPrice(recharge.getRprice());
+			order.setOrderGoodsActualPayPrice(recharge.getRprice());
 			String illustrate="用户[{}]购买充值卡，充值金额：{}，充值后享受的折扣:{}";
 			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberPower(recharge.getRprice()),NumberUtils.formaterNumberPower(recharge.getRdiscount()));
 			order.setOrderIllustrate(illustrate);

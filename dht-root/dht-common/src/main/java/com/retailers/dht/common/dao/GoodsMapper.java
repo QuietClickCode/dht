@@ -48,6 +48,13 @@ public interface GoodsMapper {
 	 * @date 2017-10-12 17:29:40
 	 */
 	public Goods queryGoodsByGid(Long gid);
+
+	/**
+	 * 根据商品id批量取得商品
+	 * @param gids
+	 * @return
+	 */
+	public List<Goods> queryGoodsByGids(@Param("gids") List<Long> gids);
 	/**
 	 * 查询商品表列表
 	 * @param pagination 分页对象

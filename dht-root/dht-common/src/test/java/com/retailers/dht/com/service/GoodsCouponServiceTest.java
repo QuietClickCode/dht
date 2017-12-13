@@ -8,7 +8,9 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author zhongp
@@ -28,6 +30,27 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         List<GoodsCouponShowVo> lists = goodsCouponService.queryGoodsCouponByGid(goodsIds);
         System.out.println(JSON.toJSON(lists));
     }
+    /**
+     * 取得商品关联的优惠
+     */
+    @Test
+    public void  checkGoodsCoupon()throws Exception{
+        Map<Long,List<Long>> data=new HashMap<Long, List<Long>>();
+        data.put(57l,null);
+        data.put(1l,null);
+        data.put(56l,null);
+        data.put(4l,null);
+        data.put(51l,null);
+        data.put(52l,null);
+        data.put(53l,null);
+        data.put(54l,null);
+        data.put(55l,null);
+        data.put(27l,null);
+        data.put(40l,null);
+        goodsCouponService.checkGoodsCoupon(data,null);
+    }
+
+
     /**
      * 取得所有子集
      */

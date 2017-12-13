@@ -7,7 +7,7 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-22 15:18:18
+ * @date 2017-12-14 00:20:05
  */
 public class Order implements java.io.Serializable {
 
@@ -56,7 +56,16 @@ public class Order implements java.io.Serializable {
 	private Long orderTradePrice;
 	/**交易商品总金额*/
 	@NotEmpty
-	private Long orderShopPrice;
+	private Long orderGoodsTotalPrice;
+	/**商品实际支付金额*/
+	@NotEmpty
+	private Long orderGoodsActualPayPrice;
+	/**商品优惠金额（某些商品有商品优惠）*/
+	@NotEmpty
+	private Long orderGoodsCouponPrice;
+	/**优惠卷金额（使用优惠卷金额）*/
+	@NotEmpty
+	private Long orderCouponPrice;
 	/**物流费*/
 	@NotEmpty
 	private Long orderLogisticsPrice;
@@ -227,12 +236,33 @@ public class Order implements java.io.Serializable {
 	public Long getOrderTradePrice() {
 		return this.orderTradePrice;
 	}
-	public void setOrderShopPrice(Long value) {
-		this.orderShopPrice = value;
+	public void setOrderGoodsTotalPrice(Long value) {
+		this.orderGoodsTotalPrice = value;
 	}
 
-	public Long getOrderShopPrice() {
-		return this.orderShopPrice;
+	public Long getOrderGoodsTotalPrice() {
+		return this.orderGoodsTotalPrice;
+	}
+	public void setOrderGoodsActualPayPrice(Long value) {
+		this.orderGoodsActualPayPrice = value;
+	}
+
+	public Long getOrderGoodsActualPayPrice() {
+		return this.orderGoodsActualPayPrice;
+	}
+	public void setOrderGoodsCouponPrice(Long value) {
+		this.orderGoodsCouponPrice = value;
+	}
+
+	public Long getOrderGoodsCouponPrice() {
+		return this.orderGoodsCouponPrice;
+	}
+	public void setOrderCouponPrice(Long value) {
+		this.orderCouponPrice = value;
+	}
+
+	public Long getOrderCouponPrice() {
+		return this.orderCouponPrice;
 	}
 	public void setOrderLogisticsPrice(Long value) {
 		this.orderLogisticsPrice = value;

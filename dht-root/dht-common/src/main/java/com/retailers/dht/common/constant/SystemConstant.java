@@ -1,7 +1,11 @@
 package com.retailers.dht.common.constant;
 
+import com.retailers.dht.common.entity.OrderProcessingQueue;
+
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 /**
  * 大汇堂系统 常量配置
@@ -63,6 +67,10 @@ public class SystemConstant {
      * 验证码
      */
     public static final String LOGIN_VALIDATE_CODE="VALIDATE_CODE";
+    /**
+     * 默认金额
+     */
+    public static final long DEFAULT_PRICE =0;
 
     /**
      * 压缩类型（ small 小图，middle 中图 ，originalfile 原图)
@@ -76,10 +84,29 @@ public class SystemConstant {
      * 用户是新平台用户（新的加密方式）
      */
     public static final int USER_IS_OLD_NO=0;
+    /**
+     * java 队列
+     */
+    private static Queue<OrderProcessingQueue> queue = new LinkedList<OrderProcessingQueue>();
+
+    public static void addOrderQueue(OrderProcessingQueue opq){
+        queue.add(opq);
+    }
+
+    public static OrderProcessingQueue executeQueue(){
+        OrderProcessingQueue opq=queue.poll();
+        return opq;
+    }
 
     static {
         compressTypes.add("small");
         compressTypes.add("middle");
         compressTypes.add("originalfile");
+    }
+
+    public static void main(String[] args) {
+        for(int i=0;i<100;i++){
+            System.out.println(executeQueue());
+        }
     }
 }

@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.OrderProcessingQueueMapper">
+
+	<resultMap id="rm_orderProcessingQueue" type="com.retailers.dht.common.entity.OrderProcessingQueue">
+			<result property="id" column="id"/>
+			<result property="type" column="type"/>
+			<result property="status" column="status"/>
+			<result property="orderNo" column="order_no"/>
+			<result property="params" column="params"/>
+			<result property="createTime" column="create_time"/>
+			<result property="executeTime" column="execute_time"/>
+			<result property="waitTime" column="wait_time"/>
+			<result property="remark" column="remark"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orderProcessingQueue_columns">
+		id,type,status,order_no,params,create_time,execute_time,wait_time,remark
+	</sql>
+	<!-- 根据订单处理队列（订单支付回调，订单状态变更）主键取得数据 -->
+	<select id="queryOrderProcessingQueueById" resultMap="rm_orderProcessingQueue" parameterType="java.lang.Long">
+		SELECT <include refid="orderProcessingQueue_columns" />
+		FROM t_order_processing_queue WHERE id = #{id}
+	</select>
+	<!-- 订单处理队列（订单支付回调，订单状态变更）查询条件组合 -->
+	<sql id="orderProcessingQueue_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.type">
+				AND type = #{params.type}
+			</if>
+			<if test="null != params.status">
+				AND status = #{params.status}
+			</if>
+			<if test="null != params.orderNo and '' != params.orderNo">
+				AND order_no = #{params.orderNo}
+			</if>
+			<if test="null != params.params and '' != params.params">
+				AND params = #{params.params}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= TO_DATE('${params.createTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= TO_DATE('${params.createTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.executeTimeBegin">
+				AND execute_time &gt;= TO_DATE('${params.executeTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.executeTimeEnd">
+				AND execute_time &lt;= TO_DATE('${params.executeTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.waitTime">
+				AND wait_time = #{params.waitTime}
+			</if>
+			<if test="null != params.remark and '' != params.remark">
+				AND remark = #{params.remark}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOrderProcessingQueueList" resultMap="rm_orderProcessingQueue" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="orderProcessingQueue_columns" />
+		FROM t_order_processing_queue
+		<include refid="orderProcessingQueue_where"/>
+	</select>
+	<!--添加订单处理队列（订单支付回调，订单状态变更） -->
+	<insert id="saveOrderProcessingQueue" parameterType="com.retailers.dht.common.entity.OrderProcessingQueue" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order_processing_queue (
+			type,status,order_no,params,create_time,execute_time,wait_time,remark
+		) VALUES
+		(
+			#{type,jdbcType=BIGINT},#{status,jdbcType=BIGINT},#{orderNo,jdbcType=VARCHAR},#{params,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{executeTime,jdbcType=TIMESTAMP},#{waitTime,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改订单处理队列（订单支付回调，订单状态变更） -->
+	<update id="updateOrderProcessingQueue" parameterType="com.retailers.dht.common.entity.OrderProcessingQueue">
+		UPDATE t_order_processing_queue
+		<set>
+            <if test="null != type">
+                type = #{type},
+            </if>
+            <if test="null != status">
+                status = #{status},
+            </if>
+            <if test="null != orderNo and '' != orderNo">
+                order_no = #{orderNo},
+            </if>
+            <if test="null != params and '' != params">
+                params = #{params},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != executeTime">
+                execute_time = #{executeTime},
+            </if>
+            <if test="null != waitTime">
+                wait_time = #{waitTime},
+            </if>
+            <if test="null != remark and '' != remark">
+                remark = #{remark},
+            </if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除订单处理队列（订单支付回调，订单状态变更） -->
+	<delete id="deleteOrderProcessingQueueById" parameterType="java.lang.Long">
+		DELETE FROM t_order_processing_queue WHERE id = #{id}
+	</delete>
+</mapper>

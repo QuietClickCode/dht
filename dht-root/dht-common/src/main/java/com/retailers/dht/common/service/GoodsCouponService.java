@@ -6,6 +6,7 @@ import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -99,6 +100,15 @@ public interface GoodsCouponService {
 	 * @throws AppException
 	 */
 	public boolean goodsUnBindCoupon(Long goodsId,String gcpIds)throws AppException;
+
+	/**
+	 * 校验商品成惠是否可用
+	 * @param gcpMaps
+	 * @param buyPrices
+	 * @return
+	 * @throws AppException
+	 */
+	public Object checkGoodsCoupon(Map<Long,List<Long>> gcpMaps,Map<Long,Long> buyPrices)throws AppException;
 
 }
 

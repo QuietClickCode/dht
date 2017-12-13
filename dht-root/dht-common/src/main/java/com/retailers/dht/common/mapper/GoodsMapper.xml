@@ -66,6 +66,14 @@
 		SELECT <include refid="goods_columns" />
 		FROM t_goods WHERE g_id = #{gid}
 	</select>
+	<!-- 根据商品id批量取得商品 -->
+	<select id="queryGoodsByGids" resultMap="rm_goods">
+		SELECT <include refid="goods_columns" />
+		FROM t_goods WHERE g_id IN
+		<foreach collection="gids" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
 	<!-- 商品表查询条件组合 -->
 	<sql id="goods_where">
 		<where>

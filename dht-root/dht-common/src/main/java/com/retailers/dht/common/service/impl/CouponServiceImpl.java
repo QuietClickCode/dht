@@ -372,5 +372,15 @@ public class CouponServiceImpl implements CouponService {
 		cur.setCpurType(isRestricted);
 		return cur;
 	}
+
+	/**
+	 *
+	 * @param uid
+	 * @param cIds
+	 * @param gIds
+	 * @throws AppException
+	 */
+	public void checkUserUseCouponByGoodsIds(Long uid, List<Long> cIds, List<Long> gIds) throws AppException {
+	}
 }
 

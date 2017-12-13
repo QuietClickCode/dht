@@ -2,6 +2,7 @@
 package com.retailers.dht.common.service.impl;
 import java.util.*;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
@@ -144,6 +145,18 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
         List<GoodsCouponShowVo> list = goodsCouponMapper.queryAllowGoodsCouponByGid(goods.getGclassification(),goodsId,new Date());
 		return list;
 	}
+
+	/**
+	 * 根据商品取得该商品下的所有优惠
+	 * @param goodsIds
+	 * @return
+	 */
+	private List<GoodsCouponShowVo> queryGoodsCouponByGid(List<Long> goodsIds){
+		//取得允许的商品优惠
+		//List<Goods> goods=goodsMapper.queryGoodsByGids(goodsIds);
+		List<GoodsCouponShowVo> list = goodsCouponMapper.queryAllowGoodsCouponByGids(goodsIds,new Date());
+		return list;
+	}
 	/**
 	 * 根据优惠名称取得优惠列表（排除己存在的）
 	 * @param couponNm 优惠名称
@@ -222,6 +235,16 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		return true;
 	}
 
+	public Object checkGoodsCoupon(Map<Long,List<Long>> gcpMaps,Map<Long,Long> buyPrices)throws AppException{
+    	List<Long> goodsIds=new ArrayList<Long>();
+    	for(Long gid:gcpMaps.keySet()){
+			goodsIds.add(gid);
+		}
+    	//取得商品例表
+		List<GoodsCouponShowVo> list = queryGoodsCouponByGid(goodsIds);
+
+		return null;
+	}
 }
 
 

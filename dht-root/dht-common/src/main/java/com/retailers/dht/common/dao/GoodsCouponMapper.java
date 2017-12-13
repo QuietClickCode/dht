@@ -67,6 +67,14 @@ public interface GoodsCouponMapper {
 	public List<GoodsCouponShowVo> queryAllowGoodsCouponByGid(@Param("goodsType")Long goodsType, @Param("goodsId")Long goodsId, @Param("curDate")Date curDate);
 
 	/**
+	 * 批量取得商品列表允许的优惠
+	 * @param goodsIds
+	 * @param curDate
+	 * @return
+	 */
+	public List<GoodsCouponShowVo> queryAllowGoodsCouponByGids(@Param("goodsIds")List<Long> goodsIds, @Param("curDate")Date curDate);
+
+	/**
 	 * 取得该商品下未绑定的优惠
 	 * @param couponNm 优惠名称
 	 * @param gcpIds 己绑定优惠

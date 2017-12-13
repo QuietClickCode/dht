@@ -16,7 +16,10 @@
 			<result property="orderBuyUid" column="order_buy_uid"/>
 			<result property="orderSellUid" column="order_sell_uid"/>
 			<result property="orderTradePrice" column="order_trade_price"/>
-			<result property="orderShopPrice" column="order_shop_price"/>
+			<result property="orderGoodsTotalPrice" column="order_goods_total_price"/>
+			<result property="orderGoodsActualPayPrice" column="order_goods_actual_pay_price"/>
+			<result property="orderGoodsCouponPrice" column="order_goods_coupon_price"/>
+			<result property="orderCouponPrice" column="order_coupon_price"/>
 			<result property="orderLogisticsPrice" column="order_logistics_price"/>
 			<result property="orderCreateDate" column="order_create_date"/>
 			<result property="orderPayDate" column="order_pay_date"/>
@@ -42,7 +45,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="order_columns">
-		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
+		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 	</sql>
 	<!-- 根据订单主键取得数据 -->
 	<select id="queryOrderById" resultMap="rm_order" parameterType="java.lang.Long">
@@ -85,10 +88,10 @@
 				AND order_pay_callback_remark = #{params.orderPayCallbackRemark}
 			</if>
 			<if test="null != params.orderPayCallbackDateBegin">
-				AND order_pay_callback_date &gt;= #{params.orderPayCallbackDate}
+				AND order_pay_callback_date &gt;= TO_DATE('${params.orderPayCallbackDateBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderPayCallbackDateEnd">
-				AND order_pay_callback_date &lt;= #{params.orderPayCallbackDate}
+				AND order_pay_callback_date &lt;= TO_DATE('${params.orderPayCallbackDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderBuyUid">
 				AND order_buy_uid = #{params.orderBuyUid}
@@ -99,23 +102,32 @@
 			<if test="null != params.orderTradePrice">
 				AND order_trade_price = #{params.orderTradePrice}
 			</if>
-			<if test="null != params.orderShopPrice">
-				AND order_shop_price = #{params.orderShopPrice}
+			<if test="null != params.orderGoodsTotalPrice">
+				AND order_goods_total_price = #{params.orderGoodsTotalPrice}
+			</if>
+			<if test="null != params.orderGoodsActualPayPrice">
+				AND order_goods_actual_pay_price = #{params.orderGoodsActualPayPrice}
+			</if>
+			<if test="null != params.orderGoodsCouponPrice">
+				AND order_goods_coupon_price = #{params.orderGoodsCouponPrice}
+			</if>
+			<if test="null != params.orderCouponPrice">
+				AND order_coupon_price = #{params.orderCouponPrice}
 			</if>
 			<if test="null != params.orderLogisticsPrice">
 				AND order_logistics_price = #{params.orderLogisticsPrice}
 			</if>
 			<if test="null != params.orderCreateDateBegin">
-				AND order_create_date &gt;= #{params.orderCreateDate}
+				AND order_create_date &gt;= TO_DATE('${params.orderCreateDateBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderCreateDateEnd">
-				AND order_create_date &lt;= #{params.orderCreateDate}
+				AND order_create_date &lt;= TO_DATE('${params.orderCreateDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderPayDateBegin">
-				AND order_pay_date &gt;= #{params.orderPayDate}
+				AND order_pay_date &gt;= TO_DATE('${params.orderPayDateBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderPayDateEnd">
-				AND order_pay_date &lt;= #{params.orderPayDate}
+				AND order_pay_date &lt;= TO_DATE('${params.orderPayDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderRemark and '' != params.orderRemark">
 				AND order_remark = #{params.orderRemark}
@@ -148,19 +160,19 @@
 				AND order_logistics_code = #{params.orderLogisticsCode}
 			</if>
 			<if test="null != params.orderSendDateBegin">
-				AND order_send_date &gt;= #{params.orderSendDate}
+				AND order_send_date &gt;= TO_DATE('${params.orderSendDateBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderSendDateEnd">
-				AND order_send_date &lt;= #{params.orderSendDate}
+				AND order_send_date &lt;= TO_DATE('${params.orderSendDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderSendRemark and '' != params.orderSendRemark">
 				AND order_send_remark = #{params.orderSendRemark}
 			</if>
 			<if test="null != params.orderConfirmDateBegin">
-				AND order_confirm_date &gt;= #{params.orderConfirmDate}
+				AND order_confirm_date &gt;= TO_DATE('${params.orderConfirmDateBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderConfirmDateEnd">
-				AND order_confirm_date &lt;= #{params.orderConfirmDate}
+				AND order_confirm_date &lt;= TO_DATE('${params.orderConfirmDateEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.orderSendAddressId">
 				AND order_send_address_id = #{params.orderSendAddressId}
@@ -188,10 +200,10 @@
 	<!--添加订单 -->
 	<insert id="saveOrder" parameterType="com.retailers.dht.common.entity.Order" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_order (
-			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_shop_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
+			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 		) VALUES
 		(
-			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderShopPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{orderBuyDel,jdbcType=INTEGER},#{orderSellDel,jdbcType=INTEGER},#{isReal,jdbcType=INTEGER},0
+			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderGoodsTotalPrice,jdbcType=BIGINT},#{orderGoodsActualPayPrice,jdbcType=BIGINT},#{orderGoodsCouponPrice,jdbcType=BIGINT},#{orderCouponPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{orderBuyDel,jdbcType=INTEGER},#{orderSellDel,jdbcType=INTEGER},#{isReal,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改订单 -->
@@ -234,8 +246,17 @@
             <if test="null != orderTradePrice">
                 order_trade_price = #{orderTradePrice},
             </if>
-            <if test="null != orderShopPrice">
-                order_shop_price = #{orderShopPrice},
+            <if test="null != orderGoodsTotalPrice">
+                order_goods_total_price = #{orderGoodsTotalPrice},
+            </if>
+            <if test="null != orderGoodsActualPayPrice">
+                order_goods_actual_pay_price = #{orderGoodsActualPayPrice},
+            </if>
+            <if test="null != orderGoodsCouponPrice">
+                order_goods_coupon_price = #{orderGoodsCouponPrice},
+            </if>
+            <if test="null != orderCouponPrice">
+                order_coupon_price = #{orderCouponPrice},
             </if>
             <if test="null != orderLogisticsPrice">
                 order_logistics_price = #{orderLogisticsPrice},

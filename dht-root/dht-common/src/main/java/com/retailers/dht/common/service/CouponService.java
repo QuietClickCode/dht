@@ -102,6 +102,15 @@ public interface CouponService {
 	 */
 	public List<CouponShowVo> queryCouponByGid(Long gid);
 
+	/**
+	 * 校验用户的优惠卷是否正常 可是否可用于该商品
+	 * @param uid 用户id
+	 * @param cIds 优惠卷id
+	 * @param gIds 商品ids
+	 * @throws AppException
+	 */
+	public void checkUserUseCouponByGoodsIds(Long uid,List<Long> cIds,List<Long> gIds)throws AppException;
+
 }
 
 

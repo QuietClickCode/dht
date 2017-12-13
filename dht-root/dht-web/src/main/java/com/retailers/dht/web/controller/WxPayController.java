@@ -3,6 +3,7 @@ package com.retailers.dht.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
+import com.retailers.dht.common.service.OrderProcessingQueueService;
 import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayService;
 import com.retailers.dht.web.base.BaseController;
@@ -43,6 +44,8 @@ public class WxPayController extends BaseController{
 
     @Autowired
     private PayCallbackService payCallbackService;
+    @Autowired
+    private OrderProcessingQueueService orderProcessingQueueService;
     @Autowired
     private PayService payService;
     @RequestMapping("payInfo")
@@ -276,9 +279,15 @@ public class WxPayController extends BaseController{
                     pc.setPcOrderNo(tradeNo);
                     pc.setPcIsSign(SystemConstant.EXECUTE_SUCCESS);
                     pc.setPcSign(StringUtils.concat(sign,":",mySign));
+                    boolean isSuccess=false;
                     if (retMap2.get("return_code").equals("SUCCESS") && retMap2.get("result_code").equals("SUCCESS")) {
-                    }else{
+                        isSuccess=true;
                     }
+                    long payWay=0;
+                    if(ObjectUtils.isNotEmpty(retMap2.get("attach"))){
+                        payWay=Long.parseLong("attach");
+                    }
+                    orderProcessingQueueService.addQueue(tradeNo,isSuccess,retMap2.get("transaction_id"),payWay,StringUtils.formate(retMap2.get("err_code"),retMap2.get("err_code_des")));
                 }else{
                     return_code = "FAIL";
                     return_msg = "签名验证失败";
