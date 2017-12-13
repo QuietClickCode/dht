@@ -1,13 +1,9 @@
 package com.retailers.hnc.manage.controller;
 
-import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
-import com.retailers.auth.vo.ZTreeVo;
+import com.retailers.hnc.common.service.ProjectService;
 import com.retailers.hnc.manage.base.BaseController;
-import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.HttpClientUtil;
-import com.retailers.tools.utils.PageUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -20,28 +16,21 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
-import java.net.URLEncoder;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 /**
  * Created by Administrator on 2017/9/28.
  */
 @Controller
 @RequestMapping("project")
 public class ProjectController extends BaseController {
-//
-//    @Autowired
-//    ProjectService ProjectService;
-//
-//    @RequestMapping("/openProject")
-//    @Menu(parentRes = "sys.manager.projectManager",resourse = "project.openProject",description = "项目管理",sort = 1,label = "项目管理")
-//    public String openProject(){
-//        return "project/project";
-//    }
+
+    @Autowired
+    ProjectService projectService;
+
+    @RequestMapping("/openProject")
+    @Menu(parentRes = "sys.manager.projectManager",resourse = "project.openProject",description = "项目管理",sort = 1,label = "项目管理")
+    public String openProject(){
+        return "project";
+    }
 //
 //    @RequestMapping("editProject")
 //    @Function(label = "编辑商品",parentRes = "Project.openProject",resourse = "Project.editProject",description = "编辑商品",sort = 2)
