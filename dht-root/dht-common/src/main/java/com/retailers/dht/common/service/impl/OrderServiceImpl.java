@@ -4,6 +4,7 @@ package com.retailers.dht.common.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.constant.LogUserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
@@ -54,6 +55,12 @@ public class OrderServiceImpl implements OrderService {
     private ProcedureToolsService procedureToolsService;
     @Autowired
 	private GoodsMapper goodsMapper;
+    @Autowired
+	private UserMapper userMapper;
+    @Autowired
+	private UserCardPackageMapper userCardPackageMapper;
+    @Autowired
+	private LogUserCardPackageMapper logUserCardPackageMapper;
 
 
 
@@ -306,6 +313,98 @@ public class OrderServiceImpl implements OrderService {
 		return rtn;
 	}
 
+	/**
+	 * 修改订单状态
+	 * @param opq
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean updateOrderStatus(OrderProcessingQueue opq) throws AppException {
+		return false;
+	}
 
+	/**
+	 * 订单支付回调
+	 * @param opq
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean orderPayCallback(OrderProcessingQueue opq) throws AppException {
+		Order order = orderMapper.queryOrderByOrderNo(opq.getOrderNo());
+		Date curDate=new Date();
+		//判断处理状态
+		if(ObjectUtils.isNotEmpty(opq.getParams())){
+			JSONObject obj = JSONObject.parseObject(opq.getParams());
+			boolean isSuccess=false;
+			Integer status=OrderConstant.ORDER_STATUS_PAY_FAILE;
+			if(obj.containsKey("isSuccess")){
+				isSuccess=obj.getBoolean("isSuccess");
+				if(isSuccess){
+					status=OrderConstant.ORDER_STATUS_PAY_SUCCESS;
+				}
+			}
+			order.setOrderPayUseWay(obj.getInteger("payWay"));
+			order.setOrderPayCallbackNo(obj.getString("tradeOffId"));
+			order.setOrderPayCallbackDate(curDate);
+			order.setOrderPayCallbackRemark(obj.getString("message"));
+			order.setOrderStatus(status);
+			long total=orderMapper.orderPayCallBack(order);
+			if(total==0){
+				throw new AppException("订单状态己变更");
+			}
+			if(isSuccess){
+				//判断订单类型 充值 添加用户钱包
+				if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+					UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+					//修改用户钱包
+					long updateSize=userCardPackageMapper.userRechage(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+					if(updateSize==0){
+						throw new AppException("数据己变更");
+					}
+					String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
+					addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+				}else{
+					//判断是返现订单还是返积分订单
+					if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){
+						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+						//修改用户钱包
+						long updateSize=userCardPackageMapper.userIntegral(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+						if(updateSize==0){
+							throw new AppException("数据己变更");
+						}
+						String remark=StringUtils.formates("用户购物返积分，返还积分:[{}],当前积分:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUtotalIntegral()));
+						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_OUT,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+					//订单返现
+					}else{
+
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 *  添加用户卡包操作日志
+	 * @param uid 用户id
+	 * @param type 日志类型
+	 * @param orderId 订单id
+	 * @param val 变更值
+	 * @param curVal 当前 值
+	 * @param remark 备注
+	 * @param curDate 当前日期
+	 */
+	private void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate){
+		//添加用户钱包日志
+		LogUserCardPackage lucp=new LogUserCardPackage();
+		lucp.setUid(uid);
+		lucp.setType(type);
+		lucp.setRelationOrderId(orderId);
+		lucp.setVal(val);
+		lucp.setCurVal(curVal);
+		lucp.setRemark(remark);
+		lucp.setCreateTime(curDate);
+		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
+	}
 }
 

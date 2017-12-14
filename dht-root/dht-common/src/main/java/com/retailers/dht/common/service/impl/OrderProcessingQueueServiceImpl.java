@@ -8,9 +8,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.dao.OrderMapper;
+import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.dht.common.dao.OrderProcessingQueueMapper;
 import com.retailers.dht.common.service.OrderProcessingQueueService;
+import com.retailers.dht.common.service.OrderService;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +36,11 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 	Logger logger= LoggerFactory.getLogger(OrderProcessingQueueServiceImpl.class);
 	@Autowired
 	private OrderProcessingQueueMapper orderProcessingQueueMapper;
+	@Autowired
+	private OrderService orderService;
+	@Autowired
+	private OrderMapper orderMapper;
+
 	public boolean saveOrderProcessingQueue(OrderProcessingQueue orderProcessingQueue) {
 		int status = orderProcessingQueueMapper.saveOrderProcessingQueue(orderProcessingQueue);
 		return status == 1 ? true : false;
@@ -108,8 +117,17 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 		}
 	}
 	@Transactional(rollbackFor = Exception.class)
-	private void orderProcessingQueue(OrderProcessingQueue opq){
+	private void orderProcessingQueue(OrderProcessingQueue opq)throws AppException{
+		//根据订单号取得订单
+		Order order =orderMapper.queryOrderByOrderNo(opq.getOrderNo());
+		//判断处理类型 修改订单状态
+		if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_UPDATE){
+			orderService.updateOrderStatus(opq);
+		}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_PAY_CALLBACK){
+			orderService.orderPayCallback(opq);
+		}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_REFUND){
 
+		}
 	}
 }
 

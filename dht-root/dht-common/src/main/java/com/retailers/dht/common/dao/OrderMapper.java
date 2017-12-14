@@ -27,6 +27,13 @@ public interface OrderMapper {
 	 * @date 2017-11-21 14:23:59
 	 */
 	public int updateOrder(Order order);
+
+	/**
+	 * 订单支付回调
+	 * @param order
+	 * @return
+	 */
+	public int orderPayCallBack(Order order);
 	/**
 	 * 根据Id删除订单
 	 * @param id

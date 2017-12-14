@@ -80,6 +80,38 @@
 		</set>
 		WHERE id = #{id} and version = #{version}
 	</update>
+	<!--用户充值-->
+	<update id="userRechage">
+		UPDATE t_user_card_package
+		<set>
+			<if test="null != utotalWallet">
+				u_total_wallet = u_total_wallet+#{wallet},
+			</if>
+			<if test="null != ucurWallet">
+				u_cur_wallet = u_cur_wallet+#{wallet},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
+		</set>
+		WHERE id = #{uid} and version = #{version}
+	</update>
+	<!--编辑用户积分 -->
+	<update id="userIntegral">
+		UPDATE t_user_card_package
+		<set>
+			<if test="null != utotalWallet">
+				u_total_integral = u_total_integral+#{integral},
+			</if>
+			<if test="null != ucurWallet">
+				u_cur_integral = u_cur_integral+#{integral},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
+		</set>
+		WHERE id = #{uid} and version = #{version}
+	</update>
 	<!--删除用户钱包，积分 -->
 	<delete id="deleteUserCardPackageById" parameterType="java.lang.Long">
 		DELETE FROM t_user_card_package WHERE id = #{id}
