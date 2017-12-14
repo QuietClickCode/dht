@@ -84,15 +84,9 @@
 	<update id="userRechage">
 		UPDATE t_user_card_package
 		<set>
-			<if test="null != utotalWallet">
-				u_total_wallet = u_total_wallet+#{wallet},
-			</if>
-			<if test="null != ucurWallet">
-				u_cur_wallet = u_cur_wallet+#{wallet},
-			</if>
-			<if test="null != version">
-				version = version+1,
-			</if>
+			u_total_wallet = u_total_wallet+#{wallet},
+			u_cur_wallet = u_cur_wallet+#{wallet},
+			version = version+1,
 		</set>
 		WHERE id = #{uid} and version = #{version}
 	</update>
@@ -100,15 +94,9 @@
 	<update id="userIntegral">
 		UPDATE t_user_card_package
 		<set>
-			<if test="null != utotalWallet">
-				u_total_integral = u_total_integral+#{integral},
-			</if>
-			<if test="null != ucurWallet">
-				u_cur_integral = u_cur_integral+#{integral},
-			</if>
-			<if test="null != version">
-				version = version+1,
-			</if>
+			u_total_integral = u_total_integral+#{integral},
+			u_cur_integral = u_cur_integral+#{integral},
+			version = version+1,
 		</set>
 		WHERE id = #{uid} and version = #{version}
 	</update>

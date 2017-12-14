@@ -16,13 +16,18 @@ import com.retailers.dht.common.service.OrderProcessingQueueService;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.SpringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 /**
  * 描述：订单处理队列（订单支付回调，订单状态变更）Service
@@ -116,18 +121,33 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 			}
 		}
 	}
-	@Transactional(rollbackFor = Exception.class)
 	private void orderProcessingQueue(OrderProcessingQueue opq)throws AppException{
-		//根据订单号取得订单
-		Order order =orderMapper.queryOrderByOrderNo(opq.getOrderNo());
-		//判断处理类型 修改订单状态
-		if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_UPDATE){
-			orderService.updateOrderStatus(opq);
-		}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_PAY_CALLBACK){
-			orderService.orderPayCallback(opq);
-		}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_REFUND){
+		DataSourceTransactionManager transactionManager = (DataSourceTransactionManager) SpringUtils.getBean("transactionManager");
+		DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+		def.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRED); // 事物隔离级
+		TransactionStatus ts = transactionManager.getTransaction(def);
+		try{
+			//判断处理类型 修改订单状态
+			if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_UPDATE){
+				orderService.updateOrderStatus(opq);
+			}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_PAY_CALLBACK){
+				orderService.orderPayCallback(opq);
+			}else if(opq.getType().intValue()==OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_REFUND){
 
+			}
+			transactionManager.commit(ts);
+		}catch(AppException e){
+			transactionManager.rollback(ts);
+			throw new AppException(e.getMessage());
+		}catch(Exception e){
+			transactionManager.rollback(ts);
+			throw new AppException(e.getMessage());
 		}
+
+	}
+
+	public void test(OrderProcessingQueue opq )throws AppException{
+		orderProcessingQueue(opq);
 	}
 }
 

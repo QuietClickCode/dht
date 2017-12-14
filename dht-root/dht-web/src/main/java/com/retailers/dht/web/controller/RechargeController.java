@@ -64,6 +64,7 @@ public class RechargeController extends BaseController {
             Map<String,Object> rtn =orderService.userRecharge(curUid,rid_);
             return  success(rtn);
         }catch(Exception e){
+            e.printStackTrace();
             return errorForSystem("请你选择充值金额");
         }
     }

@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.OrderProcessingQueue;
+import com.retailers.tools.exception.AppException;
+
 import java.util.Map;
 /**
  * 描述：订单处理队列（订单支付回调，订单状态变更）Service
@@ -70,6 +72,8 @@ public interface OrderProcessingQueueService {
 	 * 执行订单队列
 	 */
 	public void executeOrderProcessingQueue();
+
+	public void test(OrderProcessingQueue opq )throws AppException;
 
 }
 

@@ -347,7 +347,7 @@
 				version = version+1,
 			</if>
 		</set>
-		WHERE id = #{id} and version = #{version} and order_pay_way!=4
+		WHERE id = #{id} and version = #{version} and order_status!=3
 	</update>
 	<!--删除订单 -->
 	<delete id="deleteOrderById" parameterType="java.lang.Long">

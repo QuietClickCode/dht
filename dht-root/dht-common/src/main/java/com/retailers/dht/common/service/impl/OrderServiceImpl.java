@@ -23,6 +23,7 @@ import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -277,6 +278,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public Map<String, Object> userRecharge(Long uid, Long rid) throws AppException {
 		logger.info("用户充值处理开始,充值用户id:[{}],充值卡id:[{}]",uid,rid);
 		Date curDate = new Date();
@@ -308,7 +310,7 @@ public class OrderServiceImpl implements OrderService {
 			rtn.put("orderNo",orderNo);
 			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
 		}finally {
-			logger.info("用户充值处理结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
+			logger.info("用户充值处理结束,执行时间:[{}],返回数据：[{}]",(System.currentTimeMillis()-curDate.getTime()),JSON.toJSON(rtn));
 		}
 		return rtn;
 	}
@@ -332,54 +334,58 @@ public class OrderServiceImpl implements OrderService {
 	public boolean orderPayCallback(OrderProcessingQueue opq) throws AppException {
 		Order order = orderMapper.queryOrderByOrderNo(opq.getOrderNo());
 		Date curDate=new Date();
-		//判断处理状态
-		if(ObjectUtils.isNotEmpty(opq.getParams())){
-			JSONObject obj = JSONObject.parseObject(opq.getParams());
-			boolean isSuccess=false;
-			Integer status=OrderConstant.ORDER_STATUS_PAY_FAILE;
-			if(obj.containsKey("isSuccess")){
-				isSuccess=obj.getBoolean("isSuccess");
-				if(isSuccess){
-					status=OrderConstant.ORDER_STATUS_PAY_SUCCESS;
-				}
-			}
-			order.setOrderPayUseWay(obj.getInteger("payWay"));
-			order.setOrderPayCallbackNo(obj.getString("tradeOffId"));
-			order.setOrderPayCallbackDate(curDate);
-			order.setOrderPayCallbackRemark(obj.getString("message"));
-			order.setOrderStatus(status);
-			long total=orderMapper.orderPayCallBack(order);
-			if(total==0){
-				throw new AppException("订单状态己变更");
-			}
-			if(isSuccess){
-				//判断订单类型 充值 添加用户钱包
-				if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
-					UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
-					//修改用户钱包
-					long updateSize=userCardPackageMapper.userRechage(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
-					if(updateSize==0){
-						throw new AppException("数据己变更");
+		try{
+			//判断处理状态
+			if(ObjectUtils.isNotEmpty(opq.getParams())){
+				JSONObject obj = JSONObject.parseObject(opq.getParams());
+				boolean isSuccess=false;
+				Integer status=OrderConstant.ORDER_STATUS_PAY_FAILE;
+				if(obj.containsKey("isSuccess")){
+					isSuccess=obj.getBoolean("isSuccess");
+					if(isSuccess){
+						status=OrderConstant.ORDER_STATUS_PAY_SUCCESS;
 					}
-					String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
-					addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
-				}else{
-					//判断是返现订单还是返积分订单
-					if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){
+				}
+				order.setOrderPayUseWay(obj.getInteger("payWay"));
+				order.setOrderPayCallbackNo(obj.getString("tradeOffId"));
+				order.setOrderPayCallbackDate(curDate);
+				order.setOrderPayCallbackRemark(obj.getString("message"));
+				order.setOrderStatus(status);
+				long total=orderMapper.orderPayCallBack(order);
+				if(total==0){
+					throw new AppException("订单状态己变更");
+				}
+				if(isSuccess){
+					//判断订单类型 充值 添加用户钱包
+					if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
 						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
 						//修改用户钱包
-						long updateSize=userCardPackageMapper.userIntegral(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+						long updateSize=userCardPackageMapper.userRechage(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 						if(updateSize==0){
 							throw new AppException("数据己变更");
 						}
-						String remark=StringUtils.formates("用户购物返积分，返还积分:[{}],当前积分:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUtotalIntegral()));
-						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_OUT,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
-					//订单返现
+						String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
+						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
 					}else{
+						//判断是返现订单还是返积分订单
+						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){
+							UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+							//修改用户钱包
+							long updateSize=userCardPackageMapper.userIntegral(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+							if(updateSize==0){
+								throw new AppException("数据己变更");
+							}
+							String remark=StringUtils.formates("用户购物返积分，返还积分:[{}],当前积分:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUtotalIntegral()));
+							addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_OUT,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+							//订单返现
+						}else{
 
+						}
 					}
 				}
 			}
+		}catch(DuplicateKeyException e){
+			throw new AppException(e.getMessage());
 		}
 		return true;
 	}

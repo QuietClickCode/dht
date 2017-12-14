@@ -285,7 +285,7 @@ public class WxPayController extends BaseController{
                     }
                     long payWay=0;
                     if(ObjectUtils.isNotEmpty(retMap2.get("attach"))){
-                        payWay=Long.parseLong("attach");
+                        payWay=Long.parseLong(retMap2.get("attach"));
                     }
                     orderProcessingQueueService.addQueue(tradeNo,isSuccess,retMap2.get("transaction_id"),payWay,StringUtils.formate(retMap2.get("err_code"),retMap2.get("err_code_des")));
                 }else{
