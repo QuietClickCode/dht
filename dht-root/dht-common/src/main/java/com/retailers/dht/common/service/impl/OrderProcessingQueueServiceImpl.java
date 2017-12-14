@@ -106,7 +106,7 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 				try{
 					orderProcessingQueue(opq);
 				}catch(Exception e){
-
+					e.printStackTrace();
 				}finally {
 
 				}
