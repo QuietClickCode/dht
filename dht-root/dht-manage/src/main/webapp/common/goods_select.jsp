@@ -203,7 +203,7 @@
             for(var i=0;i<sids_.length;i++){
                 if(sids_[i]){
                     commonGoodsSelectValuesMaps.set(parseInt(sids_[i],10),sNms_[i]);
-                    let child="<li id='"+sids_[i]+"' onmouseover='add_remove_icon(this)'>"+sNms_[i]+"</li>";
+                    let child="<li id='"+sids_[i]+"' onmouseleave='remove_child_icon(this)' onmouseover='add_remove_icon(this)'>"+sNms_[i]+"</li>";
                     $("#commonSelectGoods").append(child);
                 }
             }
@@ -283,7 +283,7 @@
                 for(var row of rows){
                     if(!commonGoodsSelectValuesMaps.has(row.gid)){
                         commonGoodsSelectValuesMaps.set(row.gid,row.gname);
-                        let child="<li id='"+row.gid+"' onmouseover='add_remove_icon(this)'>"+row.gname+"</li>";
+                        let child="<li id='"+row.gid+"' onmouseleave='remove_child_icon(this)' onmouseover='add_remove_icon(this)'>"+row.gname+"</li>";
                         $("#commonSelectGoods").append(child);
                     }
                 }
@@ -293,7 +293,7 @@
                 //判断是否己经存在
                 if(!commonGoodsSelectValuesMaps.has(row.gid)){
                     commonGoodsSelectValuesMaps.set(row.gid,row.gname);
-                    let child="<li id='"+row.gid+"' onmouseover='add_remove_icon(this)' >"+row.gname+"</li>";
+                    let child="<li id='"+row.gid+"' onmouseleave='remove_child_icon(this)' onmouseover='add_remove_icon(this)' >"+row.gname+"</li>";
                     $("#commonSelectGoods").append(child);
                 }
             },
@@ -364,10 +364,18 @@
     function add_remove_icon($this) {
         let len = $($this).find(".remove_icon").length;
         if (len == 0){
-            $($this).append('<span class="remove_icon" onclick="remove_icon_goods(this)"></span>');
+            $($this).append('<span class="remove_icon" onmouseleave="event.stopPropagation();remove_icon(this)" onclick="remove_icon_goods(this)"></span>');
             $($this).find(".remove_icon").show();
         }
         return;
+    }
+
+    function remove_icon($this) {
+        $($this).remove();
+    }
+    
+    function remove_child_icon($this) {
+        $($this).find("span").remove();
     }
 
     //删除选中的商品
