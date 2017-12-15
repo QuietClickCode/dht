@@ -49,9 +49,9 @@ public class GoodsController extends BaseController {
     @RequestMapping("/setinviter")
     @ResponseBody
     public  String setinviter(HttpServletRequest request){
-        UserInfoVIew u = new UserInfoVIew();
-        u.setUid(10L);
-        setCurLoginUser(request,u);
+//        UserInfoVIew u = new UserInfoVIew();
+//        u.setUid(10L);
+//        setCurLoginUser(request,u);
         return "";
     }
 

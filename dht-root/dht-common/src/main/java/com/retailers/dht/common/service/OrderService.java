@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.tools.exception.AppException;
@@ -89,7 +90,20 @@ public interface OrderService {
 	 */
 	public Map<String,Object> userRecharge(Long uid,Long rid)throws AppException;
 
-
+	/**
+	 * 修改订单状态
+	 * @param opq
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean updateOrderStatus(OrderProcessingQueue opq)throws AppException;
+	/**
+	 * 订单支付回调处理
+	 * @param opq
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean orderPayCallback(OrderProcessingQueue opq)throws AppException;
 
 }
 

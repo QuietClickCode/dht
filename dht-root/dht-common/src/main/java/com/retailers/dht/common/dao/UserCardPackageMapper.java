@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：用户钱包，积分DAO
@@ -27,6 +29,24 @@ public interface UserCardPackageMapper {
 	 * @date 2017-11-22 23:13:08
 	 */
 	public int updateUserCardPackage(UserCardPackage userCardPackage);
+
+	/**
+	 * 用户充值
+	 * @param uid 用户id
+	 * @param wallet 用户钱包
+	 * @param version 版本号
+	 * @return
+	 */
+	public int userRechage(@Param("uid")Long uid, @Param("wallet")Long wallet, @Param("version") Integer version);
+
+	/**
+	 * 编辑用户积分
+	 * @param uid 用户id
+	 * @param integral 积分
+	 * @param version 版本号
+	 * @return
+	 */
+	public int userIntegral(@Param("uid")Long uid, @Param("integral")Long integral, @Param("version") Integer version);
 	/**
 	 * 根据Id删除用户钱包，积分
 	 * @param id

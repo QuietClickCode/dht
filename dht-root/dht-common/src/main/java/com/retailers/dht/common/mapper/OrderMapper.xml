@@ -324,6 +324,31 @@
 		</set>
 		WHERE id = #{id} and version = #{version}
 	</update>
+	<!--订单支付回调 -->
+	<update id="orderPayCallBack" parameterType="com.retailers.dht.common.entity.Order">
+		UPDATE t_order
+		<set>
+			<if test="null != orderStatus">
+				order_status = #{orderStatus},
+			</if>
+			<if test="null != orderPayUseWay">
+				order_pay_use_way = #{orderPayUseWay},
+			</if>
+			<if test="null != orderPayCallbackNo and '' != orderPayCallbackNo">
+				order_pay_callback_no = #{orderPayCallbackNo},
+			</if>
+			<if test="null != orderPayCallbackRemark and '' != orderPayCallbackRemark">
+				order_pay_callback_remark = #{orderPayCallbackRemark},
+			</if>
+			<if test="null != orderPayCallbackDate">
+				order_pay_callback_date = #{orderPayCallbackDate},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
+		</set>
+		WHERE id = #{id} and version = #{version} and order_status!=3
+	</update>
 	<!--删除订单 -->
 	<delete id="deleteOrderById" parameterType="java.lang.Long">
 		DELETE FROM t_order WHERE id = #{id}
