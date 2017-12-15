@@ -27,7 +27,7 @@ public class ProjectController extends BaseController {
     ProjectService projectService;
 
     @RequestMapping("/openProject")
-    @Menu(parentRes = "sys.manager.projectManager",resourse = "project.openProject",description = "项目管理",sort = 1,label = "项目管理")
+    @Menu(parentRes = "sys.manager.project",resourse = "project.openProject",description = "项目管理",sort = 1,label = "项目管理")
     public String openProject(){
         return "project";
     }

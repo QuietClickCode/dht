@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.FloorRelationshipMapper">
+
+	<resultMap id="rm_floorRelationship" type="com.retailers.hnc.common.entity.FloorRelationship">
+			<result property="frId" column="fr_id"/>
+			<result property="fmId" column="fm_id"/>
+			<result property="ftId" column="ft_id"/>
+			<result property="ftName" column="ft_name"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="floorRelationship_columns">
+		fr_id,fm_id,ft_id,ft_name,is_delete,version
+	</sql>
+	<!-- 根据楼栋关系表主键取得数据 -->
+	<select id="queryFloorRelationshipByFrId" resultMap="rm_floorRelationship" parameterType="java.lang.Long">
+		SELECT <include refid="floorRelationship_columns" />
+		FROM t_floor_relationship WHERE fr_id = #{frId}
+	</select>
+	<!-- 楼栋关系表查询条件组合 -->
+	<sql id="floorRelationship_where">
+		<where>
+			<if test="null != params.frId">
+				AND fr_id = #{params.frId}
+			</if>
+			<if test="null != params.fmId">
+				AND fm_id = #{params.fmId}
+			</if>
+			<if test="null != params.ftId">
+				AND ft_id = #{params.ftId}
+			</if>
+			<if test="null != params.ftName and '' != params.ftName">
+				AND ft_name = #{params.ftName}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryFloorRelationshipList" resultMap="rm_floorRelationship" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="floorRelationship_columns" />
+		FROM t_floor_relationship
+		<include refid="floorRelationship_where"/>
+	</select>
+	<!--添加楼栋关系表 -->
+	<insert id="saveFloorRelationship" parameterType="com.retailers.hnc.common.entity.FloorRelationship" useGeneratedKeys="true" keyProperty="frId">
+		INSERT INTO t_floor_relationship (
+			fm_id,ft_id,ft_name,is_delete,version
+		) VALUES
+		(
+			#{fmId,jdbcType=BIGINT},#{ftId,jdbcType=BIGINT},#{ftName,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改楼栋关系表 -->
+	<update id="updateFloorRelationship" parameterType="com.retailers.hnc.common.entity.FloorRelationship">
+		UPDATE t_floor_relationship
+		<set>
+            <if test="null != fmId">
+                fm_id = #{fmId},
+            </if>
+            <if test="null != ftId">
+                ft_id = #{ftId},
+            </if>
+            <if test="null != ftName and '' != ftName">
+                ft_name = #{ftName},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE fr_id = #{frId} and version = #{version}
+	</update>
+	<!--删除楼栋关系表 -->
+	<delete id="deleteFloorRelationshipByFrId" parameterType="java.lang.Long">
+		DELETE FROM t_floor_relationship WHERE fr_id = #{frId}
+	</delete>
+
+	<select id="queryFloorType" resultMap="rm_floorRelationship" parameterType="java.lang.Long">
+		SELECT * FROM t_floor_relationship WHERE fm_id = #{fmId} AND is_delete != 1
+	</select>
+</mapper>
