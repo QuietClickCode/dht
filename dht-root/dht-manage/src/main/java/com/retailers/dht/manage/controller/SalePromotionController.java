@@ -50,7 +50,10 @@ public class SalePromotionController extends BaseController{
     @RequestMapping("/updateSalePromotion")
     @Function(label = "修改特价名单",description = "修改特价名单",resourse = "openSalePromotion.updateSalePromotion",sort = 3,parentRes = "openSalePromotion.salePromotionMapping")
     @ResponseBody
-    public BaseResp updateSalePromotion(SalePromotion promotion){
+    public BaseResp updateSalePromotion(SalePromotion promotion,String spStartTimes,String spEndTimes){
+        if(ObjectUtils.isNotEmpty(spEndTimes)&&ObjectUtils.isNotEmpty(spStartTimes)){
+            promotion = addDate(promotion,spStartTimes,spEndTimes);
+        }
         boolean flag = promotionService.updateSalePromotion(promotion);
         if(flag)
             return success("修改首页导航[" + promotion.getGoodsName() + "]成功");

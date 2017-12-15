@@ -402,7 +402,7 @@
                 dataType: "json",
                 data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:1,gid:gid,pageNo:1,pageSize:1},
                 success:function(data){
-                    if(data.rows!=null){
+                    if(data.rows!=null&&data.rows.length>0){
                         spId=data.rows[0].spId;
                         <!--查询用户是否购买此商品-->
                         queryuserisbuygoods();
@@ -519,18 +519,18 @@
             $('#open_address').html(address);
             $.ajax({
                 type:"post",
-                url:'/city/queryCityListsByCityName',
+                url:'/goodsFreight/queryFreightByAddress',
                 dataType: "json",
-                data:{cityname:address.substr(0,2),pageNo:1,pageSize:2},
+                saync:false,
+                data:{address:address},
                 success:function(data){
                     var row = data.row;
                     if(row!=null){
-                        var gfreigh = row.gfreigh;
+                        var gfreigh = parseFloat(row.gfPrice/100).toFixed(2);
                         $('#gfreigh').html(gfreigh+'元');
                     }
                 }
             });
-
             document.getElementById('closeaddress').click();
         }
 

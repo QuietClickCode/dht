@@ -67,6 +67,7 @@ public interface CutPriceService {
 	public List<CutPriceVo> queryCutPriceListsByGid(Map params);
 
 	public Pagination<CutPriceVo> queryCutPriceGoodsList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<CutPriceVo> queryNextCutPriceGoodsList(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

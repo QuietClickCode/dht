@@ -172,5 +172,18 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 		return list;
 	}
 
+	public Pagination<SalePromotionVo> queryNextSalePromotionLists(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<SalePromotionVo> page = new Pagination<SalePromotionVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<SalePromotionVo> list = salePromotionMapper.queryNextSalePromotionLists(page);
+		for(SalePromotionVo salePromotionVo:list){
+			salePromotionVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+salePromotionVo.getImgurl());
+		}
+		page.setData(list);
+		return page;
+	}
+
 }
 

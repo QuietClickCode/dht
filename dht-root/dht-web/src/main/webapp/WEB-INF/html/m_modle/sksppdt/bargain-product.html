@@ -49,11 +49,11 @@
     <div class="current-price">
             <span class="title-now">
                 现价:¥
-                <span id="minprice">1280.00</span>
+                <span id="minprice">0.00</span>
             </span>
         <span class="bargain-more">
                 每件最高可砍掉¥
-                <span id="cutdownprice">580.80</span>
+                <span id="cutdownprice">0.00</span>
                 &nbsp;
             </span>
     </div>
@@ -408,7 +408,7 @@
             dataType: "json",
             data:{gid:gid},
             success:function(data){
-                if(data.rows!=null){
+                if(data.rows!=null&&data.rows.length>0){
                     cpId=data.rows[0].cpId;
                     timestape = data.rows[0].timestap*1000;
                     var cpSale = parseFloat(data.rows[0].cpSale/100).toFixed(2);
@@ -530,18 +530,18 @@
         $('#open_address').html(address);
         $.ajax({
             type:"post",
-            url:'/city/queryCityListsByCityName',
+            url:'/goodsFreight/queryFreightByAddress',
             dataType: "json",
-            data:{cityname:address.substr(0,2),pageNo:1,pageSize:2},
+            saync:false,
+            data:{address:address},
             success:function(data){
                 var row = data.row;
                 if(row!=null){
-                    var gfreigh = row.gfreigh;
+                    var gfreigh = parseFloat(row.gfPrice/100).toFixed(2);
                     $('#gfreigh').html(gfreigh+'元');
                 }
             }
         });
-
         document.getElementById('closeaddress').click();
     }
 

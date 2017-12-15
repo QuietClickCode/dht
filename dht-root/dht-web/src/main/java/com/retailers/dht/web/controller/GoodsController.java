@@ -10,6 +10,7 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -116,8 +117,10 @@ public class GoodsController extends BaseController {
         if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
                 encryuid = URLEncoder.encode(encryuid);
+                String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
+                randStr = URLEncoder.encode(randStr);
                 if(arr.length==1){
-                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
+                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
@@ -127,7 +130,7 @@ public class GoodsController extends BaseController {
                         Long ivrLong = Long.parseLong(ivr);
                         setShareUserId(request,ivrLong);
                         String gidstr = id.split("~")[0];
-                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html";
+                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html?randStr="+randStr;
                         return path;
                     }
                 }

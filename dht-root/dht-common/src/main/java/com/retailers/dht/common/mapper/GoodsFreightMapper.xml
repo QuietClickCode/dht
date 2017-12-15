@@ -5,6 +5,7 @@
 	<resultMap id="rm_goodsFreight" type="com.retailers.dht.common.entity.GoodsFreight">
 			<result property="gfId" column="gf_id"/>
 			<result property="gfName" column="gf_name"/>
+			<result property="gfFreeArea" column="gf_free_area"/>
 			<result property="gfPrice" column="gf_price"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -12,14 +13,14 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsFreight_columns">
-		gf_id,gf_name,gf_price,is_delete,version
+		gf_id,gf_name,gf_free_area,gf_price,is_delete,version
 	</sql>
-	<!-- 根据商品运费表主键取得数据 -->
+	<!-- 根据运费表主键取得数据 -->
 	<select id="queryGoodsFreightByGfId" resultMap="rm_goodsFreight" parameterType="java.lang.Long">
 		SELECT <include refid="goodsFreight_columns" />
 		FROM t_goods_freight WHERE gf_id = #{gfId}
 	</select>
-	<!-- 商品运费表查询条件组合 -->
+	<!-- 运费表查询条件组合 -->
 	<sql id="goodsFreight_where">
 		<where>
 			<if test="null != params.gfId">
@@ -27,6 +28,9 @@
 			</if>
 			<if test="null != params.gfName and '' != params.gfName">
 				AND gf_name = #{params.gfName}
+			</if>
+			<if test="null != params.gfFreeArea and '' != params.gfFreeArea">
+				AND gf_free_area = #{params.gfFreeArea}
 			</if>
 			<if test="null != params.gfPrice">
 				AND gf_price = #{params.gfPrice}
@@ -45,21 +49,34 @@
 		FROM t_goods_freight
 		<include refid="goodsFreight_where"/>
 	</select>
-	<!--添加商品运费表 -->
+	<select id="queryFreightByAddress" resultMap="rm_goodsFreight">
+		SELECT
+		t2.*
+		from
+		t_goods_cgfrel t1
+		LEFT JOIN t_goods_freight t2 ON t1.gf_id=t2.gf_id OR t2.gf_id=0 and t2.is_delete=0
+		WHERE
+		t1.c_id=#{cid}
+		and t1.is_delete=0
+	</select>
+	<!--添加运费表 -->
 	<insert id="saveGoodsFreight" parameterType="com.retailers.dht.common.entity.GoodsFreight" useGeneratedKeys="true" keyProperty="gfId">
 		INSERT INTO t_goods_freight (
-			gf_name,gf_price,is_delete,version
+			gf_name,gf_free_area,gf_price,is_delete,version
 		) VALUES
 		(
-			#{gfName,jdbcType=VARCHAR},#{gfPrice,jdbcType=REAL},#{isDelete,jdbcType=BIGINT},0
+			#{gfName,jdbcType=VARCHAR},#{gfFreeArea,jdbcType=VARCHAR},#{gfPrice,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改商品运费表 -->
+	<!--修改运费表 -->
 	<update id="updateGoodsFreight" parameterType="com.retailers.dht.common.entity.GoodsFreight">
 		UPDATE t_goods_freight
 		<set>
             <if test="null != gfName and '' != gfName">
                 gf_name = #{gfName},
+            </if>
+            <if test="null != gfFreeArea and '' != gfFreeArea">
+                gf_free_area = #{gfFreeArea},
             </if>
             <if test="null != gfPrice">
                 gf_price = #{gfPrice},
@@ -73,7 +90,7 @@
 		</set>
 		WHERE gf_id = #{gfId} and version = #{version}
 	</update>
-	<!--删除商品运费表 -->
+	<!--删除运费表 -->
 	<delete id="deleteGoodsFreightByGfId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_freight WHERE gf_id = #{gfId}
 	</delete>

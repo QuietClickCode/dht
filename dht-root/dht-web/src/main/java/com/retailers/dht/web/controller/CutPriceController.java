@@ -45,10 +45,23 @@ public class CutPriceController extends BaseController{
 
     @RequestMapping("/queryCutPriceGoodsList")
     @ResponseBody
-    public Map<String,Object> queryCutPriceList(int pageNo,int pageSize){
+    public Map<String,Object> queryCutPriceList(Long cpRegion,int pageNo,int pageSize){
         Map params = new HashMap();
-        params.put("now",new Date());
+        params.put("cpRegion",cpRegion);
         List<CutPriceVo> list = cutPriceService.queryCutPriceGoodsList(params,pageNo,pageSize).getData();
+        Map gtm = new HashMap();
+        if(!ObjectUtils.isEmpty(list)){
+            gtm.put("rows",list);
+        }
+        return gtm;
+    }
+
+    @RequestMapping("/queryNextCutPriceGoodsList")
+    @ResponseBody
+    public Map<String,Object> queryNextCutPriceGoodsList(Long cpRegion,int pageNo,int pageSize){
+        Map params = new HashMap();
+        params.put("cpRegion",cpRegion);
+        List<CutPriceVo> list = cutPriceService.queryNextCutPriceGoodsList(params,pageNo,pageSize).getData();
         Map gtm = new HashMap();
         if(!ObjectUtils.isEmpty(list)){
             gtm.put("rows",list);

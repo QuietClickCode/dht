@@ -137,6 +137,116 @@ body {
     letter-spacing: 1px;
 }
 .current-price > .bargain-more > span {
-    /*font-size: .12rem;*/
+    font-size: .12rem;
     margin: 0 -.06rem;
+}
+
+/*确认订单*/
+.coupon-wrap {
+    height: auto !important;
+}
+.coupon-list {
+    display: block;
+    width: calc(100% - .1rem);
+    height: auto;
+    margin-top: .2rem;
+    margin-left: .1rem;
+}
+.coupon-list > li {
+    display: block;
+    width: 100%;
+    margin-bottom: .08rem;
+}
+.coupon-item-tittle {
+    height: .4rem;
+}
+.coupon-item-tittle > label {
+    float: left;
+    height: .4rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: calc(100% - 1rem);
+    font-size: .24rem;
+}
+.coupon-list > li input {
+    float: left;
+    height: .3rem;
+    width: .3rem;
+    margin-right: .1rem;
+}
+.coupon-arrows {
+    position: absolute;
+    top: .42rem;
+}
+.coupon-detail {
+    display: inline-block;
+    float: right;
+    width: .4rem;
+    height: .4rem;
+    background: url("../img/coupon_down_arrows.png") no-repeat;
+    background-size: 100% 100%;
+}
+.show-status {
+    background: url("../img/coupon_up_arrows.png") no-repeat;
+    background-size: 100% 100%;
+}
+.coupon-item-detail {
+    height: 2rem;
+    width: 90%;
+    /*padding: .2rem;*/
+    /*background: url("../img/coupon_item_bg.png") no-repeat;*/
+    /*background-size: 100%;*/
+    background-color: #fe863d;
+    border-radius: .08rem;
+    margin: .2rem auto;
+    position: relative;
+}
+.coupon-item-detail .get-img {
+    display: inline-block;
+    width: 70%;
+    height: 100%;
+    float: left;
+}
+.coupon-item-detail .coupon-data {
+    display: inline-block;
+    width: 30%;
+    height: 100%;
+    float: right;
+    /*border-left: 1px dotted #fff;*/
+    color: #fff;
+    font-size: .28rem;
+}
+.coupon-data .coupon-price small {
+    font-size: .12rem;
+}
+.coupon-data .coupon-price {
+    margin: .2rem 0 .2rem .1rem;
+}
+.coupon-data .coupon-price strong {
+    font-weight: bold;
+}
+.coupon-data .coupon-condition {
+    font-size: .3rem;
+    margin: .2rem 0 .2rem .1rem;
+}
+.coupon-data .coupon-date {
+    font-size: .12rem;
+    margin: .2rem 0 .2rem .1rem;
+}
+
+.coupon-list li input[disabled='disabled'] {
+    opacity: 0;
+}
+.coupon-list .no-selected{
+    background: url("../img/no_selected.png") no-repeat left top;
+    background-size: .3rem .3rem;
+}
+
+.order-product .text-box .price-box .number-box {
+    background: none !important;
+}
+.buy-num {
+    font-size: .24rem;
+    color: #1a1a1a;
 }

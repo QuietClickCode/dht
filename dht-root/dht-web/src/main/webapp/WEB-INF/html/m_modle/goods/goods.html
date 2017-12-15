@@ -42,7 +42,7 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip">预订服务</span><span id="gname"></span></p>
+		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip" style="display: none">预订服务</span><span id="gname"></span></p>
 		    <p class="p2"><span id="gdprice" style="font-size: .3rem"></span><s><span class="mr_4" id="gprice"></span></s></p>
 		</div>
 		<div class="norms" id="" style="margin-bottom: 0;">
@@ -547,22 +547,18 @@
             $('#open_address').html(address);
             $.ajax({
                 type:"post",
-                url:'/city/queryCityListsByCityName',
+                url:'/goodsFreight/queryFreightByAddress',
                 dataType: "json",
                 saync:false,
-                data:{cityname:address.substr(0,2),pageNo:1,pageSize:2},
+                data:{address:address},
                 success:function(data){
                     var row = data.row;
                     if(row!=null){
-                        var gfreigh = row.gfreigh;
-                        if(address.indexOf('石柱县')>0){
-                            gfreigh=0;
-                        }
+                        var gfreigh = parseFloat(row.gfPrice/100).toFixed(2);
                         $('#gfreigh').html(gfreigh+'元');
                     }
                 }
             });
-
             document.getElementById('closeaddress').click();
         }
 

@@ -102,13 +102,13 @@
         <!-- 秒杀 -->
         <div class="index-title" onclick="gotosecspepage(1)">
             <span>限时秒杀</span>
-            <a href="" class="more">全部<i class="icon-more"></i></a>
+            <a  class="more">全部<i class="icon-more"></i></a>
         </div>
 
         <!-- 倒计时 -->
         <div class="countdown">
             <div class="cont">
-                <span class="word">距结束还有</span>
+                <span class="word" id="wordspan">距结束还有</span>
                 <span class="time1" id="shi1">0</span>
                 <span class="time1" id="shi2">0</span>
                 <span class="colon">:</span>
@@ -138,6 +138,7 @@
             <!--</li>-->
 
         </ul>
+        <img id="noseckillpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
 
         <!-- banner -->
         <div id="banner3" class="focus">
@@ -175,6 +176,7 @@
             <!--</li>-->
 
         </ul>
+        <img id="nospecialpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
 
         <!-- 可能喜欢 -->
         <div class="like">
@@ -409,7 +411,8 @@
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
-                    if(rows!=null){
+                    alert(000);
+                    if(rows!=null&&rows.length>0){
                         timestape = rows[0].timestap*1000;
                         timegoing();
                         for(var i=0;i<rows.length;i++){
@@ -436,11 +439,60 @@
                             $('#seckillul').append(html);
                         }
                         $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        //加载下一波秒杀
+                        loadNextseckill();
                     }
                 }
             });
         }
 
+        function loadNextseckill() {
+            $('#wordspan').html('距开始还有');
+            $.ajax({
+                type:"post",
+                url:'/openSalePromotion/queryNextSalePromotionLists',
+                dataType: "json",
+                data:{spType:1,spRegion:1,pageNo:1,pageSize:2},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    alert(111);
+                    if(rows!=null&&rows.length>0){
+                        timestape = rows[0].timestap*1000;
+                        timegoing();
+                        for(var i=0;i<rows.length;i++){
+                            var minprice = rows[i].minprice;
+                            var maxprice = rows[i].maxprice;
+                            html = '<li>'+
+                                '<a  class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a  class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            if(minprice==maxprice){
+                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                            }else{
+                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                            }
+                            html += '</div>'+
+                                '<div class="purchase">'+
+                                '<a style="background: #999">马上抢购</a>'+
+                                '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#seckillul').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        //展示图片
+                        $('#noseckillpimg').show();
+                    }
+                }
+            });
+        }
+        
         <!--加载特价-->
         loadbargain();
         <!--加载特价-->
@@ -451,11 +503,11 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{now:date,spType:0,pageNo:1,pageSize:2},
+                data:{spType:0,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
-                    if(rows!=null){
+                    if(rows!=null&&rows.length>0){
                         for(var i=0;i<rows.length;i++){
                             var minprice = rows[i].minprice;
                             var maxprice = rows[i].maxprice;
@@ -480,6 +532,50 @@
                             $('#barginul').append(html);
                         }
                         $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        loadNextspecial();
+                    }
+                }
+            });
+        }
+
+        function loadNextspecial() {
+            $.ajax({
+                type:"post",
+                url:'/openSalePromotion/queryNextSalePromotionLists',
+                dataType: "json",
+                data:{spType:0,spRegion:0,pageNo:1,pageSize:2},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        for(var i=0;i<rows.length;i++){
+                            var minprice = rows[i].minprice;
+                            var maxprice = rows[i].maxprice;
+                            html = '<li>'+
+                                '<a  class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a  class="title overflow">'+rows[i].goodsName+'</a>'+
+                                '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            if(minprice==maxprice){
+                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                            }else{
+                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                            }
+                            html += '</div>'+
+                                '<div class="purchase">'+
+                                '<a style="background: #999">马上抢购</a>'+
+                                '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#barginul').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        //展示图片
+                        $('#nospecialpimg').show();
                     }
                 }
             });
@@ -515,8 +611,7 @@
                 timestape -= 1000;
                 if(timestape<0){
                     clearInterval(interval);
-//                $('#shi1').parent().parent().next().remove();
-//                $('#shi1').parent().parent().remove();
+                window.location.reload();
                 }
             },1000);
         }
@@ -526,7 +621,6 @@
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/public.js"></script>
     <script type="text/javascript">
-        <!--判断设备-->
         $(function () {
             <!--图片懒加载-->
             $("img").lazyload({effect: "fadeIn"});
@@ -570,7 +664,7 @@
 
 
     </script>
-
+    <script src="/js/layer/layer.js"></script>
     <!--猜你喜欢-->
     <script>
         var pageNo=1;
@@ -611,6 +705,9 @@
                                     $("img").lazyload({effect: "fadeIn"});
                                     pageNo++;
                                     flag = true;
+                                }
+                                if(data.status==3){
+                                    layer.msg('请您登陆');
                                 }
                             }
                         });

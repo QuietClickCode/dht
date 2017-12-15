@@ -76,5 +76,12 @@ public class GoodsFreightController extends BaseController {
         gtm.put("rows",goodsFreight);
         return gtm;
     }
-
+    @RequestMapping("/queryFreightByAddress")
+    @ResponseBody
+    public Map<String,Object> queryFreightByAddress(String address){
+        GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(address);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("row",goodsFreight);
+        return gtm;
+    }
 }

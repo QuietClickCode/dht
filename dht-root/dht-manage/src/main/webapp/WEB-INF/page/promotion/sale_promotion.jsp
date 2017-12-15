@@ -762,11 +762,12 @@
                     return;
                 }
             }
+            var inputs = $('#gdspTabel').find('input[type=text]');
+            if(!validateinputs(inputs)){
+                return;
+            }
         }
-        var inputs = $('#gdspTabel').find('input[type=text]');
-        if(!validateinputs(inputs)){
-            return;
-        }
+
         let bootstrapValidator = $("#"+fromId).data('bootstrapValidator');
         bootstrapValidator.validate();
         if(!bootstrapValidator.isValid())

@@ -55,6 +55,7 @@ public interface GoodsFreightService {
 	 */
 	public boolean deleteGoodsFreightByGfId(Long gfId);
 
+	public GoodsFreight queryFreightByAddress(String address);
 }
 
 

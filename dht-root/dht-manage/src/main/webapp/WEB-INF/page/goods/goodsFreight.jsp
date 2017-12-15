@@ -70,7 +70,11 @@
                             </div>
                         </div>
                     </div>
+                </div>
+                <div class="row" id="freeAreadiv">
+                    <textarea id="textArea" name="textArea" class="form-control" style="width: 100%">
 
+                    </textarea>
                 </div>
             </div>
             <div class="modal-footer">
@@ -110,7 +114,16 @@
             field: 'gfPrice',
             title: '商品运费价格',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                var val = '';
+                if(value!=null){
+                    val = parseFloat(value/100).toFixed(2);
+                }else{
+                    val = '-';
+                }
+                return val;
+            }
         },
         {
             field: 'CreateTime',
@@ -124,9 +137,11 @@
                 <ex:perm url="goods/editGoodsFreight">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorGoodsFreight(\''+row.gfId+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="goods/removeGoodsFreight">
-                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gfId+'\',this)">删除</button>';
-                </ex:perm>
+                if(row.gfId!=0){
+                    <ex:perm url="goods/removeGoodsFreight">
+                    html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.gfId+'\',this)">删除</button>';
+                    </ex:perm>
+                }
                 return html;
             }
         }
@@ -155,6 +170,11 @@
             let url="/goods/addGoodsFreight";
             if(editorGoodsFreightType==1){
                 url="/goods/editGoodsFreight";
+            }
+            formData["gfPrice"] = parseInt(formData["gfPrice"]*100);
+
+            if(formData["gfId"]==0){
+                formData["gfFreeArea"] = $('#textArea').val();
             }
             //取得form表单数据
             $.ajax({
@@ -309,8 +329,16 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
+            if(rowData.gfId==0){
+                $('#cityrow').hide();
+                $('#freeAreadiv').show();
+                $('#textArea').html(rowData.gfFreeArea);
+            }else{
+                $('#cityrow').show();
+                $('#freeAreadiv').hide();
+            }
             $("#editorGoodsFreightForm #gfName").val(rowData.gfName);
-            $("#editorGoodsFreightForm #gfPrice").val(rowData.gfPrice);
+            $("#editorGoodsFreightForm #gfPrice").val(parseFloat(rowData.gfPrice/100).toFixed(2) );
             $("#editorGoodsFreightForm #gfId").val(rowData.gfId);
             $("#editorGoodsFreightForm #version").val(rowData.version);
 

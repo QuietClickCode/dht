@@ -139,5 +139,17 @@ public class CutPriceServiceImpl implements CutPriceService {
 		page.setData(list);
 		return page;
 	}
+	public Pagination<CutPriceVo> queryNextCutPriceGoodsList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<CutPriceVo> page = new Pagination<CutPriceVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<CutPriceVo> list = cutPriceMapper.queryNextCutPriceGoodsList(page);
+		for(CutPriceVo cutPriceVo:list){
+			cutPriceVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+cutPriceVo.getImgurl());
+		}
+		page.setData(list);
+		return page;
+	}
 }
 

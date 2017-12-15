@@ -56,6 +56,7 @@
 		<result property="gcount" column="g_count"/>
 		<result property="isMultiplebuy" column="is_multiplebuy"/>
 		<result property="bcGsvalids" column="bc_gsvalids"/>
+		<result property="gdId" column="gd_Id"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->

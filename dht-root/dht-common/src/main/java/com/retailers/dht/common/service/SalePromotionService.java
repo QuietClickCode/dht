@@ -65,6 +65,8 @@ public interface SalePromotionService {
 	public Pagination<SalePromotionVo> querySalePromotionListWeb(Map<String, Object> params, int pageNo, int pageSize);
 
 	public List<GoodsVo> queryHasNoSpGoods(String gname,Long parentId);
+
+	public Pagination<SalePromotionVo> queryNextSalePromotionLists(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 

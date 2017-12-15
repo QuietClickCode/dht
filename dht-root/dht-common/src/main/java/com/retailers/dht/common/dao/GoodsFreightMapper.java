@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsFreight;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品运费表DAO
@@ -52,4 +54,6 @@ public interface GoodsFreightMapper {
 	 */
 	public List<GoodsFreight> queryGoodsFreightList(Pagination<GoodsFreight> pagination);
 
+
+	public List<GoodsFreight> queryFreightByAddress(@Param("cid") Long cid);
 }

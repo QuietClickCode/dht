@@ -4,6 +4,7 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,8 +60,10 @@ public class SeckillSpecialProductController extends BaseController {
             if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
                 encryuid = URLEncoder.encode(encryuid);
+                String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
+                randStr = URLEncoder.encode(randStr);
                 if(arr.length==1){
-                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
+                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
@@ -70,7 +73,7 @@ public class SeckillSpecialProductController extends BaseController {
                         Long ivrLong = Long.parseLong(ivr);
                         setShareUserId(request,ivrLong);
                         String gidstr = id.split("~")[0];
-                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html";
+                        path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html?randStr="+randStr;
                         return path;
                     }
                 }
@@ -100,14 +103,13 @@ public class SeckillSpecialProductController extends BaseController {
             if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
                 encryuid = URLEncoder.encode(encryuid);
+                String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
+                randStr = URLEncoder.encode(randStr);
                 if(arr.length==1){
-                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html";
+                    path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
-
                     String ivr = id.split("_")[1];
-                    System.out.println("uid:::::"+uid);
-                    System.out.println("ivr:::::"+ivr);
                     ivr = URLDecoder.decode(ivr);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     if(!ivr.equals(uid.toString())){
@@ -117,16 +119,16 @@ public class SeckillSpecialProductController extends BaseController {
                     }
                 }
             }else{
-                if(arr.length==2){
-                    String ivr = id.split("_")[1];
-                    ivr = URLDecoder.decode(ivr);
-                    ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
-                    Long ivrLong = Long.parseLong(ivr);
-                    setShareUserId(request,ivrLong);
-                    String gidstr = id.split("~")[0];
-                    path = "redirect:/"+controllerMapping+"/"+gidstr+".html";
-                    return path;
-                }
+//                if(arr.length==2){
+//                    String ivr = id.split("_")[1];
+//                    ivr = URLDecoder.decode(ivr);
+//                    ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
+//                    Long ivrLong = Long.parseLong(ivr);
+//                    setShareUserId(request,ivrLong);
+//                    String gidstr = id.split("~")[0];
+//                    path = "redirect:/"+controllerMapping+"/"+gidstr+".html";
+//                    return path;
+//                }
             }
         }catch (Exception e){
             e.printStackTrace();

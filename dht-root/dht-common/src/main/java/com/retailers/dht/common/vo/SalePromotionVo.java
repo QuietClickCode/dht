@@ -15,6 +15,15 @@ public class SalePromotionVo extends SalePromotion {
     private Float gprice;
     private String gunitname;
     private String gdescription;
+    private String gname;
+
+    public String getGname() {
+        return gname;
+    }
+
+    public void setGname(String gname) {
+        this.gname = gname;
+    }
 
     public String getGdescription() {
         return gdescription;

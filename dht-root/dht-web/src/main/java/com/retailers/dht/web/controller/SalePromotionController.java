@@ -26,27 +26,28 @@ public class SalePromotionController extends BaseController{
 
     @RequestMapping("/querySalePromotionLists")
     @ResponseBody
-    public Map<String,Object> querySalePromotionLists(String now,Long spType,Long gid,int pageNo,int pageSize){
+    public Map<String,Object> querySalePromotionLists(String now,Long spRegion,Long spType,Long gid,int pageNo,int pageSize){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        if(!ObjectUtils.isEmpty(now)){
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-            try {
-                Date nowDate = sdf.parse(now);
-                map.put("nowDate",nowDate);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-        }else{
-            return null;
-        }
         map.put("spType",spType);
         map.put("gid",gid);
+        map.put("spRegion",spRegion);
         Pagination<SalePromotionVo> advertisingPagination = promotionService.querySalePromotionListWeb(map,pageNo,pageSize);
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("rows",advertisingPagination.getData());
         return gtm;
     }
 
+    @RequestMapping("/queryNextSalePromotionLists")
+    @ResponseBody
+    public Map<String,Object> queryNextSalePromotionLists(Long spType,Long spRegion,int pageNo,int pageSize){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("spType",spType);
+        map.put("spRegion",spRegion);
+        Pagination<SalePromotionVo> advertisingPagination = promotionService.queryNextSalePromotionLists(map,pageNo,pageSize);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("rows",advertisingPagination.getData());
+        return gtm;
+    }
 
 }

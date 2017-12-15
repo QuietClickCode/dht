@@ -21,6 +21,15 @@ public class GoodsVo extends Goods {
     private Long gcount;
     private Long isMultiplebuy;
     private Long ufId;
+    private Long gdId;
+
+    public Long getGdId() {
+        return gdId;
+    }
+
+    public void setGdId(Long gdId) {
+        this.gdId = gdId;
+    }
 
     public Long getUfId() {
         return ufId;

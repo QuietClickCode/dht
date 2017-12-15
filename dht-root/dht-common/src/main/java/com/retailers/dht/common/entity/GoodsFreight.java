@@ -20,13 +20,16 @@ public class GoodsFreight implements java.io.Serializable {
 	private String gfName;
 	/**运费价格*/
 	@NotEmpty
-	private Float gfPrice;
+	private Long gfPrice;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
 	/**version*/
 	@NotEmpty
 	private Long version;
+	/**包邮地区*/
+	@NotEmpty
+	private String gfFreeArea;
 	//columns END
 
 	public GoodsFreight(){
@@ -50,13 +53,7 @@ public class GoodsFreight implements java.io.Serializable {
 	public String getGfName() {
 		return this.gfName;
 	}
-	public void setGfPrice(Float value) {
-		this.gfPrice = value;
-	}
 
-	public Float getGfPrice() {
-		return this.gfPrice;
-	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;
 	}
@@ -72,5 +69,17 @@ public class GoodsFreight implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getGfPrice() {
+		return gfPrice;
+	}
+	public void setGfPrice(Long gfPrice) {
+		this.gfPrice = gfPrice;
+	}
+	public String getGfFreeArea() {
+		return gfFreeArea;
+	}
 
+	public void setGfFreeArea(String gfFreeArea) {
+		this.gfFreeArea = gfFreeArea;
+	}
 }

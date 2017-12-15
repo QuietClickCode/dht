@@ -147,10 +147,46 @@
 		t1.cp_end_time>CURRENT_TIME()
 		and CURRENT_TIME()>t1.cp_start_time
 		and t2.parent_id=t1.cp_id
+		<if test="null!=params.cpRegion">
+			and t2.cp_region=#{params.cpRegion}
+		</if>
 		and t1.is_delete=0
 		and t2.is_delete=0
 		GROUP BY t2.g_id
 	</select>
+
+	<select id="queryNextCutPriceGoodsList" resultMap="rm_cutPrice_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t2.*,
+		t3.g_name gname,t3.g_description gdescription,
+		min(t4.gd_price) minprice,
+		t6.show_url imgurl,
+		min(t7.cp_sale) minCpSale
+		FROM
+		t_cut_price t1,
+		t_cut_price t2
+		LEFT JOIN t_goods t3 ON t2.g_id=t3.g_id and t3.is_delete=0
+		LEFT JOIN t_goods_detail t4 ON t2.g_id=t4.g_id and t4.is_delete=0
+		LEFT JOIN t_goods_image t5 ON t2.g_id=t5.g_id and t5.is_delete=0
+		LEFT JOIN t_attachment t6 ON t5.gi_id=t6.id
+		LEFT JOIN t_goods_gdcprel t7 ON t2.cp_id=t7.cp_id and t7.is_delete=0
+		WHERE
+		t1.cp_start_time=(SELECT min(t10.cp_start_time)
+		FROM
+		t_cut_price t10
+		where t10.cp_start_time>CURRENT_TIME()
+		)
+		and t2.parent_id=t1.cp_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+		<if test="null!=params.cpRegion">
+			and t2.cp_region=#{params.cpRegion}
+			or t2.cp_region=2
+		</if>
+
+		GROUP BY t2.g_id
+	</select>
+
 	<select id="queryCutPriceTree" resultMap="rm_cutPrice_vo">
 		SELECT t1.*,t2.g_name gname
 		from t_cut_price t1
@@ -159,6 +195,7 @@
 		t1.is_delete=0
 		ORDER BY t1.cp_end_time DESC
 	</select>
+
 	<select id="queryHasNoSpGoods" resultMap="rm_goods" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT *
 		from t_goods t1
@@ -170,6 +207,7 @@
 			and t1.g_name like concat('%', #{params.gname} ,'%')
 		</if>
 	</select>
+
 	<select id="queryCutPriceListsByGid" parameterType="java.util.Map" resultMap="rm_cutPrice_vo">
 		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.cp_end_time) timestap,
 		t2.*,min(t3.cp_sale) cp_sale,min(t4.gd_price) minprice
@@ -186,6 +224,7 @@
 		and t2.is_delete=0
 		and t2.g_id=#{params.gid}
 	</select>
+
 	<!--添加砍价表 -->
 	<insert id="saveCutPrice" parameterType="com.retailers.dht.common.entity.CutPrice" useGeneratedKeys="true" keyProperty="cpId">
 		INSERT INTO t_cut_price (

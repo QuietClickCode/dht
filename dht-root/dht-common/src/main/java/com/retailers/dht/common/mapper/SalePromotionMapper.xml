@@ -24,7 +24,7 @@
 			<result property="gprice" column="gprice"/>
 			<result property="gunitname" column="gunitname"/>
 			<result property="gdescription" column="gdescription"/>
-
+			<result property="gname" column="gname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -92,6 +92,7 @@
 		FROM t_sale_promotion
 		<include refid="salePromotion_where"/> ORDER BY sp_order
 	</select>
+
 	<select id="querySalePromotionListWeb" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT timestampdiff(SECOND,CURRENT_TIME(),t1.sp_end_time) timestap,t3.*,t6.g_price gprice,t6.g_unitname gunitname,t6.g_description gdescription,t5.show_url imgurl,min(t2.sp_sale) minprice,max(t2.sp_sale) maxprice,t2.sp_inventory spinventory
 		FROM
@@ -103,10 +104,10 @@
 		LEFT JOIN t_goods t6 ON t3.goods_id=t6.g_id
 		where
 		t3.is_delete!=1
-		<if test="null != params.nowDate">
-			and #{params.nowDate}>t1.sp_start_time
-			and t1.sp_end_time>#{params.nowDate}
-		</if>
+
+		and CURRENT_TIME ()>t1.sp_start_time
+		and t1.sp_end_time>CURRENT_TIME ()
+
 		and t1.sp_id=t3.parent_id
 		<if test="null != params.spType">
 			and t1.sp_type=#{params.spType}
@@ -114,7 +115,49 @@
 		<if test="null != params.gid">
 			and t3.goods_id=#{params.gid}
 		</if>
+		<if test="null != params.spRegion">
+			and t3.sp_region=#{params.spRegion}
+		</if>
 		GROUP BY t3.sp_id
+	</select>
+
+	<select id="queryNextSalePromotionLists" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t3.show_url imgurl,
+		t4.g_name gname,t4.g_description gdescription,t4.g_unitname gunitname,t4.g_price gprice
+		FROM
+		(SELECT
+		timestampdiff(SECOND,CURRENT_TIME(),t1.sp_start_time) timestap,
+		t1.sp_start_time sp_start_time11,
+		t2.*,
+		min(t4.sp_sale) minprice,max(t4.sp_sale) maxprice,SUM(t4.sp_inventory) spinventory
+		FROM
+		t_sale_promotion t1
+		LEFT JOIN t_sale_promotion t2 ON t2.parent_id=t1.sp_id and t2.is_delete=0
+		LEFT JOIN t_goods_gdsprel t4 ON t2.sp_id=t4.sp_id and t4.is_delete=0
+		WHERE
+		t1.sp_start_time=(SELECT min(t10.sp_start_time)
+		from t_sale_promotion t10
+		WHERE t10.sp_start_time>CURRENT_TIME()
+		<if test="null!=params.spType">
+			and t10.sp_Type=#{params.spType}
+		</if>
+		)
+		and t1.is_delete=0
+		<if test="null!=params.spType">
+			and t1.sp_Type=#{params.spType}
+		</if>
+		GROUP BY t2.goods_id ) t1
+		LEFT JOIN t_goods_image t2 ON t1.goods_id=t2.g_id and t2.is_delete=0
+		LEFT JOIN t_attachment t3 ON t3.id=t2.gi_id
+		LEFT JOIN t_goods t4 ON t4.g_id=t1.goods_id and t4.is_delete=0
+		<if test="null != params.spRegion">
+			WHERE
+			t1.sp_region=#{params.spRegion}
+			or t1.sp_region=2
+		</if>
+		GROUP BY t1.goods_id
 	</select>
 	<!--添加商品特价表 -->
 	<insert id="saveSalePromotion" parameterType="com.retailers.dht.common.entity.SalePromotion" useGeneratedKeys="true" keyProperty="spId">

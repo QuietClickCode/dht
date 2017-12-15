@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>购物车</title>
     <script src="/js/Adaptive.js"></script>
@@ -65,41 +66,21 @@
     </div>
 
     <!-- 为你推荐 -->
-    <div class="like">
+    <div class="like" style="display: none">
         <div class="cont">
             <span>为你推荐</span>
         </div>
     </div>
 
     <ul class="care-groom box2" style="display: none;">
-        <li>
-            <a href="" class="img">
-                <img src="/img/care-icon7.jpg" alt="">
-            </a>
-            <a href="" class="title">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-            <p class="price">￥55</p>
-        </li>
-        <li>
-            <a href="" class="img">
-                <img src="/img/care-icon7.jpg" alt="">
-            </a>
-            <a href="" class="title">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-            <p class="price">￥55</p>
-        </li>
-        <li>
-            <a href="" class="img">
-                <img src="/img/care-icon7.jpg" alt="">
-            </a>
-            <a href="" class="title">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-            <p class="price">￥55</p>
-        </li>
-        <li>
-            <a href="" class="img">
-                <img src="/img/care-icon7.jpg" alt="">
-            </a>
-            <a href="" class="title">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-            <p class="price">￥55</p>
-        </li>
+        <!--<li>-->
+            <!--<a href="" class="img">-->
+                <!--<img src="/img/care-icon7.jpg" alt="">-->
+            <!--</a>-->
+            <!--<a href="" class="title">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
+            <!--<p class="price">￥55</p>-->
+        <!--</li>-->
+
 
     </ul>
 
@@ -119,7 +100,7 @@
                     <span class="J_totalNum" id="J_totalNum">0.00</span>
                 </span>
         </div>
-        <a href="" class="settlement">去结算（
+        <a onclick="buynow();" class="settlement">去结算（
             <span class="J_productNum" id="J_productNum">0</span>）</a>
     </div>
 
@@ -153,9 +134,9 @@
     <div class="care-checkbox" style="margin-top: 10px">
         <span class="name">数量</span>
         <div class="number number-box">
-            <span class="reduce J_careReduce" id="gsreducebtn"></span>
+            <span class="reduce J_careReduce" id="gsreducebtn">-</span>
             <span class="num J_careNum" id="current-num"></span>
-            <span class="add J_careAdd" id="gsaddbtn"></span>
+            <span class="add J_careAdd" id="gsaddbtn">+</span>
         </div>
     </div>
     <a onclick="suregsa()" id="setgsvala" class="care-norms-checkbox-btn">确定</a>
@@ -655,8 +636,8 @@
     function init() {
 //        //autoJudgeCanReduce();
         toCalculateTotal();
-//        toRefrechTotalPrice();
-//        //changeGoodsNum();
+        toRefrechTotalPrice();
+//        changeGoodsNum();
         editGoodsDetailBtn();
         clearInvalidGoods();
     }
@@ -684,7 +665,8 @@
                     for(var i=0;i<rows.length;i++){
                         html = '<div class="purchase J_product">'+
                             '<div class="checkbox">'+
-                            '<i class="icon-checkbox J_checkbox goods-item"><input type="hidden" value="'+rows[i].bcId+'"></i>'+
+                            '<i class="icon-checkbox J_checkbox goods-item"><input type="hidden" value="'+rows[i].bcId+'"></i>' +
+                            '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>'+
                             '</div>';
                         var goodsPath;
                         var gdImgurl = rows[i].gdimgurl;
@@ -706,7 +688,7 @@
                         '<p onclick="showgsmodal('+rows[i].bcId+','+rows[i].gid+',\''+rows[i].bcGsvalids+'\',\''+goodsPath+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
                         '<div class="price-box">'+
                             '<span class="price">￥'+
-                            '<span class="J_price">'+rows[i].gdPrice+'</span>'+'/'+rows[i].gunitname+
+                            '<span class="J_price">'+parseFloat(rows[i].gdPrice/100).toFixed(2) +'</span>'+'/'+rows[i].gunitname+
                             '</span>'+
                             '<div class="number-box">';
                         var gstartbuy = rows[i].gstartbuy;
@@ -774,6 +756,7 @@
                                     html = '<div class="purchase J_product">'+
                                         '<div class="checkbox">'+
                                         '<i class="icon-checkbox J_checkbox goods-item"></i>'+
+                                        '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>'+
                                         '</div>';
                                     var goodsPath;
                                     var gdImgurl = rows[i].gdimgurl;
@@ -795,7 +778,7 @@
                                         '<p onclick="showgsmodal('+rows[i].bcId+','+rows[i].gid+',\''+rows[i].bcGsvalids+'\',\''+goodsPath+'\',this)" class="norms J_norms item-detail">'+rows[i].bcGsval+'</p>'+
                                         '<div class="price-box">'+
                                         '<span class="price">￥'+
-                                        '<span class="J_price">'+rows[i].gdPrice+'</span>'+'/'+rows[i].gunitname+
+                                        '<span class="J_price">'+parseFloat(rows[i].gdPrice/100).toFixed(2) +'</span>'+'/'+rows[i].gunitname+
                                         '</span>'+
                                         '<div class="number-box">';
                                     var gstartbuy = rows[i].gstartbuy;
@@ -919,7 +902,9 @@
     var gendbuy;
     var isMultiplebuy;
     var bcId;
+    var globelInput;
     function showgsmodal(bcId1,gid,hasgsvalids,goodsPath,obj) {
+        globelInput = $($(obj).parent().siblings()[0]).find('input[name=gdId]')[0];
         bcId=bcId1;
         if(!$(obj).hasClass('change')){
             return;
@@ -1041,7 +1026,7 @@
                     var row = data.row;
                     if(row!=null){
                         var imgUrl = row.imgUrl;
-                        var price = row.gdPrice;
+                        var price = parseFloat( row.gdPrice/100).toFixed(2);
                         var inventory = row.gdResidueinventory;
                         var gunitname = row.gunitname;
 
@@ -1068,8 +1053,8 @@
                         $(inventoryspan).html('库存'+inventory+gunitname);
                         ginventory = inventory;
 
-                        var reducehtml='<span class="reduce J_careReduce" id="gsreducebtn" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')"></span>';
-                        var addhtml='<span class="add J_careAdd" id="gsaddbtn" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')"></span>';
+                        var reducehtml='<span class="reduce J_careReduce" id="gsreducebtn" onclick="pdmaxinventory(\'-\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')">-</span>';
+                        var addhtml='<span class="add J_careAdd" id="gsaddbtn" onclick="pdmaxinventory(\'+\','+gstartbuy+','+gendbuy+','+isMultiplebuy+','+ginventory+',this,'+bcId+')">+</span>';
                         $('#current-num').prev().remove();
                         $('#current-num').next().remove();
 
@@ -1278,6 +1263,30 @@
         str=str.replace(/\s/g,''); //将空格去掉
         return str;
     }
+    
+    <!--结算-->
+    function buynow() {
+        var rows = $('.care-cont').find('.active');
+        if(rows.length>0){
+            var data = '';
+            for(var i=0;i<rows.length;i++){
+                data+=',{';
+                var row = rows[i];
+                var gdId = $(row).next().val();
+                var num = $(row).parent().parent().find('.J_careNum').html();
+                data+='gdId:'+gdId+',';
+                data+='num:'+num;
+                data+='}';
+            }
+            data = data.substr(1);
+            data = '['+data+']';
+            console.log(data);
+            window.location.href = '/order/getCheckOrderData?data='+1;
+        }else{
+            layer.msg('抱歉,请您选择商品');
+        }
+    }
+
 </script>
 
 <!--调用函数-->
