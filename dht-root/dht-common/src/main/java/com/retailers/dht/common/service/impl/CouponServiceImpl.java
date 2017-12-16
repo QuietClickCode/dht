@@ -17,6 +17,7 @@ import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.CouponShowVo;
 import com.retailers.dht.common.vo.CouponVo;
 import com.retailers.dht.common.vo.CouponWebVo;
+import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
@@ -381,6 +382,90 @@ public class CouponServiceImpl implements CouponService {
 	 * @throws AppException
 	 */
 	public void checkUserUseCouponByGoodsIds(Long uid, List<Long> cIds, List<Long> gIds) throws AppException {
+	}
+
+	/**
+	 * 据用户和选购商品取取用户可用的优惠卷
+	 * @param uid 用户id
+	 * @param gtpvs 购买商品对应的商品id 商品类型，商品总价
+	 * @return
+	 */
+	public List<CouponWebVo> queryUserUseCoupons(Long uid,List<GoodsTypePriceVo> gtpvs) {
+		List<CouponWebVo> lists = couponMapper.queryCurAllValidCoupon(uid);
+		List<CouponWebVo> rtn=new ArrayList<CouponWebVo>();
+		//判断用户是否有优惠卷
+		if(ObjectUtils.isNotEmpty(lists)){
+			//商品总价
+			long totalPrice = 0l;
+			//商品类型价格
+			Map<Long,Long> gtps=new HashMap<Long, Long>();
+			//商品价格
+			Map<Long,Long> gps=new HashMap<Long, Long>();
+			//商品，商品类型关联
+			Map<Long,Long> gtggl=new HashMap<Long, Long>();
+			Map<Long,Long> spsslx=new HashMap<Long, Long>();
+			for(GoodsTypePriceVo gtpv:gtpvs){
+				totalPrice+=gtpv.getgPrice().intValue();
+				gps.put(gtpv.getgId(),gtpv.getgPrice());
+				if(gtps.containsKey(gtpv.getgType())){
+					gtps.put(gtpv.getgType(),gtps.get(gtpv.getgType())+gtpv.getgPrice());
+				}else{
+					gtps.put(gtpv.getgType(),gtpv.getgPrice());
+				}
+				spsslx.put(gtpv.getgId(),gtpv.getgType());
+			}
+			//商品优惠卷可用
+			for(CouponWebVo cwv:lists){
+				long tp=0l;
+				//判断是否有限制范围
+				if(cwv.getCpIsRestricted().intValue()==CouponConstant.COUPON_USED_RANGE_ALL){
+					tp=totalPrice;
+				}else{
+					//允许商品类型列表
+					List<Long> gts=new ArrayList<Long>();
+					//允许商品列表
+					List<Long> gs=new ArrayList<Long>();
+					if(ObjectUtils.isNotEmpty(cwv.getgIds())){
+						String[] ids= cwv.getgIds().split(",");
+						for(String id:ids){
+							gs.add(Long.parseLong(id));
+						}
+					}
+					if(ObjectUtils.isNotEmpty(cwv.getGgIds())){
+						String[] ids= cwv.getGgIds().split(",");
+						for(String id:ids){
+							gts.add(Long.parseLong(id));
+						}
+					}
+					//该优惠卷使用范围内商品类型总价
+					if(ObjectUtils.isNotEmpty(gts)){
+						for(Long gt:gts){
+							if(gtps.containsKey(gt)){
+								tp+=gtps.get(gt);
+							}
+						}
+					}
+					//该优惠卷使用范围内商品总价
+					if(ObjectUtils.isNotEmpty(gs)){
+						for(Long gt:gts){
+							if(ObjectUtils.isNotEmpty(gts)){
+								if(gts.contains(spsslx.get(gt))){
+									continue;
+								}
+							}
+							if(gtps.containsKey(gt)){
+								tp+=gtps.get(gt);
+							}
+						}
+					}
+				}
+				//判断优惠卷是否慢足使用条件
+				if(tp>=cwv.getCpUseCondition().intValue()){
+					rtn.add(cwv);
+				}
+			}
+		}
+		return rtn;
 	}
 }
 

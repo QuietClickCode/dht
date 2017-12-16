@@ -1,10 +1,13 @@
 package com.retailers.dht.web.controller;
 
+import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.service.GoodsCouponService;
+import com.retailers.dht.common.vo.BuyGoodsVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.web.base.BaseController;
@@ -15,9 +18,11 @@ import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,4 +53,18 @@ public class GoodsCouponController extends BaseController{
         return success(list);
     }
 
+    /**
+     * 根据商品购买信息取得商品对应的优惠列表，和用户能够使用的优惠卷列表
+     * @param request
+     * @param bgs  商品详情
+     * @return
+     */
+    @RequestMapping("queryGoodsCouponLists")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryGoodsCouponLists(HttpServletRequest request, @RequestBody List<BuyGoodsVo> bgs){
+        Long uid = getCurLoginUserId(request);
+        Map<String,Object> rtn =goodsCouponService.queryGoodsCouponLists(uid,bgs);
+        return success(rtn);
+    }
 }

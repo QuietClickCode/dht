@@ -40,6 +40,20 @@
 		<result property="spId" column="spId"/>
 		<result property="spNm" column="spNm"/>
 	</resultMap>
+	<resultMap id="rm_goodsCoupon_view" type="com.retailers.dht.common.view.GoodsCouponView">
+		<result property="gcpId" column="gcp_id"/>
+		<result property="gcpName" column="gcp_name"/>
+		<result property="gcpType" column="gcp_type"/>
+		<result property="gcpIsRestricted" column="gcp_is_restricted"/>
+		<result property="gcpCondition" column="gcp_condition"/>
+		<result property="gcpUnits" column="gcp_units"/>
+		<result property="gcpIsOverlapUse" column="gcp_is_overlap_use"/>
+		<result property="gcpStartTime" column="gcp_start_time"/>
+		<result property="gcpEndTime" column="gcp_end_time"/>
+		<result property="val" column="val"/>
+		<result property="allow" column="allow"/>
+		<result property="gid" column="gid"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsCoupon_columns">
 		gcp_id,gcp_name,gcp_type,gcp_is_restricted,gcp_condition,gcp_units,gcp_is_overlap_use,gcp_start_time,gcp_end_time,gcp_money,gcp_discount,gcp_create_time,is_valid,is_delete,version
@@ -313,6 +327,91 @@
 		gcp_id) gcp where gcp.allow not like '%1%'
 	</select>
 
+	<!--根据商品id取得商品优惠列表 -->
+	<select id="queryGoodsCouponByGids" resultMap="rm_goodsCoupon_view">
+		SELECT
+			gcp_id,
+			gcp_name,
+			gcp_type,
+			gcp_is_restricted,
+			gcp_condition,
+			gcp_units,
+			gcp_is_overlap_use,
+			gcp_start_time,
+			gcp_end_time,
+			CASE
+			WHEN gcp_type = 0 THEN
+			c.gcp_money
+			ELSE
+			c.gcp_discount
+			END val,
+			q.allow,
+			q.gid
+		FROM
+			t_goods_coupon c,
+			(SELECT
+					cp_id,
+					gid,
+					GROUP_CONCAT(p.cpur_is_allow) allow
+				FROM
+					(SELECT DISTINCT
+						c.*, g.g_id gid
+					FROM
+						t_coupon_use_range c,
+						t_goods g
+					WHERE
+						c.type = 0 AND c.cpur_type = 1 AND c.cpur_relevance_id = g.g_classification
+						AND g.g_id IN
+						<foreach collection="goodsIds" item="item" index="index" open="(" close=")" separator=",">
+							#{item}
+						</foreach>
+					UNION SELECT
+						c.*, c.cpur_relevance_id gid
+					FROM
+						t_coupon_use_range c
+					WHERE
+						type = 0 AND cpur_type = 2 AND cpur_relevance_id IN
+						<foreach collection="goodsIds" item="item" index="index" open="(" close=")" separator=",">
+							#{item}
+						</foreach>
+					) p
+				GROUP BY
+				cp_id,
+				p.gid
+			) q
+		WHERE
+		is_valid = 0
+		AND is_delete = 0
+		AND c.gcp_id = q.cp_id
+		AND (gcp_end_time > #{curDate} or gcp_end_time is null)
+		-- AND allow not LIKE '%1%'
+	</select>
+	<!--取得无限制商品优惠例表 -->
+	<select id="queryUnRestrictedGoodsCoupon" resultMap="rm_goodsCoupon_view">
+		SELECT
+		gcp_id,
+		gcp_name,
+		gcp_type,
+		gcp_is_restricted,
+		gcp_condition,
+		gcp_units,
+		gcp_is_overlap_use,
+		gcp_start_time,
+		gcp_end_time,
+		CASE
+		WHEN gcp_type = 0 THEN
+		c.gcp_money
+		ELSE
+		c.gcp_discount
+		END val
+		FROM
+		t_goods_coupon c
+		WHERE
+		c.gcp_is_restricted = 0
+		AND gcp_end_time >  #{curDate}
+		AND is_valid = 0
+		AND is_delete = 0
+	</select>
 	<!--分页查询 -->
 	<select id="queryUnBindGoodsCuoponByGid" resultMap="rm_goodsCouponShowVo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="goodsCoupon_columns" />

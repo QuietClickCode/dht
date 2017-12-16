@@ -94,6 +94,8 @@
 		<result property="couponVal" column="couponVal"/>
 		<result property="useCondition" column="useCondition"/>
 		<result property="useRange" column="useRange"/>
+		<result property="gIds" column="gIds"/>
+		<result property="ggIds" column="ggIds"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -381,7 +383,60 @@
 			</if>
 			order BY cp_end_date DESC,cp_id asc
 	</select>
-
+	<!--取得用户所有的优惠卷 -->
+	<select id="queryCurAllValidCoupon" resultMap="rm_coupon_web_vo">
+		SELECT
+			c.cp_id,
+			c.cp_name,
+			c.cp_coin_type,
+			c.cp_type,
+			c.cp_is_restricted,
+			c.cp_receive_condition,
+			c.cp_use_condition,
+			c.cp_start_date,
+			c.cp_end_date,
+			c.cp_is_overlap_use,
+			c.cp_is_first,
+			c.cp_send_start_date,
+			c.cp_send_end_date,
+			c.cp_num,
+			c.cp_surplus_num,
+			c.cp_min_discount,
+			c.cp_max_discount,
+			CONCAT(
+			'满',
+			ROUND(c.cp_use_condition / 100, 2),
+			'可用'
+			) useCondition,
+			CASE
+			WHEN c.cp_end_date IS NULL THEN
+			'长期有效'
+			ELSE
+			DATE_FORMAT(c.cp_end_date, '%Y-%m-%d')
+			END useTime,
+			ROUND(u.cpu_val / 100, 2) couponVal,
+			a.show_url,
+			fw.gIds,fw.ggIds
+		FROM
+			t_coupon_user u,
+			t_coupon c
+			LEFT JOIN t_attachment a ON c.cp_logo = a.id
+			LEFT JOIN (
+					SELECT cp_id,GROUP_CONCAT(q.gg_id) ggIds,GROUP_CONCAT(q.gg_name) ggNames,GROUP_CONCAT(q.g_id) gIds,GROUP_CONCAT(q.g_name) gNames
+					FROM
+						(SELECT 	cp_id,cpur_type,gc.gg_id,gc.gg_name,g.g_id,g.g_name
+							FROM t_coupon_use_range cur
+							LEFT JOIN t_goods_classification gc ON cur.cpur_relevance_id = gc.gg_id AND cpur_type = 1
+							LEFT JOIN t_goods g ON cur.cpur_relevance_id = g.g_id AND cpur_type = 2
+						) q
+					GROUP BY cp_id
+			)fw on  c.cp_id = fw.cp_id
+		WHERE
+			u.cp_id = c.cp_id
+			AND u.cpu_status=0
+			AND u.cpu_uid=#{uid}
+		ORDER by c.cp_end_date ASC
+	</select>
 	<!--取得当前有效的优惠卷列表 -->
 	<select id="queryUserCoupon" resultMap="rm_coupon_web_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT

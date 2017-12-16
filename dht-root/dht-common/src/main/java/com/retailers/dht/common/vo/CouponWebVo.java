@@ -60,6 +60,14 @@ public class CouponWebVo {
      * 优惠卷使用范围
      */
     private String useRange;
+    /**
+     * 优惠卷使用范围（商品id）
+     */
+    private String gIds;
+    /**
+     * 优惠卷使用范围（商品类型id）
+     */
+    private String ggIds;
 
     public Long getCpId() {
         return cpId;
@@ -235,5 +243,21 @@ public class CouponWebVo {
 
     public void setUseRange(String useRange) {
         this.useRange = useRange;
+    }
+
+    public String getgIds() {
+        return gIds;
+    }
+
+    public void setgIds(String gIds) {
+        this.gIds = gIds;
+    }
+
+    public String getGgIds() {
+        return ggIds;
+    }
+
+    public void setGgIds(String ggIds) {
+        this.ggIds = ggIds;
     }
 }

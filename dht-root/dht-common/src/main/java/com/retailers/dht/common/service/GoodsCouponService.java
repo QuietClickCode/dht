@@ -2,8 +2,11 @@
 package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.GoodsCoupon;
+import com.retailers.dht.common.view.GoodsCouponView;
+import com.retailers.dht.common.vo.BuyGoodsVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
@@ -102,13 +105,29 @@ public interface GoodsCouponService {
 	public boolean goodsUnBindCoupon(Long goodsId,String gcpIds)throws AppException;
 
 	/**
-	 * 校验商品成惠是否可用
+	 * 校验商品优惠是否可用
 	 * @param gcpMaps
 	 * @param buyPrices
 	 * @return
 	 * @throws AppException
 	 */
 	public Object checkGoodsCoupon(Map<Long,List<Long>> gcpMaps,Map<Long,Long> buyPrices)throws AppException;
+
+	/**
+	 * 根据购买商品信息取得商品优惠列表
+	 * @param gtpvs
+	 * @return
+	 */
+	public Map<Long,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs);
+
+	/**
+	 * 根据商品购买信息取得商品对应的优惠列表，和用户能够使用的优惠卷列表
+	 * @param uid 用户id
+	 * @param gbs 购买商品信息
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsVo> gbs);
 
 }
 

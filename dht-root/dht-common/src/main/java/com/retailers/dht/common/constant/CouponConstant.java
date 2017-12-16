@@ -41,4 +41,13 @@ public class CouponConstant {
      * 优惠卷使用范围 2 指定商品
      */
     public static final  long COUPON_USED_RANGE_GOODS=2;
+
+    /**
+     * 优惠使用条件 数量
+     */
+    public static final long GOODS_UNITS_NUM=1;
+    /**
+     * 优惠使用条件 金额
+     */
+    public static final long GOODS_UNITS_PRICE=0;
 }

@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 
 import com.retailers.dht.common.entity.GoodsCoupon;
+import com.retailers.dht.common.view.GoodsCouponView;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -73,6 +74,21 @@ public interface GoodsCouponMapper {
 	 * @return
 	 */
 	public List<GoodsCouponShowVo> queryAllowGoodsCouponByGids(@Param("goodsIds")List<Long> goodsIds, @Param("curDate")Date curDate);
+
+	/**
+	 * 根据商品id取得商品优惠列表
+	 * @param goodsIds 商品ids
+	 * @param curDate 当前时间
+	 * @return
+	 */
+	public List<GoodsCouponView> queryGoodsCouponByGids(@Param("goodsIds")List<Long> goodsIds, @Param("curDate")Date curDate);
+
+	/**
+	 * 取得无限制商品优惠例表
+	 * @param curDate 当前时间
+	 * @return
+	 */
+	public List<GoodsCouponView> queryUnRestrictedGoodsCoupon(@Param("curDate")Date curDate);
 
 	/**
 	 * 取得该商品下未绑定的优惠
