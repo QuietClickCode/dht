@@ -13,11 +13,10 @@ import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
+import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
-import com.retailers.dht.common.vo.CouponShowVo;
-import com.retailers.dht.common.vo.CouponVo;
-import com.retailers.dht.common.vo.CouponWebVo;
-import com.retailers.dht.common.vo.GoodsTypePriceVo;
+import com.retailers.dht.common.view.GoodsCouponView;
+import com.retailers.dht.common.vo.*;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
@@ -56,6 +55,8 @@ public class CouponServiceImpl implements CouponService {
 	private CouponUseRangeMapper couponUseRangeMapper;
 	@Autowired
 	private GoodsMapper goodsMapper;
+	@Autowired
+	private GoodsDetailService goodsDetailService;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveCoupon(CouponVo couponVo,Long optionId) {
@@ -466,6 +467,51 @@ public class CouponServiceImpl implements CouponService {
 			}
 		}
 		return rtn;
+	}
+
+	/**
+	 * 根据购买商品取得优惠卷例表
+	 * @param uid 用户id
+	 * @param gbs 购买属性
+	 * @return
+	 */
+	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsVo> gbs) {
+		String gdIds="";
+		List<Long> gIds=new ArrayList<Long>();
+		//商品对应的购买数量
+		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
+		for(BuyGoodsVo gb:gbs){
+			gdIds+=gb.getGdId()+",";
+			gIds.add(gb.getGoodsId());
+			gtn.put(gb.getGoodsId(),gb.getNum());
+		}
+		//商品列表
+		List<Goods> goodss=goodsMapper.queryGoodsByGids(gIds);
+		Map<Long,Long> gType=new HashMap<Long, Long>();
+		for(Goods g:goodss){
+			gType.put(g.getGid(),g.getGclassification());
+		}
+		//取得商品价格
+		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+		//商品购买总价
+		Map<Long,Long> gtp=new HashMap<Long, Long>();
+		for(GoodsDetail gt:gts){
+			//取得商品价格
+			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
+		}
+		//取得商吕购买信息
+		List<GoodsTypePriceVo> gtpvs= new ArrayList<GoodsTypePriceVo>();
+		for(Long gid:gIds){
+			GoodsTypePriceVo gtpv=new GoodsTypePriceVo();
+			gtpv.setgType(gType.get(gid));
+			gtpv.setgId(gid);
+			gtpv.setgPrice(gtp.get(gid));
+			gtpv.setNum(gtn.get(gid).longValue());
+			gtpvs.add(gtpv);
+		}
+		//取得用户此次购买满足条件的未使用优惠卷
+		List<CouponWebVo> uacs=queryUserUseCoupons(uid,gtpvs);
+		return uacs;
 	}
 }
 

@@ -1,9 +1,6 @@
 
 package com.retailers.dht.common.service;
-import com.retailers.dht.common.vo.CouponShowVo;
-import com.retailers.dht.common.vo.CouponVo;
-import com.retailers.dht.common.vo.CouponWebVo;
-import com.retailers.dht.common.vo.GoodsTypePriceVo;
+import com.retailers.dht.common.vo.*;
 import com.retailers.mybatis.pagination.PageInterceptor;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
@@ -119,6 +116,14 @@ public interface CouponService {
 	 * @return
 	 */
 	public List<CouponWebVo> queryUserUseCoupons(Long uid,List<GoodsTypePriceVo> gtpvs);
+
+	/**
+	 * 根据购买商品取得优惠卷例表
+	 * @param uid 用户id
+	 * @param gbs 购买属性
+	 * @return
+	 */
+	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsVo> gbs);
 
 }
 

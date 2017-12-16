@@ -3,6 +3,7 @@ package com.retailers.dht.web.controller;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.vo.BuyGoodsVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -12,6 +13,7 @@ import com.retailers.tools.utils.PageUtils;
 import org.apache.http.protocol.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.context.request.async.WebAsyncTask;
@@ -137,5 +139,20 @@ public class CouponController extends BaseController{
         //取得当前用户
         Long curUid=getCurLoginUserId(request);
         return null;
+    }
+
+    /**
+     * 根据购买属性取得用户优惠卷例表
+     * @param request
+     * @param bgs  商品详情
+     * @return
+     */
+    @RequestMapping("queryCouponListsByBuy")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryCouponListsByBuy(HttpServletRequest request, @RequestBody List<BuyGoodsVo> bgs){
+        Long uid = getCurLoginUserId(request);
+        List<CouponWebVo> list=couponService.queryCouponListsByBuy(uid,bgs);
+        return success(list);
     }
 }
