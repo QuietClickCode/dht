@@ -119,7 +119,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.shoppingOrder(uid,buyInfo,getShareUserId(request),null);
+            Map<String,Object>rtn= orderService.shoppingOrder(uid,buyInfo,getShareUserId(request),getShareGoodsId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
