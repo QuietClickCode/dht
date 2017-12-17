@@ -359,8 +359,19 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
 		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
-			gIds.add(gb.getGoodsId());
 			gtn.put(gb.getGoodsId(),gb.getNum());
+		}
+
+		//取得商品价格
+		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+
+
+		//商品购买总价
+		Map<Long,Long> gtp=new HashMap<Long, Long>();
+		for(GoodsDetail gt:gts){
+			//取得商品价格
+			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
+			gIds.add(gt.getGid());
 		}
 		//商品列表
 		List<Goods> goodss=goodsMapper.queryGoodsByGids(gIds);
@@ -368,14 +379,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		for(Goods g:goodss){
 			gType.put(g.getGid(),g.getGclassification());
 		}
-		//取得商品价格
-		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-		//商品购买总价
-		Map<Long,Long> gtp=new HashMap<Long, Long>();
-		for(GoodsDetail gt:gts){
-			//取得商品价格
-			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
-		}
+
 		//取得商吕购买信息
 		List<GoodsTypePriceVo> gtpvs= new ArrayList<GoodsTypePriceVo>();
 		for(Long gid:gIds){
