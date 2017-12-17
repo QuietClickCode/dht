@@ -46,26 +46,26 @@
                     </div>
                 </div>
                 <div class="coupon-info-box">
-                    <span class="coupon-btn">优惠券</span>
+                    <span class="coupon-btn">商品优惠</span>
                     <ul class="coupon-info-wrap">
                         <li>
-                            <span>会员折扣</span>
+                            <span style="margin-top: 4px"><input type="checkbox"></span>
+                            <span style="margin-left: 20px">会员折扣</span>
                             <span>￥ -20.00</span>
                         </li>
                         <li>
-                            <span>会员折扣</span>
+                            <span style="margin-top: 4px"><input type="checkbox"></span>
+                            <span style="margin-left: 20px">会员折扣</span>
                             <span>￥ -20.00</span>
                         </li>
                         <li>
-                            <span>会员折扣</span>
+                            <span style="margin-top: 4px"><input type="checkbox"></span>
+                            <span style="margin-left: 20px">会员折扣</span>
                             <span>￥ -20.00</span>
                         </li>
                         <li>
-                            <span>会员折扣</span>
-                            <span>￥ -20.00</span>
-                        </li>
-                        <li>
-                            <span>会员折扣</span>
+                            <span style="margin-top: 4px"><input type="checkbox"></span>
+                            <span style="margin-left: 20px">会员折扣</span>
                             <span>￥ -20.00</span>
                         </li>
                     </ul>
@@ -392,79 +392,118 @@
     }
 
     function loadgcpandcp(){
-        var rows = goodsData.data;
-        var reqRows=new Array();
+        if(isActivity==3){
+            var rows = goodsData.data;
+            var reqRows=new Array();
 
-        for(var i=0;i<rows.length;i++){
-            var row = rows[i];
-            var reqRow=new Object();
-            reqRow["gdId"]=row.gdId;
-            reqRow["num"]=row.num;
-            reqRows.push(reqRow);
-        }
-        $.ajax({
-            type:"post",//请求方式
-            url: "/goodsCoupon/queryGoodsCouponLists",//发送请求地址
-            data:JSON.stringify(reqRows),
-            dataType:"json",
-            contentType: "application/json",
-            //请求成功后的回调函数有两个参数
-            success:function(sdata){
-                if(sdata.status==0){
-                    var gcLists = sdata.data.gcLists;
-                    var userCoupons = sdata.data.userCoupons;
+            for(var i=0;i<rows.length;i++){
+                var row = rows[i];
+                var reqRow=new Object();
+                reqRow["gdId"]=row.gdId;
+                reqRow["num"]=row.num;
+                reqRows.push(reqRow);
+            }
+            $.ajax({
+                type:"post",//请求方式
+                url: "/goodsCoupon/queryGoodsCouponLists",//发送请求地址
+                data:JSON.stringify(reqRows),
+                dataType:"json",
+                contentType: "application/json",
+                //请求成功后的回调函数有两个参数
+                success:function(sdata){
+                    if(sdata.status==0){
+                        var gcLists = sdata.data.gcLists;
+                        var userCoupons = sdata.data.userCoupons;
 
-                    if(userCoupons!=null&&userCoupons.length>0){
-                        var userCouponsUl = $('.coupon-list');
-                        for(var i=0;i<userCoupons.length;i++){
-                            var row = userCoupons[i];
-                            var html = '<li>'+
-                                '<div class="coupon-item-tittle">'+
-                            '<input name="Fruit" type="checkbox" value="苹果" />'+
-                            '<label for="">'+row.cpName+'</label>'+
-                            '<a class="coupon-detail"></a>'+
-                            '</div>'+
-                            '<div class="coupon-item-detail" style="display: none;">'+
-                            '<img class="get-img" src="/img/coupon-img1.png">'+
-                            '<div class="coupon-data">'+
-                            '<p class="coupon-price">';
+                        if(userCoupons!=null&&userCoupons.length>0){
+                            var userCouponsUl = $('.coupon-list');
+                            for(var i=0;i<userCoupons.length;i++){
+                                var row = userCoupons[i];
+                                var html = '<li>'+
+                                    '<div class="coupon-item-tittle">'+
+                                    '<input onclick="choosecp(this);" name="Fruit" type="checkbox" value="'+row.cpId+'" cpIsOverlapUse="'+row.cpIsOverlapUse+'" />'+
+                                    '<label for="">'+row.cpName+'</label>'+
+                                    '<a class="coupon-detail"></a>'+
+                                    '</div>'+
+                                    '<div class="coupon-item-detail" style="display: none;">'+
+                                    '<img class="get-img" src="/img/coupon-img1.png">'+
+                                    '<div class="coupon-data">'+
+                                    '<p class="coupon-price">';
+                                var cpCoinType = row.cpCoinType;
+                                var small = '';
+                                var strong = '';
+                                if(cpCoinType==1){
+                                    small = '打'
+                                    strong = row.couponVal+'折';
+                                }else{
+                                    small = '￥';
+                                    strong = row.couponVal;
+                                }
 
-                            var cpCoinType = row.cpCoinType;
-                            var small = '';
-                            var strong = '';
-                            if(cpCoinType==1){
-                                small = '打'
-                                strong = row.couponVal+'折';
-                            }else{
-                                small = '￥';
-                                strong = row.couponVal;
+                                html +=  '<small>'+small+'</small>'+
+                                    '<strong>'+strong+'</strong>'+
+                                    '</p>'+
+                                    '<p class="coupon-condition">'+row.useCondition+'</p>'+
+                                    '<p class="coupon-date">'+row.cpStartDate+' - '+row.cpEndDate+'</p>'+
+                                    '</div>'+
+                                    '</div>'+
+                                    '</li>';
+                                userCouponsUl.append(html);
                             }
-
-                            html +=  '<small>'+small+'</small>'+
-                            '<strong>'+strong+'</strong>'+
-                            '</p>'+
-                            '<p class="coupon-condition">'+row.useCondition+'</p>'+
-                            '<p class="coupon-date">'+row.cpStartDate+'-'+row.cpEndDate+'</p>'+
-                            '</div>'+
-                            '</div>'+
-                            '</li>';
-                            userCouponsUl.append(html);
+                            initcoupon();
+//                        jiesuan();
                         }
-                        initcoupon();
-                        jiesuan();
-                    }
 
-                }else{
+                    }else{
+                        layer.msg(sdata);
+                    }
+                },
+                error:function(sdata){
                     layer.msg(sdata);
                 }
-            },
-            error:function(sdata){
-                layer.msg(sdata);
-            }
-        });
-
+            });
+        }
     }
 
+    function choosecp(obj) {
+        var cpisoverlapuse = $(obj).attr("cpisoverlapuse");
+        var inputs = $('.coupon-list').find('input[type=checkbox]');
+        var flag = obj.checked;
+        if(cpisoverlapuse==1&&flag){
+            inputs.attr("disabled","disabled");
+            inputs.parent().addClass("no-selected");
+            $(obj).removeAttr("disabled");
+            $(obj).parent().removeClass("no-selected");
+        }
+        if(cpisoverlapuse==1&&!flag){
+            inputs.removeAttr("disabled");
+            inputs.parent().removeClass("no-selected");
+        }
+        if(cpisoverlapuse==0&&flag){
+            for(var i=0;i<inputs.length;i++){
+                var overUse = $(inputs[i]).attr('cpisoverlapuse');
+                if(overUse==1){
+                    $(inputs[i]).attr('disabled','disabled');
+                    $(inputs[i]).parent().addClass('no-selected');
+                }
+            }
+        }
+        if(cpisoverlapuse==0&&!flag){
+            var flag = false;
+            for(var i=0;i<inputs.length;i++){
+                var overUse = $(inputs[i]).attr('cpisoverlapuse');
+                if(overUse==0&&inputs[i].checked){
+                    flag = true;
+                    break;
+                }
+            }
+            if(!flag){
+                inputs.removeAttr("disabled");
+                inputs.parent().removeClass("no-selected");
+            }
+        }
+
+    }
 
 
     function jiesuan(){

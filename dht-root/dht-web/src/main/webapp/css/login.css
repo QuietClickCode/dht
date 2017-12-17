@@ -47,18 +47,18 @@
 }
 
 .username input{
-    background:url(img/user-icon.png)no-repeat left;
+    background:url(/img/user-icon.png)no-repeat left;
     background-size: 0.4rem 0.4rem;
 }
 
 .password input{
-    background:url(img/password-icon.png)no-repeat left;
+    background:url(/img/password-icon.png)no-repeat left;
     background-position:0 1px;
     background-size: 0.4rem 0.4rem;
 }
 
 .code input{
-    background:url(img/code-icon.png)no-repeat left;
+    background:url(/img/code-icon.png)no-repeat left;
     vertical-align: bottom;
     display: inline-block;
     background-size: 0.4rem 0.4rem;

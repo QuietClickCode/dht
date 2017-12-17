@@ -1,5 +1,6 @@
 package com.retailers.dht.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.OrderService;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -49,24 +52,16 @@ public class OrderController extends BaseController {
         return redirectUrl(request,"order/create-order");
     }
 
-    /** isActivity: 0特价 1秒杀 2砍价 3正常*/
+    @RequestMapping("orderList")
+    public String openOrderList(HttpServletRequest request){
+        return redirectUrl(request,"order/all-order");
+    }
+
     @RequestMapping("getCheckOrderData")
     public String getCheckOrderData(HttpServletRequest request,String data){
         data += "\'isActivity\':3}";
         request.getSession().setAttribute("checkOrderData",data);
-        return "redirect:/order/checkOrder";
-    }
-    @RequestMapping("getCheckOrderDataBySeckill")
-    public String getCheckOrderDataBySeckill(HttpServletRequest request,String data){
-        data += "\'isActivity\':1}";
-        request.getSession().setAttribute("checkOrderData",data);
-        return "redirect:/order/checkOrder";
-    }
-    @RequestMapping("getCheckOrderDataBySpecial")
-    public String getCheckOrderDataBySpecial(HttpServletRequest request,String data){
-        data += "\'isActivity\':0}";
-        request.getSession().setAttribute("checkOrderData",data);
-        return "redirect:/order/checkOrder";
+        return "redirect://order/checkOrder";
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
@@ -78,18 +73,24 @@ public class OrderController extends BaseController {
                 String gsName = goodsGdcprelVo.getGsName();
                 Long gdId = goodsGdcprelVo.getGdId();
                 Long sumcount = goodsGdcprelVo.getSumcount();
-                String data = "{";
-                data += "\'gdId\':\'"+gdId+"\',";
-                data += "\'num\':\'"+sumcount+"\',";
-                data += "\'imgurl\':\'"+imgurl+"\',";
-                data += "\'gsvals\':\'"+gsName+"\',";
-                data += "\'remark\':\'"+remark+"\',";
-                data += "\'gname\':\'"+gname+"\',";
-                data += "\'gdprice\':\'"+gdprice+"\'";
-                data += '}';
-                data = "["+data+"]";
-                data = "{data:"+data+",isActivity:2}";
-                request.getSession().setAttribute("checkOrderData",data);
+
+                Map map = new HashMap();
+                map.put("gdId",gdId);
+                map.put("num",sumcount);
+                map.put("imgurl",imgurl);
+                map.put("gsvals",gsName);
+                map.put("remark",remark);
+                map.put("gname",gname);
+                map.put("gdprice",gdprice);
+
+                List list = new ArrayList();
+                list.add(map);
+
+                Map data = new HashMap();
+                data.put("data",list);
+                data.put("isActivity",2);
+
+                request.getSession().setAttribute("checkOrderData", JSON.toJSONString(data));
             }
         }
         return "redirect:/order/checkOrder";
@@ -111,7 +112,7 @@ public class OrderController extends BaseController {
      * @param buyInfo 购买信息
      * @return
      */
-    @RequestMapping(value = "/buyGoods",method = RequestMethod.POST)
+    @RequestMapping("/buyGoods")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public BaseResp buyGoods(HttpServletRequest request, @RequestBody BuyInfoVo buyInfo){
@@ -119,77 +120,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.shoppingOrder(uid,buyInfo,getShareUserId(request),getShareGoodsId(request));
-            return success(rtn);
-        }catch(AppException e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }catch(Exception e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }
-    }
-
-    /**
-     * 购买特价商品
-     * @param request
-     * @param buyInfo 购买信息
-     * @return
-     */
-    @RequestMapping(value = "buySpecialOfferGoods",method = RequestMethod.POST)
-    @ResponseBody
-    public BaseResp buySpecialOfferGoods(HttpServletRequest request,@RequestBody BuyInfoVo buyInfo){
-        long uid=getCurLoginUserId(request);
-        try{
-            //校验购买信息
-            checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySpecialOfferGoods(uid,buyInfo,isInviter(request,buyInfo));
-            return success(rtn);
-        }catch(AppException e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }catch(Exception e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }
-    }
-    /**
-     * 购买秒杀商品
-     * @param request
-     * @param buyInfo 购买信息
-     * @return
-     */
-    @RequestMapping(value = "buySeckillGoods",method = RequestMethod.POST)
-    @ResponseBody
-    public BaseResp buySeckillGoods(HttpServletRequest request,@RequestBody BuyInfoVo buyInfo){
-        long uid=getCurLoginUserId(request);
-        try{
-            //校验购买信息
-            checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySeckillGoods(uid,buyInfo,isInviter(request,buyInfo));
-            return success(rtn);
-        }catch(AppException e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }catch(Exception e){
-            logger.error(StringUtils.getErrorInfoFromException(e));
-            return errorForSystem(e.getMessage());
-        }
-    }
-    /**
-     * 购买砍价商品(不做分润 无分享用户）
-     * @param request
-     * @param buyInfo 购买信息
-     * @return
-     */
-    @RequestMapping(value = "buyCutPrice",method = RequestMethod.POST)
-    @ResponseBody
-    public BaseResp buyCutPrice(HttpServletRequest request,@RequestBody BuyInfoVo buyInfo){
-        long uid=getCurLoginUserId(request);
-        try{
-            //校验购买信息
-            checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buyCutPrice(uid,buyInfo);
+            Map<String,Object>rtn = orderService.shoppingOrder(uid,buyInfo);
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -243,14 +174,5 @@ public class OrderController extends BaseController {
             }
             curRow++;
         }
-    }
-
-    /**
-     * 购买商品是否为推荐购买
-     * @param request
-     * @return
-     */
-    private boolean isInviter(HttpServletRequest request,BuyInfoVo buyInfo){
-        return true;
     }
 }
