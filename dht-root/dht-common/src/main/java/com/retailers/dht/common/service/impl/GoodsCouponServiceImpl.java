@@ -248,9 +248,9 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 * @param gtpvs
 	 * @return
 	 */
-	public Map<Long,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs) {
+	public Map<String,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs) {
 		//返回结果
-		Map<Long,List<GoodsCouponView>> rtn=new HashMap<Long, List<GoodsCouponView>>();
+		Map<String,List<GoodsCouponView>> rtn=new HashMap<String, List<GoodsCouponView>>();
 		Date curDate=new Date();
 		if(ObjectUtils.isNotEmpty(gtpvs)){
 			//商品价格
@@ -291,10 +291,10 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			System.out.println(JSON.toJSON(spyhMap));
 			System.out.println(JSON.toJSON(maps));
 			//商品所有能够使用的优惠
-			Map<Long,GoodsCouponView> acgMaps=new HashMap<Long, GoodsCouponView>();
+//			Map<String,GoodsCouponView> acgMaps=new HashMap<String, GoodsCouponView>();
 			//设置商品对应的优惠
 			for(Long gid:gids){
-				rtn.put(gid,assembleGoodsCoupon(maps,spyhMap.get(gid),gps.get(gid),bgns.get(gid)));
+				rtn.put(gid+"",assembleGoodsCoupon(maps,spyhMap.get(gid),gps.get(gid),bgns.get(gid)));
 			}
 		}
 		return rtn;
@@ -394,7 +394,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			gtpvs.add(gtpv);
 		}
 		//取得商品关联的优惠卷
-		Map<Long,List<GoodsCouponView>> gcs=queryGoodsCouponBuyGid(gtpvs);
+		Map<String,List<GoodsCouponView>> gcs=queryGoodsCouponBuyGid(gtpvs);
 		//取得用户此次购买满足条件的未使用优惠卷
 		List<CouponWebVo> uacs=couponService.queryUserUseCoupons(uid,gtpvs);
 		Map<String,Object> rtn=new HashMap<String, Object>();

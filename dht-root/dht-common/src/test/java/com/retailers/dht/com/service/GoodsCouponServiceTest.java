@@ -116,7 +116,7 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         list.add(vo4);
         list.add(vo5);
         list.add(vo6);
-        Map<Long,List<GoodsCouponView>> rtn = goodsCouponService.queryGoodsCouponBuyGid(list);
+        Map<String,List<GoodsCouponView>> rtn = goodsCouponService.queryGoodsCouponBuyGid(list);
         System.out.println(JSON.toJSON(rtn));
     }
 }
