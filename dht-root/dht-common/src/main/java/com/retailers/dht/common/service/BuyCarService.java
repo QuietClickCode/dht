@@ -61,6 +61,8 @@ public interface BuyCarService {
 	public List<GoodsVo> queryGoodsVoList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public boolean deleteBuyCarByBcIds(String bcIds);
+
+	public Map<Long,Long> queryInviterIdByBcIds(List<Long> list);
 }
 
 

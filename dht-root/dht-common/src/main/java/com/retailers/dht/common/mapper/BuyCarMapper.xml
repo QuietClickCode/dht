@@ -166,6 +166,19 @@
 		GROUP BY t1.bc_id
 		ORDER BY bc_id DESC
 	</select>
+	<select id="queryInviterIdByBcIds" resultMap="rm_buyCar">
+		SELECT
+		*
+		FROM
+		t_buy_car
+		WHERE
+		is_delete=0
+		and bc_id IN
+		<foreach collection="bcIds" item="bcId" index="index"
+				 open="(" close=")" separator=",">
+			#{bcId}
+		</foreach>
+	</select>
 	<!--添加购物车表 -->
 	<insert id="saveBuyCar" parameterType="com.retailers.dht.common.entity.BuyCar" useGeneratedKeys="true" keyProperty="bcId">
 		INSERT INTO t_buy_car (

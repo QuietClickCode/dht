@@ -13,6 +13,8 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import sun.rmi.runtime.Log;
+
 /**
  * 描述：购物车表Service
  * @author fanghui
@@ -100,6 +102,18 @@ public class BuyCarServiceImpl implements BuyCarService {
 			flag=flag && deleteBuyCarByBcId(bcIdLong);
 		}
 		return flag;
+	}
+	public Map<Long,Long> queryInviterIdByBcIds(List<Long> list){
+		Map<Long,Long> map = new HashMap<Long,Long>();
+		if(ObjectUtils.isNotEmpty(list)){
+			List<BuyCar> buyCarList = buyCarMapper.queryInviterIdByBcIds(list);
+			for(BuyCar buyCar:buyCarList){
+				Long bcId = buyCar.getBcId();
+				Long inviterId = buyCar.getBcInviterid();
+				map.put(bcId,inviterId);
+			}
+		}
+		return map;
 	}
 }
 

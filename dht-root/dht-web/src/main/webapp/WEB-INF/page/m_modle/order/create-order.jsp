@@ -287,7 +287,7 @@
         });
     }
 
-
+    function initgcp() {
         //    商品项暂开隐藏优惠券
         var couponBtns = $('.coupon-btn');  //商品项
         var couponInfoWraps = $('.coupon-info-wrap'); //商品优惠列表
@@ -311,6 +311,8 @@
                 }
             })
         })
+    }
+
 
 
 
@@ -505,6 +507,9 @@
 
     }
 
+    function choosegcp(obj) {
+
+    }
 
     function jiesuan(){
         var rows = goodsData.data;

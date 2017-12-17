@@ -2,6 +2,8 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.BuyCar;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：购物车表DAO
@@ -54,5 +56,7 @@ public interface BuyCarMapper {
 	public List<BuyCar> queryBuyCarList(Pagination<BuyCar> pagination);
 
 	public List<GoodsVo> queryGoodsVoList(Pagination<GoodsVo> pagination);
+
+	public List<BuyCar> queryInviterIdByBcIds(@Param("bcIds") List<Long> bcIds);
 
 }
