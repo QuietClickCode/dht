@@ -355,11 +355,13 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsDetailVo> gbs){
 		String gdIds="";
 		List<Long> gIds=new ArrayList<Long>();
+		//商品gid对应的购买数量
+		Map<Long,Integer> gdtn= new HashMap<Long, Integer>();
 		//商品对应的购买数量
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
 		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
-			gtn.put(gb.getGdId(),gb.getNum());
+			gdtn.put(gb.getGdId(),gb.getNum());
 		}
 
 		//取得商品价格
@@ -370,8 +372,9 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Map<Long,Long> gtp=new HashMap<Long, Long>();
 		for(GoodsDetail gt:gts){
 			//取得商品价格
-			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGdId()));
+			gtp.put(gt.getGid(),gt.getGdPrice()*gdtn.get(gt.getGdId()));
 			gIds.add(gt.getGid());
+			gtn.put(gt.getGid(),gdtn.get(gt.getGdId()));
 		}
 		//商品列表
 		List<Goods> goodss=goodsMapper.queryGoodsByGids(gIds);
