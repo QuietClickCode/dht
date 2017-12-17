@@ -32,6 +32,8 @@ public class FloorManageServiceImpl implements FloorManageService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateFloorManage(FloorManage floorManage) {
+		FloorManage manage = queryFloorManageByFmId(floorManage.getFmId());
+		floorManage.setVersion(manage.getVersion());
 		int status = floorManageMapper.updateFloorManage(floorManage);
 		return status == 1 ? true : false;
 	}
@@ -55,7 +57,9 @@ public class FloorManageServiceImpl implements FloorManageService {
 		return page;
 	}
 	public boolean deleteFloorManageByFmId(Long fmId) {
-		int status = floorManageMapper.deleteFloorManageByFmId(fmId);
+		FloorManage manage = queryFloorManageByFmId(fmId);
+		manage.setIsDelete(1);
+		int status = floorManageMapper.updateFloorManage(manage);
 		return status == 1 ? true : false;
 	}
 }

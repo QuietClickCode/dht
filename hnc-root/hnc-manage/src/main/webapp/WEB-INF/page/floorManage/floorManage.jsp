@@ -18,13 +18,26 @@
     <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
     <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
     <style>
+        .house_type_table{
+            float: left;
+            width: 80%;
+            height: 500px;
 
+        }
+
+        .house_type_list{
+            float: left;
+            width: 20%;
+            height: 500px;
+
+            border-left: none;
+        }
     </style>
 </head>
 <div>
     <div id="toolbar" class="form-inline">
         <button class="btn btn-default saveFloor" type="button">新增楼栋</button>
-        <input type="text" class="form-control"  id="AdvertisingName" placeholder="请输入楼栋名称">
+        <input type="text" class="form-control fmName"  placeholder="请输入楼栋名称">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>
 
@@ -68,6 +81,102 @@
 </div>
 
 
+<div class="modal fade" id="editFloor" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑楼栋</h4>
+            </div>
+            <div class="modal-body">
+                <form id="updateFloor">
+                    <div class="form-group">
+                        <label>是否显示:</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="isShow" name="isShow" value="1">显示
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="isShow" name="isShow" value="0">不显示
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group" style="display: none;">
+                        <label>ID:</label>
+                        <input type="text" class="form-control" name="fmId" placeholder="楼栋ID" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>楼栋名称:</label>
+                        <input type="text" class="form-control" name="fmName" placeholder="楼栋名称">
+                    </div>
+                    <div class="form-group">
+                        <label>物业性质:</label>
+                        <input type="text" class="form-control" name="fmType" placeholder="物业性质">
+                    </div>
+                    <div class="form-group">
+                        <label>房屋套数:</label>
+                        <input type="text" class="form-control" name="fmQuantity" placeholder="楼栋名称">
+                    </div>
+                    <div class="form-group">
+                        <label>备注:</label>
+                        <textarea style="outline:none;resize:none;height: 200px;" name="fmInfo" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary updateFloor">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%--删除楼栋模态框--%>
+<div class="modal fade" id="deleteFloor" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除楼栋</h4>
+            </div>
+            <div class="modal-body">
+                <p>删除该楼栋</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary deleteFloor">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%--添加删除户型模态框--%>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" id="saveHouseType" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">修改户型</h4>
+            </div>
+            <div class="modal-body" style="overflow: hidden;">
+                <div class="house_type_table">
+                    <table id="house_type_table"></table>
+                </div>
+                <div class="house_type_list"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
@@ -79,9 +188,6 @@
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
-    //编辑部门类型 0 新增 1 修改
-    var editorGoodsTypeType=0;
-    var orgPermissionTreeObj;
     var treeColumns=[
         {   checkbox: true,
             align : 'center',
@@ -106,25 +212,43 @@
             valign : 'middle'
         },
         {
-            title: '户型',
-            align : 'center',
-            valign : 'middle'
-        },
-        {
             field: 'fmInfo',
             title: '备注',
+            width:'200px',
+            class:'fmInfo',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                if(row.fmInfo == null){
+                    return "";
+                }
+
+                if(row.fmInfo.length > 8){
+                    return row.fmInfo.substring(0,8) + '...';
+                }
+
+                return row.fmInfo;
+            }
+        },
+        {
+            title: '户型',
+            align : 'center',
+            valign : 'middle',
+            class:'house_type',
+            formatter:function (value,row,index) {
+                if(row.relationships.length == 0)
+                return "请添加户型";
+            }
         },
         {
             align : 'center',
             valign : 'middle',
             title: '编辑',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
+                rowDatas.set(''+row.fmId+'',row);
                 let html='';
                 <ex:perm url="floorManage/updateFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();editFloor(\''+row.fmId+'\')">编辑</button>'
                 </ex:perm>
                 return html;
             }
@@ -134,9 +258,10 @@
             valign : 'middle',
             title: '删除',
             formatter:function (value,row,index) {
-                rowDatas.set(row.flId,row);
                 let html='';
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">删除</button>'
+                <ex:perm url="floorManage/removeFloor">
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();openDeleteFloorModal(\''+row.fmId+'\')">删除</button>'
+                </ex:perm>
                 return html;
             }
         }
@@ -150,6 +275,7 @@
      **/
     function queryParams(that){
         return {
+            fmName:$(".fmName").val(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
         };
@@ -171,28 +297,235 @@
 
 <%--新增楼栋--%>
 <script type="text/javascript">
-
+    /*防止重复提交标记*/
+    var flag = false;
+    /*打开添加楼栋信息模态框*/
     $(".saveFloor").click(function () {
         $("#addFloor").modal("show");
     });
-
+    /*提交新建楼栋信息*/
     $(".addFloor").click(function () {
-        var floor = document.getElementById("saveFloor");
-        var data = new FormData(floor);
-        data.append("isDelete", 0);
-        $.ajax({
-            url:"/floorManage/addFloor",
-            method:"post",
-            data:data,
-            processData : false,
-            contentType : false,
-            success:function (data) {
-                refreshTableData();
-                $("#addFloor").modal("hide");
-            }
-        });
+        let bootstrapValidator = $("#saveFloor").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+        if(!flag){
+            flag=true;
+            var floor = document.getElementById("saveFloor");
+            var data = new FormData(floor);
+            data.append("isDelete", 0);
+            data.append("isShow", 1);
+            $.ajax({
+                url:"/floorManage/addFloor",
+                method:"post",
+                data:data,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    flag = false;
+                    refreshTableData();
+                    $("#addFloor").modal("hide");
+                    $("#saveFloor").data('bootstrapValidator').resetForm(true);
+                }
+            });
+        }
     });
 
+</script>
+
+<%--自定义方法--%>
+<script>
+    /*为单选框赋值*/
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
+        }
+    }
+</script>
+
+<%--编辑楼栋信息--%>
+<script>
+    /*防止重复提交*/
+    var isSave = false;
+    /*当前的楼栋对象*/
+    var f;
+    /*打开编辑楼栋模态框*/
+    function editFloor(fmId) {
+        f = rowDatas.get(fmId);
+        $("#updateFloor input").each(function () {
+            let name = $(this).attr("name");
+            if(name != 'isShow')
+            $(this).val(f[name]);
+        });
+        radioChoose(".isShow",f['isShow']);
+        $("#updateFloor textarea").val(f['fmInfo']);
+        $("#editFloor").modal("show");
+    }
+
+    /*提交修改的楼栋信息*/
+    $(".updateFloor").click(function () {
+        let bootstrapValidator = $("#updateFloor").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+        if(!isSave){
+            isSave = true;
+            var floor = document.getElementById("updateFloor");
+            var data = new FormData(floor);
+            $.ajax({
+                url:"/floorManage/updateFloor",
+                method:"post",
+                data:data,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    isSave = false;
+                    $("#editFloor").modal("hide");
+                    $("#updateFloor").data('bootstrapValidator').resetForm(true);
+                    refreshTableData();
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    <%--打开删除楼栋模态框--%>
+    function openDeleteFloorModal(id) {
+        f = rowDatas.get(id);
+        $("#deleteFloor").modal("show");
+    }
+
+    var delflag = false;
+    $(".deleteFloor").click(function () {
+        if(!delflag){
+            delflag = true;
+            $.ajax({
+                url:"/floorManage/removeFloor",
+                method:"post",
+                data:{
+                    fmId:f['fmId']
+                },
+                dataType:"json",
+                success:function (data) {
+                    delflag = false;
+                    refreshTableData();
+                    $("#deleteFloor").modal("hide");
+                }
+            });
+        }
+    });
+</script>
+
+<script>
+    /*$(".house_type").click(function () {
+        alert("Demo");
+    });*/
+
+    $("#goodsTypeTables").on("click",'.house_type',function (event) {
+        let index = $(this).index("#goodsTypeTables .house_type");
+        $("#saveHouseType").modal("show");
+        createTable("/floorManage/queryFloorList","house_type_table","fmId",treeColumns,queryParams)
+    });
+</script>
+
+
+<%--表单校验--%>
+<script type="text/javascript">
+    $('#saveFloor').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            fmName: {
+                validators: {
+                    notEmpty: {
+                        message: '楼栋名称不能为空'
+                    }
+                }
+            },
+            fmType: {
+                validators: {
+                    notEmpty: {
+                        message: '物业性质不能为空'
+                    }
+                }
+            },
+            fmQuantity: {
+                validators: {
+                    notEmpty: {
+                        message: '房屋套数不能为空'
+                    },
+                    regexp: {
+                        regexp: /\d/,
+                        message: "只能输入数字"
+                    }
+                }
+            },
+            fmInfo: {
+                validators: {
+                    notEmpty: {
+                        message: '备注不能为空'
+                    }
+                }
+            }
+        }
+    });
+
+
+    $('#updateFloor').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            isShow: {
+                validators: {
+                    notEmpty: {
+                        message: '必须选择一个'
+                    }
+                }
+            },
+            fmName: {
+                validators: {
+                    notEmpty: {
+                        message: '楼栋名称不能为空'
+                    }
+                }
+            },
+            fmType: {
+                validators: {
+                    notEmpty: {
+                        message: '物业性质不能为空'
+                    }
+                }
+            },
+            fmQuantity: {
+                validators: {
+                    notEmpty: {
+                        message: '房屋套数不能为空'
+                    },
+                    regexp: {
+                        regexp: /\d/,
+                        message: "只能输入数字"
+                    }
+                }
+            },
+            fmInfo: {
+                validators: {
+                    notEmpty: {
+                        message: '备注不能为空'
+                    }
+                }
+            }
+        }
+    });
 </script>
 </body>
 </html>

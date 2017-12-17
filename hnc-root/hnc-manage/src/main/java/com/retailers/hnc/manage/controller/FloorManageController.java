@@ -49,31 +49,33 @@ public class FloorManageController extends BaseController{
             return success("新增楼层失败");
     }
 
-    /*@RequestMapping("/updateAdvertising")
-    @Function(label = "修改首页广告",description = "修改首页广告",resourse = "openHomeAdvertising.updateNavigatorBar",sort = 3,parentRes = "openHomeAdvertising.homeAdvertisingMapping")
+    @RequestMapping("/updateFloor")
+    @Function(label = "修改楼栋信息",description = "修改楼栋信息",resourse = "floorManage.updateFloor",sort = 3,parentRes = "floorManage.floorManageMapping")
     @ResponseBody
-    public BaseResp updateNavigatorBar(HomeAdvertising advertising){
-        boolean flag = advertisingService.updateHomeAdvertising(advertising);
+    public BaseResp updateFloor(FloorManage manage){
+        System.out.println(manage.getVersion());
+        boolean flag = manageService.updateFloorManage(manage);
         if(flag)
-            return success("修改首页导航[" + advertising.getHaName() + "]成功");
+            return success("修改首页导航[" + manage.getFmName() + "]成功");
         else
-            return errorForSystem("修改首页导航[" + advertising.getHaName() + "]失败");
+            return errorForSystem("修改首页导航[" + manage.getFmName() + "]失败");
     }
 
-    @RequestMapping("/removeAdvertising")
-    @Function(label = "删除首页广告",description = "删除首页广告",resourse = "openHomeAdvertising.removeNavigatorBar",sort = 3,parentRes = "openHomeAdvertising.homeAdvertisingMapping")
+    @RequestMapping("/removeFloor")
+    @Function(label = "删除楼栋",description = "删除楼栋",resourse = "floorManage.removeFloor",sort = 3,parentRes = "floorManage.floorManageMapping")
     @ResponseBody
-    public BaseResp removeAdvertising(Long haId){
-        boolean flag = advertisingService.deleteHomeAdvertisingByHaId(haId);
+    public BaseResp removeFloor(Long fmId){
+        boolean flag = manageService.deleteFloorManageByFmId(fmId);
         return  success(flag);
-    }*/
+    }
 
     @RequestMapping("/queryFloorList")
     @Function(label="楼栋合集", description = "楼栋合集", resourse = "floorManage.queryFloorList",sort=1,parentRes="floorManage.floorManageMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(PageUtils pageForm){
+    public Map<String,Object> queryNavigationLists(PageUtils pageForm,String fmName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("fmName",fmName);
         Pagination<FloorManageVo> advertisingPagination = manageService.queryFloorManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",advertisingPagination.getPageSize());
