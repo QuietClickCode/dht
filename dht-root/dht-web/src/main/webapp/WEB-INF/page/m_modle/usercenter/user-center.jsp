@@ -15,11 +15,30 @@
         .user-icon-list7{
             background-size: .36rem .34rem;
         }
+
+        .login_box{
+            display: block;
+            width: 2rem;
+            height: 0.7rem;
+            background: #e43f46;
+            border-radius: 3px;
+            text-align: center;
+            line-height: 0.7rem;
+            font-size: .26rem;
+            color: grey;
+            margin: 0 auto;
+            margin-top: 1rem;
+        }
+
+        .login_btn{
+            color: #fff;
+            font-size: 0.2rem;
+        }
     </style>
 </head>
 <body class="bge6">
     <div class="box2">
-        <div class="user-header">
+        <div class="user-header" >
             <a href="/user/userDetailInfo" class="icon-change">
                 <div class="user-img">
                     <img src="/img/user-header.png" alt=""/>
@@ -40,12 +59,12 @@
                 <i class="icon-order"></i>
                 <span>我的订单</span>
             </div>
-            <a href="">全部订单></a>
+            <a href="/order/orderList">全部订单></a>
         </div>
 
         <div class="user-order-state">
             <div class="state">
-                <a href="">
+                <a href="/order/orderList?id=#obligation">
                     <i class="icon-state1">
                         <span>1</span>
                     </i>
@@ -53,7 +72,7 @@
                 </a>
             </div>
             <div class="state">
-                <a href="">
+                <a href="/order/orderList?id=#unsent">
                     <i class="icon-state2">
                         <span>1</span>
                     </i>
@@ -61,7 +80,7 @@
                 </a>
             </div>
             <div class="state">
-                <a href="">
+                <a href="/order/orderList?id=#appraise">
                     <i class="icon-state3">
                         <span>1</span>
                     </i>
@@ -173,6 +192,28 @@
             success:function(data){
 
             }
+        });
+
+        $(function () {
+            $.ajax({
+                url:"/user/queryLoginUserId",
+                method:"post",
+                dataType:"json",
+                success:function (data) {
+                    if(data.status = 3){
+                        $(".user-header").children().hide();
+                        var login_box = $('<a src="/loginPage" class="login_box"></a>');
+                        var login_btn = $('<span class="login_btn">立即登录</span>');
+                        login_box.append(login_btn);
+                        $(".user-header").append(login_box);
+                    }
+                }
+            });
+        });
+
+
+        $(".user-header").on("click",".login_box",function () {
+            $(location).attr('href', '/loginPage?redirectUrl=%2Fuser%2FuserCenter');
         });
     </script>
 </body>
