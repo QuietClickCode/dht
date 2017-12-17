@@ -12,6 +12,10 @@ public class GoodsTypePriceVo {
      */
     private Long gId;
     /**
+     *商品规格
+     */
+    private Long gdId;
+    /**
      * 商品数量
      */
     private Long gType;
@@ -26,11 +30,12 @@ public class GoodsTypePriceVo {
     public GoodsTypePriceVo(){
 
     }
-    public GoodsTypePriceVo(Long gid,Long gType,Long gPrice,Long num){
+    public GoodsTypePriceVo(Long gid,Long gdId,Long gType,Long gPrice,Long num){
         this.gId=gid;
         this.gType=gType;
         this.gPrice=gPrice;
         this.num=num;
+        this.gdId=gdId;
     }
     public Long getgId() {
         return gId;
@@ -62,5 +67,13 @@ public class GoodsTypePriceVo {
 
     public void setNum(Long num) {
         this.num = num;
+    }
+
+    public Long getGdId() {
+        return gdId;
+    }
+
+    public void setGdId(Long gdId) {
+        this.gdId = gdId;
     }
 }

@@ -13,7 +13,7 @@ public class BuyGoodsDetailVo {
     /**
      * 购物车id
      */
-    private Long buyCartId;
+    private Long buyCarId;
     /**
      * 商品id
      */
@@ -35,12 +35,12 @@ public class BuyGoodsDetailVo {
      */
     private String remark;
 
-    public Long getBuyCartId() {
-        return buyCartId;
+    public Long getBuyCarId() {
+        return buyCarId;
     }
 
-    public void setBuyCartId(Long buyCartId) {
-        this.buyCartId = buyCartId;
+    public void setBuyCarId(Long buyCarId) {
+        this.buyCarId = buyCarId;
     }
 
     public Long getGoodsId() {

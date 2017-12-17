@@ -93,7 +93,14 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
     @Test
     public void queryGoodsCouponByGids(){
         Date curDate=new Date();
-        List<Long> gids=Arrays.asList(1l, 4l, 51l, 52l, 53l, 54l, 57l);
+        Set<Long> gids= new HashSet<Long>();
+        gids.add(1l);
+        gids.add(4l);
+        gids.add(51l);
+        gids.add(52l);
+        gids.add(53l);
+        gids.add(54l);
+        gids.add(57l);
         List<GoodsCouponView> gcvs=goodsCouponMapper.queryGoodsCouponByGids(gids,curDate);
         System.out.println(JSON.toJSON(gcvs));
     }
@@ -102,13 +109,13 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
     @Test
     public void queryGoodsCouponBuyGid(){
         List<GoodsTypePriceVo> list = new ArrayList<GoodsTypePriceVo>();
-        GoodsTypePriceVo vo=new GoodsTypePriceVo(1l,null,1000l,2l);
-        GoodsTypePriceVo vo1=new GoodsTypePriceVo(4l,null,10000l,2l);
-        GoodsTypePriceVo vo2=new GoodsTypePriceVo(51l,null,10000l,2l);
-        GoodsTypePriceVo vo3=new GoodsTypePriceVo(52l,null,10000l,2l);
-        GoodsTypePriceVo vo4=new GoodsTypePriceVo(53l,null,10000l,2l);
-        GoodsTypePriceVo vo5=new GoodsTypePriceVo(54l,null,10000l,2l);
-        GoodsTypePriceVo vo6=new GoodsTypePriceVo(57l,null,10000l,2l);
+        GoodsTypePriceVo vo=new GoodsTypePriceVo(1l,771l,null,1000l,2l);
+        GoodsTypePriceVo vo1=new GoodsTypePriceVo(4l,805l,null,10000l,2l);
+        GoodsTypePriceVo vo2=new GoodsTypePriceVo(51l,853l,null,10000l,2l);
+        GoodsTypePriceVo vo3=new GoodsTypePriceVo(52l,99l,null,10000l,2l);
+        GoodsTypePriceVo vo4=new GoodsTypePriceVo(53l,2l,null,10000l,2l);
+        GoodsTypePriceVo vo5=new GoodsTypePriceVo(54l,9l,null,10000l,2l);
+        GoodsTypePriceVo vo6=new GoodsTypePriceVo(57l,11l,null,10000l,2l);
         list.add(vo);
         list.add(vo1);
         list.add(vo2);

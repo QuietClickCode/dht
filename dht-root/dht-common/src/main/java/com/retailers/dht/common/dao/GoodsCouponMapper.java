@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
 /**
  * 描述：商品优惠活动DAO
  * @author zhongp
@@ -81,7 +83,7 @@ public interface GoodsCouponMapper {
 	 * @param curDate 当前时间
 	 * @return
 	 */
-	public List<GoodsCouponView> queryGoodsCouponByGids(@Param("goodsIds")List<Long> goodsIds, @Param("curDate")Date curDate);
+	public List<GoodsCouponView> queryGoodsCouponByGids(@Param("goodsIds")Set<Long> goodsIds, @Param("curDate")Date curDate);
 
 	/**
 	 * 取得无限制商品优惠例表
