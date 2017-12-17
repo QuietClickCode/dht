@@ -39,6 +39,11 @@ public class OrderController extends BaseController {
         return redirectUrl(request,"order/create-order");
     }
 
+    @RequestMapping("orderList")
+    public String openOrderList(HttpServletRequest request){
+        return redirectUrl(request,"order/all-order");
+    }
+
     @RequestMapping("getCheckOrderData")
     public String getCheckOrderData(HttpServletRequest request,String data){
         request.getSession().setAttribute("checkOrderData",data);
