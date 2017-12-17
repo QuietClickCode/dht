@@ -3,13 +3,12 @@ package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.GoodsCoupon;
 import com.retailers.dht.common.view.GoodsCouponView;
-import com.retailers.dht.common.vo.BuyGoodsVo;
+import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsCouponVo;
 import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
-import com.retailers.tools.utils.ObjectUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -127,7 +126,7 @@ public interface GoodsCouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsVo> gbs);
+	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsDetailVo> gbs);
 
 }
 

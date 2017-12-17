@@ -1,7 +1,6 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.*;
-import com.retailers.mybatis.pagination.PageInterceptor;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Coupon;
 import com.retailers.tools.exception.AppException;
@@ -123,7 +122,7 @@ public interface CouponService {
 	 * @param gbs 购买属性
 	 * @return
 	 */
-	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsVo> gbs);
+	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsDetailVo> gbs);
 
 }
 
