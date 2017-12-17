@@ -9,6 +9,7 @@ import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.GoodsDetailService;
+import com.retailers.dht.common.service.GoodsFreightService;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
@@ -62,6 +63,8 @@ public class OrderServiceImpl implements OrderService {
 	private UserCardPackageMapper userCardPackageMapper;
     @Autowired
 	private LogUserCardPackageMapper logUserCardPackageMapper;
+    @Autowired
+	private GoodsFreightService goodsFreightService;
 
 
 
@@ -117,10 +120,10 @@ public class OrderServiceImpl implements OrderService {
 		String orderNo="";
         try{
         	//判断用户是否存在未付款订单
-			int unPayTotal=orderMapper.checkUserUnPayOrder(uid);
-			if(unPayTotal>0){
-				throw new AppException("存在款付款订单，不能进行此次购买");
-			}
+//			int unPayTotal=orderMapper.checkUserUnPayOrder(uid);
+//			if(unPayTotal>0){
+//				throw new AppException("存在款付款订单，不能进行此次购买");
+//			}
 			//开始计算商品价格
 			//取得用户地址
 			UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(buyInfos.getAddress());
@@ -131,6 +134,9 @@ public class OrderServiceImpl implements OrderService {
 			if(userAddress.getUaUid().intValue()!=uid.intValue()){
 				throw new AppException("请填写收货人地址");
 			}
+			//取得快递费
+			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+
 			//商品对应使用的商品优惠
 			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
 			//购买商品列表
@@ -151,11 +157,12 @@ public class OrderServiceImpl implements OrderService {
 			if(ObjectUtils.isNotEmpty(gcpMaps)){
 				//校验商品优惠是否异常
 			}
+
 			//取得使用的优惠卷
 			String couponIds=buyInfos.getCpIds();
 			//判断是否使用优卷
 			if(ObjectUtils.isNotEmpty(couponIds)){
-			//校验优惠卷是否异常
+				//校验优惠卷是否异常
 			}
 			//订单详情
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();

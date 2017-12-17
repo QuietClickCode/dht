@@ -353,4 +353,11 @@
 	<delete id="deleteOrderById" parameterType="java.lang.Long">
 		DELETE FROM t_order WHERE id = #{id}
 	</delete>
+
+	<!--分页查询 -->
+	<select id="checkUserUnPayOrder" resultType="java.lang.Long">
+		SELECT <include refid="order_columns" />
+		FROM t_order
+		<include refid="order_where"/>
+	</select>
 </mapper>

@@ -254,13 +254,22 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Date curDate=new Date();
 		if(ObjectUtils.isNotEmpty(gtpvs)){
 			//商品价格
-			Map<Long,Long> gps=new HashMap<Long, Long>();
-			Map<Long,Long> bgns=new HashMap<Long, Long>();
-			List<Long> gids=new ArrayList<Long>();
+//			Map<Long,Long> gps=new HashMap<Long, Long>();
+			//购买商品规格对应的格
+			Map<Long,Long> gdps=new HashMap<Long, Long>();
+//			Map<Long,Long> bgns=new HashMap<Long, Long>();
+			//购买规格对应的数量
+			Map<Long,Long> bgdns=new HashMap<Long, Long>();
+			Set<Long> gids=new HashSet<Long>();
+			List<Long> gdIds=new ArrayList<Long>();
+			Map<Long,Long> gdidUngid=new HashMap<Long, Long>();
 			for(GoodsTypePriceVo gtpv:gtpvs){
-				gps.put(gtpv.getgId(),gtpv.getgPrice());
+				gdps.put(gtpv.getGdId(),gtpv.getgPrice());
 				gids.add(gtpv.getgId());
-				bgns.put(gtpv.getgId(),gtpv.getNum());
+				bgdns.put(gtpv.getGdId(),gtpv.getNum());
+				gdidUngid.put(gtpv.getGdId(),gtpv.getgId());
+				gdIds.add(gtpv.getGdId());
+
 			}
 			//取得商品优惠列表
 			List<GoodsCouponView> xzAllows=goodsCouponMapper.queryGoodsCouponByGids(gids,curDate);
@@ -288,13 +297,11 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 					spyhMap.put(gcv.getGid(),spyh);
 				}
 			}
-			System.out.println(JSON.toJSON(spyhMap));
-			System.out.println(JSON.toJSON(maps));
-			//商品所有能够使用的优惠
-//			Map<String,GoodsCouponView> acgMaps=new HashMap<String, GoodsCouponView>();
 			//设置商品对应的优惠
-			for(Long gid:gids){
-				rtn.put(gid+"",assembleGoodsCoupon(maps,spyhMap.get(gid),gps.get(gid),bgns.get(gid)));
+			for(Long gdId:gdIds){
+				//取得规格id关联的商品id
+				long gid=gdidUngid.get(gdId);
+				rtn.put(gdId+"",assembleGoodsCoupon(maps,spyhMap.get(gid),gid,gdps.get(gdId),bgdns.get(gdId)));
 			}
 		}
 		return rtn;
@@ -304,11 +311,12 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 * 组装商品可用的优惠列表
 	 * @param wxzuyhs 无限制优惠例表
 	 * @param xzyh 限制优惠列表
+	 * @param gid 商品id
 	 * @param buyPrce 购买总价
 	 * @param buyNum 购买数量
 	 * @return
 	 */
-	private List<GoodsCouponView> assembleGoodsCoupon(Map<Long,GoodsCouponView> wxzuyhs,Map<Long,GoodsCouponView> xzyh,Long buyPrce,Long buyNum){
+	private List<GoodsCouponView> assembleGoodsCoupon(Map<Long,GoodsCouponView> wxzuyhs,Map<Long,GoodsCouponView> xzyh,Long gid,Long buyPrce,Long buyNum){
 		List<GoodsCouponView> rtn=new ArrayList<GoodsCouponView>();
 		List<GoodsCouponView> bjs=new ArrayList<GoodsCouponView>();
 		if(ObjectUtils.isNotEmpty(wxzuyhs)){
@@ -354,27 +362,45 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 */
 	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsDetailVo> gbs){
 		String gdIds="";
+		//商品id
 		List<Long> gIds=new ArrayList<Long>();
-		//商品gid对应的购买数量
+		//购买规格ids
+		List<Long> gdIdList=new ArrayList<Long>();
+		//规格id对应的购买数量
 		Map<Long,Integer> gdtn= new HashMap<Long, Integer>();
 		//商品对应的购买数量
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
+		//规格对应的商品
+		Map<Long,Long> gidGids=new HashMap<Long, Long>();
 		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
 			gdtn.put(gb.getGdId(),gb.getNum());
 		}
-
 		//取得商品价格
 		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-
-
 		//商品购买总价
 		Map<Long,Long> gtp=new HashMap<Long, Long>();
+		//规格对应的购买价格
+		Map<Long,Long> ggPrice=new HashMap<Long, Long>();
 		for(GoodsDetail gt:gts){
+			//购买价格
+			long buyPrice=gt.getGdPrice()*gdtn.get(gt.getGdId());
 			//取得商品价格
-			gtp.put(gt.getGid(),gt.getGdPrice()*gdtn.get(gt.getGdId()));
+			if(gtp.containsKey(gt.getGid())){
+				buyPrice+=gtp.get(gt.getGid());
+			}
+			gtp.put(gt.getGid(),buyPrice);
+			//购买商品ids
 			gIds.add(gt.getGid());
-			gtn.put(gt.getGid(),gdtn.get(gt.getGdId()));
+			//购买商品数量
+			int buyNum=gdtn.get(gt.getGdId());
+			if(gtn.containsKey(gt.getGid())){
+				buyNum+=gtn.get(gt.getGdId());
+			}
+			gtn.put(gt.getGid(),buyNum);
+			//规格对应的商品id
+			gidGids.put(gt.getGdId(),gt.getGid());
+			ggPrice.put(gt.getGdId(),gt.getGdPrice()*gdtn.get(gt.getGdId()));//计算该规格下的购买价格
 		}
 		//商品列表
 		List<Goods> goodss=goodsMapper.queryGoodsByGids(gIds);
@@ -385,14 +411,17 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 
 		//取得商吕购买信息
 		List<GoodsTypePriceVo> gtpvs= new ArrayList<GoodsTypePriceVo>();
-		for(Long gid:gIds){
+		for(Long gdId:gdIdList){
+			long gid=gidGids.get(gdId);
 			GoodsTypePriceVo gtpv=new GoodsTypePriceVo();
 			gtpv.setgId(gid);
+			gtpv.setGdId(gdId);
 			gtpv.setgType(gType.get(gid));
-			gtpv.setgPrice(gtp.get(gid));
-			gtpv.setNum(gtn.get(gid).longValue());
+			gtpv.setgPrice(ggPrice.get(gdId));
+			gtpv.setNum(gdtn.get(gid).longValue());
 			gtpvs.add(gtpv);
 		}
+//
 		//取得商品关联的优惠卷
 		Map<String,List<GoodsCouponView>> gcs=queryGoodsCouponBuyGid(gtpvs);
 		//取得用户此次购买满足条件的未使用优惠卷
@@ -402,6 +431,8 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		rtn.put("gcLists",gcs);
 		//用户优惠卷
 		rtn.put("userCoupons",uacs);
+		//规格id对应的商品id
+		rtn.put("gdisRelationGid",gidGids);
 		//商品优惠
 		return rtn;
 	}
