@@ -74,7 +74,7 @@ public class HomeAdvertisingController extends BaseController{
         map.put("haRegion",haRegion);
         Pagination<HomeAdvertisingVo> advertisingPagination = advertisingService.queryHomeAdvertisingList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("total",advertisingPagination.getPageSize());
+        gtm.put("total",advertisingPagination.getTotalCount());
         gtm.put("rows",advertisingPagination.getData());
         return gtm;
     }

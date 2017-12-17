@@ -78,7 +78,7 @@ public class FloorManageController extends BaseController{
         map.put("fmName",fmName);
         Pagination<FloorManageVo> advertisingPagination = manageService.queryFloorManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("total",advertisingPagination.getPageSize());
+        gtm.put("total",advertisingPagination.getTotalCount());
         gtm.put("rows",advertisingPagination.getData());
         return gtm;
     }
