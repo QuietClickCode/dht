@@ -2,6 +2,8 @@ package com.retailers.dht.web.filter;
 
 
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.CheckMobile;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
@@ -12,6 +14,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.util.Map;
 
@@ -47,11 +50,13 @@ public class WxFilter implements Filter {
         }
 
         boolean isFromMobile= CheckMobile.check(userAgent);
-
+        //判断是否存在推荐人
+        String randStr=request.getParameter("randStr");
+        if(ObjectUtils.isNotEmpty(randStr)){
+            cachInviter(request,randStr);
+        }
         //判断是否为移动端访问 移动端访问
         if(isFromMobile){
-            System.out.println("request.getRequestURI()------------------------------>:"+request.getRequestURI());
-            System.out.println("---------------------------------->>>"+request.getContextPath());
             //判断是否是微信
             if(userAgent.indexOf("micromessenger")>0){
                 String uri = request.getRequestURI();
@@ -97,5 +102,29 @@ public class WxFilter implements Filter {
             }
         }
         return sb.toString();
+    }
+
+    /**
+     * 缓存推荐人
+     * @param request
+     * @param randStr
+     */
+    private void cachInviter(HttpServletRequest request,String randStr){
+        logger.info("取得推荐人信息:[{}]",randStr);
+        try{
+            String randDecode= URLDecoder.decode(randStr, com.retailers.dht.common.constant.SystemConstant.DEFAUT_CHARSET);
+            logger.info("传入参数decode 之后的结果:[{}]",randDecode);
+            //解密推荐人信息
+            String decryptInfo= DESUtils.decryptDES(randDecode, DesKey.WEB_KEY);
+            if(decryptInfo.indexOf("_")>=0){
+                String uid=decryptInfo.split("_")[0];
+                if(ObjectUtils.isNotEmpty(uid)){
+                    logger.info("取得推荐人用户ID:[{}]",uid);
+                    request.getSession().setAttribute(SystemConstant.SHARE_USER_SESSION_KEY,Long.parseLong(uid));
+                }
+            }
+        }catch (Exception e){
+            logger.error("解密推荐人异常，推荐人信息：[{}],异常信息:\r\n{}",randStr,e);
+        }
     }
 }

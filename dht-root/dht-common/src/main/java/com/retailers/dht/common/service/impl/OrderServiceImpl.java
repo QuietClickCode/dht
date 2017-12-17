@@ -108,7 +108,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @throws AppException
 	 */
     @Transactional(rollbackFor = Exception.class)
-	public Map<String,Object> shoppingOrder(Long uid,BuyInfoVo buyInfos)throws AppException{
+	public Map<String,Object> shoppingOrder(Long uid, BuyInfoVo buyInfos,Long inviterUid,Long inviterGid)throws AppException{
         logger.info("创建购物订单,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
         Date curDate=new Date();
         String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
@@ -209,7 +209,41 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return rtnMap;
 	}
-	//订单创建(购特，秒杀，团购，砍价，预购）
+
+	/**
+	 *
+	 * @param uid
+	 * @param buyInfos
+	 * @param isInviter
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String, Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos, boolean isInviter) throws AppException {
+		return null;
+	}
+
+	/**
+	 *
+	 * @param uid
+	 * @param buyInfos
+	 * @param isInviter 是否是推荐商品
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String, Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos, boolean isInviter) throws AppException {
+		return null;
+	}
+
+	/**
+	 *
+	 * @param uid
+	 * @param buyInfos
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String, Object> buyCutPrice(Long uid, BuyInfoVo buyInfos) throws AppException {
+		return null;
+	}
 
 	/**
 	 * 创建订单

@@ -11,6 +11,10 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
  */
 public class BuyGoodsDetailVo {
     /**
+     * 购物车id
+     */
+    private Long buyCartId;
+    /**
      * 商品id
      */
     private Long goodsId;
@@ -30,6 +34,14 @@ public class BuyGoodsDetailVo {
      * 备注
      */
     private String remark;
+
+    public Long getBuyCartId() {
+        return buyCartId;
+    }
+
+    public void setBuyCartId(Long buyCartId) {
+        this.buyCartId = buyCartId;
+    }
 
     public Long getGoodsId() {
         return goodsId;
