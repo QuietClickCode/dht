@@ -53,7 +53,7 @@ public class WxFilter implements Filter {
         //判断是否存在推荐人
         String randStr=request.getParameter("randStr");
         if(ObjectUtils.isNotEmpty(randStr)){
-            cachInviter(request,randStr);
+            cachInviter(request,randStr,false);
         }
         //判断是否为移动端访问 移动端访问
         if(isFromMobile){
@@ -109,10 +109,13 @@ public class WxFilter implements Filter {
      * @param request
      * @param randStr
      */
-    private void cachInviter(HttpServletRequest request,String randStr){
+    private void cachInviter(HttpServletRequest request,String randStr,boolean decode){
         logger.info("取得推荐人信息:[{}]",randStr);
         try{
-            String randDecode= URLDecoder.decode(randStr, com.retailers.dht.common.constant.SystemConstant.DEFAUT_CHARSET);
+            String randDecode= randStr;
+            if(decode){
+                randDecode = URLDecoder.decode(randStr, com.retailers.dht.common.constant.SystemConstant.DEFAUT_CHARSET);
+            }
             logger.info("传入参数decode 之后的结果:[{}]",randDecode);
             //解密推荐人信息
             String decryptInfo= DESUtils.decryptDES(randDecode, DesKey.WEB_KEY);
@@ -123,7 +126,10 @@ public class WxFilter implements Filter {
                     request.getSession().setAttribute(SystemConstant.SHARE_USER_SESSION_KEY,Long.parseLong(uid));
                 }
             }
+        }catch(IllegalArgumentException e){
+            cachInviter(request,randStr,true);
         }catch (Exception e){
+            e.printStackTrace();
             logger.error("解密推荐人异常，推荐人信息：[{}],异常信息:\r\n{}",randStr,e);
         }
     }
