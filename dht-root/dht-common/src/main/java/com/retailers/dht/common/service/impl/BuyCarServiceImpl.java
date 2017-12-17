@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,24 @@ public class BuyCarServiceImpl implements BuyCarService {
 	@Autowired
 	private BuyCarMapper buyCarMapper;
 	public boolean saveBuyCar(BuyCar buyCar) {
-		int status = buyCarMapper.saveBuyCar(buyCar);
+		Map params = new HashMap();
+		Long gid = buyCar.getGid();
+		Long uid = buyCar.getUid();
+		String bcUrl = buyCar.getBcUrl();
+		params.put("gid",gid);
+		params.put("uid",uid);
+		params.put("bcUrl",bcUrl);
+		params.put("isDelete",0L);
+		List<BuyCar> list = queryBuyCarList(params,1,1).getData();
+		int status = 0;
+		if(ObjectUtils.isNotEmpty(list)){
+			BuyCar bc = list.get(0);
+			bc.setBcInviterid(null);
+			bc.setGcount(bc.getGcount()+buyCar.getGcount());
+			status = buyCarMapper.updateBuyCar(bc);
+		}else{
+			status = buyCarMapper.saveBuyCar(buyCar);
+		}
 		return status == 1 ? true : false;
 	}
 	public boolean updateBuyCar(BuyCar buyCar) {

@@ -203,9 +203,9 @@
             <if test="null != bcUrl and '' != bcUrl">
                 bc_url = #{bcUrl},
             </if>
-            <if test="null != bcInviterid">
+
                 bc_inviterid = #{bcInviterid},
-            </if>
+
             <if test="null != bcDescription and '' != bcDescription">
                 bc_description = #{bcDescription},
             </if>

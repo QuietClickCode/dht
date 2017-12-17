@@ -1,5 +1,6 @@
 package com.retailers.dht.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.OrderService;
@@ -26,6 +27,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,18 +81,24 @@ public class OrderController extends BaseController {
                 String gsName = goodsGdcprelVo.getGsName();
                 Long gdId = goodsGdcprelVo.getGdId();
                 Long sumcount = goodsGdcprelVo.getSumcount();
-                String data = "{";
-                data += "\'gdId\':\'"+gdId+"\',";
-                data += "\'num\':\'"+sumcount+"\',";
-                data += "\'imgurl\':\'"+imgurl+"\',";
-                data += "\'gsvals\':\'"+gsName+"\',";
-                data += "\'remark\':\'"+remark+"\',";
-                data += "\'gname\':\'"+gname+"\',";
-                data += "\'gdprice\':\'"+gdprice+"\'";
-                data += '}';
-                data = "["+data+"]";
-                data = "{data:"+data+",isActivity:2}";
-                request.getSession().setAttribute("checkOrderData",data);
+
+                Map map = new HashMap();
+                map.put("gdId",gdId);
+                map.put("num",sumcount);
+                map.put("imgurl",imgurl);
+                map.put("gsvals",gsName);
+                map.put("remark",remark);
+                map.put("gname",gname);
+                map.put("gdprice",gdprice);
+
+                List list = new ArrayList();
+                list.add(map);
+
+                Map data = new HashMap();
+                data.put("data",list);
+                data.put("isActivity",2);
+
+                request.getSession().setAttribute("checkOrderData", JSON.toJSONString(data));
             }
         }
         return "redirect:/order/checkOrder";
