@@ -109,43 +109,43 @@
             </a>
 
             <ul class="coupon-list">
-                <li>
-                    <div class="coupon-item-tittle no-selected">
-                        <input disabled="disabled" name="Fruit" type="checkbox" value="苹果" />
-                        <label for="">苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果</label>
-                        <a class="coupon-detail"></a>
-                    </div>
-                    <div class="coupon-item-detail" style="display: none;">
-                        <img class="get-img" src="/img/coupon-img1.png">
-                        <div class="coupon-data">
-                            <p class="coupon-price">
-                                <small>￥</small>
-                                <strong>150</strong>
-                            </p>
-                            <p class="coupon-condition">满 200 可用</p>
-                            <p class="coupon-date">2017.11.11-2017.12.12</p>
-                        </div>
-                    </div>
-                </li>
+                <%--<li>--%>
+                    <%--<div class="coupon-item-tittle no-selected">--%>
+                        <%--<input disabled="disabled" name="Fruit" type="checkbox" value="苹果" />--%>
+                        <%--<label for="">苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果</label>--%>
+                        <%--<a class="coupon-detail"></a>--%>
+                    <%--</div>--%>
+                    <%--<div class="coupon-item-detail" style="display: none;">--%>
+                        <%--<img class="get-img" src="/img/coupon-img1.png">--%>
+                        <%--<div class="coupon-data">--%>
+                            <%--<p class="coupon-price">--%>
+                                <%--<small>￥</small>--%>
+                                <%--<strong>150</strong>--%>
+                            <%--</p>--%>
+                            <%--<p class="coupon-condition">满 200 可用</p>--%>
+                            <%--<p class="coupon-date">2017.11.11-2017.12.12</p>--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+                <%--</li>--%>
 
-                <li>
-                    <div class="coupon-item-tittle">
-                        <input name="Fruit" type="checkbox" value="苹果" />
-                        <label for="">苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果</label>
-                        <a class="coupon-detail"></a>
-                    </div>
-                    <div class="coupon-item-detail" style="display: none;">
-                        <img class="get-img" src="/img/coupon-img1.png">
-                        <div class="coupon-data">
-                            <p class="coupon-price">
-                                <small>￥</small>
-                                <strong>150</strong>
-                            </p>
-                            <p class="coupon-condition">满 200 可用</p>
-                            <p class="coupon-date">2017.11.11-2017.12.12</p>
-                        </div>
-                    </div>
-                </li>
+                <%--<li>--%>
+                    <%--<div class="coupon-item-tittle">--%>
+                        <%--<input name="Fruit" type="checkbox" value="苹果" />--%>
+                        <%--<label for="">苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果</label>--%>
+                        <%--<a class="coupon-detail"></a>--%>
+                    <%--</div>--%>
+                    <%--<div class="coupon-item-detail" style="display: none;">--%>
+                        <%--<img class="get-img" src="/img/coupon-img1.png">--%>
+                        <%--<div class="coupon-data">--%>
+                            <%--<p class="coupon-price">--%>
+                                <%--<small>￥</small>--%>
+                                <%--<strong>150</strong>--%>
+                            <%--</p>--%>
+                            <%--<p class="coupon-condition">满 200 可用</p>--%>
+                            <%--<p class="coupon-date">2017.11.11-2017.12.12</p>--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
+                <%--</li>--%>
             </ul>
         </div>
     </div>
@@ -213,7 +213,7 @@
                 <i class="icon-checkbox J_checkbox"></i>
             </div>
         </div>
-        <button type="submit" class="payment-btn">确认支付</button>
+        <button onclick="jiesuan();" type="submit" class="payment-btn">确认支付</button>
     </div>
 
 
@@ -263,49 +263,56 @@
         $("#J_mark,#J_footprintPrompt").hide()
     })
 
-    //优惠券详情
-    var couponDetailBts = $('.coupon-detail');       //展开详情按钮列表
-    var couponDetailBoxs = $('.coupon-item-detail');  //展开详情盒子
-    couponDetailBts.each(function () {
-        $(this).on('click',function () {
-            if($(this).hasClass('show-status')){
-                $(this).removeClass('show-status');
-                $(this).parent().parent().find('.coupon-item-detail').hide('slow')
-            }else {
-                couponDetailBoxs.each(function () {
-                    $(this).hide('slow')
-                });
-                couponDetailBts.each(function () {
+
+    function initcoupon() {
+        //优惠券详情
+        var couponDetailBts = $('.coupon-detail');       //展开详情按钮列表
+        var couponDetailBoxs = $('.coupon-item-detail');  //展开详情盒子
+        couponDetailBts.each(function () {
+            $(this).on('click',function () {
+                if($(this).hasClass('show-status')){
                     $(this).removeClass('show-status');
-                });
-                $(this).addClass('show-status');
-                $(this).parent().parent().find('.coupon-item-detail').show('slow')
-            }
-        })
-    });
-
-    //    商品项暂开隐藏优惠券
-    var couponBtns = $('.coupon-btn');  //商品项
-    var couponInfoWraps = $('.coupon-info-wrap'); //商品优惠列表
-
-    couponBtns.each(function () {
-        $(this).on('click',function () {
-            if($(this).hasClass('active')){
-                $(this).removeClass('active');
-                $(this).parent().find('.coupon-info-wrap').css('display','none')
-            }else {
-                var haveActive = $(this).parent().parent().parent().parent().find('.active');  //此前是否有打开的列表
-                if(haveActive){
-                    $(haveActive).parent().find('.coupon-info-wrap').css('display','none');
-                    $(haveActive).removeClass('active');
+                    $(this).parent().parent().find('.coupon-item-detail').hide('slow')
+                }else {
+                    couponDetailBoxs.each(function () {
+                        $(this).hide('slow')
+                    });
+                    couponDetailBts.each(function () {
+                        $(this).removeClass('show-status');
+                    });
+                    $(this).addClass('show-status');
+                    $(this).parent().parent().find('.coupon-item-detail').show('slow')
                 }
+            })
+        });
+    }
 
-                //为当前添加样式
-                $(this).addClass('active');
-                $(this).parent().find('.coupon-info-wrap').css('display','block');
-            }
+
+        //    商品项暂开隐藏优惠券
+        var couponBtns = $('.coupon-btn');  //商品项
+        var couponInfoWraps = $('.coupon-info-wrap'); //商品优惠列表
+
+        couponBtns.each(function () {
+            $(this).on('click',function () {
+                console.log(222);
+                if($(this).hasClass('active')){
+                    $(this).removeClass('active');
+                    $(this).parent().find('.coupon-info-wrap').css('display','none')
+                }else {
+                    var haveActive = $(this).parent().parent().parent().parent().find('.active');  //此前是否有打开的列表
+                    if(haveActive){
+                        $(haveActive).parent().find('.coupon-info-wrap').css('display','none');
+                        $(haveActive).removeClass('active');
+                    }
+
+                    //为当前添加样式
+                    $(this).addClass('active');
+                    $(this).parent().find('.coupon-info-wrap').css('display','block');
+                }
+            })
         })
-    })
+
+
 
 </script>
 
@@ -356,7 +363,7 @@
         }else{
             $.ajax({
                 type:"post",
-                url:"userAddress/queryUserAddress",
+                url:"/userAddress/queryUserAddress",
                 dataType: "json",
                 data:{pageNo:1,pageSize:1},
                 success:function(data){
@@ -367,7 +374,7 @@
                         uaName = row.uaName;
                         uaAllAddress = row.uaAllAddress;
                         uaPhone = row.uaPhone;
-                        addAdressData(uaId,uaName,uaPhone,uaAddress);
+                        addAdressData(uaId,uaName,uaPhone,uaAllAddress);
                     }else{
                         $('#ordernoaddressimg').siblings().remove();
                         $('#ordernoaddressimg').show();
@@ -383,15 +390,130 @@
         $('#uaPhone').html(uaPhone);
         $('#uaAllAddress').html(uaAllAddress);
     }
+
+    function loadgcpandcp(){
+        var rows = goodsData.data;
+        var reqRows=new Array();
+
+        for(var i=0;i<rows.length;i++){
+            var row = rows[i];
+            var reqRow=new Object();
+            reqRow["gdId"]=row.gdId;
+            reqRow["num"]=row.num;
+            reqRows.push(reqRow);
+        }
+        $.ajax({
+            type:"post",//请求方式
+            url: "/goodsCoupon/queryGoodsCouponLists",//发送请求地址
+            data:JSON.stringify(reqRows),
+            dataType:"json",
+            contentType: "application/json",
+            //请求成功后的回调函数有两个参数
+            success:function(sdata){
+                if(sdata.status==0){
+                    var gcLists = sdata.data.gcLists;
+                    var userCoupons = sdata.data.userCoupons;
+
+                    if(userCoupons!=null&&userCoupons.length>0){
+                        var userCouponsUl = $('.coupon-list');
+                        for(var i=0;i<userCoupons.length;i++){
+                            var row = userCoupons[i];
+                            var html = '<li>'+
+                                '<div class="coupon-item-tittle">'+
+                            '<input name="Fruit" type="checkbox" value="苹果" />'+
+                            '<label for="">'+row.cpName+'</label>'+
+                            '<a class="coupon-detail"></a>'+
+                            '</div>'+
+                            '<div class="coupon-item-detail" style="display: none;">'+
+                            '<img class="get-img" src="/img/coupon-img1.png">'+
+                            '<div class="coupon-data">'+
+                            '<p class="coupon-price">';
+
+                            var cpCoinType = row.cpCoinType;
+                            var small = '';
+                            var strong = '';
+                            if(cpCoinType==1){
+                                small = '打'
+                                strong = row.couponVal+'折';
+                            }else{
+                                small = '￥';
+                                strong = row.couponVal;
+                            }
+
+                            html +=  '<small>'+small+'</small>'+
+                            '<strong>'+strong+'</strong>'+
+                            '</p>'+
+                            '<p class="coupon-condition">'+row.useCondition+'</p>'+
+                            '<p class="coupon-date">'+row.cpStartDate+'-'+row.cpEndDate+'</p>'+
+                            '</div>'+
+                            '</div>'+
+                            '</li>';
+                            userCouponsUl.append(html);
+                        }
+                        initcoupon();
+                        jiesuan();
+                    }
+
+                }else{
+                    layer.msg(sdata);
+                }
+            },
+            error:function(sdata){
+                layer.msg(sdata);
+            }
+        });
+
+    }
+
+
+
+    function jiesuan(){
+        var rows = goodsData.data;
+        var reqRows=new Array();
+
+        for(var i=0;i<rows.length;i++){
+            var row = rows[i];
+            var reqRow=new Object();
+            reqRow["buyCarId"]=row.buyCarId;
+            reqRow["gcpIds"]='10';
+            reqRow["gdId"]=row.gdId;
+            reqRow["goodsId"]=57;
+            reqRow["num"]=row.num;
+            reqRow["remark"]=row.remark;
+            reqRows.push(reqRow);
+        }
+        var data = new Object();
+        data["address"] = 65;
+        data["cpIds"] = 13;
+        data["buyGoods"] = reqRows;
+        $.ajax({
+            type:"post",//请求方式
+            url: "/order/buyGoods",//发送请求地址
+            data:JSON.stringify(data),
+            dataType:"json",
+            contentType: "application/json",
+            //请求成功后的回调函数有两个参数
+            success:function(sdata){
+
+            },
+            error:function(sdata){
+                layer.msg(sdata);
+            }
+        });
+
+    }
 </script>
 
 <!--调用函数-->
 <script>
     <!--加载商品-->
-//    loadgoodsinfo();
+    loadgoodsinfo();
 
     <!--加载地址-->
     loadAddress();
+
+    <!--加载优惠与优惠券-->
+    loadgcpandcp();
 </script>
 </body>
 </html>

@@ -1277,6 +1277,7 @@
             for(var i=0;i<rows.length;i++){
                 data+=',{';
                 var row = rows[i];
+                var bcId = $(row).find('input[type=hidden]')[0].value;
                 var gdId = $(row).next().val();
                 var num = $(row).parent().parent().find('.J_careNum').html();
                 var imgurl = $(row).parent().next().find('img')[0].src;
@@ -1291,13 +1292,14 @@
                 data+='\'gsvals\':\''+gsvals+'\',';
                 data+='\'gdprice\':\''+gdprice+'\',';
                 data+='\'remark\':\''+remark+'\',';
+                data+='\'buyCarId\':\''+bcId+'\',';
                 data+='\'gname\':\''+gname+'\'';
                 data+='}';
             }
             data = data.substr(1);
             data = '['+data+']';
 
-            data = '{data:'+data+',isActivity:0}';
+            data = '{data:'+data+',';
 
             $('#checkorderdata').val(data);
             $('#checkorderdataform').submit();
