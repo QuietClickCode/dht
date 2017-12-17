@@ -38,7 +38,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("openSysUserPage")
     @Menu(parentRes = "sys.user.manager",resourse = "sysUser.openSysUserPage",description = "职员管理",sort = 1,label = "职员管理")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     public String openSysUserPage(){
         return "sys_user/sys_user";
     }
@@ -49,7 +49,7 @@ public class SysUserController extends BaseController {
      * @return
      */
     @RequestMapping("openLoginPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     public String openLoginPage(){
         return "sys_user/login";
     }
@@ -60,7 +60,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("querySyUserByAccount")
     @Function(label="根据账号查找用户", description = "根据账号查找用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp querySyUserByAccount(HttpServletRequest request, String account,String sysUserPwd){
         try {
@@ -80,7 +80,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("querySysUserLists")
     @Function(label="取得职员列表", description = "取得职员列表", resourse = "sysUser.querySysUserLists",sort=1,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
 //    public  Map<String,Object> querySysUserLists(String userName, String orgs,@RequestBody PageUtils pageForm){
     public  Map<String,Object> querySysUserLists(String userName, String orgs,PageUtils pageForm){
@@ -101,7 +101,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("addSysUser")
     @Function(label="添加职员", description = "添加职员", resourse = "sysUser.addSysUser",sort=2,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addSysUser(SysUserVo sysUserVo){
         try{
@@ -125,7 +125,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("editorSysUser")
     @Function(label="编辑职员", description = "编辑职员", resourse = "sysUser.editorSysUser",sort=3,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public Object editorSysUser(SysUserVo sysUserVo){
         try{
@@ -144,7 +144,7 @@ public class SysUserController extends BaseController {
      */
     @RequestMapping("delSysUser")
     @Function(label="删除职员", description = "删除职员", resourse = "sysUser.delSysUser",sort=4,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp delSysUser(Long uid){
         if(ObjectUtils.isEmpty(uid)){

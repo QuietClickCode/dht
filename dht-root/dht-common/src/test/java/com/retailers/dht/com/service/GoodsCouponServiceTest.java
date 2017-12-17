@@ -2,15 +2,15 @@ package com.retailers.dht.com.service;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
+import com.retailers.dht.common.dao.GoodsCouponMapper;
 import com.retailers.dht.common.service.GoodsCouponService;
+import com.retailers.dht.common.view.GoodsCouponView;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
+import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhongp
@@ -21,6 +21,8 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
 
     @Autowired
     private GoodsCouponService goodsCouponService;
+    @Autowired
+    private GoodsCouponMapper goodsCouponMapper;
     /**
      * 取得商品关联的优惠
      */
@@ -82,4 +84,39 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         System.out.println(flag);
     }
 
+    @Test
+    public void queryUnRestrictedGoodsCoupon(){
+        Date curDate=new Date();
+        List<GoodsCouponView> gcvs=goodsCouponMapper.queryUnRestrictedGoodsCoupon(curDate);
+        System.out.println(JSON.toJSON(gcvs));
+    }
+    @Test
+    public void queryGoodsCouponByGids(){
+        Date curDate=new Date();
+        List<Long> gids=Arrays.asList(1l, 4l, 51l, 52l, 53l, 54l, 57l);
+        List<GoodsCouponView> gcvs=goodsCouponMapper.queryGoodsCouponByGids(gids,curDate);
+        System.out.println(JSON.toJSON(gcvs));
+    }
+
+
+    @Test
+    public void queryGoodsCouponBuyGid(){
+        List<GoodsTypePriceVo> list = new ArrayList<GoodsTypePriceVo>();
+        GoodsTypePriceVo vo=new GoodsTypePriceVo(1l,null,1000l,2l);
+        GoodsTypePriceVo vo1=new GoodsTypePriceVo(4l,null,10000l,2l);
+        GoodsTypePriceVo vo2=new GoodsTypePriceVo(51l,null,10000l,2l);
+        GoodsTypePriceVo vo3=new GoodsTypePriceVo(52l,null,10000l,2l);
+        GoodsTypePriceVo vo4=new GoodsTypePriceVo(53l,null,10000l,2l);
+        GoodsTypePriceVo vo5=new GoodsTypePriceVo(54l,null,10000l,2l);
+        GoodsTypePriceVo vo6=new GoodsTypePriceVo(57l,null,10000l,2l);
+        list.add(vo);
+        list.add(vo1);
+        list.add(vo2);
+        list.add(vo3);
+        list.add(vo4);
+        list.add(vo5);
+        list.add(vo6);
+        Map<Long,List<GoodsCouponView>> rtn = goodsCouponService.queryGoodsCouponBuyGid(list);
+        System.out.println(JSON.toJSON(rtn));
+    }
 }

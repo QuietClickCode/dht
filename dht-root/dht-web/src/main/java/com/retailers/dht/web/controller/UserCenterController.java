@@ -68,7 +68,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userMember")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirect = "/loginPage")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
     public String openUserMember(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-member");
     }
@@ -78,6 +78,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userWallet")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",isOpenPage = true)
     public String openUserWallet(HttpServletRequest request){
         return redirectUrl(request,"usercenter/user-wallet");
     }

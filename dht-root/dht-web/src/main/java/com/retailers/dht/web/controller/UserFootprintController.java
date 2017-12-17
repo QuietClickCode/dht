@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,7 +34,7 @@ public class UserFootprintController extends BaseController{
 
     @RequestMapping("/toUserFootprintpage")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
-    public String toUserFootprintpage(HttpServletRequest request) {
+    public String toUserFootprintpage(HttpServletRequest request, HttpServletResponse response) {
         return redirectUrl(request,"user/footprint");
     }
 

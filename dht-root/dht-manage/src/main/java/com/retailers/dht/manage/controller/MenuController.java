@@ -43,7 +43,7 @@ public class MenuController extends BaseController {
 	}
 
 	@RequestMapping("/queryUserMenus")
-	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	@ResponseBody
 	public BaseResp queryUserMenus(HttpServletRequest request){
 		SysUser sysUser = getCurLoginUser(request);
@@ -60,14 +60,14 @@ public class MenuController extends BaseController {
 	@RequestMapping("/openMenus")
 	@com.retailers.auth.annotation.Menu(label="资源列表", description = "描述", resourse = "menu.queryMenuByUserId",sort=2,parentRes="sys.menu.manager")
 	@SystemControllerLog(description="取得菜单信息")
-	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	public String openMenus(){
 		return "menu/menu";
 	}
 
 	@RequestMapping("queryMenuList")
 	@Function(label="取得资源列表", description = "描述", resourse = "menu.queryMenuList",sort=2,parentRes="menu.queryMenuByUserId")
-	@CheckSession(key =SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key =SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	@ResponseBody
 	public Map<String,Object> queryMenuList(){
 		List<MenuVo> menu=menuService.queryMenuTree();
@@ -83,7 +83,7 @@ public class MenuController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping("queryMenuNode")
-	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	@ResponseBody
 	public BaseResp queryMenuNode(Long menuId){
 		List<MenuVo> list = menuService.queryMenuNode(menuId);
@@ -99,7 +99,7 @@ public class MenuController extends BaseController {
 	@RequestMapping("/removeResource")
 	@Function(label="移除资源", description = "描述", resourse = "menu.removeResource",sort=2,parentRes="menu.queryMenuByUserId")
 	@SystemControllerLog(description="删除选中的资源")
-	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	@ResponseBody
 	public BaseResp removeResource(HttpServletRequest request,Long id){
 		menuService.removeResource(id);
@@ -116,7 +116,7 @@ public class MenuController extends BaseController {
 	@RequestMapping("/editorResource")
 	@Function(label="编辑资源", description = "对资源名称，排序进行编辑", resourse = "menu.editorResource",sort=2,parentRes="menu.queryMenuByUserId")
 	@SystemControllerLog(description="删除选中的资源")
-	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirect = "http://www.baidu.com")
+	@CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
 	@ResponseBody
 	public BaseResp editorResource(HttpServletRequest request,MenuVo menu){
 		try{

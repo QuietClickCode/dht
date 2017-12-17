@@ -2,10 +2,12 @@
 package com.retailers.dht.common.service;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.entity.OrderProcessingQueue;
+import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.tools.exception.AppException;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：订单Service
@@ -68,18 +70,11 @@ public interface OrderService {
 	/**
 	 * 购物订单
 	 * @param uid 购买用户id
-	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"specs":1,"remark":"说明"}],"address":123}
-	 *                   				buyGoods 购买商品列表
-	 *                   				goodsId 商品id
-	 *                   				num 购买数量
-	 *                   				gcpId 商品优惠id
-	 *                   				cpId 优惠卷id
-	 *                   				specs 规格ids 多个间用逗号隔开
-	 *                   				address 收货人地址id
+	 * @param buyInfos 购买详情
 	 * @return 返回订单号和总金额
 	 * @throws AppException
 	 */
-	public Map<String,Object> shoppingOrder(Long uid, JSONObject buyDetails)throws AppException;
+	public Map<String,Object> shoppingOrder(Long uid, BuyInfoVo buyInfos)throws AppException;
 
 	/**
 	 * 用户充值

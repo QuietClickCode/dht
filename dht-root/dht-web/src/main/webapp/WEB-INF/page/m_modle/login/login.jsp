@@ -101,7 +101,7 @@
     });
     $(function(){
         let isBindWx=${isBindWx};
-        if(isBindWx){
+        if(isBindWx==false){
             haveUser();
         }
         changeCode();

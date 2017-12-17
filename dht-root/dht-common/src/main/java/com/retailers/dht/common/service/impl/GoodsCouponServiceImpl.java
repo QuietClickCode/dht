@@ -8,17 +8,11 @@ import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
-import com.retailers.dht.common.entity.CouponUseRange;
-import com.retailers.dht.common.entity.CouponUser;
-import com.retailers.dht.common.entity.Goods;
-import com.retailers.dht.common.entity.GoodsCoupon;
+import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.dao.GoodsCouponMapper;
-import com.retailers.dht.common.service.AttachmentService;
-import com.retailers.dht.common.service.GoodsClassificationService;
-import com.retailers.dht.common.service.GoodsCouponService;
-import com.retailers.dht.common.vo.CouponVo;
-import com.retailers.dht.common.vo.GoodsCouponShowVo;
-import com.retailers.dht.common.vo.GoodsCouponVo;
+import com.retailers.dht.common.service.*;
+import com.retailers.dht.common.view.GoodsCouponView;
+import com.retailers.dht.common.vo.*;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.BeanUtils;
@@ -41,9 +35,13 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	@Autowired
 	private CouponUseRangeMapper couponUseRangeMapper;
 	@Autowired
-	private GoodsMapper goodsMapper;
-	@Autowired
 	private GoodsClassificationService goodsClassificationService;
+	@Autowired
+	private GoodsDetailService goodsDetailService;
+	@Autowired
+	private CouponService couponService;
+	@Autowired
+	private GoodsMapper goodsMapper;
 
 	@Transactional(rollbackFor = Exception.class)
 	public boolean saveGoodsCoupon(GoodsCouponVo goodsCouponVo) {
@@ -242,8 +240,163 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		}
     	//取得商品例表
 		List<GoodsCouponShowVo> list = queryGoodsCouponByGid(goodsIds);
-
 		return null;
+	}
+
+	/**
+	 * 根据购买商品信息取得商品优惠列表
+	 * @param gtpvs
+	 * @return
+	 */
+	public Map<Long,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs) {
+		//返回结果
+		Map<Long,List<GoodsCouponView>> rtn=new HashMap<Long, List<GoodsCouponView>>();
+		Date curDate=new Date();
+		if(ObjectUtils.isNotEmpty(gtpvs)){
+			//商品价格
+			Map<Long,Long> gps=new HashMap<Long, Long>();
+			Map<Long,Long> bgns=new HashMap<Long, Long>();
+			List<Long> gids=new ArrayList<Long>();
+			for(GoodsTypePriceVo gtpv:gtpvs){
+				gps.put(gtpv.getgId(),gtpv.getgPrice());
+				gids.add(gtpv.getgId());
+				bgns.put(gtpv.getgId(),gtpv.getNum());
+			}
+			//取得商品优惠列表
+			List<GoodsCouponView> xzAllows=goodsCouponMapper.queryGoodsCouponByGids(gids,curDate);
+			//取得没有限制的商品优惠
+			List<GoodsCouponView> wxzs=goodsCouponMapper.queryUnRestrictedGoodsCoupon(curDate);
+			//商品优惠id 对应的优惠数据
+			Map<Long,GoodsCouponView> maps=new HashMap<Long, GoodsCouponView>();
+			for(GoodsCouponView gcv:wxzs){
+				maps.put(gcv.getGcpId(),gcv);
+			}
+			Map<Long,List<GoodsCouponView>> map=new HashMap<Long, List<GoodsCouponView>>();
+			//商品对应的商品优惠列表
+			Map<Long,Map<Long,GoodsCouponView>> spyhMap=new HashMap<Long, Map<Long, GoodsCouponView>>();
+			//取得商品下的优惠列表
+			for(GoodsCouponView gcv:xzAllows){
+				if(map.containsKey(gcv.getGid())){
+					map.get(gcv.getGid()).add(gcv);
+					spyhMap.get(gcv.getGid()).put(gcv.getGcpId(),gcv);
+				}else{
+					List<GoodsCouponView> gcvs=new ArrayList<GoodsCouponView>();
+					gcvs.add(gcv);
+					map.put(gcv.getGid(),gcvs);
+					Map<Long,GoodsCouponView> spyh=new HashMap<Long, GoodsCouponView>();
+					spyh.put(gcv.getGcpId(),gcv);
+					spyhMap.put(gcv.getGid(),spyh);
+				}
+			}
+			System.out.println(JSON.toJSON(spyhMap));
+			System.out.println(JSON.toJSON(maps));
+			//商品所有能够使用的优惠
+			Map<Long,GoodsCouponView> acgMaps=new HashMap<Long, GoodsCouponView>();
+			//设置商品对应的优惠
+			for(Long gid:gids){
+				rtn.put(gid,assembleGoodsCoupon(maps,spyhMap.get(gid),gps.get(gid),bgns.get(gid)));
+			}
+		}
+		return rtn;
+	}
+
+	/**
+	 * 组装商品可用的优惠列表
+	 * @param wxzuyhs 无限制优惠例表
+	 * @param xzyh 限制优惠列表
+	 * @param buyPrce 购买总价
+	 * @param buyNum 购买数量
+	 * @return
+	 */
+	private List<GoodsCouponView> assembleGoodsCoupon(Map<Long,GoodsCouponView> wxzuyhs,Map<Long,GoodsCouponView> xzyh,Long buyPrce,Long buyNum){
+		List<GoodsCouponView> rtn=new ArrayList<GoodsCouponView>();
+		List<GoodsCouponView> bjs=new ArrayList<GoodsCouponView>();
+		if(ObjectUtils.isNotEmpty(wxzuyhs)){
+			for(Long key:wxzuyhs.keySet()){
+				if(ObjectUtils.isNotEmpty(xzyh)&&xzyh.containsKey(key)){
+					GoodsCouponView vo = xzyh.get(key);
+					if(vo.getAllow().indexOf("1")<0){
+						bjs.add(vo);
+					}
+					xzyh.remove(key);
+				}else{
+					bjs.add(wxzuyhs.get(key));
+				}
+			}
+		}
+		if(ObjectUtils.isNotEmpty(xzyh)){
+			for(Long key:xzyh.keySet()){
+				bjs.add(xzyh.get(key));
+			}
+		}
+		for(GoodsCouponView gcv:bjs){
+			//判断该优惠卷是否满足条件
+			if(gcv.getGcpUnits().intValue()==CouponConstant.GOODS_UNITS_NUM){
+				if(buyNum>=gcv.getGcpCondition().longValue()){
+					rtn.add(gcv);
+				}
+			}else if(gcv.getGcpUnits().intValue()==CouponConstant.GOODS_UNITS_PRICE){
+				if(buyPrce>=gcv.getGcpCondition().longValue()){
+					rtn.add(gcv);
+				}
+			}
+		}
+		return rtn;
+	}
+
+
+	/**
+	 * 根据商品购买信息取得商品对应的优惠列表，和用户能够使用的优惠卷列表
+	 * @param uid 用户id
+	 * @param gbs 购买商品信息
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsDetailVo> gbs){
+		String gdIds="";
+		List<Long> gIds=new ArrayList<Long>();
+		//商品对应的购买数量
+		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
+		for(BuyGoodsDetailVo gb:gbs){
+			gdIds+=gb.getGdId()+",";
+			gIds.add(gb.getGoodsId());
+			gtn.put(gb.getGoodsId(),gb.getNum());
+		}
+		//商品列表
+		List<Goods> goodss=goodsMapper.queryGoodsByGids(gIds);
+		Map<Long,Long> gType=new HashMap<Long, Long>();
+		for(Goods g:goodss){
+			gType.put(g.getGid(),g.getGclassification());
+		}
+		//取得商品价格
+		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+		//商品购买总价
+		Map<Long,Long> gtp=new HashMap<Long, Long>();
+		for(GoodsDetail gt:gts){
+			//取得商品价格
+			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
+		}
+		//取得商吕购买信息
+		List<GoodsTypePriceVo> gtpvs= new ArrayList<GoodsTypePriceVo>();
+		for(Long gid:gIds){
+			GoodsTypePriceVo gtpv=new GoodsTypePriceVo();
+			gtpv.setgId(gid);
+			gtpv.setgType(gType.get(gid));
+			gtpv.setgPrice(gtp.get(gid));
+			gtpv.setNum(gtn.get(gid).longValue());
+			gtpvs.add(gtpv);
+		}
+		//取得商品关联的优惠卷
+		Map<Long,List<GoodsCouponView>> gcs=queryGoodsCouponBuyGid(gtpvs);
+		//取得用户此次购买满足条件的未使用优惠卷
+		List<CouponWebVo> uacs=couponService.queryUserUseCoupons(uid,gtpvs);
+		Map<String,Object> rtn=new HashMap<String, Object>();
+		//商品优惠列表（根据商品id）
+		rtn.put("gcLists",gcs);
+		//用户优惠卷
+		rtn.put("userCoupons",uacs);
+		//商品优惠
+		return rtn;
 	}
 }
 

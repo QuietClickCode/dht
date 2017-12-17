@@ -26,8 +26,14 @@ public @interface CheckSession {
     String msg() default "";
 
     /**
-     * 重定向地址
+     * 重定向地址页面地址
      * @return
      */
-    String redirect() default "";
+    String redirectUrl() default "";
+
+    /**
+     * 是否重定向页面
+     * @return
+     */
+    boolean isOpenPage() default  false;
 }

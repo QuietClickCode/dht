@@ -3,57 +3,73 @@ package com.retailers.dht.common.vo;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
+ * 购买商品详情
  * @author zhongp
  * @version 1.0.1
  * @data 2017/12/11
  */
 public class BuyGoodsDetailVo {
     /**
-     * 购买商品列表
+     * 商品id
      */
-    private List<BuyGoodsVo> buyGoods;
+    private Long goodsId;
     /**
-     * 优惠卷id
+     * 购买数量
      */
-    private String cpIds;
+    private Integer num;
     /**
-     * 收货人地址id
+     * 商品详情表（关联了价格和库存，与t_goods_ggsval_detail 关联，能找到对应的商品规格）
      */
-    private Long address;
+    private Long gdId;
+    /**
+     * 商品优惠id
+     */
+    private String gcpIds;
+    /**
+     * 备注
+     */
+    private String remark;
 
-    public List<BuyGoodsVo> getBuyGoods() {
-        return buyGoods;
-    }
-
-    public void setBuyGoods(List<BuyGoodsVo> buyGoods) {
-        this.buyGoods = buyGoods;
-    }
-
-    public String getCpIds() {
-        return cpIds;
-    }
-
-    public void setCpIds(String cpIds) {
-        this.cpIds = cpIds;
+    public Long getGoodsId() {
+        return goodsId;
     }
 
-    public Long getAddress() {
-        return address;
+    public void setGoodsId(Long goodsId) {
+        this.goodsId = goodsId;
     }
 
-    public void setAddress(Long address) {
-        this.address = address;
+    public Integer getNum() {
+        return num;
     }
-    public static void main(String[] args) {
-        BuyGoodsDetailVo vo =new BuyGoodsDetailVo();
-        BuyGoodsVo v=new BuyGoodsVo();
-        List<BuyGoodsVo> vs=new ArrayList<BuyGoodsVo>();
-        vs.add(v);
-        vo.setBuyGoods(vs);
-        System.out.println(JSON.toJSONString(vo, SerializerFeature.WriteMapNullValue));
+
+    public void setNum(Integer num) {
+        this.num = num;
     }
+
+    public Long getGdId() {
+        return gdId;
+    }
+
+    public void setGdId(Long gdId) {
+        this.gdId = gdId;
+    }
+
+    public String getGcpIds() {
+        return gcpIds;
+    }
+
+    public void setGcpIds(String gcpIds) {
+        this.gcpIds = gcpIds;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+
 }
