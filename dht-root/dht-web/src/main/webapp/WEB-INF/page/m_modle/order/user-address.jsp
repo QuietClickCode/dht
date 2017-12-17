@@ -89,6 +89,12 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
             <a href="/userAddress/openAddUserAddress"><span class="add_address_footer_btn">新增地址</span></a>
         </div>
     </div>
+    <form method="post" action="/order/getAddressData" style="display: none" id="getAddressDataForm">
+        <input type="hidden" id="uaId" name="uaId">
+        <input type="hidden" id="uaName" name="uaName">
+        <input type="hidden" id="uaPhone" name="uaPhone">
+        <input type="hidden" id="uaAllAddress" name="uaAllAddress">
+    </form>
     <script src="/js/jquery-1.9.1.min.js"></script>
 	<script>
 		var countdown=60;
@@ -136,7 +142,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                                 defaultAddress = '<p href="javascript:void(0)" class="defaultAddress">默认地址</p>';
                             }
                             var html='<li><div class="my_address_item_top"><div class="my_address_L">';
-                            html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i>✓</i></label>';
+                            html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i onclick="chosethisaddress(this);">✓</i><input type="hidden" value="'+row.uaId+'"></label>';
                             html+='</div><div class="my_address_R"><p class="p1"><span class="span1">'+row.uaName+'</span>&emsp;';
                             html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>'+defaultAddress+'';
                             html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a class="del_user_address" href="javascript:void(0)" onclick="delAddress('+row.uaId+',this)">删除</a></div></li>';
@@ -202,6 +208,21 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                 scrollTop = scrollTop * 2;
             }
         })
+
+        function chosethisaddress(obj) {
+            var addressId = $(obj).next().val();
+            var sec = $(obj).parent().parent().next();
+            var name = $($(sec.find('p')[0]).find('span')[0]).html();
+            var phone = $($(sec.find('p')[0]).find('span')[1]).html();
+            var address = $($(sec.find('p')[1])).html();
+
+            $('#uaId').val(addressId);
+            $('#uaName').val(name);
+            $('#uaPhone').val(phone);
+            $('#uaAllAddress').val(address);
+
+            $('#getAddressDataForm').submit();
+        }
 	</script>
 </body>
 

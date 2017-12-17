@@ -128,6 +128,7 @@
 			<span class="span1">￥0.00</span>
 			<span class="span2">￥0.00</span>
 		</p>
+        <input type="hidden" id="nowprice">
 	</div>
 
     <div class="bargain-details box2">
@@ -170,8 +171,8 @@
     </div>
     <div class="main_ft">
         <div class="ft_item" style="display: none">
-            <div class="item_box" id="buynow" style="display: none;">
-                <a href="">立即购买</a>
+            <div onclick="buynow();" class="item_box" id="buynow" style="display: none;">
+                <a >立即购买</a>
             </div>
             <div class="item_box" onclick="savecutmyselflog();" id="cutmyself" style="display: none;">
                 <a >自砍一刀</a>
@@ -188,7 +189,13 @@
         </div>
     </div>
 
-
+<form method="post" action="/order/getCheckOrderDataByCutPrice" style="display: none" id="checkorderdataform">
+    <input type="hidden" id="gdcpId" name="gdcpId">
+    <input type="hidden" id="gname" name="gname">
+    <input type="hidden" id="imgurl" name="imgurl">
+    <input type="hidden" id="remark" name="remark">
+    <input type="hidden" id="gdprice" name="gdprice">
+</form>
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
@@ -356,6 +363,8 @@
             });
         }
 
+        var gdcpId;
+        var remark;
         <!--加载砍价日志-->
         function loadcutpricrlog() {
             $.ajax({
@@ -365,15 +374,17 @@
                 data:{gid:gid},
                 success:function(data){
                     var rows = data.rows;
-                    if(rows!=null){
+                    if(rows!=null&&rows.length>0){
                         var times = 0;
-                        var gdPrice = rows[0].gdPrice;
-                        var cpPrice = rows[0].cpPrice;
+                        var gdPrice = parseFloat(rows[0].gdPrice/100).toFixed(2) ;
+                        var cpPrice = parseFloat(rows[0].cpPrice/100).toFixed(2) ;
                         var cpMostperson = rows[0].cpMostperson;
                         var cpLestperson = rows[0].cpLestperson;
+                        gdcpId = rows[0].gdcpId;
+                        remark = rows[0].remark;
                         var logul = $('.bargain_info_list');
                         logul.html('');
-                        var cpindex=0;
+                        var cpindex= parseFloat(0.00);
                         if(rows[0].usdId!=null){
                             times = rows.length;
                             var flag = false;
@@ -383,8 +394,8 @@
                                     '<span class="name">'+rows[i].uname+'</span>';
                                 var usId = rows[i].usId;
                                 var usdId = rows[i].usdId;
-                                var cplCutdownprice = rows[i].cplCutdownprice;
-                                cpindex += cplCutdownprice;
+                                var cplCutdownprice = parseFloat(rows[i].cplCutdownprice/100).toFixed(2);
+                                cpindex += Number(parseFloat(cplCutdownprice).toFixed(2));
                                 var howcp='';
                                 if(usId==usdId){
                                     howcp='自砍';
@@ -411,6 +422,7 @@
 
                         var nowprice = gdPrice-cpindex;
                         $('.p1').html('已砍'+times+'刀，现价，<span>￥'+nowprice+'</span>');
+                        $('#nowprice').val(nowprice);
                         $('.span1').html('￥'+gdPrice);
                         $('.span2').html('￥'+cpPrice);
                         $('.progress_bar_son').css('width',times/cpMostperson*100+'%');
@@ -504,6 +516,17 @@
                 window.history.go(-2);
             }
         }
+
+        <!--立即购买-->
+        function buynow() {
+            $('#imgurl').val($('#goodsImagesul').find('img')[0].src);
+            $('#gname').val($('#goodsNameDiv').html());
+            $('#gdcpId').val(gdcpId);
+            $('#remark').val(remark);
+            $('#gdprice').val($('#nowprice').val());
+
+            $('#checkorderdataform').submit();
+        }
     </script>
 
     <!--调用函数-->
@@ -535,7 +558,7 @@
                 success:function(data){
                     if(data!=null){
                         homePath = data.homePath;
-                        alert(homePath);
+//                        alert(homePath);
                         var appId = data.appid;
                         var timestamp = data.timestamp;
                         var nonceStr = data.nonceStr;
@@ -571,7 +594,7 @@
 
         wx.ready(function(){
             var imgUrl = $('#goodsImagesul').find('img')[0].src;
-            alert(imgUrl);
+//            alert(imgUrl);
             var title = $('#goodsNameDiv').html();
             var link = homePath;
             var desc = removeHTMLTag($('#gdescription').html());
@@ -599,7 +622,7 @@
                 imgUrl: imgUrl, // 分享图标
                 success: function (res) {
                     //alert('好友');
-                    alert(title);
+//                    alert(title);
                     saveShareRecord('好友',title);
                 },
                 cancel: function () {

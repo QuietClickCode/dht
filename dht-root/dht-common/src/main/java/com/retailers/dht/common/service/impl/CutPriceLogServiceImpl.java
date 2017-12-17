@@ -1,22 +1,22 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.entity.CutPrice;
-import com.retailers.dht.common.entity.CutPriceLog;
 import com.retailers.dht.common.dao.CutPriceLogMapper;
+import com.retailers.dht.common.entity.CutPriceLog;
 import com.retailers.dht.common.entity.CutPricePrice;
 import com.retailers.dht.common.service.CutPriceLogService;
 import com.retailers.dht.common.service.CutPricePriceService;
 import com.retailers.dht.common.vo.CutPriceLogVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：砍价日志表Service
  * @author fanghui
@@ -73,7 +73,7 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 		Map params = new HashMap();
 		params.put("gid",gid);
 		params.put("uid",uid);
-		List<CutPricePrice> cutPricePriceList = cutPricePriceService.queryCutPricePriceList(params,1,1).getData();
+		List<CutPricePrice> cutPricePriceList = cutPricePriceService.queryGdcpIdList(params,1,1).getData();
 		List<CutPriceLogVo> list =new ArrayList<CutPriceLogVo>();
 		if(!ObjectUtils.isEmpty(cutPricePriceList)){
 			Long gdcpId = cutPricePriceList.get(0).getGdcpId();

@@ -163,6 +163,10 @@
     <a href="javascript: ;" class="close-all">删除</a>
 </div>
 
+<form method="post" action="/order/getCheckOrderData" style="display: none" id="checkorderdataform">
+    <input type="hidden" id="checkorderdata" name="data">
+</form>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
 <script src="/js/layer/layer.js"></script>
@@ -666,7 +670,8 @@
                         html = '<div class="purchase J_product">'+
                             '<div class="checkbox">'+
                             '<i class="icon-checkbox J_checkbox goods-item"><input type="hidden" value="'+rows[i].bcId+'"></i>' +
-                            '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>'+
+                            '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>' +
+                            '<input type="hidden" name="bcDescription" value="'+rows[i].bcDescription+'"/>' +
                             '</div>';
                         var goodsPath;
                         var gdImgurl = rows[i].gdimgurl;
@@ -1274,14 +1279,28 @@
                 var row = rows[i];
                 var gdId = $(row).next().val();
                 var num = $(row).parent().parent().find('.J_careNum').html();
-                data+='gdId:'+gdId+',';
-                data+='num:'+num;
+                var imgurl = $(row).parent().next().find('img')[0].src;
+                var gsvals = $(row).parent().next().next().find('p').html();
+                var gdprice = $(row).parent().next().next().find('div').find('.J_price').html();
+                var gname = $(row).parent().next().next().find('a').html();
+                var remark = $(row).next().next().val();
+
+                data+='\'gdId\':\''+gdId+'\',';
+                data+='\'num\':\''+num+'\',';
+                data+='\'imgurl\':\''+imgurl+'\',';
+                data+='\'gsvals\':\''+gsvals+'\',';
+                data+='\'gdprice\':\''+gdprice+'\',';
+                data+='\'remark\':\''+remark+'\',';
+                data+='\'gname\':\''+gname+'\'';
                 data+='}';
             }
             data = data.substr(1);
             data = '['+data+']';
-            console.log(data);
-            window.location.href = '/order/getCheckOrderData?data='+1;
+
+            data = '{data:'+data+',isActivity:0}';
+
+            $('#checkorderdata').val(data);
+            $('#checkorderdataform').submit();
         }else{
             layer.msg('抱歉,请您选择商品');
         }

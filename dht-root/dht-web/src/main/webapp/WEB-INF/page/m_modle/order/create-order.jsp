@@ -16,79 +16,65 @@
         <span>确认订单</span>
     </div>
 
-    <div class="address">
-        <a href="">
+    <div class="address" id="address">
+        <input type="hidden" value="" id="uaId">
+        <a href="/order/choseAddress">
             <p>
-                <span>胡月半</span>
-                <span>151****2388</span>
+                <span id="uaName">胡月半</span>
+                <span id="uaPhone">151****2388</span>
             </p>
-            <p>
-                重庆 重庆市石柱县物流镇明星村
+            <p id="uaAllAddress">
+                重庆重庆市石柱县物流镇明星村
             </p>
             <i class="icon-right"></i>
         </a>
+        <img id="ordernoaddressimg" style="display: none;width: 100%;height: 100%" src="/img/ordernoaddress.jpg">
     </div>
 
-    <div class="order-product">
-        <a href="" class="img">
-            <img src="/img/order1.png" alt="">
-        </a>
-        <div class="text-box">
-            <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
-            <p class="norms">土豪金;168cm</p>
-            <div class="price-box">
-                <span class="price">￥165</span>
-                <div class="number-box">
-                    <span class="buy-num">数量：×7</span>
+    <div id="goodsList">
+        <div class="order-product">
+            <a href="" class="img">
+                <img src="/img/order1.png" alt="">
+            </a>
+            <div class="text-box">
+                <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
+                <p class="norms">土豪金;168cm</p>
+                <div class="price-box">
+                    <span class="price">￥165</span>
+                    <div class="number-box">
+                        <span class="buy-num">数量：×7</span>
+                    </div>
+                </div>
+                <div class="coupon-info-box">
+                    <span class="coupon-btn">优惠券</span>
+                    <ul class="coupon-info-wrap">
+                        <li>
+                            <span>会员折扣</span>
+                            <span>￥ -20.00</span>
+                        </li>
+                        <li>
+                            <span>会员折扣</span>
+                            <span>￥ -20.00</span>
+                        </li>
+                        <li>
+                            <span>会员折扣</span>
+                            <span>￥ -20.00</span>
+                        </li>
+                        <li>
+                            <span>会员折扣</span>
+                            <span>￥ -20.00</span>
+                        </li>
+                        <li>
+                            <span>会员折扣</span>
+                            <span>￥ -20.00</span>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
+
     </div>
-    <div class="order-product">
-        <a href="" class="img">
-            <img src="/img/order1.png" alt="">
-        </a>
-        <div class="text-box">
-            <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
-            <p class="norms">土豪金;168cm</p>
-            <div class="price-box">
-                <span class="price">￥165</span>
-                <div class="number-box">
-                    <span class="buy-num">数量：×7</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="order-product">
-        <a href="" class="img">
-            <img src="/img/order1.png" alt="">
-        </a>
-        <div class="text-box">
-            <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
-            <p class="norms">土豪金;168cm</p>
-            <div class="price-box">
-                <span class="price">￥165</span>
-                <div class="number-box">
-                    <span class="buy-num">数量：×7</span>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="order-product">
-        <a href="" class="img">
-            <img src="/img/order1.png" alt="">
-        </a>
-        <div class="text-box">
-            <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
-            <p class="norms">土豪金;168cm</p>
-            <div class="price-box">
-                <span class="price">￥165</span>
-                <div class="number-box">
-                    <span class="buy-num">数量：×7</span>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
     <%--<div class="order-payment">--%>
         <%--<span class="name">支付配送</span>--%>
@@ -243,6 +229,7 @@
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
+<!--页面交互-->
 <script>
     // 弹出支付选择框
     $('#J_paymentBtn').click(function () {
@@ -295,8 +282,116 @@
                 $(this).parent().parent().find('.coupon-item-detail').show('slow')
             }
         })
+    });
+
+    //    商品项暂开隐藏优惠券
+    var couponBtns = $('.coupon-btn');  //商品项
+    var couponInfoWraps = $('.coupon-info-wrap'); //商品优惠列表
+
+    couponBtns.each(function () {
+        $(this).on('click',function () {
+            if($(this).hasClass('active')){
+                $(this).removeClass('active');
+                $(this).parent().find('.coupon-info-wrap').css('display','none')
+            }else {
+                var haveActive = $(this).parent().parent().parent().parent().find('.active');  //此前是否有打开的列表
+                if(haveActive){
+                    $(haveActive).parent().find('.coupon-info-wrap').css('display','none');
+                    $(haveActive).removeClass('active');
+                }
+
+                //为当前添加样式
+                $(this).addClass('active');
+                $(this).parent().find('.coupon-info-wrap').css('display','block');
+            }
+        })
     })
 
+</script>
+
+<!--定义函数-->
+<script>
+    var goodsData = (${sessionScope.checkOrderData});
+    var isActivity = goodsData.isActivity;
+    console.log(goodsData);
+    <!--加载商品信息-->
+    function loadgoodsinfo() {
+        var rows = goodsData.data;
+        console.log(rows);
+        var element = $('#goodsList');
+        var html = '';
+        for(var i=0;i<rows.length;i++){
+            html = '<div class="order-product">'+
+                '<a  class="img">'+
+            '<img src="'+rows[i].imgurl+'" alt="">'+
+            '</a>'+
+            '<div class="text-box">'+
+            '<a  class="title">'+rows[i].gname+'</a>'+
+            '<p class="norms">'+rows[i].gsvals+'</p>'+
+            '<div class="price-box">'+
+            '<span class="price">￥'+rows[i].gdprice+'</span>'+
+            '<div class="number-box">'+
+            '<span class="buy-num">数量：×'+rows[i].num+'</span>'+
+            '</div>'+
+            '</div>'+
+            '</div>'+
+            '</div>';
+              element.append(html);
+        }
+    }
+
+    function loadAddress() {
+        var sedata = "${sessionScope.checkOrderAddress.uaId}";
+        console.log(sedata);
+        var uaId;
+        var uaName;
+        var uaAllAddress;
+        var uaPhone;
+        if(sedata!=null&&sedata!=''){
+            uaId = "${sessionScope.checkOrderAddress.uaId}";
+            uaName = "${sessionScope.checkOrderAddress.uaName}";
+            uaAllAddress = "${sessionScope.checkOrderAddress.uaAllAddress}";
+            uaPhone = "${sessionScope.checkOrderAddress.uaPhone}";
+            addAdressData(uaId,uaName,uaPhone,uaAllAddress);
+        }else{
+            $.ajax({
+                type:"post",
+                url:"userAddress/queryUserAddress",
+                dataType: "json",
+                data:{pageNo:1,pageSize:1},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var row = rows[0];
+                        uaId = row.uaId;
+                        uaName = row.uaName;
+                        uaAllAddress = row.uaAllAddress;
+                        uaPhone = row.uaPhone;
+                        addAdressData(uaId,uaName,uaPhone,uaAddress);
+                    }else{
+                        $('#ordernoaddressimg').siblings().remove();
+                        $('#ordernoaddressimg').show();
+                    }
+                }
+            });
+        }
+    }
+
+    function addAdressData(uaId,uaName,uaPhone,uaAllAddress) {
+        $('#uaId').val(uaId);
+        $('#uaName').html(uaName);
+        $('#uaPhone').html(uaPhone);
+        $('#uaAllAddress').html(uaAllAddress);
+    }
+</script>
+
+<!--调用函数-->
+<script>
+    <!--加载商品-->
+//    loadgoodsinfo();
+
+    <!--加载地址-->
+    loadAddress();
 </script>
 </body>
 </html>

@@ -414,7 +414,7 @@
                     var cpSale = parseFloat(data.rows[0].cpSale/100).toFixed(2);
                     var minprice = parseFloat(data.rows[0].minprice/100).toFixed(2);
                     $('#minprice').html(minprice);
-                    $('#cutdownprice').html(minprice-cpSale);
+                    $('#cutdownprice').html(parseFloat(minprice-cpSale).toFixed(2) );
                     parentId = data.rows[0].parentId;
                     timegoing();
                     var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
@@ -1221,12 +1221,25 @@
         var gdcpId = $('#gdcpId').val();
         var nowhasgsvalhtml = $('#nowhasgsvalspan').html();
         var gcount = parseInt(nowhasgsvalhtml.substr(nowhasgsvalhtml.indexOf(':x')+2));
+
+        var description = '';
+        if(isServiceGoods==1){
+            var servicetime = $($('#open_time').find('span')[1]).html().trim();
+            if(servicetime!=''&&servicetime!='请选择服务时间'){
+                description += '服务时间:'+servicetime;
+            }
+        }else{
+            var servicetime = $($('#open_time').find('span')[1]).html().trim();
+            if(servicetime!=''&&servicetime!='选择配送时间'){
+                description += '配送时间:'+servicetime;
+            }
+        }
         $.ajax({
             type:"post",
             url:'/openCutPricePrice/saveCutPricePrice',
             dataType: "json",
             async :false,
-            data:{gdcpId:gdcpId,gcount:gcount},
+            data:{gdcpId:gdcpId,gcount:gcount,remark:description},
             success:function(data){
                 if(data.status==3){
                     layer.msg('请登录');

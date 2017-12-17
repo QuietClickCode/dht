@@ -22,6 +22,15 @@ public class GoodsVo extends Goods {
     private Long isMultiplebuy;
     private Long ufId;
     private Long gdId;
+    private String bcDescription;
+
+    public String getBcDescription() {
+        return bcDescription;
+    }
+
+    public void setBcDescription(String bcDescription) {
+        this.bcDescription = bcDescription;
+    }
 
     public Long getGdId() {
         return gdId;

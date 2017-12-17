@@ -56,7 +56,7 @@ public class BaseController extends BaseWrite {
      * @return
      */
     protected Long getShareUserId(HttpServletRequest request){
-        Object obj =request.getSession().getAttribute(SystemConstant.Share_USER_SESSION_KEY);
+        Object obj =request.getSession().getAttribute(SystemConstant.SHARE_USER_SESSION_KEY);
         if(ObjectUtils.isNotEmpty(obj)){
             return (Long) obj;
         }
@@ -68,7 +68,19 @@ public class BaseController extends BaseWrite {
      * @return
      */
     protected void setShareUserId(HttpServletRequest request,Long uid){
-        request.getSession().setAttribute(SystemConstant.Share_USER_SESSION_KEY,uid);
+        request.getSession().setAttribute(SystemConstant.SHARE_USER_SESSION_KEY,uid);
+    }
+    /**
+     * 设置分享商品 id
+     * @param request
+     * @return
+     */
+    protected void setShareGoodsId(HttpServletRequest request,Long goodsId){
+        request.getSession().setAttribute(SystemConstant.SHARE_GOODSID_SESSION_KEY,goodsId);
+    }
+
+    protected Long getShareGoodsId(HttpServletRequest request){
+        return (Long)request.getSession().getAttribute(SystemConstant.SHARE_GOODSID_SESSION_KEY);
     }
     /**
      * 取得当前登陆用户

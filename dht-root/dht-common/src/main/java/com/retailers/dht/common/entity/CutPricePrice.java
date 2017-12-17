@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：砍价价格初始化表对象
+ * 描述：砍价商品价格初始化表对象
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-12-13 11:46:52
+ * @date 2017-12-16 15:14:50
  */
 public class CutPricePrice implements java.io.Serializable {
 
@@ -26,6 +26,10 @@ public class CutPricePrice implements java.io.Serializable {
 	/**商品件数*/
 	@NotEmpty
 	private Long gcount;
+	/**说明*/
+	@NotEmpty
+	@Length(min = 1, max = 20000)
+	private String remark;
 	/**是否删除 0不删除 1删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -75,6 +79,13 @@ public class CutPricePrice implements java.io.Serializable {
 
 	public Long getGcount() {
 		return this.gcount;
+	}
+	public void setRemark(String value) {
+		this.remark = value;
+	}
+
+	public String getRemark() {
+		return this.remark;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

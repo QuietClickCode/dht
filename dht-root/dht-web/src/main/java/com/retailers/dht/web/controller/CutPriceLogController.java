@@ -54,6 +54,7 @@ public class CutPriceLogController extends BaseController{
         boolean flag = cutPriceLogService.saveCutPriceLog(cutPriceLog);
         return success(flag);
     }
+
     @RequestMapping("/saveOtherCutPriceLog")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
@@ -97,6 +98,7 @@ public class CutPriceLogController extends BaseController{
         map.put("rows",list);
         return map;
     }
+
     @RequestMapping("/queryOtherCutPriceLog")
     @ResponseBody
     public Map<String,Object> queryOtherCutPriceLog(Long gid, HttpServletRequest request){

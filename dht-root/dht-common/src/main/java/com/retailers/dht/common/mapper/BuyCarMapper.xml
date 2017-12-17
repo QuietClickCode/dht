@@ -57,6 +57,7 @@
 		<result property="isMultiplebuy" column="is_multiplebuy"/>
 		<result property="bcGsvalids" column="bc_gsvalids"/>
 		<result property="gdId" column="gd_Id"/>
+		<result property="bcDescription" column="bc_description"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -124,7 +125,7 @@
 	</select>
 	<select id="queryGoodsVoList" resultMap="rm_goods_vo"  parameterType="com.retailers.mybatis.pagination.Pagination">
 		select t1.*,t3.id,t3.show_url imgurl from
-		(select t1.bc_id,t1.g_count,t1.u_id,t1.bc_gsvalids,t1.bc_gsval,t1.bc_timmer,COUNT(*) sumcount ,
+		(select t1.bc_id,t1.g_count,t1.u_id,t1.bc_gsvalids,t1.bc_gsval,t1.bc_description,t1.bc_timmer,COUNT(*) sumcount ,
 		t2.gd_id,
 		t3.gd_price,t3.gd_residueinventory inventory,t4.g_startbuy gstartbuy,
 		t4.g_endbuy gendbuy,t4.is_multiplebuy ,
@@ -141,7 +142,12 @@
 			and t1.u_id=#{params.uid}
 		</if>
 		<if test="null != params.isPutway">
-			and t4.is_putway=#{params.isPutway}
+			<if test="1 == params.isPutway">
+				and (t4.is_putway=#{params.isPutway} and t8.is_checked=#{params.isPutway})
+			</if>
+			<if test="0 == params.isPutway">
+				and (t4.is_putway=#{params.isPutway} or t8.is_checked!=1)
+			</if>
 		</if>
 		and t1.g_id=t2.g_id
 		and find_in_set(t2.gsv_id,replace(t1.bc_gsvalids,' ',','))>0

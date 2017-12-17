@@ -41,7 +41,10 @@ public class BuyCarController extends BaseController{
         buyCar.setIsDelete(0L);
         buyCar.setBcTimmer(new Date());
         buyCar.setUid(getCurLoginUserId(request));
-        buyCar.setBcInviterid(getShareUserId(request));
+        Long goodsId = getShareGoodsId(request);
+        if(buyCar.getGid().equals(goodsId)){
+            buyCar.setBcInviterid(getShareUserId(request));
+        }
         boolean flag = buyCarService.saveBuyCar(buyCar);
         return  success(flag);
     }

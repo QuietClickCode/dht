@@ -89,6 +89,7 @@
             <span class="name">已选</span>
             <span class="text overflow" id="nowhasgsvalspan" onclick="loadgavalmessage()"> 请选择规格</span>
             <span class="checkbox"></span>
+            <input id="gdId" type="hidden">
         </div>
         
         <div class="norms showaddressfreigh">
@@ -212,7 +213,7 @@
                 </a>
             </div>
         </div>
-        <a href="" class="bargain-btn2">立即购买</a>
+        <a onclick="buynow();" class="bargain-btn2">立即购买</a>
         <a  class="bargain-btn1" style="width: 100%;display: none">商品已下架</a>
     </div>
     
@@ -303,42 +304,16 @@
 	    </div>
     </div>
 
+<form method="post" action="/order/getCheckOrderData" style="display: none" id="checkorderdataform">
+    <input type="hidden" id="checkorderdata" name="data">
+</form>
+
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/tabs.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
     <script src="/js/layer/layer.js"></script>
-    <!--时间减少-->
-    <script>
-        var timestape = 0;
-        function timegoing() {
-            var interval = setInterval(function () {
-                var date = new Date(timestape);
-                var shi1 = Math.floor((date.getHours()-8)/10);
-                var shi2 = Math.floor((date.getHours()-8)%10);
-                var fen1 = Math.floor(date.getMinutes()/10);
-                var fen2 = Math.floor(date.getMinutes()%10);
-                var miao1 = Math.floor(date.getSeconds()/10);
-                var miao2 = Math.floor(date.getSeconds()%10);
-
-                $('#shi1').html(shi1);
-                $('#shi2').html(shi2);
-                $('#fen1').html(fen1);
-                $('#fen2').html(fen2);
-                $('#miao1').html(miao1);
-                $('#miao2').html(miao2);
-
-                timestape -= 1000;
-                if(timestape<0){
-                    clearInterval(interval);
-//                $('#shi1').parent().parent().next().remove();
-//                $('#shi1').parent().parent().remove();
-                }
-            },1000);
-        }
-
-    </script>
     <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
@@ -840,6 +815,13 @@
                     }else{
                         $('#goodsnumber').html(pdindex*startbuy-1);
                     }
+                    if(pdindex*startbuy>ginventory&&ginventory!=-1){
+                        layer.msg('不能超过库存'+ginventory);
+                        $('#goodsnumber').html(ginventory-1);
+                        pdindex--;
+                    }else{
+                        $('#goodsnumber').html(pdindex*startbuy-1);
+                    }
                 }else{
                     pdindex--;
                     if(pdindex==0){
@@ -939,12 +921,17 @@
 
         }
 
+        var bcndnum;
+        var bcndimgurl;
+        var bcndgsvals;
+        var bcndgdprice;
         <!--确定规格-->
         function suregsa() {
             if(canbuy==0){
                 layer.msg('库存不足');
                 return;
             }
+
             var actives = $('#gsdiv').find('.active');
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
             if(actives.length>0&&actives.length==gsdivs.length){
@@ -964,6 +951,13 @@
                 $('#nowhasgsvalspan').html(gsval+',数量:x'+gcount);
                 document.getElementById('closegsdiv').click();
                 $('#gdprice').html($($('#product').find('span')[0]).html());
+
+                $('#gdId').val(gdId);
+                bcndimgurl = $('#product').find('img')[0].src;
+                bcndnum = gcount;
+                bcndgsvals = gsval;
+                bcndgdprice = $($('#product').find('span')[0]).html().substr(1);
+
             }else{
                 layer.msg("请选择规格");
             }
@@ -1126,6 +1120,47 @@
             });
         }
 
+        function buynow() {
+            var flag = validatedate();
+            if(!flag){
+                return;
+            }
+            var bcDescription = '';
+            if(isServiceGoods==1){
+                var servicetime = $($('#open_time').find('span')[1]).html().trim();
+                if(servicetime!=''&&servicetime!='请选择服务时间'){
+                    bcDescription += '服务时间:'+servicetime;
+                }
+            }else {
+                var servicetime = $($('#open_time').find('span')[1]).html().trim();
+                if (servicetime != '' && servicetime != '选择配送时间') {
+                    bcDescription += '配送时间:' + servicetime;
+                }
+            }
+            var gdId = $('#gdId').val();
+            var num = bcndnum;
+            var imgurl = bcndimgurl
+            var gsvals = bcndgsvals;
+            var gdprice = bcndgdprice;
+            var gname = $('#gname').html();
+            var remark = bcDescription;
+
+            var data = '{';
+            data+='\'gdId\':\''+gdId+'\',';
+            data+='\'num\':\''+num+'\',';
+            data+='\'imgurl\':\''+imgurl+'\',';
+            data+='\'gsvals\':\''+gsvals+'\',';
+            data+='\'gdprice\':\''+gdprice+'\',';
+            data+='\'remark\':\''+remark+'\',';
+            data+='\'gname\':\''+gname+'\'';
+            data += '}';
+            data = '['+data+']';
+            data = '{data:'+data+',';
+            $('#checkorderdata').val(data);
+            console.log(data);
+            $('#checkorderdataform').submit();
+        }
+        
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {

@@ -78,6 +78,7 @@
             <span class="name">已选</span>
             <span class="text overflow" id="nowhasgsvalspan"> 请选择规格</span>
             <span class="checkbox"></span>
+            <input type="hidden" id="gdId"/>
         </div>
         <div class="norms showaddressfreigh" onclick="loadAddress();">
             <span class="name">送至</span>
@@ -289,6 +290,9 @@
         </div>
     </div>
 
+<form method="post" action="/order/getCheckOrderDataBySeckill" style="display: none" id="checkorderdataform">
+    <input type="hidden" id="checkorderdata" name="data">
+</form>
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/public.js"></script>
     <script src="/js/TouchSlide.1.1.js"></script>
@@ -659,6 +663,7 @@
             loadgsval();
         }
 
+        var gdId;
         <!--规格加载信息-->
         function loadgsval() {
             var gsdivs = $('#gsdiv').find('div[name=gsdivs]');
@@ -682,6 +687,7 @@
                             var price = parseFloat(row.spSale/100).toFixed(2);
                             var inventory = row.spInventory;
                             var gunitname = row.gunitname;
+                            gdId = row.gdId;
 
                             var img = $('#product').find('img')[0];
                             var pricespan = $('#product').find('span')[0];
@@ -724,6 +730,7 @@
                                 nownumber = spBounds;
                                 $('#goodsnumber').html(spBounds);
                             }
+
                         }
                     }
                 });
@@ -873,6 +880,11 @@
                 document.getElementById('closegsdiv').click();
                 $('#minprice').html('￥'+bcPrice);
 
+                $('#gdId').val(gdId);
+                bcndimgurl = $('#product').find('img')[0].src;
+                bcndnum = gcount;
+                bcndgsvals = gsval;
+                bcndgdprice = bcPrice;
             }else{
                 layer.msg("请选择规格");
             }
@@ -896,6 +908,27 @@
                     description += '配送时间:'+servicetime;
                 }
             }
+            var gdId = $('#gdId').val();
+            var num = bcndnum;
+            var imgurl = bcndimgurl
+            var gsvals = bcndgsvals;
+            var gdprice = bcndgdprice;
+            var gname = $('#goodsNameDiv').html();
+            var remark = description;
+
+            var data = '{';
+            data+='\'gdId\':\''+gdId+'\',';
+            data+='\'num\':\''+num+'\',';
+            data+='\'imgurl\':\''+imgurl+'\',';
+            data+='\'gsvals\':\''+gsvals+'\',';
+            data+='\'gdprice\':\''+gdprice+'\',';
+            data+='\'remark\':\''+remark+'\',';
+            data+='\'gname\':\''+gname+'\'';
+            data += '}';
+            data = '['+data+']';
+            data = '{data:'+data+',';
+            $('#checkorderdata').val(data);
+            $('#checkorderdataform').submit();
         }
 
         <!--验证-->
@@ -917,7 +950,12 @@
 
         <!--设置配送时间-->
         function setpstime() {
-            var pstime = $('#pstimeselect').val();
+            var pstime = '';
+            if(isServiceGoods==0){
+                pstime = $('#pstimeselect').val();
+            }else{
+                pstime = $('#select_time').val();
+            }
             $($('#open_time').find('span')[1]).html(pstime);
             document.getElementsByClassName('J_careNormsClose3')[0].click();
         }

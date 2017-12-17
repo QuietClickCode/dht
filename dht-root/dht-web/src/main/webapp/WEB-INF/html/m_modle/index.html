@@ -411,7 +411,6 @@
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
-                    alert(000);
                     if(rows!=null&&rows.length>0){
                         timestape = rows[0].timestap*1000;
                         timegoing();
@@ -425,9 +424,9 @@
                                 '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(minprice==maxprice){
-                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }else{
-                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }
                             html += '</div>'+
                             '<div class="purchase">'+
@@ -457,7 +456,6 @@
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
-                    alert(111);
                     if(rows!=null&&rows.length>0){
                         timestape = rows[0].timestap*1000;
                         timegoing();
@@ -471,9 +469,9 @@
                                 '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(minprice==maxprice){
-                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }else{
-                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }
                             html += '</div>'+
                                 '<div class="purchase">'+
@@ -518,9 +516,9 @@
                                 '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(minprice==maxprice){
-                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }else{
-                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }
                             html += '</div>'+
                                 '<div class="purchase">'+
@@ -559,9 +557,9 @@
                                 '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(minprice==maxprice){
-                                html += '<span>￥'+rows[i].minprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
                             }else{
-                                html += '<span>￥'+rows[i].minprice+'-'+rows[i].maxprice+'/'+rows[i].gunitname+'</span>';
+                                html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+ parseFloat(rows[i].maxprice/100).toFixed(2) +'/'+rows[i].gunitname+'</span>';
                             }
                             html += '</div>'+
                                 '<div class="purchase">'+
@@ -698,7 +696,7 @@
                                         html = '<li>'+
                                             '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
                                             '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
-                                            '<p>￥'+rows[i].minprice+'</p>'+
+                                            '<p>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'</p>'+
                                             '</li>';
                                         main.append(html);
                                     }
@@ -717,6 +715,7 @@
             });
         }
         scrollloadfootprint();
+
     </script>
 </body>
 

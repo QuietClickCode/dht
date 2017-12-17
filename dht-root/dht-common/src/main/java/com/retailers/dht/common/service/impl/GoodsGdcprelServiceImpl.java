@@ -1,21 +1,22 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.dao.GoodsGdcprelMapper;
+import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.service.GoodsGdcprelService;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：商品详情与砍价关系表Service
  * @author fanghui
@@ -104,6 +105,10 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 			return goodsGdcprelVo;
 		}
 		return null;
+	}
+	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid){
+		GoodsGdcprelVo list = goodsGdcprelMapper.queryCheckOrderData(gdcpId,uid);
+		return  list;
 	}
 }
 

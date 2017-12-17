@@ -1,6 +1,6 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.dht.common.entity.Goods;
+import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.GoodsVo;
@@ -49,9 +49,9 @@ public class GoodsController extends BaseController {
     @RequestMapping("/setinviter")
     @ResponseBody
     public  String setinviter(HttpServletRequest request){
-//        UserInfoVIew u = new UserInfoVIew();
-//        u.setUid(10L);
-//        setCurLoginUser(request,u);
+        UserInfoVIew u = new UserInfoVIew();
+        u.setUid(11L);
+        setCurLoginUser(request,u);
         return "";
     }
 
@@ -116,15 +116,15 @@ public class GoodsController extends BaseController {
         try {
         if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
-                encryuid = URLEncoder.encode(encryuid);
+                encryuid = URLEncoder.encode(encryuid, SystemConstant.DEFAUT_CHARSET);
                 String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
-                randStr = URLEncoder.encode(randStr);
+                randStr = URLEncoder.encode(randStr,SystemConstant.DEFAUT_CHARSET);
                 if(arr.length==1){
                     path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
-                    ivr = URLDecoder.decode(ivr);
+                    ivr = URLDecoder.decode(ivr,SystemConstant.DEFAUT_CHARSET);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     if(!ivr.equals(uid.toString())){
                         Long ivrLong = Long.parseLong(ivr);
@@ -137,12 +137,13 @@ public class GoodsController extends BaseController {
         }else{
             if(arr.length==2){
                 String ivr = id.split("_")[1];
-                ivr = URLDecoder.decode(ivr);
+                ivr = URLDecoder.decode(ivr,SystemConstant.DEFAUT_CHARSET);
                 ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                 Long ivrLong = Long.parseLong(ivr);
                 setShareUserId(request,ivrLong);
                 String gidstr = id.split("~")[0];
                 path = "redirect:/"+controllerMapping+"/"+gidstr+".html";
+                setShareGoodsId(request,Long.parseLong(gidstr));
                 return path;
             }
         }

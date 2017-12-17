@@ -24,7 +24,7 @@
 		<result property="cpMostperson" column="cpMostperson"/>
 		<result property="cpLestperson" column="cpLestperson"/>
 		<result property="gdPrice" column="gdPrice"/>
-		<result property="cpPrice" column="cpPrice"/>
+		<result property="remark" column="remark"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -70,6 +70,7 @@
 	</select>
 	<select id="queryCutPriceLogVoList" resultMap="rm_cutPriceLog_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT t1.*,
+		t0.remark remark,
 		t2.u_name uname,
 		t3.show_url uimgurl,
 		t4.cp_sale cpPrice,
