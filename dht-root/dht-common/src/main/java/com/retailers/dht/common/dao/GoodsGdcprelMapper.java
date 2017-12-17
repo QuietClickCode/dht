@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGdcprel;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -60,4 +61,6 @@ public interface GoodsGdcprelMapper {
 	public List<GoodsGdcprelVo> queryGoodsGdcprelListsByGid(@Param("gid") Long gid, @Param("cpId") Long cpId);
 
 	public List<GoodsGdcprelVo> queryGoodsGdcprelVoLists(@Param("params")Map params);
+
+	public GoodsGdcprelVo queryCheckOrderData(@Param("gdcpId")Long gdcpId,@Param("uid") Long uid);
 }

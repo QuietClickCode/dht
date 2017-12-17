@@ -1,5 +1,6 @@
 package com.retailers.dht.web.controller;
 
+import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
@@ -59,20 +60,21 @@ public class SeckillSpecialProductController extends BaseController {
         try {
             if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
-                encryuid = URLEncoder.encode(encryuid);
+                encryuid = URLEncoder.encode(encryuid,SystemConstant.DEFAUT_CHARSET);
                 String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
-                randStr = URLEncoder.encode(randStr);
+                randStr = URLEncoder.encode(randStr,SystemConstant.DEFAUT_CHARSET);
                 if(arr.length==1){
                     path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
-                    ivr = URLDecoder.decode(ivr);
+                    ivr = URLDecoder.decode(ivr,SystemConstant.DEFAUT_CHARSET);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     if(!ivr.equals(uid.toString())){
                         Long ivrLong = Long.parseLong(ivr);
                         setShareUserId(request,ivrLong);
                         String gidstr = id.split("~")[0];
+                        setShareGoodsId(request,Long.parseLong(gidstr));
                         path = "redirect:/"+controllerMapping+"/"+gidstr+"~inviter_"+encryuid+".html?randStr="+randStr;
                         return path;
                     }
@@ -80,7 +82,7 @@ public class SeckillSpecialProductController extends BaseController {
             }else{
                 if(arr.length==2){
                     String ivr = id.split("_")[1];
-                    ivr = URLDecoder.decode(ivr);
+                    ivr = URLDecoder.decode(ivr,SystemConstant.DEFAUT_CHARSET);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     Long ivrLong = Long.parseLong(ivr);
                     setShareUserId(request,ivrLong);
@@ -102,15 +104,15 @@ public class SeckillSpecialProductController extends BaseController {
         try {
             if(!ObjectUtils.isEmpty(uid)){
                 String encryuid = DESUtils.encryptDES(uid.toString(), DesKey.WEB_KEY);
-                encryuid = URLEncoder.encode(encryuid);
+                encryuid = URLEncoder.encode(encryuid,SystemConstant.DEFAUT_CHARSET);
                 String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""),DesKey.WEB_KEY);
-                randStr = URLEncoder.encode(randStr);
+                randStr = URLEncoder.encode(randStr,SystemConstant.DEFAUT_CHARSET);
                 if(arr.length==1){
                     path = "redirect:/"+controllerMapping+"/"+id+"~inviter_"+encryuid+".html?randStr="+randStr;
                     return path;
                 }else{
                     String ivr = id.split("_")[1];
-                    ivr = URLDecoder.decode(ivr);
+                    ivr = URLDecoder.decode(ivr, SystemConstant.DEFAUT_CHARSET);
                     ivr = DESUtils.decryptDES(ivr, DesKey.WEB_KEY);
                     if(!ivr.equals(uid.toString())){
                         Long ivrLong = Long.parseLong(ivr);

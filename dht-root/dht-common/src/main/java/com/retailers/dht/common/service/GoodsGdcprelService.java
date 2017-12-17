@@ -1,5 +1,7 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.entity.GoodsDetail;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGdcprel;
@@ -63,6 +65,8 @@ public interface GoodsGdcprelService {
 	public boolean saveGoodsGdcprelByJson(String data);
 
 	public GoodsGdcprelVo queryGoodsGdcprelVoLists(Map params);
+
+	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid);
 }
 
 

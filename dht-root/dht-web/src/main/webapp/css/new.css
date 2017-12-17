@@ -250,3 +250,46 @@ body {
     font-size: .24rem;
     color: #1a1a1a;
 }
+
+
+.order-product {
+    height: auto;
+    font-size: .24rem;
+    color: #1a1a1a;
+    background-color: #FFFFFF;
+}
+.coupon-info-box .coupon-btn {
+    display: block;
+    text-align: right;
+    padding-right: .48rem;
+    background: url("../img/coupon_down_arrows.png") no-repeat right center;
+    background-size: .28rem .28rem;
+}
+.coupon-info-box .active {
+    background: url("../img/coupon_up_arrows.png") no-repeat right center;
+    background-size: .28rem .28rem;
+}
+.order-product .text-box {
+    height: auto;
+}
+.coupon-info-wrap {
+    padding-top: .2rem;
+    display: none;
+}
+.coupon-info-wrap li {
+    height: .46rem;
+    line-height: .46rem;
+    border-bottom: 1px solid #e5e5e5;
+}
+.coupon-info-wrap span:first-child {
+    float: left;
+}
+.coupon-info-wrap span:last-child {
+    float: right;
+}
+
+.clear-fix::after {
+    content: " ";
+    display: block;
+    clear: both;
+}

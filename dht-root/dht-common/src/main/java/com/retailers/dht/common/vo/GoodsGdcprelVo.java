@@ -13,6 +13,7 @@ public class GoodsGdcprelVo extends GoodsGdcprel {
     private String imgurl;
     private String gunitname;
 
+
     public String getGsName() {
         return gsName;
     }

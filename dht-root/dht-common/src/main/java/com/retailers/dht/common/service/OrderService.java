@@ -71,10 +71,41 @@ public interface OrderService {
 	 * 购物订单
 	 * @param uid 购买用户id
 	 * @param buyInfos 购买详情
+	 * @param inviterUid 推荐人id
+	 * @param inviterGid 推荐商品id
 	 * @return 返回订单号和总金额
 	 * @throws AppException
 	 */
-	public Map<String,Object> shoppingOrder(Long uid, BuyInfoVo buyInfos)throws AppException;
+	public Map<String,Object> shoppingOrder(Long uid, BuyInfoVo buyInfos,Long inviterUid,Long inviterGid)throws AppException;
+
+	/**
+	 * 购买特价商品
+	 * @param uid
+	 * @param buyInfos
+	 * @param isInviter
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,boolean isInviter)throws AppException;
+
+	/**
+	 * 购买秒杀商品
+	 * @param uid
+	 * @param buyInfos
+	 * @param isInviter 是否是推荐商品
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos,boolean isInviter)throws AppException;
+
+	/**
+	 * 购买秒杀商品
+	 * @param uid
+	 * @param buyInfos
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,Object> buyCutPrice(Long uid, BuyInfoVo buyInfos)throws AppException;
 
 	/**
 	 * 用户充值

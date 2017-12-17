@@ -117,7 +117,7 @@ public interface GoodsCouponService {
 	 * @param gtpvs
 	 * @return
 	 */
-	public Map<Long,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs);
+	public Map<String,List<GoodsCouponView>> queryGoodsCouponBuyGid(List<GoodsTypePriceVo> gtpvs);
 
 	/**
 	 * 根据商品购买信息取得商品对应的优惠列表，和用户能够使用的优惠卷列表

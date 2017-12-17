@@ -36,7 +36,11 @@ public class SystemConstant {
     /**
      * 分享用户session 存入key
      */
-    public static final String Share_USER_SESSION_KEY="shareUser";
+    public static final String SHARE_USER_SESSION_KEY="shareUser";
+    /**
+     * 分享用户session 存入key
+     */
+    public static final String SHARE_GOODSID_SESSION_KEY="shareGoodsId";
     /**
      * 是否拉取得微信用户信息
      */

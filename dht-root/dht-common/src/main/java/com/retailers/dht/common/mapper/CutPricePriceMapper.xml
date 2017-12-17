@@ -8,20 +8,21 @@
 			<result property="usId" column="us_id"/>
 			<result property="cppPrice" column="cpp_price"/>
 			<result property="gcount" column="g_count"/>
+			<result property="remark" column="remark"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="cutPricePrice_columns">
-		cpp_id,gdcp_id,us_id,cpp_price,g_count,is_delete,version
+		cpp_id,gdcp_id,us_id,cpp_price,g_count,remark,is_delete,version
 	</sql>
-	<!-- 根据砍价价格初始化表主键取得数据 -->
+	<!-- 根据砍价商品价格初始化表主键取得数据 -->
 	<select id="queryCutPricePriceByCppId" resultMap="rm_cutPricePrice" parameterType="java.lang.Long">
 		SELECT <include refid="cutPricePrice_columns" />
 		FROM t_cut_price_price WHERE cpp_id = #{cppId}
 	</select>
-	<!-- 砍价价格初始化表查询条件组合 -->
+	<!-- 砍价商品价格初始化表查询条件组合 -->
 	<sql id="cutPricePrice_where">
 		<where>
 			<if test="null != params.cppId">
@@ -38,6 +39,9 @@
 			</if>
 			<if test="null != params.gcount">
 				AND g_count = #{params.gcount}
+			</if>
+			<if test="null != params.remark and '' != params.remark">
+				AND remark = #{params.remark}
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
@@ -69,16 +73,16 @@
 		and t3.g_id=#{params.gid}
 		and t1.us_id=#{params.uid}
 	</select>
-	<!--添加砍价价格初始化表 -->
+	<!--添加砍价商品价格初始化表 -->
 	<insert id="saveCutPricePrice" parameterType="com.retailers.dht.common.entity.CutPricePrice" useGeneratedKeys="true" keyProperty="cppId">
 		INSERT INTO t_cut_price_price (
-			gdcp_id,us_id,cpp_price,g_count,is_delete,version
+			gdcp_id,us_id,cpp_price,g_count,remark,is_delete,version
 		) VALUES
 		(
-			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{cppPrice,jdbcType=BIGINT},#{gcount,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gdcpId,jdbcType=BIGINT},#{usId,jdbcType=BIGINT},#{cppPrice,jdbcType=BIGINT},#{gcount,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改砍价价格初始化表 -->
+	<!--修改砍价商品价格初始化表 -->
 	<update id="updateCutPricePrice" parameterType="com.retailers.dht.common.entity.CutPricePrice">
 		UPDATE t_cut_price_price
 		<set>
@@ -94,6 +98,9 @@
             <if test="null != gcount">
                 g_count = #{gcount},
             </if>
+            <if test="null != remark and '' != remark">
+                remark = #{remark},
+            </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
@@ -103,7 +110,7 @@
 		</set>
 		WHERE cpp_id = #{cppId} and version = #{version}
 	</update>
-	<!--删除砍价价格初始化表 -->
+	<!--删除砍价商品价格初始化表 -->
 	<delete id="deleteCutPricePriceByCppId" parameterType="java.lang.Long">
 		DELETE FROM t_cut_price_price WHERE cpp_id = #{cppId}
 	</delete>

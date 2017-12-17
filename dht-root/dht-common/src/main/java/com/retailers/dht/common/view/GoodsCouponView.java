@@ -1,6 +1,7 @@
 package com.retailers.dht.common.view;
 
 import com.alibaba.fastjson.annotation.JSONField;
+import com.retailers.tools.utils.NumberUtils;
 import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
@@ -21,6 +22,7 @@ public class GoodsCouponView {
     /**是否限制使用（0 无限制，1限制使用（指定商品种类/ 指定商品）)**/
     private Long gcpIsRestricted;
     /**商品优惠活动触发条件*/
+    @JSONField(serialize =false )
     private Long gcpCondition;
     /**
      * 优惠条件计量单位（0 元，1 件）
@@ -78,6 +80,10 @@ public class GoodsCouponView {
     public Long getGcpCondition() {
         return gcpCondition;
     }
+    public String getGcpConditions(){
+        return  NumberUtils.formaterNumberPower(gcpCondition);
+    }
+
 
     public void setGcpCondition(Long gcpCondition) {
         this.gcpCondition = gcpCondition;
@@ -115,8 +121,8 @@ public class GoodsCouponView {
         this.gcpEndTime = gcpEndTime;
     }
 
-    public Long getVal() {
-        return val;
+    public String getVal() {
+        return NumberUtils.formaterNumberPower(val);
     }
 
     public void setVal(Long val) {

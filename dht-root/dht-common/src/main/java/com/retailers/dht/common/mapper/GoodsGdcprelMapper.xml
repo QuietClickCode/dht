@@ -110,6 +110,27 @@
 		GROUP BY t1.gd_id
 		ORDER BY sumcount DESC
 	</select>
+
+	<select id="queryCheckOrderData" resultMap="rm_goodsGdcprel_vo">
+		SELECT
+		t1.gd_id,
+		GROUP_CONCAT(DISTINCT t4.gsv_val ORDER BY t4.gs_id) gsName,
+		t6.g_count sumcount
+		from
+		t_goods_gdcprel t1
+		LEFT JOIN t_goods_detail t2 ON t1.gd_id=t2.gd_id and t2.is_delete=0
+		LEFT JOIN t_goods_ggsval_detail t3 ON t2.gd_id=t3.gd_id and t3.is_delete=0
+		LEFT JOIN t_goods_gsval t4 ON t3.gsv_id=t4.gsv_id and t4.is_delete=0
+		LEFT JOIN t_cut_price_price t6 ON t1.gdcp_id=t6.gdcp_id and t6.is_delete=0,
+		t_cut_price_price t5
+		where
+		t1.gdcp_id=#{gdcpId}
+		and t1.gdcp_id=t5.gdcp_id
+		and t5.us_id=#{uid}
+		and t1.is_delete=0
+		GROUP BY t5.gdcp_id,t5.us_id
+	</select>
+
 	<!--添加商品详情与砍价关系表 -->
 	<insert id="saveGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel" useGeneratedKeys="true" keyProperty="gdcpId">
 		INSERT INTO t_goods_gdcprel (
@@ -119,6 +140,7 @@
 			#{gdId,jdbcType=BIGINT},#{cpId,jdbcType=BIGINT},#{cpSale,jdbcType=BIGINT},#{cpInventory,jdbcType=BIGINT},#{cpBounds,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
+
 	<!--修改商品详情与砍价关系表 -->
 	<update id="updateGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel">
 		UPDATE t_goods_gdcprel
