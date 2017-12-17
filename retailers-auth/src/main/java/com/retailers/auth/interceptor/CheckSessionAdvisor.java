@@ -14,10 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Map;
 
 /**
  * Created by admin on 2017/5/3.
@@ -63,20 +66,66 @@ public class CheckSessionAdvisor {
                     if(ObjectUtils.isNotEmpty(referer)){
                         isLoca=true;
                     }
-                    String redirect=cs.redirect();
-                    HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder
-                            .getRequestAttributes()).getResponse();
-                    if(ObjectUtils.isNotEmpty(redirect)&&!isLoca){
-                        response.sendRedirect(redirect);
+                    String redirect=cs.redirectUrl();
+                    if(ObjectUtils.isEmpty(redirect)){
+                        redirect="/loginPage";
+                    }
+                    boolean isRedirect=cs.isOpenPage();
+                    boolean isRes=false;
+                    for (Object param : joinPoint.getArgs()) {
+                        if (param instanceof HttpServletResponse) {
+                            System.out.println("取得response 值------------------------------->>>>>:");
+                            isRes=true;
+                        }
+                    }
+                    //是否需要重定向
+                    if(isRedirect){
+//                        Map<String,Object> params = WebUtils.getParametersStartingWith(request,"");
+//                        String oldUrl=generateRedirectParams(request,params);
+//                        if(isRes){
+//                            HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder
+//                                    .getRequestAttributes()).getResponse();
+//                            response.sendRedirect(redirect);
+//                        }else{
+//                            ModelAndView modelAndView=new ModelAndView(redirect);
+//                            modelAndView.addObject("redirectUrl",oldUrl);
+//                            return modelAndView;
+//                        }
+                        result="/loginPage";
                     }else{
+                        HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder
+                                .getRequestAttributes()).getResponse();
                         WriteData.writeObject(WriteData.LOGIN_OUT,msg,redirect,response);
                     }
+
+//                    if(ObjectUtils.isNotEmpty(redirect)&&!isLoca){
+//                        response.sendRedirect(redirect);
+//                    }else{
+//                        WriteData.writeObject(WriteData.LOGIN_OUT,msg,redirect,response);
+//                    }
                 }
             }
         }else{
             throw new Exception("session异常");
         }
         return result;
+    }
+
+    private String generateRedirectParams(HttpServletRequest request,Map<String,Object> params){
+        String uri=request.getRequestURI();
+        String rtn="";
+        if(ObjectUtils.isNotEmpty(params)){
+            for(String key:params.keySet()){
+                rtn+=key+"="+params.get(key)+"&";
+            }
+            if(rtn.endsWith("&")){
+                rtn=rtn.substring(0,rtn.length()-1);
+            }
+            if(ObjectUtils.isNotEmpty(rtn)){
+                rtn=uri+"?"+rtn;
+            }
+        }
+        return rtn;
     }
 
 }

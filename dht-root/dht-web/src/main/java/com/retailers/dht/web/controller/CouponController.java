@@ -3,21 +3,18 @@ package com.retailers.dht.web.controller;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.CouponService;
-import com.retailers.dht.common.vo.BuyGoodsVo;
+import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.CouponWebVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.PageUtils;
-import org.apache.http.protocol.HttpService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.context.request.async.WebAsyncTask;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -150,7 +147,7 @@ public class CouponController extends BaseController{
     @RequestMapping("queryCouponListsByBuy")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
-    public BaseResp queryCouponListsByBuy(HttpServletRequest request, @RequestBody List<BuyGoodsVo> bgs){
+    public BaseResp queryCouponListsByBuy(HttpServletRequest request, @RequestBody List<BuyGoodsDetailVo> bgs){
         Long uid = getCurLoginUserId(request);
         List<CouponWebVo> list=couponService.queryCouponListsByBuy(uid,bgs);
         return success(list);

@@ -10,8 +10,8 @@ import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.OrderService;
+import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
-import com.retailers.dht.common.vo.BuyGoodsVo;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
@@ -103,20 +103,13 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 购物订单
 	 * @param uid 购买用户id
-	 * @param buyDetails 购买商品详情  {"buyGoods":[{"goodsId":123,"num":3,"gcpId":123,"cpId":222,"specs":1,"remark":"说明"}],"address":123}
-	 *                   				buyGoods 购买商品列表
-	 *                   				goodsId 商品id
-	 *                   				num 购买数量
-	 *                   				gcpId 商品优惠id
-	 *                   				cpId 优惠卷id
-	 *                   				specs 规格ids
-	 *                   				address 收货人地址id
+	 * @param buyInfos 购买详情
 	 * @return
 	 * @throws AppException
 	 */
     @Transactional(rollbackFor = Exception.class)
-	public Map<String,Object> shoppingOrder(Long uid, JSONObject buyDetails)throws AppException{
-        logger.info("创建购物订单,购买用户:[{}],商品列表:[{}]",uid,buyDetails);
+	public Map<String,Object> shoppingOrder(Long uid,BuyInfoVo buyInfos)throws AppException{
+        logger.info("创建购物订单,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
         Date curDate=new Date();
         String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
         procedureToolsService.singleUnLockManager(key);
@@ -128,11 +121,9 @@ public class OrderServiceImpl implements OrderService {
 			if(unPayTotal>0){
 				throw new AppException("存在款付款订单，不能进行此次购买");
 			}
-			//取得货品信息
-			BuyGoodsDetailVo bgVos= JSONObject.parseObject(buyDetails.toJSONString(),BuyGoodsDetailVo.class);
 			//开始计算商品价格
 			//取得用户地址
-			UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(bgVos.getAddress());
+			UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(buyInfos.getAddress());
 			if(ObjectUtils.isEmpty(userAddress)){
 				throw new AppException("请填写收货人地址");
 			}
@@ -145,7 +136,7 @@ public class OrderServiceImpl implements OrderService {
 			//购买商品列表
 			List<Long> buyGIds=new ArrayList<Long>();
 			//取得购买商中使用了商品优惠的
-			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
+			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
 					String gcpIds=bgVo.getGcpIds();
 					List<Long> gcps=new ArrayList<Long>();
@@ -161,7 +152,7 @@ public class OrderServiceImpl implements OrderService {
 				//校验商品优惠是否异常
 			}
 			//取得使用的优惠卷
-			String couponIds=bgVos.getCpIds();
+			String couponIds=buyInfos.getCpIds();
 			//判断是否使用优卷
 			if(ObjectUtils.isNotEmpty(couponIds)){
 			//校验优惠卷是否异常
@@ -172,7 +163,7 @@ public class OrderServiceImpl implements OrderService {
 			List<OrderGoodsCoupon> ogcs=new ArrayList<OrderGoodsCoupon>();
 			String gdIds="";
 			//取得对应价格
-			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
+			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				gdIds+=bgVo.getGdId()+",";
 			}
 			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
@@ -182,7 +173,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			long totalPrice = 0;
 			//生成订单详情
-			for(BuyGoodsVo bgVo:bgVos.getBuyGoods()){
+			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				OrderDetail od=new OrderDetail();
 				od.setOdBuyNumber(bgVo.getNum());
 				od.setOdGoodsId(bgVo.getGoodsId());

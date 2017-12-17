@@ -15,12 +15,10 @@ import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
-import com.retailers.dht.common.view.GoodsCouponView;
 import com.retailers.dht.common.vo.*;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -475,12 +473,12 @@ public class CouponServiceImpl implements CouponService {
 	 * @param gbs 购买属性
 	 * @return
 	 */
-	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsVo> gbs) {
+	public List<CouponWebVo> queryCouponListsByBuy(Long uid, List<BuyGoodsDetailVo> gbs) {
 		String gdIds="";
 		List<Long> gIds=new ArrayList<Long>();
 		//商品对应的购买数量
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
-		for(BuyGoodsVo gb:gbs){
+		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
 			gIds.add(gb.getGoodsId());
 			gtn.put(gb.getGoodsId(),gb.getNum());

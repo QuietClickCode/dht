@@ -6,7 +6,6 @@ import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
-import com.retailers.dht.common.dao.CouponMapper;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.*;
@@ -353,12 +352,12 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsVo> gbs){
+	public Map<String,Object> queryGoodsCouponLists(Long uid, List<BuyGoodsDetailVo> gbs){
 		String gdIds="";
 		List<Long> gIds=new ArrayList<Long>();
 		//商品对应的购买数量
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
-		for(BuyGoodsVo gb:gbs){
+		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
 			gIds.add(gb.getGoodsId());
 			gtn.put(gb.getGoodsId(),gb.getNum());
