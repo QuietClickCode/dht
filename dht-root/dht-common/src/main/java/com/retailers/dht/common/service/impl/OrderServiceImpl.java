@@ -8,11 +8,12 @@ import com.retailers.dht.common.constant.LogUserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
-import com.retailers.dht.common.service.GoodsDetailService;
-import com.retailers.dht.common.service.GoodsFreightService;
-import com.retailers.dht.common.service.OrderService;
+import com.retailers.dht.common.service.*;
+import com.retailers.dht.common.view.GoodsCouponView;
 import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
+import com.retailers.dht.common.vo.CouponWebVo;
+import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
@@ -65,6 +66,10 @@ public class OrderServiceImpl implements OrderService {
 	private LogUserCardPackageMapper logUserCardPackageMapper;
     @Autowired
 	private GoodsFreightService goodsFreightService;
+    @Autowired
+	private GoodsCouponService goodsCouponService;
+    @Autowired
+	private BuyCarService buyCarService;
 
 
 
@@ -119,12 +124,6 @@ public class OrderServiceImpl implements OrderService {
 		Map<String,Object> rtnMap=new HashMap<String,Object>();
 		String orderNo="";
         try{
-        	//判断用户是否存在未付款订单
-//			int unPayTotal=orderMapper.checkUserUnPayOrder(uid);
-//			if(unPayTotal>0){
-//				throw new AppException("存在款付款订单，不能进行此次购买");
-//			}
-			//开始计算商品价格
 			//取得用户地址
 			UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(buyInfos.getAddress());
 			if(ObjectUtils.isEmpty(userAddress)){
@@ -136,11 +135,21 @@ public class OrderServiceImpl implements OrderService {
 			}
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+			if(ObjectUtils.isEmpty(goodsFreight)){
 
-			//商品对应使用的商品优惠
+			}
+			//规格使用的选择的优惠例表
 			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
-			//购买商品列表
+			//购买规格例表
 			List<Long> buyGIds=new ArrayList<Long>();
+			//规格ids
+			String gdIds="";
+			//取得购物车例表
+			List<Long> carIds=new ArrayList<Long>();
+			//购买商品例表
+			List<Long> gids=new ArrayList<Long>();
+			//购买商品例表属性
+			List<GoodsTypePriceVo> buyDetailInfos = new ArrayList<GoodsTypePriceVo>();
 			//取得购买商中使用了商品优惠的
 			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
@@ -149,35 +158,40 @@ public class OrderServiceImpl implements OrderService {
 					for(String gcp:gcpIds.split(",")){
 						gcps.add(Long.parseLong(gcp));
 					}
-					gcpMaps.put(bgVo.getGoodsId(),gcps);
+					gcpMaps.put(bgVo.getGdId(),gcps);
 				}
-				buyGIds.add(bgVo.getGoodsId());
+				buyGIds.add(bgVo.getGdId());
+				gdIds+=bgVo.getGdId()+",";
+				carIds.add(bgVo.getBuyCarId());
+				GoodsTypePriceVo gtpv=new GoodsTypePriceVo(bgVo.getGoodsId(),bgVo.getGdId(),null,null,bgVo.getNum().longValue());
+				buyDetailInfos.add(gtpv);
 			}
+			//从购物车中取得购买商品相应的推荐人
+			Map<Long,Long> buyCarMaps=buyCarService.queryInviterIdByBcIds(carIds);
+			//根据规格取得详细例表
+			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+			//规格对应的价格
+			Map<Long,Long> gdPrice=new HashMap<Long, Long>();
+			for(GoodsDetail gd:gds){
+				gdPrice.put(gd.getGdId(),gd.getGdPrice());
+			}
+			//取得商品优惠卷
+			Map<String,Object> rtn = goodsCouponService.queryGoodsCouponLists(uid,buyInfos.getBuyGoods());
 			//判断是否使用了商品优惠
 			if(ObjectUtils.isNotEmpty(gcpMaps)){
 				//校验商品优惠是否异常
 			}
-
 			//取得使用的优惠卷
 			String couponIds=buyInfos.getCpIds();
+			List<CouponWebVo> useCoupns=new ArrayList<CouponWebVo>();
 			//判断是否使用优卷
 			if(ObjectUtils.isNotEmpty(couponIds)){
-				//校验优惠卷是否异常
+				useCoupns.addAll(allowUseCoupon(couponIds,(List<CouponWebVo>)rtn.get("userCoupons")));
 			}
 			//订单详情
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			//商品优惠使用情况
 			List<OrderGoodsCoupon> ogcs=new ArrayList<OrderGoodsCoupon>();
-			String gdIds="";
-			//取得对应价格
-			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
-				gdIds+=bgVo.getGdId()+",";
-			}
-			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-			Map<Long,Long> goodsPrice=new HashMap<Long, Long>();
-			for(GoodsDetail gd:gds){
-				goodsPrice.put(gd.getGid(),gd.getGdPrice());
-			}
 			long totalPrice = 0;
 			//生成订单详情
 			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
@@ -185,7 +199,11 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdBuyNumber(bgVo.getNum());
 				od.setOdGoodsId(bgVo.getGoodsId());
 				od.setRemark(bgVo.getRemark());
-				long p=goodsPrice.get(bgVo.getGoodsId());
+				//判断商品是否存在推荐人
+				if(ObjectUtils.isNotEmpty(bgVo.getBuyCarId())){
+					od.setOdInviterUid(buyCarMaps.get(bgVo.getBuyCarId()));
+				}
+				long p=gdPrice.get(bgVo.getGdId());
 				od.setOdGoodsPrice(p*bgVo.getNum());
 				totalPrice+=od.getOdGoodsPrice();
 				od.setOdGdId(bgVo.getGdId());
@@ -204,8 +222,8 @@ public class OrderServiceImpl implements OrderService {
 				ods.add(od);
 			}
 
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,ods,ogcs);
 
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,null,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			rtnMap.put("orderNo",orderNo);
@@ -216,6 +234,7 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return rtnMap;
 	}
+
 
 	/**
 	 *
@@ -260,12 +279,13 @@ public class OrderServiceImpl implements OrderService {
 	 * @param cPrice 优惠卷金额
 	 * @param gcPrice 商品优惠金额
 	 * @param actualPrice 实际金额
+	 * @param orderLogisticsPrice 物流费
 	 * @param ods 商品详情
 	 * @param ogcs 商品优惠详情
 	 * @return
 	 */
 	private Order createOrder(OrderEnum orderEnum,UserAddress userAddress,Long totalPrice,Long cPrice,Long gcPrice,
-							  Long actualPrice,List<OrderDetail>ods,List<OrderGoodsCoupon> ogcs){
+							  Long actualPrice,Long orderLogisticsPrice,List<OrderDetail>ods,List<OrderGoodsCoupon> ogcs){
 		Order order=new Order();
 		String orderNo=procedureToolsService.executeOrderNo(orderEnum);
 		order.setOrderType(orderEnum.getKey());
@@ -286,6 +306,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderGoodsActualPayPrice(actualPrice);
 		order.setOrderGoodsCouponPrice(cPrice);
 		order.setOrderGoodsCouponPrice(gcPrice);
+		order.setOrderLogisticsPrice(orderLogisticsPrice);
 		orderMapper.saveOrder(order);
 		long orderId=order.getId();
 		for(OrderDetail od:ods){
@@ -444,5 +465,34 @@ public class OrderServiceImpl implements OrderService {
 		lucp.setCreateTime(curDate);
 		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
 	}
+	/**
+	 * 允许使用的优惠列表
+	 * @param couponIds 优惠id
+	 * @param cs 用户优惠例表
+	 * @return
+	 */
+	private List<CouponWebVo> allowUseCoupon(String couponIds,List<CouponWebVo> cs)throws AppException{
+		List<CouponWebVo> rtn=new ArrayList<CouponWebVo>();
+		//校验优惠卷是否异常
+		List<Long> ucs=new ArrayList<Long>();
+		for(String id:couponIds.split(",")){
+			ucs.add(Long.parseLong(id));
+		}
+		if(ObjectUtils.isNotEmpty(cs)){
+			Map<Long,CouponWebVo> maps=new HashMap<Long, CouponWebVo>();
+			for(CouponWebVo cwv:cs){
+				maps.put(cwv.getCpId(),cwv);
+			}
+			for(Long id:ucs){
+				if(maps.containsKey(id)){
+					rtn.add(maps.get(id));
+				}else{
+					throw new AppException("使用优惠卷异常");
+				}
+			}
+		}
+		return rtn;
+	}
+
 }
 

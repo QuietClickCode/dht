@@ -61,7 +61,7 @@ public class OrderController extends BaseController {
     public String getCheckOrderData(HttpServletRequest request,String data){
         data += "\'isActivity\':3}";
         request.getSession().setAttribute("checkOrderData",data);
-        return "redirect://order/checkOrder";
+        return "redirect:/order/checkOrder";
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
@@ -183,7 +183,7 @@ public class OrderController extends BaseController {
      * @param buyInfo 购买信息
      * @return
      */
-    @RequestMapping(value = "buyCutPrice",method = RequestMethod.POST)
+        @RequestMapping(value = "buyCutPrice",method = RequestMethod.POST)
     @ResponseBody
     public BaseResp buyCutPrice(HttpServletRequest request,@RequestBody BuyInfoVo buyInfo){
         long uid=getCurLoginUserId(request);
