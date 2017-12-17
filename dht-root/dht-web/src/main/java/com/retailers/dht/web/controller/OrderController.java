@@ -70,7 +70,11 @@ public class OrderController extends BaseController {
         }
     }
 
-
+    /**
+     * 校验商品购买信息
+     * @param buyInfoVo
+     * @throws AppException
+     */
     private void checkBuyInfo(BuyInfoVo buyInfoVo)throws AppException{
         if(ObjectUtils.isEmpty(buyInfoVo)){
             throw new AppException("购买信息不能为空");
