@@ -359,7 +359,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
 		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
-			gtn.put(gb.getGoodsId(),gb.getNum());
+			gtn.put(gb.getGdId(),gb.getNum());
 		}
 
 		//取得商品价格
@@ -370,7 +370,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Map<Long,Long> gtp=new HashMap<Long, Long>();
 		for(GoodsDetail gt:gts){
 			//取得商品价格
-			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
+			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGdId()));
 			gIds.add(gt.getGid());
 		}
 		//商品列表
