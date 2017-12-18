@@ -73,7 +73,7 @@
                         isSaves=false;
                         if(data.status == 0){
                             layer.msg("登陆成功",{time:1000});
-                            window.location.href = "/index";
+                            window.location.href = "/home";
                         }else{
                             layer.msg(data.msg,{time:1000});
                         }

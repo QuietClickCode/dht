@@ -87,7 +87,7 @@ public interface SysUserService {
 	 * @param account
 	 * @return
 	 */
-	public boolean querySyUserByAccount(String account,String sysUserPwd) throws AppException;
+	public SysUser querySyUserByAccount(String account,String sysUserPwd) throws AppException;
 
 }
 
