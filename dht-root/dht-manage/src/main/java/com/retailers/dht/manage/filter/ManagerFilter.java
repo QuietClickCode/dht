@@ -57,7 +57,7 @@ public class ManagerFilter implements Filter {
                 }else{
                     String context="";
                     //判断是否是ajax 请求
-                    if(header.equals("XMLHttpRequest")){
+                    if(ObjectUtils.isNotEmpty(header)&&header.equals("XMLHttpRequest")){
                         Map<String,Object> obj = new HashMap<String,Object>();
                         obj.put("status",WriteData.SC_UNAUTHORIZED);
                         obj.put("msg","未登陆或过期，请重新登陆");
