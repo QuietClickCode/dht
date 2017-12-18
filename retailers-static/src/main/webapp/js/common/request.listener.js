@@ -24,7 +24,13 @@
             },
             success:function(data, textStatus){
                 if(data.status==401){
-                    window.top.location.href="/login";
+                    layer.open({
+                        content: '登陆己过期，请重新登陆',
+                        scrollbar: false,
+                        end: function(){
+                            window.top.location.href="/login";
+                        }
+                    });
                 }
                 return;
                 //成功回调方法增强处理
