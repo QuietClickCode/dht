@@ -7,7 +7,7 @@ import java.util.List;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-15 14:22:08
+ * @date 2017-12-18 11:07:35
  */
 public interface FloorRelationshipMapper {
 
@@ -16,7 +16,7 @@ public interface FloorRelationshipMapper {
 	 * @param floorRelationship
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public int saveFloorRelationship(FloorRelationship floorRelationship);
 	/**
@@ -24,42 +24,49 @@ public interface FloorRelationshipMapper {
 	 * @param floorRelationship
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public int updateFloorRelationship(FloorRelationship floorRelationship);
 	/**
-	 * 根据FrId删除楼栋关系表
-	 * @param frId
+	 * 根据FlId删除楼栋关系表
+	 * @param flId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
-	public int deleteFloorRelationshipByFrId(Long frId);
+	public int deleteFloorRelationshipByFlId(Long flId);
 	/**
-	 * 根据FrId查询楼栋关系表
-	 * @param frId
+	 * 根据FlId查询楼栋关系表
+	 * @param flId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
-	public FloorRelationship queryFloorRelationshipByFrId(Long frId);
+	public FloorRelationship queryFloorRelationshipByFlId(Long flId);
 	/**
 	 * 查询楼栋关系表列表
 	 * @param pagination 分页对象
 	 * @return  楼栋关系表列表
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public List<FloorRelationship> queryFloorRelationshipList(Pagination<FloorRelationship> pagination);
 
-
 	/**
-	 * 查询与楼栋所绑定的户型
+	 * 根据楼栋ID查询该楼栋所关联的户型
 	 * @param fmId 楼栋ID
-	 * @return  楼栋所绑定的户型列表
+	 * @return  楼栋关系表列表
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public List<FloorRelationship> queryFloorType(Long fmId);
 
+	/**
+	 * 根据户型ID查询该楼栋所关联的楼栋
+	 * @param htId 户型ID
+	 * @return  楼栋关系表列表
+	 * @author wangjue
+	 * @date 2017-12-18 11:07:35
+	 */
+	public List<FloorRelationship> queryHouseType(Long htId);
 }

@@ -1,28 +1,29 @@
 package com.retailers.hnc.common.entity;
-import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
  * 描述：楼栋关系表对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-15 14:22:08
+ * @date 2017-12-18 11:07:35
  */
 public class FloorRelationship implements java.io.Serializable {
 
 	/**楼栋关联表ID*/
 	@NotEmpty
-	private Long frId;
-	/**楼栋id*/
+	private Long flId;
+	/**楼栋ID*/
 	@NotEmpty
 	private Long fmId;
-	/**户型id*/
+	/**与楼栋所关联的户型ID*/
 	@NotEmpty
-	private Long ftId;
-	/**户型名称*/
+	private Long frId;
+	/**户型ID*/
 	@NotEmpty
-	@Length(min = 1, max = 200)
-	private String ftName;
+	private Long htId;
+	/**与户型所关联的楼栋ID*/
+	@NotEmpty
+	private Long hrId;
 	/**是否删除（0代表不删除，1代表删除）默认为0*/
 	@NotEmpty
 	private Integer isDelete;
@@ -34,16 +35,16 @@ public class FloorRelationship implements java.io.Serializable {
 	public FloorRelationship(){
 	}
 
-	public FloorRelationship( Long frId){
-		this.frId = frId;
+	public FloorRelationship( Long flId){
+		this.flId = flId;
 	}
 
-	public void setFrId(Long value) {
-		this.frId = value;
+	public void setFlId(Long value) {
+		this.flId = value;
 	}
 
-	public Long getFrId() {
-		return this.frId;
+	public Long getFlId() {
+		return this.flId;
 	}
 	public void setFmId(Long value) {
 		this.fmId = value;
@@ -52,19 +53,26 @@ public class FloorRelationship implements java.io.Serializable {
 	public Long getFmId() {
 		return this.fmId;
 	}
-	public void setFtId(Long value) {
-		this.ftId = value;
+	public void setFrId(Long value) {
+		this.frId = value;
 	}
 
-	public Long getFtId() {
-		return this.ftId;
+	public Long getFrId() {
+		return this.frId;
 	}
-	public void setFtName(String value) {
-		this.ftName = value;
+	public void setHtId(Long value) {
+		this.htId = value;
 	}
 
-	public String getFtName() {
-		return this.ftName;
+	public Long getHtId() {
+		return this.htId;
+	}
+	public void setHrId(Long value) {
+		this.hrId = value;
+	}
+
+	public Long getHrId() {
+		return this.hrId;
 	}
 	public void setIsDelete(Integer value) {
 		this.isDelete = value;

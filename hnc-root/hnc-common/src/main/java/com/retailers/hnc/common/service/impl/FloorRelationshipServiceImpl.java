@@ -13,7 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-15 14:22:08
+ * @date 2017-12-18 11:07:35
  */
 @Service("floorrelationshipService")
 public class FloorRelationshipServiceImpl implements FloorRelationshipService {
@@ -27,8 +27,8 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 		int status = floorRelationshipMapper.updateFloorRelationship(floorRelationship);
 		return status == 1 ? true : false;
 	}
-	public FloorRelationship queryFloorRelationshipByFrId(Long frId) {
-		return floorRelationshipMapper.queryFloorRelationshipByFrId(frId);
+	public FloorRelationship queryFloorRelationshipByFlId(Long flId) {
+		return floorRelationshipMapper.queryFloorRelationshipByFlId(flId);
 	}
 
 	public Pagination<FloorRelationship> queryFloorRelationshipList(Map<String, Object> params,int pageNo,int pageSize) {
@@ -40,9 +40,17 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteFloorRelationshipByFrId(Long frId) {
-		int status = floorRelationshipMapper.deleteFloorRelationshipByFrId(frId);
+	public boolean deleteFloorRelationshipByFlId(Long flId) {
+		int status = floorRelationshipMapper.deleteFloorRelationshipByFlId(flId);
 		return status == 1 ? true : false;
+	}
+
+	public List<FloorRelationship> queryFloorType(Long fmId) {
+		return floorRelationshipMapper.queryFloorType(fmId);
+	}
+
+	public List<FloorRelationship> queryHouseType(Long htId) {
+		return floorRelationshipMapper.queryHouseType(htId);
 	}
 }
 

@@ -72,7 +72,7 @@ public class FloorManageController extends BaseController{
     @RequestMapping("/queryFloorList")
     @Function(label="楼栋合集", description = "楼栋合集", resourse = "floorManage.queryFloorList",sort=1,parentRes="floorManage.floorManageMapping")
     @ResponseBody
-    public Map<String,Object> queryNavigationLists(PageUtils pageForm,String fmName){
+    public Map<String,Object> queryFloorManageList(PageUtils pageForm,String fmName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
         map.put("fmName",fmName);

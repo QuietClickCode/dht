@@ -2,13 +2,15 @@
 package com.retailers.hnc.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.FloorRelationship;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：楼栋关系表Service
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-15 14:22:08
+ * @date 2017-12-18 11:07:35
  */
 public interface FloorRelationshipService {
 
@@ -17,7 +19,7 @@ public interface FloorRelationshipService {
 	 * @param floorRelationship
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public boolean saveFloorRelationship(FloorRelationship floorRelationship);
 	/**
@@ -30,12 +32,12 @@ public interface FloorRelationshipService {
 	public boolean updateFloorRelationship(FloorRelationship floorRelationship);
 	/**
 	 * 根据id查询楼栋关系表
-	 * @param frId
+	 * @param flId
 	 * @return floorRelationship
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
-	public FloorRelationship queryFloorRelationshipByFrId(Long frId);
+	public FloorRelationship queryFloorRelationshipByFlId(Long flId);
 	/**
 	 * 查询楼栋关系表列表
 	 * @param params 请求参数
@@ -43,17 +45,35 @@ public interface FloorRelationshipService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
 	public Pagination<FloorRelationship> queryFloorRelationshipList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
-	 * 根据frId删除楼栋关系表
-	 * @param frId
+	 * 根据flId删除楼栋关系表
+	 * @param flId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-15 14:22:08
+	 * @date 2017-12-18 11:07:35
 	 */
-	public boolean deleteFloorRelationshipByFrId(Long frId);
+	public boolean deleteFloorRelationshipByFlId(Long flId);
+
+	/**
+	 * 根据楼栋ID查询该楼栋所关联的户型
+	 * @param fmId 楼栋ID
+	 * @return  楼栋关系表列表
+	 * @author wangjue
+	 * @date 2017-12-18 11:07:35
+	 */
+	public List<FloorRelationship> queryFloorType(Long fmId);
+
+	/**
+	 * 根据户型ID查询该楼栋所关联的楼栋
+	 * @param htId 户型ID
+	 * @return  楼栋关系表列表
+	 * @author wangjue
+	 * @date 2017-12-18 11:07:35
+	 */
+	public List<FloorRelationship> queryHouseType(Long htId);
 
 }
 

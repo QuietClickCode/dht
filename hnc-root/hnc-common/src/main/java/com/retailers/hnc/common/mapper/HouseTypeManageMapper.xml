@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.HouseTypeManageMapper">
+
+	<resultMap id="rm_houseTypeManage" type="com.retailers.hnc.common.entity.HouseTypeManage">
+			<result property="htId" column="ht_id"/>
+			<result property="htTypeName" column="ht_type_name"/>
+			<result property="htType" column="ht_type"/>
+			<result property="htArea" column="ht_area"/>
+			<result property="htRecommend" column="ht_recommend"/>
+			<result property="htImage" column="ht_image"/>
+			<result property="htInfo" column="ht_info"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_houseTypeManageVo" type="com.retailers.hnc.common.vo.HouseTypeManageVo">
+		<result property="htId" column="ht_id"/>
+		<result property="htTypeName" column="ht_type_name"/>
+		<result property="htType" column="ht_type"/>
+		<result property="htArea" column="ht_area"/>
+		<result property="htRecommend" column="ht_recommend"/>
+		<result property="htImage" column="ht_image"/>
+		<result property="htInfo" column="ht_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="houseTypeManage_columns">
+		ht_id,ht_type_name,ht_type,ht_area,ht_recommend,ht_image,ht_info,is_show,is_delete,version
+	</sql>
+	<!-- 根据户型表主键取得数据 -->
+	<select id="queryHouseTypeManageByHtId" resultMap="rm_houseTypeManage" parameterType="java.lang.Long">
+		SELECT <include refid="houseTypeManage_columns" />
+		FROM t_house_type_manage WHERE ht_id = #{htId}
+	</select>
+	<!-- 户型表查询条件组合 -->
+	<sql id="houseTypeManage_where">
+		<where>
+			<if test="null != params.htId">
+				AND ht_id = #{params.htId}
+			</if>
+			<if test="null != params.htTypeName and '' != params.htTypeName">
+				AND ht_type_name = #{params.htTypeName}
+			</if>
+			<if test="null != params.htType and '' != params.htType">
+				AND ht_type = #{params.htType}
+			</if>
+			<if test="null != params.htArea">
+				AND ht_area = #{params.htArea}
+			</if>
+			<if test="null != params.htRecommend">
+				AND ht_recommend = #{params.htRecommend}
+			</if>
+			<if test="null != params.htImage">
+				AND ht_image = #{params.htImage}
+			</if>
+			<if test="null != params.htInfo and '' != params.htInfo">
+				AND ht_info = #{params.htInfo}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryHouseTypeManageList" resultMap="rm_houseTypeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="houseTypeManage_columns" />
+		FROM t_house_type_manage
+		<include refid="houseTypeManage_where"/>
+	</select>
+	<!--添加户型表 -->
+	<insert id="saveHouseTypeManage" parameterType="com.retailers.hnc.common.entity.HouseTypeManage" useGeneratedKeys="true" keyProperty="htId">
+		INSERT INTO t_house_type_manage (
+			ht_type_name,ht_type,ht_area,ht_recommend,ht_image,ht_info,is_show,is_delete,version
+		) VALUES
+		(
+			#{htTypeName,jdbcType=VARCHAR},#{htType,jdbcType=VARCHAR},#{htArea,jdbcType=BIGINT},#{htRecommend,jdbcType=INTEGER},#{htImage,jdbcType=BIGINT},#{htInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改户型表 -->
+	<update id="updateHouseTypeManage" parameterType="com.retailers.hnc.common.entity.HouseTypeManage">
+		UPDATE t_house_type_manage
+		<set>
+            <if test="null != htTypeName and '' != htTypeName">
+                ht_type_name = #{htTypeName},
+            </if>
+            <if test="null != htType and '' != htType">
+                ht_type = #{htType},
+            </if>
+            <if test="null != htArea">
+                ht_area = #{htArea},
+            </if>
+            <if test="null != htRecommend">
+                ht_recommend = #{htRecommend},
+            </if>
+            <if test="null != htImage">
+                ht_image = #{htImage},
+            </if>
+            <if test="null != htInfo and '' != htInfo">
+                ht_info = #{htInfo},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ht_id = #{htId} and version = #{version}
+	</update>
+	<!--删除户型表 -->
+	<delete id="deleteHouseTypeManageByHtId" parameterType="java.lang.Long">
+		DELETE FROM t_house_type_manage WHERE ht_id = #{htId}
+	</delete>
+</mapper>

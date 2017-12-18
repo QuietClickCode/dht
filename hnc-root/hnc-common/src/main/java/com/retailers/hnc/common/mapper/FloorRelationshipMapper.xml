@@ -3,37 +3,41 @@
 <mapper namespace="com.retailers.hnc.common.dao.FloorRelationshipMapper">
 
 	<resultMap id="rm_floorRelationship" type="com.retailers.hnc.common.entity.FloorRelationship">
-			<result property="frId" column="fr_id"/>
+			<result property="flId" column="fl_id"/>
 			<result property="fmId" column="fm_id"/>
-			<result property="ftId" column="ft_id"/>
-			<result property="ftName" column="ft_name"/>
+			<result property="frId" column="fr_id"/>
+			<result property="htId" column="ht_id"/>
+			<result property="hrId" column="hr_id"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="floorRelationship_columns">
-		fr_id,fm_id,ft_id,ft_name,is_delete,version
+		fl_id,fm_id,fr_id,ht_id,hr_id,is_delete,version
 	</sql>
 	<!-- 根据楼栋关系表主键取得数据 -->
-	<select id="queryFloorRelationshipByFrId" resultMap="rm_floorRelationship" parameterType="java.lang.Long">
+	<select id="queryFloorRelationshipByFlId" resultMap="rm_floorRelationship" parameterType="java.lang.Long">
 		SELECT <include refid="floorRelationship_columns" />
-		FROM t_floor_relationship WHERE fr_id = #{frId}
+		FROM t_floor_relationship WHERE fl_id = #{flId}
 	</select>
 	<!-- 楼栋关系表查询条件组合 -->
 	<sql id="floorRelationship_where">
 		<where>
-			<if test="null != params.frId">
-				AND fr_id = #{params.frId}
+			<if test="null != params.flId">
+				AND fl_id = #{params.flId}
 			</if>
 			<if test="null != params.fmId">
 				AND fm_id = #{params.fmId}
 			</if>
-			<if test="null != params.ftId">
-				AND ft_id = #{params.ftId}
+			<if test="null != params.frId">
+				AND fr_id = #{params.frId}
 			</if>
-			<if test="null != params.ftName and '' != params.ftName">
-				AND ft_name = #{params.ftName}
+			<if test="null != params.htId">
+				AND ht_id = #{params.htId}
+			</if>
+			<if test="null != params.hrId">
+				AND hr_id = #{params.hrId}
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
@@ -50,12 +54,12 @@
 		<include refid="floorRelationship_where"/>
 	</select>
 	<!--添加楼栋关系表 -->
-	<insert id="saveFloorRelationship" parameterType="com.retailers.hnc.common.entity.FloorRelationship" useGeneratedKeys="true" keyProperty="frId">
+	<insert id="saveFloorRelationship" parameterType="com.retailers.hnc.common.entity.FloorRelationship" useGeneratedKeys="true" keyProperty="flId">
 		INSERT INTO t_floor_relationship (
-			fm_id,ft_id,ft_name,is_delete,version
+			fm_id,fr_id,ht_id,hr_id,is_delete,version
 		) VALUES
 		(
-			#{fmId,jdbcType=BIGINT},#{ftId,jdbcType=BIGINT},#{ftName,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},0
+			#{fmId,jdbcType=BIGINT},#{frId,jdbcType=BIGINT},#{htId,jdbcType=BIGINT},#{hrId,jdbcType=BIGINT},#{isDelete,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改楼栋关系表 -->
@@ -65,11 +69,14 @@
             <if test="null != fmId">
                 fm_id = #{fmId},
             </if>
-            <if test="null != ftId">
-                ft_id = #{ftId},
+            <if test="null != frId">
+                fr_id = #{frId},
             </if>
-            <if test="null != ftName and '' != ftName">
-                ft_name = #{ftName},
+            <if test="null != htId">
+                ht_id = #{htId},
+            </if>
+            <if test="null != hrId">
+                hr_id = #{hrId},
             </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
@@ -78,14 +85,20 @@
                 version = version+1,
             </if>
 		</set>
-		WHERE fr_id = #{frId} and version = #{version}
+		WHERE fl_id = #{flId} and version = #{version}
 	</update>
 	<!--删除楼栋关系表 -->
-	<delete id="deleteFloorRelationshipByFrId" parameterType="java.lang.Long">
-		DELETE FROM t_floor_relationship WHERE fr_id = #{frId}
+	<delete id="deleteFloorRelationshipByFlId" parameterType="java.lang.Long">
+		DELETE FROM t_floor_relationship WHERE fl_id = #{flId}
 	</delete>
 
-	<select id="queryFloorType" resultMap="rm_floorRelationship" parameterType="java.lang.Long">
-		SELECT * FROM t_floor_relationship WHERE fm_id = #{fmId} AND is_delete != 1
+	<!--查找与该楼栋所关联的户型-->
+	<select id="queryFloorType" parameterType="java.lang.Long" resultMap="rm_floorRelationship">
+		SELECT * FROM t_floor_relationship WHERE fm_id = #{fmId} AND is_delete = 0;
+	</select>
+
+	<!--查找与该户型所关联的楼栋-->
+	<select id="queryHouseType" parameterType="java.lang.Long" resultMap="rm_floorRelationship">
+		SELECT * FROM t_floor_relationship WHERE ht_id = #{htId} AND is_delete = 0;
 	</select>
 </mapper>
