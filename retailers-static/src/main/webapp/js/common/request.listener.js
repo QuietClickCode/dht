@@ -31,8 +31,9 @@
                             window.top.location.href="/login";
                         }
                     });
+                    return;
                 }
-                return;
+
                 //成功回调方法增强处理
                 fn.success(data, textStatus);
             },
