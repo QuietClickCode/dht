@@ -59,6 +59,8 @@ public interface CutPriceLogService {
 	public boolean deleteCutPriceLogByCplId(Long cplId);
 
 	public List<CutPriceLogVo> queryCutPriceLog(Long gid, Long uid);
+
+	public Map<Long,Float> queryCutpriceByGdId(Long gdId,Long uid);
 }
 
 
