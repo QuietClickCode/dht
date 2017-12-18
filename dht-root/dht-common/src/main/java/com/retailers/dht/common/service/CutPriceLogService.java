@@ -60,7 +60,7 @@ public interface CutPriceLogService {
 
 	public List<CutPriceLogVo> queryCutPriceLog(Long gid, Long uid);
 
-	public Map<Long,Float> queryCutpriceByGdId(Long gdId,Long uid);
+	public Map<String,Long> queryCutpriceByGdId(Long gdId,Long uid);
 }
 
 

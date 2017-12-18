@@ -14,6 +14,15 @@ public class CutPriceLogVo extends CutPriceLog {
     private Long gdPrice;
     private Long cpPrice;
     private String remark;
+    private Long cpInventory;
+
+    public Long getCpInventory() {
+        return cpInventory;
+    }
+
+    public void setCpInventory(Long cpInventory) {
+        this.cpInventory = cpInventory;
+    }
 
     public String getRemark() {
         return remark;

@@ -192,6 +192,7 @@
 <form method="post" action="/order/getCheckOrderDataByCutPrice" style="display: none" id="checkorderdataform">
     <input type="hidden" id="gdcpId" name="gdcpId">
     <input type="hidden" id="gname" name="gname">
+    <input type="hidden" id="gid" name="gid">
     <input type="hidden" id="imgurl" name="imgurl">
     <input type="hidden" id="remark" name="remark">
     <input type="hidden" id="gdprice" name="gdprice">
@@ -524,6 +525,7 @@
             $('#gdcpId').val(gdcpId);
             $('#remark').val(remark);
             $('#gdprice').val($('#nowprice').val());
+            $('#gid').val(gid);
 
             $('#checkorderdataform').submit();
         }

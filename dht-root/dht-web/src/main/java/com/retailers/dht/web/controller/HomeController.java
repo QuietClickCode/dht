@@ -24,8 +24,8 @@ public class HomeController extends BaseController {
     @RequestMapping(value = {"","/","/index"})
     public String home(HttpServletRequest request){
         UserInfoVIew userInfo=new UserInfoVIew();
-        userInfo.setUid(10l);
-//        setCurLoginUser(request,userInfo);
+        userInfo.setUid(11l);
+        setCurLoginUser(request,userInfo);
         return redirectUrl(request,"index");
     }
 

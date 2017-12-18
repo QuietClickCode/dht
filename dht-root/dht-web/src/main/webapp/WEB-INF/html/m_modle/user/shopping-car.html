@@ -672,6 +672,7 @@
                             '<i class="icon-checkbox J_checkbox goods-item"><input type="hidden" value="'+rows[i].bcId+'"></i>' +
                             '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>' +
                             '<input type="hidden" name="bcDescription" value="'+rows[i].bcDescription+'"/>' +
+                            '<input type="hidden" name="gid" value="'+rows[i].gid+'"/>' +
                             '</div>';
                         var goodsPath;
                         var gdImgurl = rows[i].gdimgurl;
@@ -762,6 +763,8 @@
                                         '<div class="checkbox">'+
                                         '<i class="icon-checkbox J_checkbox goods-item"></i>'+
                                         '<input type="hidden" name="gdId" value="'+rows[i].gdId+'"/>'+
+                                        '<input type="hidden" name="bcDescription" value="'+rows[i].bcDescription+'"/>' +
+                                        '<input type="hidden" name="gid" value="'+rows[i].gid+'"/>' +
                                         '</div>';
                                     var goodsPath;
                                     var gdImgurl = rows[i].gdimgurl;
@@ -1279,6 +1282,7 @@
                 var row = rows[i];
                 var bcId = $(row).find('input[type=hidden]')[0].value;
                 var gdId = $(row).next().val();
+                var goodsId = $(row).next().next().next().val();
                 var num = $(row).parent().parent().find('.J_careNum').html();
                 var imgurl = $(row).parent().next().find('img')[0].src;
                 var gsvals = $(row).parent().next().next().find('p').html();
@@ -1286,6 +1290,7 @@
                 var gname = $(row).parent().next().next().find('a').html();
                 var remark = $(row).next().next().val();
 
+                data+='\'goodsId\':\''+goodsId+'\',';
                 data+='\'gdId\':\''+gdId+'\',';
                 data+='\'num\':\''+num+'\',';
                 data+='\'imgurl\':\''+imgurl+'\',';

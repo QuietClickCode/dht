@@ -13,7 +13,6 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -92,18 +91,20 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 		}
 		return list;
 	}
-	public Map<Long,Float> queryCutpriceByGdId(Long gdId,Long uid){
+	public Map<String,Long> queryCutpriceByGdId(Long gdId,Long uid){
 		List<CutPriceLogVo> list =  cutPriceLogMapper.queryCutpriceByGdId(gdId,uid);
-		Map<Long,Float> map = new HashMap<Long, Float>();
-		DecimalFormat    df   = new DecimalFormat("######0.00");
+		Map<String,Long> map = new HashMap<String, Long>();
 		if(ObjectUtils.isNotEmpty(list)){
 			Long gdPrice = list.get(0).getGdPrice();
+			Long cpInventory = list.get(0).getCpInventory();
 			Long index = 0L;
 			for(CutPriceLogVo cutPriceLogVo:list){
 				index += cutPriceLogVo.getCplCutdownprice();
 			}
-			gdPrice = gdPrice - index;
-			map.put(gdId,Float.parseFloat(df.format(gdPrice/100.0F)));
+			Long finalPrice = gdPrice - index;
+			map.put("finalPrice",finalPrice);
+			map.put("gdPrice",gdPrice);
+			map.put("cpInventory",cpInventory);
 		}
 		return  map;
 	}

@@ -78,7 +78,7 @@ public class CutPriceLogController extends BaseController{
                 List<CutPricePrice> cutPricePriceList = cutPricePriceService.queryGdcpIdList(params,1,1).getData();
                 if(!ObjectUtils.isEmpty(cutPricePriceList)){
                     Long gdcpId = cutPricePriceList.get(0).getGdcpId();
-                    boolean isBuyFlag = goodsIsbuycpService.queryIsBuycpByGdcpId(gdcpId,uid);
+                    boolean isBuyFlag = goodsIsbuycpService.queryIsBuycpByGdcpId(gdcpId,usdId);
                     System.out.println("isBuyFlag:==="+isBuyFlag);
                     //false为已经购买 true为未购买
                     if(isBuyFlag){

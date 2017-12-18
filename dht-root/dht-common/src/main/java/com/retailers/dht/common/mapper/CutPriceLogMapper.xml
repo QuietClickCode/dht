@@ -25,6 +25,7 @@
 		<result property="cpLestperson" column="cpLestperson"/>
 		<result property="gdPrice" column="gdPrice"/>
 		<result property="remark" column="remark"/>
+		<result property="cpInventory" column="cp_inventory"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -92,7 +93,8 @@
 	<select id="queryCutpriceByGdId" resultMap="rm_cutPriceLog_vo">
 		SELECT
 		t4.*,
-		t5.gd_price gdPrice
+		t5.gd_price gdPrice,
+		t1.cp_inventory
 		FROM
 		t_goods_gdcprel t1,
 		t_cut_price t2,

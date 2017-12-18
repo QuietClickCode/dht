@@ -35,6 +35,11 @@ public class GoodsCutPriceLogServiceTest extends TestBaseJunit {
 
     }
 
+    @Test
+    public void  queryCutpriceByGdId()throws Exception{
+        Map list = cutPriceLogService.queryCutpriceByGdId(858L,11L);
+        System.out.println(list.get("cpInventory"));
+    }
 
 
 }

@@ -63,9 +63,21 @@ public class OrderController extends BaseController {
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
+    @RequestMapping("getCheckOrderDataBySeckill")
+    public String getCheckOrderDataBySeckill(HttpServletRequest request,String data){
+        data += "\'isActivity\':1}";
+        request.getSession().setAttribute("checkOrderData",data);
+        return "redirect:/order/checkOrder";
+    }
+    @RequestMapping("getCheckOrderDataBySpecial")
+    public String getCheckOrderDataBySpecial(HttpServletRequest request,String data){
+        data += "\'isActivity\':0}";
+        request.getSession().setAttribute("checkOrderData",data);
+        return "redirect:/order/checkOrder";
+    }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
-    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice){
+    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long gid){
         if(ObjectUtils.isNotEmpty(gdcpId)){
             Long uid = getCurLoginUserId(request);
             GoodsGdcprelVo goodsGdcprelVo = goodsGdcprelService.queryCheckOrderData(gdcpId,uid);
@@ -76,6 +88,7 @@ public class OrderController extends BaseController {
 
                 Map map = new HashMap();
                 map.put("gdId",gdId);
+                map.put("gid",gid);
                 map.put("num",sumcount);
                 map.put("imgurl",imgurl);
                 map.put("gsvals",gsName);

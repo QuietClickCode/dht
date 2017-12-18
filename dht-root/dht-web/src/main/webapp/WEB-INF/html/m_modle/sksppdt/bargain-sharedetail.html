@@ -193,7 +193,7 @@
 
 
     <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/public.js"></script>
+
     <script src="/js/TouchSlide.1.1.js"></script>
     <script src="/js/tabs.js"></script>
     <script src="/js/layer/layer.js"></script>
@@ -362,8 +362,8 @@
                     var rows = data.rows;
                     if(rows!=null){
                         var times = 0;
-                        var gdPrice = rows[0].gdPrice;
-                        var cpPrice = rows[0].cpPrice;
+                        var gdPrice = parseFloat( rows[0].gdPrice/100).toFixed(2);
+                        var cpPrice = parseFloat(rows[0].cpPrice/100).toFixed(2);
                         var cpMostperson = rows[0].cpMostperson;
                         var cpLestperson = rows[0].cpLestperson;
                         var logul = $('.bargain_info_list');
@@ -378,8 +378,8 @@
                                     '<span class="name">'+rows[i].uname+'</span>';
                                 var usId = rows[i].usId;
                                 var usdId = rows[i].usdId;
-                                var cplCutdownprice = rows[i].cplCutdownprice;
-                                cpindex += cplCutdownprice;
+                                var cplCutdownprice = parseFloat(rows[i].cplCutdownprice/100).toFixed(2);
+                                cpindex += Number(cplCutdownprice);
                                 var howcp='';
                                 if(usId==usdId){
                                     howcp='自砍';
@@ -399,7 +399,7 @@
                         }
 
 
-                        var nowprice = gdPrice-cpindex;
+                        var nowprice = parseFloat(gdPrice-cpindex).toFixed(2);
                         $('.p1').html('已砍'+times+'刀，现价，<span>￥'+nowprice+'</span>');
                         $('.span1').html('￥'+gdPrice);
                         $('.span2').html('￥'+cpPrice);

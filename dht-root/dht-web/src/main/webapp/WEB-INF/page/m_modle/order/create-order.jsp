@@ -32,46 +32,46 @@
     </div>
 
     <div id="goodsList">
-        <div class="order-product">
-            <a href="" class="img">
-                <img src="/img/order1.png" alt="">
-            </a>
-            <div class="text-box">
-                <a href="" class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>
-                <p class="norms">土豪金;168cm</p>
-                <div class="price-box">
-                    <span class="price">￥165</span>
-                    <div class="number-box">
-                        <span class="buy-num">数量：×7</span>
-                    </div>
-                </div>
-                <div class="coupon-info-box">
-                    <span class="coupon-btn">商品优惠</span>
-                    <ul class="coupon-info-wrap">
-                        <li>
-                            <span style="margin-top: 4px"><input type="checkbox"></span>
-                            <span style="margin-left: 20px">会员折扣</span>
-                            <span>￥ -20.00</span>
-                        </li>
-                        <li>
-                            <span style="margin-top: 4px"><input type="checkbox"></span>
-                            <span style="margin-left: 20px">会员折扣</span>
-                            <span>￥ -20.00</span>
-                        </li>
-                        <li>
-                            <span style="margin-top: 4px"><input type="checkbox"></span>
-                            <span style="margin-left: 20px">会员折扣</span>
-                            <span>￥ -20.00</span>
-                        </li>
-                        <li>
-                            <span style="margin-top: 4px"><input type="checkbox"></span>
-                            <span style="margin-left: 20px">会员折扣</span>
-                            <span>￥ -20.00</span>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <%--<div class="order-product clear-fix">--%>
+            <%--<a  class="img">--%>
+                <%--<img src="/img/order1.png" alt="">--%>
+            <%--</a>--%>
+            <%--<div class="text-box">--%>
+                <%--<a  class="title">荣泰（ROTAI）按摩椅 RT6616 多功能太零重力 足底滚轮指压 支持腰部热敷 专用皮质...。。。。。。家用全自动按摩椅 香槟色</a>--%>
+                <%--<p class="norms">土豪金;168cm</p>--%>
+                <%--<div class="price-box">--%>
+                    <%--<span class="price">￥165</span>--%>
+                    <%--<div class="number-box">--%>
+                        <%--<span class="buy-num">数量：×7</span>--%>
+                    <%--</div>--%>
+                <%--</div>--%>
+                <%--<div class="coupon-info-box">--%>
+                    <%--<span class="coupon-btn">商品优惠</span>--%>
+                    <%--<ul class="coupon-info-wrap">--%>
+                        <%--<li>--%>
+                            <%--<span style="margin-top: 4px"><input type="checkbox"></span>--%>
+                            <%--<span style="margin-left: 20px">会员折扣</span>--%>
+                            <%--<span>￥ -20.00</span>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                            <%--<span style="margin-top: 4px"><input type="checkbox"></span>--%>
+                            <%--<span style="margin-left: 20px">会员折扣</span>--%>
+                            <%--<span>￥ -20.00</span>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                            <%--<span style="margin-top: 4px"><input type="checkbox"></span>--%>
+                            <%--<span style="margin-left: 20px">会员折扣</span>--%>
+                            <%--<span>￥ -20.00</span>--%>
+                        <%--</li>--%>
+                        <%--<li>--%>
+                            <%--<span style="margin-top: 4px"><input type="checkbox"></span>--%>
+                            <%--<span style="margin-left: 20px">会员折扣</span>--%>
+                            <%--<span>￥ -20.00</span>--%>
+                        <%--</li>--%>
+                    <%--</ul>--%>
+                <%--</div>--%>
+            <%--</div>--%>
+        <%--</div>--%>
 
     </div>
 
@@ -229,7 +229,7 @@
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
-<script src="/js/layer/layer.js"></script>
+
 <!--页面交互-->
 <script>
     // 弹出支付选择框
@@ -295,7 +295,6 @@
 
         couponBtns.each(function () {
             $(this).on('click',function () {
-                console.log(222);
                 if($(this).hasClass('active')){
                     $(this).removeClass('active');
                     $(this).parent().find('.coupon-info-wrap').css('display','none')
@@ -327,13 +326,14 @@
     <!--加载商品信息-->
     function loadgoodsinfo() {
         var rows = goodsData.data;
-        console.log(rows);
+//        console.log(rows);
         var element = $('#goodsList');
         var html = '';
         for(var i=0;i<rows.length;i++){
-            html = '<div class="order-product">'+
+            html = '<div class="order-product clear-fix">' +
+                '<input type="hidden" value="'+rows[i].gdId+'" name="gdId">'+
                 '<a  class="img">'+
-            '<img src="'+rows[i].imgurl+'" alt="">'+
+            '<img style="margin-top: 15px" src="'+rows[i].imgurl+'" alt="">'+
             '</a>'+
             '<div class="text-box">'+
             '<a  class="title">'+rows[i].gname+'</a>'+
@@ -352,7 +352,7 @@
 
     function loadAddress() {
         var sedata = "${sessionScope.checkOrderAddress.uaId}";
-        console.log(sedata);
+//        console.log(sedata);
         var uaId;
         var uaName;
         var uaAllAddress;
@@ -457,8 +457,51 @@
 //                        jiesuan();
                         }
 
-                        if(gcLists!=null){
+                        var keyFlag = false;
+                        for ( var key in gcLists ) {
+                            keyFlag = true;
+                        }
+//                        console.log(keyFlag);
+                        if(keyFlag){
+                            var goodsdivs = $('.order-product');
+                            console.log(goodsdivs.length);
+                            for(var i=0;i<goodsdivs.length;i++){
+                                var godosdiv = $(goodsdivs[i]);
+                                var gdId = godosdiv.find('input[type=hidden]')[0].value;
+                                var goodscoupons = gcLists[gdId];
+                                console.log(goodscoupons[1].gcpName);
+                                if(goodscoupons.length>0){
+                                    var html = '<div class="coupon-info-box">'+
+                                        '<span class="coupon-btn">商品优惠</span>'+
+                                        '<ul class="coupon-info-wrap">';
 
+                                    for(var j=0;j<goodscoupons.length;j++){
+                                        var goodscoupon = goodscoupons[j];
+                                        var gcpIsOverlapUse = goodscoupon.gcpIsOverlapUse;
+                                        var type = goodscoupon.gcpType;
+                                        var val = goodscoupon.val;
+
+                                        html += '<li>'+
+                                            '<span style="margin-top: 4px"><input type="checkbox" value="'+goodscoupon.gcpId+'" gcpIsOverlapUse="'+gcpIsOverlapUse+'"></span>'+
+                                            '<span style="margin-left: 20px">'+goodscoupon.gcpName+'</span>';
+                                        var yh = '';
+                                        if(type==0){
+                                            yh = '￥'+val;
+                                        }else{
+                                            yh = '打'+val+'折';
+                                        }
+                                        html += '<span>'+yh+'</span>'+
+                                            '</li>';
+                                    }
+
+                                     html += '</ul>'+
+                                        '</div>';
+                                    godosdiv.append(html);
+                                }else{
+                                    continue;
+                                }
+                            }
+                            initgcp();
                         }
                     }else{
                         layer.msg(sdata);
