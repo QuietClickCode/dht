@@ -2,11 +2,16 @@ package com.retailers.wx.manage.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
+import com.retailers.tools.utils.UUIDUtils;
 import com.retailers.wx.common.config.WxConfig;
+import com.retailers.wx.common.entity.WxMessage;
+import com.retailers.wx.common.service.WxMessageService;
 import com.retailers.wx.common.utils.wx.WxMsgTextVo;
 import com.retailers.wx.common.utils.wx.WxMsgUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -29,6 +34,9 @@ import java.util.Map;
 @RequestMapping("wechat")
 public class WxMessageController{
     Logger logger = LoggerFactory.getLogger(WxMessageController.class);
+
+    @Autowired
+    private WxMessageService wxMessageService;
 
     /**
      * <b>方法名：</b>：core<br>
@@ -83,13 +91,21 @@ public class WxMessageController{
         if (ObjectUtils.isEmpty(wxMsgMap)|| ObjectUtils.isEmpty(wxMsgMap.get("MsgType"))) {
             return "";
         }
+        WxMessage wxMessage=new WxMessage();
+        wxMessage.setWmContext(JSON.toJSONString(wxMsgMap));
+        wxMessage.setWmCreateDate(new Date());
+        wxMessage.setWmMessageType(wxMsgMap.get("MsgType"));
+        wxMessage.setWmType(0l);
+        wxMessage.setWmUuid(UUIDUtils.getUUID());
+        wxMessageService.saveWxMessage(wxMessage);
 
         String originalId = wxMsgMap.get("ToUserName"); // 开发者微信号
         String openId = wxMsgMap.get("FromUserName"); // openId
         String msgType = wxMsgMap.get("MsgType"); // 消息类型
-        // String createTime = wxMsgMap.get("CreateTime");//消息接收时间
+         String createTime = wxMsgMap.get("CreateTime");//消息接收时间
         String event = wxMsgMap.get("Event");// 事件类型 subscribe(订阅)、unsubscribe(取消订阅)
         String ticket = wxMsgMap.get("Ticket");// 二维码的ticket，可用来换取二维码图片
+
         // 回复信息内容
         WxMsgTextVo tm = new WxMsgTextVo(openId, originalId, new Date().getTime(), WxConfig.REQ_MESSAGE_TYPE_TEXT, "正在发送消息，请稍候...");
 

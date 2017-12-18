@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.wx.common.dao.WxMessageMapper">
+
+	<resultMap id="rm_wxMessage" type="com.retailers.wx.common.entity.WxMessage">
+			<result property="wmId" column="wm_id"/>
+			<result property="wmType" column="wm_type"/>
+			<result property="wmMessageType" column="wm_message_type"/>
+			<result property="wmContext" column="wm_context"/>
+			<result property="wmUuid" column="wm_uuid"/>
+			<result property="wmCreateDate" column="wm_create_date"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="wxMessage_columns">
+		wm_id,wm_type,wm_message_type,wm_context,wm_uuid,wm_create_date
+	</sql>
+	<!-- 根据用户发送消息内容主键取得数据 -->
+	<select id="queryWxMessageByWmId" resultMap="rm_wxMessage" parameterType="java.lang.Long">
+		SELECT <include refid="wxMessage_columns" />
+		FROM t_wx_message WHERE wm_id = #{wmId}
+	</select>
+	<!-- 用户发送消息内容查询条件组合 -->
+	<sql id="wxMessage_where">
+		<where>
+			<if test="null != params.wmId">
+				AND wm_id = #{params.wmId}
+			</if>
+			<if test="null != params.wmType">
+				AND wm_type = #{params.wmType}
+			</if>
+			<if test="null != params.wmMessageType and '' != params.wmMessageType">
+				AND wm_message_type = #{params.wmMessageType}
+			</if>
+			<if test="null != params.wmContext and '' != params.wmContext">
+				AND wm_context = #{params.wmContext}
+			</if>
+			<if test="null != params.wmUuid and '' != params.wmUuid">
+				AND wm_uuid = #{params.wmUuid}
+			</if>
+			<if test="null != params.wmCreateDateBegin">
+				AND wm_create_date &gt;= TO_DATE('${params.wmCreateDateBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.wmCreateDateEnd">
+				AND wm_create_date &lt;= TO_DATE('${params.wmCreateDateEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryWxMessageList" resultMap="rm_wxMessage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="wxMessage_columns" />
+		FROM t_wx_message
+		<include refid="wxMessage_where"/>
+	</select>
+	<!--添加用户发送消息内容 -->
+	<insert id="saveWxMessage" parameterType="com.retailers.wx.common.entity.WxMessage" useGeneratedKeys="true" keyProperty="wmId">
+		INSERT INTO t_wx_message (
+			wm_type,wm_message_type,wm_context,wm_uuid,wm_create_date
+		) VALUES
+		(
+			#{wmType,jdbcType=BIGINT},#{wmMessageType,jdbcType=VARCHAR},#{wmContext,jdbcType=LONGVARCHAR},#{wmUuid,jdbcType=VARCHAR},#{wmCreateDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改用户发送消息内容 -->
+	<update id="updateWxMessage" parameterType="com.retailers.wx.common.entity.WxMessage">
+		UPDATE t_wx_message
+		<set>
+            <if test="null != wmType">
+                wm_type = #{wmType},
+            </if>
+            <if test="null != wmMessageType and '' != wmMessageType">
+                wm_message_type = #{wmMessageType},
+            </if>
+            <if test="null != wmContext and '' != wmContext">
+                wm_context = #{wmContext},
+            </if>
+            <if test="null != wmUuid and '' != wmUuid">
+                wm_uuid = #{wmUuid},
+            </if>
+            <if test="null != wmCreateDate">
+                wm_create_date = #{wmCreateDate},
+            </if>
+		</set>
+		WHERE wm_id = #{wmId}
+	</update>
+	<!--删除用户发送消息内容 -->
+	<delete id="deleteWxMessageByWmId" parameterType="java.lang.Long">
+		DELETE FROM t_wx_message WHERE wm_id = #{wmId}
+	</delete>
+</mapper>
