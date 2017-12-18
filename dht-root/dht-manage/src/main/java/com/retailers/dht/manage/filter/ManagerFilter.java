@@ -39,15 +39,10 @@ public class ManagerFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
-        System.out.println("uri---------------->:"+uri);
         if(uri.indexOf(".")<0){
             String path = request.getServletPath();
-            System.out.println("path---------------->:"+path);
-            String igpath = path.substring(path.lastIndexOf("/") + 1);
-            System.out.println("req.getContextPath()---------------->:"+request.getContextPath());
-            System.out.println("igpath---------------->:"+igpath);
             // 如果用户未登录，通过在IE地址栏走login.jsp或者register.jsp的页面可以直接访问资源，否则就进行拦截
-            if (uri.equalsIgnoreCase("/login")||uri.equalsIgnoreCase("/wechat/sendMsg")) {
+            if (uri.equalsIgnoreCase("/login")||uri.equalsIgnoreCase("/wechat/sendMsg")||uri.equals("/sysUser/querySyUserByAccount")) {
                 chain.doFilter(request, response);
                 return;
             } else {
