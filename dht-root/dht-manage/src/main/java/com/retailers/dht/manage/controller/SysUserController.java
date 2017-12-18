@@ -55,7 +55,7 @@ public class SysUserController extends BaseController {
         if (ObjectUtils.isNotEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))) {
             request.getSession().removeAttribute(SystemConstant.LOG_USER_SESSION_KEY);
         }
-        return "/login";
+        return "sys_user/login";
     }
     /**
      * 打开后台人员管理页面
@@ -66,15 +66,6 @@ public class SysUserController extends BaseController {
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     public String openSysUserPage(){
         return "sys_user/sys_user";
-    }
-    /**
-     * 打开登陆页面
-     * @return
-     */
-    @RequestMapping("openLoginPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
-    public String openLoginPage(){
-        return "sys_user/login";
     }
 
     /**
