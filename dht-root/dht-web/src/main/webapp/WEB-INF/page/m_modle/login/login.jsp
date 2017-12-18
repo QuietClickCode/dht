@@ -8,6 +8,17 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/login.css">
+    <style type="text/css">
+        .form .code{
+            overflow: hidden;
+            position: relative;
+        }
+
+        #validateCodeImg{
+            position: absolute;
+            bottom: 0.1rem;
+        }
+    </style>
 </head>
 <body>
 <div class="login_app">
