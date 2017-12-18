@@ -235,10 +235,6 @@ public class OrderController extends BaseController {
         int curRow =1;
         for(BuyGoodsDetailVo bgdv:bgdvs){
             boolean isFlag=false;
-            if(ObjectUtils.isEmpty(bgdv.getGoodsId())){
-                error.append("第"+curRow+"行数据商品ID不能为空,");
-                isFlag=true;
-            }
             if(ObjectUtils.isEmpty(bgdv.getGdId())){
                 error.append("第"+curRow+"行商品规格id不能为空,");
                 isFlag=true;
@@ -264,8 +260,23 @@ public class OrderController extends BaseController {
      * @param request
      * @return
      */
-    private boolean isInviter(HttpServletRequest request,BuyInfoVo buyInfo){
-        return true;
+    private Long isInviter(HttpServletRequest request,BuyInfoVo buyInfo){
+        //取得推荐人
+        Long inviterUid=getShareUserId(request);
+        //取得推荐商品id
+        Long inviterGid=getShareGoodsId(request);
+        Long curGid=null;
+        if(ObjectUtils.isNotEmpty(buyInfo)){
+            for(BuyGoodsDetailVo bgd:buyInfo.getBuyGoods()){
+                curGid=bgd.getGoodsId();
+            }
+        }
+        if(ObjectUtils.isNotEmpty(curGid)&&ObjectUtils.isNotEmpty(inviterGid)){
+            if(curGid.intValue()==inviterGid.intValue()){
+                return inviterUid;
+            }
+        }
+        return null;
     }
 }
 

@@ -97,8 +97,92 @@
     </div>
 </div>
 
+<%--修改户型--%>
+<div class="modal fade" id="editHouseType" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">编辑户型信息</h4>
+            </div>
+            <div class="modal-body">
+                <form id="updateHouseType">
+                    <div class="form-group">
+                        <label>是否显示:</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="isShow" name="isShow" value="1">显示
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="isShow" name="isShow" value="0">不显示
+                            </label>
+                        </div>
+                    </div>
 
+                    <div class="form-group">
+                        <label>是否主推</label>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="htRecommend" name="htRecommend" value="0">非主推
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label>
+                                <input type="radio" class="htRecommend" name="htRecommend" value="1">主推
+                            </label>
+                        </div>
+                    </div>
 
+                    <div class="form-group" style="display: none;">
+                        <label>户型ID:</label>
+                        <input type="text" class="form-control" name="htId" placeholder="楼栋ID" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label>户型名称:</label>
+                        <input type="text" class="form-control" name="htTypeName" placeholder="户型名称">
+                    </div>
+                    <div class="form-group">
+                        <label>房屋类型:</label>
+                        <input type="text" class="form-control" name="htType" placeholder="房屋类型">
+                    </div>
+                    <div class="form-group">
+                        <label>户型面积:</label>
+                        <input type="text" class="form-control" name="htArea" placeholder="户型面积">
+                    </div>
+                    <div class="form-group">
+                        <label>户型描述:</label>
+                        <textarea style="outline:none;resize:none;height: 200px;" name="htInfo" class="form-control" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary subEditHouseType">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<%--删除户型模态框--%>
+<div class="modal fade" id="deleteHouseType" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">删除楼栋</h4>
+            </div>
+            <div class="modal-body">
+                <p>是否删除该户型</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary deleteHouseType">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
@@ -147,6 +231,18 @@
             }
         },
         {
+            title: '是否显示',
+            align : 'center',
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                if(row.isShow == 0){
+                    return "不显示";
+                }else if (row.isShow == 1){
+                    return "显示";
+                }
+            }
+        },
+        {
             field: 'fmInfo',
             title: '户型描述',
             width:'200px',
@@ -170,7 +266,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                    return '<button class="btn btn-primary" onclick="event.stopPropagation();">添加户型效果图</button>';
+                return '<button class="btn btn-primary" onclick="event.stopPropagation();">添加户型效果图</button>';
             }
         },
         {
@@ -191,7 +287,7 @@
                 rowDatas.set(''+row.htId+'',row);
                 let html='';
                 <ex:perm url="floorManage/updateFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();editHouseType(\''+row.htId+'\')">编辑</button>'
                 </ex:perm>
                 return html;
             }
@@ -203,7 +299,7 @@
             formatter:function (value,row,index) {
                 let html='';
                 <ex:perm url="floorManage/removeFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">删除</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();deleteHouseType(\''+row.htId+'\')">删除</button>'
                 </ex:perm>
                 return html;
             }
@@ -246,7 +342,7 @@
         $("#saveHouseTypeModal").modal("show");
     });
 
-    /*提交*/
+    /*提交新增户型*/
     $(".subSaveHouseType").click(function () {
         let bootstrapValidator = $("#saveHouseType").data('bootstrapValidator');
         bootstrapValidator.validate();
@@ -275,7 +371,77 @@
     });
 </script>
 
+<%--修改户型--%>
+<script>
 
+    var houseType;
+    /*打开修改户型模态框*/
+    function editHouseType(id) {
+        houseType = rowDatas.get(id);
+        $("#updateHouseType input[type='text']").each(function () {
+            let name = $(this).attr("name");
+            $(this).val(houseType[name]);
+        });
+        radioChoose(".isShow",houseType['isShow']);
+        radioChoose(".htRecommend",houseType['htRecommend']);
+        $("#updateHouseType textarea").val(houseType['htInfo']);
+        $("#editHouseType").modal("show");
+    }
+
+    /*提交户型修改信息*/
+    $(".subEditHouseType").click(function () {
+        let bootstrapValidator = $("#updateHouseType").data('bootstrapValidator');
+        bootstrapValidator.validate();
+        if(!bootstrapValidator.isValid())
+            return;
+        if(!isSave) {
+            isSave = true;
+            var floor = document.getElementById("updateHouseType");
+            var data = new FormData(floor);
+            $.ajax({
+                url:"/houseManage/updateHouseType",
+                method:"post",
+                data:data,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    isSave = false;
+                    $("#editHouseType").modal("hide");
+                    $("#updateHouseType").data('bootstrapValidator').resetForm(true);
+                    refreshTableData();
+                }
+            });
+        }
+    });
+</script>
+
+<%--删除该户型--%>
+<script>
+    /*打开删除户型模态框*/
+    function deleteHouseType(id) {
+        houseType = rowDatas.get(id);
+        $("#deleteHouseType").modal("show");
+    }
+
+    $(".deleteHouseType").click(function () {
+        if(!isSave){
+            isSave = true;
+            $.ajax({
+                url:"/houseManage/removeHouseType",
+                method:"post",
+                data:{
+                    htId:houseType['htId']
+                },
+                dataType:"json",
+                success:function (data) {
+                    isSave = false;
+                    refreshTableData();
+                    $("#deleteHouseType").modal("hide");
+                }
+            });
+        }
+    });
+</script>
 
 <%--自定义方法--%>
 <script>
@@ -292,6 +458,57 @@
 <%--表单校验--%>
 <script type="text/javascript">
     $('#saveHouseType').bootstrapValidator({
+        message: 'This value is not valid',
+        feedbackIcons: {
+            valid: 'glyphicon glyphicon-ok',
+            invalid: 'glyphicon glyphicon-remove',
+            validating: 'glyphicon glyphicon-refresh'
+        },
+        fields: {
+            htRecommend: {
+                validators: {
+                    notEmpty: {
+                        message: '不能为空'
+                    }
+                }
+            },
+            htTypeName: {
+                validators: {
+                    notEmpty: {
+                        message: '户型名称不能为空'
+                    }
+                }
+            },
+            htType: {
+                validators: {
+                    notEmpty: {
+                        message: '户型不能为空'
+                    }
+                }
+            },
+            htArea: {
+                validators: {
+                    notEmpty: {
+                        message: '户型面积不能为空'
+                    },
+                    regexp: {
+                        regexp: /\d/,
+                        message: "只能输入数字"
+                    }
+                }
+            },
+            htInfo: {
+                validators: {
+                    notEmpty: {
+                        message: '户型信息不能为空'
+                    }
+                }
+            }
+        }
+    });
+
+
+    $('#updateHouseType').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',

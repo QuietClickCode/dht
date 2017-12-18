@@ -3,9 +3,9 @@ package com.retailers.hnc.common.service.impl;
 
 import com.retailers.hnc.common.dao.FloorRelationshipMapper;
 import com.retailers.hnc.common.dao.HouseTypeManageMapper;
+import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.service.HouseTypeManageService;
-import com.retailers.hnc.common.vo.FloorManageVo;
 import com.retailers.hnc.common.vo.HouseTypeManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +33,8 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateHouseTypeManage(HouseTypeManage houseTypeManage) {
+		HouseTypeManage manage = queryHouseTypeManageByHtId(houseTypeManage.getHtId());
+		houseTypeManage.setVersion(manage.getVersion());
 		int status = houseTypeManageMapper.updateHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;
 	}
@@ -53,7 +55,9 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		return page;
 	}
 	public boolean deleteHouseTypeManageByHtId(Long htId) {
-		int status = houseTypeManageMapper.deleteHouseTypeManageByHtId(htId);
+		HouseTypeManage houseTypeManage = queryHouseTypeManageByHtId(htId);
+		houseTypeManage.setIsDelete(1);
+		int status = houseTypeManageMapper.updateHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;
 	}
 }

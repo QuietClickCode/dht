@@ -10,7 +10,9 @@ public enum OrderEnum {
     RECHARGE("RECHARGE", "充值", "CZ"),
     SHOPPING("SHOPPING", "购买商品", "GM"),
     SECKILL("SECKILL", "秒杀", "MS"),
-    GROUP_BUYING("GROUP_BUYING", "团购", "tg"),
+    GROUP_BUYING("GROUP_BUYING", "团购", "TG"),
+    SPECIAL_OFFER("SPECIAL_OFFER", "特价", "TJ"),
+    CUT_PRICE("CUT_PRICE", "砍价", "KJ"),
     PRE_ORDER("PRE_ORDER", "预购", "YG");
     //SHOPPING("SHOPPING","购买商品","GM"), recharge
     //SHOPPING("SHOPPING","购买商品","GM");

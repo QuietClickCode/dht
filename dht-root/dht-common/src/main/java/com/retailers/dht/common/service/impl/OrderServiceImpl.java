@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.LogUserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.*;
@@ -70,7 +71,8 @@ public class OrderServiceImpl implements OrderService {
 	private GoodsCouponService goodsCouponService;
     @Autowired
 	private BuyCarService buyCarService;
-
+	@Autowired
+	private CutPriceLogService cutPriceLogService;
 
 
 	public boolean saveOrder(Order order) {
@@ -120,19 +122,19 @@ public class OrderServiceImpl implements OrderService {
         logger.info("创建购物订单,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
         Date curDate=new Date();
         String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
-        procedureToolsService.singleUnLockManager(key);
+        procedureToolsService.singleLockManager(key);
 		Map<String,Object> rtnMap=new HashMap<String,Object>();
 		String orderNo="";
         try{
 			//取得用户地址
-			UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(buyInfos.getAddress());
-			if(ObjectUtils.isEmpty(userAddress)){
-				throw new AppException("请填写收货人地址");
-			}
-			//判断用户地址是否异常
-			if(userAddress.getUaUid().intValue()!=uid.intValue()){
-				throw new AppException("请填写收货人地址");
-			}
+			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
+//			if(ObjectUtils.isEmpty(userAddress)){
+//				throw new AppException("请填写收货人地址");
+//			}
+//			//判断用户地址是否异常
+//			if(userAddress.getUaUid().intValue()!=uid.intValue()){
+//				throw new AppException("请填写收货人地址");
+//			}
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
 			if(ObjectUtils.isEmpty(goodsFreight)){
@@ -237,45 +239,115 @@ public class OrderServiceImpl implements OrderService {
 
 
 	/**
-	 *
+	 *购买特价商品
 	 * @param uid
 	 * @param buyInfos
-	 * @param isInviter
+	 * @param inviterUid
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String, Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos, boolean isInviter) throws AppException {
-		return null;
+	public Map<String, Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid) throws AppException {
+		logger.info("购买特价商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
+		Date curDate=new Date();
+		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
+		procedureToolsService.singleUnLockManager(key);
+		Map<String,Object> rtnMap=new HashMap<String,Object>();
+		try{
+			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SPECIAL_OFFER);
+			rtnMap.put("orderNo",order.getOrderNo());
+			rtnMap.put("totalPrice",order.getOrderTradePrice());
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
+			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return rtnMap;
 	}
 
+
+
 	/**
-	 *
+	 *购买秒杀商品
 	 * @param uid
 	 * @param buyInfos
-	 * @param isInviter 是否是推荐商品
+	 * @param inviterUid 是否是推荐商品
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String, Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos, boolean isInviter) throws AppException {
-		return null;
+	public Map<String, Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos, Long inviterUid) throws AppException {
+		logger.info("购买秒杀商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
+		Date curDate=new Date();
+		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
+		procedureToolsService.singleUnLockManager(key);
+		Map<String,Object> rtnMap=new HashMap<String,Object>();
+		try{
+			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SECKILL);
+			rtnMap.put("orderNo",order.getOrderNo());
+			rtnMap.put("totalPrice",order.getOrderTradePrice());
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
+			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return rtnMap;
 	}
 
 	/**
-	 *
+	 *购买砍价商品
 	 * @param uid
 	 * @param buyInfos
 	 * @return
 	 * @throws AppException
 	 */
 	public Map<String, Object> buyCutPrice(Long uid, BuyInfoVo buyInfos) throws AppException {
-		return null;
+		logger.info("购买秒杀商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
+		Date curDate=new Date();
+		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
+		procedureToolsService.singleUnLockManager(key);
+		Map<String,Object> rtnMap=new HashMap<String,Object>();
+		try{
+			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
+			//取得快递费
+			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+			long logisticsPrice=0l;
+			if(ObjectUtils.isEmpty(goodsFreight)){
+				logisticsPrice= SysParameterConfigConstant.getValue(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,Long.class);
+			}else{
+				logisticsPrice=goodsFreight.getGfPrice();
+			}
+			Long gdId=null;
+			Integer num=null;
+			Long gid=null;
+			String remark="";
+			for(BuyGoodsDetailVo bgd:buyInfos.getBuyGoods()){
+				gdId=bgd.getGdId();
+				num=bgd.getNum();
+				gid=bgd.getGoodsId();
+				remark=bgd.getRemark();
+			}
+			//取得商品价格
+			Map<Long,Float> cutPrice=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
+			List<OrderDetail> ods=new ArrayList<OrderDetail>();
+			long totalPrice=0l;
+			OrderDetail  od=new OrderDetail();
+			od.setOdGoodsId(gid);
+			od.setOdGdId(gdId);
+			od.setOdBuyNumber(num);
+			od.setRemark(remark);
+//			od.setOdGoodsPrice(gd.getGdPrice());
+//			od.setOdActualPrice(gd.getGdPrice());
+			ods.add(od);
+			Order order=createOrder(OrderEnum.CUT_PRICE,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
+			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return rtnMap;
 	}
 
 	/**
 	 * 创建订单
 	 * @param orderEnum 订单类型
 	 * @param userAddress 用户收货地址
-	 * @param totalPrice 总金额
+	 * @param gTotalPrice 商品总额
 	 * @param cPrice 优惠卷金额
 	 * @param gcPrice 商品优惠金额
 	 * @param actualPrice 实际金额
@@ -284,7 +356,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @param ogcs 商品优惠详情
 	 * @return
 	 */
-	private Order createOrder(OrderEnum orderEnum,UserAddress userAddress,Long totalPrice,Long cPrice,Long gcPrice,
+	private Order createOrder(OrderEnum orderEnum,UserAddress userAddress,Long gTotalPrice,Long cPrice,Long gcPrice,
 							  Long actualPrice,Long orderLogisticsPrice,List<OrderDetail>ods,List<OrderGoodsCoupon> ogcs){
 		Order order=new Order();
 		String orderNo=procedureToolsService.executeOrderNo(orderEnum);
@@ -302,7 +374,8 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_NO);
 		order.setOrderSellDel(SystemConstant.SYS_IS_DELETE_NO);
 		order.setIsReal(OrderConstant.ORDER_IS_REAL_YES);
-		order.setOrderTradePrice(totalPrice);
+		order.setOrderTradePrice(actualPrice+orderLogisticsPrice);
+		order.setOrderGoodsTotalPrice(gTotalPrice);
 		order.setOrderGoodsActualPayPrice(actualPrice);
 		order.setOrderGoodsCouponPrice(cPrice);
 		order.setOrderGoodsCouponPrice(gcPrice);
@@ -312,13 +385,15 @@ public class OrderServiceImpl implements OrderService {
 		for(OrderDetail od:ods){
 			od.setOdOrderId(orderId);
 		}
-		for(OrderGoodsCoupon ogc:ogcs){
-			ogc.setOcOrderId(orderId);
-		}
 		//批量添加订单详情
 		orderDetailMapper.saveOrderDetails(ods);
-		//批量添加订单商品优惠
-		orderGoodsCouponMapper.saveOrderGoodsCoupons(ogcs);
+		if(ObjectUtils.isNotEmpty(ogcs)){
+			for(OrderGoodsCoupon ogc:ogcs){
+				ogc.setOcOrderId(orderId);
+			}
+			//批量添加订单商品优惠
+			orderGoodsCouponMapper.saveOrderGoodsCoupons(ogcs);
+		}
 		return order;
 	}
 
@@ -494,5 +569,81 @@ public class OrderServiceImpl implements OrderService {
 		return rtn;
 	}
 
+	/**
+	 * 校验收货地址
+	 * @param uid 用户
+	 * @param addressId 收货人地址id
+	 * @return
+	 * @throws AppException
+	 */
+	private UserAddress checkUserAddress(Long uid,Long addressId)throws AppException{
+		//取得用户地址
+		UserAddress userAddress=userAddressMapper.queryUserAddressByUaId(addressId);
+		if(ObjectUtils.isEmpty(userAddress)){
+			throw new AppException("请填写收货人地址");
+		}
+		//判断用户地址是否异常
+		if(userAddress.getUaUid().intValue()!=uid.intValue()){
+			throw new AppException("请填写收货人地址");
+		}
+		return userAddress;
+	}
+
+	/**
+	 * 创建优惠订单
+	 * @param uid 用户id
+	 * @param buyInfos 购买信息
+	 * @param inviterUid 是否分享
+	 * @param orderEnum 订单类型
+	 * @return
+	 * @throws AppException
+	 */
+	private Order createCouponOrder(Long uid,BuyInfoVo buyInfos,Long inviterUid,OrderEnum orderEnum)throws AppException{
+		UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
+		//取得快递费
+		GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+		long logisticsPrice=0l;
+		if(ObjectUtils.isEmpty(goodsFreight)){
+			logisticsPrice= SysParameterConfigConstant.getValue(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,Long.class);
+		}else{
+			logisticsPrice=goodsFreight.getGfPrice();
+		}
+		String gdids_="";
+		List<Long> gdIds=new ArrayList<Long>();
+		//规格id关联商品id
+		Map<Long,Long> gdIdUnGid=new HashMap<Long, Long>();
+		//规格id关联购买数量
+		Map<Long,Long> gdIdUnNum=new HashMap<Long, Long>();
+		//规格id关联价格
+		Map<Long,Long> gdIdUnPrice=new HashMap<Long, Long>();
+		//规格id关联备注
+		Map<Long,String> gdIdUnRemark=new HashMap<Long, String>();
+		for(BuyGoodsDetailVo bgd:buyInfos.getBuyGoods()){
+			gdIds.add(bgd.getGdId());
+			gdIdUnNum.put(bgd.getGdId(),bgd.getNum().longValue());
+			gdids_+=bgd.getGdId()+",";
+			gdIdUnRemark.put(bgd.getGdId(),bgd.getRemark());
+		}
+		//取得商品价格
+		List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdids_);
+		List<OrderDetail> ods=new ArrayList<OrderDetail>();
+		long totalPrice=0l;
+		for(GoodsDetail gd:gds){
+			gdIdUnPrice.put(gd.getGdId(),gd.getGdPrice());
+			gdIdUnPrice.put(gd.getGdId(),gd.getGid());
+			totalPrice+=gd.getGdPrice()*gdIdUnNum.get(gd.getGdId());
+			OrderDetail  od=new OrderDetail();
+			od.setOdGoodsId(gd.getGid());
+			od.setOdGdId(gd.getGdId());
+			od.setOdBuyNumber(gdIdUnNum.get(gd.getGdId()).intValue());
+			od.setRemark(gdIdUnRemark.get(gd.getGdId()));
+			od.setOdGoodsPrice(gd.getGdPrice());
+			od.setOdActualPrice(gd.getGdPrice());
+			od.setOdInviterUid(inviterUid);
+			ods.add(od);
+		}
+		Order order=createOrder(orderEnum,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
+		return order;
+	}
 }
 

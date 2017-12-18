@@ -31,6 +31,10 @@ public class SysParameterConfigConstant {
      * 主服务器地址（移动端）
      */
     public static final String MASTER_SERVER_MOBILE_URL="MASTER_SERVER_MOBILE_URL";
+    /**
+     * 平台默认邮费
+     */
+    public static final String DEFAULT_LOGISTICS_PRICE="DEFAULT_LOGISTICS_PRICE";
 
 
     //系统 参数对应的key值

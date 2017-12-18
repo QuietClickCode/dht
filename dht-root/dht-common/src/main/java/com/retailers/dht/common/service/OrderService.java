@@ -82,24 +82,24 @@ public interface OrderService {
 	 * 购买特价商品
 	 * @param uid
 	 * @param buyInfos
-	 * @param isInviter
+	 * @param inviterUid
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,boolean isInviter)throws AppException;
+	public Map<String,Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid)throws AppException;
 
 	/**
 	 * 购买秒杀商品
 	 * @param uid
 	 * @param buyInfos
-	 * @param isInviter 是否是推荐商品
+	 * @param inviterUid 是否是推荐商品
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos,boolean isInviter)throws AppException;
+	public Map<String,Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid)throws AppException;
 
 	/**
-	 * 购买秒杀商品
+	 * 购买砍价商品
 	 * @param uid
 	 * @param buyInfos
 	 * @return
