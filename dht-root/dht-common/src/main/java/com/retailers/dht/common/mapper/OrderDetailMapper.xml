@@ -10,13 +10,14 @@
 			<result property="odActualPrice" column="od_actual_price"/>
 			<result property="odBuyNumber" column="od_buy_number"/>
 			<result property="odGdId" column="od_gd_id"/>
+			<result property="odInviterUid" column="od_inviter_uid"/>
 			<result property="odIsRefund" column="od_is_refund"/>
 			<result property="remark" column="remark"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="orderDetail_columns">
-		id,od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_is_refund,remark
+		id,od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_inviter_uid,od_is_refund,remark
 	</sql>
 	<!-- 根据订单详情主键取得数据 -->
 	<select id="queryOrderDetailById" resultMap="rm_orderDetail" parameterType="java.lang.Long">
@@ -64,16 +65,17 @@
 	<!--添加订单详情 -->
 	<insert id="saveOrderDetail" parameterType="com.retailers.dht.common.entity.OrderDetail" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_order_detail (
-			od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_is_refund,remark
+			od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_inviter_uid,od_is_refund,remark
 		) VALUES
 		(
-			#{odOrderId,jdbcType=BIGINT},#{odGoodsId,jdbcType=BIGINT},#{odGoodsPrice,jdbcType=BIGINT},#{odActualPrice,jdbcType=BIGINT},#{odBuyNumber,jdbcType=INTEGER},#{odGdId,jdbcType=VARCHAR},#{odIsRefund,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
+			#{odOrderId,jdbcType=BIGINT},#{odGoodsId,jdbcType=BIGINT},#{odGoodsPrice,jdbcType=BIGINT},#{odActualPrice,jdbcType=BIGINT},
+			#{odBuyNumber,jdbcType=INTEGER},#{odGdId,jdbcType=VARCHAR},#{odInviterUid,jdbcType=BIGINT},#{odIsRefund,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
 		)
 	</insert>
 	<!--批量添加订单详情-->
 	<insert id="saveOrderDetails" parameterType="com.retailers.dht.common.entity.OrderDetail" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_order_detail (
-		od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_is_refund,remark
+		od_order_id,od_goods_id,od_goods_price,od_actual_price,od_buy_number,od_gd_id,od_inviter_uid,od_is_refund,remark
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator="," >
 			(
@@ -83,6 +85,7 @@
 				#{item.odActualPrice,jdbcType=BIGINT},
 				#{item.odBuyNumber,jdbcType=INTEGER},
 				#{item.odGdId,jdbcType=VARCHAR},
+				#{item.odInviterUid,jdbcType=BIGINT},
 				#{item.odIsRefund,jdbcType=INTEGER},
 				#{item.remark,jdbcType=VARCHAR}
 			)

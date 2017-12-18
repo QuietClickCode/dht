@@ -254,10 +254,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		Date curDate=new Date();
 		if(ObjectUtils.isNotEmpty(gtpvs)){
 			//商品价格
-//			Map<Long,Long> gps=new HashMap<Long, Long>();
-			//购买商品规格对应的格
 			Map<Long,Long> gdps=new HashMap<Long, Long>();
-//			Map<Long,Long> bgns=new HashMap<Long, Long>();
 			//购买规格对应的数量
 			Map<Long,Long> bgdns=new HashMap<Long, Long>();
 			Set<Long> gids=new HashSet<Long>();
@@ -421,7 +418,6 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			gtpv.setNum(gdtn.get(gid).longValue());
 			gtpvs.add(gtpv);
 		}
-//
 		//取得商品关联的优惠卷
 		Map<String,List<GoodsCouponView>> gcs=queryGoodsCouponBuyGid(gtpvs);
 		//取得用户此次购买满足条件的未使用优惠卷
