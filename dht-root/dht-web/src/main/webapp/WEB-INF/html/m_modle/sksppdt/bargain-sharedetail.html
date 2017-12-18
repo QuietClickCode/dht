@@ -413,6 +413,7 @@
 
         <!--调用分享函数-->
         function helpFriend() {
+            console.log(111);
             $.ajax({
                 type:"post",
                 url:'/openCutPriceLog/saveOtherCutPriceLog',
@@ -426,7 +427,6 @@
                         $('#hadhelp').show();
                         $('#askforhelp').hide();
                         layer.msg('成功补刀');
-                        alert(data.status);
                         setTimeout(function () {
                             window.location.reload();
                         },1000);

@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsIsbuycp;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：是否购买砍价商品表DAO
@@ -52,4 +54,5 @@ public interface GoodsIsbuycpMapper {
 	 */
 	public List<GoodsIsbuycp> queryGoodsIsbuycpList(Pagination<GoodsIsbuycp> pagination);
 
+	public GoodsIsbuycp queryIsBuycpByGdcpId(@Param("gdcpId")Long gdcpId,@Param("uid") Long uid);
 }

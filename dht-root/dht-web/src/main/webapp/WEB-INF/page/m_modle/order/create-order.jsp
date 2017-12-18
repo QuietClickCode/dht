@@ -229,6 +229,7 @@
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/layer/layer.js"></script>
 <!--页面交互-->
 <script>
     // 弹出支付选择框
@@ -456,6 +457,9 @@
 //                        jiesuan();
                         }
 
+                        if(gcLists!=null){
+
+                        }
                     }else{
                         layer.msg(sdata);
                     }
