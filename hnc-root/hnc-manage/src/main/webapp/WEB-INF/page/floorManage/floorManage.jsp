@@ -351,9 +351,8 @@
     /*打开编辑楼栋模态框*/
     function editFloor(fmId) {
         f = rowDatas.get(fmId);
-        $("#updateFloor input").each(function () {
+        $("#updateFloor input[type='text']").each(function () {
             let name = $(this).attr("name");
-            if(name != 'isShow')
             $(this).val(f[name]);
         });
         radioChoose(".isShow",f['isShow']);

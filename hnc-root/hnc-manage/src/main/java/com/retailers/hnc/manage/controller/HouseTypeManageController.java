@@ -66,4 +66,12 @@ public class HouseTypeManageController extends BaseController{
         else
             return errorForSystem("修改首页导航[" + manage.getHtTypeName() + "]失败");
     }
+
+    @RequestMapping("/removeHouseType")
+    @Function(label = "删除户型",description = "删除户型",resourse = "houseManage.removeHouseType",sort = 3,parentRes = "houseManage.houseManageMapping")
+    @ResponseBody
+    public BaseResp removeHouseType(Long htId){
+        boolean flag = houseTypeManageService.deleteHouseTypeManageByHtId(htId);
+        return  success(flag);
+    }
 }

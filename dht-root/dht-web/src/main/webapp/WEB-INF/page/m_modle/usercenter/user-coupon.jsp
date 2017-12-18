@@ -129,6 +129,7 @@
                 $(couponNum).text("("+data.rows.length+")");
 
                 for(let i = 0;i<data.rows.length;i++){
+                    console.log("Demo");
                     var html = '<li><a href="javascript:void(0)"> <div class="coupon_item_box clearfix"> <div class="item_box_left"> <span>￥</span>';
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
                     html += '<div id="item_box_right" class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
