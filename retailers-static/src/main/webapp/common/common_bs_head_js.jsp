@@ -6,4 +6,5 @@
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootbox.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/layer/layer.js"></script>
 <script type="text/javascript" src="<%=path%>/js/validate/bootstrapValidator.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/common/request.listener.js"></script>
 
