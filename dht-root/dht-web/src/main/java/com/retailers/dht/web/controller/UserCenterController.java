@@ -450,6 +450,24 @@ public class UserCenterController extends BaseController{
     }
 
     /**
+     *  当前用户是否登陆
+     */
+    @RequestMapping("queryLoginUser")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public Map<String,Object> queryLoginUser(HttpServletRequest request){
+        Long uId=getCurLoginUserId(request);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        if(uId == null)
+            map.put("flag",false);
+        else {
+            map.put("flag",true);
+        }
+        return map;
+    }
+
+
+    /**
      *  获取当前用户支付密码是否为空
      */
     @RequestMapping("queryLoginUserPayPwd")

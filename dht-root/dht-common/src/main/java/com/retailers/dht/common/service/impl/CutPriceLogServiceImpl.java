@@ -13,6 +13,7 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -90,6 +91,21 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 			}
 		}
 		return list;
+	}
+	public Map<Long,Float> queryCutpriceByGdId(Long gdId,Long uid){
+		List<CutPriceLogVo> list =  cutPriceLogMapper.queryCutpriceByGdId(gdId,uid);
+		Map<Long,Float> map = new HashMap<Long, Float>();
+		DecimalFormat    df   = new DecimalFormat("######0.00");
+		if(ObjectUtils.isNotEmpty(list)){
+			Long gdPrice = list.get(0).getGdPrice();
+			Long index = 0L;
+			for(CutPriceLogVo cutPriceLogVo:list){
+				index += cutPriceLogVo.getCplCutdownprice();
+			}
+			gdPrice = gdPrice - index;
+			map.put(gdId,Float.parseFloat(df.format(gdPrice/100.0F)));
+		}
+		return  map;
 	}
 }
 

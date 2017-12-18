@@ -196,12 +196,12 @@
 
         $(function () {
             $.ajax({
-                url:"/user/queryLoginUserId",
+                url:"/user/queryLoginUser",
                 method:"post",
                 dataType:"json",
                 success:function (data) {
-                    if(data.status = 3){
-                        $(".user-header").children().hide();
+                    if(data.flag){
+                        $(".user-header > *").remove();
                         var login_box = $('<a src="/loginPage" class="login_box"></a>');
                         var login_btn = $('<span class="login_btn">立即登录</span>');
                         login_box.append(login_btn);
@@ -210,7 +210,6 @@
                 }
             });
         });
-
 
         $(".user-header").on("click",".login_box",function () {
             $(location).attr('href', '/loginPage?redirectUrl=%2Fuser%2FuserCenter');

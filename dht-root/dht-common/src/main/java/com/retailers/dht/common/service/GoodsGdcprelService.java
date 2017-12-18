@@ -67,6 +67,7 @@ public interface GoodsGdcprelService {
 	public GoodsGdcprelVo queryGoodsGdcprelVoLists(Map params);
 
 	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid);
+
 }
 
 

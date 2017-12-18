@@ -55,6 +55,8 @@ public interface GoodsIsbuycpService {
 	 */
 	public boolean deleteGoodsIsbuycpByIbcp(Long ibcp);
 
+	public boolean queryIsBuycpByGdcpId(Long gdcpId,Long uid);
+
 }
 
 

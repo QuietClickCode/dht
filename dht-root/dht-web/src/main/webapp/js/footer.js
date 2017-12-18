@@ -5,7 +5,6 @@ $("#footer").html() || $.get("/footer.html").then(function(t) {
     $("#footer").html(t)
     selectFooter(curFooter)
 
-
 });
 /**
  *选中底部导航条
