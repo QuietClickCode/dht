@@ -1,5 +1,6 @@
 package com.retailers.dht.manage.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.utils.CheckUserPermissionUtils;
@@ -13,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 后台管理过滤器
@@ -39,6 +42,8 @@ public class ManagerFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
+        String header = request.getHeader("X-Requested-With");
+        System.out.println("header------------------------->>:"+header);
         if(uri.indexOf(".")<0){
             String path = request.getServletPath();
             // 如果用户未登录，通过在IE地址栏走login.jsp或者register.jsp的页面可以直接访问资源，否则就进行拦截
@@ -50,11 +55,21 @@ public class ManagerFilter implements Filter {
                 if(!ObjectUtils.isEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))){
                     chain.doFilter(request, response);
                 }else{
-                    String url = "<script language='javascript'>window.top.location.href='"
-                            + request.getContextPath()
-                            + "login'</script>";
+                    String context="";
+                    //判断是否是ajax 请求
+                    if(header.equals("XMLHttpRequest")){
+                        Map<String,Object> obj = new HashMap<String,Object>();
+                        obj.put("status",WriteData.SC_UNAUTHORIZED);
+                        obj.put("msg","未登陆或过期，请重新登陆");
+                        context= JSON.toJSONString(obj);
+                    }else{
+                        context = "<script language='javascript'>window.top.location.href='"
+                                + request.getContextPath()
+                                + "login'</script>";
+
+                    }
                     Writer writer = response.getWriter();
-                    writer.write(url);
+                    writer.write(context);
                     writer.flush();
                     writer.close();
                     return;
