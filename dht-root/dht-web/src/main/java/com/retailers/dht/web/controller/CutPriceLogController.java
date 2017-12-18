@@ -6,10 +6,14 @@ import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.CutPrice;
 import com.retailers.dht.common.entity.CutPriceLog;
 import com.retailers.dht.common.entity.CutPricePrice;
+import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.service.CutPriceLogService;
 import com.retailers.dht.common.service.CutPricePriceService;
+import com.retailers.dht.common.service.GoodsGdcprelService;
+import com.retailers.dht.common.service.GoodsIsbuycpService;
 import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +36,10 @@ public class CutPriceLogController extends BaseController{
     CutPriceLogService cutPriceLogService;
     @Autowired
     CutPricePriceService cutPricePriceService;
+    @Autowired
+    GoodsGdcprelService goodsGdcprelService;
+    @Autowired
+    GoodsIsbuycpService goodsIsbuycpService;
     @RequestMapping("/saveCutPriceLog")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
@@ -70,11 +78,19 @@ public class CutPriceLogController extends BaseController{
                 List<CutPricePrice> cutPricePriceList = cutPricePriceService.queryGdcpIdList(params,1,1).getData();
                 if(!ObjectUtils.isEmpty(cutPricePriceList)){
                     Long gdcpId = cutPricePriceList.get(0).getGdcpId();
-                    CutPriceLog cutPriceLog = new CutPriceLog();
-                    cutPriceLog.setGdcpId(gdcpId);
-                    cutPriceLog.setUsdId(uid);
-                    cutPriceLog.setUsId(usdId);
-                    flag = cutPriceLogService.saveCutPriceLog(cutPriceLog);
+                    boolean isBuyFlag = goodsIsbuycpService.queryIsBuycpByGdcpId(gdcpId,uid);
+                    System.out.println("isBuyFlag:==="+isBuyFlag);
+                    //false为已经购买 true为未购买
+                    if(isBuyFlag){
+                        CutPriceLog cutPriceLog = new CutPriceLog();
+                        cutPriceLog.setGdcpId(gdcpId);
+                        cutPriceLog.setUsdId(uid);
+                        cutPriceLog.setUsId(usdId);
+                        flag = cutPriceLogService.saveCutPriceLog(cutPriceLog);
+                    }else {
+                        return errorForSystem("该好友已经购买此商品");
+                    }
+
                 }
             }
             if(flag){
@@ -108,7 +124,7 @@ public class CutPriceLogController extends BaseController{
                 return null;
             }
             List<CutPriceLogVo> list = cutPriceLogService.queryCutPriceLog(gid,uid);
-            System.out.println(JSON.toJSON(list));
+
             Map map = new HashMap();
             map.put("rows",list);
             return map;

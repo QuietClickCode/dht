@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.dht.common.entity.GoodsIsbuycp;
 import com.retailers.dht.common.dao.GoodsIsbuycpMapper;
 import com.retailers.dht.common.service.GoodsIsbuycpService;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -43,6 +44,14 @@ public class GoodsIsbuycpServiceImpl implements GoodsIsbuycpService {
 	public boolean deleteGoodsIsbuycpByIbcp(Long ibcp) {
 		int status = goodsIsbuycpMapper.deleteGoodsIsbuycpByIbcp(ibcp);
 		return status == 1 ? true : false;
+	}
+	public boolean queryIsBuycpByGdcpId(Long gdcpId,Long uid){
+		GoodsIsbuycp goodsIsbuycp = goodsIsbuycpMapper.queryIsBuycpByGdcpId(gdcpId,uid);
+		if(ObjectUtils.isEmpty(goodsIsbuycp)){
+			return true;
+		}else{
+			return  false;
+		}
 	}
 }
 

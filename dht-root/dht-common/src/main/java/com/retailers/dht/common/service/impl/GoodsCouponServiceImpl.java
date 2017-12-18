@@ -423,12 +423,18 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		//取得用户此次购买满足条件的未使用优惠卷
 		List<CouponWebVo> uacs=couponService.queryUserUseCoupons(uid,gtpvs);
 		Map<String,Object> rtn=new HashMap<String, Object>();
+		Map<String,Long> rtnGId=new HashMap<String, Long>();
+		for(Long key:gidGids.keySet()){
+			rtnGId.put(key+"",gidGids.get(key));
+		}
+
+
 		//商品优惠列表（根据商品id）
 		rtn.put("gcLists",gcs);
 		//用户优惠卷
 		rtn.put("userCoupons",uacs);
 		//规格id对应的商品id
-		rtn.put("gdisRelationGid",gidGids);
+		rtn.put("gdisRelationGid",rtnGId);
 		//商品优惠
 		return rtn;
 	}

@@ -50,7 +50,7 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public  String setinviter(HttpServletRequest request){
         UserInfoVIew u = new UserInfoVIew();
-        u.setUid(11L);
+        u.setUid(111L);
         setCurLoginUser(request,u);
         return "";
     }

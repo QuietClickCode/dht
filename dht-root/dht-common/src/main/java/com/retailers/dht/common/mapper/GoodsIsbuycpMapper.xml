@@ -45,6 +45,19 @@
 		FROM t_goods_isbuycp
 		<include refid="goodsIsbuycp_where"/>
 	</select>
+	<select id="queryIsBuycpByGdcpId" resultMap="rm_goodsIsbuycp">
+		SELECT
+		t1.*
+		from
+		t_goods_isbuycp t1,
+		t_goods_gdcprel t2
+		WHERE
+		t2.gdcp_id=#{gdcpId}
+		and t1.cp_id=t2.cp_id
+		and t1.u_id=#{uid}
+		and t1.is_delete=0
+		and t2.is_delete=0
+	</select>
 	<!--添加是否购买砍价商品表 -->
 	<insert id="saveGoodsIsbuycp" parameterType="com.retailers.dht.common.entity.GoodsIsbuycp" useGeneratedKeys="true" keyProperty="ibcp">
 		INSERT INTO t_goods_isbuycp (

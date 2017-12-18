@@ -89,6 +89,31 @@
 		and t0.us_id=#{params.uid}
 		GROUP BY t1.cpl_id
 	</select>
+	<select id="queryCutpriceByGdId" resultMap="rm_cutPriceLog_vo">
+		SELECT
+		t4.*,
+		t5.gd_price gdPrice
+		FROM
+		t_goods_gdcprel t1,
+		t_cut_price t2,
+		t_cut_price t3,
+		t_cut_price_log t4,
+		t_goods_detail t5
+		WHERE
+		t1.cp_id=t2.cp_id
+		and t1.gd_id = #{gdId}
+		and t2.parent_id=t3.cp_id
+		and t1.gdcp_id=t4.gdcp_id
+		and t4.us_id=#{uid}
+		and t5.gd_id=t1.gd_id
+		and CURRENT_TIME()>t3.cp_start_time
+		and t3.cp_end_time>CURRENT_TIME()
+		and t1.is_delete=0
+		and t2.is_delete=0
+		and t3.is_delete=0
+		and t4.is_delete=0
+		and t5.is_delete=0
+	</select>
 	<!--添加砍价日志表 -->
 	<insert id="saveCutPriceLog" parameterType="com.retailers.dht.common.entity.CutPriceLog" useGeneratedKeys="true" keyProperty="cplId">
 		INSERT INTO t_cut_price_log (

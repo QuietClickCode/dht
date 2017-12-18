@@ -53,6 +53,8 @@ public class WxFilter implements Filter {
         //判断是否存在推荐人
         String randStr=request.getParameter("randStr");
         if(ObjectUtils.isNotEmpty(randStr)){
+            String uri = request.getRequestURI();
+            System.out.println("请求url------------------------->"+uri);
             cachInviter(request,randStr,false);
         }
         //判断是否为移动端访问 移动端访问

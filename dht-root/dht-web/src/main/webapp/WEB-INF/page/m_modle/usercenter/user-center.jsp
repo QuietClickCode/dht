@@ -211,7 +211,6 @@
             });
         });
 
-
         $(".user-header").on("click",".login_box",function () {
             $(location).attr('href', '/loginPage?redirectUrl=%2Fuser%2FuserCenter');
         });

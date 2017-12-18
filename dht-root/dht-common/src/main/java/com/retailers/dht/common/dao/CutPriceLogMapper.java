@@ -1,7 +1,10 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.CutPriceLog;
+import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：砍价日志表DAO
@@ -54,4 +57,6 @@ public interface CutPriceLogMapper {
 	public List<CutPriceLog> queryCutPriceLogList(Pagination<CutPriceLog> pagination);
 
 	public List<CutPriceLogVo> queryCutPriceLogVoList(Pagination<CutPriceLogVo> pagination);
+
+	public List<CutPriceLogVo> queryCutpriceByGdId(@Param("gdId")Long gdId, @Param("uid")Long uid);
 }
