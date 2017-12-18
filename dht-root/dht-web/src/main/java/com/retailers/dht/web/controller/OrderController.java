@@ -61,7 +61,7 @@ public class OrderController extends BaseController {
     public String getCheckOrderData(HttpServletRequest request,String data){
         data += "\'isActivity\':3}";
         request.getSession().setAttribute("checkOrderData",data);
-        return "redirect://order/checkOrder";
+        return "redirect:/order/checkOrder";
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
