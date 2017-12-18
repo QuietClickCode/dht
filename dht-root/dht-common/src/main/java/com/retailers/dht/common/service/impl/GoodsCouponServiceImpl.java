@@ -372,6 +372,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		for(BuyGoodsDetailVo gb:gbs){
 			gdIds+=gb.getGdId()+",";
 			gdtn.put(gb.getGdId(),gb.getNum());
+			gdIdList.add(gb.getGdId());
 		}
 		//取得商品价格
 		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
@@ -415,7 +416,7 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			gtpv.setGdId(gdId);
 			gtpv.setgType(gType.get(gid));
 			gtpv.setgPrice(ggPrice.get(gdId));
-			gtpv.setNum(gdtn.get(gid).longValue());
+			gtpv.setNum(gdtn.get(gdId).longValue());
 			gtpvs.add(gtpv);
 		}
 		//取得商品关联的优惠卷

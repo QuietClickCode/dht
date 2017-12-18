@@ -5,6 +5,7 @@ import com.retailers.dht.com.base.TestBaseJunit;
 import com.retailers.dht.common.dao.GoodsCouponMapper;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.view.GoodsCouponView;
+import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsCouponShowVo;
 import com.retailers.dht.common.vo.GoodsTypePriceVo;
 import org.junit.Test;
@@ -125,5 +126,17 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         list.add(vo6);
         Map<String,List<GoodsCouponView>> rtn = goodsCouponService.queryGoodsCouponBuyGid(list);
         System.out.println(JSON.toJSON(rtn));
+    }
+
+    @Test
+    public void queryGoodsCouponLists(){
+        long uid=11;
+        List<BuyGoodsDetailVo> bg=new ArrayList<BuyGoodsDetailVo>();
+        BuyGoodsDetailVo vo =new BuyGoodsDetailVo();
+        vo.setGdId(857l);
+        vo.setNum(7);
+        bg.add(vo);
+        Map<String,Object> map = goodsCouponService.queryGoodsCouponLists(uid,bg);
+        System.out.println(JSON.toJSON(map));
     }
 }
