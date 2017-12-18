@@ -89,6 +89,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 			}
 			System.out.println("------------------------------------------------>"+WxConfig.ACCESS_TICKET);
 			System.out.println(WxConfig.ACCESS_TICKET);
+			WxConfig.WX_TOKEN=wxManager.getWxToken();
 		}else{
 		}
 	}

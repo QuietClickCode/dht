@@ -9,7 +9,6 @@ import java.util.Arrays;
  * @Date 2017/6/6
  */
 public class SignUtil {
-    private static String token = "11219";
 
     /**
      * 校验签名
@@ -18,7 +17,7 @@ public class SignUtil {
      * @param nonce 随机数
      * @return 布尔值
      */
-    public static boolean checkSignature(String signature,String timestamp,String nonce){
+    public static boolean checkSignature(String signature,String timestamp,String nonce,String token){
         String checktext = null;
         if (null != signature) {
             //对ToKen,timestamp,nonce 按字典排序
@@ -75,7 +74,7 @@ public class SignUtil {
          * @param nonce 随机数
          * @return 布尔值
          */
-        boolean flag =checkSignature("89703e27196b9c3e0dd0b7dbb9eae79ced645119","1513176918","1584585747");
+        boolean flag =checkSignature("89703e27196b9c3e0dd0b7dbb9eae79ced645119","1513176918","1584585747","");
         System.out.println(flag);
     }
 

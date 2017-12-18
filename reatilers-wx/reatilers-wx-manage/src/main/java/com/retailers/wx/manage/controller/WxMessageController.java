@@ -58,8 +58,9 @@ public class WxMessageController{
                 @RequestParam(value = "echostr", required = false) String echostr)
             throws ServletException, IOException {
         logger.info("signature=" + signature + "  timestamp=" + timestamp+ "nonce=" + nonce + "  echostr=" + echostr);
-        response.getOutputStream().println(echostr);
-//        return echostr;
+        if(SignUtil.checkSignature(signature,timestamp,nonce,WxConfig.WX_TOKEN)){
+            response.getOutputStream().println(echostr);
+        }
     }
 
     /**

@@ -39,26 +39,30 @@ public class ManagerFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
-        if(uri.indexOf(".")>=0){
-            HttpServletRequest req = (HttpServletRequest) request;
-            String path = req.getServletPath();
+        System.out.println("uri---------------->:"+uri);
+        if(uri.indexOf(".")<0){
+            String path = request.getServletPath();
+            System.out.println("path---------------->:"+path);
             String igpath = path.substring(path.lastIndexOf("/") + 1);
-            System.out.println("req.getContextPath()---------------->:"+req.getContextPath());
+            System.out.println("req.getContextPath()---------------->:"+request.getContextPath());
+            System.out.println("igpath---------------->:"+igpath);
             // 如果用户未登录，通过在IE地址栏走login.jsp或者register.jsp的页面可以直接访问资源，否则就进行拦截
-            if (igpath.equalsIgnoreCase("/login")||path.indexOf(".")>=0) {
+            if (uri.equalsIgnoreCase("/login")||uri.equalsIgnoreCase("/wechat/sendMsg")) {
                 chain.doFilter(request, response);
+                return;
             } else {
                 // 如果用户已经登录，则用户可以在同一个IE浏览器通过url来访问资源，否则直接进入登录页面
                 if(!ObjectUtils.isEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))){
                     chain.doFilter(request, response);
                 }else{
                     String url = "<script language='javascript'>window.top.location.href='"
-                            + req.getContextPath()
+                            + request.getContextPath()
                             + "login'</script>";
                     Writer writer = response.getWriter();
                     writer.write(url);
                     writer.flush();
                     writer.close();
+                    return;
                 }
             }
 
