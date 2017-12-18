@@ -64,10 +64,10 @@ public class ManagerFilter implements Filter {
                         context= JSON.toJSONString(obj);
                     }else{
                         context = "<script language='javascript'>window.top.location.href='"
-                                + request.getContextPath()
-                                + "login'</script>";
+                                + "/login'</script>";
 
                     }
+                    System.out.println(context);
                     Writer writer = response.getWriter();
                     writer.write(context);
                     writer.flush();
