@@ -1,9 +1,11 @@
 
 package com.retailers.hnc.common.service.impl;
 
+import com.retailers.hnc.common.dao.FloorManageMapper;
 import com.retailers.hnc.common.dao.FloorRelationshipMapper;
 import com.retailers.hnc.common.dao.HouseTypeManageMapper;
 import com.retailers.hnc.common.entity.FloorManage;
+import com.retailers.hnc.common.entity.FloorRelationship;
 import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.service.HouseTypeManageService;
 import com.retailers.hnc.common.vo.HouseTypeManageVo;
@@ -11,6 +13,7 @@ import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 /**
@@ -27,6 +30,9 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 
 	@Autowired
 	private FloorRelationshipMapper relationshipMapper;
+
+	@Autowired
+	private FloorManageMapper manageMapper;
 
 	public boolean saveHouseTypeManage(HouseTypeManage houseTypeManage) {
 		int status = houseTypeManageMapper.saveHouseTypeManage(houseTypeManage);
@@ -48,8 +54,8 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHouseTypeManageList(page);
-		for(HouseTypeManageVo manageVo:list){
-			manageVo.setRelationships(relationshipMapper.queryHouseType(manageVo.getHtId()));
+		for (HouseTypeManageVo typeManageVo : list) {
+			typeManageVo.setFloorManages(relationshipMapper.queryHouseType(typeManageVo.getHtId()));
 		}
 		page.setData(list);
 		return page;

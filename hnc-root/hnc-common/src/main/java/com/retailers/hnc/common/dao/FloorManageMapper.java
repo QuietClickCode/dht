@@ -43,7 +43,7 @@ public interface FloorManageMapper {
 	 * @author wangjue
 	 * @date 2017-12-15 14:23:58
 	 */
-	public FloorManageVo queryFloorManageByFmId(Long fmId);
+	public FloorManage queryFloorManageByFmId(Long fmId);
 	/**
 	 * 查询楼栋管理列表
 	 * @param pagination 分页对象

@@ -1,6 +1,6 @@
 package com.retailers.hnc.common.vo;
 
-import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.HouseTypeManage;
 
 import java.util.List;
@@ -9,13 +9,13 @@ import java.util.List;
  * Created by niconiconi on 2017/12/18.
  */
 public class HouseTypeManageVo extends HouseTypeManage {
-    private List<FloorRelationship> relationships;
+    private List<FloorManage> floorManages;
 
-    public List<FloorRelationship> getRelationships() {
-        return relationships;
+    public List<FloorManage> getFloorManages() {
+        return floorManages;
     }
 
-    public void setRelationships(List<FloorRelationship> relationships) {
-        this.relationships = relationships;
+    public void setFloorManages(List<FloorManage> floorManages) {
+        this.floorManages = floorManages;
     }
 }

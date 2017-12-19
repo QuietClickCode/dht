@@ -25,7 +25,7 @@ public class HomeController extends BaseController {
     public String home(HttpServletRequest request){
         UserInfoVIew userInfo=new UserInfoVIew();
         userInfo.setUid(11l);
-//        setCurLoginUser(request,userInfo);
+        setCurLoginUser(request,userInfo);
         return redirectUrl(request,"index");
     }
 

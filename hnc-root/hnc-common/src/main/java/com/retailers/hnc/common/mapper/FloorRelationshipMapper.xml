@@ -12,6 +12,30 @@
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_floorManage" type="com.retailers.hnc.common.entity.FloorManage">
+		<result property="fmId" column="fm_id"/>
+		<result property="fmName" column="fm_name"/>
+		<result property="fmType" column="fm_type"/>
+		<result property="fmQuantity" column="fm_quantity"/>
+		<result property="fmInfo" column="fm_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_houseTypeManage" type="com.retailers.hnc.common.entity.HouseTypeManage">
+		<result property="htId" column="ht_id"/>
+		<result property="htTypeName" column="ht_type_name"/>
+		<result property="htType" column="ht_type"/>
+		<result property="htArea" column="ht_area"/>
+		<result property="htRecommend" column="ht_recommend"/>
+		<result property="htImage" column="ht_image"/>
+		<result property="htInfo" column="ht_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="floorRelationship_columns">
 		fl_id,fm_id,fr_id,ht_id,hr_id,is_delete,version
@@ -93,12 +117,14 @@
 	</delete>
 
 	<!--查找与该楼栋所关联的户型-->
-	<select id="queryFloorType" parameterType="java.lang.Long" resultMap="rm_floorRelationship">
-		SELECT * FROM t_floor_relationship WHERE fm_id = #{fmId} AND is_delete = 0;
+	<select id="queryFloorType" parameterType="java.lang.Long" resultMap="rm_houseTypeManage">
+		select hm.* from t_house_type_manage hm LEFT JOIN t_floor_relationship fr ON fr.fm_id = #{fmId} AND
+		 		fr.is_delete = 0 WHERE fr.fr_id = hm.ht_id AND hm.is_delete = 0
 	</select>
 
 	<!--查找与该户型所关联的楼栋-->
-	<select id="queryHouseType" parameterType="java.lang.Long" resultMap="rm_floorRelationship">
-		SELECT * FROM t_floor_relationship WHERE ht_id = #{htId} AND is_delete = 0;
+	<select id="queryHouseType" parameterType="java.lang.Long" resultMap="rm_floorManage">
+		select fm.* from t_floor_manage fm LEFT JOIN t_floor_relationship fr ON fr.ht_id = #{htId}
+				AND fr.is_delete = 0 WHERE fr.hr_id = fm.fm_id AND fm.is_delete = 0
 	</select>
 </mapper>

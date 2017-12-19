@@ -234,8 +234,15 @@
             valign : 'middle',
             class:'house_type',
             formatter:function (value,row,index) {
-                if(row.relationships.length == 0)
-                return "请添加户型";
+                let html = "";
+                if(row.typeManages.length == 0)
+                return "<button class='btn btn-primary' onclick='event.stopPropagation();'>请添加户型</button>";
+                else{
+                    for(let i = 0;i<row.typeManages.length;i++){
+                        html +=''+row.typeManages[i].htTypeName+''
+                    }
+                }
+                return html;
             }
         },
         {
