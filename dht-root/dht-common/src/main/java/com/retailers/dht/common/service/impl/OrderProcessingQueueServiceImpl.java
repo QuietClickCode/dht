@@ -156,9 +156,11 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 			transactionManager.commit(ts);
 		}catch(AppException e){
 			transactionManager.rollback(ts);
+			e.printStackTrace();
 			throw new AppException(e.getMessage());
 		}catch(Exception e){
 			transactionManager.rollback(ts);
+			e.printStackTrace();
 			throw new AppException(e.getMessage());
 		}
 
