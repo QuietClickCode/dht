@@ -63,6 +63,8 @@ public interface BuyCarService {
 	public boolean deleteBuyCarByBcIds(String bcIds);
 
 	public Map<Long,Long> queryInviterIdByBcIds(List<Long> list);
+
+	public boolean updateBuyCatHadBuy(List<Long> bcIds);
 }
 
 

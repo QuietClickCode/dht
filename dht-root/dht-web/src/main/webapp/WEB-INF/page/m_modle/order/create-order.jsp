@@ -482,7 +482,7 @@
                                         var val = goodscoupon.val;
 
                                         html += '<li>'+
-                                            '<span style="margin-top: 4px"><input type="checkbox" value="'+goodscoupon.gcpId+'" gcpIsOverlapUse="'+gcpIsOverlapUse+'"></span>'+
+                                            '<span style="margin-top: 4px"><input onclick="choosegcp(this);" type="checkbox" value="'+goodscoupon.gcpId+'" gcpIsOverlapUse="'+gcpIsOverlapUse+'"></span>'+
                                             '<span style="margin-left: 20px">'+goodscoupon.gcpName+'</span>';
                                         var yh = '';
                                         if(type==0){
@@ -555,6 +555,36 @@
     }
 
     function choosegcp(obj) {
+        var gcpisoverlapuse = $(obj).attr("gcpisoverlapuse");
+        var flag = obj.checked;
+        if(gcpisoverlapuse==0&&flag){
+            var inputs = $(obj).parent().parent().siblings().find('input[type=checkbox]');
+            for(var i=0;i<inputs.length;i++){
+                var othergcpisoverlapuse = $(inputs[i]).attr("gcpisoverlapuse");
+                if(othergcpisoverlapuse==1){
+                    $(inputs[i]).attr("disabled","disabled");
+                }
+            }
+        }
+        if(gcpisoverlapuse==0&&!flag){
+            var inputs = $(obj).parent().parent().siblings().find('input[type=checkbox]');
+            var myFlag = false;
+            for(var i=0;i<inputs.length;i++){
+                var othergcpisoverlapuse = $(inputs[i]).attr("gcpisoverlapuse");
+                if(othergcpisoverlapuse==0&&inputs[i].checked){
+                    myFlag = true;
+                }
+            }
+            if(!myFlag){
+                inputs.removeAttr("disabled");
+            }
+        }
+        if(gcpisoverlapuse==1&&flag){
+            $(obj).parent().parent().siblings().find('input[type=checkbox]').attr("disabled","disabled");
+        }
+        if(gcpisoverlapuse==1&&!flag){
+            $(obj).parent().parent().siblings().find('input[type=checkbox]').removeAttr("disabled");
+        }
 
     }
 

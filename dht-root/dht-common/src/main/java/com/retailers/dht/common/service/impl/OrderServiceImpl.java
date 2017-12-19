@@ -324,6 +324,7 @@ public class OrderServiceImpl implements OrderService {
 				remark=bgd.getRemark();
 			}
 			//取得商品价格
+
 			Map<String,Long> cutLog=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
 			//判断购买数量是否大于限制数量
 			if(ObjectUtils.isEmpty(cutLog.get("cpInventory"))){
@@ -333,6 +334,7 @@ public class OrderServiceImpl implements OrderService {
 			if(cutLog.get("cpInventory").intValue()<num.intValue()){
 				throw new AppException("购买超限");
 			}
+			Map<Long,Float> cutPrice=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			OrderDetail  od=new OrderDetail();
 			od.setOdGoodsId(gid);

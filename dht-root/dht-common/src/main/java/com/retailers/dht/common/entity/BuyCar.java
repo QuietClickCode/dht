@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2017-11-25 16:48:43
+ * @date 2017-12-19 09:28:58
  */
 public class BuyCar implements java.io.Serializable {
 
@@ -48,6 +48,9 @@ public class BuyCar implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 1000)
 	private String bcDescription;
+	/**是否购买 0没购买 1已购买*/
+	@NotEmpty
+	private Long isBuy;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -139,6 +142,13 @@ public class BuyCar implements java.io.Serializable {
 
 	public String getBcDescription() {
 		return this.bcDescription;
+	}
+	public void setIsBuy(Long value) {
+		this.isBuy = value;
+	}
+
+	public Long getIsBuy() {
+		return this.isBuy;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;

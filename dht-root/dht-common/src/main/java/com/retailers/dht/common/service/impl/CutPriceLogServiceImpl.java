@@ -5,8 +5,10 @@ import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.CutPriceLogMapper;
 import com.retailers.dht.common.entity.CutPriceLog;
 import com.retailers.dht.common.entity.CutPricePrice;
+import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.service.CutPriceLogService;
 import com.retailers.dht.common.service.CutPricePriceService;
+import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
@@ -30,6 +32,8 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 	private CutPriceLogMapper cutPriceLogMapper;
 	@Autowired
 	private CutPricePriceService cutPricePriceService;
+	@Autowired
+	private GoodsDetailService goodsDetailService;
 	public boolean saveCutPriceLog(CutPriceLog cutPriceLog) {
 		Long gdcpId = cutPriceLog.getGdcpId();
 		cutPriceLog.setIsDelete(0L);
@@ -105,6 +109,12 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 			map.put("finalPrice",finalPrice);
 			map.put("gdPrice",gdPrice);
 			map.put("cpInventory",cpInventory);
+		}else{
+			List<GoodsDetail> goodsDetailList = goodsDetailService.queryGoodsDetailByGdIds(""+gdId);
+			GoodsDetail goodsDetail = goodsDetailList.get(0);
+			map.put("finalPrice",goodsDetail.getGdPrice());
+			map.put("gdPrice",goodsDetail.getGdPrice());
+			map.put("cpInventory",99999L);
 		}
 		return  map;
 	}

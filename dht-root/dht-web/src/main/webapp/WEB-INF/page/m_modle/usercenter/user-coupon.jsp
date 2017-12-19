@@ -129,11 +129,17 @@
                 $(couponNum).text("("+data.rows.length+")");
 
                 for(let i = 0;i<data.rows.length;i++){
-                    console.log("Demo");
+                    let cpStartDate = "";
+                    let cpEndDate = "";
+                    console.log(data.rows[i].cpStartDate);
+                    if(data.rows[i].cpStartDate != null)
+                        cpStartDate = data.rows[i].cpStartDate.split(" ")[0];
+                    if(data.rows[i].cpEndDate != null)
+                        cpEndDate = data.rows[i].cpEndDate.split(" ")[0];
                     var html = '<li><a href="javascript:void(0)"> <div class="coupon_item_box clearfix"> <div class="item_box_left"> <span>￥</span>';
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
                     html += '<div id="item_box_right" class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
-                    html += '<p class="time" id="time">'+data.rows[i].cpStartDate.split(" ")[0]+'  -  '+data.rows[i].cpEndDate.split(" ")[0]+'</p></div></div>';
+                    html += '<p class="time" id="time">'+cpStartDate+'  -  '+cpEndDate+'</p></div></div>';
                     html += '<p class="coupon_list1_bg"></p><span class="btn_span" data-cpId="'+data.rows[i].cpId+'">立即使用</span>';
                     html += '<p class="coupon_list1_info">'+data.rows[i].useRange+'<img class="img_open" src="/img/icon_up.png" />';
                     html += '</p></a></li>';
