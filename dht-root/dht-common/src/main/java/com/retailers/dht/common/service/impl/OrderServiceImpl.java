@@ -132,8 +132,11 @@ public class OrderServiceImpl implements OrderService {
 			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+			long logisticsPrice=0l;
 			if(ObjectUtils.isEmpty(goodsFreight)){
-
+				logisticsPrice= SysParameterConfigConstant.getValue(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,Long.class);
+			}else{
+				logisticsPrice=goodsFreight.getGfPrice();
 			}
 			//规格使用的选择的优惠例表
 			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
@@ -218,7 +221,7 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,null,ods,ogcs);
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,0l,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			//清除购物车数据
