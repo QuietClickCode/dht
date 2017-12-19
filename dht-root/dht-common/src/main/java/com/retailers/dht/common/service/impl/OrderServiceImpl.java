@@ -650,6 +650,7 @@ public class OrderServiceImpl implements OrderService {
 			gdIdUnNum.put(bgd.getGdId(),bgd.getNum().longValue());
 			gdids_+=bgd.getGdId()+",";
 			gdIdUnRemark.put(bgd.getGdId(),bgd.getRemark());
+            gdIdUnGid.put(bgd.getGdId(),bgd.getGoodsId());
 		}
 		//取得商品价格
 		List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdids_);
