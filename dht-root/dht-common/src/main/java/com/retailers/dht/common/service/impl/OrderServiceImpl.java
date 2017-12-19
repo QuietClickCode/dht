@@ -73,6 +73,8 @@ public class OrderServiceImpl implements OrderService {
 	private BuyCarService buyCarService;
 	@Autowired
 	private CutPriceLogService cutPriceLogService;
+	@Autowired
+	private GoodsGdsprelMapper goodsGdsprelMapper;
 
 
 	public boolean saveOrder(Order order) {
@@ -635,41 +637,33 @@ public class OrderServiceImpl implements OrderService {
 		}else{
 			logisticsPrice=goodsFreight.getGfPrice();
 		}
-		String gdids_="";
-		List<Long> gdIds=new ArrayList<Long>();
-		//规格id关联商品id
-		Map<Long,Long> gdIdUnGid=new HashMap<Long, Long>();
-		//规格id关联购买数量
-		Map<Long,Long> gdIdUnNum=new HashMap<Long, Long>();
-		//规格id关联价格
-		Map<Long,Long> gdIdUnPrice=new HashMap<Long, Long>();
-		//规格id关联备注
-		Map<Long,String> gdIdUnRemark=new HashMap<Long, String>();
-		for(BuyGoodsDetailVo bgd:buyInfos.getBuyGoods()){
-			gdIds.add(bgd.getGdId());
-			gdIdUnNum.put(bgd.getGdId(),bgd.getNum().longValue());
-			gdids_+=bgd.getGdId()+",";
-			gdIdUnRemark.put(bgd.getGdId(),bgd.getRemark());
-            gdIdUnGid.put(bgd.getGdId(),bgd.getGoodsId());
+		if(buyInfos.getBuyGoods().size()>1){
+			throw new AppException("特价/秒杀商品只能购买一样商品");
+		}
+		BuyGoodsDetailVo bgd=buyInfos.getBuyGoods().get(0);
+		GoodsGdsprel goodsGdsprel=goodsGdsprelMapper.queryGoodsGdsprelByGdspId(bgd.getGdId());
+		if(ObjectUtils.isEmpty(goodsGdsprel)){
+			throw new AppException("购买商品异常");
+		}
+		//判断是否存在购买限制
+		if(ObjectUtils.isNotEmpty(goodsGdsprel.getSpBounds())){
+			if(bgd.getNum()>goodsGdsprel.getSpBounds()){
+				throw new AppException("超过购买限制，限购数量"+goodsGdsprel.getSpBounds());
+			}
 		}
 		//取得商品价格
-		List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdids_);
 		List<OrderDetail> ods=new ArrayList<OrderDetail>();
 		long totalPrice=0l;
-		for(GoodsDetail gd:gds){
-			gdIdUnPrice.put(gd.getGdId(),gd.getGdPrice());
-			gdIdUnPrice.put(gd.getGdId(),gd.getGid());
-			totalPrice+=gd.getGdPrice()*gdIdUnNum.get(gd.getGdId());
-			OrderDetail  od=new OrderDetail();
-			od.setOdGoodsId(gd.getGid());
-			od.setOdGdId(gd.getGdId());
-			od.setOdBuyNumber(gdIdUnNum.get(gd.getGdId()).intValue());
-			od.setRemark(gdIdUnRemark.get(gd.getGdId()));
-			od.setOdGoodsPrice(gd.getGdPrice());
-			od.setOdActualPrice(gd.getGdPrice());
-			od.setOdInviterUid(inviterUid);
-			ods.add(od);
-		}
+		totalPrice=goodsGdsprel.getSpSale()*bgd.getNum();
+		OrderDetail  od=new OrderDetail();
+		od.setOdGoodsId(bgd.getGoodsId());
+		od.setOdGdId(goodsGdsprel.getGdspId());
+		od.setOdBuyNumber(bgd.getNum());
+		od.setRemark(bgd.getRemark());
+		od.setOdGoodsPrice(totalPrice);
+		od.setOdActualPrice(totalPrice);
+		od.setOdInviterUid(inviterUid);
+		ods.add(od);
 		Order order=createOrder(orderEnum,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
 		return order;
 	}
