@@ -321,7 +321,11 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return rtnList;
 	}
 
-	private void queryAllChild(Long curNode,Map<Long,Map<Long,Long>> tree,Map<Long,Long> allow,List<Long> childList){
+	public Map<Long, Map<String, Object>> queryGoodsClassificationByGids(List<Long> gids) {
+		return null;
+	}
+
+	private void queryAllChild(Long curNode, Map<Long,Map<Long,Long>> tree, Map<Long,Long> allow, List<Long> childList){
 		if(tree.containsKey(curNode)){
 			Map<Long,Long> childMap=tree.get(curNode);
 			for(Long childs:childMap.keySet()){

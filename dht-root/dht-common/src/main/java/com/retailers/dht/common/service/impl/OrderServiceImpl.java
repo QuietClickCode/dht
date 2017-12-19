@@ -549,7 +549,7 @@ public class OrderServiceImpl implements OrderService {
 							//订单返现
 							generateCashBack(order);
 							//返现
-						}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
+						}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
 							//修改用户消费
 							long updateSize=userCardPackageMapper.userWalletConsume(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 							if(updateSize==0){
@@ -572,7 +572,10 @@ public class OrderServiceImpl implements OrderService {
 	 * @param order
 	 */
 	private void generateCashBack(Order order){
-
+		//取得订单例表
+		List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+		List<WalletCashBackQueue> list = new ArrayList<WalletCashBackQueue>();
+		WalletCashBackQueue wcbq=new WalletCashBackQueue();
 	}
 
 	/**
