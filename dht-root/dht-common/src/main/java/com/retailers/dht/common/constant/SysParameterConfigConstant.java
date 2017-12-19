@@ -35,6 +35,10 @@ public class SysParameterConfigConstant {
      * 平台默认邮费
      */
     public static final String DEFAULT_LOGISTICS_PRICE="DEFAULT_LOGISTICS_PRICE";
+    /**
+     * 用户推广提成最大值
+     */
+    public static final String USER_RECOMMEND_COMMISSION_MAX="USER_RECOMMEND_COMMISSION_MAX";
 
 
     //系统 参数对应的key值

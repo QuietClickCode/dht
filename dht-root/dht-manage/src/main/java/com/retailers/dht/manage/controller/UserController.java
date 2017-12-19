@@ -2,13 +2,19 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
-import com.retailers.dht.common.entity.User;
+import com.retailers.dht.common.constant.SysParameterConfigConstant;
+import com.retailers.dht.common.constant.UserConstant;
 import com.retailers.dht.common.service.UserService;
-import com.retailers.dht.common.vo.RechargeVo;
 import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +32,7 @@ import java.util.Map;
 @Controller
 @RequestMapping("customer")
 public class UserController extends BaseController{
-
+    Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
 
@@ -55,5 +61,63 @@ public class UserController extends BaseController{
         params.put("isDelete",0);
         Pagination<UserVo> pages= userService.queryUserList(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
+    }
+
+    /**
+     * 编辑用户类型
+     * @param request
+     * @param uid 用户id
+     * @param utype 用户类型
+     * @param ufirstCommission 首单提成
+     * @param urecommendCommission 消费提成
+     * @return
+     */
+    @RequestMapping("editorUserType")
+    @Function(label="编辑用户类型", description = "编辑用户类型", resourse = "customer.editorUserType",sort=1,parentRes="customer.queryCustomerLists")
+    @ResponseBody
+    public BaseResp editorUserType(HttpServletRequest request,Long uid,Long utype,String ufirstCommission,String urecommendCommission){
+        Long sysUid=getCurLoginUserId(request);
+        if(ObjectUtils.isEmpty(uid)){
+            return errorForParam("用户id不能为空");
+        }
+        if(ObjectUtils.isEmpty(utype)){
+            return errorForParam("用户类型不能为空");
+        }
+        Long ufirstCommission_=null;
+        Long urecommendCommission_=null;
+        if(utype.intValue()!= UserConstant.USER_TYPE_PT){
+            long max=SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_RECOMMEND_COMMISSION_MAX,Long.class);
+            if(ObjectUtils.isEmpty(ufirstCommission)){
+                return errorForParam("用户类型为推广员时，首单提成不能为空");
+            }else{
+                if(NumberUtils.isNumber(ufirstCommission)){
+                    ufirstCommission_=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(Double.parseDouble(ufirstCommission),2));
+                    if(max<ufirstCommission_){
+                        return errorForParam("推广提成不能大于平台设置最大值["+NumberUtils.priceChangeYuan(max)+"]");
+                    }
+                }else{
+                    return errorForParam("首单提成只能为数字类型");
+                }
+            }
+            if(ObjectUtils.isEmpty(urecommendCommission)){
+                return errorForParam("用户类型为推广员时，消费提成不能为空");
+            }else{
+                if(NumberUtils.isNumber(urecommendCommission)){
+                    urecommendCommission_=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(Double.parseDouble(urecommendCommission),2));
+                    if(max<urecommendCommission_){
+                        return errorForParam("推广提成不能大于平台设置最大值["+NumberUtils.priceChangeYuan(max)+"]");
+                    }
+                }else{
+                    return errorForParam("消费提成只能为数字类型");
+                }
+            }
+        }
+        try{
+            userService.editorUserType(sysUid,uid,utype,ufirstCommission_,urecommendCommission_);
+            return  success("编辑用户类型成功");
+        }catch(AppException e){
+            logger.error("设置用户类型出错：\r\n{}",e);
+            return errorForParam(e.getMessage());
+        }
     }
 }
