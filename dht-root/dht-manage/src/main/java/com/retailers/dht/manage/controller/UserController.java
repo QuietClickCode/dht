@@ -73,6 +73,7 @@ public class UserController extends BaseController{
      * @return
      */
     @RequestMapping("editorUserType")
+    @Function(label="编辑用户类型", description = "编辑用户类型", resourse = "customer.editorUserType",sort=1,parentRes="customer.queryCustomerLists")
     @ResponseBody
     public BaseResp editorUserType(HttpServletRequest request,Long uid,Long utype,String ufirstCommission,String urecommendCommission){
         Long sysUid=getCurLoginUserId(request);
