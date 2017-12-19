@@ -116,7 +116,10 @@ public class BuyCarServiceImpl implements BuyCarService {
 		return map;
 	}
 	public boolean updateBuyCatHadBuy(List<Long> bcIds){
-		int status = buyCarMapper.updateBuyCatHadBuy(bcIds);
+		int status = 0;
+		if(ObjectUtils.isNotEmpty(bcIds)){
+			status = buyCarMapper.updateBuyCatHadBuy(bcIds);
+		}
 		return status>0?true:false;
 	}
 }
