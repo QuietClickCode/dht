@@ -44,7 +44,7 @@ public class RechargeController extends BaseController {
     }
 
     /**
-     * 弃值列表
+     * 充值列表
      * @param rName 等级名称
      * @param rcashback 是否返现
      * @param isValid 充值 状态

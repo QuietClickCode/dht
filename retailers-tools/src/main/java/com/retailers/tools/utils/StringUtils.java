@@ -5047,8 +5047,21 @@ public class StringUtils {
 //		System.out.println(unicode2String("StatTrak\\u2122 Music Kit | Twin Atlantic, GLA"));
 //		System.out.println(formate("1",null));
 //		System.out.println(StringUtils.formates("数据测试:{},datae:[{}],哈哈：{}","ok","oky"));
-		for(int i=0;i<1000;i++){
-			System.out.println(StringUtils.randomNumberCode(4));
-		}
+//		for(int i=0;i<1000;i++){
+//			System.out.println(StringUtils.randomNumberCode(4));
+//		}
+
+
+		String context="<p><span style=\"font-size:14px\"><span style=\"background-color:#00FF00\">帽子详细介绍</span></span></p>\n" +
+				"\n" +
+				"<p><span style=\"font-size:14px\"><img src=\"UploadStorage/gallery/img1/245058/201704/d147f63f56cc47d6914f8e3811a608bf.jpg\" /></span></p>\n" +
+				"\n" +
+				"<p>&nbsp;</p>\n" +
+				"\n" +
+				"<p><span style=\"font-size:14px\"><img src=\"http://img1.2298.com/UploadStorage/gallery/img1/245058/201704/d147f63f56cc47d6914f8e3811a608bf.jpg\" /></span></p>\n" +
+				"\n" +
+				"<p><span style=\"font-size:14px\"><img src=\"http://img1.2298.com/UploadStorage/gallery/img1/245058/201704/bf6801118d21486a8834a0605405f46a.jpg\" /></span></p>\n";
+		context = context.replaceAll("(<img*?.*?src=[\"|\'](?![http:\\/\\/|https:\\/\\/]))(.*?)", "$1www.baidu.com$2");
+		System.out.println(context);
 	}
 }

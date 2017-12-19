@@ -21,6 +21,7 @@ import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
@@ -63,12 +64,12 @@ public class UserServiceImpl implements UserService {
 		return userMapper.queryUserByUid(uid);
 	}
 
-	public Pagination<User> queryUserList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<User> page = new Pagination<User>();
+	public Pagination<UserVo> queryUserList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<UserVo> page = new Pagination<UserVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<User> list = userMapper.queryUserList(page);
+		List<UserVo> list = userMapper.queryUserList(page);
 		page.setData(list);
 		return page;
 	}

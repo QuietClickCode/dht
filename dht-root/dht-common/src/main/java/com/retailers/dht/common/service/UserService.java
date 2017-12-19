@@ -5,6 +5,7 @@ import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 
@@ -51,7 +52,7 @@ public interface UserService {
 	 * @author zhongp
 	 * @date 2017-11-23 00:47:29
 	 */
-	public Pagination<User> queryUserList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<UserVo> queryUserList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据uid删除平台会员
 	 * @param uid

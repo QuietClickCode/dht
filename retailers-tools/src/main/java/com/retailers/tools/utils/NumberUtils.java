@@ -262,14 +262,21 @@ public class NumberUtils {
 		DecimalFormat df = new DecimalFormat(STR_FORMAT);
 		return  df.format(d);
 	}
-
+	/**
+	 * 格式化数字 （2位小数，传入数据除以100）
+	 * @param number
+	 * @return
+	 */
+	public static String formaterNumberPower(Long number,boolean isRtnNull){
+		return formaterNumberPower(number,2,2,isRtnNull);
+	}
 	/**
 	 * 格式化数字 （2位小数，传入数据除以100）
 	 * @param number
 	 * @return
 	 */
 	public static String formaterNumberPower(Long number){
-		return formaterNumberPower(number,2,2);
+		return formaterNumberPower(number,2,2,false);
 	}
 	/**
 	 * 格式化数字 （2位小数，传入数据除以100）
@@ -277,7 +284,7 @@ public class NumberUtils {
 	 * @return
 	 */
 	public static String formaterNumberPower(Long number,int power){
-		return formaterNumberPower(number,2,power);
+		return formaterNumberPower(number,2,power,false);
 	}
 	/**
 	 * 格式化数字
@@ -286,8 +293,11 @@ public class NumberUtils {
 	 * @param power 10的n次方（如果为传入为正数 剩，负数 除）
 	 * @return
 	 */
-	public static String formaterNumberPower(Long number,int decimalLen,int power) {
+	public static String formaterNumberPower(Long number,int decimalLen,int power,boolean isRtnNull) {
 		if(ObjectUtils.isEmpty(number)){
+			if(isRtnNull){
+				return null;
+			}
 			number=0l;
 		}
 		String STR_FORMAT = "##0.00";

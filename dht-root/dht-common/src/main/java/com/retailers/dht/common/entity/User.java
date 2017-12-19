@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：用户表对象
+ * 描述：平台会员对象
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-22 22:13:51
+ * @date 2017-12-19 11:06:52
  */
 public class User implements java.io.Serializable {
 
@@ -44,9 +44,18 @@ public class User implements java.io.Serializable {
 	/**用户头像Id*/
 	@NotEmpty
 	private Long uimgid;
-	/**用户类型*/
+	/**用户类型(0 平台会员，1 兼职人员，2推广人员）*/
 	@NotEmpty
 	private Integer utype;
+	/**首单推荐提成*/
+	@NotEmpty
+	private Long ufirstCommission;
+	/**推荐消费提成*/
+	@NotEmpty
+	private Long urecommendCommission;
+	/**会员充值id*/
+	@NotEmpty
+	private Long urechage;
 	/**用户状态（0 正常，1 禁用）*/
 	@NotEmpty
 	private Integer ustatus;
@@ -133,21 +142,40 @@ public class User implements java.io.Serializable {
 	public String getUpayPwd() {
 		return this.upayPwd;
 	}
+	public void setUimgid(Long value) {
+		this.uimgid = value;
+	}
 
 	public Long getUimgid() {
-		return uimgid;
+		return this.uimgid;
 	}
-
-	public void setUimgid(Long uimgid) {
-		this.uimgid = uimgid;
-	}
-
 	public void setUtype(Integer value) {
 		this.utype = value;
 	}
 
 	public Integer getUtype() {
 		return this.utype;
+	}
+	public void setUfirstCommission(Long value) {
+		this.ufirstCommission = value;
+	}
+
+	public Long getUfirstCommission() {
+		return this.ufirstCommission;
+	}
+	public void setUrecommendCommission(Long value) {
+		this.urecommendCommission = value;
+	}
+
+	public Long getUrecommendCommission() {
+		return this.urecommendCommission;
+	}
+	public void setUrechage(Long value) {
+		this.urechage = value;
+	}
+
+	public Long getUrechage() {
+		return this.urechage;
 	}
 	public void setUstatus(Integer value) {
 		this.ustatus = value;
