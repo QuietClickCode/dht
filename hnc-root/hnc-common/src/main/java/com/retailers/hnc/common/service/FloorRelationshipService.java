@@ -1,7 +1,10 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
+import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.HouseTypeManage;
+import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.List;
 import java.util.Map;
@@ -64,7 +67,7 @@ public interface FloorRelationshipService {
 	 * @author wangjue
 	 * @date 2017-12-18 11:07:35
 	 */
-	public List<FloorRelationship> queryFloorType(Long fmId);
+	public List<HouseTypeManage> queryFloorType(Long fmId);
 
 	/**
 	 * 根据户型ID查询该楼栋所关联的楼栋
@@ -73,7 +76,7 @@ public interface FloorRelationshipService {
 	 * @author wangjue
 	 * @date 2017-12-18 11:07:35
 	 */
-	public List<FloorRelationship> queryHouseType(Long htId);
+	public List<FloorManage> queryHouseType(Long htId);
 
 }
 

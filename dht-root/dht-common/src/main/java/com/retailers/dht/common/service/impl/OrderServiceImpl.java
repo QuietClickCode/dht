@@ -446,6 +446,15 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderIllustrate(illustrate);
 			order.setOrderCreateDate(curDate);
 			orderMapper.saveOrder(order);
+			OrderDetail orderDetail=new OrderDetail();
+			orderDetail.setOdOrderId(order.getId());
+			orderDetail.setOdGoodsId(recharge.getRid());
+			orderDetail.setOdBuyNumber(1);
+			orderDetail.setRemark("用户购买充值卡");
+			orderDetail.setOdActualPrice(recharge.getRprice());
+			orderDetail.setOdGoodsPrice(recharge.getRprice());
+			orderDetail.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
+			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
 			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
 		}finally {
@@ -497,14 +506,24 @@ public class OrderServiceImpl implements OrderService {
 				if(isSuccess){
 					//判断订单类型 充值 添加用户钱包
 					if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+						//取得用户卡包
 						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
 						//修改用户钱包
 						long updateSize=userCardPackageMapper.userRechage(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 						if(updateSize==0){
 							throw new AppException("数据己变更");
 						}
+						List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+						Long rechageId=null;
+						for(OrderDetail od:ods){
+							rechageId=od.getOdGoodsId();
+						}
 						String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
 						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+						User user=userMapper.queryUserByUid(order.getOrderBuyUid());
+						user.setUrechage(rechageId);
+						//修改用户会员类型
+						userMapper.editorCustomerType(user.getUid(),rechageId,user.getVersion());
 					}else{
 						//判断是返现订单还是返积分订单
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){

@@ -76,6 +76,15 @@
 			#{type,jdbcType=BIGINT},#{status,jdbcType=BIGINT},#{orderNo,jdbcType=VARCHAR},#{params,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{executeTime,jdbcType=TIMESTAMP},#{waitTime,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR}
 		)
 	</insert>
+	<!--添加订单处理队列至历史 -->
+	<insert id="saveOrderProcessingQueueHistory" parameterType="com.retailers.dht.common.entity.OrderProcessingQueue" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_order_processing_queue_history (
+		id,type,status,order_no,params,create_time,execute_time,wait_time,remark
+		) VALUES
+		(
+		#{id,jdbcType=BIGINT},#{type,jdbcType=BIGINT},#{status,jdbcType=BIGINT},#{orderNo,jdbcType=VARCHAR},#{params,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{executeTime,jdbcType=TIMESTAMP},#{waitTime,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
 	<!--修改订单处理队列（订单支付回调，订单状态变更） -->
 	<update id="updateOrderProcessingQueue" parameterType="com.retailers.dht.common.entity.OrderProcessingQueue">
 		UPDATE t_order_processing_queue
@@ -111,4 +120,9 @@
 	<delete id="deleteOrderProcessingQueueById" parameterType="java.lang.Long">
 		DELETE FROM t_order_processing_queue WHERE id = #{id}
 	</delete>
+	<!--分页查询 -->
+	<select id="initProcessingQueue" resultMap="rm_orderProcessingQueue" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="orderProcessingQueue_columns" />
+		FROM t_order_processing_queue ORDER  BY id ASC
+	</select>
 </mapper>

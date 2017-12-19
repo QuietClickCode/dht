@@ -37,11 +37,9 @@ public class FloorManageServiceImpl implements FloorManageService {
 		int status = floorManageMapper.updateFloorManage(floorManage);
 		return status == 1 ? true : false;
 	}
-	public FloorManageVo queryFloorManageByFmId(Long fmId) {
-		FloorManageVo floorManageVo = floorManageMapper.queryFloorManageByFmId(fmId);
-		List<FloorRelationship> list = relationshipMapper.queryFloorType(fmId);
-		floorManageVo.setRelationships(list);
-		return floorManageVo;
+	public FloorManage queryFloorManageByFmId(Long fmId) {
+		FloorManage floorManage = floorManageMapper.queryFloorManageByFmId(fmId);
+		return floorManage;
 	}
 
 	public Pagination<FloorManageVo> queryFloorManageList(Map<String, Object> params,int pageNo,int pageSize) {
@@ -51,7 +49,7 @@ public class FloorManageServiceImpl implements FloorManageService {
 		page.setParams(params);
 		List<FloorManageVo> list = floorManageMapper.queryFloorManageList(page);
 		for(FloorManageVo manageVo:list){
-			manageVo.setRelationships(relationshipMapper.queryFloorType(manageVo.getFmId()));
+			manageVo.setTypeManages(relationshipMapper.queryFloorType(manageVo.getFmId()));
 		}
 		page.setData(list);
 		return page;
