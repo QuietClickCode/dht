@@ -1,9 +1,14 @@
 package com.retailers.dht.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.dao.PayInfoMapper;
 import com.retailers.dht.common.entity.Order;
+import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.dht.common.entity.PayInfo;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.service.PayService;
@@ -114,6 +119,17 @@ public class PayServiceImpl implements PayService {
                     throw new AppException(e.getMessage());
                 }
             }
+            OrderProcessingQueue opq=new OrderProcessingQueue();
+            opq.setCreateTime(new Date());
+            opq.setOrderNo(order.getOrderNo());
+            opq.setType(OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_UPDATE);
+            JSONObject obj=new JSONObject();
+            obj.put("orderPayWay",OrderConstant.ORDER_PAY_WAY_WX);
+            obj.put("orderPayUseWay",SystemConstant.WX_PAY_WAY_GZH);
+            obj.put("orderPayDate",curDate);
+            opq.setParams(JSON.toJSONString(obj));
+            opq.setStatus(OrderProcessingQueueConstant.ORDER_EXECUTE_STATUS_UN);
+            com.retailers.dht.common.constant.SystemConstant.addOrderQueue(opq);
 //
 //            Map<String,String> obj=null;
 //            try{

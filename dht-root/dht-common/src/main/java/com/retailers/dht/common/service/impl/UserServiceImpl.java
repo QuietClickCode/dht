@@ -268,6 +268,8 @@ public class UserServiceImpl implements UserService {
 			userCardPackage.setUcurWallet(0l);
 			userCardPackage.setUtotalIntegral(0l);
 			userCardPackage.setUcurIntegral(0l);
+			userCardPackage.setUtotalConsume(0l);
+			userCardPackage.setUwalletConsumeTotal(0l);
 			userCardPackage.setId(user.getUid());
 			userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		}

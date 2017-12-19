@@ -1,15 +1,13 @@
 package com.retailers.dht.common.entity;
-import com.alibaba.fastjson.annotation.JSONField;
-import com.retailers.tools.utils.NumberUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：用户钱包，积分对象
+ * 描述：用户钱包/第三方总消费/剩余返现金额/钱包消费/消费对象
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-11-22 23:13:08
+ * @date 2017-12-20 01:16:42
  */
 public class UserCardPackage implements java.io.Serializable {
 
@@ -18,19 +16,22 @@ public class UserCardPackage implements java.io.Serializable {
 	private Long id;
 	/**充值总金额*/
 	@NotEmpty
-	@JSONField(serialize = false)
 	private Long utotalWallet;
 	/**当前可用金额*/
 	@NotEmpty
-	@JSONField(serialize = false)
 	private Long ucurWallet;
-	/**总积分*/
+	/**第三方支付消费总额*/
 	@NotEmpty
-	@JSONField(serialize = false)
 	private Long utotalIntegral;
-	/**当前可用积分*/
+	/**第三方剩余消费（满20000 返2000之后减掉20000）*/
 	@NotEmpty
 	private Long ucurIntegral;
+	/**总消费(第三方消费+钱包消费）*/
+	@NotEmpty
+	private Long utotalConsume;
+	/**钱包总消费*/
+	@NotEmpty
+	private Long uwalletConsumeTotal;
 	/**version*/
 	@NotEmpty
 	private Integer version;
@@ -78,6 +79,20 @@ public class UserCardPackage implements java.io.Serializable {
 	public Long getUcurIntegral() {
 		return this.ucurIntegral;
 	}
+	public void setUtotalConsume(Long value) {
+		this.utotalConsume = value;
+	}
+
+	public Long getUtotalConsume() {
+		return this.utotalConsume;
+	}
+	public void setUwalletConsumeTotal(Long value) {
+		this.uwalletConsumeTotal = value;
+	}
+
+	public Long getUwalletConsumeTotal() {
+		return this.uwalletConsumeTotal;
+	}
 	public void setVersion(Integer value) {
 		this.version = value;
 	}
@@ -85,9 +100,6 @@ public class UserCardPackage implements java.io.Serializable {
 	public Integer getVersion() {
 		return this.version;
 	}
-	//前端钱包格式化
-	public String getUcurWalletStr(){
-		return NumberUtils.formaterNumberPower(ucurWallet);
-	}
+
 
 }

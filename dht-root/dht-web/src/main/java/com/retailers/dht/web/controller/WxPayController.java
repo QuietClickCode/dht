@@ -3,6 +3,7 @@ package com.retailers.dht.web.controller;
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
+import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.service.OrderProcessingQueueService;
 import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayService;
@@ -129,7 +130,9 @@ public class WxPayController extends BaseController{
 //        logger.info("===============================================================");
 //        return params;
         try{
-            Map<String,String> rtn = payService.createWxPay(orderNo,"oEIKZxOHy-ovkImvP8X78sMCYlGA",ip);
+            //取得当前登陆id
+            UserInfoVIew uiv =getCurLoginUser(request);
+            Map<String,String> rtn = payService.createWxPay(orderNo,uiv.getWauOpenid(),ip);
             return success(rtn);
         }catch(Exception e){
             return errorForSystem(e.getMessage());
