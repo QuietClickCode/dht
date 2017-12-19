@@ -36,7 +36,7 @@ public interface FloorManageService {
 	 * @author wangjue
 	 * @date 2017-12-15 14:23:58
 	 */
-	public FloorManageVo queryFloorManageByFmId(Long fmId);
+	public FloorManage queryFloorManageByFmId(Long fmId);
 	/**
 	 * 查询楼栋管理列表
 	 * @param params 请求参数

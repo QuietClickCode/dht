@@ -1,13 +1,17 @@
 
 package com.retailers.hnc.common.service.impl;
+
+import com.retailers.hnc.common.dao.FloorRelationshipMapper;
+import com.retailers.hnc.common.entity.FloorManage;
+import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.HouseTypeManage;
+import com.retailers.hnc.common.service.FloorRelationshipService;
+import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Map;
-import com.retailers.hnc.common.entity.FloorRelationship;
-import com.retailers.hnc.common.dao.FloorRelationshipMapper;
-import com.retailers.hnc.common.service.FloorRelationshipService;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
 /**
  * 描述：楼栋关系表Service
  * @author wangjue
@@ -45,11 +49,11 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 		return status == 1 ? true : false;
 	}
 
-	public List<FloorRelationship> queryFloorType(Long fmId) {
+	public List<HouseTypeManage> queryFloorType(Long fmId) {
 		return floorRelationshipMapper.queryFloorType(fmId);
 	}
 
-	public List<FloorRelationship> queryHouseType(Long htId) {
+	public List<FloorManage> queryHouseType(Long htId) {
 		return floorRelationshipMapper.queryHouseType(htId);
 	}
 }

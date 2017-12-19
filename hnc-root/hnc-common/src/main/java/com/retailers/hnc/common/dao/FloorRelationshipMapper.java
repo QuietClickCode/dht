@@ -1,5 +1,7 @@
 package com.retailers.hnc.common.dao;
+import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -59,7 +61,7 @@ public interface FloorRelationshipMapper {
 	 * @author wangjue
 	 * @date 2017-12-18 11:07:35
 	 */
-	public List<FloorRelationship> queryFloorType(Long fmId);
+	public List<HouseTypeManage> queryFloorType(Long fmId);
 
 	/**
 	 * 根据户型ID查询该楼栋所关联的楼栋
@@ -68,5 +70,5 @@ public interface FloorRelationshipMapper {
 	 * @author wangjue
 	 * @date 2017-12-18 11:07:35
 	 */
-	public List<FloorRelationship> queryHouseType(Long htId);
+	public List<FloorManage> queryHouseType(Long htId);
 }
