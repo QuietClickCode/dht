@@ -67,9 +67,9 @@ public interface GoodsGgsvalDetailService {
 
 	public boolean editGoodsInventory(Long gdId,Long inventory,Long updatepersonId);
 
-	public boolean reduceGoodsInventorys(List<GoodsDetail> goodsDetailList);
+	public boolean reduceGoodsInventorys(Map<Long,Long> goodsDetailMap);
 
-	public boolean addGoodsInventorys(List<GoodsDetail> goodsDetailList);
+	public boolean addGoodsInventorys(Map<Long,Long> goodsDetailMap);
 }
 
 

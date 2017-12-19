@@ -39,6 +39,7 @@ public class BuyCarController extends BaseController{
     @ResponseBody
     public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request){
         buyCar.setIsDelete(0L);
+        buyCar.setIsBuy(0L);
         buyCar.setBcTimmer(new Date());
         buyCar.setUid(getCurLoginUserId(request));
         Long goodsId = getShareGoodsId(request);

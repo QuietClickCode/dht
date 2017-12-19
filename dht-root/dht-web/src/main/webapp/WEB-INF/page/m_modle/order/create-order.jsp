@@ -349,6 +349,7 @@
                 '<input type="hidden" value="'+rows[i].num+'" name="num">'+
                 '<input type="hidden" value="'+rows[i].buyCarId+'" name="buyCarId">'+
                 '<input type="hidden" value="'+rows[i].gdprice+'" name="gdprice">'+
+                '<input type="hidden" value="'+rows[i].gdspId+'" name="gdspId">'+
                 '<a  class="img">'+
             '<img style="margin-top: 15px" src="'+rows[i].imgurl+'" alt="">'+
             '</a>'+
@@ -737,6 +738,7 @@
             reqRow["buyCarId"]=row.find('input[name=buyCarId]')[0].value;
             reqRow["gcpIds"]=gcpIds;
             reqRow["gdId"]=row.find('input[name=gdId]')[0].value;
+            reqRow["gdspId"]=row.find('input[name=gdspId]')[0].value;
             reqRow["goodsId"]=row.find('input[name=goodsId]')[0].value;
             reqRow["num"]=row.find('input[name=num]')[0].value;
             reqRow["remark"]=row.find('input[name=remark]')[0].value;
@@ -756,7 +758,6 @@
         data["cpIds"] = cpIds;
         data["buyGoods"] = reqRows;
         console.log(data);
-        return;
         $.ajax({
             type:"post",//请求方式
             url: "/order/buyGoods",//发送请求地址
