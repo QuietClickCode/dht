@@ -21,6 +21,7 @@ import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserVo;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
@@ -63,12 +64,12 @@ public class UserServiceImpl implements UserService {
 		return userMapper.queryUserByUid(uid);
 	}
 
-	public Pagination<User> queryUserList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<User> page = new Pagination<User>();
+	public Pagination<UserVo> queryUserList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<UserVo> page = new Pagination<UserVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<User> list = userMapper.queryUserList(page);
+		List<UserVo> list = userMapper.queryUserList(page);
 		page.setData(list);
 		return page;
 	}
@@ -312,6 +313,33 @@ public class UserServiceImpl implements UserService {
 		//根据用户取得相应的登陆信息
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
 		return info;
+	}
+
+	/**
+	 *
+	 * @param sysUid 系统用户id
+	 * @param uid 用户id
+	 * @param utype 用户类型
+	 * @param ufirstCommission 首单提成
+	 * @param urecommendCommission 消费提成
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean editorUserType(Long sysUid, Long uid, Long utype, Long ufirstCommission, Long urecommendCommission) throws AppException {
+		User user=userMapper.queryUserByUid(uid);
+		if(ObjectUtils.isEmpty(user)){
+			throw new AppException("用户不存在");
+		}
+		if(utype.intValue()==UserConstant.USER_TYPE_PT){
+			ufirstCommission=null;
+			urecommendCommission=null;
+		}
+		long total =userMapper.editorUserType(uid,utype,ufirstCommission,urecommendCommission,user.getVersion());
+		if(total==0){
+			throw new AppException("设置用户类型失败");
+		}
+		return true;
 	}
 }
 

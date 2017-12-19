@@ -208,7 +208,7 @@
             </div>
             <div class="care" style="width: 50%;">
                 <a onclick="addtobuycar();">
-                    <i><span class="number">4</span></i>
+                    <i><span class="number" id="bcnum">0</span></i>
                     <p>加入购物车</p>
                 </a>
             </div>
@@ -1161,7 +1161,29 @@
             console.log(data);
             $('#checkorderdataform').submit();
         }
-        
+
+        function querybuycarcount() {
+            $.ajax({
+                type:"post",
+                url:'/buyCar/querybuycarcount',
+                dataType: "json",
+                async :false,
+                data:{},
+                success:function(data){
+                    if(data.status==3){
+                        $('#bcnum').html(0);
+                    }else{
+                        var count = data.count;
+                        if(count!=null){
+                            $('#bcnum').html(count);
+                        }else{
+                            $('#bcnum').html(0);
+                        }
+                    }
+                }
+            });
+        }
+
         <!--日期格式化-->
         Date.prototype.pattern=function(fmt) {
             var o = {
@@ -1230,6 +1252,9 @@
 
         <!--加载类似商品-->
         scrollsamegclass();
+
+        <!--加载购物车数量-->
+        querybuycarcount();
     </script>
 
     <script>

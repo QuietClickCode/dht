@@ -13,6 +13,9 @@
 		<result property="upayPwd" column="u_pay_pwd"/>
 		<result property="uimgid" column="u_imgid"/>
 		<result property="utype" column="u_type"/>
+		<result property="ufirstCommission" column="u_first_commission"/>
+		<result property="urecommendCommission" column="u_recommend_commission"/>
+		<result property="urechage" column="u_rechage"/>
 		<result property="ustatus" column="u_status"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="ucreateTime" column="u_create_time"/>
@@ -21,6 +24,29 @@
 		<result property="usex" column="u_sex"/>
 		<result property="version" column="version"/>
 	</resultMap>
+
+	<resultMap id="rm_user_vo" type="com.retailers.dht.common.vo.UserVo">
+		<result property="uid" column="uid"/>
+		<result property="uaccount" column="uaccount"/>
+		<result property="uphone" column="uphone"/>
+		<result property="uemail" column="uemail"/>
+		<result property="uname" column="uname"/>
+		<result property="heardUrl" column="heardUrl"/>
+		<result property="utype" column="utype"/>
+		<result property="ustatus" column="ustatus"/>
+		<result property="ucreateTime" column="ucreateTime"/>
+		<result property="usex" column="usex"/>
+		<result property="discount" column="discount"/>
+		<result property="rechageNm" column="rechageNm"/>
+		<result property="uRecommendNm" column="uRecommendNm"/>
+		<result property="uTotalWallet" column="uTotalWallet"/>
+		<result property="uCurWallet" column="uCurWallet"/>
+		<result property="consumeTotal" column="consumeTotal"/>
+		<result property="walletConsumeTotal" column="walletConsumeTotal"/>
+		<result property="onLineConsumeTotal" column="onLineConsumeTotal"/>
+		<result property="openId" column="openId"/>
+	</resultMap>
+
 	<resultMap id="rm_user_info_view" type="com.retailers.dht.common.view.UserInfoVIew">
 		<result property="uid" column="u_id"/>
 		<result property="urecommendId" column="u_recommend_id"/>
@@ -44,7 +70,7 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="user_columns">
-		u_id,u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
+		u_id,u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_first_commission,u_recommend_commission,u_rechage,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
 	</sql>
 	<!-- 根据平台会员主键取得数据 -->
 	<select id="queryUserByUid" resultMap="rm_user" parameterType="java.lang.Long">
@@ -89,6 +115,15 @@
 			<if test="null != params.utype">
 				AND u_type = #{params.utype}
 			</if>
+			<if test="null != params.ufirstCommission">
+				AND u_first_commission = #{params.ufirstCommission}
+			</if>
+			<if test="null != params.urecommendCommission">
+				AND u_recommend_commission = #{params.urecommendCommission}
+			</if>
+			<if test="null != params.urechage">
+				AND u_rechage = #{params.urechage}
+			</if>
 			<if test="null != params.ustatus">
 				AND u_status = #{params.ustatus}
 			</if>
@@ -96,10 +131,10 @@
 				AND is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.ucreateTimeBegin">
-				AND u_create_time &gt;= TO_DATE('${params.ucreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND u_create_time &gt;= #{params.ucreateTime}
 			</if>
 			<if test="null != params.ucreateTimeEnd">
-				AND u_create_time &lt;= TO_DATE('${params.ucreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND u_create_time &lt;= #{params.ucreateTime}
 			</if>
 			<if test="null != params.uisOld">
 				AND u_is_old = #{params.uisOld}
@@ -116,72 +151,123 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryUserList" resultMap="rm_user" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="user_columns" />
-		FROM t_user
-		<include refid="user_where"/>
+	<select id="queryUserList" resultMap="rm_user_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+			u.u_id uid,
+			u.u_account uaccount,
+			u.u_phone uphone,
+			u.u_email uemail,
+			u.u_name uname,
+			IFNULL(
+				a.show_url,
+				w.wau_headimgurl
+			) heardUrl,
+			u.u_type utype,
+			u.u_status ustatus,
+			u.u_create_time ucreateTime,
+			u.u_sex usex,
+			u.u_first_commission ufirstCommission,
+			u.u_recommend_commission urecommendCommission,
+			r.r_discount discount,
+			ifnull(r.r_name,'普通会员') rechageNm,
+			t.u_name uRecommendNm,
+			p.u_total_wallet uTotalWallet,
+			p.u_cur_wallet uCurWallet,
+			p.u_total_consume consumeTotal,
+			p.u_wallet_consume_total walletConsumeTotal,
+			p.u_total_integral onLineConsumeTotal,
+			w.wau_openid openId
+		FROM
+			t_user u
+			LEFT JOIN t_user t ON t.u_id = u.u_recommend_id
+			LEFT JOIN t_user_card_package p ON u.u_id = p.id
+			LEFT JOIN t_wx_auth_user w ON u.u_id = w.wau_u_id
+			LEFT JOIN t_recharge_history r ON u.u_rechage = r.r_id
+			LEFT JOIN t_attachment a ON u.u_imgid = a.id
+		WHERE u.is_delete=0
+		<if test="null != params.loginNm and '' != params.loginNm">
+			AND u.u_account = #{params.loginNm}
+		</if>
+		<if test="null != params.userNm and '' != params.userNm">
+			AND u.u_name like concat('%', #{params.userNm} ,'%')
+		</if>
+		<if test="null != params.phone and '' != params.phone">
+			AND u.u_phone = #{params.phone}
+		</if>
+		<if test="null != params.type">
+			AND u.u_type = #{params.type}
+		</if>
 	</select>
 	<!--添加平台会员 -->
 	<insert id="saveUser" parameterType="com.retailers.dht.common.entity.User" useGeneratedKeys="true" keyProperty="uid">
 		INSERT INTO t_user (
-			u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
+			u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_first_commission,u_recommend_commission,u_rechage,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,version
 		) VALUES
 		(
-			#{urecommendId,jdbcType=BIGINT},#{uaccount,jdbcType=VARCHAR},#{uphone,jdbcType=VARCHAR},#{uemail,jdbcType=VARCHAR},#{uname,jdbcType=VARCHAR},#{upwd,jdbcType=VARCHAR},#{upayPwd,jdbcType=VARCHAR},#{uimgid,jdbcType=INTEGER},#{utype,jdbcType=INTEGER},#{ustatus,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{ucreateTime,jdbcType=TIMESTAMP},#{uisOld,jdbcType=INTEGER},#{uoldPwd,jdbcType=INTEGER},#{usex,jdbcType=INTEGER},0
+			#{urecommendId,jdbcType=BIGINT},#{uaccount,jdbcType=VARCHAR},#{uphone,jdbcType=VARCHAR},#{uemail,jdbcType=VARCHAR},#{uname,jdbcType=VARCHAR},#{upwd,jdbcType=VARCHAR},#{upayPwd,jdbcType=VARCHAR},#{uimgid,jdbcType=BIGINT},#{utype,jdbcType=INTEGER},#{ufirstCommission,jdbcType=BIGINT},#{urecommendCommission,jdbcType=BIGINT},#{urechage,jdbcType=BIGINT},#{ustatus,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{ucreateTime,jdbcType=TIMESTAMP},#{uisOld,jdbcType=INTEGER},#{uoldPwd,jdbcType=INTEGER},#{usex,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改平台会员 -->
 	<update id="updateUser" parameterType="com.retailers.dht.common.entity.User">
 		UPDATE t_user
 		<set>
-            <if test="null != urecommendId">
-                u_recommend_id = #{urecommendId},
-            </if>
-            <if test="null != uaccount and '' != uaccount">
-                u_account = #{uaccount},
-            </if>
-            <if test="null != uphone and '' != uphone">
-                u_phone = #{uphone},
-            </if>
-            <if test="null != uemail and '' != uemail">
-                u_email = #{uemail},
-            </if>
-            <if test="null != uname and '' != uname">
-                u_name = #{uname},
-            </if>
-            <if test="null != upwd and '' != upwd">
-                u_pwd = #{upwd},
-            </if>
-            <if test="null != upayPwd and '' != upayPwd">
-                u_pay_pwd = #{upayPwd},
-            </if>
-            <if test="null != uimgid">
-                u_imgid = #{uimgid},
-            </if>
-            <if test="null != utype">
-                u_type = #{utype},
-            </if>
-            <if test="null != ustatus">
-                u_status = #{ustatus},
-            </if>
-            <if test="null != isDelete">
-                is_delete = #{isDelete},
-            </if>
-            <if test="null != ucreateTime">
-                u_create_time = #{ucreateTime},
-            </if>
-            <if test="null != uisOld">
-                u_is_old = #{uisOld},
-            </if>
-            <if test="null != uoldPwd">
-                u_old_pwd = #{uoldPwd},
-            </if>
-            <if test="null != usex">
-                u_sex = #{usex},
-            </if>
-            <if test="null != version">
-                version = version+1,
-            </if>
+			<if test="null != urecommendId">
+				u_recommend_id = #{urecommendId},
+			</if>
+			<if test="null != uaccount and '' != uaccount">
+				u_account = #{uaccount},
+			</if>
+			<if test="null != uphone and '' != uphone">
+				u_phone = #{uphone},
+			</if>
+			<if test="null != uemail and '' != uemail">
+				u_email = #{uemail},
+			</if>
+			<if test="null != uname and '' != uname">
+				u_name = #{uname},
+			</if>
+			<if test="null != upwd and '' != upwd">
+				u_pwd = #{upwd},
+			</if>
+			<if test="null != upayPwd and '' != upayPwd">
+				u_pay_pwd = #{upayPwd},
+			</if>
+			<if test="null != uimgid">
+				u_imgid = #{uimgid},
+			</if>
+			<if test="null != utype">
+				u_type = #{utype},
+			</if>
+			<if test="null != ufirstCommission">
+				u_first_commission = #{ufirstCommission},
+			</if>
+			<if test="null != urecommendCommission">
+				u_recommend_commission = #{urecommendCommission},
+			</if>
+			<if test="null != urechage">
+				u_rechage = #{urechage},
+			</if>
+			<if test="null != ustatus">
+				u_status = #{ustatus},
+			</if>
+			<if test="null != isDelete">
+				is_delete = #{isDelete},
+			</if>
+			<if test="null != ucreateTime">
+				u_create_time = #{ucreateTime},
+			</if>
+			<if test="null != uisOld">
+				u_is_old = #{uisOld},
+			</if>
+			<if test="null != uoldPwd">
+				u_old_pwd = #{uoldPwd},
+			</if>
+			<if test="null != usex">
+				u_sex = #{usex},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
 		</set>
 		WHERE u_id = #{uid} and version = #{version}
 	</update>
@@ -231,4 +317,15 @@
 			uc.id = u.u_id
 		AND u.u_id = #{uid}
 	</select>
+
+	<!--设置用户类型 -->
+	<update id="editorUserType">
+		UPDATE t_user
+			SET
+				u_type = #{utype},
+				u_first_commission = #{ufirstCommission},
+				u_recommend_commission = #{urecommendCommission},
+				version = version+1
+		WHERE u_id = #{uid} and version = #{version}
+	</update>
 </mapper>

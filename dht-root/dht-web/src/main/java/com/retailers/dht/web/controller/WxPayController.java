@@ -6,6 +6,8 @@ import com.retailers.dht.common.entity.PayCallback;
 import com.retailers.dht.common.service.OrderProcessingQueueService;
 import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayService;
+import com.retailers.dht.common.service.UserService;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.IPUtil;
@@ -48,11 +50,19 @@ public class WxPayController extends BaseController{
     private OrderProcessingQueueService orderProcessingQueueService;
     @Autowired
     private PayService payService;
+    @Autowired
+    private UserService userService;
     @RequestMapping("payInfo")
     public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price){
         ModelAndView model=new ModelAndView();
         model.addObject("orderNo",orderNo);
         model.addObject("price",price);
+        //取得用户钱包余额
+        long uid=getCurLoginUserId(request);
+        UserInfoVIew uiv=userService.queryUserInfoByUid(uid);
+        if(ObjectUtils.isNotEmpty(uiv)){
+            model.addObject("userWallet",uiv.getUcurWallet());
+        }
         String url=redirectUrl(request,"pay/payInfo");;
         model.setViewName(url);
         return model;

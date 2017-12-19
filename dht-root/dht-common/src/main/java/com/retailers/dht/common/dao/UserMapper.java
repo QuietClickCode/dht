@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
@@ -60,7 +61,7 @@ public interface UserMapper {
 	 * @author zhongp
 	 * @date 2017-11-23 00:47:29
 	 */
-	public List<User> queryUserList(Pagination<User> pagination);
+	public List<UserVo> queryUserList(Pagination<UserVo> pagination);
 
 	/**
 	 * 校验手机号是否存在
@@ -75,5 +76,15 @@ public interface UserMapper {
 	 * @return
 	 */
 	public UserInfoVIew queryLoginUserInfoView(@Param("uid")Long uId);
+
+	/**
+	 * 设置用户类型
+	 * @param uid 用户id
+	 * @param type 用户类型
+	 * @param ufirstCommission 首次交易提成
+	 * @param urecommendCommission 消费提成
+	 * @return
+	 */
+	public int editorUserType(@Param("uid")Long uid,@Param("utype")Long type,@Param("ufirstCommission")Long ufirstCommission,@Param("urecommendCommission")Long urecommendCommission,@Param("version") Integer version);
 
 }

@@ -82,5 +82,20 @@ public class BuyCarController extends BaseController{
         boolean flag = buyCarService.deleteBuyCarByBcIds(buyCarIds);
         return success(flag);
     }
-    
+
+    @RequestMapping("/querybuycarcount")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public Map<String,Object> querybuycarcount(HttpServletRequest request){
+        Long uid = getCurLoginUserId(request);
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("uid",uid);
+        params.put("isBuy",0L);
+        List<BuyCar> list = new ArrayList<BuyCar>();
+        list = buyCarService.queryBuyCarList(params,1,10000).getData();
+        Map map = new HashMap();
+        map.put("count",list.size());
+        return map;
+    }
 }

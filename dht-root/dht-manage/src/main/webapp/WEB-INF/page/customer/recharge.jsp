@@ -214,10 +214,10 @@
             formatter:function(value,row,index){
                 rowDatas.set(row.rid,row);
                 let html='';
-                <ex:perm url="goodsCoupon/delGoodsCoupon">
+                <ex:perm url="recharge/editorRecharge">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorRecharge(\''+row.rid+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
-                <ex:perm url="goodsCoupon/delGoodsCoupon">
+                <ex:perm url="recharge/delRecharge">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.rid+'\')"">删除</button>';
                 </ex:perm>
                 return html;

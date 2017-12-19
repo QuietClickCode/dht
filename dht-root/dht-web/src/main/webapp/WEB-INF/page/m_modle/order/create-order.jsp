@@ -20,15 +20,18 @@
         <input type="hidden" value="" id="uaId">
         <a href="/order/choseAddress">
             <p>
-                <span id="uaName">胡月半</span>
-                <span id="uaPhone">151****2388</span>
+                <span id="uaName"></span>
+                <span id="uaPhone"></span>
             </p>
             <p id="uaAllAddress">
-                重庆重庆市石柱县物流镇明星村
+
             </p>
             <i class="icon-right"></i>
         </a>
-        <img id="ordernoaddressimg" style="display: none;width: 100%;height: 100%" src="/img/ordernoaddress.jpg">
+        <a href="/order/choseAddress">
+            <img id="ordernoaddressimg" style="display: none;width: 100%;height: 100%" src="/img/ordernoaddress.jpg">
+        </a>
+
     </div>
 
     <div id="goodsList">
@@ -115,16 +118,18 @@
                         <%--<label for="">苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果苹果</label>--%>
                         <%--<a class="coupon-detail"></a>--%>
                     <%--</div>--%>
-                    <%--<div class="coupon-item-detail" style="display: none;">--%>
-                        <%--<img class="get-img" src="/img/coupon-img1.png">--%>
-                        <%--<div class="coupon-data">--%>
-                            <%--<p class="coupon-price">--%>
-                                <%--<small>￥</small>--%>
-                                <%--<strong>150</strong>--%>
-                            <%--</p>--%>
-                            <%--<p class="coupon-condition">满 200 可用</p>--%>
-                            <%--<p class="coupon-date">2017.11.11-2017.12.12</p>--%>
-                        <%--</div>--%>
+                    <%--<div class="coupon-item-detail" style="">--%>
+                        <%--<ul class="coupon_list1 ">--%>
+                            <%--<li><a href="javascript:void(0)">--%>
+                                <%--<div class="coupon_item_box clearfix">--%>
+                                    <%--<div class="item_box_left"><span>￥</span><strong class="condition">1</strong>--%>
+                                    <%--</div>--%>
+                                    <%--<div id="item_box_right" class="item_box_right"><p class="term">满1.00可用</p>--%>
+                                        <%--<p class="time" id="time"> - </p></div>--%>
+                                <%--</div>--%>
+                                <%--<p class="coupon_list1_info">测试1</p>--%>
+                            <%--</a></li>--%>
+                        <%--</ul>--%>
                     <%--</div>--%>
                 <%--</li>--%>
 
@@ -153,19 +158,23 @@
     <div class="order-price">
         <div class="price1">
             <span class="name">应付总额</span>
-            <span class="number"><span class="mr_4">￥</span>168.00</span>
+            <span class="number" id="shouldPay"><span class="mr_4">￥</span>0.00</span>
         </div>
         <div class="price2">
             <span class="name">商品总金额</span>
-            <span class="number"><span class="mr_4">￥</span>168.00</span>
+            <span class="number" id="goodsprice"><span class="mr_4">￥</span>168.00</span>
         </div>
         <div class="price2">
             <span class="name">运费</span>
-            <span class="number"><span class="mr_4">￥</span>168.00</span>
+            <span class="number" id="goodsFreight"><span class="mr_4">￥</span>168.00</span>
         </div>
         <div class="price2">
             <span class="name">会员折扣</span>
             <span class="number"><span class="mr_4">￥</span>-20.00</span>
+        </div>
+        <div class="price2">
+            <span class="name">商品优惠</span>
+            <span class="number" id="gcpspan"><span class="mr_4">￥</span>0.00</span>
         </div>
         <div class="price2">
             <span class="name">优惠卷</span>
@@ -186,9 +195,9 @@
     <div class="order-footer">
             <span class="price">
                 实付
-                <span class="number"><span class="mr_4">￥</span>128.00</span>
+                <span class="number" id="finalPrice"><span class="mr_4">￥</span>0.00</span>
             </span>
-        <a href="javascript:void(0);" class="order-payment-btn" id="J_paymentBtn">去支付</a>
+        <a onclick="jiesuan();" class="order-payment-btn" >去支付</a>
     </div>
 
     <!-- 支付方式选择 -->
@@ -315,7 +324,6 @@
 
 
 
-
 </script>
 
 <!--定义函数-->
@@ -329,9 +337,18 @@
 //        console.log(rows);
         var element = $('#goodsList');
         var html = '';
+        var index = 0;
         for(var i=0;i<rows.length;i++){
+            var gdPrice = Number(rows[i].gdprice);
+            var num = Number(rows[i].num);
+            index += gdPrice * num;
             html = '<div class="order-product clear-fix">' +
                 '<input type="hidden" value="'+rows[i].gdId+'" name="gdId">'+
+                '<input type="hidden" value="'+rows[i].goodsId+'" name="goodsId">'+
+                '<input type="hidden" value="'+rows[i].remark+'" name="remark">'+
+                '<input type="hidden" value="'+rows[i].num+'" name="num">'+
+                '<input type="hidden" value="'+rows[i].buyCarId+'" name="buyCarId">'+
+                '<input type="hidden" value="'+rows[i].gdprice+'" name="gdprice">'+
                 '<a  class="img">'+
             '<img style="margin-top: 15px" src="'+rows[i].imgurl+'" alt="">'+
             '</a>'+
@@ -348,6 +365,9 @@
             '</div>';
               element.append(html);
         }
+
+        $('#goodsprice').html('<span class="mr_4">￥</span>'+parseFloat(index).toFixed(2));
+
     }
 
     function loadAddress() {
@@ -379,7 +399,7 @@
                         uaPhone = row.uaPhone;
                         addAdressData(uaId,uaName,uaPhone,uaAllAddress);
                     }else{
-                        $('#ordernoaddressimg').siblings().remove();
+                        $('#ordernoaddressimg').parent().siblings().remove();
                         $('#ordernoaddressimg').show();
                     }
                 }
@@ -388,12 +408,16 @@
     }
 
     function addAdressData(uaId,uaName,uaPhone,uaAllAddress) {
+        loadGoodsFreight(uaAllAddress);
         $('#uaId').val(uaId);
         $('#uaName').html(uaName);
         $('#uaPhone').html(uaPhone);
         $('#uaAllAddress').html(uaAllAddress);
+
+        $('#J_twoAddress').html('<span>送至:</span>'+uaAllAddress);
     }
 
+    <!--加载优惠和优惠券-->
     function loadgcpandcp(){
         if(isActivity==3){
             var rows = goodsData.data;
@@ -424,31 +448,40 @@
                                 var row = userCoupons[i];
                                 var html = '<li>'+
                                     '<div class="coupon-item-tittle">'+
-                                    '<input onclick="choosecp(this);" name="Fruit" type="checkbox" value="'+row.cpId+'" cpIsOverlapUse="'+row.cpIsOverlapUse+'" />'+
+                                    '<input onclick="choosecp(this);" name="Fruit" type="checkbox" val="'+row.couponVal+'" value="'+row.cpId+'" cpIsOverlapUse="'+row.cpIsOverlapUse+'" cpType="'+row.cpType+'" cpIsFirst="'+row.cpIsFirst+'"/>'+
                                     '<label for="">'+row.cpName+'</label>'+
                                     '<a class="coupon-detail"></a>'+
                                     '</div>'+
-                                    '<div class="coupon-item-detail" style="display: none;">'+
-                                    '<img class="get-img" src="/img/coupon-img1.png">'+
-                                    '<div class="coupon-data">'+
-                                    '<p class="coupon-price">';
-                                var cpCoinType = row.cpCoinType;
+                                    '<div class="coupon-item-detail" style="display: none;margin-top: -.3rem;height: 2.7rem">';
+
+                                var cpType = row.cpType;
                                 var small = '';
                                 var strong = '';
-                                if(cpCoinType==1){
+                                var small1='';
+                                if(cpType==1){
                                     small = '打'
-                                    strong = row.couponVal+'折';
+                                    strong = row.couponVal;
+                                    small1 = '折';
                                 }else{
                                     small = '￥';
                                     strong = row.couponVal;
                                 }
+                                var useRange = row.useRange;
+                                if(useRange==''||useRange==null){
+                                    useRange = '全场可用';
+                                }
 
-                                html +=  '<small>'+small+'</small>'+
-                                    '<strong>'+strong+'</strong>'+
-                                    '</p>'+
-                                    '<p class="coupon-condition">'+row.useCondition+'</p>'+
-                                    '<p class="coupon-date">'+row.cpStartDate+' - '+row.cpEndDate+'</p>'+
-                                    '</div>'+
+                                html +=  '<ul class="coupon_list1 ">'+
+                                    '<li><a href="javascript:void(0)">'+
+                                '<div class="coupon_item_box clearfix">'+
+                                '<div class="item_box_left"><span>'+small+'</span><strong class="condition">'+strong+'</strong><span>'+small1+'</span>'+
+                                '</div>'+
+                                '<div id="item_box_right" class="item_box_right"><p class="term">'+row.useCondition+'</p>'+
+                                '<p class="time" id="time"> '+row.cpStartDate + '- '+row.cpEndDate+'</p></div>'+
+                                '</div><p class="coupon_list1_bg"></p>'+
+                                '<p class="coupon_list1_info overflow" style="font-size: .3rem">'+useRange+'</p>'+
+                                ' </a></li>'+
+                                '</ul>'+
                                     '</div>'+
                                     '</li>';
                                 userCouponsUl.append(html);
@@ -464,12 +497,12 @@
 //                        console.log(keyFlag);
                         if(keyFlag){
                             var goodsdivs = $('.order-product');
-                            console.log(goodsdivs.length);
+//                            console.log(goodsdivs.length);
                             for(var i=0;i<goodsdivs.length;i++){
                                 var godosdiv = $(goodsdivs[i]);
                                 var gdId = godosdiv.find('input[type=hidden]')[0].value;
                                 var goodscoupons = gcLists[gdId];
-                                console.log(goodscoupons[1].gcpName);
+//                                console.log(goodscoupons[1].gcpName);
                                 if(goodscoupons.length>0){
                                     var html = '<div class="coupon-info-box">'+
                                         '<span class="coupon-btn">商品优惠</span>'+
@@ -482,7 +515,7 @@
                                         var val = goodscoupon.val;
 
                                         html += '<li>'+
-                                            '<span style="margin-top: 4px"><input onclick="choosegcp(this);" type="checkbox" value="'+goodscoupon.gcpId+'" gcpIsOverlapUse="'+gcpIsOverlapUse+'"></span>'+
+                                            '<span style="margin-top: 4px"><input onclick="choosegcp(this);" val="'+goodscoupon.val+'" type="checkbox" value="'+goodscoupon.gcpId+'" gcpIsOverlapUse="'+gcpIsOverlapUse+'" gcpType="'+goodscoupon.gcpType+'"></span>'+
                                             '<span style="margin-left: 20px">'+goodscoupon.gcpName+'</span>';
                                         var yh = '';
                                         if(type==0){
@@ -514,6 +547,7 @@
         }
     }
 
+    <!--点击选择优惠券-->
     function choosecp(obj) {
         var cpisoverlapuse = $(obj).attr("cpisoverlapuse");
         var inputs = $('.coupon-list').find('input[type=checkbox]');
@@ -551,9 +585,9 @@
                 inputs.parent().removeClass("no-selected");
             }
         }
-
     }
 
+    <!--点击选择商品优惠-->
     function choosegcp(obj) {
         var gcpisoverlapuse = $(obj).attr("gcpisoverlapuse");
         var flag = obj.checked;
@@ -585,28 +619,144 @@
         if(gcpisoverlapuse==1&&!flag){
             $(obj).parent().parent().siblings().find('input[type=checkbox]').removeAttr("disabled");
         }
+        outprice();
+    }
+
+    <!--加载运费-->
+    function loadGoodsFreight(address) {
+        $.ajax({
+            type:"post",
+            url:"/goodsFreight/queryFreightByAddress",
+            dataType: "json",
+            data:{address:address},
+            success:function(data){
+                var row = data.row;
+                if(row!=null){
+                    $('#goodsFreight').html('<span class="mr_4">￥</span>'+parseFloat(row.gfPrice/100).toFixed(2) );
+                    var goodsPrice = $('#goodsprice').html();
+
+                    var goodsPriceFloat = Number(parseFloat(row.gfPrice/100).toFixed(2));
+                    var goodsFreight = Number(removeHTMLTag(goodsPrice).substr(1));
+                    var total = goodsPriceFloat+goodsFreight;
+                    console.log(total);
+                    $('#finalPrice').html('<span class="mr_4">￥</span>'+ total.toFixed(2));
+                    $('#shouldPay').html('<span class="mr_4">￥</span>'+total.toFixed(2));
+                }
+            }
+        });
+    }
+
+    <!--计算价格-->
+    function outprice() {
+        var downprice = 0;
+
+        var goodsdivs = $('.order-product');
+        var gcpdowncutprice = 0;
+        if(goodsdivs!=null && goodsdivs.length>0){
+            for(var i=0;i<goodsdivs.length;i++){
+                var goods = $(goodsdivs[i]);
+                var gdprice = goods.find('input[name=gdprice]')[0].value;
+                var num = goods.find('input[name=num]')[0].value;
+                var gcps = goods.find('.coupon-info-box').find('input[type=checkbox]:checked');
+                var index = 0;
+                if(gcps!=null&&gcps.length>0){
+                    var gcpRateArr = new Array();
+                    var gcpCashArr = new Array();
+
+                    for(var j=0;j<gcps.length;j++){
+                        var gcpType = $(gcps[j]).attr('gcptype');
+                        if(gcpType==1){
+                            gcpRateArr.push(gcps[j]);
+                        }else{
+                            gcpCashArr.push(gcps[j]);
+                        }
+                    }
+                    var ingdPrice = Number(gdprice);
+                    for(var j=0;j<gcpRateArr.length;j++){
+                        var val =  Number($(gcpRateArr[j]).attr('val'));
+                        ingdPrice = ingdPrice * val / 10;
+                    }
+                    for(var j=0;j<gcpCashArr.length;j++){
+                        var val =  Number($(gcpCashArr[j]).attr('val'));
+                        ingdPrice = ingdPrice - val;
+                    }
+                    ingdPrice = ingdPrice.toFixed(2);
+                    var nowoneprice = (gdprice - ingdPrice).toFixed(2);
+
+                    gcpdowncutprice += Number(nowoneprice);
+                    downprice += nowoneprice;
+                }
+            }
+        }
+        $('#gcpspan').html('<span class="mr_4">￥</span>-'+gcpdowncutprice);
+
 
     }
 
     function jiesuan(){
-        var rows = goodsData.data;
+        var addressId = $('#address').find('input[type=hidden]')[0].value;
+        if(addressId==null||addressId==''){
+            layer.msg('请选择地址');
+            return;
+        }
+
+//        var rows = goodsData.data;
+//        var reqRows=new Array();
+//
+//        for(var i=0;i<rows.length;i++){
+//            var row = rows[i];
+//            var reqRow=new Object();
+//            reqRow["buyCarId"]=row.buyCarId;
+//            reqRow["gcpIds"]='10';
+//            reqRow["gdId"]=row.gdId;
+//            reqRow["goodsId"]=row.goodsId;
+//            reqRow["num"]=row.num;
+//            reqRow["remark"]=row.remark;
+//            reqRows.push(reqRow);
+//        }
+//        var data = new Object();
+//        data["address"] = 65;
+//        data["cpIds"] = 13;
+//        data["buyGoods"] = reqRows;
+
+
+        var goodsrows = $('.order-product');
         var reqRows=new Array();
 
-        for(var i=0;i<rows.length;i++){
-            var row = rows[i];
+        for(var i=0;i<goodsrows.length;i++){
+            var row = $(goodsrows[i]);
+            var gcpIds = '';
+            var checkboxs = row.find('.coupon-info-box').find('input[type=checkbox]:checked');
+            if(checkboxs!=null&&checkboxs.length>0){
+                for(var j=0;j<checkboxs.length;j++){
+                    gcpIds += ','+checkboxs[j].value;
+                }
+                gcpIds = gcpIds.substr(1);
+            }
             var reqRow=new Object();
-            reqRow["buyCarId"]=row.buyCarId;
-            reqRow["gcpIds"]='10';
-            reqRow["gdId"]=row.gdId;
-            reqRow["goodsId"]=57;
-            reqRow["num"]=row.num;
-            reqRow["remark"]=row.remark;
+            reqRow["buyCarId"]=row.find('input[name=buyCarId]')[0].value;
+            reqRow["gcpIds"]=gcpIds;
+            reqRow["gdId"]=row.find('input[name=gdId]')[0].value;
+            reqRow["goodsId"]=row.find('input[name=goodsId]')[0].value;
+            reqRow["num"]=row.find('input[name=num]')[0].value;
+            reqRow["remark"]=row.find('input[name=remark]')[0].value;
             reqRows.push(reqRow);
         }
         var data = new Object();
-        data["address"] = 65;
-        data["cpIds"] = 13;
+        var cpIds = '';
+        var coupons = $('.coupon-list').find('input[type=checkbox]:checked');
+        if(coupons!=null && coupons.length>0){
+            for(var i=0;i<coupons.length;i++){
+                cpIds += ','+coupons[i].value;
+            }
+            cpIds = cpIds.substr(1);
+        }
+
+        data["address"] = addressId;
+        data["cpIds"] = cpIds;
         data["buyGoods"] = reqRows;
+        console.log(data);
+        return;
         $.ajax({
             type:"post",//请求方式
             url: "/order/buyGoods",//发送请求地址
@@ -623,6 +773,16 @@
         });
 
     }
+
+    <!--获取纯文本内容-->
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+        //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+        str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+        str=str.replace(/\s/g,''); //将空格去掉
+        return str;
+    }
 </script>
 
 <!--调用函数-->
@@ -635,6 +795,7 @@
 
     <!--加载优惠与优惠券-->
     loadgcpandcp();
+
 </script>
 </body>
 </html>
