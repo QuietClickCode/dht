@@ -21,24 +21,24 @@ public class GoodsGgsvalDetailServiceTest extends TestBaseJunit{
 
     @Test
     public void editGoodsInventorysTest(){
-        GoodsDetail goodsDetail = new GoodsDetail();
-        goodsDetail.setGdId(858L);
-        goodsDetail.setGdResidueinventory(1L);
-        List<GoodsDetail> list = new ArrayList<GoodsDetail>();
-        list.add(goodsDetail);
-        boolean falg = goodsGgsvalDetailService.reduceGoodsInventorys(list);
-        System.out.println(falg);
+//        GoodsDetail goodsDetail = new GoodsDetail();
+//        goodsDetail.setGdId(858L);
+//        goodsDetail.setGdResidueinventory(1L);
+//        List<GoodsDetail> list = new ArrayList<GoodsDetail>();
+//        list.add(goodsDetail);
+//        boolean falg = goodsGgsvalDetailService.reduceGoodsInventorys(list);
+//        System.out.println(falg);
     }
 
     @Test
     public void addGoodsInventorysTest(){
-        GoodsDetail goodsDetail = new GoodsDetail();
-        goodsDetail.setGdId(858L);
-        goodsDetail.setGdResidueinventory(1L);
-        goodsDetail.setGdInventory(1L);
-        List<GoodsDetail> list = new ArrayList<GoodsDetail>();
-        list.add(goodsDetail);
-        boolean falg = goodsGgsvalDetailService.addGoodsInventorys(list);
-        System.out.println(falg);
+//        GoodsDetail goodsDetail = new GoodsDetail();
+//        goodsDetail.setGdId(858L);
+//        goodsDetail.setGdResidueinventory(1L);
+//        goodsDetail.setGdInventory(1L);
+//        List<GoodsDetail> list = new ArrayList<GoodsDetail>();
+//        list.add(goodsDetail);
+//        boolean falg = goodsGgsvalDetailService.addGoodsInventorys(list);
+//        System.out.println(falg);
     }
 }

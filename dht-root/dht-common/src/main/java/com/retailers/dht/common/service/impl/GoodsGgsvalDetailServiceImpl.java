@@ -105,21 +105,22 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return status>0?true:false;
     }
 
-    public boolean reduceGoodsInventorys(List<GoodsDetail> goodsDetailList){
+    public boolean reduceGoodsInventorys(Map<Long,Long> goodsDetailMap){
         int status = 0;
-        if(ObjectUtils.isNotEmpty(goodsDetailList)){
+        if(ObjectUtils.isNotEmpty(goodsDetailMap)){
             String gdIds = "";
-            for(GoodsDetail goodsDetail:goodsDetailList){
-                gdIds = ","+goodsDetail.getGdId();
+            for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
+                gdIds = ","+entry.getKey();
             }
             gdIds = gdIds.substring(1);
             List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
             for(GoodsDetail goodsDetail1:list){
-                for(GoodsDetail goodsDetail2:goodsDetailList){
+                for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
                     Long gdId1 = goodsDetail1.getGdId();
-                    Long gdId2 = goodsDetail2.getGdId();
+                    Long gdId2 = entry.getKey();
+                    Long reduceInventory = entry.getValue();
                     if(gdId1.equals(gdId2)){
-                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()-goodsDetail2.getGdResidueinventory();
+                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+reduceInventory;
                         if(gdResidueinventory<0){
                             return false;
                         }
@@ -135,22 +136,24 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return status>0?true:false;
     }
 
-    public boolean addGoodsInventorys(List<GoodsDetail> goodsDetailList){
+    public boolean addGoodsInventorys(Map<Long,Long> goodsDetailMap){
         int status = 0;
-        if(ObjectUtils.isNotEmpty(goodsDetailList)){
+        if(ObjectUtils.isNotEmpty(goodsDetailMap)){
             String gdIds = "";
-            for(GoodsDetail goodsDetail:goodsDetailList){
-                gdIds = ","+goodsDetail.getGdId();
+            for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
+                gdIds = ","+entry.getKey();
             }
             gdIds = gdIds.substring(1);
             List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
             for(GoodsDetail goodsDetail1:list){
-                for(GoodsDetail goodsDetail2:goodsDetailList){
+                for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
                     Long gdId1 = goodsDetail1.getGdId();
-                    Long gdId2 = goodsDetail2.getGdId();
+                    Long gdId2 = entry.getKey();
+                    Long reduceInventory = entry.getValue();
                     if(gdId1.equals(gdId2)){
-                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+goodsDetail2.getGdResidueinventory();
-                        Long gdInventory = goodsDetail1.getGdInventory()+goodsDetail2.getGdInventory();
+                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+reduceInventory;
+                        Long gdInventory = goodsDetail1.getGdInventory()+reduceInventory;
+
                         goodsDetail1.setGdResidueinventory(gdResidueinventory);
                         goodsDetail1.setGdInventory(gdInventory);
                         break;
