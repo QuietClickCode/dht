@@ -14,6 +14,7 @@
 			<result property="bcUrl" column="bc_url"/>
 			<result property="bcInviterid" column="bc_inviterid"/>
 			<result property="bcDescription" column="bc_description"/>
+			<result property="isBuy" column="is_buy"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -39,6 +40,7 @@
 		<result property="gcheckmessage" column="g_checkmessage"/>
 		<result property="gunitname" column="g_unitname"/>
 		<result property="isChecked" column="is_checked"/>
+		<result property="isBuy" column="is_buy"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="gclassificationName" column="gg_name"/>
@@ -62,7 +64,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="buyCar_columns">
-		bc_id,u_id,g_id,g_count,bc_gsvalids,bc_gsval,bc_timmer,bc_price,bc_url,bc_inviterid,bc_description,is_delete,version
+		bc_id,u_id,g_id,g_count,bc_gsvalids,bc_gsval,bc_timmer,bc_price,bc_url,bc_inviterid,bc_description,is_buy,is_delete,version
 	</sql>
 	<!-- 根据购物车表主键取得数据 -->
 	<select id="queryBuyCarByBcId" resultMap="rm_buyCar" parameterType="java.lang.Long">
@@ -107,6 +109,9 @@
 			</if>
 			<if test="null != params.bcDescription and '' != params.bcDescription">
 				AND bc_description = #{params.bcDescription}
+			</if>
+			<if test="null != params.isBuy">
+				AND is_buy = #{params.isBuy}
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
@@ -156,6 +161,7 @@
 		and t8.g_id=t1.g_id
 
 		and t1.is_delete=0
+		and t1.is_buy=0
 		and t2.is_delete=0
 		and t3.is_delete=0
 		and t8.is_delete=0
@@ -182,11 +188,23 @@
 	<!--添加购物车表 -->
 	<insert id="saveBuyCar" parameterType="com.retailers.dht.common.entity.BuyCar" useGeneratedKeys="true" keyProperty="bcId">
 		INSERT INTO t_buy_car (
-			u_id,g_id,g_count,bc_gsvalids,bc_gsval,bc_timmer,bc_price,bc_url,bc_inviterid,bc_description,is_delete,version
+			u_id,g_id,g_count,bc_gsvalids,bc_gsval,bc_timmer,bc_price,bc_url,bc_inviterid,bc_description,is_buy,is_delete,version
 		) VALUES
 		(
-			#{uid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{gcount,jdbcType=BIGINT},#{bcGsvalids,jdbcType=VARCHAR},#{bcGsval,jdbcType=VARCHAR},#{bcTimmer,jdbcType=TIMESTAMP},#{bcPrice,jdbcType=REAL},#{bcUrl,jdbcType=VARCHAR},#{bcInviterid,jdbcType=BIGINT},#{bcDescription,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+			#{uid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{gcount,jdbcType=BIGINT},#{bcGsvalids,jdbcType=VARCHAR},#{bcGsval,jdbcType=VARCHAR},#{bcTimmer,jdbcType=TIMESTAMP},#{bcPrice,jdbcType=REAL},#{bcUrl,jdbcType=VARCHAR},#{bcInviterid,jdbcType=BIGINT},#{bcDescription,jdbcType=VARCHAR},#{isBuy,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
+	</insert>
+	<insert id="updateBuyCatHadBuy">
+		INSERT INTO t_buy_car
+		(bc_id,is_buy) VALUES
+		<foreach collection ="bcIds" item="bcId" index= "index" separator =",">
+			(
+			 #{bcId},
+			 1
+			)
+			</foreach >
+		on duplicate key update
+		is_buy=VALUES(is_buy)
 	</insert>
 	<!--修改购物车表 -->
 	<update id="updateBuyCar" parameterType="com.retailers.dht.common.entity.BuyCar">
@@ -217,11 +235,14 @@
                 bc_url = #{bcUrl},
             </if>
 
-                bc_inviterid = #{bcInviterid},
+            bc_inviterid = #{bcInviterid},
 
             <if test="null != bcDescription and '' != bcDescription">
                 bc_description = #{bcDescription},
             </if>
+			<if test="null != isBuy">
+				is_buy = #{isBuy},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>

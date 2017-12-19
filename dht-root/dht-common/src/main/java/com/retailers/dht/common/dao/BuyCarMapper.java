@@ -59,4 +59,5 @@ public interface BuyCarMapper {
 
 	public List<BuyCar> queryInviterIdByBcIds(@Param("bcIds") List<Long> bcIds);
 
+	public int updateBuyCatHadBuy(@Param("bcIds") List<Long> bcIds);
 }

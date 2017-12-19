@@ -28,4 +28,13 @@ public class BuyCarServiceTest extends TestBaseJunit{
         Map goodsFreight = buyCarService.queryInviterIdByBcIds(list);
         System.out.println(goodsFreight.size());
     }
+    @Test
+    public void updateBuyCatHadBuyTest(){
+        List<Long> list = new ArrayList();
+        list.add(24L);
+        list.add(25L);
+        list.add(26L);
+        boolean goodsFreight = buyCarService.updateBuyCatHadBuy(list);
+        System.out.println(goodsFreight);
+    }
 }
