@@ -131,6 +131,31 @@
 		g_id = #{gid}
 		and is_delete=0
 	</update>
+	<insert id="reduceGoodsInventorys">
+		INSERT INTO t_goods_detail
+		(gd_id,gd_residueinventory) VALUES
+		<foreach collection ="list" item="goodsDetail" index= "index" separator =",">
+			(
+			#{goodsDetail.gdId},
+			#{goodsDetail.gdResidueinventory}
+			)
+		</foreach >
+		on duplicate key update
+		gd_residueinventory=VALUES(gd_residueinventory)
+	</insert>
+	<insert id="addGoodsInventorys">
+		INSERT INTO t_goods_detail
+		(gd_id,gd_inventory,gd_residueinventory) VALUES
+		<foreach collection ="list" item="goodsDetail" index= "index" separator =",">
+			(
+			#{goodsDetail.gdId},
+			#{goodsDetail.gdInventory},
+			#{goodsDetail.gdResidueinventory}
+			)
+		</foreach >
+		on duplicate key update
+		gd_residueinventory=VALUES(gd_residueinventory),gd_inventory=VALUES(gd_inventory)
+	</insert>
 	<!--删除商品与规格值详情表 -->
 	<delete id="deleteGoodsGgsvalDetailByGgdId" parameterType="java.lang.Long">
 		DELETE FROM t_goods_ggsval_detail WHERE ggd_id = #{ggdId}

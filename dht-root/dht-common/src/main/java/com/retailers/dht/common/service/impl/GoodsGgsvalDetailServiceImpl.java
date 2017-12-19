@@ -14,6 +14,7 @@ import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -101,6 +102,65 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
     }
     public boolean saveGoodsGgsvalDetails( List<GoodsGgsvalDetail> list){
         int status = goodsGgsvalDetailMapper.saveGoodsGgsvalDetails(list);
+        return status>0?true:false;
+    }
+
+    public boolean reduceGoodsInventorys(List<GoodsDetail> goodsDetailList){
+        int status = 0;
+        if(ObjectUtils.isNotEmpty(goodsDetailList)){
+            String gdIds = "";
+            for(GoodsDetail goodsDetail:goodsDetailList){
+                gdIds = ","+goodsDetail.getGdId();
+            }
+            gdIds = gdIds.substring(1);
+            List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+            for(GoodsDetail goodsDetail1:list){
+                for(GoodsDetail goodsDetail2:goodsDetailList){
+                    Long gdId1 = goodsDetail1.getGdId();
+                    Long gdId2 = goodsDetail2.getGdId();
+                    if(gdId1.equals(gdId2)){
+                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()-goodsDetail2.getGdResidueinventory();
+                        if(gdResidueinventory<0){
+                            return false;
+                        }
+                        goodsDetail1.setGdResidueinventory(gdResidueinventory);
+                        break;
+                    }
+                }
+            }
+
+            status = goodsGgsvalDetailMapper.reduceGoodsInventorys(list);
+        }
+
+        return status>0?true:false;
+    }
+
+    public boolean addGoodsInventorys(List<GoodsDetail> goodsDetailList){
+        int status = 0;
+        if(ObjectUtils.isNotEmpty(goodsDetailList)){
+            String gdIds = "";
+            for(GoodsDetail goodsDetail:goodsDetailList){
+                gdIds = ","+goodsDetail.getGdId();
+            }
+            gdIds = gdIds.substring(1);
+            List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+            for(GoodsDetail goodsDetail1:list){
+                for(GoodsDetail goodsDetail2:goodsDetailList){
+                    Long gdId1 = goodsDetail1.getGdId();
+                    Long gdId2 = goodsDetail2.getGdId();
+                    if(gdId1.equals(gdId2)){
+                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+goodsDetail2.getGdResidueinventory();
+                        Long gdInventory = goodsDetail1.getGdInventory()+goodsDetail2.getGdInventory();
+                        goodsDetail1.setGdResidueinventory(gdResidueinventory);
+                        goodsDetail1.setGdInventory(gdInventory);
+                        break;
+                    }
+                }
+            }
+
+            status = goodsGgsvalDetailMapper.addGoodsInventorys(list);
+        }
+
         return status>0?true:false;
     }
 }
