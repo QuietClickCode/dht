@@ -70,7 +70,6 @@
 		}
 		var isSubmit=false;
 		function userRechage(){
-			console.log(curSelectId)
 			if(!isSubmit){
 				isSubmit=true;
 				$.ajax({

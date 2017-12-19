@@ -27,6 +27,10 @@ public class BuyGoodsDetailVo {
      */
     private Long gdId;
     /**
+     * 秒杀，特价确定商品价格id
+     */
+    private Long gdspId;
+    /**
      * 商品优惠id
      */
     private String gcpIds;
@@ -83,5 +87,11 @@ public class BuyGoodsDetailVo {
         this.remark = remark;
     }
 
+    public Long getGdspId() {
+        return gdspId;
+    }
 
+    public void setGdspId(Long gdspId) {
+        this.gdspId = gdspId;
+    }
 }
