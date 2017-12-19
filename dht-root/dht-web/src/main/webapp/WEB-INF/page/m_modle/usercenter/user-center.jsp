@@ -183,16 +183,6 @@
             }
         });
 
-        $.ajax({
-            type:"post",
-            url:'/goods/setinviter',
-            dataType: "json",
-            async :false,
-            data:{},
-            success:function(data){
-
-            }
-        });
 
         $(function () {
             $.ajax({
