@@ -159,6 +159,18 @@ public interface UserService {
 	 */
 	public UserInfoVIew wxLoginNoUser(WxAuthUser wxAuthUser);
 
+	/**
+	 * 编辑用户类型
+	 * @param sysUid 系统用户id
+	 * @param uid 用户id
+	 * @param utype 用户类型
+	 * @param ufirstCommission 首单提成
+	 * @param urecommendCommission 消费提成
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean editorUserType(Long sysUid,Long uid,Long utype,Long ufirstCommission,Long urecommendCommission)throws AppException;
+
 }
 
 

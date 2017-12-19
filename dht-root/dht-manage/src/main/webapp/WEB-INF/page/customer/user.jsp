@@ -45,90 +45,68 @@
             </div>
             <div class="modal-body">
                 <form id="editorCustomerForm">
-                    <input type="hidden" name="rid" id="rid">
-                    <input type="hidden" name="version" id="version">
-                    <input type="hidden" name="rsnapshot" id="rsnapshot">
-                    <input type="hidden" name="rlogo" id="rlogo">
+                    <input type="hidden" name="uid" id="uid">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
-                                    充值金额:
+                                    登陆帐号:
                                 </span>
-                                <input type="text" class="form-control" name="rprice" id="rprice">
+                                <input type="text" class="form-control" name="uaccount" id="uaccount" readonly="readonly">
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
-                                    享受折扣:
+                                    账户名称:
                                 </span>
-                                <input type="text" class="form-control" name="rdiscount" id="rdiscount">
+                                <input type="text" class="form-control" name="uname" id="uname" readonly="readonly">
                             </div>
                         </div>
-                    </div>
 
+                    </div>
                     <div class="row">
+                        <div class="col-lg-6">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                    手机号:
+                                </span>
+                                <input type="text" class="form-control" name="uphone" id="uphone" readonly="readonly">
+                            </div>
+                        </div>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <div class="input-group col-xs-12">
                                     <div class="input-group-addon">
-                                        会员等级名称:
+                                        会员类型:
                                     </div>
-                                    <input type="text" class="form-control" name="rname" id="rname" placeholder="请输入会员等级名称">
+                                    <select id="utype" name="utype"  class="form-control" style="width: auto;">
+                                        <option value="">--全部--</option>
+                                        <option value="0">普通会员</option>
+                                        <option value="1">兼职推广人员</option>
+                                        <option value="2">推广人员</option>
+                                    </select>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6">
-                            <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                是否返现:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="rcashback" name="rcashback" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
                     </div>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                是否启用:
+                                首单提成:
                               </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isValid" name="isValid" type="checkbox" />
+                              <input id="ufirstCommission" name="ufirstCommission" class="form-control" type="text" />
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <div class="input-group col-xs-12">
+                                    <div class="input-group-addon">
+                                        消费提成:
                                     </div>
+                                    <input type="text" class="form-control" name="urecommendCommission" id="urecommendCommission" placeholder="请输入会员等级名称">
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <form id="rlogoImageForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
-                    <div class="row">
-                        <div class="col-lg-4" id="rlogoDiv">
-                            <div class="input-group form-group">
-                                    <span class="input-group-addon">
-                                        会员卡图片:
-                                    </span>
-                                <input type="file" id="dht_image_upload" name="dht_image_upload">
-                            </div>
-                        </div>
-                        <div class="col-lg-4" id="clearrlogoDiv">
-                            <div class="input-group form-group">
-                                <span class="input-group-addon">
-                                        会员卡图片:
-                                    </span>
-                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
-                            </div>
-                        </div>
-                        <div class="col-lg-4" id="uploadImageDiv">
-                            <div class="input-group form-group">
-                                <img src="" id="uploadImage" width="96px;" height="48px;">
                             </div>
                         </div>
                     </div>
@@ -142,7 +120,6 @@
     </div>
 </div>
 <%@include file="/common/common_bs_head_js.jsp"%>
-<script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script type="text/javascript">
@@ -254,13 +231,13 @@
             valign : 'middle',
             width:240,
             formatter:function(value,row,index){
-                rowDatas.set(row.rid,row);
+                rowDatas.set(row.uid,row);
                 let html='';
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorCustomer(\''+row.rid+'\')"">编辑</button>&nbsp;';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorCustomer(\''+row.uid+'\')"">编辑</button>&nbsp;';
                 </ex:perm>
                 <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.rid+'\')"">删除</button>';
+                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.uid+'\')"">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -270,8 +247,6 @@
     $(function () {
         createTable("/customer/queryCustomerLists","customerListsTables","orgId",treeColumns,queryParams)
         //初始华开关选择器
-        $("#editorCustomerForm #isValid").bootstrapSwitch();
-        $("#editorCustomerForm #rcashback").bootstrapSwitch();
         $('#editorCustomer').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
@@ -290,22 +265,7 @@
 
             var sendData=new Array();
             var formData=$("#editorCustomerForm").serializeObject();
-            var flag =$("#editorCustomerForm #isValid").bootstrapSwitch("state");
-            var rcashback =$("#editorCustomerForm #rcashback").bootstrapSwitch("state");
-            if(flag){
-                formData["isValid"]=0;
-            }else{
-                formData["isValid"]=1;
-            }
-            if(rcashback){
-                formData["rcashback"]=0;
-            }else{
-                formData["rcashback"]=1;
-            }
-            let url="/recharge/addRecharge";
-            if(editorCustomerType==1){
-                url="/recharge/editorCustomer";
-            }
+            url="/customer/editorUserType";
             //取得form表单数据
             $.ajax({
                 type:"post",
@@ -328,14 +288,6 @@
             });
         });
         formValidater();
-        $('#rlogoImageForm #dht_image_upload').filestyle({
-            btnClass : "btn-primary",
-            text:"选择文件",
-            onChange:function(){
-                editSubmitIndex = layer.load(2);
-                imagesFormSummit();
-            }
-        });
     });
     /**
      * form 校验
@@ -354,27 +306,27 @@
                         validating: 'glyphicon glyphicon-refresh'
                     },
                     fields: {
-                        rprice: {
-                            message: '充值金额校验',
+                        ufirstCommission: {
+                            message: '首单提成不能为空',
                             validators: {
                                 notEmpty: {
-                                    message: '充值金额不能为空'
+                                    message: '首单提成不能为空'
                                 },
                                 regexp:{
                                     regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                                    message:'充值金额只允许在2位整数和2位小数范围内'
+                                    message:'首单提成只允许在2位整数和2位小数范围内'
                                 }
                             }
                         },
-                        rdiscount: {
-                            message: '享受折扣校验',
+                        urecommendCommission: {
+                            message: '消费提成',
                             validators: {
                                 notEmpty: {
-                                    message: '享受折扣不能为空'
+                                    message: '消费提成不能为空'
                                 },
                                 regexp:{
                                     regexp:/^([1-9]{1}|0)(\.\d{1,2})?$/,
-                                    message:'享受折扣只允许在2位整数和2位小数范围内'
+                                    message:'消费提成只允许在2位整数和2位小数范围内'
                                 }
                             }
                         }
@@ -434,26 +386,23 @@
             }
         });
     }
-    function editorCustomer(gcpId){
+    function editorCustomer(uid){
         editorCustomerType=1;
-        initFormData(gcpId);
-        $("#editorCustomerTitle").text("编辑商品优惠");
+        initFormData(uid);
+        $("#editorCustomerTitle").text("设置会员类型");
         $('#editorCustomer').modal("show")
     }
     /**
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorCustomerForm #rid").val("");
-        $("#editorCustomerForm #version").val("");
-        $("#editorCustomerForm #rsnapshot").val("");
-        $("#editorCustomerForm #rlogo").val("");
-        $("#editorCustomerForm #rprice").val("");
-        $("#editorCustomerForm #rdiscount").val("");
-        $("#editorCustomerForm #rname").val("");
-        $("#editorCustomerForm #rcashback").bootstrapSwitch("state",false);
-        $("#editorCustomerForm #isValid").bootstrapSwitch("state",true);
-        initRlogoForm();
+        $("#editorCustomerForm #uid").val("");
+        $("#editorCustomerForm #uaccount").val("");
+        $("#editorCustomerForm #uname").val("");
+        $("#editorCustomerForm #uphone").val("");
+        $("#editorCustomerForm #utype").val("");
+        $("#editorCustomerForm #ufirstCommission").val("");
+        $("#editorCustomerForm #urecommendCommission").val("");
     }
     /**
      * 清除form 表单数据
@@ -461,81 +410,15 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorCustomerForm #rid").val(rowData.rid);
-            $("#editorCustomerForm #version").val(rowData.version);
-            $("#editorCustomerForm #rsnapshot").val(rowData.rsnapshot);
-            $("#editorCustomerForm #rlogo").val(rowData.rlogo);
-            $("#editorCustomerForm #rprice").val(rowData.rpriceFormater);
-            $("#editorCustomerForm #rdiscount").val(rowData.rdiscountFormater);
-            $("#editorCustomerForm #rname").val(rowData.rname);
-            initRlogoForm(rowData.rlogo,rowData.rlogoUrl);
-            var rcashback =false;
-            if(rowData.rcashback==0){
-                rcashback=true;
-            }
-            $("#editorCustomerForm #rcashback").bootstrapSwitch("state",rcashback);
-            var isValid =false;
-            if(rowData.isValid==0){
-                isValid=true;
-            }
-            $("#editorCustomerForm #isValid").bootstrapSwitch("state",isValid);
+            $("#editorCustomerForm #uid").val(rowData.uid);
+            $("#editorCustomerForm #uaccount").val(rowData.uaccount);
+            $("#editorCustomerForm #uname").val(rowData.uname);
+            $("#editorCustomerForm #uphone").val(rowData.uphone);
+            $("#editorCustomerForm #utype").val(rowData.utype);
+            $("#editorCustomerForm #ufirstCommission").val(rowData.ufirstCommission);
+            $("#editorCustomerForm #urecommendCommission").val(rowData.urecommendCommission);
         }else{
             clearFormData();
-        }
-    }
-    /**
-     * 编辑部门
-     **/
-    function addRecharge(){
-        editorCustomerType=0;
-        let orgId,orgPid;
-        initFormData();
-        $("#editorCustomerForm #isValid").bootstrapSwitch("state",true);
-        $("#editorCustomerTitle").text("添加充值金额");
-        $('#editorCustomer').modal("show")
-    }
-    let fileUpload=ueditorUploadUrl("goods",false,false);
-    /**
-     * 图片上传
-     */
-    function imagesFormSummit(){
-        var formData = new FormData($( "#rlogoImageForm" )[0]);
-        $.ajax({
-            url: fileUpload,
-            type: 'POST',
-            data: formData,
-            async: false,
-            cache: false,
-            contentType: false,
-            processData: false,
-            dataType: "json",
-            success: function (returndata) {
-                if(returndata.state=="SUCCESS"){
-                    initRlogoForm(returndata.original,returndata.url);
-                }
-                layer.close(editSubmitIndex);
-            },
-            error: function (returndata) {
-                layer.close(editSubmitIndex);
-            }
-        });
-    }
-    /**
-     * 初始化会员卡表单
-     * @param rLogo 表单id
-     * @param showImageUrl 显示图片
-     */
-    function initRlogoForm(rLogo,showImageUrl){
-        if(rLogo){
-            $("#rlogoImageForm #uploadImageDiv").show();
-            $("#rlogoImageForm #rlogoDiv").hide();
-            $("#rlogoImageForm #clearrlogoDiv").show();
-            $("#rlogoImageForm #uploadImage").attr("src",showImageUrl);
-            $("#editorCustomerForm #rlogo").val(rLogo);
-        }else{
-            $("#rlogoImageForm #uploadImageDiv").hide();
-            $("#rlogoImageForm #rlogoDiv").show();
-            $("#rlogoImageForm #clearrlogoDiv").hide();
         }
     }
 </script>

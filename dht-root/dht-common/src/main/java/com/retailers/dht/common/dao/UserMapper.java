@@ -77,4 +77,14 @@ public interface UserMapper {
 	 */
 	public UserInfoVIew queryLoginUserInfoView(@Param("uid")Long uId);
 
+	/**
+	 * 设置用户类型
+	 * @param uid 用户id
+	 * @param type 用户类型
+	 * @param ufirstCommission 首次交易提成
+	 * @param urecommendCommission 消费提成
+	 * @return
+	 */
+	public int editorUserType(@Param("uid")Long uid,@Param("utype")Long type,@Param("ufirstCommission")Long ufirstCommission,@Param("urecommendCommission")Long urecommendCommission,@Param("version") Integer version);
+
 }

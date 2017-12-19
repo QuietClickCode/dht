@@ -317,4 +317,15 @@
 			uc.id = u.u_id
 		AND u.u_id = #{uid}
 	</select>
+
+	<!--设置用户类型 -->
+	<update id="editorUserType">
+		UPDATE t_user
+			SET
+				u_type = #{utype},
+				u_first_commission = #{ufirstCommission},
+				u_recommend_commission = #{urecommendCommission},
+				version = version+1
+		WHERE u_id = #{uid} and version = #{version}
+	</update>
 </mapper>

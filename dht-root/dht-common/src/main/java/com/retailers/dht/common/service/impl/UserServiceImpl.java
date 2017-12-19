@@ -314,5 +314,32 @@ public class UserServiceImpl implements UserService {
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
 		return info;
 	}
+
+	/**
+	 *
+	 * @param sysUid 系统用户id
+	 * @param uid 用户id
+	 * @param utype 用户类型
+	 * @param ufirstCommission 首单提成
+	 * @param urecommendCommission 消费提成
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean editorUserType(Long sysUid, Long uid, Long utype, Long ufirstCommission, Long urecommendCommission) throws AppException {
+		User user=userMapper.queryUserByUid(uid);
+		if(ObjectUtils.isEmpty(user)){
+			throw new AppException("用户不存在");
+		}
+		if(utype.intValue()==UserConstant.USER_TYPE_PT){
+			ufirstCommission=null;
+			urecommendCommission=null;
+		}
+		long total =userMapper.editorUserType(uid,utype,ufirstCommission,urecommendCommission,user.getVersion());
+		if(total==0){
+			throw new AppException("设置用户类型失败");
+		}
+		return true;
+	}
 }
 
