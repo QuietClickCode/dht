@@ -128,13 +128,6 @@ public class OrderServiceImpl implements OrderService {
         try{
 			//取得用户地址
 			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
-//			if(ObjectUtils.isEmpty(userAddress)){
-//				throw new AppException("请填写收货人地址");
-//			}
-//			//判断用户地址是否异常
-//			if(userAddress.getUaUid().intValue()!=uid.intValue()){
-//				throw new AppException("请填写收货人地址");
-//			}
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
 			if(ObjectUtils.isEmpty(goodsFreight)){
@@ -223,11 +216,15 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
-
-
 			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,null,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
+			//清除购物车数据
+			boolean flag =buyCarService.updateBuyCatHadBuy(carIds);
+			if(!flag){
+				logger.error("清除购物车异常");
+				throw new AppException("创建订单异常");
+			}
 			rtnMap.put("orderNo",orderNo);
 		}finally {
         	logger.info("创建购物订单完毕，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
