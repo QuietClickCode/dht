@@ -67,7 +67,6 @@ public class ManagerFilter implements Filter {
                                 + "/login'</script>";
 
                     }
-                    System.out.println(context);
                     Writer writer = response.getWriter();
                     writer.write(context);
                     writer.flush();

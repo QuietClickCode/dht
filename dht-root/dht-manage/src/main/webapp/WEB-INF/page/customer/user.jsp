@@ -80,7 +80,7 @@
                                     <div class="input-group-addon">
                                         会员类型:
                                     </div>
-                                    <select id="utype" name="utype"  class="form-control" style="width: auto;">
+                                    <select id="utype" name="utype"  class="form-control" style="width: auto;" onclick="utypeChange()">
                                         <option value="">--全部--</option>
                                         <option value="0">普通会员</option>
                                         <option value="1">兼职推广人员</option>
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" id="commissionDiv">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
@@ -233,11 +233,8 @@
             formatter:function(value,row,index){
                 rowDatas.set(row.uid,row);
                 let html='';
-                <ex:perm url="goodsCoupon/delGoodsCoupon">
+                <ex:perm url="customer/editorUserType">
                 html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorCustomer(\''+row.uid+'\')"">编辑</button>&nbsp;';
-                </ex:perm>
-                <ex:perm url="goodsCoupon/delGoodsCoupon">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.uid+'\')"">删除</button>';
                 </ex:perm>
                 return html;
             }
@@ -397,6 +394,7 @@
     function editorCustomer(uid){
         editorCustomerType=1;
         initFormData(uid);
+        utypeChange();
         $("#editorCustomerTitle").text("设置会员类型");
         $('#editorCustomer').modal("show")
     }
@@ -427,6 +425,18 @@
             $("#editorCustomerForm #urecommendCommission").val(rowData.urecommendCommission);
         }else{
             clearFormData();
+        }
+    }
+    /**
+     * 用户类型改变事件
+     */
+    function  utypeChange() {
+        let valSelect=$("#editorCustomerForm #utype").val();
+        $("#commissionDiv").hide();
+        if(valSelect==0){
+            $("#commissionDiv").hide();
+        }else{
+            $("#commissionDiv").show();
         }
     }
 </script>
