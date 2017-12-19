@@ -40,7 +40,7 @@
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
                             <li><a class="menu_item" href="form_avatar.html">修改密码</a>
                             </li>
-                            <li><a href="sysUser/openLoginPage">安全退出</a>
+                            <li><a href="/login">安全退出</a>
                             </li>
                         </ul>
                     </div>
@@ -93,10 +93,10 @@
             <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
         <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="index_v148b2.html?v=4.0" frameborder="0" data-id="index_v1.html" seamless></iframe>
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="/statistics" frameborder="0" data-id="index_v1.html" seamless></iframe>
         </div>
         <div class="footer">
-            <div class="pull-right">&copy; 2014-2015 <a href="http://www.zi-han.net/" target="_blank">zihan's blog</a>
+            <div class="pull-right">&copy; 2017-2020 <a href="http://www.zi-han.net/" target="_blank">大汇堂</a>
             </div>
         </div>
     </div>

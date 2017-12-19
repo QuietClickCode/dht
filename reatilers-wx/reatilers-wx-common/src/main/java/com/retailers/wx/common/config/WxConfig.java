@@ -12,7 +12,8 @@ public class WxConfig {
     public static String ACCESS_TOKEN="nUd7jMakoJGO5QoAdOXgVedNGZcOqt3rLcLtjp6V_d1inAJ3pZb2l5CMbT0SG_2H6VyxZKyUfaHzgWe5flm8lVwPiWqJGYbHA5paSEBI7c-TwJ1y5bjN421ze4wf4MRVLFVjAFAGAQ";
     //js-sdk 耍要的token
     public static String ACCESS_TICKET="";
-
+    //微信token与微信认证地址
+    public static String WX_TOKEN="";
 
     /** 请求消息类型：文本 */
     public static String REQ_MESSAGE_TYPE_TEXT = "text";

@@ -28,18 +28,23 @@ public class MainController extends BaseController {
 	@Autowired
 	SysUserService sysUserService;
 
-	@RequestMapping(value={"/index","/"})
+	@RequestMapping(value={"/index","/","login"})
 	public String index(HttpServletRequest request){
-		SysUser sysUser=getCurLoginUser(request);
-		if(ObjectUtils.isEmpty(sysUser)){
-			SysUser info = new SysUser();
-			info.setUid(-1l);
-			info.setUaccount("admin");
-			info.setUname("测试");
-			setCurLoginUser(request,info);
-		}
+		return "sys_user/login";
+	}
+	@RequestMapping(value={"/home"})
+	public String home(HttpServletRequest request){
+//		SysUser sysUser=getCurLoginUser(request);
+//		if(ObjectUtils.isEmpty(sysUser)){
+//			SysUser info = new SysUser();
+//			info.setUid(-1l);
+//			info.setUaccount("admin");
+//			info.setUname("测试");
+//			setCurLoginUser(request,info);
+//		}
 		return "index";
 	}
+
 	@RequestMapping(value={"/main"})
 	public String main(HttpServletRequest request){
 		SysUser info = new SysUser();
@@ -130,5 +135,14 @@ public class MainController extends BaseController {
 				}
 			}
 		}
+	}
+
+	/**
+	 * 统计页面展示
+	 * @return
+	 */
+	@RequestMapping("/statistics")
+	public String statistics(HttpServletRequest request){
+		return "statistics/home";
 	}
 }

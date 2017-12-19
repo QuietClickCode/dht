@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.service.SysUserService;
 import com.retailers.auth.vo.SysUserVo;
 import com.retailers.dht.manage.base.BaseController;
@@ -12,12 +13,17 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
+import org.omg.CORBA.ObjectHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,9 +35,28 @@ import java.util.Map;
 @Controller
 @RequestMapping("sysUser")
 public class SysUserController extends BaseController {
+    Logger logger= LoggerFactory.getLogger(SysUserController.class);
     @Autowired
     private SysUserService sysUserService;
 
+    public String mainMenu;
+
+    /**
+     * 用户退出
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/exitLogin")
+    public String exitLogin(HttpServletRequest request,HttpServletResponse response){
+        logger.debug("LoginAction exitLogin()");
+        // 登陆用户信息
+        SysUser sysUser = (SysUser)request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        // 清空在线列表
+        if (ObjectUtils.isNotEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))) {
+            request.getSession().removeAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        }
+        return "sys_user/login";
+    }
     /**
      * 打开后台人员管理页面
      * @return
@@ -41,17 +66,6 @@ public class SysUserController extends BaseController {
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     public String openSysUserPage(){
         return "sys_user/sys_user";
-    }
-
-
-    /**
-     * 打开登陆页面
-     * @return
-     */
-    @RequestMapping("openLoginPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
-    public String openLoginPage(){
-        return "sys_user/login";
     }
 
     /**
@@ -64,7 +78,8 @@ public class SysUserController extends BaseController {
     @ResponseBody
     public BaseResp querySyUserByAccount(HttpServletRequest request, String account,String sysUserPwd){
         try {
-            sysUserService.querySyUserByAccount(account,sysUserPwd);
+            SysUser sysUser=sysUserService.querySyUserByAccount(account,sysUserPwd);
+            setCurLoginUser(request,sysUser);
         } catch (AppException e) {
             return errorForSystem(e.getMessage());
         }

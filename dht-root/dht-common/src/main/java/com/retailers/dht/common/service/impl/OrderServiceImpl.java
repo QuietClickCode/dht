@@ -324,18 +324,28 @@ public class OrderServiceImpl implements OrderService {
 				remark=bgd.getRemark();
 			}
 			//取得商品价格
-			Map<Long,Float> cutPrice=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
+			Map<String,Long> cutLog=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
+			//判断购买数量是否大于限制数量
+			if(ObjectUtils.isEmpty(cutLog.get("cpInventory"))){
+				logger.info("未设置砍价商品购买最大数量");
+				throw new AppException("商品购买异常");
+			}
+			if(cutLog.get("cpInventory").intValue()<num.intValue()){
+				throw new AppException("购买超限");
+			}
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
-			long totalPrice=0l;
 			OrderDetail  od=new OrderDetail();
 			od.setOdGoodsId(gid);
 			od.setOdGdId(gdId);
 			od.setOdBuyNumber(num);
 			od.setRemark(remark);
-//			od.setOdGoodsPrice(gd.getGdPrice());
-//			od.setOdActualPrice(gd.getGdPrice());
+			od.setOdGoodsPrice(cutLog.get("gdPrice"));
+			od.setOdActualPrice(cutLog.get("gdPrice")-cutLog.get("finalPrice"));
 			ods.add(od);
-			Order order=createOrder(OrderEnum.CUT_PRICE,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
+			Long total =cutLog.get("gdPrice")*num;
+			Long actualPrice =(cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num;
+			Long gcPice=cutLog.get("finalPrice")*num;
+			Order order=createOrder(OrderEnum.CUT_PRICE,userAddress,total,0l,gcPice,actualPrice,logisticsPrice,ods,null);
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
