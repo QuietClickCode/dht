@@ -6,7 +6,7 @@
     <title>会员管理</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
 </head>
-<body>
+<body id="contextDiv">
 <div id="toolbar" class="form-inline">
     <div class="form-group">
         <sapn>会员帐号:</sapn>
@@ -288,6 +288,14 @@
             });
         });
         formValidater();
+        $("#contextDiv").height($(window).height()-80);
+        $("#tableContext").height($(window).height()-90);
+        $('#customerListsTables').bootstrapTable("resetView");
+    });
+    $(window).resize(function() {
+        $("#contextDiv").height($(window).height()-80);
+        $("#tableContext").height($(window).height()-90);
+        $('#customerListsTables').bootstrapTable("resetView");
     });
     /**
      * form 校验
