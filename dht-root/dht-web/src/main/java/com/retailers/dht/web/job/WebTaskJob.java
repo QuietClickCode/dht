@@ -23,7 +23,10 @@ public class WebTaskJob {
      */
     public void startJob(){
         logger.info("项目启动,订单队列数据加载");
+        orderProcessingQueueService.initProcessingQueue();
+        //订单回调处理
         orderProcessingQueueService.executeOrderProcessingQueue();
         logger.info("项目启动,订单队列数据结束");
+
     }
 }

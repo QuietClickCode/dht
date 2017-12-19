@@ -50,6 +50,13 @@ public interface OrderDetailMapper {
 	 * @date 2017-12-11 23:38:12
 	 */
 	public OrderDetail queryOrderDetailById(Long id);
+
+	/**
+	 * 根据订单号取得订单id
+	 * @param orderId
+	 * @return
+	 */
+	public List<OrderDetail> queryOrderDetailByOdId(Long orderId);
 	/**
 	 * 查询订单详情列表
 	 * @param pagination 分页对象
