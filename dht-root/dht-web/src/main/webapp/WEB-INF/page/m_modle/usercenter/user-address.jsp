@@ -64,11 +64,13 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
         top: 0.2rem;
         right: 0.2rem;
         color: red;
+        font-size:0.28rem;
     }
 
     .defaultAddress{
         position: absolute;
         top: 0.2rem;
+        font-size: 0.28rem;
         right: 0.2rem;
     }
 </style>

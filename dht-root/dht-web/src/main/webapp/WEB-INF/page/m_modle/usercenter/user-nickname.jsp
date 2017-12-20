@@ -72,8 +72,8 @@
                     layer.msg("修改昵称成功",{time:1000});
                     isSaves=false;
                     setTimeout(function(){
-                        history.go(-1);
-                    },2000);
+                        $(location).attr('href', '/user/userDetailInfo');
+                    },1000);
                 }
             });
         }

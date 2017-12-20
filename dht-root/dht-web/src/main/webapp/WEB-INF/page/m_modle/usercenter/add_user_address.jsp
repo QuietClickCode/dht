@@ -18,6 +18,14 @@
 			height: 0.5rem;
 			margin-top: 0.25rem;
 		}
+
+		.add_address_footer{
+			position: fixed;
+		}
+
+		#userAddressFrom{
+			margin-bottom: 4rem;
+		}
 	</style>
 </head>
 
@@ -211,9 +219,9 @@
                             layer.open({
                                 content: data.msg,
                                 skin: 'msg',
-                                time: 2, //2秒后自动关闭
+                                time: 1, //2秒后自动关闭
                                 end:function(){
-                                    window.history.back();
+                                    $(location).attr('href', '/user/userAddress');
                                 }
                             });
 

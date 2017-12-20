@@ -190,13 +190,16 @@
                 method:"post",
                 dataType:"json",
                 success:function (data) {
-                    console.log(data.status);
                     if(data.status == 3){
                         $(".user-header > *").remove();
                         var login_box = $('<a src="/loginPage" class="login_box"></a>');
                         var login_btn = $('<span class="login_btn">立即登录</span>');
                         login_box.append(login_btn);
                         $(".user-header").append(login_box);
+                    }
+                    if(data.user != undefined){
+                        $(".user-name").text(data.user.uname);
+                        $(".user-img img").attr("src","http://image.kuaiyis.com/attachment/"+data.user.headUrl);
                     }
                 }
             });
