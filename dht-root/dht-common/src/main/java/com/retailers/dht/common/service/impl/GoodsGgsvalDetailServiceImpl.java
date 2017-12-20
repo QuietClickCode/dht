@@ -120,18 +120,12 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
                     Long gdId2 = entry.getKey();
                     Long reduceInventory = entry.getValue();
                     if(gdId1.equals(gdId2)){
-                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+reduceInventory;
-                        if(gdResidueinventory<0){
-                            return false;
-                        }
-                        goodsDetail1.setGdResidueinventory(gdResidueinventory);
+                        goodsDetail1.setGdResidueinventory(reduceInventory);
                         break;
                     }
                 }
             }
-
             status = goodsGgsvalDetailMapper.editGoodsInventorys(list);
-
             if(list.size()!=status){
                 throw new AppException("数据有误");
             }
