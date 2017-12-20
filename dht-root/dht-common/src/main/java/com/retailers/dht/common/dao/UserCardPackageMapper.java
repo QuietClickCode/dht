@@ -42,11 +42,20 @@ public interface UserCardPackageMapper {
 	/**
 	 * 编辑用户积分
 	 * @param uid 用户id
-	 * @param integral 积分
+	 * @param integral 消费额
 	 * @param version 版本号
 	 * @return
 	 */
 	public int userIntegral(@Param("uid")Long uid, @Param("integral")Long integral, @Param("version") Integer version);
+
+	/**
+	 * 用户钱包消费
+	 * @param uid 用户id
+	 * @param wallet 钱包消费额
+	 * @param version 版本号
+	 * @return
+	 */
+	public int userWalletConsume(@Param("uid")Long uid, @Param("wallet")Long wallet, @Param("version") Integer version);
 	/**
 	 * 根据Id删除用户钱包，积分
 	 * @param id

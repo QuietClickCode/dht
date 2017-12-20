@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.LogUserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
@@ -132,8 +133,11 @@ public class OrderServiceImpl implements OrderService {
 			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+			long logisticsPrice=0l;
 			if(ObjectUtils.isEmpty(goodsFreight)){
-
+				logisticsPrice= SysParameterConfigConstant.getValue(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,Long.class);
+			}else{
+				logisticsPrice=goodsFreight.getGfPrice();
 			}
 			//规格使用的选择的优惠例表
 			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
@@ -218,7 +222,7 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,null,ods,ogcs);
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,0l,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			//清除购物车数据
@@ -469,7 +473,15 @@ public class OrderServiceImpl implements OrderService {
 	 * @throws AppException
 	 */
 	public boolean updateOrderStatus(OrderProcessingQueue opq) throws AppException {
-		return false;
+		Order order = orderMapper.queryOrderByOrderNo(opq.getOrderNo());
+		if(ObjectUtils.isNotEmpty(order)){
+			JSONObject obj = JSONObject.parseObject(opq.getParams());
+			order.setOrderPayUseWay(obj.getInteger("orderPayUseWay"));
+			order.setOrderPayWay(obj.getInteger("orderPayWay"));
+			order.setOrderPayDate(obj.getDate("orderPayDate"));
+			orderMapper.updateOrder(order);
+		}
+		return true;
 	}
 
 	/**
@@ -524,10 +536,10 @@ public class OrderServiceImpl implements OrderService {
 						//修改用户会员类型
 						userMapper.editorCustomerType(user.getUid(),rechageId,user.getVersion());
 					}else{
-						//判断是返现订单还是返积分订单
+						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+						//返积分
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){
-							UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
-							//修改用户钱包
+							//修改用户消费
 							long updateSize=userCardPackageMapper.userIntegral(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 							if(updateSize==0){
 								throw new AppException("数据己变更");
@@ -535,8 +547,16 @@ public class OrderServiceImpl implements OrderService {
 							String remark=StringUtils.formates("用户购物返积分，返还积分:[{}],当前积分:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUtotalIntegral()));
 							addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_OUT,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
 							//订单返现
-						}else{
-
+							generateCashBack(order);
+							//返现
+						}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
+							//修改用户消费
+							long updateSize=userCardPackageMapper.userWalletConsume(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+							if(updateSize==0){
+								throw new AppException("数据己变更");
+							}
+							//订单返现
+							generateCashBack(order);
 						}
 					}
 				}
@@ -545,6 +565,17 @@ public class OrderServiceImpl implements OrderService {
 			throw new AppException(e.getMessage());
 		}
 		return true;
+	}
+
+	/**
+	 * 生成返现队例
+	 * @param order
+	 */
+	private void generateCashBack(Order order){
+		//取得订单例表
+		List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+		List<WalletCashBackQueue> list = new ArrayList<WalletCashBackQueue>();
+		WalletCashBackQueue wcbq=new WalletCashBackQueue();
 	}
 
 	/**

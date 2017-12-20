@@ -1,9 +1,15 @@
 package com.retailers.dht.common.service.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.dao.OrderMapper;
+import com.retailers.dht.common.dao.OrderProcessingQueueMapper;
 import com.retailers.dht.common.dao.PayInfoMapper;
 import com.retailers.dht.common.entity.Order;
+import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.dht.common.entity.PayInfo;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.service.PayService;
@@ -40,6 +46,8 @@ public class PayServiceImpl implements PayService {
     private OrderService orderService;
     @Autowired
     private PayInfoMapper payInfoMapper;
+    @Autowired
+    private OrderProcessingQueueMapper orderProcessingQueueMapper;
 
     /**
      *  公众号支付
@@ -114,6 +122,7 @@ public class PayServiceImpl implements PayService {
                     throw new AppException(e.getMessage());
                 }
             }
+            addOrderProcessingQueue(order.getOrderNo(),OrderConstant.ORDER_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_GZH);
 //
 //            Map<String,String> obj=null;
 //            try{
@@ -135,6 +144,21 @@ public class PayServiceImpl implements PayService {
             logger.info("微信公众号支付执行完成，耗时：{}",(System.currentTimeMillis()-curDate.getTime()));
         }
         return params;
+    }
+
+    private void addOrderProcessingQueue(String orderNo,Integer payWay,Integer payUseWay){
+        OrderProcessingQueue opq=new OrderProcessingQueue();
+        opq.setCreateTime(new Date());
+        opq.setOrderNo(orderNo);
+        opq.setType(OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_UPDATE);
+        JSONObject obj=new JSONObject();
+        obj.put("orderPayWay",payWay);
+        obj.put("orderPayUseWay",payUseWay);
+        obj.put("orderPayDate",new Date());
+        opq.setParams(JSON.toJSONString(obj));
+        opq.setStatus(OrderProcessingQueueConstant.ORDER_EXECUTE_STATUS_UN);
+        orderProcessingQueueMapper.saveOrderProcessingQueue(opq);
+        com.retailers.dht.common.constant.SystemConstant.addOrderQueue(opq);
     }
 
     public String createWxH5Pay(String orderNo, String ip) throws AppException {
@@ -181,6 +205,7 @@ public class PayServiceImpl implements PayService {
                 e.printStackTrace();
                 throw new AppException(e.getMessage());
             }
+            addOrderProcessingQueue(orderNo,OrderConstant.ORDER_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_SM);
         }finally {
             procedureToolsService.singleUnLockManager(key);
             logger.info("h5扫描支付执行完成，耗时：{}",(System.currentTimeMillis()-curDate.getTime()));
