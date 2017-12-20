@@ -1,0 +1,27 @@
+/*交易完成*/
+.no-border-bottom {
+    border: 0 !important;
+}
+.btn-wrap {
+    height: 1.2rem !important;
+    text-align: center !important;
+}
+.btn-wrap .go-evaluate {
+    display: inline-block;
+    padding: .06rem .14rem;
+    line-height: .36rem;
+    border: 1px solid #db2e2e;
+    border-radius: 3px;
+    color: #db2e2e;
+    font-size: .26rem;
+    text-align: center;
+}
+.text-box .price {
+    display: block;
+    float: right;
+    color: #333;
+    font-size: .28rem;
+    line-height: .36rem;
+    height: .76rem;
+    overflow: hidden;
+}

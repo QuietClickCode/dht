@@ -27,7 +27,7 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.go(-1); return false;" class="icon-return"></a>
     <span>修改昵称</span>
     <a href="javascript:void(0);" id="saveNickName">保存</a>
 </div>
@@ -72,7 +72,7 @@
                     layer.msg("修改昵称成功",{time:1000});
                     isSaves=false;
                     setTimeout(function(){
-                        history.back(-1);
+                        history.go(-1);
                     },2000);
                 }
             });

@@ -249,7 +249,7 @@
                 <div class="btn-box">
                     <a href="/order/checkLogistics">物流详情</a>
                     <a href="">查看订单</a>
-                    <a href="">确认收货</a>
+                    <a href="/order/dealSuccess">确认收货</a>
                 </div>
             </div>
         </li>

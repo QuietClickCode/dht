@@ -66,6 +66,12 @@ public class OrderController extends BaseController {
         return redirectUrl(request,"order/appraise-order");
     }
 
+    /*确认收货*/
+    @RequestMapping("dealSuccess")
+    public String dealSuccess(HttpServletRequest request){
+        return redirectUrl(request,"order/deal-succeed");
+    }
+
     @RequestMapping("getCheckOrderData")
     public String getCheckOrderData(HttpServletRequest request,String data){
         data += "\'isActivity\':3}";
