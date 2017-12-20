@@ -19,6 +19,13 @@ public interface OrderProcessingQueueMapper {
 	 * @date 2017-12-14 01:32:58
 	 */
 	public int saveOrderProcessingQueue(OrderProcessingQueue orderProcessingQueue);
+
+	/**
+	 * 添加订单处理队列至历史
+	 * @param orderProcessingQueue
+	 * @return
+	 */
+	public int saveOrderProcessingQueueHistory(OrderProcessingQueue orderProcessingQueue);
 	/**
 	 * 编辑订单处理队列（订单支付回调，订单状态变更）
 	 * @param orderProcessingQueue
@@ -52,4 +59,9 @@ public interface OrderProcessingQueueMapper {
 	 */
 	public List<OrderProcessingQueue> queryOrderProcessingQueueList(Pagination<OrderProcessingQueue> pagination);
 
+	/**
+	 * 取得所有未执行的订单状态队列
+	 * @return
+	 */
+	public List<OrderProcessingQueue> initProcessingQueue();
 }

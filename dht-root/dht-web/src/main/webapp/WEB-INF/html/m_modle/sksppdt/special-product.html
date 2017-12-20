@@ -79,6 +79,7 @@
         <span class="text overflow" id="nowhasgsvalspan"> 请选择规格</span>
         <span class="checkbox"></span>
         <input type="hidden" id="gdId">
+        <input type="hidden" id="gdspId">
     </div>
     <div class="norms showaddressfreigh" onclick="loadAddress();">
         <span class="name">送至</span>
@@ -688,6 +689,7 @@
                         var inventory = row.spInventory;
                         var gunitname = row.gunitname;
                         gdId = row.gdId;
+                        gdspId = row.gdspId;
 
                         var img = $('#product').find('img')[0];
                         var pricespan = $('#product').find('span')[0];
@@ -853,6 +855,7 @@
 
     }
 
+    var gdspId;
     <!--确定规格-->
     function suregsa() {
         if(canbuy==0){
@@ -880,6 +883,7 @@
             $('#minprice').html('￥'+bcPrice);
 
             $('#gdId').val(gdId);
+            $('#gdspId').val(gdspId);
             bcndimgurl = $('#product').find('img')[0].src;
             bcndnum = gcount;
             bcndgsvals = gsval;
@@ -908,6 +912,7 @@
             }
         }
         var gdId = $('#gdId').val();
+        var gdspId = $('#gdspId').val();
         var num = bcndnum;
         var imgurl = bcndimgurl
         var gsvals = bcndgsvals;
@@ -917,6 +922,7 @@
 
         var data = '{';
         data+='\'goodsId\':\''+gid+'\',';
+        data+='\'gdspId\':\''+gdspId+'\',';
         data+='\'gdId\':\''+gdId+'\',';
         data+='\'num\':\''+num+'\',';
         data+='\'imgurl\':\''+imgurl+'\',';

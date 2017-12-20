@@ -83,5 +83,4 @@ public class BuyGoodsDetailVo {
         this.remark = remark;
     }
 
-
 }

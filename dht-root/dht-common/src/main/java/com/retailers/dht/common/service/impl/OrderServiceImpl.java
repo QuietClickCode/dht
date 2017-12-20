@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.LogUserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
@@ -73,6 +74,8 @@ public class OrderServiceImpl implements OrderService {
 	private BuyCarService buyCarService;
 	@Autowired
 	private CutPriceLogService cutPriceLogService;
+	@Autowired
+	private GoodsGdsprelMapper goodsGdsprelMapper;
 
 
 	public boolean saveOrder(Order order) {
@@ -128,17 +131,13 @@ public class OrderServiceImpl implements OrderService {
         try{
 			//取得用户地址
 			UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
-//			if(ObjectUtils.isEmpty(userAddress)){
-//				throw new AppException("请填写收货人地址");
-//			}
-//			//判断用户地址是否异常
-//			if(userAddress.getUaUid().intValue()!=uid.intValue()){
-//				throw new AppException("请填写收货人地址");
-//			}
 			//取得快递费
 			GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
+			long logisticsPrice=0l;
 			if(ObjectUtils.isEmpty(goodsFreight)){
-
+				logisticsPrice= SysParameterConfigConstant.getValue(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,Long.class);
+			}else{
+				logisticsPrice=goodsFreight.getGfPrice();
 			}
 			//规格使用的选择的优惠例表
 			Map<Long,List<Long>> gcpMaps=new HashMap<Long, List<Long>>();
@@ -223,11 +222,15 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
-
-
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,null,null,null,null,ods,ogcs);
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,0l,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
+			//清除购物车数据
+			boolean flag =buyCarService.updateBuyCatHadBuy(carIds);
+			if(!flag){
+				logger.error("清除购物车异常");
+				throw new AppException("创建订单异常");
+			}
 			rtnMap.put("orderNo",orderNo);
 		}finally {
         	logger.info("创建购物订单完毕，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
@@ -446,6 +449,15 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderIllustrate(illustrate);
 			order.setOrderCreateDate(curDate);
 			orderMapper.saveOrder(order);
+			OrderDetail orderDetail=new OrderDetail();
+			orderDetail.setOdOrderId(order.getId());
+			orderDetail.setOdGoodsId(recharge.getRid());
+			orderDetail.setOdBuyNumber(1);
+			orderDetail.setRemark("用户购买充值卡");
+			orderDetail.setOdActualPrice(recharge.getRprice());
+			orderDetail.setOdGoodsPrice(recharge.getRprice());
+			orderDetail.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
+			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
 			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
 		}finally {
@@ -461,7 +473,15 @@ public class OrderServiceImpl implements OrderService {
 	 * @throws AppException
 	 */
 	public boolean updateOrderStatus(OrderProcessingQueue opq) throws AppException {
-		return false;
+		Order order = orderMapper.queryOrderByOrderNo(opq.getOrderNo());
+		if(ObjectUtils.isNotEmpty(order)){
+			JSONObject obj = JSONObject.parseObject(opq.getParams());
+			order.setOrderPayUseWay(obj.getInteger("orderPayUseWay"));
+			order.setOrderPayWay(obj.getInteger("orderPayWay"));
+			order.setOrderPayDate(obj.getDate("orderPayDate"));
+			orderMapper.updateOrder(order);
+		}
+		return true;
 	}
 
 	/**
@@ -497,19 +517,29 @@ public class OrderServiceImpl implements OrderService {
 				if(isSuccess){
 					//判断订单类型 充值 添加用户钱包
 					if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+						//取得用户卡包
 						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
 						//修改用户钱包
 						long updateSize=userCardPackageMapper.userRechage(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 						if(updateSize==0){
 							throw new AppException("数据己变更");
 						}
+						List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+						Long rechageId=null;
+						for(OrderDetail od:ods){
+							rechageId=od.getOdGoodsId();
+						}
 						String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
 						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+						User user=userMapper.queryUserByUid(order.getOrderBuyUid());
+						user.setUrechage(rechageId);
+						//修改用户会员类型
+						userMapper.editorCustomerType(user.getUid(),rechageId,user.getVersion());
 					}else{
-						//判断是返现订单还是返积分订单
+						UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+						//返积分
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_INTEGRAL){
-							UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
-							//修改用户钱包
+							//修改用户消费
 							long updateSize=userCardPackageMapper.userIntegral(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
 							if(updateSize==0){
 								throw new AppException("数据己变更");
@@ -517,8 +547,16 @@ public class OrderServiceImpl implements OrderService {
 							String remark=StringUtils.formates("用户购物返积分，返还积分:[{}],当前积分:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUtotalIntegral()));
 							addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_OUT,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
 							//订单返现
-						}else{
-
+							generateCashBack(order);
+							//返现
+						}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
+							//修改用户消费
+							long updateSize=userCardPackageMapper.userWalletConsume(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+							if(updateSize==0){
+								throw new AppException("数据己变更");
+							}
+							//订单返现
+							generateCashBack(order);
 						}
 					}
 				}
@@ -527,6 +565,17 @@ public class OrderServiceImpl implements OrderService {
 			throw new AppException(e.getMessage());
 		}
 		return true;
+	}
+
+	/**
+	 * 生成返现队例
+	 * @param order
+	 */
+	private void generateCashBack(Order order){
+		//取得订单例表
+		List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+		List<WalletCashBackQueue> list = new ArrayList<WalletCashBackQueue>();
+		WalletCashBackQueue wcbq=new WalletCashBackQueue();
 	}
 
 	/**
@@ -619,40 +668,33 @@ public class OrderServiceImpl implements OrderService {
 		}else{
 			logisticsPrice=goodsFreight.getGfPrice();
 		}
-		String gdids_="";
-		List<Long> gdIds=new ArrayList<Long>();
-		//规格id关联商品id
-		Map<Long,Long> gdIdUnGid=new HashMap<Long, Long>();
-		//规格id关联购买数量
-		Map<Long,Long> gdIdUnNum=new HashMap<Long, Long>();
-		//规格id关联价格
-		Map<Long,Long> gdIdUnPrice=new HashMap<Long, Long>();
-		//规格id关联备注
-		Map<Long,String> gdIdUnRemark=new HashMap<Long, String>();
-		for(BuyGoodsDetailVo bgd:buyInfos.getBuyGoods()){
-			gdIds.add(bgd.getGdId());
-			gdIdUnNum.put(bgd.getGdId(),bgd.getNum().longValue());
-			gdids_+=bgd.getGdId()+",";
-			gdIdUnRemark.put(bgd.getGdId(),bgd.getRemark());
+		if(buyInfos.getBuyGoods().size()>1){
+			throw new AppException("特价/秒杀商品只能购买一样商品");
+		}
+		BuyGoodsDetailVo bgd=buyInfos.getBuyGoods().get(0);
+		GoodsGdsprel goodsGdsprel=goodsGdsprelMapper.queryGoodsGdsprelByGdspId(bgd.getGdId());
+		if(ObjectUtils.isEmpty(goodsGdsprel)){
+			throw new AppException("购买商品异常");
+		}
+		//判断是否存在购买限制
+		if(ObjectUtils.isNotEmpty(goodsGdsprel.getSpBounds())){
+			if(bgd.getNum()>goodsGdsprel.getSpBounds()){
+				throw new AppException("超过购买限制，限购数量"+goodsGdsprel.getSpBounds());
+			}
 		}
 		//取得商品价格
-		List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdids_);
 		List<OrderDetail> ods=new ArrayList<OrderDetail>();
 		long totalPrice=0l;
-		for(GoodsDetail gd:gds){
-			gdIdUnPrice.put(gd.getGdId(),gd.getGdPrice());
-			gdIdUnPrice.put(gd.getGdId(),gd.getGid());
-			totalPrice+=gd.getGdPrice()*gdIdUnNum.get(gd.getGdId());
-			OrderDetail  od=new OrderDetail();
-			od.setOdGoodsId(gd.getGid());
-			od.setOdGdId(gd.getGdId());
-			od.setOdBuyNumber(gdIdUnNum.get(gd.getGdId()).intValue());
-			od.setRemark(gdIdUnRemark.get(gd.getGdId()));
-			od.setOdGoodsPrice(gd.getGdPrice());
-			od.setOdActualPrice(gd.getGdPrice());
-			od.setOdInviterUid(inviterUid);
-			ods.add(od);
-		}
+		totalPrice=goodsGdsprel.getSpSale()*bgd.getNum();
+		OrderDetail  od=new OrderDetail();
+		od.setOdGoodsId(bgd.getGoodsId());
+		od.setOdGdId(goodsGdsprel.getGdspId());
+		od.setOdBuyNumber(bgd.getNum());
+		od.setRemark(bgd.getRemark());
+		od.setOdGoodsPrice(totalPrice);
+		od.setOdActualPrice(totalPrice);
+		od.setOdInviterUid(inviterUid);
+		ods.add(od);
 		Order order=createOrder(orderEnum,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
 		return order;
 	}

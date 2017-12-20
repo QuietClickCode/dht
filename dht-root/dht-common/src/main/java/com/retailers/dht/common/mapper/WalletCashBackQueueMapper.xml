@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.WalletCashBackQueueMapper">
+
+	<resultMap id="rm_walletCashBackQueue" type="com.retailers.dht.common.entity.WalletCashBackQueue">
+			<result property="ccbqD" column="ccbq_d"/>
+			<result property="ccbqGoodsType" column="ccbq__goods_type"/>
+			<result property="ccbqOrderId" column="ccbq__order_id"/>
+			<result property="ccbqUid" column="ccbq__uid"/>
+			<result property="ccbqMoney" column="ccbq__money"/>
+			<result property="ccbqStatus" column="ccbq__status"/>
+			<result property="ccbqCreateTime" column="ccbq__create_time"/>
+			<result property="ccbqCashBackTime" column="ccbq__cash_back_time"/>
+			<result property="ccbqWaitTime" column="ccbq__wait_time"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="walletCashBackQueue_columns">
+		ccbq_d,ccbq__goods_type,ccbq__order_id,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+	</sql>
+	<!-- 根据钱包消费返现(包括指定可返现商品类型）主键取得数据 -->
+	<select id="queryWalletCashBackQueueByCcbqD" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
+		SELECT <include refid="walletCashBackQueue_columns" />
+		FROM t_wallet_cash_back_queue WHERE ccbq_d = #{ccbqD}
+	</select>
+	<!-- 钱包消费返现(包括指定可返现商品类型）查询条件组合 -->
+	<sql id="walletCashBackQueue_where">
+		<where>
+			<if test="null != params.ccbqD">
+				AND ccbq_d = #{params.ccbqD}
+			</if>
+			<if test="null != params.ccbqGoodsType">
+				AND ccbq__goods_type = #{params.ccbqGoodsType}
+			</if>
+			<if test="null != params.ccbqOrderId">
+				AND ccbq__order_id = #{params.ccbqOrderId}
+			</if>
+			<if test="null != params.ccbqUid">
+				AND ccbq__uid = #{params.ccbqUid}
+			</if>
+			<if test="null != params.ccbqMoney">
+				AND ccbq__money = #{params.ccbqMoney}
+			</if>
+			<if test="null != params.ccbqStatus">
+				AND ccbq__status = #{params.ccbqStatus}
+			</if>
+			<if test="null != params.ccbqCreateTimeBegin">
+				AND ccbq__create_time &gt;= TO_DATE('${params.ccbqCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.ccbqCreateTimeEnd">
+				AND ccbq__create_time &lt;= TO_DATE('${params.ccbqCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.ccbqCashBackTimeBegin">
+				AND ccbq__cash_back_time &gt;= TO_DATE('${params.ccbqCashBackTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.ccbqCashBackTimeEnd">
+				AND ccbq__cash_back_time &lt;= TO_DATE('${params.ccbqCashBackTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.ccbqWaitTime">
+				AND ccbq__wait_time = #{params.ccbqWaitTime}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryWalletCashBackQueueList" resultMap="rm_walletCashBackQueue" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="walletCashBackQueue_columns" />
+		FROM t_wallet_cash_back_queue
+		<include refid="walletCashBackQueue_where"/>
+	</select>
+	<!--添加钱包消费返现(包括指定可返现商品类型） -->
+	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqD">
+		INSERT INTO t_wallet_cash_back_queue (
+			ccbq__goods_type,ccbq__order_id,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+		) VALUES
+		(
+			#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqOrderId,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改钱包消费返现(包括指定可返现商品类型） -->
+	<update id="updateWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue">
+		UPDATE t_wallet_cash_back_queue
+		<set>
+            <if test="null != ccbqGoodsType">
+                ccbq__goods_type = #{ccbqGoodsType},
+            </if>
+            <if test="null != ccbqOrderId">
+                ccbq__order_id = #{ccbqOrderId},
+            </if>
+            <if test="null != ccbqUid">
+                ccbq__uid = #{ccbqUid},
+            </if>
+            <if test="null != ccbqMoney">
+                ccbq__money = #{ccbqMoney},
+            </if>
+            <if test="null != ccbqStatus">
+                ccbq__status = #{ccbqStatus},
+            </if>
+            <if test="null != ccbqCreateTime">
+                ccbq__create_time = #{ccbqCreateTime},
+            </if>
+            <if test="null != ccbqCashBackTime">
+                ccbq__cash_back_time = #{ccbqCashBackTime},
+            </if>
+            <if test="null != ccbqWaitTime">
+                ccbq__wait_time = #{ccbqWaitTime},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ccbq_d = #{ccbqD} and version = #{version}
+	</update>
+	<!--删除钱包消费返现(包括指定可返现商品类型） -->
+	<delete id="deleteWalletCashBackQueueByCcbqD" parameterType="java.lang.Long">
+		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_d = #{ccbqD}
+	</delete>
+</mapper>

@@ -51,5 +51,17 @@ public class OrderConstant {
      * 购物订单返还方式 返现（0 消费积分，1 消费返现）
      */
     public static final int ORDER_RETURN_TYPE_CASH=1;
+    /**
+     * 订单支付方式 0 微信
+     */
+    public static final int ORDER_PAY_WAY_WX=0;
+    /**
+     * 订单支付方式 1 支付宝
+     */
+    public static final int ORDER_PAY_WAY_ALIPAY=1;
+    /**
+     * 订单支付方式 2 钱包
+     */
+    public static final int ORDER_PAY_WAY_WALLET=2;
 
 }

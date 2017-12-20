@@ -24,6 +24,11 @@
 		SELECT <include refid="orderDetail_columns" />
 		FROM t_order_detail WHERE id = #{id}
 	</select>
+	<!-- 根据订单号取得订单id -->
+	<select id="queryOrderDetailByOdId" resultMap="rm_orderDetail" parameterType="java.lang.Long">
+		SELECT <include refid="orderDetail_columns" />
+		FROM t_order_detail WHERE od_order_id = #{orderId}
+	</select>
 	<!-- 订单详情查询条件组合 -->
 	<sql id="orderDetail_where">
 		<where>

@@ -197,23 +197,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">优惠券</label>
-                        <div class="col-sm-10">
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="isCoupon" class="isCoupon" value="1">
-                                    使用优惠券
-                                </label>
-                            </div>
-                            <div class="radio">
-                                <label>
-                                    <input type="radio" name="isCoupon" class="isCoupon" value="0">
-                                    不使用优惠券
-                                </label>
-                            </div>
-                        </div>
-                    </div>
+
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
@@ -228,6 +212,12 @@
                                 <label>
                                     <input type="radio" name="spRegion" class="spRegion" value="1">
                                     城市
+                                </label>
+                            </div>
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="spRegion" class="spRegion" value="2">
+                                    城市和乡村
                                 </label>
                             </div>
                         </div>
@@ -281,17 +271,7 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="" class="col-sm-2 control-label">优惠券</label>
-                        <div class="col-sm-10">
-                            <label class="radio-inline">
-                                <input type="radio" name="isCoupon" class="isCoupon" value="1">使用优惠券
-                            </label>
-                            <label class="radio-inline">
-                                <input type="radio" name="isCoupon" class="isCoupon" value="0">不使用优惠券
-                            </label>
-                        </div>
-                    </div>
+
 
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">推送对象</label>
@@ -301,6 +281,9 @@
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" name="spRegion" class="spRegion" value="1">城市
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="spRegion" class="spRegion" value="2">城市和乡村
                             </label>
                         </div>
                     </div>
@@ -669,14 +652,14 @@
             return;
         }
 
-        var gdResidueinventory = $('#addgdspTabel input[name=gdResidueinventory]');
-        for(var i=0;i<gdResidueinventory.length;i++){
-            var preval = $(gdResidueinventory[i]).prev().val();
-            if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
-                layer.msg('特价数量不可大于最大数量');
-                return;
-            }
-        }
+//        var gdResidueinventory = $('#addgdspTabel input[name=gdResidueinventory]');
+//        for(var i=0;i<gdResidueinventory.length;i++){
+//            var preval = $(gdResidueinventory[i]).prev().val();
+//            if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
+//                layer.msg('特价数量不可大于最大数量');
+//                return;
+//            }
+//        }
         var spBounds = $('#addgdspTabel input[name=spBounds]');
         for(var i=0;i<spBounds.length;i++){
             var preval = $(spBounds[i]).parent().prev().find('input[type=text]').val();
@@ -688,14 +671,14 @@
 
         var goodsId = $('.goodsId')[0].value;
         var goodsName = $('.goodsName')[0].value;
-        var isCoupon = $('input[name=isCoupon]:checked')[0].value;
+//        var isCoupon = $('input[name=isCoupon]:checked')[0].value;
         var spRegion = $('input[name=spRegion]:checked')[0].value;
         var spOrder = $('#addSalePromotionGoods input[name=spOrder]')[0].value;
         $.ajax({
             url:"/openSalePromotion/addSalePromotion",
             type:"post",
             dataType: "json",
-            data:{goodsId:goodsId,goodsName:goodsName,isCoupon:isCoupon,spRegion:spRegion,spOrder:spOrder,isDelete:0,parentId:parentId},
+            data:{goodsId:goodsId,goodsName:goodsName,spRegion:spRegion,spOrder:spOrder,isDelete:0,parentId:parentId},
             success:function (data) {
                 if(data.row!=null){
                     id=data.row.spId;
@@ -725,7 +708,6 @@
         else{
             let goods = $("#goodsClassificationTable").bootstrapTable("getRowByUniqueId",spid);
             setInfo("updateSalePromotionGoodsFrom",goods);
-            radioChoose("#updateSalePromotionGoodsFrom .isCoupon",goods.isCoupon);
             radioChoose("#updateSalePromotionGoodsFrom .spRegion",goods.spRegion);
 
             refreshinnerTableData();
@@ -755,13 +737,13 @@
         else{
             fromId = "updateSalePromotionGoodsFrom";
             var gdResidueinventory = $('#gdspTabel input[name=gdResidueinventory]');
-            for(var i=0;i<gdResidueinventory.length;i++){
-                var preval = $(gdResidueinventory[i]).prev().val();
-                if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
-                    layer.msg('特价数量不可大于最大数量');
-                    return;
-                }
-            }
+//            for(var i=0;i<gdResidueinventory.length;i++){
+//                var preval = $(gdResidueinventory[i]).prev().val();
+//                if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
+//                    layer.msg('特价数量不可大于最大数量');
+//                    return;
+//                }
+//            }
             var inputs = $('#gdspTabel').find('input[type=text]');
             if(!validateinputs(inputs)){
                 return;
@@ -798,7 +780,7 @@
     function setInfo(id,goods) {
         $("#"+id).find('[name]').each(function () {
             var name = $(this).attr('name');
-            if(name == "spType" || name == "isCoupon" || name == "spRegion"){
+            if(name == "spType" || name == "spRegion"){
 
             }
             else {
@@ -901,7 +883,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input  type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                html = '<input  type="text"  class="form-controller"value="'+val+'" >' +
                     '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'">';
                 return html;
             }
@@ -1098,7 +1080,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" placeholder="最大数量为'+row.gdResidueinventory+'" class="form-controller"value="'+val+'" onblur="checkspInventory(this)">' +
+                html = '<input type="text"  class="form-controller"value="'+val+'" >' +
                     '<input name="gdResidueinventory" type="hidden" value="'+row.gdResidueinventory+'" >';
                 return html;
             }
@@ -1351,13 +1333,6 @@
                         regexp: {
                             regexp: /\d/,
                             message: "只能输入数字"
-                        }
-                    }
-                },
-                isCoupon: {
-                    validators: {
-                        notEmpty: {
-                            message: '优惠券不能为空'
                         }
                     }
                 },

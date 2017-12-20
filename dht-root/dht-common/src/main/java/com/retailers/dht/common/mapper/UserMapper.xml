@@ -328,4 +328,13 @@
 				version = version+1
 		WHERE u_id = #{uid} and version = #{version}
 	</update>
+	<!--修改会员类型 -->
+	<update id="editorCustomerType">
+		UPDATE t_user
+		SET
+		u_rechage=#{rechage},
+		version = version+1
+		WHERE u_id = #{uid} and version = #{version}
+	</update>
+
 </mapper>

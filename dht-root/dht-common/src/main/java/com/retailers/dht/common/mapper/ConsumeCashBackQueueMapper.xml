@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.ConsumeCashBackQueueMapper">
+
+	<resultMap id="rm_consumeCashBackQueue" type="com.retailers.dht.common.entity.ConsumeCashBackQueue">
+			<result property="icbqId" column="icbq_id"/>
+			<result property="icbqUid" column="icbq_uid"/>
+			<result property="icbqMoney" column="icbq_money"/>
+			<result property="icbqUseIntegral" column="icbq_use_integral"/>
+			<result property="icbqCreateTime" column="icbq_create_time"/>
+			<result property="icbqCashBackTime" column="icbq_cash_back_time"/>
+			<result property="icbqWaitTime" column="icbq_wait_time"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="consumeCashBackQueue_columns">
+		icbq_id,icbq_uid,icbq_money,icbq_use_integral,icbq_create_time,icbq_cash_back_time,icbq_wait_time,version
+	</sql>
+	<!-- 根据第三方消费返现主键取得数据 -->
+	<select id="queryConsumeCashBackQueueByIcbqId" resultMap="rm_consumeCashBackQueue" parameterType="java.lang.Long">
+		SELECT <include refid="consumeCashBackQueue_columns" />
+		FROM t_consume_cash_back_queue WHERE icbq_id = #{icbqId}
+	</select>
+	<!-- 第三方消费返现查询条件组合 -->
+	<sql id="consumeCashBackQueue_where">
+		<where>
+			<if test="null != params.icbqId">
+				AND icbq_id = #{params.icbqId}
+			</if>
+			<if test="null != params.icbqUid">
+				AND icbq_uid = #{params.icbqUid}
+			</if>
+			<if test="null != params.icbqMoney">
+				AND icbq_money = #{params.icbqMoney}
+			</if>
+			<if test="null != params.icbqUseIntegral">
+				AND icbq_use_integral = #{params.icbqUseIntegral}
+			</if>
+			<if test="null != params.icbqCreateTimeBegin">
+				AND icbq_create_time &gt;= TO_DATE('${params.icbqCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.icbqCreateTimeEnd">
+				AND icbq_create_time &lt;= TO_DATE('${params.icbqCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.icbqCashBackTimeBegin">
+				AND icbq_cash_back_time &gt;= TO_DATE('${params.icbqCashBackTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.icbqCashBackTimeEnd">
+				AND icbq_cash_back_time &lt;= TO_DATE('${params.icbqCashBackTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.icbqWaitTime">
+				AND icbq_wait_time = #{params.icbqWaitTime}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryConsumeCashBackQueueList" resultMap="rm_consumeCashBackQueue" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="consumeCashBackQueue_columns" />
+		FROM t_consume_cash_back_queue
+		<include refid="consumeCashBackQueue_where"/>
+	</select>
+	<!--添加第三方消费返现 -->
+	<insert id="saveConsumeCashBackQueue" parameterType="com.retailers.dht.common.entity.ConsumeCashBackQueue" useGeneratedKeys="true" keyProperty="icbqId">
+		INSERT INTO t_consume_cash_back_queue (
+			icbq_uid,icbq_money,icbq_use_integral,icbq_create_time,icbq_cash_back_time,icbq_wait_time,version
+		) VALUES
+		(
+			#{icbqUid,jdbcType=BIGINT},#{icbqMoney,jdbcType=BIGINT},#{icbqUseIntegral,jdbcType=BIGINT},#{icbqCreateTime,jdbcType=TIMESTAMP},#{icbqCashBackTime,jdbcType=TIMESTAMP},#{icbqWaitTime,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改第三方消费返现 -->
+	<update id="updateConsumeCashBackQueue" parameterType="com.retailers.dht.common.entity.ConsumeCashBackQueue">
+		UPDATE t_consume_cash_back_queue
+		<set>
+            <if test="null != icbqUid">
+                icbq_uid = #{icbqUid},
+            </if>
+            <if test="null != icbqMoney">
+                icbq_money = #{icbqMoney},
+            </if>
+            <if test="null != icbqUseIntegral">
+                icbq_use_integral = #{icbqUseIntegral},
+            </if>
+            <if test="null != icbqCreateTime">
+                icbq_create_time = #{icbqCreateTime},
+            </if>
+            <if test="null != icbqCashBackTime">
+                icbq_cash_back_time = #{icbqCashBackTime},
+            </if>
+            <if test="null != icbqWaitTime">
+                icbq_wait_time = #{icbqWaitTime},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE icbq_id = #{icbqId} and version = #{version}
+	</update>
+	<!--删除第三方消费返现 -->
+	<delete id="deleteConsumeCashBackQueueByIcbqId" parameterType="java.lang.Long">
+		DELETE FROM t_consume_cash_back_queue WHERE icbq_id = #{icbqId}
+	</delete>
+</mapper>

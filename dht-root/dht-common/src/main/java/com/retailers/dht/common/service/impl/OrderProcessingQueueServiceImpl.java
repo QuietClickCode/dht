@@ -12,11 +12,13 @@ import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.dht.common.dao.OrderProcessingQueueMapper;
+import com.retailers.dht.common.service.AsyncService;
 import com.retailers.dht.common.service.OrderProcessingQueueService;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.SpringUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -45,6 +47,9 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 	private OrderService orderService;
 	@Autowired
 	private OrderMapper orderMapper;
+	@Autowired
+	private AsyncService asyncService;
+
 
 	public boolean saveOrderProcessingQueue(OrderProcessingQueue orderProcessingQueue) {
 		int status = orderProcessingQueueMapper.saveOrderProcessingQueue(orderProcessingQueue);
@@ -105,10 +110,23 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 			if(ObjectUtils.isNotEmpty(opq)){
 				try{
 					orderProcessingQueue(opq);
+					opq.setRemark("订单回调成功");
+					opq.setStatus(OrderProcessingQueueConstant.ORDER_EXECUTE_STATUS_SUCCESS);
 				}catch(Exception e){
 					e.printStackTrace();
+					String message= StringUtils.getErrorInfoFromException(e);
+					if(ObjectUtils.isNotEmpty(message)){
+						if(message.length()>400){
+							message=message.substring(0,400);
+						}
+					}
+					opq.setRemark(message);
+					opq.setStatus(OrderProcessingQueueConstant.ORDER_EXECUTE_STATUS_FAILE);
 				}finally {
-
+					Date curDate=new Date();
+					opq.setExecuteTime(curDate);
+					opq.setWaitTime(curDate.getTime()-opq.getCreateTime().getTime());
+					asyncService.orderCallback(opq);
 				}
 			}else{
 				try{
@@ -138,12 +156,43 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 			transactionManager.commit(ts);
 		}catch(AppException e){
 			transactionManager.rollback(ts);
+			e.printStackTrace();
 			throw new AppException(e.getMessage());
 		}catch(Exception e){
 			transactionManager.rollback(ts);
+			e.printStackTrace();
 			throw new AppException(e.getMessage());
 		}
 
+	}
+
+	/**
+	 * 初始化未处理的订单
+	 */
+	public void initProcessingQueue() {
+		List<OrderProcessingQueue> lists =orderProcessingQueueMapper.initProcessingQueue();
+		if(ObjectUtils.isNotEmpty(lists)){
+			for(OrderProcessingQueue opq:lists){
+				SystemConstant.addOrderQueue(opq);
+			}
+		}
+	}
+
+	/**
+	 *
+	 * @param orderProcessingQueue
+	 */
+	public void addProcessingQueueToHistory(OrderProcessingQueue orderProcessingQueue) {
+		logger.info("开始添加订单回调处理至历史");
+		Date date=new Date();
+		try{
+			//添加订单回调处理至队列
+			orderProcessingQueueMapper.saveOrderProcessingQueueHistory(orderProcessingQueue);
+			//删除原数据
+			orderProcessingQueueMapper.deleteOrderProcessingQueueById(orderProcessingQueue.getId());
+		}finally {
+			logger.info("添加订单回调处理至历史结束，执行时间:[{}]",(System.currentTimeMillis()-date.getTime()));
+		}
 	}
 
 	public void test(OrderProcessingQueue opq )throws AppException{

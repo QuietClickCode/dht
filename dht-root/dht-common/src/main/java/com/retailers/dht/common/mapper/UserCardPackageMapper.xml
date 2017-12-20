@@ -3,17 +3,19 @@
 <mapper namespace="com.retailers.dht.common.dao.UserCardPackageMapper">
 
 	<resultMap id="rm_userCardPackage" type="com.retailers.dht.common.entity.UserCardPackage">
-			<result property="id" column="id"/>
-			<result property="utotalWallet" column="u_total_wallet"/>
-			<result property="ucurWallet" column="u_cur_wallet"/>
-			<result property="utotalIntegral" column="u_total_integral"/>
-			<result property="ucurIntegral" column="u_cur_integral"/>
-			<result property="version" column="version"/>
+		<result property="id" column="id"/>
+		<result property="utotalWallet" column="u_total_wallet"/>
+		<result property="ucurWallet" column="u_cur_wallet"/>
+		<result property="utotalIntegral" column="u_total_integral"/>
+		<result property="ucurIntegral" column="u_cur_integral"/>
+		<result property="utotalConsume" column="u_total_consume"/>
+		<result property="uwalletConsumeTotal" column="u_wallet_consume_total"/>
+		<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="userCardPackage_columns">
-		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
+		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,version
 	</sql>
 	<!-- 根据用户钱包，积分主键取得数据 -->
 	<select id="queryUserCardPackageById" resultMap="rm_userCardPackage" parameterType="java.lang.Long">
@@ -38,6 +40,12 @@
 			<if test="null != params.ucurIntegral">
 				AND u_cur_integral = #{params.ucurIntegral}
 			</if>
+			<if test="null != params.utotalConsume">
+				AND u_total_consume = #{params.utotalConsume}
+			</if>
+			<if test="null != params.uwalletConsumeTotal">
+				AND u_wallet_consume_total = #{params.uwalletConsumeTotal}
+			</if>
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
@@ -52,31 +60,37 @@
 	<!--添加用户钱包，积分 -->
 	<insert id="saveUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_user_card_package (
-			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,version
+			u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,version
 		) VALUES
 		(
-			#{id,jdbcType=BIGINT},#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},0
+			#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},#{utotalConsume,jdbcType=BIGINT},#{uwalletConsumeTotal,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改用户钱包，积分 -->
 	<update id="updateUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage">
 		UPDATE t_user_card_package
 		<set>
-            <if test="null != utotalWallet">
-                u_total_wallet = #{utotalWallet},
-            </if>
-            <if test="null != ucurWallet">
-                u_cur_wallet = #{ucurWallet},
-            </if>
-            <if test="null != utotalIntegral">
-                u_total_integral = #{utotalIntegral},
-            </if>
-            <if test="null != ucurIntegral">
-                u_cur_integral = #{ucurIntegral},
-            </if>
-            <if test="null != version">
-                version = version+1,
-            </if>
+			<if test="null != utotalWallet">
+				u_total_wallet = #{utotalWallet},
+			</if>
+			<if test="null != ucurWallet">
+				u_cur_wallet = #{ucurWallet},
+			</if>
+			<if test="null != utotalIntegral">
+				u_total_integral = #{utotalIntegral},
+			</if>
+			<if test="null != ucurIntegral">
+				u_cur_integral = #{ucurIntegral},
+			</if>
+			<if test="null != utotalConsume">
+				u_total_consume = #{utotalConsume},
+			</if>
+			<if test="null != uwalletConsumeTotal">
+				u_wallet_consume_total = #{uwalletConsumeTotal},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
 		</set>
 		WHERE id = #{id} and version = #{version}
 	</update>
@@ -96,6 +110,17 @@
 		<set>
 			u_total_integral = u_total_integral+#{integral},
 			u_cur_integral = u_cur_integral+#{integral},
+			u_total_consume=u_total_consume+#{integral},
+			version = version+1,
+		</set>
+		WHERE id = #{uid} and version = #{version}
+	</update>
+	<!--用户钱包消费 -->
+	<update id="userWalletConsume">
+		UPDATE t_user_card_package
+		<set>
+			u_total_consume = u_total_consume+#{wallet},
+			u_wallet_consume_total=u_wallet_consume_total+#{wallet},
 			version = version+1,
 		</set>
 		WHERE id = #{uid} and version = #{version}

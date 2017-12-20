@@ -73,6 +73,18 @@ public interface OrderProcessingQueueService {
 	 */
 	public void executeOrderProcessingQueue();
 
+	/**
+	 * 初始加载订单回调队列
+	 */
+	public void initProcessingQueue();
+
+	/**
+	 * 添加订单执行队列至历史
+	 * @param orderProcessingQueue
+	 */
+	public void addProcessingQueueToHistory(OrderProcessingQueue orderProcessingQueue);
+
+
 	public void test(OrderProcessingQueue opq )throws AppException;
 
 }

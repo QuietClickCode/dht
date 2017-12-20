@@ -87,4 +87,13 @@ public interface UserMapper {
 	 */
 	public int editorUserType(@Param("uid")Long uid,@Param("utype")Long type,@Param("ufirstCommission")Long ufirstCommission,@Param("urecommendCommission")Long urecommendCommission,@Param("version") Integer version);
 
+	/**
+	 * 修改会员类型
+	 * @param uid 会员id
+	 * @param rechage 充值卡id
+	 * @param version 版本号
+	 * @return
+	 */
+	public int editorCustomerType(@Param("uid")Long uid,@Param("rechage")Long rechage,@Param("version") Integer version);
+
 }
