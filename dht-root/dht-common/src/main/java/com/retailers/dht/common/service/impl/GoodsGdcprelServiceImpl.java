@@ -127,11 +127,7 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 					Long gdcpId2 = entry.getKey();
 					if(gdcpId1.equals(gdcpId2)){
 						Long reduceInventory = entry.getValue();
-						Long cpInventory = goodsGdcprel.getCpInventory()+reduceInventory;
-						if(cpInventory<0){
-							return false;
-						}
-						goodsGdcprel.setCpInventory(cpInventory);
+						goodsGdcprel.setCpInventory(reduceInventory);
 						break;
 					}
 				}
@@ -139,7 +135,7 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 
 			status = goodsGdcprelMapper.editGoodsInventorys(list);
 		}
-		return status>0?true:false;
+		return status==goodsGdcprelMap.size()?true:false;
 	}
 
 }

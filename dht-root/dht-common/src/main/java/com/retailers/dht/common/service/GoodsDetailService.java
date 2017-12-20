@@ -64,7 +64,7 @@ public interface GoodsDetailService {
 
 	public GoodsDetailVo queryGoodsDetailVoLists(Map map);
 
-	public List<GoodsDetail> queryGoodsDetailByGdIds(String gdIds);
+	public List<GoodsDetailVo> queryGoodsDetailByGdIds(String gdIds);
 
 	public boolean deleteGoodsDetailByGid(Long gid);
 }

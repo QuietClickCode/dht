@@ -15,6 +15,24 @@ public class CutPriceLogVo extends CutPriceLog {
     private Long cpPrice;
     private String remark;
     private Long cpInventory;
+    private Long isMenberdiscount;
+    private Long gclass;
+
+    public Long getGclass() {
+        return gclass;
+    }
+
+    public void setGclass(Long gclass) {
+        this.gclass = gclass;
+    }
+
+    public Long getIsMenberdiscount() {
+        return isMenberdiscount;
+    }
+
+    public void setIsMenberdiscount(Long isMenberdiscount) {
+        this.isMenberdiscount = isMenberdiscount;
+    }
 
     public Long getCpInventory() {
         return cpInventory;

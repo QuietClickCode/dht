@@ -12,6 +12,24 @@ public class GoodsGdsprelVo extends GoodsGdsprel {
     private Long sumcount;
     private String imgurl;
     private String gunitname;
+    private Long isMenberdiscount;
+    private Long gclass;
+
+    public Long getGclass() {
+        return gclass;
+    }
+
+    public void setGclass(Long gclass) {
+        this.gclass = gclass;
+    }
+
+    public Long getIsMenberdiscount() {
+        return isMenberdiscount;
+    }
+
+    public void setIsMenberdiscount(Long isMenberdiscount) {
+        this.isMenberdiscount = isMenberdiscount;
+    }
 
     public String getGsName() {
         return gsName;

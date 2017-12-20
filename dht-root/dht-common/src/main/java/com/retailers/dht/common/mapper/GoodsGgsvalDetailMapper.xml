@@ -149,13 +149,13 @@
 			t1.gd_residueinventory = CASE
 			<foreach collection="list" item="item" index="index" >
 				WHEN  t1.gd_id=#{item.gdId} THEN
-				#{item.gdResidueinventory}
+				t1.gd_residueinventory + #{item.gdResidueinventory}
 			</foreach> end,
 			t1.version=t1.version+1
 		</set>
 		WHERE
 		<foreach collection="list" item="item" index="index" separator="or" close=")" open="(" >
-			(t1.gd_id=#{item.gdId} and t1.version=#{item.version})
+			(t1.gd_id=#{item.gdId} and t1.version=#{item.version} and t1.gd_residueinventory + #{item.gdResidueinventory}>=0)
 		</foreach>
   		and t1.is_delete=0
 	</update>

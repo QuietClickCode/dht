@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -61,6 +62,6 @@ public interface GoodsGgsvalDetailMapper {
 
 	public int deleteGoodsGgsvalDetailByGid(@Param("gid") Long gid);
 
-	public int editGoodsInventorys(@Param("list") List<GoodsDetail> list);
+	public int editGoodsInventorys(@Param("list") List<GoodsDetailVo> list);
 
 }

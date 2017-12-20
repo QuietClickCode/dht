@@ -24,7 +24,7 @@
             </div>
             <div class="bd">
                 <ul id="topbanner" style="height: 250px">
-                    <li><a href="#"><img _src="img/banner1.jpg"  data-original="img/banner1.jpg" /></a></li>
+                    <!--<li><a href="#"><img _src="img/banner1.jpg"  data-original="img/banner1.jpg" /></a></li>-->
                 </ul>
             </div>
         </div>
@@ -58,18 +58,9 @@
 
         <!-- 热点 -->
         <ul class="hot" id="secondnav">
-            <li>
-                <a href=""><img data-original="img/hot1.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot2.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot1.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot4.jpg" alt=""></a>
-            </li>
+            <!--<li>-->
+                <!--<a href=""><img data-original="img/hot1.jpg" alt=""></a>-->
+            <!--</li>-->
         </ul>
 
         <!-- 热点更多 -->
@@ -91,10 +82,7 @@
         </div>
         <div class="bd">
             <ul id="midbanner" style="height: 200px">
-                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
+                <!--<li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>-->
             </ul>
         </div>
     </div>
@@ -501,7 +489,7 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{spType:0,pageNo:1,pageSize:2},
+                data:{spType:0,spRegion:1,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;

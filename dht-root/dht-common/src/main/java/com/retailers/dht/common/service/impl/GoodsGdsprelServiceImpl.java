@@ -105,5 +105,10 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 		}
 		return status>0?true:false;
 	}
+
+	public GoodsGdsprelVo queryGoodsGdsprelVoByGdspId(Long gdspId){
+		GoodsGdsprelVo goodsGdsprelVo = goodsGdsprelMapper.queryGoodsGdsprelVoByGdspId(gdspId);
+		return goodsGdsprelVo;
+	}
 }
 

@@ -29,6 +29,8 @@
 		<result property="sumcount" column="sumcount"/>
 		<result property="imgurl" column="imgurl"/>
 		<result property="gunitname" column="g_unitname"/>
+		<result property="isMenberdiscount" column="isMenberdiscount"/>
+		<result property="gclass" column="gclass"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -124,6 +126,20 @@
 		and is_delete=0
 	</select>
 
+	<select id="queryGoodsGdsprelVoByGdspId" resultMap="rm_goodsGdsprel_vo">
+		SELECT
+		t1.*,t3.is_menberdiscount isMenberdiscount,t4.g_classification gclass
+		from
+		t_goods_gdsprel t1
+		LEFT JOIN t_goods_detail t2 ON t1.gd_id=t2.gd_id and t2.is_delete=0
+		LEFT JOIN t_goods_config t3 ON t2.g_id=t3.g_id and t3.is_putway=1
+		LEFT JOIN t_goods t4 ON t4.g_id=t2.g_id and t4.is_checked=1 and t4.is_delete=0
+		WHERE
+		t1.is_delete=0
+		and t1.gdsp_id =#{gdspId}
+
+	</select>
+
 	<update id="editGoodsInventorys">
 		UPDATE t_goods_gdsprel t1
 		<set>
@@ -140,6 +156,7 @@
 		</foreach>
 		and t1.is_delete=0
 	</update>
+
 	<!--添加商品与特价关系表 -->
 	<insert id="saveGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel" useGeneratedKeys="true" keyProperty="gdspId">
 		INSERT INTO t_goods_gdsprel (

@@ -143,7 +143,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 		}
 		return null;
 	}
-	public List<GoodsDetail> queryGoodsDetailByGdIds(String gdIds){
+	public List<GoodsDetailVo> queryGoodsDetailByGdIds(String gdIds){
 		String[] gdIdsArr = gdIds.split(",");
 		if(!ObjectUtils.isEmpty(gdIds)){
 			List<Long> gdIdsList = new ArrayList<Long>();
@@ -151,7 +151,7 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 				Long gdIdLong = Long.parseLong(gdId);
 				gdIdsList.add(gdIdLong);
 			}
-			List<GoodsDetail> list = goodsDetailMapper.queryGoodsDetailByGdIds(gdIdsList);
+			List<GoodsDetailVo> list = goodsDetailMapper.queryGoodsDetailByGdIds(gdIdsList);
 			return list;
 		}
 		return null;

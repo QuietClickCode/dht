@@ -26,6 +26,8 @@
 		<result property="gdPrice" column="gdPrice"/>
 		<result property="remark" column="remark"/>
 		<result property="cpInventory" column="cp_inventory"/>
+		<result property="isMenberdiscount" column="isMenberdiscount"/>
+		<result property="gclass" column="gclass"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -94,13 +96,17 @@
 		SELECT
 		t4.*,
 		t5.gd_price gdPrice,
-		t1.cp_inventory
+		t1.cp_inventory,
+		t6.g_classification gclass,
+		t7.is_menberdiscount isMenberdiscount
 		FROM
 		t_goods_gdcprel t1,
 		t_cut_price t2,
 		t_cut_price t3,
 		t_cut_price_log t4,
 		t_goods_detail t5
+		LEFT JOIN t_goods t6 ON t5.g_id=t6.g_id and t6.is_delete=0 and t6.is_checked=1
+		LEFT JOIN t_goods_config t7 ON t6.g_id=t7.g_id
 		WHERE
 		t1.cp_id=t2.cp_id
 		and t1.gd_id = #{gdId}

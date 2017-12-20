@@ -9,6 +9,7 @@ import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalService;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
@@ -16,6 +17,7 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.bind.SchemaOutputResolver;
 import java.util.List;
 import java.util.Map;
 /**
@@ -110,10 +112,10 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         if(ObjectUtils.isNotEmpty(goodsDetailMap)){
             String gdIds = "";
             for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
-                gdIds = ","+entry.getKey();
+                gdIds += ","+entry.getKey();
             }
             gdIds = gdIds.substring(1);
-            List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+            List<GoodsDetailVo> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
             for(GoodsDetail goodsDetail1:list){
                 for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
                     Long gdId1 = goodsDetail1.getGdId();
@@ -130,7 +132,6 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
                 throw new AppException("数据有误");
             }
         }
-
         return status>0?true:false;
     }
 

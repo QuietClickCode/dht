@@ -10,6 +10,7 @@ import com.retailers.dht.common.service.CutPriceLogService;
 import com.retailers.dht.common.service.CutPricePriceService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.vo.CutPriceLogVo;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,6 +102,8 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 		if(ObjectUtils.isNotEmpty(list)){
 			Long gdPrice = list.get(0).getGdPrice();
 			Long cpInventory = list.get(0).getCpInventory();
+			Long gclass = list.get(0).getGclass();
+			Long isMenberdiscount = list.get(0).getIsMenberdiscount();
 			Long index = 0L;
 			for(CutPriceLogVo cutPriceLogVo:list){
 				index += cutPriceLogVo.getCplCutdownprice();
@@ -109,12 +112,16 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 			map.put("finalPrice",finalPrice);
 			map.put("gdPrice",gdPrice);
 			map.put("cpInventory",cpInventory);
+			map.put("gclass",gclass);
+			map.put("isMenberdiscount",isMenberdiscount);
 		}else{
-			List<GoodsDetail> goodsDetailList = goodsDetailService.queryGoodsDetailByGdIds(""+gdId);
-			GoodsDetail goodsDetail = goodsDetailList.get(0);
+			List<GoodsDetailVo> goodsDetailList = goodsDetailService.queryGoodsDetailByGdIds(""+gdId);
+			GoodsDetailVo goodsDetail = goodsDetailList.get(0);
 			map.put("finalPrice",goodsDetail.getGdPrice());
 			map.put("gdPrice",goodsDetail.getGdPrice());
 			map.put("cpInventory",99999L);
+			map.put("gclass",goodsDetail.getGclass());
+			map.put("isMenberdiscount",goodsDetail.getIsMenberdiscount());
 		}
 		return  map;
 	}

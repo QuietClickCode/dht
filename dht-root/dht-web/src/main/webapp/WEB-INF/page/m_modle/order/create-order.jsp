@@ -174,7 +174,7 @@
         </div>
         <div class="price2">
             <span class="name">商品优惠</span>
-            <span class="number" id="gcpspan"><span class="mr_4">￥</span>0.00</span>
+            <span class="number" id="gcpspan"><span class="mr_4">￥</span>-0.00</span>
         </div>
         <div class="price2">
             <span class="name">优惠卷</span>
@@ -182,7 +182,7 @@
         </div>
         <div class="price3">
             <span class="name">已为你节省</span>
-            <span class="number"><span class="mr_4">￥</span>0.00</span>
+            <span class="number" id="cutdownprice"><span class="mr_4">￥</span>0.00</span>
         </div>
     </div>
 
@@ -498,11 +498,11 @@
                         }
 //                        console.log(keyFlag);
                         if(keyFlag){
-                            var goodsdivs = $('.order-product');
+                            var goodsdivs = $('.text-box');
 //                            console.log(goodsdivs.length);
                             for(var i=0;i<goodsdivs.length;i++){
                                 var godosdiv = $(goodsdivs[i]);
-                                var gdId = godosdiv.find('input[type=hidden]')[0].value;
+                                var gdId = godosdiv.parent().find('input[name=gdId]')[0].value;
                                 var goodscoupons = gcLists[gdId];
 //                                console.log(goodscoupons[1].gcpName);
                                 if(goodscoupons.length>0){
@@ -695,7 +695,7 @@
                 }
             }
         }
-        $('#gcpspan').html('<span class="mr_4">￥</span>-'+gcpdowncutprice);
+        $('#gcpspan').html('<span class="mr_4">￥</span>-'+Number(gcpdowncutprice).toFixed(2));
 
         var lastPrice = inittotalPrice - gcpdowncutprice;
         var secondPrice = lastPrice;
@@ -745,13 +745,15 @@
                 secondPrice = secondPrice - Number($(lastCashArr[i]).attr('val'));
             }
             coupondowncutprice = lastPrice - secondPrice;
-            $('#couponspan').html('<span class="mr_4">￥</span>-'+coupondowncutprice);
         }
 
+        $('#couponspan').html('<span class="mr_4">￥</span>-'+coupondowncutprice.toFixed(2));
         lastPrice = lastPrice - coupondowncutprice +gfPrice;
+        var cutdownprice = gcpdowncutprice+coupondowncutprice;
 
-        $('#finalPrice').html('<span class="mr_4">￥</span>'+ lastPrice.toFixed(2));
-        $('#shouldPay').html('<span class="mr_4">￥</span>'+lastPrice.toFixed(2));
+        $('#cutdownprice').html('<span class="mr_4">￥</span>'+Number(cutdownprice).toFixed(2));
+        $('#finalPrice').html('<span class="mr_4">￥</span>'+ Number(lastPrice).toFixed(2));
+        $('#shouldPay').html('<span class="mr_4">￥</span>'+Number(lastPrice).toFixed(2));
     }
 
     function jiesuan(){
@@ -836,7 +838,6 @@
                     var data = sdata.data;
                     var orderNo = data.orderNo;
                     var price = data.totalPrice;
-                    return;
                     window.location.href = "/wxPay/payInfo?orderNo="+orderNo+"&price="+price;
                 }else{
                     alert(sdata.msg);

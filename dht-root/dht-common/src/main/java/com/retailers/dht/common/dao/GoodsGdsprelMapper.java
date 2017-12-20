@@ -64,4 +64,7 @@ public interface GoodsGdsprelMapper {
 	public List<GoodsGdsprel> queryGoodsGdcprelListByGdspIds(@Param("list") List<Long> list);
 
 	public int editGoodsInventorys(@Param("list")List<GoodsGdsprel> list);
+
+	public GoodsGdsprelVo queryGoodsGdsprelVoByGdspId(@Param("gdspId") Long gdspId);
+
 }

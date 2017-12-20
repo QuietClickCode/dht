@@ -61,7 +61,7 @@ public interface GoodsDetailMapper {
 
 	public List<GoodsDetailVo> queryGoodsDetailVoLists(@Param("params") Map params);
 
-	public List<GoodsDetail> queryGoodsDetailByGdIds(@Param("gdIds") List gdIds);
+	public List<GoodsDetailVo> queryGoodsDetailByGdIds(@Param("gdIds") List gdIds);
 
 	public int deleteGoodsDetailByGid(@Param("gid") Long gid);
 }
