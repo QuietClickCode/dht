@@ -142,18 +142,23 @@
 		</foreach>
 		and is_delete=0
 	</select>
-	<insert id="editGoodsInventorys">
-		INSERT INTO t_goods_gdcprel
-		(gdcp_id,cp_inventory) VALUES
-		<foreach collection ="list" item="goodsGdcprel" index= "index" separator =",">
-			(
-			#{goodsGdcprel.gdcpId},
-			#{goodsGdcprel.cpInventory}
-			)
-		</foreach >
-		on duplicate key update
-		cp_inventory=VALUES(cp_inventory)
-	</insert>
+
+	<update id="editGoodsInventorys">
+		UPDATE t_goods_gdcprel t1
+		<set>
+			t1.cp_inventory = CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  t1.gdcp_id=#{item.gdcpId} THEN
+				#{item.cpInventory}
+			</foreach> end,
+			t1.version=t1.version+1
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" close=")" open="(" >
+			(t1.gdcp_id=#{item.gdcpId} and t1.version=#{item.version})
+		</foreach>
+		and t1.is_delete=0
+	</update>
 	<!--添加商品详情与砍价关系表 -->
 	<insert id="saveGoodsGdcprel" parameterType="com.retailers.dht.common.entity.GoodsGdcprel" useGeneratedKeys="true" keyProperty="gdcpId">
 		INSERT INTO t_goods_gdcprel (

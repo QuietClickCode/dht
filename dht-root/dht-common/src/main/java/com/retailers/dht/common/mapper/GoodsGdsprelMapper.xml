@@ -123,18 +123,23 @@
 		</foreach>
 		and is_delete=0
 	</select>
-	<insert id="editGoodsInventorys">
-		INSERT INTO t_goods_gdsprel
-		(gdsp_id,sp_inventory) VALUES
-		<foreach collection ="list" item="goodsGdsprel" index= "index" separator =",">
-			(
-			#{goodsGdsprel.gdspId},
-			#{goodsGdsprel.spInventory}
-			)
-		</foreach >
-		on duplicate key update
-		sp_inventory=VALUES(sp_inventory)
-	</insert>
+
+	<update id="editGoodsInventorys">
+		UPDATE t_goods_gdsprel t1
+		<set>
+			t1.sp_inventory = CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  t1.gdsp_id=#{item.gdspId} THEN
+				#{item.spInventory}
+			</foreach> end,
+			t1.version=t1.version+1
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" close=")" open="(" >
+			(t1.gdsp_id=#{item.gdspId} and t1.version=#{item.version})
+		</foreach>
+		and t1.is_delete=0
+	</update>
 	<!--添加商品与特价关系表 -->
 	<insert id="saveGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel" useGeneratedKeys="true" keyProperty="gdspId">
 		INSERT INTO t_goods_gdsprel (
