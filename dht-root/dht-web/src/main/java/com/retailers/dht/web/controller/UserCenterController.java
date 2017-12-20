@@ -464,11 +464,12 @@ public class UserCenterController extends BaseController{
     @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
     @ResponseBody
     public Map<String,Object> queryLoginUser(HttpServletRequest request){
-        Long uId=getCurLoginUserId(request);
         HashMap<String,Object> map = new HashMap<String,Object>();
-        if(uId == null)
+        UserInfoVIew userInfoVIew = (UserInfoVIew)request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        System.out.println(userInfoVIew);
+        if (userInfoVIew == null) {
             map.put("flag",false);
-        else {
+        }else {
             map.put("flag",true);
         }
         return map;

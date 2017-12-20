@@ -247,7 +247,7 @@
                 <span class="number">共1件</span>
                 合计：￥155(含运费:10.0)
                 <div class="btn-box">
-                    <a href="">物流详情</a>
+                    <a href="/order/checkLogistics">物流详情</a>
                     <a href="">查看订单</a>
                     <a href="">确认收货</a>
                 </div>
@@ -278,7 +278,7 @@
                 合计：￥155(含运费:10.0)
                 <div class="btn-box">
                     <a href="">查看订单</a>
-                    <a href="" class="btn2">评价</a>
+                    <a href="/order/checkAppraise" class="btn2">评价</a>
                 </div>
             </div>
         </li>

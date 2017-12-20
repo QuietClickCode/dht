@@ -42,6 +42,7 @@ public class SalePromotionController extends BaseController{
     public Map<String,Object> addSalePromotion(SalePromotion promotion,String spStartTimes,String spEndTimes){
         addDate(promotion, spStartTimes, spEndTimes);
         SalePromotion salePromotion = promotionService.saveSalePromotion(promotion);
+        System.out.println("Controller");
         Map map = new HashMap();
         map.put("row",salePromotion);
         return map;
