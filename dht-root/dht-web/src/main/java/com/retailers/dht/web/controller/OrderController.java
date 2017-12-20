@@ -5,12 +5,11 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.entity.UserAddress;
+import com.retailers.dht.common.service.GoodsGdcprelService;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.BuyInfoVo;
-import com.retailers.dht.common.entity.GoodsGdcprel;
-import com.retailers.dht.common.entity.UserAddress;
-import com.retailers.dht.common.service.GoodsGdcprelService;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
@@ -19,8 +18,6 @@ import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,6 +54,24 @@ public class OrderController extends BaseController {
     @RequestMapping("orderList")
     public String openOrderList(HttpServletRequest request){
         return redirectUrl(request,"order/all-order");
+    }
+
+    /*物流信息*/
+    @RequestMapping("checkLogistics")
+    public String checkLogistics(HttpServletRequest request){
+        return redirectUrl(request,"order/logistics");
+    }
+
+    /*评价订单*/
+    @RequestMapping("checkAppraise")
+    public String checkAppraise(HttpServletRequest request){
+        return redirectUrl(request,"order/appraise-order");
+    }
+
+    /*确认收货*/
+    @RequestMapping("dealSuccess")
+    public String dealSuccess(HttpServletRequest request){
+        return redirectUrl(request,"order/deal-succeed");
     }
 
     @RequestMapping("getCheckOrderData")

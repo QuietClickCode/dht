@@ -73,6 +73,13 @@ public interface GoodsService {
 	public List<ZTreeVo> queryGoodsByGt(Long gt);
 
 	public List<GoodsVo> queryGoodsListByGclass(Map params,int pageNo,int paeSize);
+
+	/**
+	 * 根据订单号取得商品例表
+	 * @param gIds 商品ids
+	 * @return
+	 */
+	public List<Goods> queryGoodsByIds(List<Long> gIds);
 }
 
 

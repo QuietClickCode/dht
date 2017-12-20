@@ -17,11 +17,11 @@
         </div>
         <div class="integral-number">
             <p>账户余额</p>
-            <p>0</p>
+            <p>${wallet}</p>
         </div>
     </div>
     <div class="no-integral">
-        <img src="/img/balance.png" alt="">
+        <img src="/img/balance.png" alt="" style="visibility: hidden;">
         <a href="/user/userRecharge" class="recharge">充值</a>
     </div>
 </body>

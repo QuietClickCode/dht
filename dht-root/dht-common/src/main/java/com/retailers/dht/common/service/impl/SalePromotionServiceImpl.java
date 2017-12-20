@@ -36,6 +36,7 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 	private GoodsService goodsService;
 	public SalePromotion saveSalePromotion(SalePromotion salePromotion) {
 		int status = salePromotionMapper.saveSalePromotion(salePromotion);
+		System.out.println("impl");
 		return status == 1 ? salePromotion : null;
 	}
 	public boolean updateSalePromotion(SalePromotion salePromotion) {

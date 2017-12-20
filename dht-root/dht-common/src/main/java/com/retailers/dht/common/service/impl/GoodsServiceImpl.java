@@ -171,5 +171,9 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		return list;
 	}
+
+	public List<Goods> queryGoodsByIds(List<Long> gIds) {
+		return goodsMapper.queryGoodsByGids(gIds);
+	}
 }
 

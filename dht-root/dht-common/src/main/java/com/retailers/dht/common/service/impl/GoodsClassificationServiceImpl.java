@@ -1,26 +1,29 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.GoodsClassificationMapper;
 import com.retailers.dht.common.entity.CouponUseRange;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.logging.ConsoleHandler;
 
 /**
  * 描述：商品子类表Service
@@ -31,13 +34,16 @@ import java.util.Map;
  */
 @Service("goodsclassificationService")
 public class GoodsClassificationServiceImpl implements GoodsClassificationService {
+	Logger logger = LoggerFactory.getLogger(GoodsClassificationServiceImpl.class);
+
 	@Autowired
 	private GoodsClassificationMapper goodsClassificationMapper;
 	@Autowired
 	private AttachmentService attachmentService;
 	@Autowired
 	private CouponUseRangeMapper couponUseRangeMapper;
-
+	@Autowired
+	private GoodsService goodsService;
 
 	public boolean saveGoodsClassification(GoodsClassification goodsClassification) {
 		Long parentId = goodsClassification.getParentId();
@@ -321,9 +327,65 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return rtnList;
 	}
 
-	public Map<Long, Map<String, Object>> queryGoodsClassificationByGids(List<Long> gids) {
-		return null;
+	public Map<Long, Map<String, Long>> queryGoodsClassificationByGids(List<Long> gids) {
+		Date curDate=new Date();
+		logger.info("根据商品id取得对应的商品种类开始");
+		//取得所有的
+		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationByGtId();
+		//取和疝例表
+		List<Goods> goods=goodsService.queryGoodsByIds(gids);
+		Map<Long,Long> map = new HashMap<Long, Long>();
+		Set<Long> gcIds=new HashSet<Long>();
+		for(Goods g:goods){
+			map.put(g.getGid(),g.getGclassification());
+			gcIds.add(g.getGclassification());
+		}
+		Map<Long,Map<String,Long>> rtn = new HashMap<Long, Map<String, Long>>();
+		//取得商品类型层级
+		Map<Long,Long> gcTree=new HashMap<Long, Long>();
+		Map<Long,GoodsClassification> gcMap=new HashMap<Long, GoodsClassification>();
+		for(GoodsClassification gc:list){
+			gcTree.put(gc.getGgId(),gc.getParentId());
+			gcMap.put(gc.getGgId(),gc);
+		}
+		Map<Long,Long> topNodes=new HashMap<Long, Long>();
+		//取得商品顶层
+		for(Long id:gcIds){
+			topNodes.put(id,topNode(gcTree,id));
+		}
+		for(Long key:map.keySet()){
+			Map<String,Long> infos=new HashMap<String, Long>();
+			long curNode=map.get(key);
+			//顶层节点类型
+			infos.put("topNodes",topNodes.get(curNode));
+			//当前 节点
+			infos.put("curNodes",map.get(key));
+			if(ObjectUtils.isNotEmpty(gcMap.get(topNodes.get(curNode)))){
+				infos.put("topNodesCash",gcMap.get(topNodes.get(curNode)).getIsReturnnow());
+			}
+			if(ObjectUtils.isNotEmpty(gcMap.get(curNode))){
+				infos.put("curNodesCash",gcMap.get(curNode).getIsReturnnow());
+			}
+			rtn.put(key,infos);
+		}
+		logger.info("根据商品id取得对应的商品种类结束，执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		return rtn;
 	}
+
+
+	private Long topNode(Map<Long,Long> map,Long id){
+		//取得该节点的直接上级
+		Long parsentIds=map.get(id);
+		while (ObjectUtils.isNotEmpty(map.get(parsentIds))){
+			if(ObjectUtils.isEmpty(map.get(parsentIds))){
+				break;
+			}
+			parsentIds=map.get(parsentIds);
+		}
+		return parsentIds;
+	}
+
+
 
 	private void queryAllChild(Long curNode, Map<Long,Map<Long,Long>> tree, Map<Long,Long> allow, List<Long> childList){
 		if(tree.containsKey(curNode)){
