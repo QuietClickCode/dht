@@ -214,7 +214,7 @@
                     ,time: 1
                 });
                 setTimeout(function(){
-                    history.back(-1);
+                    $(location).attr('href', '/user/UserSafety');
                 },1000);
             }
         });

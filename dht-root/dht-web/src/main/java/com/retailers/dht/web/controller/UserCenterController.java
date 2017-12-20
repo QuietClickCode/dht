@@ -465,11 +465,11 @@ public class UserCenterController extends BaseController{
     public Map<String,Object> queryLoginUser(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
         UserInfoVIew userInfoVIew = (UserInfoVIew)request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
-        System.out.println(userInfoVIew);
+
         if (userInfoVIew == null) {
             map.put("flag",false);
         }else {
-            map.put("flag",userInfoVIew);
+            map.put("user",userInfoVIew);
         }
         return map;
     }

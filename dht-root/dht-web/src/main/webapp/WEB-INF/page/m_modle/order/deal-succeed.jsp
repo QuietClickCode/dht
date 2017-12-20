@@ -21,7 +21,7 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>交易成功</span>
 </div>
 
