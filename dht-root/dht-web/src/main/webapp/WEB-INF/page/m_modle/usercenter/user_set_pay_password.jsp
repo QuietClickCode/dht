@@ -19,10 +19,10 @@
 </head>
 <style>
     .wrap{
-        width: 100%;
-        height: 100%;
-        padding-top: 2.4rem;
-    }
+         width: 100%;
+         height: 100%;
+         padding-top: 2.4rem;
+     }
     .wrap_title{
         width: 100%;
         height: 1rem;
