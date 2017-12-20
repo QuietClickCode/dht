@@ -1,6 +1,6 @@
+/*
 package com.retailers.dht.manage.controller;
 
-import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.dht.common.entity.FloorManage;
 import com.retailers.dht.common.service.FloorManageService;
@@ -16,9 +16,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+*/
 /**
  * Created by niconiconi on 2017/10/11.
- */
+ *//*
+
 @Controller
 @RequestMapping("floorManage")
 public class FloorManageController extends BaseController {
@@ -79,3 +81,4 @@ public class FloorManageController extends BaseController {
         return success(floors);
     }
 }
+*/
