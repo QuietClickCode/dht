@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class GoodsDetailServiceTest extends TestBaseJunit{
 
     @Test
     public void queryGoodsDetailByGdIds(){
-        List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds("806,809");
+        List<GoodsDetailVo> list = goodsDetailService.queryGoodsDetailByGdIds("806,809");
         System.out.println(list.size());
         System.out.println(list.get(0).getGdPrice());
     }

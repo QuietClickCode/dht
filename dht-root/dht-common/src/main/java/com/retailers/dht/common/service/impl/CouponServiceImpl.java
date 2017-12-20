@@ -490,10 +490,10 @@ public class CouponServiceImpl implements CouponService {
 			gType.put(g.getGid(),g.getGclassification());
 		}
 		//取得商品价格
-		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+		List<GoodsDetailVo> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
 		//商品购买总价
 		Map<Long,Long> gtp=new HashMap<Long, Long>();
-		for(GoodsDetail gt:gts){
+		for(GoodsDetailVo gt:gts){
 			//取得商品价格
 			gtp.put(gt.getGid(),gt.getGdPrice()*gtn.get(gt.getGid()));
 		}

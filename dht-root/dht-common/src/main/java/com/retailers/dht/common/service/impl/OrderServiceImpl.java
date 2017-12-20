@@ -4,18 +4,12 @@ package com.retailers.dht.common.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.dht.common.constant.LogUserCardPackageConstant;
-import com.retailers.dht.common.constant.OrderConstant;
-import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
-import com.retailers.dht.common.constant.SysParameterConfigConstant;
+import com.retailers.dht.common.constant.*;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.*;
 import com.retailers.dht.common.view.GoodsCouponView;
-import com.retailers.dht.common.vo.BuyInfoVo;
-import com.retailers.dht.common.vo.BuyGoodsDetailVo;
-import com.retailers.dht.common.vo.CouponWebVo;
-import com.retailers.dht.common.vo.GoodsTypePriceVo;
+import com.retailers.dht.common.vo.*;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
@@ -24,6 +18,7 @@ import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
+import jdk.nashorn.internal.objects.GenericPropertyDescriptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -182,25 +177,15 @@ public class OrderServiceImpl implements OrderService {
 			//从购物车中取得购买商品相应的推荐人
 			Map<Long,Long> buyCarMaps=buyCarService.queryInviterIdByBcIds(carIds);
 			//根据规格取得详细例表
-			List<GoodsDetail> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+			List<GoodsDetailVo> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
 			//规格对应的价格
 			Map<Long,Long> gdPrice=new HashMap<Long, Long>();
-			for(GoodsDetail gd:gds){
+			for(GoodsDetailVo gd:gds){
 				gdPrice.put(gd.getGdId(),gd.getGdPrice());
 			}
 			//取得商品优惠卷
-			Map<String,Object> rtn = goodsCouponService.queryGoodsCouponLists(uid,buyInfos.getBuyGoods());
-			//判断是否使用了商品优惠
-			if(ObjectUtils.isNotEmpty(gcpMaps)){
-				//校验商品优惠是否异常
-			}
-			//取得使用的优惠卷
-			String couponIds=buyInfos.getCpIds();
-			List<CouponWebVo> useCoupns=new ArrayList<CouponWebVo>();
-			//判断是否使用优卷
-			if(ObjectUtils.isNotEmpty(couponIds)){
-				useCoupns.addAll(allowUseCoupon(couponIds,(List<CouponWebVo>)rtn.get("userCoupons")));
-			}
+			Map<String,Object> couponInfos = goodsCouponService.queryGoodsCouponLists(uid,buyInfos.getBuyGoods());
+
 			//订单详情
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			//商品优惠使用情况
@@ -234,6 +219,22 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdActualPrice(totalPrice);
 				ods.add(od);
 			}
+            //商品优惠
+            if(ObjectUtils.isNotEmpty(gcpMaps)){
+                boolean freeShipping = editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcs"));
+                //判断商品优惠中是否存在包邮
+                if(freeShipping){
+                    logisticsPrice=0l;
+                }
+            }
+            //取得使用的优惠卷
+            String couponIds=buyInfos.getCpIds();
+            //判断是否使用优惠卷
+            if(ObjectUtils.isNotEmpty(couponIds)){
+//                allowUseCoupon
+            }
+
+
 			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,0l,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
@@ -632,34 +633,6 @@ public class OrderServiceImpl implements OrderService {
 		lucp.setCreateTime(curDate);
 		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
 	}
-	/**
-	 * 允许使用的优惠列表
-	 * @param couponIds 优惠id
-	 * @param cs 用户优惠例表
-	 * @return
-	 */
-	private List<CouponWebVo> allowUseCoupon(String couponIds,List<CouponWebVo> cs)throws AppException{
-		List<CouponWebVo> rtn=new ArrayList<CouponWebVo>();
-		//校验优惠卷是否异常
-		List<Long> ucs=new ArrayList<Long>();
-		for(String id:couponIds.split(",")){
-			ucs.add(Long.parseLong(id));
-		}
-		if(ObjectUtils.isNotEmpty(cs)){
-			Map<Long,CouponWebVo> maps=new HashMap<Long, CouponWebVo>();
-			for(CouponWebVo cwv:cs){
-				maps.put(cwv.getCpId(),cwv);
-			}
-			for(Long id:ucs){
-				if(maps.containsKey(id)){
-					rtn.add(maps.get(id));
-				}else{
-					throw new AppException("使用优惠卷异常");
-				}
-			}
-		}
-		return rtn;
-	}
 
 	/**
 	 * 校验收货地址
@@ -745,5 +718,91 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return order;
 	}
+
+    /**
+     * 根据用户选择商品优惠，设置商品实际价格
+     * @param ods 商品详情
+     * @param useGc 用户使用商品优惠（根据gdid 对应使用的商品优惠）
+     * @param allowGc 商品上挂的优惠活动
+     */
+	public boolean editorGoodsCoupon(List<OrderDetail> ods,Map<Long,List<Long>>useGc,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+	    //是否包邮
+	    boolean isFreeShipping=false;
+	    Map<Long,Map<Long,GoodsCouponView>> allowGcMaps=new HashMap<Long, Map<Long, GoodsCouponView>>();
+	    for(String key:allowGc.keySet()){
+	        Map<Long,GoodsCouponView> allow=new HashMap<Long, GoodsCouponView>();
+	        if(ObjectUtils.isNotEmpty(allowGc.get(key))){
+	            for(GoodsCouponView gcv:allowGc.get(key)){
+                    allow.put(gcv.getGid(),gcv);
+                }
+            }
+        }
+        StringBuffer error=new StringBuffer();
+        //判断用户使用商品优惠是否合规格  商品上使用的优惠卷
+        for(Long key:useGc.keySet()){
+	        if(allowGcMaps.containsKey(key)){
+                if(ObjectUtils.isNotEmpty(useGc.get(key))){
+                    for(Long gcId:useGc.get(key)){
+                        if(!allowGcMaps.get(key).containsKey(gcId)){
+                            error.append("商品id[]"+key+"使用不合规优惠卷["+gcId+"]\r\n");
+                        }
+                    }
+                }
+            }else{
+	            error.append("商品id["+key+"]使用不合规优惠卷");
+            }
+        }
+        if(ObjectUtils.isNotEmpty(error)){
+            throw new AppException(error.toString());
+        }
+        //计算商品使用优惠卷后的金额
+        for(OrderDetail od:ods){
+            //判断是否使用优惠卷
+            if(useGc.containsKey(od.getOdGdId())){
+                //计算金额
+                List<Long> gcs=useGc.get(od.getOdGdId());
+                Map<Long,GoodsCouponView> gcsMap=allowGcMaps.get(od.getOdGdId());
+                long gPirce=od.getOdActualPrice();
+                for(Long gc:gcs){
+                    GoodsCouponView gcv=gcsMap.get(gc);
+                    if(ObjectUtils.isNotEmpty(gcv)){
+                        if(gcv.getGcpType().intValue()== CouponConstant.GCP_TYPE_MONEY){
+                            gPirce=gPirce-gcv.getLongVal();
+                        }else if(gcv.getGcpType().intValue()==CouponConstant.GCP_TYPE_DISCOUNT){
+                            double p=NumberUtils.priceChangeYuan(gPirce)*NumberUtils.priceChangeYuan(gcv.getLongVal());
+                            gPirce=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(p,2));
+                        }else if(gcv.getGcpType().intValue()==CouponConstant.GCP_TYPE_FREE_SHIPPING){
+                            isFreeShipping=true;
+                        }
+                    }
+                }
+                od.setOdActualPrice(gPirce);
+            }
+        }
+        return isFreeShipping;
+    }
+
+    private void editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+//        List<CouponWebVo> rtn=new ArrayList<CouponWebVo>();
+//        //校验优惠卷是否异常
+//        List<Long> ucs=new ArrayList<Long>();
+//        for(String id:couponIds.split(",")){
+//            ucs.add(Long.parseLong(id));
+//        }
+//        if(ObjectUtils.isNotEmpty(cs)){
+//            Map<Long,CouponWebVo> maps=new HashMap<Long, CouponWebVo>();
+//            for(CouponWebVo cwv:cs){
+//                maps.put(cwv.getCpId(),cwv);
+//            }
+//            for(Long id:ucs){
+//                if(maps.containsKey(id)){
+//                    rtn.add(maps.get(id));
+//                }else{
+//                    throw new AppException("使用优惠卷异常");
+//                }
+//            }
+//        }
+//        return rtn;
+    }
 }
 

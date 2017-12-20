@@ -373,12 +373,12 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			gdIdList.add(gb.getGdId());
 		}
 		//取得商品价格
-		List<GoodsDetail> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
+		List<GoodsDetailVo> gts = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
 		//商品购买总价
 		Map<Long,Long> gtp=new HashMap<Long, Long>();
 		//规格对应的购买价格
 		Map<Long,Long> ggPrice=new HashMap<Long, Long>();
-		for(GoodsDetail gt:gts){
+		for(GoodsDetailVo gt:gts){
 			//购买价格
 			long buyPrice=gt.getGdPrice()*gdtn.get(gt.getGdId());
 			//取得商品价格

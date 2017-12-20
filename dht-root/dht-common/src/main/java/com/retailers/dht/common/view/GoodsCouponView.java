@@ -12,7 +12,7 @@ import java.util.Date;
  * @version 1.0.1
  * @data 2017/12/16
  */
-public class GoodsCouponView {
+public class GoodsCouponView implements Comparable<GoodsCouponView>{
     /**gcpId*/
     private Long gcpId;
     /**商品优惠活动名称*/
@@ -120,7 +120,9 @@ public class GoodsCouponView {
     public void setGcpEndTime(Date gcpEndTime) {
         this.gcpEndTime = gcpEndTime;
     }
-
+    public Long getLongVal(){
+        return val;
+    }
     public String getVal() {
         return NumberUtils.formaterNumberPower(val);
     }
@@ -143,5 +145,9 @@ public class GoodsCouponView {
 
     public void setGid(Long gid) {
         this.gid = gid;
+    }
+
+    public int compareTo(GoodsCouponView o) {
+        return 0;
     }
 }
