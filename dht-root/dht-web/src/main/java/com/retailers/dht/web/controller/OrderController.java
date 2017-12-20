@@ -175,7 +175,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySpecialOfferGoods(uid,buyInfo,isInviter(request,buyInfo));
+            Map<String,Object>rtn= orderService.buySpecialOfferGoods(uid,buyInfo,isInviter(request,buyInfo),getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -198,7 +198,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySeckillGoods(uid,buyInfo,isInviter(request,buyInfo));
+            Map<String,Object>rtn= orderService.buySeckillGoods(uid,buyInfo,isInviter(request,buyInfo),getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -221,7 +221,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buyCutPrice(uid,buyInfo);
+            Map<String,Object>rtn= orderService.buyCutPrice(uid,buyInfo,getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -295,6 +295,31 @@ public class OrderController extends BaseController {
             }
         }
         return null;
+    }
+
+    /**
+     * 取得优惠活动 缓存id
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    private Long getSessionCspId(HttpServletRequest request)throws AppException{
+        if(ObjectUtils.isNotEmpty(request.getSession().getAttribute("checkOrderData"))){
+            String obj=(String) request.getSession().getAttribute("checkOrderData");
+            JSONObject jsonObj=JSONObject.parseObject(obj);
+            JSONArray jsonArray=jsonObj.getJSONArray("data");
+            if(jsonArray.size()>0){
+                long cspId=jsonArray.getJSONObject(0).getLong("cspId");
+                return cspId;
+            }else{
+                logger.error("未取得缓存商品信息");
+                throw new AppException("取得商品异常");
+            }
+
+        }else{
+            logger.error("未取得缓存商品信息");
+            throw new AppException("取得商品异常");
+        }
     }
 }
 

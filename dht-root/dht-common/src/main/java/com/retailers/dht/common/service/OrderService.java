@@ -83,29 +83,32 @@ public interface OrderService {
 	 * @param uid
 	 * @param buyInfos
 	 * @param inviterUid
+	 * @param cspId 特价优惠产品记录id
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid)throws AppException;
+	public Map<String,Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid,Long cspId)throws AppException;
 
 	/**
 	 * 购买秒杀商品
 	 * @param uid
 	 * @param buyInfos
 	 * @param inviterUid 是否是推荐商品
+	 * @param cspId 特价优惠产品记录id
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid)throws AppException;
+	public Map<String,Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid,Long cspId)throws AppException;
 
 	/**
 	 * 购买砍价商品
 	 * @param uid
 	 * @param buyInfos
+	 * @param cspId
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String,Object> buyCutPrice(Long uid, BuyInfoVo buyInfos)throws AppException;
+	public Map<String,Object> buyCutPrice(Long uid, BuyInfoVo buyInfos,Long cspId)throws AppException;
 
 	/**
 	 * 用户充值

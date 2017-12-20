@@ -76,7 +76,10 @@ public class OrderServiceImpl implements OrderService {
 	private CutPriceLogService cutPriceLogService;
 	@Autowired
 	private GoodsGdsprelMapper goodsGdsprelMapper;
-
+	@Autowired
+	private GoodsIsbuycpService goodsIsbuycpService;
+	@Autowired
+	private  GoodsIsbuyspService goodsIsbuyspService;
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -250,14 +253,14 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String, Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid) throws AppException {
+	public Map<String, Object> buySpecialOfferGoods(Long uid, BuyInfoVo buyInfos,Long inviterUid,Long cspId) throws AppException {
 		logger.info("购买特价商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
 		Date curDate=new Date();
 		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
 		procedureToolsService.singleUnLockManager(key);
 		Map<String,Object> rtnMap=new HashMap<String,Object>();
 		try{
-			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SPECIAL_OFFER);
+			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SPECIAL_OFFER,cspId);
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
 		}finally {
@@ -266,9 +269,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return rtnMap;
 	}
-
-
-
 	/**
 	 *购买秒杀商品
 	 * @param uid
@@ -277,14 +277,14 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String, Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos, Long inviterUid) throws AppException {
+	public Map<String, Object> buySeckillGoods(Long uid, BuyInfoVo buyInfos, Long inviterUid,Long cspId) throws AppException {
 		logger.info("购买秒杀商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
 		Date curDate=new Date();
 		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
 		procedureToolsService.singleUnLockManager(key);
 		Map<String,Object> rtnMap=new HashMap<String,Object>();
 		try{
-			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SECKILL);
+			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SECKILL,cspId);
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
 		}finally {
@@ -301,7 +301,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
-	public Map<String, Object> buyCutPrice(Long uid, BuyInfoVo buyInfos) throws AppException {
+	public Map<String, Object> buyCutPrice(Long uid, BuyInfoVo buyInfos,Long cspId) throws AppException {
 		logger.info("购买秒杀商品,购买用户:[{}],商品列表:[{}]",uid,JSON.toJSON(buyInfos));
 		Date curDate=new Date();
 		String key=StringUtils.formate(SingleThreadLockConstant.USER_BUY_GOODS,uid+"");
@@ -338,10 +338,6 @@ public class OrderServiceImpl implements OrderService {
 			if(cutLog.get("cpInventory").intValue()<num.intValue()){
 				throw new AppException("购买超限");
 			}
-/*<<<<<<< Updated upstream
-=======
-//			Map<Long,Float> cutPrice=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
->>>>>>> Stashed changes*/
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			OrderDetail  od=new OrderDetail();
 			od.setOdGoodsId(gid);
@@ -355,6 +351,13 @@ public class OrderServiceImpl implements OrderService {
 			Long actualPrice =(cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num;
 			Long gcPice=cutLog.get("finalPrice")*num;
 			Order order=createOrder(OrderEnum.CUT_PRICE,userAddress,total,0l,gcPice,actualPrice,logisticsPrice,ods,null);
+			//设置购买日志
+			GoodsIsbuycp gibcp=new GoodsIsbuycp();
+			gibcp.setCpId(cspId);
+			gibcp.setUid(uid);
+			gibcp.setIsDelete((long)SystemConstant.SYS_IS_DELETE_NO);
+			goodsIsbuycpService.saveGoodsIsbuycp(gibcp);
+
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
 		}finally {
@@ -665,7 +668,7 @@ public class OrderServiceImpl implements OrderService {
 	 * @return
 	 * @throws AppException
 	 */
-	private Order createCouponOrder(Long uid,BuyInfoVo buyInfos,Long inviterUid,OrderEnum orderEnum)throws AppException{
+	private Order createCouponOrder(Long uid,BuyInfoVo buyInfos,Long inviterUid,OrderEnum orderEnum,Long cspId)throws AppException{
 		UserAddress userAddress=checkUserAddress(uid,buyInfos.getAddress());
 		//取得快递费
 		GoodsFreight goodsFreight = goodsFreightService.queryFreightByAddress(userAddress.getUaAllAddress());
@@ -703,6 +706,12 @@ public class OrderServiceImpl implements OrderService {
 		od.setOdInviterUid(inviterUid);
 		ods.add(od);
 		Order order=createOrder(orderEnum,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
+		//添加购买日志
+		GoodsIsbuysp gibsp=new GoodsIsbuysp();
+		gibsp.setUid(uid);
+		gibsp.setSpId(cspId);
+		gibsp.setIsDelete((long)SystemConstant.SYS_IS_DELETE_NO);
+		goodsIsbuyspService.saveGoodsIsbuysp(gibsp);
 		return order;
 	}
 }
