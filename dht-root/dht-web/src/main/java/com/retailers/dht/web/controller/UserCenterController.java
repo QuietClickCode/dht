@@ -465,8 +465,7 @@ public class UserCenterController extends BaseController{
     public Map<String,Object> queryLoginUser(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
         UserInfoVIew userInfoVIew = (UserInfoVIew)request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
-
-        if (userInfoVIew == null) {
+        if (ObjectUtils.isEmpty(userInfoVIew)) {
             map.put("flag",false);
         }else {
             map.put("user",userInfoVIew);
@@ -553,5 +552,21 @@ public class UserCenterController extends BaseController{
         }else{
             return errorForSystem("关联微信登陆帐号异常");
         }
+    }
+
+    /**
+     * 编辑用户 推类型
+     * @param request
+     * @param module
+     * @return
+     */
+    @RequestMapping("editorUserUseModule")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp editorUserUseModule(HttpServletRequest request,Integer module){
+        long uid=getCurLoginUserId(request);
+        UserInfoVIew uiv=userService.editorUserUseModule(uid,module);
+        setCurLoginUser(request,uiv);
+        return success(true);
     }
 }
