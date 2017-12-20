@@ -95,7 +95,8 @@ public interface GoodsClassificationService {
 	 * @param gids
 	 * @return
 	 */
-	public Map<Long,Map<String,Object>> queryGoodsClassificationByGids(List<Long> gids);
+	public Map<Long,Map<String,Long>> queryGoodsClassificationByGids(List<Long> gids);
+
 }
 
 

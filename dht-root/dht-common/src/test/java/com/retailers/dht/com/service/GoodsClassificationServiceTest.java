@@ -12,10 +12,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by admin on 2017/9/27.
@@ -52,6 +49,13 @@ public class GoodsClassificationServiceTest extends TestBaseJunit{
         List<Long> lists = goodsClassificationService.queryGoodsClassificationChilds(curNode);
         Collections.sort(lists);
         System.out.println(JSON.toJSON(lists));
+    }
+
+    @Test
+    public void queryGoodsClassificationByGids(){
+        List<Long> gids= Arrays.asList(57l,51l);
+        Map<Long,Map<String,Long>> rtn=goodsClassificationService.queryGoodsClassificationByGids(gids);
+        System.out.println(JSON.toJSON(rtn));
     }
 
 }
