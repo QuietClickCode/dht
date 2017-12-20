@@ -177,7 +177,7 @@ public class OrderServiceImpl implements OrderService {
 				carIds.add(bgVo.getBuyCarId());
 				GoodsTypePriceVo gtpv=new GoodsTypePriceVo(bgVo.getGoodsId(),bgVo.getGdId(),null,null,bgVo.getNum().longValue());
 				buyDetailInfos.add(gtpv);
-				gdidUnGid.put(bgVo.getGdId(),bgVo.getNum().longValue());
+				gdidUnGid.put(bgVo.getGdId(),-bgVo.getNum().longValue());
 			}
 			//从购物车中取得购买商品相应的推荐人
 			Map<Long,Long> buyCarMaps=buyCarService.queryInviterIdByBcIds(carIds);
@@ -374,7 +374,7 @@ public class OrderServiceImpl implements OrderService {
 			goodsIsbuycpService.saveGoodsIsbuycp(gibcp);
 			//修改库存数量
 			Map<Long,Long> gdidUnNm=new HashMap<Long, Long>();
-			gdidUnNm.put(gdId,num.longValue());
+			gdidUnNm.put(gdId,-num.longValue());
 			boolean success = goodsGdcprelService.editGoodsInventorys(gdidUnNm);
 			if(!success){
 				logger.error("修改商品库存失败，请重试");
@@ -715,7 +715,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 		}
 		Map<Long,Long> gdidUnNum=new HashMap<Long, Long>();
-		gdidUnNum.put(bgd.getGdId(),bgd.getNum().longValue());
+		gdidUnNum.put(bgd.getGdId(),-bgd.getNum().longValue());
 		//取得商品价格
 		List<OrderDetail> ods=new ArrayList<OrderDetail>();
 		long totalPrice=0l;
