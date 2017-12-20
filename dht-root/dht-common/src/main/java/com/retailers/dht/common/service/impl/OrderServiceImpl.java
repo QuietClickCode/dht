@@ -156,6 +156,8 @@ public class OrderServiceImpl implements OrderService {
 			//购买商品例表属性
 			List<GoodsTypePriceVo> buyDetailInfos = new ArrayList<GoodsTypePriceVo>();
 			//规格对应的购买数量
+			Map<Long,Long> gdidUnNum=new HashMap<Long, Long>();
+			//规格id关联商品
 			Map<Long,Long> gdidUnGid=new HashMap<Long, Long>();
 			//取得购买商中使用了商品优惠的
 			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
@@ -172,7 +174,7 @@ public class OrderServiceImpl implements OrderService {
 				carIds.add(bgVo.getBuyCarId());
 				GoodsTypePriceVo gtpv=new GoodsTypePriceVo(bgVo.getGoodsId(),bgVo.getGdId(),null,null,bgVo.getNum().longValue());
 				buyDetailInfos.add(gtpv);
-				gdidUnGid.put(bgVo.getGdId(),-bgVo.getNum().longValue());
+				gdidUnNum.put(bgVo.getGdId(),-bgVo.getNum().longValue());
 			}
 			//从购物车中取得购买商品相应的推荐人
 			Map<Long,Long> buyCarMaps=buyCarService.queryInviterIdByBcIds(carIds);
@@ -180,8 +182,15 @@ public class OrderServiceImpl implements OrderService {
 			List<GoodsDetailVo> gds=goodsDetailService.queryGoodsDetailByGdIds(gdIds);
 			//规格对应的价格
 			Map<Long,Long> gdPrice=new HashMap<Long, Long>();
+			//商品关联的商品种类
+			Map<Long,Long> gidUnGtid=new HashMap<Long, Long>();
+			//商品关联是否允许打折（会员购买时)
+			Map<Long,Long> gidUnDiscount=new HashMap<Long, Long>();
 			for(GoodsDetailVo gd:gds){
 				gdPrice.put(gd.getGdId(),gd.getGdPrice());
+				gidUnGtid.put(gd.getGid(),gd.getGclass());
+				gidUnDiscount.put(gd.getGid(),gd.getIsMenberdiscount());
+				gdidUnGid.put(gd.getGdId(),gd.getGid());
 			}
 			//取得商品优惠卷
 			Map<String,Object> couponInfos = goodsCouponService.queryGoodsCouponLists(uid,buyInfos.getBuyGoods());
@@ -190,12 +199,12 @@ public class OrderServiceImpl implements OrderService {
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			//商品优惠使用情况
 			List<OrderGoodsCoupon> ogcs=new ArrayList<OrderGoodsCoupon>();
-			long totalPrice = 0;
+
 			//生成订单详情
 			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				OrderDetail od=new OrderDetail();
 				od.setOdBuyNumber(bgVo.getNum());
-				od.setOdGoodsId(bgVo.getGoodsId());
+				od.setOdGoodsId(gdidUnGid.get(bgVo.getGdId()));
 				od.setRemark(bgVo.getRemark());
 				//判断商品是否存在推荐人
 				if(ObjectUtils.isNotEmpty(bgVo.getBuyCarId())){
@@ -203,8 +212,9 @@ public class OrderServiceImpl implements OrderService {
 				}
 				long p=gdPrice.get(bgVo.getGdId());
 				od.setOdGoodsPrice(p*bgVo.getNum());
-				totalPrice+=od.getOdGoodsPrice();
 				od.setOdGdId(bgVo.getGdId());
+				//设置会员是否打折
+				od.setOdIsDiscount(gidUnDiscount.get(od.getOdGoodsId()));
 				od.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
 				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
 					String[] gcpIds=bgVo.getGcpIds().split(",");
@@ -216,12 +226,12 @@ public class OrderServiceImpl implements OrderService {
 					}
 				}
 				//实际支付金额
-				od.setOdActualPrice(totalPrice);
+				od.setOdActualPrice(p*bgVo.getNum());
 				ods.add(od);
 			}
             //商品优惠
             if(ObjectUtils.isNotEmpty(gcpMaps)){
-                boolean freeShipping = editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcs"));
+                boolean freeShipping = editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcLists"));
                 //判断商品优惠中是否存在包邮
                 if(freeShipping){
                     logisticsPrice=0l;
@@ -231,11 +241,27 @@ public class OrderServiceImpl implements OrderService {
             String couponIds=buyInfos.getCpIds();
             //判断是否使用优惠卷
             if(ObjectUtils.isNotEmpty(couponIds)){
-//                allowUseCoupon
+            	List<Long> cids=new ArrayList<Long>();
+            	for(String cid:couponIds.split(",")){
+            		cids.add(Long.parseLong(cid));
+				}
+            	//判断用户是否存在优惠卷
+            	if(ObjectUtils.isNotEmpty(couponInfos.get("gcLists"))){
+					//用户拥有的优惠卷
+					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("gcLists");
+					editorUserCoupon(ods,cids,gidUnGtid,cwvs);
+				}
             }
-
-
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,0l,logisticsPrice,ods,ogcs);
+            //订单总金额（未使用优惠卷，商品优惠）
+			long totalPrice = 0;
+            //实际支付金额
+            long actualPrice=0;
+            //重新计算商品总价
+			for(OrderDetail od:ods){
+				totalPrice+=od.getOdGoodsPrice();
+				actualPrice+=od.getOdActualPrice();
+			}
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			//清除购物车数据
@@ -245,7 +271,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new AppException("创建订单异常");
 			}
 			//修改商品库存
-			boolean success =goodsGgsvalDetailService.editGoodsInventorys(gdidUnGid);
+			boolean success =goodsGgsvalDetailService.editGoodsInventorys(gdidUnNum);
 			if(!success){
 				logger.error("修改商品库存失败，请重试");
 				throw new AppException("下单失败");
@@ -782,27 +808,80 @@ public class OrderServiceImpl implements OrderService {
         return isFreeShipping;
     }
 
-    private void editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
-//        List<CouponWebVo> rtn=new ArrayList<CouponWebVo>();
-//        //校验优惠卷是否异常
-//        List<Long> ucs=new ArrayList<Long>();
-//        for(String id:couponIds.split(",")){
-//            ucs.add(Long.parseLong(id));
-//        }
-//        if(ObjectUtils.isNotEmpty(cs)){
-//            Map<Long,CouponWebVo> maps=new HashMap<Long, CouponWebVo>();
-//            for(CouponWebVo cwv:cs){
-//                maps.put(cwv.getCpId(),cwv);
-//            }
-//            for(Long id:ucs){
-//                if(maps.containsKey(id)){
-//                    rtn.add(maps.get(id));
-//                }else{
-//                    throw new AppException("使用优惠卷异常");
-//                }
-//            }
-//        }
-//        return rtn;
+	/**
+	 * 用户优惠卷使用
+	 * @param ods 订单详情
+	 * @param useCoupon 使用的优惠卷
+	 * @param gidUnGt 商品id对应的商品类型
+	 * @param gidUnGt 商品关联商品种类
+	 * @param userHave 用户拥有的优惠卷
+	 * @throws AppException
+	 */
+    private void editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<Long,Long> gidUnGt,List<CouponWebVo> userHave)throws AppException{
+
+    	Map<Long,CouponWebVo> userCouponMaps=new HashMap<Long, CouponWebVo>();
+    	for(CouponWebVo cwv:userHave){
+			userCouponMaps.put(cwv.getCpId(),cwv);
+		}
+		StringBuffer error=new StringBuffer();
+    	int djgs=0;
+		for(Long uc:useCoupon){
+    		if(!userCouponMaps.containsKey(uc)){
+				error.append("无法使用优惠卷"+uc);
+			}
+			CouponWebVo cwv=userCouponMaps.get(uc);
+    		if(cwv.getCpIsOverlapUse().intValue()==0){
+				djgs++;
+			}
+		}
+		if(!ObjectUtils.isEmpty(error)){
+			throw new AppException(error.toString());
+		}
+		if(useCoupon.size()!=djgs+1){
+			throw new AppException("优惠卷选择错误 ，使用了不同叠加使用的优惠卷");
+		}
+
+		//根据使用的优惠卷重新计算商品价格
+		for(Long uc:useCoupon){
+			CouponWebVo cwv=userCouponMaps.get(uc);
+			if(cwv.getCpIsRestricted()==CouponConstant.COUPON_USED_RANGE_ALL&&
+					ObjectUtils.isEmpty(cwv.getgIds())&&
+					ObjectUtils.isEmpty(cwv.getGgIds())){
+				goodsCoupon(ods,cwv,false,gidUnGt);
+			}else{
+				goodsCoupon(ods,cwv,true,gidUnGt);
+			}
+		}
     }
+
+    private void goodsCoupon(List<OrderDetail> ods,CouponWebVo cwv,boolean isXz,Map<Long,Long> gidUnGt){
+		//商品种类
+		List<Long> spzl=new ArrayList<Long>();
+		//商品id
+		List<Long> spid=new ArrayList<Long>();
+		if(ObjectUtils.isNotEmpty(cwv.getGgIds())){
+			for(String ggid:cwv.getGgIds().split(",")){
+				spzl.add(Long.parseLong(ggid));
+			}
+		}
+		if(ObjectUtils.isNotEmpty(cwv.getgIds())){
+			for(String gid:cwv.getgIds().split(",")){
+				spid.add(Long.parseLong(gid));
+			}
+		}
+		for(OrderDetail od:ods){
+			long goodsCurPrice=od.getOdActualPrice();
+			//根据商品id取得商品类型id
+			Long gtid=gidUnGt.get(od.getOdGoodsId());
+			if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
+				if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
+					goodsCurPrice=goodsCurPrice-NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
+				}else{
+					goodsCurPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(goodsCurPrice*NumberUtils.formaterNumberr(cwv.getCouponVal())));
+				}
+			}
+			od.setOdActualPrice(goodsCurPrice);
+		}
+	}
 }
 
