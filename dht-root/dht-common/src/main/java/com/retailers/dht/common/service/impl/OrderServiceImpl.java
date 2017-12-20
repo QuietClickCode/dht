@@ -337,6 +337,10 @@ public class OrderServiceImpl implements OrderService {
 			if(cutLog.get("cpInventory").intValue()<num.intValue()){
 				throw new AppException("购买超限");
 			}
+/*<<<<<<< Updated upstream
+=======
+//			Map<Long,Float> cutPrice=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
+>>>>>>> Stashed changes*/
 			List<OrderDetail> ods=new ArrayList<OrderDetail>();
 			OrderDetail  od=new OrderDetail();
 			od.setOdGoodsId(gid);
