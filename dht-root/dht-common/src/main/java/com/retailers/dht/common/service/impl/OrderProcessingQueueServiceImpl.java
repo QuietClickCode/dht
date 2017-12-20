@@ -139,6 +139,12 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 			}
 		}
 	}
+
+	/**
+	 * 消息队例处理
+	 * @param opq
+	 * @throws AppException
+	 */
 	private void orderProcessingQueue(OrderProcessingQueue opq)throws AppException{
 		DataSourceTransactionManager transactionManager = (DataSourceTransactionManager) SpringUtils.getBean("transactionManager");
 		DefaultTransactionDefinition def = new DefaultTransactionDefinition();

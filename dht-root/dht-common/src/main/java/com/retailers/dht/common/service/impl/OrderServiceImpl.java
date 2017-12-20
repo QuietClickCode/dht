@@ -355,6 +355,8 @@ public class OrderServiceImpl implements OrderService {
 			Long actualPrice =(cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num;
 			Long gcPice=cutLog.get("finalPrice")*num;
 			Order order=createOrder(OrderEnum.CUT_PRICE,userAddress,total,0l,gcPice,actualPrice,logisticsPrice,ods,null);
+			rtnMap.put("orderNo",order.getOrderNo());
+			rtnMap.put("totalPrice",order.getOrderTradePrice());
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
