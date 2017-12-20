@@ -426,8 +426,6 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		for(Long key:gidGids.keySet()){
 			rtnGId.put(key+"",gidGids.get(key));
 		}
-
-
 		//商品优惠列表（根据商品id）
 		rtn.put("gcLists",gcs);
 		//用户优惠卷
