@@ -1,5 +1,6 @@
 package com.retailers.dht.com.service;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
@@ -25,9 +26,8 @@ public class GoodsDetailServiceTest extends TestBaseJunit{
 
     @Test
     public void queryGoodsDetailByGdIds(){
-        List<GoodsDetailVo> list = goodsDetailService.queryGoodsDetailByGdIds("806,809");
-        System.out.println(list.size());
-        System.out.println(list.get(0).getGdPrice());
+        List<GoodsDetailVo> list = goodsDetailService.queryGoodsDetailByGdIds("857,858");
+        System.out.println(JSON.toJSONString(list));
     }
 
     @Test
