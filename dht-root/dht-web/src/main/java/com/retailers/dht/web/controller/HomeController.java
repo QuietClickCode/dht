@@ -1,7 +1,5 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.auth.entity.SysUser;
-import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,9 +21,9 @@ public class HomeController extends BaseController {
      */
     @RequestMapping(value = {"","/","/index"})
     public String home(HttpServletRequest request){
-        UserInfoVIew userInfo=new UserInfoVIew();
+        /*UserInfoVIew userInfo=new UserInfoVIew();
         userInfo.setUid(11l);
-        setCurLoginUser(request,userInfo);
+        setCurLoginUser(request,userInfo);*/
         return redirectUrl(request,"index");
     }
 

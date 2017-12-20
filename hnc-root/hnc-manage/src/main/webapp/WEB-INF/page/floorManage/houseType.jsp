@@ -225,7 +225,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary addFloorRelationship">确定</button>
             </div>
         </div>
     </div>
@@ -507,7 +507,7 @@
     function addFloorManage(id) {
         houseType = rowDatas.get(id);
         for(let i = 0;i<houseType.floorManages.length;i++){
-            floorManagesMap.set(houseType.floorManages[i].fmId,houseType.floorManages[i]);
+            floorManagesMap.set(houseType.floorManages[i].fmId,houseType.htId);
             $("#house_type_list").append("<li id='"+houseType.floorManages[i].fmId+"'>"+houseType.floorManages[i].fmName+"</li>");
         }
         $("#house_type_table").bootstrapTable('destroy');
@@ -515,8 +515,31 @@
         $("#saveFloorManage").modal("show");
     }
 
+    var relationships = new Array();
+    $(".addFloorRelationship").click(function () {
+        for (let key of floorManagesMap.keys()) {
+            var floorRe = new Object();
+            floorRe['hrId'] = key;
+            floorRe['htId'] = floorManagesMap.get(key);
+            relationships.push(floorRe);
+        }
+
+        $.ajax({
+            url:"/houseManage/addFloorRelationship",
+            type:"post",
+            contentType: "application/json",
+            data:JSON.stringify(relationships),
+            success:function () {
+
+            }
+        });
+    });
+
     $("#saveFloorManage").on("hidden.bs.modal",function () {
         $("#house_type_list").children().remove();
+        for (let key of floorManagesMap.keys()) {
+            console.log(key+" "+floorManagesMap.get(key));
+        }
         floorManagesMap.clear();
         $("#house_type_list").html("");
     });
@@ -551,7 +574,7 @@
             pagination:true,
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                      //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
+            pageSize: 1000,                       //每页的记录行数（*）
             pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
             search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
             strictSearch: false,
@@ -567,7 +590,7 @@
             onCheckAll:function(rows){
                 for(var row of rows){
                     if(!floorManagesMap.has(row.fmId)){
-                        floorManagesMap.set(row.fmId,row);
+                        floorManagesMap.set(row.fmId,houseType.htId);
                         $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"</li>");
                     }
                 }
@@ -576,7 +599,7 @@
             onCheck:function(row){
                 //判断是否己经存在
                 if(!floorManagesMap.has(row.fmId)){
-                    floorManagesMap.set(row.fmId,row);
+                    floorManagesMap.set(row.fmId,houseType.htId);
                     $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"</li>");
                 }
             },

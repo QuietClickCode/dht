@@ -28,6 +28,8 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateFloorRelationship(FloorRelationship floorRelationship) {
+		Long version = queryFloorRelationshipByFlId(floorRelationship.getFlId()).getVersion();
+		floorRelationship.setVersion(version);
 		int status = floorRelationshipMapper.updateFloorRelationship(floorRelationship);
 		return status == 1 ? true : false;
 	}
@@ -45,7 +47,9 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 		return page;
 	}
 	public boolean deleteFloorRelationshipByFlId(Long flId) {
-		int status = floorRelationshipMapper.deleteFloorRelationshipByFlId(flId);
+		FloorRelationship relationship = queryFloorRelationshipByFlId(flId);
+		relationship.setIsDelete(1);
+		int status = floorRelationshipMapper.updateFloorRelationship(relationship);
 		return status == 1 ? true : false;
 	}
 

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
@@ -65,6 +66,30 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		houseTypeManage.setIsDelete(1);
 		int status = houseTypeManageMapper.updateHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;
+	}
+
+	public boolean addFloorRelationship(List<FloorRelationship> relationships){
+		if(relationships != null){
+			Long htId = null;
+			FloorRelationship relationship = relationships.get(0);
+			htId = relationship.getHtId();
+			List<FloorManage> floorManages = relationshipMapper.queryHouseType(htId);
+			HashMap<Long,Long> floorRelationshipMap = new HashMap<Long, Long>();
+			for (FloorRelationship relations : relationships) {
+				floorRelationshipMap.put(relations.getHrId(),relations.getHtId());
+			}
+
+			for (FloorManage floorManage : floorManages) {
+				if(floorRelationshipMap.get(floorManage.getFmId()) == null){
+					relationshipMapper.deleteFloorRelationshipByFlId(floorManage.getFmId());
+				}else{
+					floorRelationshipMap.remove(floorManage.getFmId());
+				}
+			}
+
+
+		}
+		return false;
 	}
 }
 

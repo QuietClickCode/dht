@@ -9,6 +9,7 @@
     <title>支付方式</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+	<link rel="stylesheet" href="/css/deal-success.css">
 </head>
 <style>
 	.div_pay_mode{
@@ -49,7 +50,7 @@
 		margin-left: .6rem;
 	}
 	.pay_mode_input_box>.span1{
-		font-size: .2rem;
+		font-size: .25rem;
 		color: #333;
 		margin-left: .3rem;
 	}
@@ -109,6 +110,25 @@
 	input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
 <body class="bge6">
+	<div class="wrap">
+		<div class="wrap_title">设置6位数字支付密码</div>
+		<div class="inputBoxContainer" id="inputBoxContainer">
+			<input type="text" class="realInput"/>
+			<div class="bogusInput">
+				<input type="password" maxlength="6" disabled/>
+				<input type="password" maxlength="6" disabled/>
+				<input type="password" maxlength="6" disabled/>
+				<input type="password" maxlength="6" disabled/>
+				<input type="password" maxlength="6" disabled/>
+				<input type="password" maxlength="6" disabled/>
+			</div>
+		</div>
+		<div class="wrap_tip_box">注:此密码仅用于大汇堂余额支付使用</div>
+		<div class="wrap_btn_box">
+			<button id="confirmButton" class="confirmButton">完成</button>
+		</div>
+	</div>
+
 	<div class="specialty-title2 borderB">
         <a href="" class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
         <span>支付方式</span>
@@ -244,6 +264,62 @@
                 }
             }
         );
+    }
+
+
+    /*获取支付密码*/
+    (function(){
+        var container = document.getElementById("inputBoxContainer");
+        boxInput = {
+            maxLength:"",
+            realInput:"",
+            bogusInput:"",
+            bogusInputArr:"",
+            callback:"",
+            init:function(fun){
+                var that = this;
+                this.callback = fun;
+                that.realInput = container.children[0];
+                that.bogusInput = container.children[1];
+                that.bogusInputArr = that.bogusInput.children;
+                that.maxLength = that.bogusInputArr[0].getAttribute("maxlength");
+                that.realInput.oninput = function(){
+                    that.setValue();
+                }
+                that.realInput.onpropertychange = function(){
+                    that.setValue();
+                }
+            },
+            setValue:function(){
+                this.realInput.value = this.realInput.value.replace(/\D/g,"");
+                var real_str = this.realInput.value;
+                for(var i = 0 ; i < this.maxLength ; i++){
+                    this.bogusInputArr[i].value = real_str[i]?real_str[i]:"";
+                }
+                if(real_str.length >= this.maxLength){
+                    this.realInput.value = real_str.substring(0,6);
+                    this.callback();
+                }
+            },
+            getBoxInputValue:function(){
+                var realValue = "";
+                for(var i in this.bogusInputArr){
+                    if(!this.bogusInputArr[i].value){
+                        break;
+                    }
+                    realValue += this.bogusInputArr[i].value;
+                }
+                return realValue;
+            }
+        }
+    })()
+    boxInput.init(function(){
+        getValue();
+    });
+
+    /*获取支付密码*/
+    function getValue(){
+        return boxInput.getBoxInputValue();
     }
 </script>
 </html>

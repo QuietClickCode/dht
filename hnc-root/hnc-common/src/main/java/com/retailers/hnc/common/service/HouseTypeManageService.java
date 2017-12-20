@@ -1,8 +1,12 @@
 
 package com.retailers.hnc.common.service;
+
+import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.vo.HouseTypeManageVo;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.hnc.common.entity.HouseTypeManage;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：户型表Service
@@ -55,6 +59,8 @@ public interface HouseTypeManageService {
 	 * @date 2017-12-18 11:36:10
 	 */
 	public boolean deleteHouseTypeManageByHtId(Long htId);
+
+	public boolean addFloorRelationship(List<FloorRelationship> relationships);
 
 }
 
