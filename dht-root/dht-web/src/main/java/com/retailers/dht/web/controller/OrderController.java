@@ -1,6 +1,8 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.service.OrderService;
@@ -77,7 +79,7 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
-    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long gid){
+    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long goodsId,Long cspId){
         if(ObjectUtils.isNotEmpty(gdcpId)){
             Long uid = getCurLoginUserId(request);
             GoodsGdcprelVo goodsGdcprelVo = goodsGdcprelService.queryCheckOrderData(gdcpId,uid);
@@ -88,13 +90,14 @@ public class OrderController extends BaseController {
 
                 Map map = new HashMap();
                 map.put("gdId",gdId);
-                map.put("gid",gid);
+                map.put("goodsId",goodsId);
                 map.put("num",sumcount);
                 map.put("imgurl",imgurl);
                 map.put("gsvals",gsName);
                 map.put("remark",remark);
                 map.put("gname",gname);
                 map.put("gdprice",gdprice);
+                map.put("cspId",cspId);
 
                 List list = new ArrayList();
                 list.add(map);
