@@ -18,13 +18,16 @@ import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
@@ -78,8 +81,13 @@ public class UserCenterController extends BaseController{
      */
     @RequestMapping("userWallet")
     @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",isOpenPage = true)
-    public String openUserWallet(HttpServletRequest request){
-        return redirectUrl(request,"usercenter/user-wallet");
+    public ModelAndView openUserWallet(HttpServletRequest request){
+        ModelAndView modelAndView=new ModelAndView();
+        Long uId=getCurLoginUserId(request);
+        UserInfoVIew user = userService.queryUserInfoByUid(uId);
+        modelAndView.addObject("wallet", NumberUtils.formaterNumberPower(user.getUcurWallet()));
+        modelAndView.setViewName(redirectUrl(request,"usercenter/user-wallet"));
+        return modelAndView;
     }
     /**
      * 用户详情
