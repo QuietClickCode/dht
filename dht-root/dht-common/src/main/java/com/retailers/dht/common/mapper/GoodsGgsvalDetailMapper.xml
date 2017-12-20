@@ -143,6 +143,24 @@
 		on duplicate key update
 		gd_residueinventory=VALUES(gd_residueinventory)
 	</insert>
+	<update id="editGoodsInventorys">
+		UPDATE t_goods_detail t1
+		<set>
+			t1.gd_residueinventory = CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  t1.gd_id=#{item.gdId} THEN
+				#{item.gdResidueinventory}
+			</foreach> end,
+			t1.version=t1.version+1
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" close=")" open="(" >
+			(t1.gd_id=#{item.gdId} and t1.version=#{item.version})
+		</foreach>
+  		and t1.is_delete=0
+	</update>
+
+
 	<insert id="addGoodsInventorys">
 		INSERT INTO t_goods_detail
 		(gd_id,gd_inventory,gd_residueinventory) VALUES

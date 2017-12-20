@@ -171,6 +171,13 @@ public interface UserService {
 	 */
 	public boolean editorUserType(Long sysUid,Long uid,Long utype,Long ufirstCommission,Long urecommendCommission)throws AppException;
 
+	/**
+	 * 设置用户选择类型
+	 * @param uid 用户id
+	 * @param module 主推方向（0 乡村，1 城镇）
+	 * @return
+	 */
+	public UserInfoVIew editorUserUseModule(Long uid,Integer module);
 }
 
 

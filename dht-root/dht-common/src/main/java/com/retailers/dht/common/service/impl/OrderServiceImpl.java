@@ -80,6 +80,12 @@ public class OrderServiceImpl implements OrderService {
 	private GoodsIsbuycpService goodsIsbuycpService;
 	@Autowired
 	private  GoodsIsbuyspService goodsIsbuyspService;
+	@Autowired
+	private GoodsGdcprelService goodsGdcprelService;
+	@Autowired
+	private GoodsGdsprelService goodsGdsprelService;
+	@Autowired
+	private GoodsGgsvalDetailService goodsGgsvalDetailService;
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -154,6 +160,8 @@ public class OrderServiceImpl implements OrderService {
 			List<Long> gids=new ArrayList<Long>();
 			//购买商品例表属性
 			List<GoodsTypePriceVo> buyDetailInfos = new ArrayList<GoodsTypePriceVo>();
+			//规格对应的购买数量
+			Map<Long,Long> gdidUnGid=new HashMap<Long, Long>();
 			//取得购买商中使用了商品优惠的
 			for(BuyGoodsDetailVo bgVo:buyInfos.getBuyGoods()){
 				if(ObjectUtils.isNotEmpty(bgVo.getGcpIds())){
@@ -169,6 +177,7 @@ public class OrderServiceImpl implements OrderService {
 				carIds.add(bgVo.getBuyCarId());
 				GoodsTypePriceVo gtpv=new GoodsTypePriceVo(bgVo.getGoodsId(),bgVo.getGdId(),null,null,bgVo.getNum().longValue());
 				buyDetailInfos.add(gtpv);
+				gdidUnGid.put(bgVo.getGdId(),-bgVo.getNum().longValue());
 			}
 			//从购物车中取得购买商品相应的推荐人
 			Map<Long,Long> buyCarMaps=buyCarService.queryInviterIdByBcIds(carIds);
@@ -233,6 +242,12 @@ public class OrderServiceImpl implements OrderService {
 			if(!flag){
 				logger.error("清除购物车异常");
 				throw new AppException("创建订单异常");
+			}
+			//修改商品库存
+			boolean success =goodsGgsvalDetailService.editGoodsInventorys(gdidUnGid);
+			if(!success){
+				logger.error("修改商品库存失败，请重试");
+				throw new AppException("下单失败");
 			}
 			rtnMap.put("orderNo",orderNo);
 			rtnMap.put("totalPrice",totalPrice);
@@ -357,7 +372,14 @@ public class OrderServiceImpl implements OrderService {
 			gibcp.setUid(uid);
 			gibcp.setIsDelete((long)SystemConstant.SYS_IS_DELETE_NO);
 			goodsIsbuycpService.saveGoodsIsbuycp(gibcp);
-
+			//修改库存数量
+			Map<Long,Long> gdidUnNm=new HashMap<Long, Long>();
+			gdidUnNm.put(gdId,-num.longValue());
+			boolean success = goodsGdcprelService.editGoodsInventorys(gdidUnNm);
+			if(!success){
+				logger.error("修改商品库存失败，请重试");
+				throw new AppException("下单失败");
+			}
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
 		}finally {
@@ -679,7 +701,7 @@ public class OrderServiceImpl implements OrderService {
 			logisticsPrice=goodsFreight.getGfPrice();
 		}
 		if(buyInfos.getBuyGoods().size()>1){
-			throw new AppException("特价/秒杀商品只能购买一样商品");
+			throw new AppException("特价/秒杀商品只能单一购买");
 		}
 		BuyGoodsDetailVo bgd=buyInfos.getBuyGoods().get(0);
 		GoodsGdsprel goodsGdsprel=goodsGdsprelMapper.queryGoodsGdsprelByGdspId(bgd.getGdId());
@@ -692,6 +714,8 @@ public class OrderServiceImpl implements OrderService {
 				throw new AppException("超过购买限制，限购数量"+goodsGdsprel.getSpBounds());
 			}
 		}
+		Map<Long,Long> gdidUnNum=new HashMap<Long, Long>();
+		gdidUnNum.put(bgd.getGdId(),-bgd.getNum().longValue());
 		//取得商品价格
 		List<OrderDetail> ods=new ArrayList<OrderDetail>();
 		long totalPrice=0l;
@@ -711,7 +735,14 @@ public class OrderServiceImpl implements OrderService {
 		gibsp.setUid(uid);
 		gibsp.setSpId(cspId);
 		gibsp.setIsDelete((long)SystemConstant.SYS_IS_DELETE_NO);
+		//保存 商品购买日志
 		goodsIsbuyspService.saveGoodsIsbuysp(gibsp);
+		//变更现有商品库存
+		boolean success=goodsGdsprelService.editGoodsInventorys(gdidUnNum);
+		if(!success){
+			logger.error("修改商品库存失败，请重试");
+			throw new AppException("下单失败");
+		}
 		return order;
 	}
 }

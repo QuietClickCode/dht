@@ -343,5 +343,18 @@ public class UserServiceImpl implements UserService {
 		}
 		return true;
 	}
+
+	/**
+	 *
+	 * @param uid 用户id
+	 * @param module 主推方向（0 乡村，1 城镇）
+	 * @return
+	 */
+	public UserInfoVIew editorUserUseModule(Long uid, Integer module) {
+		User user=userMapper.queryUserByUid(uid);
+		userMapper.editorUserUseModule(uid,module,user.getVersion());
+		UserInfoVIew userInfoVIew=userMapper.queryLoginUserInfoView(uid);
+		return null;
+	}
 }
 

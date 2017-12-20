@@ -74,6 +74,10 @@ public class User implements java.io.Serializable {
 	/**姓别（0 男，1 女）*/
 	@NotEmpty
 	private Integer usex;
+	/**
+	 * 选择模块
+	 */
+	private Integer uUseModule;
 	/**数据行版本本号*/
 	@NotEmpty
 	private Integer version;
@@ -219,6 +223,15 @@ public class User implements java.io.Serializable {
 	public Integer getUsex() {
 		return this.usex;
 	}
+
+	public Integer getuUseModule() {
+		return uUseModule;
+	}
+
+	public void setuUseModule(Integer uUseModule) {
+		this.uUseModule = uUseModule;
+	}
+
 	public void setVersion(Integer value) {
 		this.version = value;
 	}

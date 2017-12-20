@@ -4,6 +4,7 @@ import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
+import com.retailers.tools.exception.AppException;
 
 import java.util.List;
 import java.util.Map;
@@ -67,7 +68,7 @@ public interface GoodsGgsvalDetailService {
 
 	public boolean editGoodsInventory(Long gdId,Long inventory,Long updatepersonId);
 
-	public boolean editGoodsInventorys(Map<Long,Long> goodsDetailMap);
+	public boolean editGoodsInventorys(Map<Long,Long> goodsDetailMap) throws AppException;
 
 }
 

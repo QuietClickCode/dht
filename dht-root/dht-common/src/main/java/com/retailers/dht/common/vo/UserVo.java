@@ -73,6 +73,8 @@ public class UserVo {
      * 推荐消费提成
      */
     private Long urecommendCommission;
+    //选择主推类型
+    private Integer uUseModule;
 
     public Long getUid() {
         return uid;
@@ -152,7 +154,7 @@ public class UserVo {
     }
 
     public String getDiscount() {
-        return NumberUtils.formaterNumberPower(discount);
+        return NumberUtils.formaterNumberPower(discount,true);
 //        return discount;
     }
 
@@ -250,8 +252,14 @@ public class UserVo {
         return NumberUtils.formaterNumberPower(urecommendCommission,true);
 //        return urecommendCommission;
     }
-
     public void setUrecommendCommission(Long urecommendCommission) {
         this.urecommendCommission = urecommendCommission;
+    }
+    public Integer getuUseModule() {
+        return uUseModule;
+    }
+
+    public void setuUseModule(Integer uUseModule) {
+        this.uUseModule = uUseModule;
     }
 }

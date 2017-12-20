@@ -61,7 +61,6 @@ public interface GoodsGgsvalDetailMapper {
 
 	public int deleteGoodsGgsvalDetailByGid(@Param("gid") Long gid);
 
-	public int reduceGoodsInventorys(@Param("list") List<GoodsDetail> list);
+	public int editGoodsInventorys(@Param("list") List<GoodsDetail> list);
 
-	public int addGoodsInventorys(@Param("list") List<GoodsDetail> list);
 }

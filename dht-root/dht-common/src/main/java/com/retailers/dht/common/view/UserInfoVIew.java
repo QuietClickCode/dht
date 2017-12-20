@@ -1,6 +1,9 @@
 package com.retailers.dht.common.view;
 
+import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -55,6 +58,14 @@ public class UserInfoVIew {
      * 微信公从号openid
      */
     private String wauOpenid;
+    //选择主推类型
+    private Integer uUseModule;
+    //折扣
+    private Long discount;
+    /**
+     * 充值会员关联会员卡名称
+     */
+    private String rechageNm;
 
     public Long getUid() {
         return uid;
@@ -113,6 +124,11 @@ public class UserInfoVIew {
     }
 
     public String getHeadUrl() {
+        if(ObjectUtils.isNotEmpty(headUrl)){
+            if(headUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&headUrl.indexOf("http://")==-1){
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,headUrl);
+            }
+        }
         return headUrl;
     }
 
@@ -206,5 +222,29 @@ public class UserInfoVIew {
 
     public void setWauOpenid(String wauOpenid) {
         this.wauOpenid = wauOpenid;
+    }
+
+    public Integer getuUseModule() {
+        return uUseModule;
+    }
+
+    public void setuUseModule(Integer uUseModule) {
+        this.uUseModule = uUseModule;
+    }
+
+    public String getDiscount() {
+        return NumberUtils.formaterNumberPower(discount,true);
+    }
+
+    public void setDiscount(Long discount) {
+        this.discount = discount;
+    }
+
+    public String getRechageNm() {
+        return rechageNm;
+    }
+
+    public void setRechageNm(String rechageNm) {
+        this.rechageNm = rechageNm;
     }
 }

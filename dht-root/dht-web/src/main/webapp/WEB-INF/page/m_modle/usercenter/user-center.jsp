@@ -41,12 +41,11 @@
         <div class="user-header" >
             <a href="/user/userDetailInfo" class="icon-change">
                 <div class="user-img">
-                    <img src="/img/user-header.png" alt=""/>
+                    <img src="${user.headUrl}" alt=""/>
                 </div>
             </a>
-            <p class="user-name">56dfsdf</p>
+            <p class="user-name">${user.uname}</p>
             <div class="vip">
-
                 <span>普通会员</span>
             </div>
             <i class="news">
@@ -199,7 +198,7 @@
                     }
                     if(data.user != undefined){
                         $(".user-name").text(data.user.uname);
-                        $(".user-img img").attr("src","http://image.kuaiyis.com/attachment/"+data.user.headUrl);
+                        $(".user-img img").attr("src",data.user.headUrl);
                     }
                 }
             });

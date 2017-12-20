@@ -178,7 +178,7 @@
         </div>
         <div class="price2">
             <span class="name">优惠卷</span>
-            <span class="number"><span class="mr_4">￥</span>-0.00</span>
+            <span class="number" id="couponspan"><span class="mr_4">￥</span>-0.00</span>
         </div>
         <div class="price3">
             <span class="name">已为你节省</span>
@@ -331,6 +331,8 @@
     var goodsData = (${sessionScope.checkOrderData});
     var isActivity = goodsData.isActivity;
     console.log(goodsData);
+
+    var inittotalPrice = 0;
     <!--加载商品信息-->
     function loadgoodsinfo() {
         var rows = goodsData.data;
@@ -368,7 +370,7 @@
         }
 
         $('#goodsprice').html('<span class="mr_4">￥</span>'+parseFloat(index).toFixed(2));
-
+        inittotalPrice = index;
     }
 
     function loadAddress() {
@@ -488,7 +490,6 @@
                                 userCouponsUl.append(html);
                             }
                             initcoupon();
-//                        jiesuan();
                         }
 
                         var keyFlag = false;
@@ -552,6 +553,7 @@
 
     <!--点击选择优惠券-->
     function choosecp(obj) {
+        outprice();
         var cpisoverlapuse = $(obj).attr("cpisoverlapuse");
         var inputs = $('.coupon-list').find('input[type=checkbox]');
         var flag = obj.checked;
@@ -625,6 +627,7 @@
         outprice();
     }
 
+    var gfPrice = 0;
     <!--加载运费-->
     function loadGoodsFreight(address) {
         $.ajax({
@@ -641,9 +644,11 @@
                     var goodsPriceFloat = Number(parseFloat(row.gfPrice/100).toFixed(2));
                     var goodsFreight = Number(removeHTMLTag(goodsPrice).substr(1));
                     var total = goodsPriceFloat+goodsFreight;
-                    console.log(total);
+//                    console.log(total);
                     $('#finalPrice').html('<span class="mr_4">￥</span>'+ total.toFixed(2));
                     $('#shouldPay').html('<span class="mr_4">￥</span>'+total.toFixed(2));
+
+                    gfPrice = goodsPriceFloat;
                 }
             }
         });
@@ -652,7 +657,6 @@
     <!--计算价格-->
     function outprice() {
         var downprice = 0;
-
         var goodsdivs = $('.order-product');
         var gcpdowncutprice = 0;
         if(goodsdivs!=null && goodsdivs.length>0){
@@ -686,14 +690,68 @@
                     ingdPrice = ingdPrice.toFixed(2);
                     var nowoneprice = (gdprice - ingdPrice).toFixed(2);
 
-                    gcpdowncutprice += Number(nowoneprice);
+                    gcpdowncutprice += Number(nowoneprice) * num;
                     downprice += nowoneprice;
                 }
             }
         }
         $('#gcpspan').html('<span class="mr_4">￥</span>-'+gcpdowncutprice);
 
+        var lastPrice = inittotalPrice - gcpdowncutprice;
+        var secondPrice = lastPrice;
 
+        var coupons = $('.coupon-list').find('input[type=checkbox]:checked');
+        var coupondowncutprice = 0;
+
+        if(coupons!=null&&coupons.length>0){
+            var firstRateArr = new Array();
+            var firstCashArr = new Array();
+            var lastRateArr = new Array();
+            var lastCashArr = new Array();
+            console.log(coupons.length);
+            for(var i=0;i<coupons.length;i++){
+                console.log(i);
+                var coupon = $(coupons[i]);
+                var cpisfirst = Number(coupon.attr('cpisfirst'))==0;
+                var cptype = Number(coupon.attr('cptype'))==1;
+
+                if(cpisfirst&&cptype){
+                    firstRateArr.push(coupons[i]);
+                }
+                if(cpisfirst&&!cptype){
+                    firstCashArr.push(coupons[i]);
+                }
+                if(!cpisfirst&&cptype){
+                    lastRateArr.push(coupons[i]);
+                }
+                if(!cpisfirst&&!cptype){
+                    lastCashArr.push(coupons[i]);
+                }
+            }
+            console.log(firstRateArr.length);
+            console.log(firstCashArr.length);
+            console.log(lastRateArr.length);
+            console.log(lastCashArr.length);
+            for(var i=0;i<firstRateArr.length;i++){
+                secondPrice = secondPrice * Number($(firstRateArr[i]).attr('val'))/10;
+            }
+            for(var i=0;i<firstCashArr.length;i++){
+                secondPrice = secondPrice - Number($(firstCashArr[i]).attr('val'));
+            }
+            for(var i=0;i<lastRateArr.length;i++){
+                secondPrice = secondPrice * Number($(lastRateArr[i]).attr('val'))/10;
+            }
+            for(var i=0;i<lastCashArr.length;i++){
+                secondPrice = secondPrice - Number($(lastCashArr[i]).attr('val'));
+            }
+            coupondowncutprice = lastPrice - secondPrice;
+            $('#couponspan').html('<span class="mr_4">￥</span>-'+coupondowncutprice);
+        }
+
+        lastPrice = lastPrice - coupondowncutprice +gfPrice;
+
+        $('#finalPrice').html('<span class="mr_4">￥</span>'+ lastPrice.toFixed(2));
+        $('#shouldPay').html('<span class="mr_4">￥</span>'+lastPrice.toFixed(2));
     }
 
     function jiesuan(){

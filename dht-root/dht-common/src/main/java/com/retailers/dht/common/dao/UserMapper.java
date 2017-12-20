@@ -96,4 +96,11 @@ public interface UserMapper {
 	 */
 	public int editorCustomerType(@Param("uid")Long uid,@Param("rechage")Long rechage,@Param("version") Integer version);
 
+	/**
+	 *
+	 * @param uid
+	 * @param module
+	 * @return
+	 */
+	public int editorUserUseModule(@Param("uid")Long uid,@Param("module") Integer module,@Param("version")Integer version);
 }

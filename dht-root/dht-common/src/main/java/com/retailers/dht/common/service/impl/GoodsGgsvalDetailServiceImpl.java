@@ -1,23 +1,23 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import com.retailers.dht.common.dao.GoodsGgsvalDetailMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsDetail;
-import com.retailers.dht.common.entity.GoodsGgsval;
 import com.retailers.dht.common.entity.GoodsGgsvalDetail;
-import com.retailers.dht.common.dao.GoodsGgsvalDetailMapper;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalDetailService;
 import com.retailers.dht.common.service.GoodsGgsvalService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsInventoryVo;
-import com.retailers.tools.utils.ObjectUtils;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：商品与规格值详情表Service
  * @author fanghui
@@ -105,7 +105,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return status>0?true:false;
     }
 
-    public boolean editGoodsInventorys(Map<Long,Long> goodsDetailMap){
+    public boolean editGoodsInventorys(Map<Long,Long> goodsDetailMap) throws AppException{
         int status = 0;
         if(ObjectUtils.isNotEmpty(goodsDetailMap)){
             String gdIds = "";
@@ -120,17 +120,15 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
                     Long gdId2 = entry.getKey();
                     Long reduceInventory = entry.getValue();
                     if(gdId1.equals(gdId2)){
-                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+reduceInventory;
-                        if(gdResidueinventory<0){
-                            return false;
-                        }
-                        goodsDetail1.setGdResidueinventory(gdResidueinventory);
+                        goodsDetail1.setGdResidueinventory(reduceInventory);
                         break;
                     }
                 }
             }
-
-            status = goodsGgsvalDetailMapper.reduceGoodsInventorys(list);
+            status = goodsGgsvalDetailMapper.editGoodsInventorys(list);
+            if(list.size()!=status){
+                throw new AppException("数据有误");
+            }
         }
 
         return status>0?true:false;
