@@ -105,7 +105,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return status>0?true:false;
     }
 
-    public boolean reduceGoodsInventorys(Map<Long,Long> goodsDetailMap){
+    public boolean editGoodsInventorys(Map<Long,Long> goodsDetailMap){
         int status = 0;
         if(ObjectUtils.isNotEmpty(goodsDetailMap)){
             String gdIds = "";
@@ -136,35 +136,5 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
         return status>0?true:false;
     }
 
-    public boolean addGoodsInventorys(Map<Long,Long> goodsDetailMap){
-        int status = 0;
-        if(ObjectUtils.isNotEmpty(goodsDetailMap)){
-            String gdIds = "";
-            for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
-                gdIds = ","+entry.getKey();
-            }
-            gdIds = gdIds.substring(1);
-            List<GoodsDetail> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-            for(GoodsDetail goodsDetail1:list){
-                for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
-                    Long gdId1 = goodsDetail1.getGdId();
-                    Long gdId2 = entry.getKey();
-                    Long reduceInventory = entry.getValue();
-                    if(gdId1.equals(gdId2)){
-                        Long gdResidueinventory = goodsDetail1.getGdResidueinventory()+reduceInventory;
-                        Long gdInventory = goodsDetail1.getGdInventory()+reduceInventory;
-
-                        goodsDetail1.setGdResidueinventory(gdResidueinventory);
-                        goodsDetail1.setGdInventory(gdInventory);
-                        break;
-                    }
-                }
-            }
-
-            status = goodsGgsvalDetailMapper.addGoodsInventorys(list);
-        }
-
-        return status>0?true:false;
-    }
 }
 

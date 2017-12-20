@@ -365,8 +365,6 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 		List<Long> gdIdList=new ArrayList<Long>();
 		//规格id对应的购买数量
 		Map<Long,Integer> gdtn= new HashMap<Long, Integer>();
-		//商品对应的购买数量
-		Map<Long,Integer> gtn= new HashMap<Long, Integer>();
 		//规格对应的商品
 		Map<Long,Long> gidGids=new HashMap<Long, Long>();
 		for(BuyGoodsDetailVo gb:gbs){
@@ -391,11 +389,11 @@ public class GoodsCouponServiceImpl implements GoodsCouponService {
 			//购买商品ids
 			gIds.add(gt.getGid());
 			//购买商品数量
-			int buyNum=gdtn.get(gt.getGdId());
-			if(gtn.containsKey(gt.getGid())){
-				buyNum+=gtn.get(gt.getGdId());
-			}
-			gtn.put(gt.getGid(),buyNum);
+//			int buyNum=gdtn.get(gt.getGdId());
+//			if(gtn.containsKey(gt.getGid())){
+//				buyNum+=gtn.get(gt.getGid());
+//			}
+//			gtn.put(gt.getGid(),buyNum);
 			//规格对应的商品id
 			gidGids.put(gt.getGdId(),gt.getGid());
 			ggPrice.put(gt.getGdId(),gt.getGdPrice()*gdtn.get(gt.getGdId()));//计算该规格下的购买价格

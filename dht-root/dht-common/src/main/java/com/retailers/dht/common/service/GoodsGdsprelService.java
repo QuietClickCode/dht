@@ -62,6 +62,7 @@ public interface GoodsGdsprelService {
 
 	public GoodsGdsprelVo queryGoodsGdsprelVoLists(Map<String, Object> params);
 
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap);
 }
 
 

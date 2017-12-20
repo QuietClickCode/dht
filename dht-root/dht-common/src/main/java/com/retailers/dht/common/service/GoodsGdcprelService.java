@@ -68,6 +68,8 @@ public interface GoodsGdcprelService {
 
 	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid);
 
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap);
+
 }
 
 

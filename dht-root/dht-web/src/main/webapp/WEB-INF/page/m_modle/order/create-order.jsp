@@ -12,7 +12,7 @@
 <body class="bge6">
 <div class="box">
     <div class="specialty-title2 borderB">
-        <a href="javascript:;" class="icon-return" id="go_live"></a>
+        <a onclick="returnhistory();" class="icon-return" ></a>
         <span>确认订单</span>
     </div>
 
@@ -162,15 +162,15 @@
         </div>
         <div class="price2">
             <span class="name">商品总金额</span>
-            <span class="number" id="goodsprice"><span class="mr_4">￥</span>168.00</span>
+            <span class="number" id="goodsprice"><span class="mr_4">￥</span>0.00</span>
         </div>
         <div class="price2">
             <span class="name">运费</span>
-            <span class="number" id="goodsFreight"><span class="mr_4">￥</span>168.00</span>
+            <span class="number" id="goodsFreight"><span class="mr_4">￥</span>0.00</span>
         </div>
         <div class="price2">
             <span class="name">会员折扣</span>
-            <span class="number"><span class="mr_4">￥</span>-20.00</span>
+            <span class="number"><span class="mr_4">￥</span>-0.00</span>
         </div>
         <div class="price2">
             <span class="name">商品优惠</span>
@@ -178,11 +178,11 @@
         </div>
         <div class="price2">
             <span class="name">优惠卷</span>
-            <span class="number"><span class="mr_4">￥</span>-20.00</span>
+            <span class="number"><span class="mr_4">￥</span>-0.00</span>
         </div>
         <div class="price3">
             <span class="name">已为你节省</span>
-            <span class="number"><span class="mr_4">￥</span>40.00</span>
+            <span class="number"><span class="mr_4">￥</span>0.00</span>
         </div>
     </div>
 
@@ -238,7 +238,7 @@
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
-
+<script src="/js/layer/layer.js"></script>
 <!--页面交互-->
 <script>
     // 弹出支付选择框
@@ -349,7 +349,7 @@
                 '<input type="hidden" value="'+rows[i].num+'" name="num">'+
                 '<input type="hidden" value="'+rows[i].buyCarId+'" name="buyCarId">'+
                 '<input type="hidden" value="'+rows[i].gdprice+'" name="gdprice">'+
-                '<input type="hidden" value="'+rows[i].gdspId+'" name="gdspId">'+
+//                '<input type="hidden" value="'+rows[i].gdspId+'" name="gdspId">'+
                 '<a  class="img">'+
             '<img style="margin-top: 15px" src="'+rows[i].imgurl+'" alt="">'+
             '</a>'+
@@ -545,6 +545,8 @@
                     layer.msg(sdata);
                 }
             });
+        }else{
+
         }
     }
 
@@ -735,10 +737,14 @@
                 gcpIds = gcpIds.substr(1);
             }
             var reqRow=new Object();
-            reqRow["buyCarId"]=row.find('input[name=buyCarId]')[0].value;
+            var buyCarId = row.find('input[name=buyCarId]')[0].value;
+            if(buyCarId==null||buyCarId == 'undefined'){
+                buyCarId = '';
+            }
+            reqRow["buyCarId"]=buyCarId;
             reqRow["gcpIds"]=gcpIds;
             reqRow["gdId"]=row.find('input[name=gdId]')[0].value;
-            reqRow["gdspId"]=row.find('input[name=gdspId]')[0].value;
+//            reqRow["gdspId"]=row.find('input[name=gdspId]')[0].value;
             reqRow["goodsId"]=row.find('input[name=goodsId]')[0].value;
             reqRow["num"]=row.find('input[name=num]')[0].value;
             reqRow["remark"]=row.find('input[name=remark]')[0].value;
@@ -757,15 +763,26 @@
         data["address"] = addressId;
         data["cpIds"] = cpIds;
         data["buyGoods"] = reqRows;
-        console.log(data);
+//        console.log(data);
+        var url = sureUrl();
+
         $.ajax({
             type:"post",//请求方式
-            url: "/order/buyGoods",//发送请求地址
+            url: url,//发送请求地址
             data:JSON.stringify(data),
             dataType:"json",
             contentType: "application/json",
             //请求成功后的回调函数有两个参数
             success:function(sdata){
+                if(sdata.status==0){
+                    var data = sdata.data;
+                    var orderNo = data.orderNo;
+                    var price = data.totalPrice;
+                    return;
+                    window.location.href = "/wxPay/payInfo?orderNo="+orderNo+"&price="+price;
+                }else{
+                    alert(sdata.msg);
+                }
 
             },
             error:function(sdata){
@@ -773,6 +790,23 @@
             }
         });
 
+    }
+
+    function sureUrl() {
+        var url = '';
+        if(isActivity==0){
+            url = '/order/buySpecialOfferGoods';
+        }
+        if(isActivity==1){
+            url = '/order/buySeckillGoods';
+        }
+        if(isActivity==2){
+            url = '/order/buyCutPrice';
+        }
+        if(isActivity==3){
+            url = '/order/buyGoods';
+        }
+        return url;
     }
 
     <!--获取纯文本内容-->
@@ -783,6 +817,15 @@
         str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
         str=str.replace(/\s/g,''); //将空格去掉
         return str;
+    }
+
+    <!--返回上一页-->
+    function returnhistory() {
+        if(document.referrer===''){
+            window.location.href='/';
+        }else{
+            window.history.go(-1);
+        }
     }
 </script>
 

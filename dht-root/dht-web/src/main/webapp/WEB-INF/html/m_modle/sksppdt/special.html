@@ -583,10 +583,10 @@
                                 '                            <a href="/bargainp/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>' +
                                 '                            <p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>' +
                                 '                            <div class="special-prompt">' +
-                                '                                <span>砍价低至￥'+rows[i].minCpSale+'</span>' +
+                                '                                <span>砍价低至￥'+parseFloat(rows[i].minCpSale/100).toFixed(2) +'</span>' +
                                 '                            </div>' +
                                 '                            <div class="special-price">' +
-                                '                                <span>￥'+rows[i].minprice+'</span>' +
+                                '                                <span>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'</span>' +
                                 '                                <a href="/bargainp/'+rows[i].gid+'.html">我要砍价</a>' +
                                 '                            </div>' +
                                 '                        </div>' +

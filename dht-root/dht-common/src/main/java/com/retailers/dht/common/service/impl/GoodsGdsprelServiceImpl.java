@@ -11,6 +11,7 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,6 +75,35 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 			return  goodsGdsprelVo;
 		}
 		return null;
+	}
+
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap){
+		int status = 0;
+		if(ObjectUtils.isNotEmpty(goodsGdsprelMap)){
+			List<Long> gdspIds = new ArrayList<Long>();
+			for (Map.Entry<Long, Long> entry : goodsGdsprelMap.entrySet()) {
+				gdspIds.add(entry.getKey());
+			}
+			List<GoodsGdsprel> list = goodsGdsprelMapper.queryGoodsGdcprelListByGdspIds(gdspIds);
+			for(GoodsGdsprel GoodsGdsprel:list){
+				for (Map.Entry<Long, Long> entry : goodsGdsprelMap.entrySet()) {
+					Long gdspId1 = GoodsGdsprel.getGdspId();
+					Long gdspId2 = entry.getKey();
+					if(gdspId1.equals(gdspId2)){
+						Long reduceInventory = entry.getValue();
+						Long spInventory = GoodsGdsprel.getSpInventory()+reduceInventory;
+						if(spInventory<0){
+							return false;
+						}
+						GoodsGdsprel.setSpInventory(spInventory);
+						break;
+					}
+				}
+			}
+
+			status = goodsGdsprelMapper.editGoodsInventorys(list);
+		}
+		return status>0?true:false;
 	}
 }
 

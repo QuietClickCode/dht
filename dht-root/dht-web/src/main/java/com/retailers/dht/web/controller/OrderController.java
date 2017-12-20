@@ -1,6 +1,8 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.UserAddress;
@@ -92,7 +94,7 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
-    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long gid){
+    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long goodsId,Long cspId){
         if(ObjectUtils.isNotEmpty(gdcpId)){
             Long uid = getCurLoginUserId(request);
             GoodsGdcprelVo goodsGdcprelVo = goodsGdcprelService.queryCheckOrderData(gdcpId,uid);
@@ -103,13 +105,14 @@ public class OrderController extends BaseController {
 
                 Map map = new HashMap();
                 map.put("gdId",gdId);
-                map.put("gid",gid);
+                map.put("goodsId",goodsId);
                 map.put("num",sumcount);
                 map.put("imgurl",imgurl);
                 map.put("gsvals",gsName);
                 map.put("remark",remark);
                 map.put("gname",gname);
                 map.put("gdprice",gdprice);
+                map.put("cspId",cspId);
 
                 List list = new ArrayList();
                 list.add(map);
@@ -172,7 +175,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySpecialOfferGoods(uid,buyInfo,isInviter(request,buyInfo));
+            Map<String,Object>rtn= orderService.buySpecialOfferGoods(uid,buyInfo,isInviter(request,buyInfo),getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -195,7 +198,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buySeckillGoods(uid,buyInfo,isInviter(request,buyInfo));
+            Map<String,Object>rtn= orderService.buySeckillGoods(uid,buyInfo,isInviter(request,buyInfo),getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -218,7 +221,7 @@ public class OrderController extends BaseController {
         try{
             //校验购买信息
             checkBuyInfo(buyInfo);
-            Map<String,Object>rtn= orderService.buyCutPrice(uid,buyInfo);
+            Map<String,Object>rtn= orderService.buyCutPrice(uid,buyInfo,getSessionCspId(request));
             return success(rtn);
         }catch(AppException e){
             logger.error(StringUtils.getErrorInfoFromException(e));
@@ -292,6 +295,31 @@ public class OrderController extends BaseController {
             }
         }
         return null;
+    }
+
+    /**
+     * 取得优惠活动 缓存id
+     * @param request
+     * @return
+     * @throws AppException
+     */
+    private Long getSessionCspId(HttpServletRequest request)throws AppException{
+        if(ObjectUtils.isNotEmpty(request.getSession().getAttribute("checkOrderData"))){
+            String obj=(String) request.getSession().getAttribute("checkOrderData");
+            JSONObject jsonObj=JSONObject.parseObject(obj);
+            JSONArray jsonArray=jsonObj.getJSONArray("data");
+            if(jsonArray.size()>0){
+                long cspId=jsonArray.getJSONObject(0).getLong("cspId");
+                return cspId;
+            }else{
+                logger.error("未取得缓存商品信息");
+                throw new AppException("取得商品异常");
+            }
+
+        }else{
+            logger.error("未取得缓存商品信息");
+            throw new AppException("取得商品异常");
+        }
     }
 }
 

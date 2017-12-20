@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +111,35 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid){
 		GoodsGdcprelVo list = goodsGdcprelMapper.queryCheckOrderData(gdcpId,uid);
 		return  list;
+	}
+
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap){
+		int status = 0;
+		if(ObjectUtils.isNotEmpty(goodsGdcprelMap)){
+			List<Long> gdcpIds = new ArrayList<Long>();
+			for (Map.Entry<Long, Long> entry : goodsGdcprelMap.entrySet()) {
+				gdcpIds.add(entry.getKey());
+			}
+			List<GoodsGdcprel> list = goodsGdcprelMapper.queryGoodsGdcprelListByGdcpIds(gdcpIds);
+			for(GoodsGdcprel goodsGdcprel:list){
+				for (Map.Entry<Long, Long> entry : goodsGdcprelMap.entrySet()) {
+					Long gdcpId1 = goodsGdcprel.getGdcpId();
+					Long gdcpId2 = entry.getKey();
+					if(gdcpId1.equals(gdcpId2)){
+						Long reduceInventory = entry.getValue();
+						Long cpInventory = goodsGdcprel.getCpInventory()+reduceInventory;
+						if(cpInventory<0){
+							return false;
+						}
+						goodsGdcprel.setCpInventory(cpInventory);
+						break;
+					}
+				}
+			}
+
+			status = goodsGdcprelMapper.editGoodsInventorys(list);
+		}
+		return status>0?true:false;
 	}
 
 }

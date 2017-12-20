@@ -111,6 +111,30 @@
 		GROUP BY t1.gd_id
 		ORDER BY sumcount DESC
 	</select>
+	<select id="queryGoodsGdcprelListByGdspIds" resultMap="rm_goodsGdsprel">
+		SELECT *
+		FROM
+		t_goods_gdsprel
+		WHERE
+		gdsp_id in
+		<foreach collection="list" item="gdspId" index="index"
+				 open="(" close=")" separator=",">
+			#{gdspId}
+		</foreach>
+		and is_delete=0
+	</select>
+	<insert id="editGoodsInventorys">
+		INSERT INTO t_goods_gdsprel
+		(gdsp_id,sp_inventory) VALUES
+		<foreach collection ="list" item="goodsGdsprel" index= "index" separator =",">
+			(
+			#{goodsGdsprel.gdspId},
+			#{goodsGdsprel.spInventory}
+			)
+		</foreach >
+		on duplicate key update
+		sp_inventory=VALUES(sp_inventory)
+	</insert>
 	<!--添加商品与特价关系表 -->
 	<insert id="saveGoodsGdsprel" parameterType="com.retailers.dht.common.entity.GoodsGdsprel" useGeneratedKeys="true" keyProperty="gdspId">
 		INSERT INTO t_goods_gdsprel (

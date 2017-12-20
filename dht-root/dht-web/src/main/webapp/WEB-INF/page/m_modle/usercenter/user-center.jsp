@@ -94,7 +94,7 @@
                 <i class="icon-care"></i>
                 <span>购物车</span>
             </div>
-            <a href="/buyCar/gotoShoppingCar">有12件商品在等你噢
+            <a href="/buyCar/gotoShoppingCar" id="gotoShoppingCarA">有0件商品在等你噢
                 <span class="prompt"></span>
             </a>
         </div>
@@ -208,6 +208,29 @@
         $(".user-header").on("click",".login_box",function () {
             $(location).attr('href', '/loginPage?redirectUrl=%2Fuser%2FuserCenter');
         });
+
+        function querybuycarcount() {
+            $.ajax({
+                type:"post",
+                url:'/buyCar/querybuycarcount',
+                dataType: "json",
+                async :false,
+                data:{},
+                success:function(data){
+                    if(data.status==3){
+                        $('#gotoShoppingCarA').html('有'+0+'件商品在等你噢<span class="prompt"></span>');
+                    }else{
+                        var count = data.count;
+                        if(count!=null){
+                            $('#gotoShoppingCarA').html('有'+count+'件商品在等你噢<span class="prompt"></span>');
+                        }else{
+                            $('#gotoShoppingCarA').html('有'+0+'件商品在等你噢<span class="prompt"></span>');
+                        }
+                    }
+                }
+            });
+        }
+        querybuycarcount();
     </script>
 </body>
 
