@@ -14,7 +14,7 @@
     <div class="box bge6">
         <div class="search">
             <input type="text" name="" id="" placeholder="现摘 水果">
-            <a href="n-index.html" class="rural"></a>
+            <a href="/home/ton-index" class="rural"></a>
             <span class="icon-search"></span>
         </div>
         <!-- banner -->
@@ -191,7 +191,10 @@
 
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
-
+    <script src="/js/footer.js"></script>
+    <script>
+        var curFooter="#footer_home";
+    </script>
     <!--广告数据加载-->
     <script>
         <!--加载顶部城市banner-->
@@ -395,7 +398,7 @@
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
-                data:{now:date,spType:1,pageNo:1,pageSize:2},
+                data:{spType:1,spRegion:1,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;
@@ -530,7 +533,7 @@
                 type:"post",
                 url:'/openSalePromotion/queryNextSalePromotionLists',
                 dataType: "json",
-                data:{spType:0,spRegion:0,pageNo:1,pageSize:2},
+                data:{spType:0,spRegion:1,pageNo:1,pageSize:2},
                 success:function(data){
                     var html = '';
                     var rows = data.rows;

@@ -10,6 +10,7 @@ import com.retailers.dht.common.entity.GoodsGdcprel;
 import com.retailers.dht.common.service.GoodsGdcprelService;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -113,7 +114,7 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 		return  list;
 	}
 
-	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap){
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap) throws AppException{
 		int status = 0;
 		if(ObjectUtils.isNotEmpty(goodsGdcprelMap)){
 			List<Long> gdcpIds = new ArrayList<Long>();
@@ -132,8 +133,10 @@ public class GoodsGdcprelServiceImpl implements GoodsGdcprelService {
 					}
 				}
 			}
-
 			status = goodsGdcprelMapper.editGoodsInventorys(list);
+			if(status==goodsGdcprelMap.size()){
+				throw new AppException("参数错误");
+			}
 		}
 		return status==goodsGdcprelMap.size()?true:false;
 	}

@@ -3,6 +3,7 @@ package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.GoodsGdsprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGdsprel;
+import com.retailers.tools.exception.AppException;
 
 import java.util.List;
 import java.util.Map;
@@ -62,7 +63,7 @@ public interface GoodsGdsprelService {
 
 	public GoodsGdsprelVo queryGoodsGdsprelVoLists(Map<String, Object> params);
 
-	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap);
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap) throws AppException;
 
 	public GoodsGdsprelVo queryGoodsGdsprelVoByGdspId(Long gdspId);
 }

@@ -6,383 +6,581 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>首页</title>
-    <script src="js/Adaptive.js"></script>
-    <link rel="stylesheet" href="css/n-style.css">
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/n-style.css">
 </head>
 
 <body>
-    <div class="box bge6">
-        <div class="search">
-            <input type="text" name="" id="" placeholder="现摘 水果">
-            <a href="index.html" class="rural"></a>
-            <span class="icon-search"></span>
+<div class="box bge6">
+    <div class="search">
+        <input type="text" name="" id="" placeholder="现摘 水果">
+        <a href="/home/toIndex" class="rural"></a>
+        <span class="icon-search"></span>
+    </div>
+    <!-- banner -->
+    <div id="banner" class="focus">
+        <div class="hd">
+            <ul></ul>
         </div>
-        <!-- banner -->
-        <div id="banner" class="focus">
-            <div class="hd">
-                <ul></ul>
-            </div>
-            <div class="bd">
-                <ul id="topbanner">
-                    <li><a href="#"><img _src="img/banner1.jpg"  data-original="img/banner1.jpg" /></a></li>
-                </ul>
-            </div>
+        <div class="bd">
+            <ul id="topbanner" style="height: 250px">
+                <!--<li><a href="#"><img _src="img/banner1.jpg"  data-original="img/banner1.jpg" /></a></li>-->
+            </ul>
         </div>
-
-        <ul class="classify" id="firstnav">
-            <li>
-                <a href="">
-                    <img src="img/class1.png" alt="">
-                    <p>地方特产</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="img/class2.png" alt="">
-                    <p>今日特价</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img src="img/class3.png" alt="">
-                    <p>好物预购</p>
-                </a>
-            </li>
-            <li>
-                <a href="">
-                    <img data-original="img/class4.png" alt="">
-                    <p>排名公示</p>
-                </a>
-            </li>
-        </ul>
-
-        <!-- 热点 -->
-        <ul class="hot" id="secondnav">
-            <li>
-                <a href=""><img data-original="img/hot1.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot2.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot1.jpg" alt=""></a>
-            </li>
-            <li>
-                <a href=""><img data-original="img/hot4.jpg" alt=""></a>
-            </li>
-        </ul>
-
-        <!-- 热点更多 -->
-        <div class="hot-more">
-            <div class="hot-more-cont">
-                <span class="title">快讯</span>
-                <a href="" class="link">
-                    <span>促销</span>
-                    中秋佳节月饼大放送满100送50
-                </a>
-                <a href="" class="more">更多</a>
-            </div>
-        </div>
-
-        <!-- banner -->
-        <div id="banner2" class="focus">
-            <div class="hd">
-                <ul></ul>
-            </div>
-            <div class="bd">
-                <ul id="midbanner">
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 秒杀 -->
-        <div class="index-title">
-            <span>限时秒杀</span>
-            <a href="" class="more">全部<i class="icon-more"></i></a>
-        </div>
-
-        <!-- 倒计时 -->
-        <div class="countdown">
-            <div class="cont">
-                <span class="word">距结束还有</span>
-                <span class="time1" id="shi1">0</span>
-                <span class="time1" id="shi2">1</span>
-                <span class="colon">:</span>
-                <span class="time1" id="fen1">2</span>
-                <span class="time1" id="fen2">3</span>
-                <span class="colon">:</span>
-                <span class="time1" id="miao1">5</span>
-                <span class="time1" id="miao2">3</span>
-            </div>
-        </div>
-
-        <ul class="seckill box2">
-            <li>
-                <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
-                <div class="text-box">
-                    <a href="" class="title overflow">皱皮百香果</a>
-                    <p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>
-                    <div class="price">
-                        <span>￥6.5/斤</span>
-                        <s>￥16.5/斤</s>
-                    </div>
-                    <div class="purchase">
-                        <a href="">马上抢购</a>
-                        <span>剩余20斤</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
-                <div class="text-box">
-                    <a href="" class="title overflow">皱皮百香果</a>
-                    <p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>
-                    <div class="price">
-                        <span>￥6.5/斤</span>
-                        <s>￥16.5/斤</s>
-                    </div>
-                    <div class="purchase">
-                        <a href="">马上抢购</a>
-                        <span>剩余20斤</span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <!-- banner -->
-        <div id="banner3" class="focus">
-            <div class="hd">
-                <ul></ul>
-            </div>
-            <div class="bd">
-                <ul id="bottombanner">
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                    <li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>
-                </ul>
-            </div>
-        </div>
-
-        <!-- 今日特价 -->
-        <div class="index-title">
-            <span>今日特价</span>
-            <a href="" class="more">全部<i class="icon-more"></i></a>
-        </div>
-
-        <ul class="seckill box2">
-            <li>
-                <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
-                <div class="text-box">
-                    <a href="" class="title overflow">皱皮百香果</a>
-                    <p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>
-                    <div class="price">
-                        <span>￥6.5/斤</span>
-                        <s>￥16.5/斤</s>
-                    </div>
-                    <div class="purchase">
-                        <a href="">马上抢购</a>
-                        <span>剩余20斤</span>
-                    </div>
-                </div>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>
-                <div class="text-box">
-                    <a href="" class="title overflow">皱皮百香果</a>
-                    <p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>
-                    <div class="price">
-                        <span>￥6.5/斤</span>
-                        <s>￥16.5/斤</s>
-                    </div>
-                    <div class="purchase">
-                        <a href="">马上抢购</a>
-                        <span>剩余20斤</span>
-                    </div>
-                </div>
-            </li>
-        </ul>
-
-        <!-- 可能喜欢 -->
-        <div class="like">
-            <div class="cont">
-                <span>您可能喜欢</span>
-            </div>
-        </div>
-
-        <ul class="like-list box2">
-            <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-            <li>
-                <a href="" class="img"><img data-original="img/list2.jpg" alt=""></a>
-                <a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>
-                <p>￥189</p>
-            </li>
-        </ul>
-
-
-        <!-- 底部 -->
-        <div class="placeholder-footer"></div>
-        <div id="footer"></div>
-
-
     </div>
 
-    <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+    <ul class="classify" id="firstnav">
+        <li>
+            <a href="">
+                <img src="img/class1.png" alt="">
+                <p>地方特产</p>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <img src="img/class2.png" alt="">
+                <p>今日特价</p>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <img src="img/class3.png" alt="">
+                <p>好物预购</p>
+            </a>
+        </li>
+        <li>
+            <a href="">
+                <img data-original="img/class4.png" alt="">
+                <p>排名公示</p>
+            </a>
+        </li>
+    </ul>
 
-    <!--广告数据加载-->
-    <script>
-        <!--加载顶部乡村banner-->
-        loadtopbanner(0);
-        <!--加载中部乡村banner-->
-        loadmidbanner(0);
-        <!--加载底部乡村banner-->
-        loadbottombanner(0);
+    <!-- 热点 -->
+    <ul class="hot" id="secondnav">
+        <!--<li>-->
+        <!--<a href=""><img data-original="img/hot1.jpg" alt=""></a>-->
+        <!--</li>-->
+    </ul>
 
-        <!--加载顶部乡村banner-->
-        function loadtopbanner(haCountry) {
-            $.ajax({
-                type:"post",
-                url:'/openHomeAdvertising/queryAdvertisingLists',
-                dataType: "json",
-                data:{haRegion:0,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null && rows.length>0){
-                        var html = '';
-                        $('#topbanner').html('');
-                        for(var i=0;i<rows.length;i++){
-                            html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'" data-original="'+rows[i].imageUrl+'" style="width: 100%;height: 299px"/></a></li>';
-                        }
-                        $('#topbanner').html(html);
-                    }
-                    topbanner();
-                }
-            });
-        }
-        <!--加载中部乡村banner-->
-        function loadmidbanner(haCountry) {
-            $.ajax({
-                type:"post",
-                url:'/openHomeAdvertising/queryAdvertisingLists',
-                dataType: "json",
-                data:{haRegion:1,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null && rows.length>0){
-                        var html = '';
-                        $('#midbanner').html('');
-                        for(var i=0;i<rows.length;i++){
-                            html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'" data-original="'+rows[i].imageUrl+'" style="width: 100%;height: 299px"/></a></li>';
-                        }
-                        $('#midbanner').html(html);
-                    }
-                    midbanner();
-                }
-            });
-        }
-        <!--加载底部乡村banner-->
-        function loadbottombanner(haCountry) {
-            $.ajax({
-                type:"post",
-                url:'/openHomeAdvertising/queryAdvertisingLists',
-                dataType: "json",
-                data:{haRegion:2,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null && rows.length>0){
-                        var html = '';
-                        $('#bottombanner').html('');
-                        for(var i=0;i<rows.length;i++){
-                            html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'" data-original="'+rows[i].imageUrl+'" style="width: 100%;height: 299px"/></a></li>';
-                        }
-                        $('#bottombanner').html(html);
-                    }
-                    bottombanner();
-                }
-            });
-        }
-    </script>
+    <!-- 热点更多 -->
+    <div class="hot-more">
+        <div class="hot-more-cont">
+            <span class="title">快讯</span>
+            <a href="" class="link">
+                <span>促销</span>
+                中秋佳节月饼大放送满100送50
+            </a>
+            <a href="" class="more">更多</a>
+        </div>
+    </div>
 
-    <!--导航数据加载-->
-    <script>
-        <!--加载无副标题导航-->
-        loadfirstnav(0);
-        <!--加载有副标题导航-->
-        loadsecondnav(0);
+    <!-- banner -->
+    <div id="banner2" class="focus">
+        <div class="hd">
+            <ul></ul>
+        </div>
+        <div class="bd">
+            <ul id="midbanner" style="height: 200px">
+                <!--<li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>-->
+            </ul>
+        </div>
+    </div>
 
-        <!--加载无副标题导航-->
-        function loadfirstnav(haCountry) {
-            $.ajax({
-                type:"post",
-                url:'/openHomeNavigation/queryNavigationLists',
-                dataType: "json",
-                data:{hnStyle:0,hnCountry:haCountry,hnClient:0,isShow:1,pageNo:1,pageSize:4},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null && rows.length>0){
-                        var html = '';
-                        $('#firstnav').html('');
-                        for(var i=0;i<rows.length;i++){
-                            html += '<li>'+
-                                '<a href="'+rows[i].hnUrl+'">'+
-                                '<img src="'+rows[i].imageUrl+'" alt="">'+
-                                '<p>'+rows[i].hnName+'</p>'+
-                                '</a>'+
-                                '</li>';
-                        }
-                        $('#firstnav').html(html);
-                    }
-                }
-            });
-        }
-        <!--加载有副标题导航-->
-        function loadsecondnav(haCountry) {
-            $.ajax({
-                type:"post",
-                url:'/openHomeNavigation/queryNavigationLists',
-                dataType: "json",
-                data:{hnStyle:1,hnCountry:haCountry,hnClient:0,isShow:1,pageNo:1,pageSize:4},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null && rows.length>0){
-                        var html = '';
-                        $('#secondnav').html('');
-                        for(var i=0;i<rows.length;i++){
-                            html += '<li>'+
-                                '<a href="'+rows[i].hnUrl+'"><img src="'+rows[i].imageUrl+'" alt=""></a>'+
-                                '</li>';
-                        }
-                        $('#secondnav').html(html);
-                    }
-                }
-            });
-        }
-    </script>
+    <!-- 秒杀 -->
+    <div class="index-title" onclick="gotosecspepage(1)">
+        <span>限时秒杀</span>
+        <a  class="more">全部<i class="icon-more"></i></a>
+    </div>
 
-    <!--时间减少-->
-    <script>
-        var timestape = 9999;
-        setInterval(function () {
-            var date = new Date(timestape);
+    <!-- 倒计时 -->
+    <div class="countdown">
+        <div class="cont">
+            <span class="word" id="wordspan">距结束还有</span>
+            <span class="time1" id="shi1">0</span>
+            <span class="time1" id="shi2">0</span>
+            <span class="colon">:</span>
+            <span class="time1" id="fen1">0</span>
+            <span class="time1" id="fen2">0</span>
+            <span class="colon">:</span>
+            <span class="time1" id="miao1">0</span>
+            <span class="time1" id="miao2">0</span>
+        </div>
+    </div>
+
+    <ul class="seckill box2" id="seckillul">
+        <!--<li>-->
+        <!--<a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>-->
+        <!--<div class="text-box">-->
+        <!--<a href="" class="title overflow">皱皮百香果</a>-->
+        <!--<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>-->
+        <!--<div class="price">-->
+        <!--<span>￥6.5/斤</span>-->
+        <!--<s>￥16.5/斤</s>-->
+        <!--</div>-->
+        <!--<div class="purchase">-->
+        <!--<a href="">马上抢购</a>-->
+        <!--<span>剩余20斤</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</li>-->
+
+    </ul>
+    <img id="noseckillpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
+
+    <!-- banner -->
+    <div id="banner3" class="focus">
+        <div class="hd">
+            <ul></ul>
+        </div>
+        <div class="bd">
+            <ul id="bottombanner" style="height: 200px;">
+                <!--<li><a href="#"><img _data-original="img/banner2.jpg"  data-original="img/banner2.jpg" /></a></li>-->
+            </ul>
+        </div>
+    </div>
+
+    <!-- 今日特价 -->
+    <div class="index-title" onclick="gotosecspepage(0)">
+        <span>今日特价</span>
+        <a  class="more">全部<i class="icon-more"></i></a>
+    </div>
+
+    <ul class="seckill box2" id="barginul">
+        <!--<li>-->
+        <!--<a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>-->
+        <!--<div class="text-box">-->
+        <!--<a href="" class="title overflow">皱皮百香果</a>-->
+        <!--<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>-->
+        <!--<div class="price">-->
+        <!--<span>￥6.5/斤</span>-->
+        <!--<s>￥16.5/斤</s>-->
+        <!--</div>-->
+        <!--<div class="purchase">-->
+        <!--<a href="">马上抢购</a>-->
+        <!--<span>剩余20斤</span>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</li>-->
+
+    </ul>
+    <img id="nospecialpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
+
+    <!-- 可能喜欢 -->
+    <div class="like">
+        <div class="cont">
+            <span>您可能喜欢</span>
+        </div>
+    </div>
+
+    <ul class="like-list box2" id="gussyoulikeul">
+        <li>
+            <!--<a href="" class="img"><img data-original="/img/list2.jpg" alt=""></a>-->
+            <!--<a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
+            <!--<p>￥189</p>-->
+        </li>
+
+    </ul>
+
+
+    <!-- 底部 -->
+    <div class="placeholder-footer"></div>
+    <div id="footer"></div>
+
+</div>
+
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+<script>
+//    var curFooter="#footer_home";
+</script>
+<!--广告数据加载-->
+<script>
+    <!--加载顶部城市banner-->
+    loadtopbanner(0);
+    <!--加载中部城市banner-->
+    loadmidbanner(0);
+    <!--加载底部城市banner-->
+    loadbottombanner(0);
+
+    <!--加载顶部城市banner-->
+    function loadtopbanner(haCountry) {
+        $.ajax({
+            type:"post",
+            url:'/openHomeAdvertising/queryAdvertisingLists',
+            dataType: "json",
+            data:{haRegion:0,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    $('#topbanner').html('');
+                    for(var i=0;i<rows.length;i++){
+                        html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'"  style="width: 100%;height: 250px"/></a></li>';
+                    }
+                    $('#topbanner').html(html);
+                }
+                topbanner();
+            }
+        });
+    }
+    <!--加载中部城市banner-->
+    function loadmidbanner(haCountry) {
+        $.ajax({
+            type:"post",
+            url:'/openHomeAdvertising/queryAdvertisingLists',
+            dataType: "json",
+            data:{haRegion:1,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    $('#midbanner').html('');
+                    for(var i=0;i<rows.length;i++){
+                        html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'" data-original="'+rows[i].imageUrl+'" style="width: 100%;height: 200px"/></a></li>';
+                    }
+                    $('#midbanner').html(html);
+                }
+                midbanner();
+            }
+        });
+    }
+    <!--加载底部城市banner-->
+    function loadbottombanner(haCountry) {
+        $.ajax({
+            type:"post",
+            url:'/openHomeAdvertising/queryAdvertisingLists',
+            dataType: "json",
+            data:{haRegion:2,haCountry:haCountry,haClient:0,isShow:1,pageNo:1,pageSize:100},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    $('#bottombanner').html('');
+                    for(var i=0;i<rows.length;i++){
+                        html += '<li><a href="'+rows[i].url+'"><img _src="'+rows[i].imageUrl+'" src="'+rows[i].imageUrl+'" data-original="'+rows[i].imageUrl+'" style="width: 100%;height: 200px"/></a></li>';
+                    }
+                    $('#bottombanner').html(html);
+                }
+                bottombanner();
+            }
+        });
+    }
+</script>
+
+<!--导航数据加载-->
+<script>
+    <!--加载无副标题导航-->
+    loadfirstnav(0);
+    <!--加载有副标题导航-->
+    loadsecondnav(0);
+
+    <!--加载无副标题导航-->
+    function loadfirstnav(haCountry) {
+        $.ajax({
+            type:"post",
+            url:'/openHomeNavigation/queryNavigationLists',
+            dataType: "json",
+            data:{hnStyle:0,hnCountry:haCountry,hnClient:0,isShow:1,pageNo:1,pageSize:4},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    $('#firstnav').html('');
+                    for(var i=0;i<rows.length;i++){
+                        html += '<li>'+
+                            '<a href="'+rows[i].hnUrl+'">'+
+                            '<img src="'+rows[i].imageUrl+'" alt="">'+
+                            '<p>'+rows[i].hnName+'</p>'+
+                            '</a>'+
+                            '</li>';
+                    }
+                    $('#firstnav').html(html);
+                }
+            }
+        });
+    }
+    <!--加载有副标题导航-->
+    function loadsecondnav(haCountry) {
+        $.ajax({
+            type:"post",
+            url:'/openHomeNavigation/queryNavigationLists',
+            dataType: "json",
+            data:{hnStyle:1,hnCountry:haCountry,hnClient:0,isShow:1,pageNo:1,pageSize:4},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null && rows.length>0){
+                    var html = '';
+                    $('#secondnav').html('');
+                    for(var i=0;i<rows.length;i++){
+                        html += '<li>'+
+                            '<a onclick="gotolabelpage(\''+rows[i].hnMianTitle+'\')"><img src="'+rows[i].imageUrl+'" alt=""></a>'+
+                            '</li>';
+                    }
+                    $('#secondnav').html(html);
+                }
+            }
+        });
+    }
+
+    function gotolabelpage(labelname) {
+        $.ajax({
+            type:"post",
+            url:'/goodsLabel/queryGoodsLabelLists',
+            dataType: "json",
+            data:{glName:labelname},
+            success:function(data){
+                var row = data.row;
+                if(row!=null){
+                    var glId = row.glId;
+                    window.location.href='/goodsLabel/'+glId+'.html';
+                }
+            }
+        });
+    }
+</script>
+
+<!--加载秒杀/特价-->
+<script>
+    <!--日期格式化-->
+    Date.prototype.pattern=function(fmt) {
+        var o = {
+            "M+" : this.getMonth()+1, //月份
+            "d+" : this.getDate(), //日
+            "h+" : this.getHours()%12 == 0 ? 12 : this.getHours()%12, //小时
+            "H+" : this.getHours(), //小时
+            "m+" : this.getMinutes(), //分
+            "s+" : this.getSeconds(), //秒
+            "q+" : Math.floor((this.getMonth()+3)/3), //季度
+            "S" : this.getMilliseconds() //毫秒
+        };
+        var week = {
+            "0" : "/u65e5",
+            "1" : "/u4e00",
+            "2" : "/u4e8c",
+            "3" : "/u4e09",
+            "4" : "/u56db",
+            "5" : "/u4e94",
+            "6" : "/u516d"
+        };
+        if(/(y+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+        }
+        if(/(E+)/.test(fmt)){
+            fmt=fmt.replace(RegExp.$1, ((RegExp.$1.length>1) ? (RegExp.$1.length>2 ? "/u661f/u671f" : "/u5468") : "")+week[this.getDay()+""]);
+        }
+        for(var k in o){
+            if(new RegExp("("+ k +")").test(fmt)){
+                fmt = fmt.replace(RegExp.$1, (RegExp.$1.length==1) ? (o[k]) : (("00"+ o[k]).substr((""+ o[k]).length)));
+            }
+        }
+        return fmt;
+    }
+
+    <!--获取纯文本内容-->
+    function removeHTMLTag(str) {
+        str = str.replace(/<\/?[^>]*>/g,''); //去除HTML tag
+        str = str.replace(/[ | ]*\n/g,'\n'); //去除行尾空白
+        //str = str.replace(/\n[\s| | ]*\r/g,'\n'); //去除多余空行
+        str=str.replace(/&nbsp;/ig,'');//去掉&nbsp;
+        str=str.replace(/\s/g,''); //将空格去掉
+        return str;
+    }
+
+    <!--加载秒杀-->
+    loadseckill();
+    <!--加载秒杀-->
+    function loadseckill() {
+        $('#seckillul').html('');
+        var date = new Date().pattern('yyyy-MM-dd hh:mm:ss');
+        $.ajax({
+            type:"post",
+            url:'/openSalePromotion/querySalePromotionLists',
+            dataType: "json",
+            data:{spType:1,spRegion:0,pageNo:1,pageSize:2},
+            success:function(data){
+                var html = '';
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    timestape = rows[0].timestap*1000;
+                    timegoing();
+                    for(var i=0;i<rows.length;i++){
+                        var minprice = rows[i].minprice;
+                        var maxprice = rows[i].maxprice;
+                        html = '<li>'+
+                            '<a href="/seckillp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                            '<div class="text-box">'+
+                            '<a href="/seckillp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                            '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                            '<div class="price">';
+                        if(minprice==maxprice){
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }else{
+                            html += '<span>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }
+                        html += '</div>'+
+                            '<div class="purchase">'+
+                            '<a href="/seckillp/'+rows[i].goodsId+'.html">马上抢购</a>'+
+                            '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '</li>';
+                        $('#seckillul').append(html);
+                    }
+                    $("img").lazyload({effect: "fadeIn"});
+                }else{
+                    //加载下一波秒杀
+                    loadNextseckill();
+                }
+            }
+        });
+    }
+
+    function loadNextseckill() {
+        $('#wordspan').html('距开始还有');
+        $.ajax({
+            type:"post",
+            url:'/openSalePromotion/queryNextSalePromotionLists',
+            dataType: "json",
+            data:{spType:1,spRegion:0,pageNo:1,pageSize:2},
+            success:function(data){
+                var html = '';
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    timestape = rows[0].timestap*1000;
+                    timegoing();
+                    for(var i=0;i<rows.length;i++){
+                        var minprice = rows[i].minprice;
+                        var maxprice = rows[i].maxprice;
+                        html = '<li>'+
+                            '<a  class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                            '<div class="text-box">'+
+                            '<a  class="title overflow">'+rows[i].goodsName+'</a>'+
+                            '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                            '<div class="price">';
+                        if(minprice==maxprice){
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }else{
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }
+                        html += '</div>'+
+                            '<div class="purchase">'+
+                            '<a style="background: #999">马上抢购</a>'+
+                            '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '</li>';
+                        $('#seckillul').append(html);
+                    }
+                    $("img").lazyload({effect: "fadeIn"});
+                }else{
+                    //展示图片
+                    $('#noseckillpimg').show();
+                }
+            }
+        });
+    }
+
+    <!--加载特价-->
+    loadbargain();
+    <!--加载特价-->
+    function loadbargain() {
+        $('#barginul').html('');
+        var date = new Date().pattern('yyyy-MM-dd hh:mm:ss');
+        $.ajax({
+            type:"post",
+            url:'/openSalePromotion/querySalePromotionLists',
+            dataType: "json",
+            data:{spType:0,spRegion:0,pageNo:1,pageSize:2},
+            success:function(data){
+                var html = '';
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        var minprice = rows[i].minprice;
+                        var maxprice = rows[i].maxprice;
+                        html = '<li>'+
+                            '<a href="/specialp/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                            '<div class="text-box">'+
+                            '<a href="/specialp/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                            '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                            '<div class="price">';
+                        if(minprice==maxprice){
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }else{
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+parseFloat(rows[i].maxprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }
+                        html += '</div>'+
+                            '<div class="purchase">'+
+                            '<a href="/specialp/'+rows[i].goodsId+'.html">马上抢购</a>'+
+                            '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '</li>';
+                        $('#barginul').append(html);
+                    }
+                    $("img").lazyload({effect: "fadeIn"});
+                }else{
+                    loadNextspecial();
+                }
+            }
+        });
+    }
+
+    function loadNextspecial() {
+        $.ajax({
+            type:"post",
+            url:'/openSalePromotion/queryNextSalePromotionLists',
+            dataType: "json",
+            data:{spType:0,spRegion:0,pageNo:1,pageSize:2},
+            success:function(data){
+                var html = '';
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        var minprice = rows[i].minprice;
+                        var maxprice = rows[i].maxprice;
+                        html = '<li>'+
+                            '<a  class="img"><img data-original="'+rows[i].imgurl+'" alt=""></a>'+
+                            '<div class="text-box">'+
+                            '<a  class="title overflow">'+rows[i].goodsName+'</a>'+
+                            '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                            '<div class="price">';
+                        if(minprice==maxprice){
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                        }else{
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'-'+ parseFloat(rows[i].maxprice/100).toFixed(2) +'/'+rows[i].gunitname+'</span>';
+                        }
+                        html += '</div>'+
+                            '<div class="purchase">'+
+                            '<a style="background: #999">马上抢购</a>'+
+                            '<span>剩余'+rows[i].spinventory+rows[i].gunitname+'</span>'+
+                            '</div>'+
+                            '</div>'+
+                            '</li>';
+                        $('#barginul').append(html);
+                    }
+                    $("img").lazyload({effect: "fadeIn"});
+                }else{
+                    //展示图片
+                    $('#nospecialpimg').show();
+                }
+            }
+        });
+    }
+
+    function gotosecspepage(num) {
+        window.location.href='/secspep/'+num+'.special';
+    }
+
+</script>
+
+<!--时间减少-->
+<script>
+    var timestape = 0;
+    function timegoing() {
+        var date = new Date(timestape);
+        var interval = setInterval(function () {
             var shi1 = Math.floor((date.getHours()-8)/10);
             var shi2 = Math.floor((date.getHours()-8)%10);
             var fen1 = Math.floor(date.getMinutes()/10);
@@ -397,66 +595,118 @@
             $('#miao1').html(miao1);
             $('#miao2').html(miao2);
 
+            date.setTime(date.getTime()-1000);
             timestape -= 1000;
             if(timestape<0){
-                $('#shi1').parent().parent().next().remove();
-                $('#shi1').parent().parent().remove();
+                clearInterval(interval);
+                window.location.reload();
             }
         },1000);
-    </script>
+    }
 
+</script>
 
+<script src="/js/TouchSlide.1.1.js"></script>
+<script src="/js/public.js"></script>
+<script type="text/javascript">
+    $(function () {
+        <!--图片懒加载-->
+        $("img").lazyload({effect: "fadeIn"});
+    });
 
-
-
-
-
-    <script src="/js/TouchSlide.1.1.js"></script>
-    <script src="/js/public.js"></script>
-    <script type="text/javascript">
-
-        $(function () {
-            <!--图片懒加载-->
-            $("img").lazyload({effect: "fadeIn"});
+    function topbanner() {
+        TouchSlide({
+            slideCell: "#banner",
+            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell: ".bd ul",
+            effect: "left",
+            autoPlay: true, //自动播放
+            autoPage: true, //自动分页
+            switchLoad: "_src" //切换加载，真实图片路径为"_src"
         });
+    }
 
-        function topbanner() {
-            TouchSlide({
-                slideCell: "#banner",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+    function midbanner() {
+        TouchSlide({
+            slideCell: "#banner2",
+            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell: ".bd ul",
+            effect: "left",
+            autoPlay: true, //自动播放
+            autoPage: true, //自动分页
+            switchLoad: "_src" //切换加载，真实图片路径为"_src"
+        });
+    }
+
+    function bottombanner() {
+        TouchSlide({
+            slideCell: "#banner3",
+            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell: ".bd ul",
+            effect: "left",
+            autoPlay: true, //自动播放
+            autoPage: true, //自动分页
+            switchLoad: "_src" //切换加载，真实图片路径为"_src"
+        });
+    }
+
+
+</script>
+<script src="/js/layer/layer.js"></script>
+<!--猜你喜欢-->
+<script>
+    var pageNo=1;
+    var pageSize=10;
+    var flag=true;
+    <!--滚动加载猜你喜欢-->
+    function scrollloadfootprint() {
+        $(document).ready(function(){
+            $('#gussyoulikeul').html('');
+            var range = 50;             //距下边界长度/单位px
+            var totalheight = 0;
+            var main = $("#gussyoulikeul");                     //主体元素
+            $(window).scroll(function(){
+                var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                if(($(document).height()-range) <= totalheight && flag) {
+                    flag = false;
+                    $.ajax({
+                        type:"post",
+                        url:'/userFootprint/queryUserFootprint',
+                        dataType: "json",
+                        async :false,
+                        data:{pageNo:pageNo,pageSize:pageSize},
+                        success:function(data){
+                            var html = '';
+                            var rows = data.rows;
+                            if(rows!=null&&rows.length>0){
+                                for(var i=0;i<rows.length;i++){
+                                    html = '<li>'+
+                                        '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                        '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                                        '<p>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'</p>'+
+                                        '</li>';
+                                    main.append(html);
+                                }
+                                $("img").lazyload({effect: "fadeIn"});
+                                pageNo++;
+                                flag = true;
+                            }
+                            if(data.status==3){
+                                layer.msg('请您登陆');
+                            }
+                        }
+                    });
+
+                }
             });
-        }
+        });
+    }
+    scrollloadfootprint();
 
-        function midbanner() {
-            TouchSlide({
-                slideCell: "#banner2",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
-            });
-        }
-
-        function bottombanner() {
-            TouchSlide({
-                slideCell: "#banner3",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
-            });
-        }
-
-    </script>
+</script>
 </body>
 
 </html>

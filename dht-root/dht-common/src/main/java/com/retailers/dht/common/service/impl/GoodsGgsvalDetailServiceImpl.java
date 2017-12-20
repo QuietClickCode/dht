@@ -132,7 +132,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
                 throw new AppException("数据有误");
             }
         }
-        return status>0?true:false;
+        return status==goodsDetailMap.size()?true:false;
     }
 
 }

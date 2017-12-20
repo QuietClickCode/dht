@@ -1,6 +1,7 @@
 package com.retailers.dht.web.controller;
 
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
@@ -9,10 +10,13 @@ import com.retailers.tools.utils.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author zhongp
@@ -51,6 +55,16 @@ public class SeckillSpecialProductController extends BaseController {
     @RequestMapping("/secspep/{id}.special")
     public String test(HttpServletRequest request, @PathVariable("id")String id){
         return redirectUrl(request,"sksppdt/special");
+    }
+    @RequestMapping("/getUserModal")
+    @ResponseBody
+    public Map<String,Object> getUserModal(HttpServletRequest request){
+        UserInfoVIew userInfoVIew = getCurLoginUser(request);
+        Map map = new HashMap();
+        if(ObjectUtils.isNotEmpty(userInfoVIew)){
+            map.put("userModal",userInfoVIew.getuUseModule());
+        }
+        return map;
     }
 
     public String getFinalReturnString(String id,String controllerMapping,String dir,String page,HttpServletRequest request){

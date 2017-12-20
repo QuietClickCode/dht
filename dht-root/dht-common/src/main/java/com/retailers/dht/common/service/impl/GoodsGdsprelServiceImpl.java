@@ -7,6 +7,7 @@ import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.service.GoodsGdsprelService;
 import com.retailers.dht.common.vo.GoodsGdsprelVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,7 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 		return null;
 	}
 
-	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap){
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdsprelMap) throws AppException{
 		int status = 0;
 		if(ObjectUtils.isNotEmpty(goodsGdsprelMap)){
 			List<Long> gdspIds = new ArrayList<Long>();
@@ -91,19 +92,17 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 					Long gdspId2 = entry.getKey();
 					if(gdspId1.equals(gdspId2)){
 						Long reduceInventory = entry.getValue();
-						Long spInventory = GoodsGdsprel.getSpInventory()+reduceInventory;
-						if(spInventory<0){
-							return false;
-						}
-						GoodsGdsprel.setSpInventory(spInventory);
+						GoodsGdsprel.setSpInventory(reduceInventory);
 						break;
 					}
 				}
 			}
-
 			status = goodsGdsprelMapper.editGoodsInventorys(list);
+			if(status!=goodsGdsprelMap.size()){
+				throw new AppException("参数错误");
+			}
 		}
-		return status>0?true:false;
+		return status==goodsGdsprelMap.size()?true:false;
 	}
 
 	public GoodsGdsprelVo queryGoodsGdsprelVoByGdspId(Long gdspId){

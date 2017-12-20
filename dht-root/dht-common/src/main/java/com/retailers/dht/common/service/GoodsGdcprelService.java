@@ -5,6 +5,7 @@ import com.retailers.dht.common.vo.GoodsDetailVo;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGdcprel;
+import com.retailers.tools.exception.AppException;
 
 import java.util.List;
 import java.util.Map;
@@ -68,7 +69,7 @@ public interface GoodsGdcprelService {
 
 	public GoodsGdcprelVo queryCheckOrderData(Long gdcpId,Long uid);
 
-	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap);
+	public boolean editGoodsInventorys(Map<Long,Long> goodsGdcprelMap) throws AppException;
 
 }
 

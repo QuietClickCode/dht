@@ -31,11 +31,11 @@
 
 
         <div class="special-tab" id="J_specialTab">
-            <a href="#xsms" class="active" onclick="loadsecspedata(1)" id="seckilla">
+            <a href="#xsms" class="active" onclick="loadusermodal(1)" id="seckilla">
                 <i class="icon-special1"></i>
                 <p>限时秒杀</p>
             </a>
-            <a href="#jrtj" onclick="loadsecspedata(0)" id="sepciala">
+            <a href="#jrtj" onclick="loadusermodal(0)" id="sepciala">
                 <i class="icon-special2"></i>
                 <p>今日特价</p>
             </a>
@@ -296,7 +296,7 @@
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
                 async:false,
-                data:{now:date,spType:spType,pageNo:pageNo,pageSize:10},
+                data:{now:date,spType:spType,spRegion:useModal,pageNo:pageNo,pageSize:10},
                 success:function(data){
                     var rows = data.rows;
                     if(rows!=null&&rows.length>0){
@@ -339,6 +339,26 @@
             });
         }
 
+        var useModal;
+        function loadusermodal(spType) {
+            $.ajax({
+                type:"post",
+                url:'/getUserModal',
+                dataType: "json",
+                async:false,
+                data:{},
+                success:function(data){
+                    var userModal = data.userModal;
+                    if(userModal!=null&&userModal!=''){
+                        useModal = userModal;
+                    }else{
+                        useModal = 1;
+                    }
+                    loadsecspedata(spType);
+                }
+            });
+        }
+
         <!--滚动加载商品-->
         function runloadgoods(spType) {
                 var range = 50;             //距下边界长度/单位px
@@ -366,7 +386,7 @@
                             url:'/openSalePromotion/querySalePromotionLists',
                             dataType: "json",
                             async :false,
-                            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spType:spType,pageNo:pageNo,pageSize:pageSize},
+                            data:{now:new Date().pattern('yyyy-MM-dd hh:mm:ss'),spRegion:useModal,spType:spType,pageNo:pageNo,pageSize:pageSize},
                             success:function(data){
                                 var rows = data.rows;
                                 if(rows!=null&&rows.length>0){
@@ -420,7 +440,7 @@
                 url:'/openSalePromotion/queryNextSalePromotionLists',
                 dataType: "json",
                 async:false,
-                data:{spType:spType,pageNo:pageNo,pageSize:10},
+                data:{spType:spType,spRegion:useModal,pageNo:pageNo,pageSize:10},
                 success:function(data){
                     var rows = data.rows;
                     if(rows!=null&&rows.length>0){
@@ -459,8 +479,12 @@
                     }else{
                         if(spType==0){
                             $('#nospecialpimg').show();
+                            $('div[name=nogoodscldiv]').hide();
+                            $('#nogoodsdiv').hide();
                         }else{
                             $('#noseckillpimg').show();
+                            $('#nogoodsdiv').hide();
+                            $('div[name=nogoodscldiv]').hide();
                         }
                     }
                 }
@@ -568,7 +592,7 @@
                 url:'/openCutPrice/queryCutPriceGoodsList',
                 dataType: "json",
                 async:false,
-                data:{pageNo:pageNo,pageSize:10},
+                data:{pageNo:pageNo,pageSize:10,spRegion:useModal},
                 success:function(data){
                     var rows = data.rows;
                     if(rows!=null&&rows.length>0){
@@ -620,7 +644,7 @@
                         url:'/openCutPrice/queryCutPriceGoodsList',
                         dataType: "json",
                         async:false,
-                        data:{pageNo:pageNo,pageSize:10},
+                        data:{pageNo:pageNo,pageSize:10,spRegion:useModal},
                         success:function(data){
                             var rows = data.rows;
                             if(rows!=null&&rows.length>0){

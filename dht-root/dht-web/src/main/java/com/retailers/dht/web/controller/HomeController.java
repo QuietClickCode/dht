@@ -1,6 +1,8 @@
 package com.retailers.dht.web.controller;
 
+import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,18 @@ public class HomeController extends BaseController {
         /*UserInfoVIew userInfo=new UserInfoVIew();
         userInfo.setUid(11l);
         setCurLoginUser(request,userInfo);*/
+        String url = "";
+        UserInfoVIew userInfoVIew = getCurLoginUser(request);
+        if(ObjectUtils.isNotEmpty(userInfoVIew)){
+            Integer userModal = userInfoVIew.getuUseModule();
+            if(userModal==0){
+                url = "n-index";
+            }else{
+                url = "index";
+            }
+        }else{
+            url = "index";
+        }
         return redirectUrl(request,"index");
     }
 
@@ -36,5 +50,15 @@ public class HomeController extends BaseController {
     @RequestMapping("/home/lostHtml")
     public String lostHtml(HttpServletRequest request){
         return redirectUrl(request,"404");
+    }
+
+    @RequestMapping("/home/ton-index")
+    public String tonIndex(HttpServletRequest request){
+        return redirectUrl(request,"n-index");
+    }
+
+    @RequestMapping("/home/toIndex")
+    public String toIndex(HttpServletRequest request){
+        return redirectUrl(request,"index");
     }
 }

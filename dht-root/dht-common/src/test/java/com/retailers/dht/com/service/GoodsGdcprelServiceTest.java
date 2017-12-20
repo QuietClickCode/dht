@@ -19,9 +19,13 @@ public class GoodsGdcprelServiceTest extends TestBaseJunit{
     @Test
     public void queryGoodsDetailByGdIds(){
         Map map = new HashMap();
-        map.put(231L,1L);
-        map.put(234L,1L);
-        boolean falg = goodsGdcprelService.editGoodsInventorys(map);
-        System.out.println(falg);
+        map.put(231L,-1L);
+        map.put(234L,-1L);
+        try {
+            boolean falg = goodsGdcprelService.editGoodsInventorys(map);
+            System.out.println(falg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

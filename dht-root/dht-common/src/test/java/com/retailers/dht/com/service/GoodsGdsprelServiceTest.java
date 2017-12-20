@@ -25,9 +25,14 @@ public class GoodsGdsprelServiceTest extends TestBaseJunit{
     @Test
     public void editGoodsInventorys(){
         Map map = new HashMap();
-        map.put(326L,-1000L);
-        boolean falg = goodsGdsprelService.editGoodsInventorys(map);
-        System.out.println(falg);
+        map.put(326L,-1L);map.put(323L,-1L);
+        try {
+            boolean falg = goodsGdsprelService.editGoodsInventorys(map);
+            System.out.println(falg);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Test
