@@ -232,6 +232,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new AppException("创建订单异常");
 			}
 			rtnMap.put("orderNo",orderNo);
+			rtnMap.put("totalPrice",totalPrice);
 		}finally {
         	logger.info("创建购物订单完毕，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
 			logger.info("创建购物订单完成，生成订单号:[{}],执行时间:[{}]",orderNo,(System.currentTimeMillis()-curDate.getTime()));
