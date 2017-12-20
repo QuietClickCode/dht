@@ -32,6 +32,10 @@ public class OrderDetail implements java.io.Serializable {
 	/**商品详情表（关联了价格和库存，与t_goods_ggsval_detail 关联，能找到对应的商品规格）*/
 	@NotEmpty
 	private Long odGdId;
+	/**
+	 * 会员购买是时否打折
+	 */
+	private Long odIsDiscount;
 	//购买推荐人
 	private Long odInviterUid;
 	/**是否退款(0 正常，1 申请退款，2 退款驳回，3退款成功）*/
@@ -106,5 +110,13 @@ public class OrderDetail implements java.io.Serializable {
 	}
 	public String getRemark() {
 		return this.remark;
+	}
+
+	public Long getOdIsDiscount() {
+		return odIsDiscount;
+	}
+
+	public void setOdIsDiscount(Long odIsDiscount) {
+		this.odIsDiscount = odIsDiscount;
 	}
 }
