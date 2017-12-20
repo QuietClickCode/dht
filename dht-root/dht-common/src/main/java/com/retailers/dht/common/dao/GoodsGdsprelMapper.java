@@ -60,4 +60,8 @@ public interface GoodsGdsprelMapper {
 	public List<GoodsGdsprelVo> queryGoodsGdsprelListsByGid(@Param("gid") Long gid,@Param("spId") Long spId);
 
 	public List<GoodsGdsprelVo> queryGoodsGdsprelVoLists(@Param("params") Map params);
+
+	public List<GoodsGdsprel> queryGoodsGdcprelListByGdspIds(@Param("list") List<Long> list);
+
+	public int editGoodsInventorys(@Param("list")List<GoodsGdsprel> list);
 }

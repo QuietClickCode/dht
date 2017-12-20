@@ -64,4 +64,8 @@ public interface GoodsGdcprelMapper {
 
 	public GoodsGdcprelVo queryCheckOrderData(@Param("gdcpId")Long gdcpId,@Param("uid") Long uid);
 
+	public List<GoodsGdcprel> queryGoodsGdcprelListByGdcpIds(@Param("gdcpIds")List<Long> gdcpIds);
+
+	public int editGoodsInventorys(@Param("list")List<GoodsGdcprel> list);
+
 }
