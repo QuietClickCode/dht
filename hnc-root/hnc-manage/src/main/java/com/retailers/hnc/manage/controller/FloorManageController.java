@@ -82,10 +82,12 @@ public class FloorManageController extends BaseController{
         return gtm;
     }
 
-    @RequestMapping("/addFloorRelationship")
-    @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addFloorRelationship",sort = 3,parentRes = "houseManage.houseManageMapping")
+    @RequestMapping("/addHouseTypeRelationship")
+    @Function(label = "添加户型",description = "添加户型",resourse = "floorManage.addHouseTypeRelationship",sort = 3,parentRes = "floorManage.floorManageMapping")
     @ResponseBody
-    public BaseResp addFloorRelationship(@RequestBody List<FloorRelationship> relationships){
+    public BaseResp addHouseTypeRelationship(@RequestBody List<FloorRelationship> relationships){
+        for (FloorRelationship relationship:relationships)
+            System.out.println(relationship.getFmId()+"  "+relationship.getFrId());
         boolean flag = manageService.addFloorRelationship(relationships);
         if(flag)
             return success("添加户型成功");
