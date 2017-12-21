@@ -1,18 +1,13 @@
 package com.retailers.dht.com.service;
 
-import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
-import com.retailers.dht.common.entity.Attachment;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsBrandService;
 import com.retailers.dht.common.vo.GoodsBrandVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
