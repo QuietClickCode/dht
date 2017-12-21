@@ -12,6 +12,14 @@
 	<link rel="stylesheet" href="/css/deal-success.css">
 </head>
 <style>
+	.checked{
+		background:#e93d3d;border:#e93d3d 1px solid;
+	}
+
+	.wrap{
+		display: none;
+	}
+
 	.div_pay_mode{
 		padding: .46rem .3rem;
 		margin: 0 .2rem;
@@ -105,7 +113,7 @@
 	input[type="checkbox"],input[type="radio"] {display:none;}  
 	input[type="radio"] + i {border-radius:16px;} 
 	input[type="checkbox"] + i {border-radius:16px;}  
-	input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}  
+	/*input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}  */
 	input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}  
 	input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
@@ -140,7 +148,7 @@
     		<p class="p1">金额&emsp;<span>${price}</span>元</p>
     	</div>
     	<div class="pay_mode_input_box active">
-    		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i>✓</i></label>
+    		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="checked">✓</i></label>
     		<img src="/img/icon-logo.png"/>
     		<span class="span1">余额支付</span>
     	</div>
@@ -159,12 +167,12 @@
 <script type="text/javascript" src="/js/common/common.js" ></script>
 
 <script>
-	$(function(){
+	/*$(function(){
 		$(".label_box").click(function(){
 			$(".label_box").parent().removeClass("active")
 			$(this).parent().addClass("active")			
 		})
-	});
+	});*/
 
 	var isSubmit=false;
     /**
@@ -321,5 +329,12 @@
     function getValue(){
         return boxInput.getBoxInputValue();
     }
+	
+    $(".pay_mode_input_box").click(function () {
+        $(this).addClass("active").find("i").addClass("checked");
+        $(this).siblings(".pay_mode_input_box").
+				removeClass("active").find("i").removeClass("checked");
+    });
+
 </script>
 </html>
