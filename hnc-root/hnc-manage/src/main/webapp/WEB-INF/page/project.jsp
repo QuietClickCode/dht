@@ -270,7 +270,24 @@
 
     <!--加载项目-->
     function loadProject() {
-
+        $.ajax({
+            url:"/project/queryProject",
+            type:"post",
+            data: {},
+            dataType: "json",
+            success:function (data) {
+                var project = data.project;
+                if(project!=null){
+                    var pid = project.pid;
+                    var pname = project.pname;
+                    var version = project.version;
+                    var paddress = project.paddress;
+                    var pdescription = project.pdescription;
+                    var pnum = project.pnum;
+                    var pnum = project.pnum;
+                }
+            }
+        });
     }
 
     <!--上传项目-->
@@ -278,6 +295,12 @@
 
     }
 </script>
+
+<!--调用函数-->
+<script>
+    loadProject();
+</script>
+
 <!--百度编辑器-->
 <script>
     var ue = UE.getEditor('editor');

@@ -15,6 +15,21 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_project_vo" type="com.retailers.hnc.common.vo.ProjectVo">
+		<result property="pid" column="p_id"/>
+		<result property="pname" column="p_name"/>
+		<result property="plogoid" column="p_logoid"/>
+		<result property="paddress" column="p_address"/>
+		<result property="plon" column="p_lon"/>
+		<result property="plat" column="p_lat"/>
+		<result property="parea" column="p_area"/>
+		<result property="pnum" column="p_num"/>
+		<result property="pdescription" column="p_description"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="logoImgUrl" column="logoImgUrl"/>
+		<collection property="imgsList" javaType="java.lang.String" column="p_id" ofType="Post" select="queryImgUrls"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="project_columns">
@@ -68,6 +83,27 @@
 		SELECT <include refid="project_columns" />
 		FROM t_project
 		<include refid="project_where"/>
+	</select>
+	<select id="queryProjectVo" >
+		SELECT
+		t1.*,t3.show_url imgsList,t4.show_url logoImgUrl
+		FROM
+		t_project t1
+		LEFT JOIN t_attachment t4 ON t1.p_logoid=t4.id
+		LEFT JOIN t_project_img t2 ON t1.p_id=t2.p_id and t2.is_delete=0
+		LEFT JOIN t_attachment t3 ON t2.a_id=t3.id
+		WHERE
+		t1.is_delete=0
+	</select>
+	<select id="queryImgUrls" resultType="java.lang.String">
+		SELECT
+		t2.show_url imgUrl
+		FROM
+		t_project_img t1
+		LEFT JOIN t_attachment t2 ON t1.a_id=t2.id
+		WHERE
+		t1.p_id=#{pid}
+		and t1.is_delete=0
 	</select>
 	<!--添加项目表 -->
 	<insert id="saveProject" parameterType="com.retailers.hnc.common.entity.Project" useGeneratedKeys="true" keyProperty="pid">

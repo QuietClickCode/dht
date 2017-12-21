@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.hnc.common.entity.Project;
 import com.retailers.hnc.common.dao.ProjectMapper;
 import com.retailers.hnc.common.service.ProjectService;
+import com.retailers.hnc.common.vo.ProjectVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -43,6 +44,10 @@ public class ProjectServiceImpl implements ProjectService {
 	public boolean deleteProjectByPid(Long pid) {
 		int status = projectMapper.deleteProjectByPid(pid);
 		return status == 1 ? true : false;
+	}
+	public List<ProjectVo> queryProjectVo(){
+		List<ProjectVo> list = projectMapper.queryProjectVo();
+		return list;
 	}
 }
 
