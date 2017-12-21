@@ -2,11 +2,11 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
-import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.constant.UserConstant;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
@@ -86,7 +86,7 @@ public class UserController extends BaseController{
         Long ufirstCommission_=null;
         Long urecommendCommission_=null;
         if(utype.intValue()!= UserConstant.USER_TYPE_PT){
-            long max=SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_RECOMMEND_COMMISSION_MAX,Long.class);
+            long max= SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_RECOMMEND_COMMISSION_MAX,Long.class);
             if(ObjectUtils.isEmpty(ufirstCommission)){
                 return errorForParam("用户类型为推广员时，首单提成不能为空");
             }else{

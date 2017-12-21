@@ -371,7 +371,6 @@ public class OrderServiceImpl implements OrderService {
 				remark=bgd.getRemark();
 			}
 			//取得商品价格
-
 			Map<String,Long> cutLog=cutPriceLogService.queryCutpriceByGdId(gdId,uid);
 			//判断购买数量是否大于限制数量
 			if(ObjectUtils.isEmpty(cutLog.get("cpInventory"))){
@@ -387,6 +386,7 @@ public class OrderServiceImpl implements OrderService {
 			od.setOdGdId(gdId);
 			od.setOdBuyNumber(num);
 			od.setRemark(remark);
+			od.setOdIsDiscount(cutLog.get("isMenberdiscount"));
 			od.setOdGoodsPrice(cutLog.get("gdPrice"));
 			od.setOdActualPrice(cutLog.get("gdPrice")-cutLog.get("finalPrice"));
 			ods.add(od);
@@ -704,7 +704,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new AppException("特价/秒杀商品只能单一购买");
 		}
 		BuyGoodsDetailVo bgd=buyInfos.getBuyGoods().get(0);
-		GoodsGdsprel goodsGdsprel=goodsGdsprelMapper.queryGoodsGdsprelByGdspId(bgd.getGdId());
+		GoodsGdsprelVo goodsGdsprel=goodsGdsprelMapper.queryGoodsGdsprelVoByGdspId(bgd.getGdId());
 		if(ObjectUtils.isEmpty(goodsGdsprel)){
 			throw new AppException("购买商品异常");
 		}
@@ -727,6 +727,7 @@ public class OrderServiceImpl implements OrderService {
 		od.setRemark(bgd.getRemark());
 		od.setOdGoodsPrice(totalPrice);
 		od.setOdActualPrice(totalPrice);
+		od.setOdIsDiscount(goodsGdsprel.getIsMenberdiscount());
 		od.setOdInviterUid(inviterUid);
 		ods.add(od);
 		Order order=createOrder(orderEnum,userAddress,totalPrice,0l,0l,totalPrice,logisticsPrice,ods,null);
@@ -878,6 +879,10 @@ public class OrderServiceImpl implements OrderService {
 				spid.add(Long.parseLong(gid));
 			}
 		}
+		//取得名个优惠卷优惠额度
+
+
+
 		//设置商品价格
 		for(OrderDetail od:ods){
 			long goodsCurPrice=od.getOdActualPrice();

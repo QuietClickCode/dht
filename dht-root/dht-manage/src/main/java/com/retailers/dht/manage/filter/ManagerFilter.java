@@ -52,9 +52,7 @@ public class ManagerFilter implements Filter {
                 return;
             } else {
                 // 如果用户已经登录，则用户可以在同一个IE浏览器通过url来访问资源，否则直接进入登录页面
-                if(!ObjectUtils.isEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))){
-                    chain.doFilter(request, response);
-                }else{
+                if(ObjectUtils.isEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))){
                     String context="";
                     //判断是否是ajax 请求
                     if(ObjectUtils.isNotEmpty(header)&&header.equals("XMLHttpRequest")){
@@ -74,7 +72,6 @@ public class ManagerFilter implements Filter {
                     return;
                 }
             }
-
             SysUser info = (SysUser) request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
             //判断访问的url是否需要权限
             if(CheckUserPermissionUtils.checkUrl(uri)){
