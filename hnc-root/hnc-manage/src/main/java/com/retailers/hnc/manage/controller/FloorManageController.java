@@ -3,8 +3,8 @@ package com.retailers.hnc.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.FloorManage;
+import com.retailers.hnc.common.entity.FloorRelationship;
 import com.retailers.hnc.common.service.FloorManageService;
-import com.retailers.hnc.common.service.FloorRelationshipService;
 import com.retailers.hnc.common.vo.FloorManageVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -12,10 +12,12 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -27,9 +29,6 @@ import java.util.Map;
 public class FloorManageController extends BaseController{
     @Autowired
     FloorManageService manageService;
-
-    @Autowired
-    FloorRelationshipService relationship;
 
     @RequestMapping("/floorManageMapping")
     @Menu(parentRes = "sys.manager.floor",resourse = "floorManage.floorManageMapping",description = "楼栋管理",label = "楼栋管理")
@@ -81,5 +80,16 @@ public class FloorManageController extends BaseController{
         gtm.put("total",advertisingPagination.getTotalCount());
         gtm.put("rows",advertisingPagination.getData());
         return gtm;
+    }
+
+    @RequestMapping("/addFloorRelationship")
+    @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addFloorRelationship",sort = 3,parentRes = "houseManage.houseManageMapping")
+    @ResponseBody
+    public BaseResp addFloorRelationship(@RequestBody List<FloorRelationship> relationships){
+        boolean flag = manageService.addFloorRelationship(relationships);
+        if(flag)
+            return success("添加户型成功");
+        else
+            return success("添加户型失败");
     }
 }

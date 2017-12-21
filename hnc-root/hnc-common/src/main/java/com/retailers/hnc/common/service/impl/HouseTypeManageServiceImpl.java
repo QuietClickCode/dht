@@ -1,22 +1,23 @@
 
 package com.retailers.hnc.common.service.impl;
 
-import com.retailers.hnc.common.dao.FloorManageMapper;
-import com.retailers.hnc.common.dao.FloorRelationshipMapper;
-import com.retailers.hnc.common.dao.HouseTypeManageMapper;
-import com.retailers.hnc.common.entity.FloorManage;
-import com.retailers.hnc.common.entity.FloorRelationship;
-import com.retailers.hnc.common.entity.HouseTypeManage;
-import com.retailers.hnc.common.service.HouseTypeManageService;
-import com.retailers.hnc.common.vo.HouseTypeManageVo;
-import com.retailers.mybatis.pagination.Pagination;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+		import com.retailers.hnc.common.dao.FloorManageMapper;
+		import com.retailers.hnc.common.dao.FloorRelationshipMapper;
+		import com.retailers.hnc.common.dao.HouseTypeManageMapper;
+		import com.retailers.hnc.common.entity.FloorManage;
+		import com.retailers.hnc.common.entity.FloorRelationship;
+		import com.retailers.hnc.common.entity.HouseTypeManage;
+		import com.retailers.hnc.common.service.FloorRelationshipService;
+		import com.retailers.hnc.common.service.HouseTypeManageService;
+		import com.retailers.hnc.common.vo.HouseTypeManageVo;
+		import com.retailers.mybatis.pagination.Pagination;
+		import org.springframework.beans.factory.annotation.Autowired;
+		import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+		import java.util.ArrayList;
+		import java.util.HashMap;
+		import java.util.List;
+		import java.util.Map;
 /**
  * 描述：户型表Service
  * @author wangjue
@@ -30,7 +31,7 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 	private HouseTypeManageMapper houseTypeManageMapper;
 
 	@Autowired
-	private FloorRelationshipMapper relationshipMapper;
+	private FloorRelationshipService relationshipService;
 
 	@Autowired
 	private FloorManageMapper manageMapper;
@@ -56,7 +57,7 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		page.setParams(params);
 		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHouseTypeManageList(page);
 		for (HouseTypeManageVo typeManageVo : list) {
-			typeManageVo.setFloorManages(relationshipMapper.queryHouseType(typeManageVo.getHtId()));
+			typeManageVo.setFloorManages(relationshipService.queryHouseType(typeManageVo.getHtId()));
 		}
 		page.setData(list);
 		return page;
@@ -69,27 +70,30 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 	}
 
 	public boolean addFloorRelationship(List<FloorRelationship> relationships){
+		boolean flag = false;
 		if(relationships != null){
 			Long htId = null;
 			FloorRelationship relationship = relationships.get(0);
 			htId = relationship.getHtId();
-			List<FloorManage> floorManages = relationshipMapper.queryHouseType(htId);
-			HashMap<Long,Long> floorRelationshipMap = new HashMap<Long, Long>();
-			for (FloorRelationship relations : relationships) {
-				floorRelationshipMap.put(relations.getHrId(),relations.getHtId());
+			HashMap<Long,FloorRelationship> map = new HashMap<Long, FloorRelationship>();
+			for (FloorRelationship floorRelationship : relationships) {
+				map.put(floorRelationship.getHrId(),floorRelationship);
 			}
-
+			List<FloorManage> floorManages = relationshipService.queryHouseType(htId);
 			for (FloorManage floorManage : floorManages) {
-				if(floorRelationshipMap.get(floorManage.getFmId()) == null){
-					relationshipMapper.deleteFloorRelationshipByFlId(floorManage.getFmId());
-				}else{
-					floorRelationshipMap.remove(floorManage.getFmId());
+				if(map.get(floorManage.getFmId()) == null){
+					flag = relationshipService.queryFloorRelationship(htId,floorManage.getFmId());
+				}else if(map.get(floorManage.getFmId()) != null){
+					map.remove(floorManage.getFmId());
 				}
 			}
 
-
+			for (Map.Entry<Long, FloorRelationship> entry : map.entrySet()) {
+				entry.getValue().setIsDelete(0);
+				flag = relationshipService.saveFloorRelationship(entry.getValue());
+			}
 		}
-		return false;
+		return flag;
 	}
 }
 

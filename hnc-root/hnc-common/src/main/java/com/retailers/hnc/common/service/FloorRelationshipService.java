@@ -78,6 +78,11 @@ public interface FloorRelationshipService {
 	 */
 	public List<FloorManage> queryHouseType(Long htId);
 
+
+	public boolean queryFloorRelationship(Long htId,Long hrId);
+
+
+	public boolean queryHouseTypeRelationship(Long fmId,Long frId);
 }
 
 

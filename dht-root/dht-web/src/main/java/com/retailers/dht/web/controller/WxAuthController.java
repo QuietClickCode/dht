@@ -1,13 +1,13 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
-import com.retailers.dht.common.constant.SysParameterConfigConstant;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.service.WxAuthUserService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;

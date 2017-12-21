@@ -1,10 +1,11 @@
 package com.retailers.dht.web.controller;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.service.AttachmentService;
+
 import com.retailers.dht.common.upload.FileUploader;
 import com.retailers.dht.common.upload.UploadFacatory;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

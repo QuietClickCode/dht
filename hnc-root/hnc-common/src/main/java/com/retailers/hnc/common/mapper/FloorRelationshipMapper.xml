@@ -127,4 +127,14 @@
 		select fm.* from t_floor_manage fm LEFT JOIN t_floor_relationship fr ON fr.ht_id = #{htId}
 				AND fr.is_delete = 0 WHERE fr.hr_id = fm.fm_id AND fm.is_delete = 0
 	</select>
+
+	<!--根据户型ID与楼栋ID查找相关联的楼栋-->
+	<select id="queryFloorRelationship" resultMap="rm_floorRelationship">
+		select * FROM t_floor_relationship WHERE ht_id = #{htId} AND hr_id = #{hrId} AND is_delete = 0
+	</select>
+
+	<!--根据楼栋ID与户型ID查找相关联的户型-->
+	<select id="queryHouseTypeRelationship" resultMap="rm_floorRelationship">
+		select * FROM t_floor_relationship WHERE fm_id = #{fmId} AND fr_id = #{frId} AND is_delete = 0
+	</select>
 </mapper>

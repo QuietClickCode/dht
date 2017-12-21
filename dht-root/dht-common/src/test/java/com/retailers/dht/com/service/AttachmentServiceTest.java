@@ -2,9 +2,9 @@ package com.retailers.dht.com.service;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
-import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.entity.Attachment;
-import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.entity.Attachment;
+import com.retailers.mybatis.common.service.AttachmentService;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 

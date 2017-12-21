@@ -3,6 +3,8 @@ import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.FloorRelationship;
 import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：楼栋关系表DAO
@@ -71,4 +73,9 @@ public interface FloorRelationshipMapper {
 	 * @date 2017-12-18 11:07:35
 	 */
 	public List<FloorManage> queryHouseType(Long htId);
+
+	public FloorRelationship queryFloorRelationship(@Param("htId") Long htId,@Param("hrId") Long hrId);
+
+	public FloorRelationship queryHouseTypeRelationship(@Param("fmId") Long fmId,@Param("frId") Long frId);
+
 }

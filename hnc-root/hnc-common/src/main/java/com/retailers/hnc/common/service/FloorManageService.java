@@ -2,9 +2,11 @@
 package com.retailers.hnc.common.service;
 
 import com.retailers.hnc.common.entity.FloorManage;
+import com.retailers.hnc.common.entity.FloorRelationship;
 import com.retailers.hnc.common.vo.FloorManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：楼栋管理Service
@@ -57,6 +59,9 @@ public interface FloorManageService {
 	 * @date 2017-12-15 14:23:58
 	 */
 	public boolean deleteFloorManageByFmId(Long fmId);
+
+
+	public boolean addFloorRelationship(List<FloorRelationship> relationships);
 }
 
 

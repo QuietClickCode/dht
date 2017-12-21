@@ -327,15 +327,14 @@
             valign : 'middle',
             class:'house_type',
             formatter:function (value,row,index) {
-                return '<button class="btn btn-primary" onclick="event.stopPropagation();addFloorManage(\''+row.htId+'\')">添加楼栋</button>';
-                /*let html = "";
+                let html = "";
                 if(row.floorManages.length == 0)
                     return '<button class="btn btn-primary" onclick="event.stopPropagation();addFloorManage(\''+row.htId+'\')">添加楼栋</button>';
                 else
                     for(let i = 0;i<row.floorManages.length;i++){
                         html += ''+row.floorManages[i].fmName+' '
                     }
-                return html;*/
+                return html;
             }
         },
         {
@@ -530,7 +529,10 @@
             contentType: "application/json",
             data:JSON.stringify(relationships),
             success:function () {
-
+                $("#saveFloorManage").modal("hide");
+                refreshTableData();
+                floorManagesMap.clear();
+                relationships.length = 0;
             }
         });
     });
@@ -608,6 +610,7 @@
                 //判断是否己经存在
                 if(floorManagesMap.has(row.fmId)){
                     floorManagesMap.delete(row.fmId);
+                    console.log(floorManagesMap.size);
                     $("#house_type_list #"+row.fmId).remove();
                 }
             },

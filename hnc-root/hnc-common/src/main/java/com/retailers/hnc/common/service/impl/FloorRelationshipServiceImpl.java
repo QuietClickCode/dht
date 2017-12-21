@@ -60,5 +60,19 @@ public class FloorRelationshipServiceImpl implements FloorRelationshipService {
 	public List<FloorManage> queryHouseType(Long htId) {
 		return floorRelationshipMapper.queryHouseType(htId);
 	}
+
+	public boolean queryFloorRelationship(Long htId,Long hrId){
+		FloorRelationship relationship = floorRelationshipMapper.queryFloorRelationship(htId,hrId);
+		relationship.setIsDelete(1);
+		int status = floorRelationshipMapper.updateFloorRelationship(relationship);
+		return status == 1 ? true : false;
+	}
+
+	public boolean queryHouseTypeRelationship(Long fmId, Long frId) {
+		FloorRelationship relationship = floorRelationshipMapper.queryHouseTypeRelationship(fmId,frId);
+		relationship.setIsDelete(1);
+		int status = floorRelationshipMapper.updateFloorRelationship(relationship);
+		return status == 1 ? true : false;
+	}
 }
 

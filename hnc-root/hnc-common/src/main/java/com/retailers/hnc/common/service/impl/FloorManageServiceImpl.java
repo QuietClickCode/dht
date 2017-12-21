@@ -1,17 +1,21 @@
 
 package com.retailers.hnc.common.service.impl;
-import java.util.List;
-import java.util.Map;
 
+import com.retailers.hnc.common.dao.FloorManageMapper;
 import com.retailers.hnc.common.dao.FloorRelationshipMapper;
 import com.retailers.hnc.common.entity.FloorManage;
-import com.retailers.hnc.common.dao.FloorManageMapper;
 import com.retailers.hnc.common.entity.FloorRelationship;
+import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.service.FloorManageService;
+import com.retailers.hnc.common.service.FloorRelationshipService;
 import com.retailers.hnc.common.vo.FloorManageVo;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：楼栋管理Service
  * @author wangjue
@@ -23,6 +27,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class FloorManageServiceImpl implements FloorManageService {
 	@Autowired
 	private FloorManageMapper floorManageMapper;
+
+	@Autowired
+	private FloorRelationshipService relationshipService;
 
 	@Autowired
 	private FloorRelationshipMapper relationshipMapper;
@@ -59,6 +66,33 @@ public class FloorManageServiceImpl implements FloorManageService {
 		manage.setIsDelete(1);
 		int status = floorManageMapper.updateFloorManage(manage);
 		return status == 1 ? true : false;
+	}
+
+	public boolean addFloorRelationship(List<FloorRelationship> relationships){
+		boolean flag = false;
+		if(relationships != null){
+			Long fmId = null;
+			FloorRelationship relationship = relationships.get(0);
+			fmId = relationship.getFmId();
+			HashMap<Long,FloorRelationship> map = new HashMap<Long, FloorRelationship>();
+			for (FloorRelationship floorRelationship : relationships) {
+				map.put(floorRelationship.getFrId(),floorRelationship);
+			}
+			List<HouseTypeManage> houseTypeManages = relationshipService.queryFloorType(fmId);
+			for (HouseTypeManage houseTypeManage : houseTypeManages) {
+				if(map.get(houseTypeManage.getHtId()) == null){
+					flag = relationshipService.queryFloorRelationship(fmId,houseTypeManage.getHtId());
+				}else if(map.get(houseTypeManage.getHtId()) != null){
+					map.remove(houseTypeManage.getHtId());
+				}
+			}
+
+			for (Map.Entry<Long, FloorRelationship> entry : map.entrySet()) {
+				entry.getValue().setIsDelete(0);
+				flag = relationshipService.saveFloorRelationship(entry.getValue());
+			}
+		}
+		return flag;
 	}
 }
 

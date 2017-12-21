@@ -643,7 +643,6 @@
     function addSaleGoods() {
         let bootstrapValidator = $("#addSalePromotionGoods").data('bootstrapValidator');
         bootstrapValidator.validate();
-
         if(!bootstrapValidator.isValid())
             return;
 
@@ -979,7 +978,6 @@
                 }
             }
         });
-
     }
 
     function checkspInventory(obj) {
