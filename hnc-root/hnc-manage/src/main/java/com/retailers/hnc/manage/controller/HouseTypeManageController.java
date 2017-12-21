@@ -48,17 +48,6 @@ public class HouseTypeManageController extends BaseController{
         return gtm;
     }
 
-    @RequestMapping("/addFloorRelationship")
-    @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addFloorRelationship",sort = 3,parentRes = "houseManage.houseManageMapping")
-    @ResponseBody
-    public BaseResp addFloorRelationship(@RequestBody List<FloorRelationship> relationships){
-        boolean flag = houseTypeManageService.addFloorRelationship(relationships);
-        if(flag)
-            return success("添加户型成功");
-        else
-            return success("添加户型失败");
-    }
-
     @RequestMapping("/addHouseType")
     @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addHouseType",sort = 3,parentRes = "houseManage.houseManageMapping")
     @ResponseBody
