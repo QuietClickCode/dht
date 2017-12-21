@@ -35,6 +35,7 @@ public class BuyCarServiceImpl implements BuyCarService {
 		params.put("uid",uid);
 		params.put("bcUrl",bcUrl);
 		params.put("isDelete",0L);
+		params.put("isBuy",0L);
 		List<BuyCar> list = queryBuyCarList(params,1,1).getData();
 		int status = 0;
 		if(ObjectUtils.isNotEmpty(list)){

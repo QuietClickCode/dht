@@ -12,7 +12,13 @@ public class GoodsGdsprelVo extends GoodsGdsprel {
     private Long sumcount;
     private String imgurl;
     private String gunitname;
+    /**
+     *会员是否打折 0不打折 1打折
+     */
     private Long isMenberdiscount;
+    /**
+     * 商品所属子类
+     */
     private Long gclass;
 
     public Long getGclass() {
