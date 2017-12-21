@@ -1,9 +1,14 @@
 package com.retailers.hnc.manage.controller;
 
+import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.hnc.common.entity.Project;
 import com.retailers.hnc.common.service.ProjectService;
 import com.retailers.hnc.manage.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.HttpClientUtil;
+import com.retailers.tools.utils.ObjectUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -15,6 +20,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2017/9/28.
@@ -31,18 +41,30 @@ public class ProjectController extends BaseController {
     public String openProject(){
         return "project";
     }
-//
-//    @RequestMapping("editProject")
-//    @Function(label = "编辑商品",parentRes = "Project.openProject",resourse = "Project.editProject",description = "编辑商品",sort = 2)
-//    @ResponseBody
-//    public BaseResp editProject(Project Project,HttpServletRequest request){
-//        boolean flag = ProjectService.updateProject(Project,getCurLoginUserId(request));
-//        if(flag){
-//            return success("修改商品["+Project.getGname()+"]成功");
-//        }else{
-//            return errorForSystem("修改商品["+Project.getGname()+"]失败");
-//        }
-//    }
+
+    @RequestMapping("saveProject")
+    @ResponseBody
+    public BaseResp editProject(Project Project, HttpServletRequest request){
+        boolean flag = projectService.saveProject(Project);
+        return success(flag);
+    }
+    @RequestMapping("updateProject")
+    @ResponseBody
+    public BaseResp updateProject(Project Project){
+        boolean flag = projectService.updateProject(Project);
+        return success(flag);
+    }
+    @RequestMapping("queryProject")
+    @ResponseBody
+    public Map<String,Object> queryProject(Project Project, HttpServletRequest request){
+        List<Project> list = projectService.queryProjectList(new HashMap(),1,1).getData();
+        Map map = new HashMap();
+        if(ObjectUtils.isNotEmpty(list)){
+            Project p = list.get(0);
+            map.put("project",p);
+        }
+        return map;
+    }
 //
 //    @RequestMapping("/removeProject")
 //    @Function(label="删除商品", description = "删除商品", resourse = "Project.removeProject",sort=3,parentRes="Project.openProject")
