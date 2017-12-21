@@ -74,17 +74,17 @@
 		margin: auto;
 		margin-top: 2rem;
 	}
-	
-	
-	
-	
+
+
+
+
 	.label_box {
 		font-size:12px;
 		cursor:pointer;
     	display: inline-block;
     	font-size: .3rem;
     	color: #808080;
-	}  
+	}
 	.label_box > .span1{
 		margin-right: .2rem;
 		color: #333;
@@ -101,16 +101,16 @@
 		vertical-align:middle;
 		margin:-2px 2px 1px 0px;
 		border:#999 1px solid;
-	}  
-	input[type="checkbox"],input[type="radio"] {display:none;}  
-	input[type="radio"] + i {border-radius:16px;} 
-	input[type="checkbox"] + i {border-radius:16px;}  
-	input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}  
-	input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}  
+	}
+	input[type="checkbox"],input[type="radio"] {display:none;}
+	input[type="radio"] + i {border-radius:16px;}
+	input[type="checkbox"] + i {border-radius:16px;}
+	input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}
+	input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 	input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
 <body class="bge6">
-	<div class="wrap">
+	<div class="wrap" style="display: none;" id="walletPayDiv">
 		<div class="wrap_title">设置6位数字支付密码</div>
 		<div class="inputBoxContainer" id="inputBoxContainer">
 			<input type="text" class="realInput"/>
@@ -140,7 +140,7 @@
     		<p class="p1">金额&emsp;<span>${price}</span>元</p>
     	</div>
     	<div class="pay_mode_input_box active">
-    		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i>✓</i></label>
+    		<label class="label_box"><input type="radio" id="radio_input1" name="abc"><i>✓</i></label>
     		<img src="/img/icon-logo.png"/>
     		<span class="span1">余额支付</span>
     	</div>
@@ -148,9 +148,7 @@
     		<label class="label_box"><input type="radio" id="radio_input2" name="abc"><i>✓</i></label>
     		<img src="/img/wx-logo.png"/>
     		<span class="span1">微信支付</span>
-    		<a href="">立即充值</a>
     	</div>
-        
     </div>
     <button type="button" class="pay_mode_btn" onclick="confirmPay()">确认支付</button>
 </body>
@@ -160,9 +158,15 @@
 
 <script>
 	$(function(){
-		$(".label_box").click(function(){
-			$(".label_box").parent().removeClass("active")
-			$(this).parent().addClass("active")			
+		$("#walletPayDiv").hide();
+		$(".pay_mode_input_box").click(function(){
+			console.log($(".pay_mode_input_box").length)
+			$(".pay_mode_input_box").removeClass("active")
+			$(".pay_mode_input_box input[type='radio']").attr("checked",false);
+			console.log($(".pay_mode_input_box input[type='radio']"))
+			$(this).addClass("active");
+			$(this).find("input[type='radio']").attr("checked",true);
+			console.log($(this).find("input[type='radio']"))
 		})
 	});
 
@@ -172,6 +176,10 @@
      */
 	function confirmPay(){
 		if(!isSubmit){
+			//判断选择支付的方式
+
+
+
             isSubmit=true;
             //钱包支付
             var payType=0;

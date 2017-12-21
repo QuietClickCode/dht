@@ -46,7 +46,7 @@
             </a>
             <p class="user-name">${user.uname}</p>
             <div class="vip">
-                <span>普通会员</span>
+                <span>${user.rechageNm}</span>
             </div>
             <i class="news">
                 <span></span>

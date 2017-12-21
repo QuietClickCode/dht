@@ -33,7 +33,7 @@ public class OrderDetail implements java.io.Serializable {
 	@NotEmpty
 	private Long odGdId;
 	/**
-	 * 会员购买是时否打折
+	 * 会员购买是时否打折   0代表会员不折扣 1代表会员折扣
 	 */
 	private Long odIsDiscount;
 	//购买推荐人
