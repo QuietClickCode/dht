@@ -134,6 +134,16 @@ public interface OrderService {
 	 */
 	public boolean orderPayCallback(OrderProcessingQueue opq)throws AppException;
 
+	/**
+	 * 钱包支付
+	 * @param uid 用户id
+	 * @param orderNo 订单号
+	 * @param payPwd 支付密码
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean walletPay(Long uid,String orderNo,String payPwd)throws AppException;
+
 }
 
 

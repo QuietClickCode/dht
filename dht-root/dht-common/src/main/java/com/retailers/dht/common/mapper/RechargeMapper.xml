@@ -49,6 +49,11 @@
 		SELECT <include refid="recharge_columns" />
 		FROM t_recharge WHERE r_id = #{rid}
 	</select>
+	<!-- 根据充值管理主键取得数据 -->
+	<select id="queryUserBuyRecharge" resultMap="rm_recharge" parameterType="java.lang.Long">
+		SELECT <include refid="recharge_columns" />
+		FROM t_recharge_history WHERE r_id = #{rid}
+	</select>
 	<!-- 充值管理查询条件组合 -->
 	<sql id="recharge_where">
 		<where>

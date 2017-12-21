@@ -63,5 +63,14 @@ public class OrderConstant {
      * 订单支付方式 2 钱包
      */
     public static final int ORDER_PAY_WAY_WALLET=2;
+    /**
+     * 会员购买时 是否享受会员折扣 0 不享受
+     */
+    public static final int BUY_GOODS_MENBER_DISCOUNT_NO=0;
+    /**
+     * 会员购买时 是否享受会员折扣 1享受
+     */
+    public static final int BUY_GOODS_MENBER_DISCOUNT_YES=1;
+
 
 }

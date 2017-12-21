@@ -168,6 +168,10 @@ public class PayServiceImpl implements PayService {
         procedureToolsService.singleLockManager(key);
         String rtnUrl="";
         Date curDate=new Date();
+        Order order=orderService.queryOrderByOrderNo(orderNo);
+        if(ObjectUtils.isEmpty(order)||order.getOrderStatus().intValue()!=0){
+            throw new AppException("未知订单");
+        }
         try{
             logger.info("微信H5页面支付(移动端非微信扫码支付):{}", orderNo);
             String apiKey="CF26762CF05A42899F1681872CE3BC89";
@@ -180,9 +184,8 @@ public class PayServiceImpl implements PayService {
             params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
             params.put("body", "微信支付");//商品简单描述，该字段请按照规范传递，具体请见参数规定
             params.put("out_trade_no",orderNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
-            params.put("total_fee", 1+"");//订单总金额，单位为分，详见支付金额
+            params.put("total_fee", order.getOrderTradePrice()+"");//订单总金额，单位为分，详见支付金额
             params.put("spbill_create_ip", ip);//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
-            params.put("spbill_create_ip", "113.250.220.86");//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
             params.put("notify_url", callbackUrl);//异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
             params.put("trade_type", "MWEB");// 取值如下：JSAPI--公众号支付，NATIVE--原生扫码支付，APP--app支付等，说明详见参数规定
             params.put("attach", SystemConstant.WX_PAY_WAY_H5+"");//附加数据，在查询API和支付通知中原样返回，可作为自定义参数使用  1 公众号支付 2 扫码支付 3 h5支付

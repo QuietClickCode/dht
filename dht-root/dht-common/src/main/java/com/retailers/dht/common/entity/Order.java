@@ -60,6 +60,11 @@ public class Order implements java.io.Serializable {
 	/**商品实际支付金额*/
 	@NotEmpty
 	private Long orderGoodsActualPayPrice;
+	/**
+	 * 会员价（钱包支付时用户所支付价格)
+	 */
+	private Long orderMenberPrice;
+
 	/**商品优惠金额（某些商品有商品优惠）*/
 	@NotEmpty
 	private Long orderGoodsCouponPrice;
@@ -242,6 +247,12 @@ public class Order implements java.io.Serializable {
 
 	public Long getOrderGoodsTotalPrice() {
 		return this.orderGoodsTotalPrice;
+	}
+	public Long getOrderMenberPrice() {
+		return orderMenberPrice;
+	}
+	public void setOrderMenberPrice(Long orderMenberPrice) {
+		this.orderMenberPrice = orderMenberPrice;
 	}
 	public void setOrderGoodsActualPayPrice(Long value) {
 		this.orderGoodsActualPayPrice = value;

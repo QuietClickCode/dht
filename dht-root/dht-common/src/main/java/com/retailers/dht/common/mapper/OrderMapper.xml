@@ -18,6 +18,7 @@
 			<result property="orderTradePrice" column="order_trade_price"/>
 			<result property="orderGoodsTotalPrice" column="order_goods_total_price"/>
 			<result property="orderGoodsActualPayPrice" column="order_goods_actual_pay_price"/>
+			<result property="orderMenberPrice" column="order_menber_price"/>
 			<result property="orderGoodsCouponPrice" column="order_goods_coupon_price"/>
 			<result property="orderCouponPrice" column="order_coupon_price"/>
 			<result property="orderLogisticsPrice" column="order_logistics_price"/>
@@ -45,7 +46,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="order_columns">
-		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
+		id,parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_menber_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 	</sql>
 	<!-- 根据订单主键取得数据 -->
 	<select id="queryOrderById" resultMap="rm_order" parameterType="java.lang.Long">
@@ -200,10 +201,12 @@
 	<!--添加订单 -->
 	<insert id="saveOrder" parameterType="com.retailers.dht.common.entity.Order" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_order (
-			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
+			parsent_id,order_type,order_no,order_status,order_pay_way,order_pay_use_way,order_pay_callback_no,order_pay_callback_remark,order_pay_callback_date,order_buy_uid,order_sell_uid,order_trade_price,order_goods_total_price,order_goods_actual_pay_price,order_menber_price,order_goods_coupon_price,order_coupon_price,order_logistics_price,order_create_date,order_pay_date,order_remark,order_illustrate,order_share_uid,order_integral_or_cash,order_ua_id,order_ua_name,order_ua_phone,order_ua_address,order_discount,order_logistics_code,order_send_date,order_send_remark,order_confirm_date,order_send_address_id,order_buy_del,order_sell_del,is_real,version
 		) VALUES
 		(
-			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},#{orderGoodsTotalPrice,jdbcType=BIGINT},#{orderGoodsActualPayPrice,jdbcType=BIGINT},#{orderGoodsCouponPrice,jdbcType=BIGINT},#{orderCouponPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{orderBuyDel,jdbcType=INTEGER},#{orderSellDel,jdbcType=INTEGER},#{isReal,jdbcType=INTEGER},0
+			#{parsentId,jdbcType=BIGINT},#{orderType,jdbcType=VARCHAR},#{orderNo,jdbcType=VARCHAR},#{orderStatus,jdbcType=INTEGER},#{orderPayWay,jdbcType=INTEGER},#{orderPayUseWay,jdbcType=INTEGER},#{orderPayCallbackNo,jdbcType=VARCHAR},#{orderPayCallbackRemark,jdbcType=VARCHAR},
+			#{orderPayCallbackDate,jdbcType=TIMESTAMP},#{orderBuyUid,jdbcType=BIGINT},#{orderSellUid,jdbcType=BIGINT},#{orderTradePrice,jdbcType=BIGINT},
+			#{orderGoodsTotalPrice,jdbcType=BIGINT},#{orderGoodsActualPayPrice,jdbcType=BIGINT},#{orderMenberPrice,jdbcType=BIGINT},#{orderGoodsCouponPrice,jdbcType=BIGINT},#{orderCouponPrice,jdbcType=BIGINT},#{orderLogisticsPrice,jdbcType=BIGINT},#{orderCreateDate,jdbcType=TIMESTAMP},#{orderPayDate,jdbcType=TIMESTAMP},#{orderRemark,jdbcType=VARCHAR},#{orderIllustrate,jdbcType=VARCHAR},#{orderShareUid,jdbcType=BIGINT},#{orderIntegralOrCash,jdbcType=INTEGER},#{orderUaId,jdbcType=BIGINT},#{orderUaName,jdbcType=VARCHAR},#{orderUaPhone,jdbcType=VARCHAR},#{orderUaAddress,jdbcType=VARCHAR},#{orderDiscount,jdbcType=BIGINT},#{orderLogisticsCode,jdbcType=VARCHAR},#{orderSendDate,jdbcType=TIMESTAMP},#{orderSendRemark,jdbcType=VARCHAR},#{orderConfirmDate,jdbcType=TIMESTAMP},#{orderSendAddressId,jdbcType=BIGINT},#{orderBuyDel,jdbcType=INTEGER},#{orderSellDel,jdbcType=INTEGER},#{isReal,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改订单 -->
