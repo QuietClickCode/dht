@@ -735,7 +735,7 @@
         }
         else{
             fromId = "updateSalePromotionGoodsFrom";
-            var gdResidueinventory = $('#gdspTabel input[name=gdResidueinventory]');
+//            var gdResidueinventory = $('#gdspTabel input[name=gdResidueinventory]');
 //            for(var i=0;i<gdResidueinventory.length;i++){
 //                var preval = $(gdResidueinventory[i]).prev().val();
 //                if(parseInt(preval) >parseInt(gdResidueinventory[i].value)){
@@ -743,6 +743,17 @@
 //                    return;
 //                }
 //            }
+            var spBounds = $('#gdspTabel input[name=spBounds]');
+            for(var i=0;i<spBounds.length;i++){
+                var preval = $(spBounds[i]).parent().prev().find('input[type=text]').val();
+                if(parseInt(preval) <parseInt(spBounds[i].value)){
+                    alert(parseInt(preval));
+                    alert(parseInt(spBounds[i].value));
+//                    console.log(spBounds[i]);
+                    layer.msg('限购量应小于特价数量');
+                    return;
+                }
+            }
             var inputs = $('#gdspTabel').find('input[type=text]');
             if(!validateinputs(inputs)){
                 return;
@@ -1094,7 +1105,7 @@
                 if(value!=null){
                     val = value;
                 }
-                html = '<input type="text" class="form-controller" value="'+val+'">';
+                html = '<input type="text" name="spBounds" class="form-controller" value="'+val+'">';
                 return html;
             }
         }
