@@ -158,7 +158,13 @@
 
 <script>
 	$(function(){
-		$("#walletPayDiv").hide();
+//		$("#walletPayDiv").hide();
+//        $(".label_box").click(function(){
+//            $(".label_box").parent().removeClass("active")
+//            $(this).parent().addClass("active")
+//        })
+
+
 		$(".pay_mode_input_box").click(function(){
 			console.log($(".pay_mode_input_box").length)
 			$(".pay_mode_input_box").removeClass("active")
@@ -166,6 +172,7 @@
 			console.log($(".pay_mode_input_box input[type='radio']"))
 			$(this).addClass("active");
 			$(this).find("input[type='radio']").attr("checked",true);
+            $(this).addClass("active");
 			console.log($(this).find("input[type='radio']"))
 		})
 	});
