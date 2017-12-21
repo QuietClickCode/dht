@@ -52,12 +52,12 @@ public class HomeController extends BaseController {
         return redirectUrl(request,"404");
     }
 
-    @RequestMapping("/home/ton-index")
+    @RequestMapping("/ton-index")
     public String tonIndex(HttpServletRequest request){
         return redirectUrl(request,"n-index");
     }
 
-    @RequestMapping("/home/toIndex")
+    @RequestMapping("/toIndex")
     public String toIndex(HttpServletRequest request){
         return redirectUrl(request,"index");
     }
