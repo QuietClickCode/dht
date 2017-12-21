@@ -838,7 +838,7 @@ public class OrderServiceImpl implements OrderService {
 			throw new AppException(error.toString());
 		}
 		if(useCoupon.size()!=djgs+1){
-			throw new AppException("优惠卷选择错误 ，使用了不同叠加使用的优惠卷");
+			throw new AppException("优惠卷选择错误 ，使用了不能叠加使用的优惠卷");
 		}
 
 		//根据使用的优惠卷重新计算商品价格
@@ -854,6 +854,13 @@ public class OrderServiceImpl implements OrderService {
 		}
     }
 
+	/**
+	 * 商品使用优惠卷 价格计算
+	 * @param ods 购买商品详情
+	 * @param cwv 优惠卷详情
+	 * @param isXz 是否限制使用
+	 * @param gidUnGt 商品id关联商品类型
+	 */
     private void goodsCoupon(List<OrderDetail> ods,CouponWebVo cwv,boolean isXz,Map<Long,Long> gidUnGt){
 		//商品种类
 		List<Long> spzl=new ArrayList<Long>();
@@ -864,11 +871,13 @@ public class OrderServiceImpl implements OrderService {
 				spzl.add(Long.parseLong(ggid));
 			}
 		}
+		//取得商品允许使用的优惠卷
 		if(ObjectUtils.isNotEmpty(cwv.getgIds())){
 			for(String gid:cwv.getgIds().split(",")){
 				spid.add(Long.parseLong(gid));
 			}
 		}
+		//设置商品价格
 		for(OrderDetail od:ods){
 			long goodsCurPrice=od.getOdActualPrice();
 			//根据商品id取得商品类型id

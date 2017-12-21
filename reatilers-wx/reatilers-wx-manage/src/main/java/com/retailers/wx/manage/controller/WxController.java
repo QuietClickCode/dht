@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.annotation.Resourse;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.service.WxManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,7 @@ public class WxController {
         String realpath = request.getSession().getServletContext().getRealPath("/");
         System.out.println(realpath);
         ModelAndView mav = new ModelAndView();
-        WxManager wxManager= wxManagerService.queryCurUsedWx();
-        System.out.println(JSON.toJSON(wxManager));
+        WxManager wxManager= wxManagerService.queryCurUsedWx(WXAccountEnum.WX_GZH);
         mav.setViewName("wx/wxpage"); //返回的文件名
         mav.addObject("curWx",wxManager);
         return mav;

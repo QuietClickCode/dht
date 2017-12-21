@@ -63,7 +63,6 @@ public class MainController extends BaseController {
 	}
 
 	@RequestMapping("/MP_verify_{m}.txt")
-//	@ResponseBody
 	public void verify(@PathVariable("m") String m, HttpServletRequest request, HttpServletResponse response)throws IOException {
 		response.setContentType("text/plain;charset=UTF-8");
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -71,29 +70,6 @@ public class MainController extends BaseController {
 		if (null != response.getOutputStream()) {
 			response.getOutputStream().close();
 		}
-//		String contentPath = request.getRealPath("/");
-//		String tempFilePath = contentPath + File.separator + "mp" + File.separator;
-//		File mpDir = new File(tempFilePath);
-//		if(!mpDir.exists()){
-//			mpDir.mkdir();
-//		}
-//		String fileName = "MP_verify_"+m+".txt";
-//		m = m.replace("-", "/");
-//		File f = new File(tempFilePath+fileName);
-//		FileOutputStream out = null;
-//		try {
-//			out = new FileOutputStream(f);
-//			out.write(m.getBytes());
-//			this.download(response, f);
-//		} catch (FileNotFoundException e) {
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}finally{
-//			if(out!=null){
-//				out.close();
-//			}
-//		}
 	}
 
 	private void download(HttpServletResponse response,File f){

@@ -27,7 +27,7 @@ public class WxManager implements java.io.Serializable {
 	private String wxOriginalId;
 	/**公众号类型*/
 	@NotEmpty
-	private Integer wxType;
+	private String wxType;
 	/**公众号id（与app_secret 使用取得公众号token)*/
 	@NotEmpty
 	@Length(min = 1, max = 64)
@@ -93,13 +93,15 @@ public class WxManager implements java.io.Serializable {
 	public String getWxOriginalId() {
 		return this.wxOriginalId;
 	}
-	public void setWxType(Integer value) {
-		this.wxType = value;
+
+	public String getWxType() {
+		return wxType;
 	}
 
-	public Integer getWxType() {
-		return this.wxType;
+	public void setWxType(String wxType) {
+		this.wxType = wxType;
 	}
+
 	public void setAppId(String value) {
 		this.appId = value;
 	}

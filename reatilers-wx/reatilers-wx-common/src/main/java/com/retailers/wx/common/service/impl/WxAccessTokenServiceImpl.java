@@ -14,6 +14,7 @@ import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.dao.WxAccessTokenMapper;
 import com.retailers.wx.common.dao.WxManagerMapper;
+import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxAccessToken;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.service.WxAccessTokenService;
@@ -74,7 +75,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 		logger.info("开始取得微信当前token");
 		Date curDate= new Date();
 		//取得当前使用微信
-		WxManager wxManager= wxManagerMapper.queryCurUsedWx();
+		WxManager wxManager= wxManagerMapper.queryCurUsedWx(WXAccountEnum.WX_GZH.getType());
 		if(ObjectUtils.isNotEmpty(wxManager)){
 			WxConfig.APP_ID=wxManager.getAppId();
 			WxConfig.APP_SECRET=wxManager.getAppSecret();

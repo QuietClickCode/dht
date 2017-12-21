@@ -2,6 +2,7 @@
 package com.retailers.wx.common.service;
 
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
 
 import java.util.Map;
@@ -62,7 +63,7 @@ public interface WxManagerService {
      * 取得当前使用的微信公众号
 	 * @return
      */
-	public WxManager queryCurUsedWx();
+	public WxManager queryCurUsedWx(WXAccountEnum wxAccountEnum);
 
 }
 

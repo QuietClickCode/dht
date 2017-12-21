@@ -40,7 +40,7 @@
 			<if test="null != params.wxOriginalId and '' != params.wxOriginalId">
 				AND wx_original_id = #{params.wxOriginalId}
 			</if>
-			<if test="null != params.wxType">
+			<if test="null != params.wxType and ''!= params.wxType">
 				AND wx_type = #{params.wxType}
 			</if>
 			<if test="null != params.appId and '' != params.appId">
@@ -90,7 +90,7 @@
 			wx_name,wx_original_id,wx_type,app_id,app_secret,wx_domain_name,wx_domain_url,wx_token,create_uid,create_time,is_delete,is_valid,version
 		) VALUES
 		(
-			#{wxName,jdbcType=VARCHAR},#{wxOriginalId,jdbcType=VARCHAR},#{wxType,jdbcType=INTEGER},#{appId,jdbcType=VARCHAR},#{appSecret,jdbcType=VARCHAR},#{wxDomainName,jdbcType=VARCHAR},#{wxDomainUrl,jdbcType=VARCHAR},#{wxToken,jdbcType=VARCHAR},#{createUid,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
+			#{wxName,jdbcType=VARCHAR},#{wxOriginalId,jdbcType=VARCHAR},#{wxType,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR},#{appSecret,jdbcType=VARCHAR},#{wxDomainName,jdbcType=VARCHAR},#{wxDomainUrl,jdbcType=VARCHAR},#{wxToken,jdbcType=VARCHAR},#{createUid,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改公众号管理 -->
@@ -103,7 +103,7 @@
             <if test="null != wxOriginalId and '' != wxOriginalId">
                 wx_original_id = #{wxOriginalId},
             </if>
-            <if test="null != wxType">
+            <if test="null != wxType and ''!=wxType">
                 wx_type = #{wxType},
             </if>
             <if test="null != appId and '' != appId">

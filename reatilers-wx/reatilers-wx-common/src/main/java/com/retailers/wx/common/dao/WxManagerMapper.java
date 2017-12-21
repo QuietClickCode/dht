@@ -59,5 +59,5 @@ public interface WxManagerMapper {
      * 取得当前使用的微信公众号
 	 * @return
      */
-	public WxManager queryCurUsedWx();
+	public WxManager queryCurUsedWx(String wxType);
 }

@@ -3,6 +3,7 @@ package com.retailers.wx.common.service.impl;
 
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.wx.common.dao.WxManagerMapper;
+import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.service.WxManagerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,8 +53,8 @@ public class WxManagerServiceImpl implements WxManagerService {
      * 取得当前使用的微信公众号
 	 * @return
      */
-	public WxManager queryCurUsedWx() {
-		return wxManagerMapper.queryCurUsedWx();
+	public WxManager queryCurUsedWx(WXAccountEnum wxAccountEnum) {
+		return wxManagerMapper.queryCurUsedWx(wxAccountEnum.getType());
 	}
 }
 
