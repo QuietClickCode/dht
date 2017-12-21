@@ -3,12 +3,12 @@ package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.SecspepAdvertising;
 import com.retailers.dht.common.dao.SecspepAdvertisingMapper;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.SecspepAdvertisingService;
 import com.retailers.dht.common.vo.SecspepAdvertisingVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;

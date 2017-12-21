@@ -1,32 +1,33 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.constant.CouponUseRangeConstant;
 import com.retailers.dht.common.constant.ExecuteQueueConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.ExecuteQueueService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.*;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.*;
 
 /**
  * 描述：优惠卷Service

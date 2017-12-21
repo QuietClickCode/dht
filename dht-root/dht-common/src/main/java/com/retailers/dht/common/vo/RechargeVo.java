@@ -1,7 +1,7 @@
 package com.retailers.dht.common.vo;
 
 import com.alibaba.fastjson.annotation.JSONField;
-import com.retailers.dht.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;

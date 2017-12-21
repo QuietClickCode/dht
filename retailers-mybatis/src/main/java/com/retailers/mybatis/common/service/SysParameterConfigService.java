@@ -1,8 +1,11 @@
 
-package com.retailers.dht.common.service;
+package com.retailers.mybatis.common.service;
+
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.dht.common.entity.SysParameterConfig;
+
 import java.util.Map;
+
 /**
  * 描述：系统参数配置表Service
  * @author zhongp

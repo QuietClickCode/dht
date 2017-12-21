@@ -3,12 +3,12 @@ package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.GoodsBrand;
 import com.retailers.dht.common.dao.GoodsBrandMapper;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsBrandService;
 import com.retailers.dht.common.vo.GoodsBrandVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +40,7 @@ public class GoodsBrandServiceImpl implements GoodsBrandService {
 		int status = goodsBrandMapper.updateGoodsBrand(goodsBrand);
 		GoodsBrand g = goodsBrandMapper.queryGoodsBrandByGbId(goodsBrand.getGbId());
 		if(!g.getGbImgpath().equals(goodsBrand.getGbImgpath())){
-			attachmentService.editorAttachment(Long.parseLong(g.getGbImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
+			attachmentService.editorAttachment(Long.parseLong(g.getGbImgpath()), AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
 		String imgPath=goodsBrand.getGbImgpath();
 		if(status==1 && imgPath!=null && !imgPath.equals("")){

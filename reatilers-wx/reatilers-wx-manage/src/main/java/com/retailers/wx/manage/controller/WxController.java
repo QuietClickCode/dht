@@ -38,6 +38,7 @@ public class WxController {
         WxManager wxManager= wxManagerService.queryCurUsedWx(WXAccountEnum.WX_GZH);
         mav.setViewName("wx/wxpage"); //返回的文件名
         mav.addObject("curWx",wxManager);
+        mav.addObject("domainName","http://www.kuaiyis.com");
         return mav;
     }
 

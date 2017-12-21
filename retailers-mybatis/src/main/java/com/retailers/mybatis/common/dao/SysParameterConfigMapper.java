@@ -1,7 +1,10 @@
-package com.retailers.dht.common.dao;
-import com.retailers.dht.common.entity.SysParameterConfig;
+package com.retailers.mybatis.common.dao;
+
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.List;
+
 /**
  * 描述：系统参数配置表DAO
  * @author zhongp

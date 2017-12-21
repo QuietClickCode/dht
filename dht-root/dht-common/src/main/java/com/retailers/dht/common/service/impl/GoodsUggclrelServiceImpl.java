@@ -3,11 +3,11 @@ package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.GoodsUggclrel;
 import com.retailers.dht.common.dao.GoodsUggclrelMapper;
 import com.retailers.dht.common.service.GoodsUggclrelService;
 import com.retailers.dht.common.vo.GoodsUggclrelVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;

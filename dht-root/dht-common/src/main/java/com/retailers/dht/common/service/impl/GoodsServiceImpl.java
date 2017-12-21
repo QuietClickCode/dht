@@ -2,17 +2,17 @@
 package com.retailers.dht.common.service.impl;
 
 import com.retailers.auth.vo.ZTreeVo;
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsCopy;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
 import com.retailers.dht.common.vo.GoodsVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.BeanUtils;

@@ -1,10 +1,12 @@
 
-package com.retailers.dht.common.service;
+package com.retailers.mybatis.common.service;
+
+import com.retailers.mybatis.common.entity.Attachment;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.dht.common.entity.Attachment;
 
 import java.util.List;
 import java.util.Map;
+
 /**
  * 描述：系统附件表(用于存放上传物品)Service
  * @author zhongp
@@ -70,7 +72,7 @@ public interface AttachmentService {
 	 * @param status 状态值
 	 * @return
 	 */
-	public boolean editorAttachment(List<Long> attachmentIds,Long status);
+	public boolean editorAttachment(List<Long> attachmentIds, Long status);
 
 	/**
 	 * 编辑附件属性
@@ -85,7 +87,7 @@ public interface AttachmentService {
 	 * @param status 状态
 	 * @return
 	 */
-	public boolean editorAttachment(Long attachmentId,Long status);
+	public boolean editorAttachment(Long attachmentId, Long status);
 
 	/**
 	 * 清除未被使用的附件

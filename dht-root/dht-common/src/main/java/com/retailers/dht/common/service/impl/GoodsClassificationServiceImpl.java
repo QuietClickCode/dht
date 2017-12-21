@@ -1,29 +1,26 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.retailers.auth.vo.ZTreeVo;
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.CouponConstant;
 import com.retailers.dht.common.dao.CouponUseRangeMapper;
 import com.retailers.dht.common.dao.GoodsClassificationMapper;
 import com.retailers.dht.common.entity.CouponUseRange;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsClassificationVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
-import java.util.logging.ConsoleHandler;
 
 /**
  * 描述：商品子类表Service
@@ -71,7 +68,7 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 
 		GoodsClassification g = goodsClassificationMapper.queryGoodsClassificationByGgId(goodsClassification.getGgId());
 		if(!g.getGgImgpath().equals(goodsClassification.getGgImgpath()) && !ObjectUtils.isEmpty(g.getGgImgpath())){
-			attachmentService.editorAttachment(Long.parseLong(g.getGgImgpath()),AttachmentConstant.ATTACHMENT_STATUS_NO);
+			attachmentService.editorAttachment(Long.parseLong(g.getGgImgpath()), AttachmentConstant.ATTACHMENT_STATUS_NO);
 		}
 
 		int status = goodsClassificationMapper.updateGoodsClassification(goodsClassification);

@@ -182,7 +182,7 @@
             <tbody>
             <tr>
                 <td>微信号</td>
-                <td><span type="text" name="WeiXin" data-bind="text:WeiXin">zg-rmdht</span></td>
+                <td><span type="text" name="WeiXin" data-bind="text:WeiXin">${curWx.wxName}</span></td>
                 <td rowspan="8" width="30%" align="center">
                     <h4>公众号二维码</h4>
                     <img src="/img/demo.jpg">
@@ -194,7 +194,7 @@
             </tr>
             <tr>
                 <td>原始ID</td>
-                <td><span type="text" name="WeiXinId" data-bind="text:WeiXinId">gh_1fe6db1bb841</span></td>
+                <td><span type="text" name="WeiXinId" data-bind="text:WeiXinId">${curWx.wxOriginalId}</span></td>
             </tr>
             <tr>
                 <td>公众号类型</td>
@@ -202,26 +202,26 @@
             </tr>
             <tr>
                 <td>AppId</td>
-                <td><span type="text" name="AppId" data-bind="text:AppId">wxd2f8d593a73b3604</span></td>
+                <td><span type="text" name="AppId" data-bind="text:AppId">${curWx.appId}</span></td>
             </tr>
             <tr>
                 <td>AppSecret</td>
-                <td><span type="text" name="AppSecret" data-bind="text:AppSecret">adfdfa1c8609de65bf2a71e5216b09d7</span></td>
+                <td><span type="text" name="AppSecret" data-bind="text:AppSecret">${curWx.appSecret}</span></td>
             </tr>
             <tr>
                 <td>接口域名</td>
-                <td><span type="text" name="DomainName" data-bind="text:DomainName">www.zgrmdht.com</span></td>
+                <td><span type="text" name="DomainName" data-bind="text:DomainName">${domainName}</span></td>
             </tr>
             <tr>
                 <td>接口URL</td>
                 <td>
-                    <span id="finshUrl">http://www.zgrmdht.com/wxapi?InitSiteID=23078&amp;wxid=gh_1fe6db1bb841</span>
+                    <span id="finshUrl">${curWx.wxDomainName}</span>
 
                 </td>
             </tr>
             <tr>
                 <td>Token</td>
-                <td> <span data-bind="text: Token">589a78ad77dd3</span></td>
+                <td> <span data-bind="text: Token">${curWx.wxToken}</span></td>
             </tr>
             </tbody>
         </table>

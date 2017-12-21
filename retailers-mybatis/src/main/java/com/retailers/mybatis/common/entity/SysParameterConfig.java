@@ -1,7 +1,10 @@
-package com.retailers.dht.common.entity;
+package com.retailers.mybatis.common.entity;
+
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+
 import java.util.Date;
+
 /**
  * 描述：系统参数配置表对象
  * @author zhongp
@@ -41,7 +44,7 @@ public class SysParameterConfig implements java.io.Serializable {
 	public SysParameterConfig(){
 	}
 
-	public SysParameterConfig( String parameterKey){
+	public SysParameterConfig(String parameterKey){
 		this.parameterKey = parameterKey;
 	}
 

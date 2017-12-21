@@ -1,16 +1,15 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.CutPriceLogMapper;
 import com.retailers.dht.common.entity.CutPriceLog;
 import com.retailers.dht.common.entity.CutPricePrice;
-import com.retailers.dht.common.entity.GoodsDetail;
 import com.retailers.dht.common.service.CutPriceLogService;
 import com.retailers.dht.common.service.CutPricePriceService;
 import com.retailers.dht.common.service.GoodsDetailService;
 import com.retailers.dht.common.vo.CutPriceLogVo;
 import com.retailers.dht.common.vo.GoodsDetailVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;

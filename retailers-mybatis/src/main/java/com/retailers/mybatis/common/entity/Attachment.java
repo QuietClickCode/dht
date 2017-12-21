@@ -1,5 +1,6 @@
-package com.retailers.dht.common.entity;
+package com.retailers.mybatis.common.entity;
 import java.util.Date;
+
 /**
  * 描述：系统附件表(用于存放上传物品)对象
  * @author zhongp
@@ -29,7 +30,7 @@ public class Attachment implements java.io.Serializable {
 	public Attachment(){
 	}
 
-	public Attachment( Long id){
+	public Attachment(Long id){
 		this.id = id;
 	}
 

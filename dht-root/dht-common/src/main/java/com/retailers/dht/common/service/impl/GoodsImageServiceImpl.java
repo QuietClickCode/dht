@@ -3,16 +3,16 @@ package com.retailers.dht.common.service.impl;
 import java.util.List;
 import java.util.Map;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsImageCopyMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsImage;
 import com.retailers.dht.common.dao.GoodsImageMapper;
 import com.retailers.dht.common.entity.GoodsImageCopy;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.GoodsImageService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.vo.GoodsImageVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

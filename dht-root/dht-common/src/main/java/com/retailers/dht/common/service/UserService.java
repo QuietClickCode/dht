@@ -1,11 +1,11 @@
 
 package com.retailers.dht.common.service;
 
-import com.retailers.dht.common.entity.Attachment;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.UserVo;
+import com.retailers.mybatis.common.entity.Attachment;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 

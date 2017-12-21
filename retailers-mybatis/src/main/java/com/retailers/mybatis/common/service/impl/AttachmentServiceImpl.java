@@ -1,10 +1,10 @@
 
-package com.retailers.dht.common.service.impl;
+package com.retailers.mybatis.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.dao.AttachmentMapper;
-import com.retailers.dht.common.entity.Attachment;
-import com.retailers.dht.common.service.AttachmentService;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.dao.AttachmentMapper;
+import com.retailers.mybatis.common.entity.Attachment;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.HttpClientUtil;
@@ -62,7 +62,7 @@ public class AttachmentServiceImpl implements AttachmentService {
 	 * @return
 	 */
 	public boolean editorAttachment(List<Long> attachmentId) {
-		return editorAttachment(attachmentId,AttachmentConstant.ATTACHMENT_STATUS_YES);
+		return editorAttachment(attachmentId, AttachmentConstant.ATTACHMENT_STATUS_YES);
 	}
 
 	public boolean editorAttachment(List<Long> attachmentIds, Long status) {

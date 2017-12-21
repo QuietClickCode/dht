@@ -1,7 +1,6 @@
 package com.retailers.dht.common.vo;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
-import com.retailers.dht.common.dao.AttachmentMapper;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;

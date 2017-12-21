@@ -1,11 +1,11 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.GoodsGdsprelMapper;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.service.GoodsGdsprelService;
 import com.retailers.dht.common.vo.GoodsGdsprelVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;

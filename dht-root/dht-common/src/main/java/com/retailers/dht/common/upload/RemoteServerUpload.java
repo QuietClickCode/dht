@@ -1,10 +1,10 @@
 package com.retailers.dht.common.upload;
 
 import com.alibaba.fastjson.JSONObject;
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.constant.SystemConstant;
-import com.retailers.dht.common.dao.AttachmentMapper;
-import com.retailers.dht.common.entity.Attachment;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.dao.AttachmentMapper;
+import com.retailers.mybatis.common.entity.Attachment;
 import com.retailers.tools.http.HttpClientManager;
 import com.retailers.tools.utils.Md5Encrypt;
 import com.retailers.tools.utils.ObjectUtils;

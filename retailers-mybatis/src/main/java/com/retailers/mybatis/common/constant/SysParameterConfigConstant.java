@@ -1,7 +1,6 @@
-package com.retailers.dht.common.constant;
+package com.retailers.mybatis.common.constant;
 
 import com.alibaba.fastjson.util.TypeUtils;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,7 +1,6 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.SalePromotionMapper;
 import com.retailers.dht.common.entity.GoodsGdsprel;
 import com.retailers.dht.common.entity.SalePromotion;
@@ -10,6 +9,7 @@ import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.service.SalePromotionService;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.dht.common.vo.SalePromotionVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;

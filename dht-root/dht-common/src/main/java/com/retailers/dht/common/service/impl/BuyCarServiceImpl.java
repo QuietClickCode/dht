@@ -4,11 +4,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.entity.BuyCar;
 import com.retailers.dht.common.dao.BuyCarMapper;
 import com.retailers.dht.common.service.BuyCarService;
 import com.retailers.dht.common.vo.GoodsVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;

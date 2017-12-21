@@ -1,4 +1,4 @@
-package com.retailers.dht.common.constant;
+package com.retailers.mybatis.common.constant;
 
 /**
  * 附件常量设置

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.retailers.dht.common.dao.SysParameterConfigMapper">
+<mapper namespace="com.retailers.mybatis.common.dao.SysParameterConfigMapper">
 
-	<resultMap id="rm_sysParameterConfig" type="com.retailers.dht.common.entity.SysParameterConfig">
+	<resultMap id="rm_sysParameterConfig" type="com.retailers.mybatis.common.entity.SysParameterConfig">
 			<result property="parameterKey" column="parameter_key"/>
 			<result property="parameterValue" column="parameter_value"/>
 			<result property="parameterName" column="parameter_name"/>
@@ -57,7 +57,7 @@
 		<include refid="sysParameterConfig_where"/>
 	</select>
 	<!--添加系统参数配置表 -->
-	<insert id="saveSysParameterConfig" parameterType="com.retailers.dht.common.entity.SysParameterConfig" useGeneratedKeys="true" keyProperty="parameterKey">
+	<insert id="saveSysParameterConfig" parameterType="com.retailers.mybatis.common.entity.SysParameterConfig" useGeneratedKeys="true" keyProperty="parameterKey">
 		INSERT INTO t_sys_parameter_config (
 			parameter_value,parameter_name,parameter_des,parameter_create_time,allow_update,parameter_version
 		) VALUES
@@ -66,7 +66,7 @@
 		)
 	</insert>
 	<!--修改系统参数配置表 -->
-	<update id="updateSysParameterConfig" parameterType="com.retailers.dht.common.entity.SysParameterConfig">
+	<update id="updateSysParameterConfig" parameterType="com.retailers.mybatis.common.entity.SysParameterConfig">
 		UPDATE t_sys_parameter_config
 		<set>
             <if test="null != parameterValue and '' != parameterValue">

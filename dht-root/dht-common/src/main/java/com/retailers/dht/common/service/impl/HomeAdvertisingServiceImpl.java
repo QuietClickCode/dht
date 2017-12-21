@@ -1,12 +1,12 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.retailers.dht.common.constant.AttachmentConstant;
 import com.retailers.dht.common.dao.HomeAdvertisingMapper;
 import com.retailers.dht.common.entity.HomeAdvertising;
-import com.retailers.dht.common.service.AttachmentService;
 import com.retailers.dht.common.service.HomeAdvertisingService;
 import com.retailers.dht.common.vo.HomeAdvertisingVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.pagination.Pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
