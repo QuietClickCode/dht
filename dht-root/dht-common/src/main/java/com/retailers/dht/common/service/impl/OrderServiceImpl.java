@@ -246,9 +246,9 @@ public class OrderServiceImpl implements OrderService {
             		cids.add(Long.parseLong(cid));
 				}
             	//判断用户是否存在优惠卷
-            	if(ObjectUtils.isNotEmpty(couponInfos.get("gcLists"))){
+            	if(ObjectUtils.isNotEmpty(couponInfos.get("userCoupons"))){
 					//用户拥有的优惠卷
-					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("gcLists");
+					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("userCoupons");
 					editorUserCoupon(ods,cids,gidUnGtid,cwvs);
 				}
             }
