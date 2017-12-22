@@ -1,5 +1,6 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.Project;
+import com.retailers.hnc.common.vo.ProjectVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -52,4 +53,5 @@ public interface ProjectMapper {
 	 */
 	public List<Project> queryProjectList(Pagination<Project> pagination);
 
+	public List<ProjectVo> queryProjectVo();
 }
