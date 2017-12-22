@@ -104,6 +104,16 @@
 		</set>
 		WHERE id = #{uid} and version = #{version}
 	</update>
+
+	<!--用户使用钱包-->
+	<update id="userWalletPay">
+		UPDATE t_user_card_package
+		<set>
+			u_cur_wallet = u_cur_wallet-#{wallet},
+			version = version+1,
+		</set>
+		WHERE id = #{uid} and version = #{version} AND u_cur_wallet-#{wallet}>=0
+	</update>
 	<!--编辑用户积分 -->
 	<update id="userIntegral">
 		UPDATE t_user_card_package

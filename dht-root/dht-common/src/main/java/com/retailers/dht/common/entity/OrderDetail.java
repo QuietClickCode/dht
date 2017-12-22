@@ -26,9 +26,15 @@ public class OrderDetail implements java.io.Serializable {
 	/**实际支付金额*/
 	@NotEmpty
 	private Long odActualPrice;
+	/**
+	 * 会员价（用钱包购买时价格）
+	 */
+	private Long odMenberPrice;
 	/**购买商品数量*/
 	@NotEmpty
 	private Integer odBuyNumber;
+
+
 	/**商品详情表（关联了价格和库存，与t_goods_ggsval_detail 关联，能找到对应的商品规格）*/
 	@NotEmpty
 	private Long odGdId;
@@ -74,6 +80,12 @@ public class OrderDetail implements java.io.Serializable {
 	}
 	public Long getOdGoodsPrice() {
 		return this.odGoodsPrice;
+	}
+	public Long getOdMenberPrice() {
+		return odMenberPrice;
+	}
+	public void setOdMenberPrice(Long odMenberPrice) {
+		this.odMenberPrice = odMenberPrice;
 	}
 	public void setOdActualPrice(Long value) {
 		this.odActualPrice = value;

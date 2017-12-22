@@ -40,6 +40,15 @@ public interface UserCardPackageMapper {
 	public int userRechage(@Param("uid")Long uid, @Param("wallet")Long wallet, @Param("version") Integer version);
 
 	/**
+	 * 用户使用钱包
+	 * @param uid 用户id
+	 * @param wallet 使用金额
+	 * @param version 版本号
+	 * @return
+	 */
+	public int userWalletPay(@Param("uid")Long uid, @Param("wallet")Long wallet, @Param("version") Integer version);
+
+	/**
 	 * 编辑用户积分
 	 * @param uid 用户id
 	 * @param integral 消费额

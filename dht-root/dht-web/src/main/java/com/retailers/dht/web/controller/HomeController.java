@@ -30,7 +30,7 @@ public class HomeController extends BaseController {
         UserInfoVIew userInfoVIew = getCurLoginUser(request);
         if(ObjectUtils.isNotEmpty(userInfoVIew)){
             Integer userModal = userInfoVIew.getuUseModule();
-            if(userModal==0){
+            if(ObjectUtils.isNotEmpty(userModal)&&userModal==0){
                 url = "n-index";
             }else{
                 url = "index";

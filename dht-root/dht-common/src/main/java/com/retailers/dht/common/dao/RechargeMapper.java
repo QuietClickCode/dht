@@ -52,6 +52,13 @@ public interface RechargeMapper {
 	 * @date 2017-10-15 23:56:18
 	 */
 	public Recharge queryRechargeByRid(Long rid);
+
+	/**
+	 * 取得用户购买的充值卡
+	 * @param rid
+	 * @return
+	 */
+	public Recharge queryUserBuyRecharge(Long rid);
 	/**
 	 * 查询充值管理列表
 	 * @param pagination 分页对象

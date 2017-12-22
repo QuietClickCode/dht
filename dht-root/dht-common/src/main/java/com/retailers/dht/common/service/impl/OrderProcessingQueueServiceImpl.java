@@ -38,7 +38,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
  * @since 1.8
  * @date 2017-12-14 01:32:58
  */
-@Service("orderprocessingqueueService")
+@Service("orderProcessingQueueService")
 public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueService {
 	Logger logger= LoggerFactory.getLogger(OrderProcessingQueueServiceImpl.class);
 	@Autowired
@@ -82,11 +82,13 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 	 * @param orderNo 订单号
 	 * @param isSuccess 是否成功
 	 * @param tradeOffId 第三方回调单号
+	 * @param orderPayWay 支付方式(0 微信，1 支付宝，2 钱包）
 	 * @param payWay 支付方式
 	 * @param message 消息
 	 * @return
 	 */
-	public boolean addQueue(String orderNo, boolean isSuccess, String tradeOffId, Long payWay, String message) {
+	@Async
+	public boolean addQueue(String orderNo, boolean isSuccess, String tradeOffId,Integer orderPayWay, Long payWay, String message) {
 		OrderProcessingQueue opq=new OrderProcessingQueue();
 		opq.setCreateTime(new Date());
 		opq.setType(OrderProcessingQueueConstant.ORDER_QUEUE_TYPE_PAY_CALLBACK);
@@ -94,6 +96,7 @@ public class OrderProcessingQueueServiceImpl implements OrderProcessingQueueServ
 		JSONObject obj=new JSONObject();
 		obj.put("isSuccess",isSuccess);
 		obj.put("tradeOffId",tradeOffId);
+		obj.put("orderPayWay",orderPayWay);
 		obj.put("payWay",payWay);
 		obj.put("message",message);
 		opq.setParams(JSON.toJSONString(obj));

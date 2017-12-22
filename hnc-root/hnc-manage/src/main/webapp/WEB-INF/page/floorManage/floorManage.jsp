@@ -21,14 +21,31 @@
         .house_type_table{
             float: left;
             width: 80%;
-            height: auto;
+            height: 500px;
+            overflow-y: scroll;
         }
 
         .house_type_list{
             float: left;
             width: 20%;
-            height: auto;
+            height: 500px;
             border-left: none;
+        }
+
+        #house_type_list{
+            padding-left: 20px;
+            list-style: none;
+        }
+
+        #house_type_list li{
+            list-style: none;
+            text-align: center;
+            display: block;
+            height: 30px;
+            line-height: 30px;
+            border: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 10px;
+            border-radius: 5px;
         }
     </style>
 </head>
@@ -151,8 +168,8 @@
     </div>
 </div>
 
-<%--添加删除户型模态框--%>
-<div class="modal fade bs-example-modal-lg" tabindex="-1" id="saveHouseType" role="dialog" aria-labelledby="myLargeModalLabel">
+<%--添加删除楼栋模态框--%>
+<div class="modal fade bs-example-modal-lg" tabindex="-1" id="saveFloorManage" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -160,14 +177,22 @@
                 <h4 class="modal-title">修改户型</h4>
             </div>
             <div class="modal-body" style="overflow: hidden;">
+                <div id="queryFloorToolbar" class="form-inline">
+                    <input type="text" class="form-control fmName"  placeholder="请输入楼栋名称">
+                    <button class="btn btn-default" onclick="refreshTableData()">查询</button>
+                </div>
                 <div class="house_type_table">
                     <table id="house_type_table"></table>
                 </div>
-                <div class="house_type_list"></div>
+                <div class="house_type_list">
+                    <ul id="house_type_list">
+
+                    </ul>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary">确定</button>
+                <button type="button" class="btn btn-primary addFloorRelationship">确定</button>
             </div>
         </div>
     </div>
@@ -236,10 +261,10 @@
             formatter:function (value,row,index) {
                 let html = "";
                 if(row.typeManages.length == 0)
-                return "<button class='btn btn-primary' onclick='event.stopPropagation();'>请添加户型</button>";
+                    return '<button class="btn btn-primary" onclick="event.stopPropagation();addHouseTypeManage(\'' + row.fmId + '\')">添加户型</button>';
                 else{
                     for(let i = 0;i<row.typeManages.length;i++){
-                        html +=''+row.typeManages[i].htTypeName+''
+                        html +=''+row.typeManages[i].htTypeName+' '
                     }
                 }
                 return html;
@@ -422,18 +447,182 @@
     });
 </script>
 
+<%--添加修改与楼栋绑定的户型--%>
 <script>
-    /*$(".house_type").click(function () {
-        alert("Demo");
-    });*/
+    var floorManage;
+    function addHouseTypeManage(id) {
+        floorManage = rowDatas.get(id);
+        for(let i = 0;i<floorManage.typeManages.length;i++){
+            floorManagesMap.set(floorManage.typeManages[i].htId,houseType.fmId);
+            $("#house_type_list").append("<li id='"+floorManage.typeManages[i].htId+"'>"+floorManage.typeManages[i].htTypeName+"</li>");
+        }
+        $("#house_type_table").bootstrapTable('destroy');
+        createFloorManageTable();
+        $("#saveFloorManage").modal("show");
+    }
 
-    $("#goodsTypeTables").on("click",'.house_type',function (event) {
-        let index = $(this).index("#goodsTypeTables .house_type");
-        $("#saveHouseType").modal("show");
-        createTable("/floorManage/queryFloorList","house_type_table","fmId",treeColumns,queryParams)
+    var relationships = new Array();
+    $(".addFloorRelationship").click(function () {
+        for (let key of floorManagesMap.keys()) {
+            var floorRe = new Object();
+            floorRe['frId'] = key;
+            floorRe['fmId'] = floorManagesMap.get(key);
+            relationships.push(floorRe);
+        }
+
+        $.ajax({
+            url:"/floorManage/addHouseTypeRelationship",
+            type:"post",
+            contentType: "application/json",
+            data:JSON.stringify(relationships),
+            success:function () {
+                $("#saveFloorManage").modal("hide");
+                refreshTableData();
+                floorManagesMap.clear();
+                relationships.length = 0;
+            }
+        });
+    });
+
+    $("#saveFloorManage").on("hidden.bs.modal",function () {
+        $("#house_type_list").children().remove();
+        floorManagesMap.clear();
+        $("#house_type_list").html("");
+        relationships.length = 0;
     });
 </script>
 
+
+<script>
+    var floorManagesMap = new Map();
+    function createFloorManageTable(){
+        //表格的初始化
+        $("#house_type_table").bootstrapTable({
+            url:"/houseManage/queryHouseType",
+            method: 'post',                      //请求方式（*）
+            toolbar:'#queryFloorToolbar' ,                //工具按钮用哪个容器
+            striped: true,                      //是否显示行间隔色
+            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
+            sortable: false,                     //是否启用排序
+            queryParams: function (params) {
+                var params=commonFloorParams(this);
+                return params;
+            },                                  //传递参数（*）
+            pagination:true,
+            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
+            pageNumber: 1,                      //初始化加载第一页，默认第一页
+            pageSize: 1000,                       //每页的记录行数（*）
+            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
+            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
+            strictSearch: false,
+            showColumns: true,                  //是否显示所有的列
+            showRefresh: true,                  //是否显示刷新按钮
+            minimumCountColumns: 2,             //最少允许的列数
+            clickToSelect: true,                //是否启用点击选中行
+            uniqueId: "htId",                     //每一行的唯一标识，一般为主键列
+            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+            selectItemName: 'parentItem',
+            dataType: "json",
+            columns: treeFloorColumns,
+            onCheckAll:function(rows){
+                for(var row of rows){
+                    if(!floorManagesMap.has(row.htId)){
+                        floorManagesMap.set(row.htId,floorManage.fmId);
+                        $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"</li>");
+                    }
+                }
+            },
+            //点击每一个单选框时触发的操作
+            onCheck:function(row){
+                //判断是否己经存在
+                if(!floorManagesMap.has(row.htId)){
+                    floorManagesMap.set(row.htId,floorManage.fmId);
+                    $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"</li>");
+                }
+            },
+            //取消每一个单选框时对应的操作；
+            onUncheck:function(row){
+                //判断是否己经存在
+                if(floorManagesMap.has(row.htId)){
+                    floorManagesMap.delete(row.htId);
+                    $("#house_type_list #"+row.htId).remove();
+                }
+            },
+            onUncheckAll:function(rows){
+                floorManagesMap.clear();
+                $("#house_type_list").html("");
+            },
+            contentType : "application/x-www-form-urlencoded"  //设置传入方式 可以用getparams 取得参数  默认为：application/json  json 方式传输
+        });
+    }
+
+    /**
+     * 查询条件
+     **/
+    function commonFloorParams(that){
+        return {
+            pageSize: that.pageSize,
+            pageNo: that.pageNumber
+        };
+    }
+
+    /**
+     * 刷新表格数据
+     **/
+    function refreshFloorTableData() {
+        $('#goodsTypeTables').bootstrapTable(
+            "refresh",
+            {
+                url:"/houseManage/queryHouseType"
+            }
+        );
+    }
+
+    var treeFloorColumns=[
+        {   checkbox: true,
+            align : 'center',
+            valign : 'middle',
+            formatter:commonFloorSelectCheckFormatter
+        },
+        {
+            field: 'htTypeName',
+            title: '户型名称',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'htType',
+            title: '户型',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'htArea',
+            title: '户型面积',
+            align : 'center',
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                if(row.htArea != "")
+                    return row.htArea + "m²";
+                return "";
+            }
+        }
+    ]
+
+    function commonFloorSelectCheckFormatter(value, row, index) {
+        let curId = row.htId;
+        for(let i = 0;i<floorManage.typeManages.length;i++){
+            if(curId == floorManage.typeManages[i].htId){
+                return {
+                    checked : true//设置选中
+                };
+            }
+        }
+        return {
+            checked : false//设置选中
+        };
+    }
+</script>
 
 <%--表单校验--%>
 <script type="text/javascript">
@@ -530,55 +719,6 @@
             }
         }
     });
-</script>
-
-<script>
-    /**
-     * 初始化 树型表结构创建
-     * @param url 请求数据的url
-     * @param tableId 数据表格id
-     * @param uniqueId 树型唯一值
-     * @param columns 展示列表
-     */
-    function createHouseTypeTable(url,tableId,uniqueId,columns,searchParams,toolbarId){
-        if(!toolbarId){
-            toolbarId='#toolbar';
-        }
-        //表格的初始化
-        $('#'+tableId).bootstrapTable({
-            url:url,
-            method: 'post',                      //请求方式（*）
-            toolbar:toolbarId ,                //工具按钮用哪个容器
-            striped: true,                      //是否显示行间隔色
-            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-            sortable: false,                     //是否启用排序
-            queryParams: function (params) {
-                if(searchParams){
-                    var params=searchParams(this);
-                    return params;
-                }else{
-                    return params;
-                }
-            },                                  //传递参数（*）
-            pagination:true,
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-            pageNumber: 1,                      //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-            search: false,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            strictSearch: false,
-            showColumns: true,                  //是否显示所有的列
-            showRefresh: true,                  //是否显示刷新按钮
-            minimumCountColumns: 2,             //最少允许的列数
-            clickToSelect: true,                //是否启用点击选中行
-            uniqueId: uniqueId,                     //每一行的唯一标识，一般为主键列
-            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            selectItemName: 'parentItem',
-            dataType: "json",
-            columns: columns,
-            contentType : "application/x-www-form-urlencoded"  //设置传入方式 可以用getparams 取得参数  默认为：application/json  json 方式传输
-        });
-    }
 </script>
 </body>
 </html>

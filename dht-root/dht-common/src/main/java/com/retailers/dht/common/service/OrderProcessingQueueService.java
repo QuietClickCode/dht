@@ -62,11 +62,12 @@ public interface OrderProcessingQueueService {
 	 * @param orderNo 订单号
 	 * @param isSuccess 是否成功
 	 * @param tradeOffId 第三方回调单号
+	 * @param orderPayWay 支付方式(0 微信，1 支付宝，2 钱包）
 	 * @param payWay 支付方式
 	 * @param message 消息
 	 * @return
 	 */
-	public boolean addQueue(String orderNo,boolean isSuccess,String tradeOffId,Long payWay,String message);
+	public boolean addQueue(String orderNo,boolean isSuccess,String tradeOffId,Integer orderPayWay,Long payWay,String message);
 
 	/**
 	 * 执行订单队列

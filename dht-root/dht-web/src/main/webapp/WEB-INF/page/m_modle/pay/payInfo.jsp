@@ -82,17 +82,17 @@
 		margin: auto;
 		margin-top: 2rem;
 	}
-	
-	
-	
-	
+
+
+
+
 	.label_box {
 		font-size:12px;
 		cursor:pointer;
     	display: inline-block;
     	font-size: .3rem;
     	color: #808080;
-	}  
+	}
 	.label_box > .span1{
 		margin-right: .2rem;
 		color: #333;
@@ -109,17 +109,17 @@
 		vertical-align:middle;
 		margin:-2px 2px 1px 0px;
 		border:#999 1px solid;
-	}  
-	input[type="checkbox"],input[type="radio"] {display:none;}  
-	input[type="radio"] + i {border-radius:16px;} 
-	input[type="checkbox"] + i {border-radius:16px;}  
+	}
+	input[type="checkbox"],input[type="radio"] {display:none;}
+	input[type="radio"] + i {border-radius:16px;}
+	input[type="checkbox"] + i {border-radius:16px;}
 	/*input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}  */
-	input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}  
+	input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 	input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
 <body class="bge6">
-	<div class="wrap">
-		<div class="wrap_title">设置6位数字支付密码</div>
+	<div class="wrap" style="display: none" id="sysInPayPwdDiv">
+		<div class="wrap_title">输入支付密码</div>
 		<div class="inputBoxContainer" id="inputBoxContainer">
 			<input type="text" class="realInput"/>
 			<div class="bogusInput">
@@ -133,7 +133,7 @@
 		</div>
 		<div class="wrap_tip_box">注:此密码仅用于大汇堂余额支付使用</div>
 		<div class="wrap_btn_box">
-			<button id="confirmButton" class="confirmButton">完成</button>
+			<button id="confirmButton" class="confirmButton" type="button" onclick="walletPay()">完成</button>
 		</div>
 	</div>
 
@@ -147,18 +147,16 @@
     		请选择支付方式
     		<p class="p1">金额&emsp;<span>${price}</span>元</p>
     	</div>
-    	<div class="pay_mode_input_box active">
+    	<div class="pay_mode_input_box active" attr="wallet">
     		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="checked">✓</i></label>
     		<img src="/img/icon-logo.png"/>
     		<span class="span1">余额支付</span>
     	</div>
-    	<div class="pay_mode_input_box">
+    	<div class="pay_mode_input_box" attr="wx">
     		<label class="label_box"><input type="radio" id="radio_input2" name="abc"><i>✓</i></label>
     		<img src="/img/wx-logo.png"/>
     		<span class="span1">微信支付</span>
-    		<a href="">立即充值</a>
     	</div>
-        
     </div>
     <button type="button" class="pay_mode_btn" onclick="confirmPay()">确认支付</button>
 </body>
@@ -167,69 +165,74 @@
 <script type="text/javascript" src="/js/common/common.js" ></script>
 
 <script>
-	/*$(function(){
-		$(".label_box").click(function(){
-			$(".label_box").parent().removeClass("active")
-			$(this).parent().addClass("active")			
-		})
-	});*/
-
 	var isSubmit=false;
     /**
 	 * 确认支付
      */
 	function confirmPay(){
 		if(!isSubmit){
-            isSubmit=true;
-            //钱包支付
-            var payType=0;
-            //默认为钱包支付地址
-            let submitUrl="";
-            //判断是否是微信支付
-            //判断是否是微信内打开
-            if(isWeiXin()){
-                //公众号支付
-                payType=1;
-                submitUrl="/wxPay/createWxPay";
-            }else{
-                //h5支付
-                payType=2;
-                submitUrl="/wxPay/createWxH5Pay";
-            }
-            $.ajax({
-                url: submitUrl,
-                type: 'post',
-                cache:false,
-                async:false,
-                dataType: 'JSON',
-                timeout: 5000,
-				data:{"orderNo":$("#orderNo").val()},
-                success: function(data){
-                    if(data.status==0){
-                        let msg=data.data;
-                        if(payType==1){
-                            appId = msg.appId;
-                            timeStamp = msg.timeStamp;
-                            nonceStr = msg.nonceStr;
-                            pg = msg.pkg;
-                            signType = msg.signType;
-                            paySign = msg.sign;
-                            pay();
-                            // h5支付
-                        }else if(payType==2){
-                            isSubmit=false;
-                            window.location.href=data.msg;
-                        }
-					}else{
-                        //提示
-                        layer.open({
-                            content: msg.msg,
-                            skin: 'msg',
-                            time: 2 //2秒后自动关闭
-                        });
+			isSubmit=true;
+			let payWay=$(".active").attr("attr");
+			if(payWay=="wallet"){
+				$("#sysInPayPwdDiv").show();
+			}else if(payWay=="wx"){
+				//钱包支付
+				var payType=0;
+				//默认为钱包支付地址
+				let submitUrl="";
+				//判断是否是微信支付
+				//判断是否是微信内打开
+				if(isWeiXin()){
+					//公众号支付
+					payType=1;
+					submitUrl="/wxPay/createWxPay";
+				}else{
+					//h5支付
+					payType=2;
+					submitUrl="/wxPay/createWxH5Pay";
+				}
+				$.ajax({
+					url: submitUrl,
+					type: 'post',
+					cache:false,
+					async:false,
+					dataType: 'JSON',
+					timeout: 5000,
+					data:{"orderNo":$("#orderNo").val()},
+					success: function(data){
+						if(data.status==0){
+							let msg=data.data;
+							if(payType==1){
+								appId = msg.appId;
+								timeStamp = msg.timeStamp;
+								nonceStr = msg.nonceStr;
+								pg = msg.pkg;
+								signType = msg.signType;
+								paySign = msg.sign;
+								pay();
+								// h5支付
+							}else if(payType==2){
+								isSubmit=false;
+								window.location.href=data.msg;
+							}
+						}else{
+							//提示
+							layer.open({
+								content: data.msg,
+								skin: 'msg',
+								time: 2 //2秒后自动关闭
+							});
+						}
 					}
-                }
-            });
+				});
+			}else{
+				//提示
+				layer.open({
+					content: '请选择支付方式',
+					skin: 'msg',
+					time: 2 //2秒后自动关闭
+				});
+			}
 		}
 	}
 
@@ -329,12 +332,45 @@
     function getValue(){
         return boxInput.getBoxInputValue();
     }
-	
-    $(".pay_mode_input_box").click(function () {
-        $(this).addClass("active").find("i").addClass("checked");
-        $(this).siblings(".pay_mode_input_box").
-				removeClass("active").find("i").removeClass("checked");
-    });
+	$(function(){
+		$("#sysInPayPwdDiv").hide();
+		$(".pay_mode_input_box").click(function () {
+			$(this).addClass("active").find("i").addClass("checked");
+			$(this).siblings(".pay_mode_input_box").
+			removeClass("active").find("i").removeClass("checked");
+		});
+	})
+	function walletPay() {
+		let payPwd=getValue();
+		if(payPwd.length!=6){
+			layer.msg('请输入正确的支付密码');
+		}else{
+			$.ajax({
+				url: "/wallet/walletPay",
+				type: 'post',
+				cache:false,
+				async:false,
+				dataType: 'JSON',
+				timeout: 5000,
+				data:{"orderNo":$("#orderNo").val(),"payPwd":payPwd},
+				success: function(data){
+					if(data.status==0){
+						//提示
+						layer.open({
+							content: '支付成功',
+							end:function(){
+								window.location.href="/"
+							}
+						});
+					}else{
+						layer.msg(data.msg);
+					}
+				}
+			});
+
+
+		}
+	}
 
 </script>
 </html>

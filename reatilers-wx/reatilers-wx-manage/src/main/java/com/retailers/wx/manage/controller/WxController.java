@@ -3,6 +3,8 @@ package com.retailers.wx.manage.controller;
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.annotation.Resourse;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
@@ -38,7 +40,7 @@ public class WxController {
         WxManager wxManager= wxManagerService.queryCurUsedWx(WXAccountEnum.WX_GZH);
         mav.setViewName("wx/wxpage"); //返回的文件名
         mav.addObject("curWx",wxManager);
-        mav.addObject("domainName","http://www.kuaiyis.com");
+        mav.addObject("domainName", SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_PC_URL));
         return mav;
     }
 

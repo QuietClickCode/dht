@@ -23,6 +23,10 @@ public class SingleThreadLockConstant {
      * 用户购买商品
      */
     public static final String USER_BUY_GOODS="buyGoods";
+    /**
+     * 钱包支付 订单
+     */
+    public static final String WALLET_ORDER_PAY="walletPay";
 
 
 

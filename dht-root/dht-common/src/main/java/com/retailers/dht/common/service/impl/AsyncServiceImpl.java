@@ -22,7 +22,7 @@ public class AsyncServiceImpl implements AsyncService {
     @Async
     @Transactional
     public void orderCallback(OrderProcessingQueue orderProcessingQueue) {
-        OrderProcessingQueueService orderProcessingQueueService= SpringUtils.getBean("orderprocessingqueueService");
+        OrderProcessingQueueService orderProcessingQueueService= SpringUtils.getBean("orderProcessingQueueService");
         orderProcessingQueueService.addProcessingQueueToHistory(orderProcessingQueue);
     }
 }
