@@ -6,6 +6,7 @@ import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.Project;
 import com.retailers.hnc.common.service.ProjectService;
 import com.retailers.hnc.common.service.impl.ProjectServiceImpl;
+import com.retailers.hnc.common.vo.ProjectVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -61,10 +62,10 @@ public class ProjectController extends BaseController {
     @RequestMapping("queryProject")
     @ResponseBody
     public Map<String,Object> queryProject(){
-        List<Project> list = projectService.queryProjectList(new HashMap(),1,1).getData();
+        List<ProjectVo> list = projectService.queryProjectVo();
         Map map = new HashMap();
         if(ObjectUtils.isNotEmpty(list)){
-            Project p = list.get(0);
+            ProjectVo p = list.get(0);
             map.put("project",p);
         }
         return map;

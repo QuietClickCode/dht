@@ -4,8 +4,13 @@ import java.util.List;
 import java.util.Map;
 import com.retailers.hnc.common.entity.Project;
 import com.retailers.hnc.common.dao.ProjectMapper;
+import com.retailers.hnc.common.entity.ProjectImg;
+import com.retailers.hnc.common.service.ProjectImgService;
 import com.retailers.hnc.common.service.ProjectService;
+import com.retailers.hnc.common.vo.ProjectImgVo;
 import com.retailers.hnc.common.vo.ProjectVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -20,6 +25,8 @@ import com.retailers.mybatis.pagination.Pagination;
 public class ProjectServiceImpl implements ProjectService {
 	@Autowired
 	private ProjectMapper projectMapper;
+	@Autowired
+	private ProjectImgService projectImgService;
 	public boolean saveProject(Project project) {
 		int status = projectMapper.saveProject(project);
 		return status == 1 ? true : false;
@@ -47,6 +54,18 @@ public class ProjectServiceImpl implements ProjectService {
 	}
 	public List<ProjectVo> queryProjectVo(){
 		List<ProjectVo> list = projectMapper.queryProjectVo();
+		if(ObjectUtils.isNotEmpty(list)){
+			ProjectVo projectVo = list.get(0);
+			projectVo.setLogoImgUrl(AttachmentConstant.IMAGE_SHOW_URL+projectVo.getLogoImgUrl());
+			Long pid = projectVo.getPid();
+			List<ProjectImgVo> projectImgVos = projectImgService.queryProjectImgVoListByPid(pid);
+
+			List<String> imgsList = projectVo.getImgsList();
+			for(ProjectImgVo projectImgVo:projectImgVos){
+				imgsList.add(AttachmentConstant.IMAGE_SHOW_URL+projectImgVo.getPiUrl());
+			}
+			projectVo.setImgsList(imgsList);
+		}
 		return list;
 	}
 }

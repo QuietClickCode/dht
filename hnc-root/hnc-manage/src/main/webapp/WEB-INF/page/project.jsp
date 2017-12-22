@@ -192,6 +192,7 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" id="cpLogo">
                     </form>
                 </div>
                 <div class="col-lg-6" style="height:49px">
@@ -240,7 +241,7 @@
         });
     });
 
-    var fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
+    var fileUpload="http://image.kuaiyis.com/filesUpload?isWatermark=false&isCompress=false&imageUse=goods&time="+new Date().getTime();
     function cpImagesFormSummit(){
         var formData = new FormData($( "#cpImagesForm" )[0]);
         $.ajax({
@@ -258,7 +259,7 @@
                     $("#cpLogoDiv").hide();
                     $("#clearCpLogoDiv").show();
                     $("#uploadImage").attr("src",returndata.url);
-                    $("#editorCouponForm #cpLogo").val(returndata.original);
+                    $("#cpLogo").val(returndata.original);
                 }
                 layer.close(editSubmitIndex);
             },
@@ -280,11 +281,19 @@
                 if(project!=null){
                     var pid = project.pid;
                     var pname = project.pname;
+                    var parea = project.parea;
                     var version = project.version;
                     var paddress = project.paddress;
                     var pdescription = project.pdescription;
-                    var pnum = project.pnum;
-                    var pnum = project.pnum;
+                    var logoImgUrl = project.logoImgUrl;
+                    var imgsList = project.imgsList;
+
+                    $('#pid').val(pid);
+                    $('#pname').val(pname);
+                    $('#parea').val(parea);
+                    $('#version').val(version);
+                    $('#paddress').val(paddress);
+                    ue.setContent(pdescription,false);
                 }
             }
         });
@@ -292,7 +301,39 @@
 
     <!--上传项目-->
     function uploadProject() {
+        var pid = $('#pid').val();
+        var pname = $('#pname').val();
+        var parea = $('#parea').val();
+        var version = $('#version').val();
+        var paddress = $('#paddress').val();
+        var pdescription = ue.getContent();
+        var plogoid = $('#cpLogo').val();
 
+        var project = new Object();
+        project['pid'] = pid;
+        project['pname'] = pname;
+        project['parea'] = parea;
+        project['version'] = version;
+        project['paddress'] = paddress;
+        project['pdescription'] = pdescription;
+        project['plogoid'] = plogoid;
+
+        var url = '';
+        if(pid==''){
+            url = '/project/saveProject';
+        }else{
+            url = '/project/updateProject';
+        }
+
+        $.ajax({
+            url:url,
+            type:"post",
+            data: JSON.stringify(project),
+            dataType: "json",
+            success:function (data) {
+
+            }
+        });
     }
 </script>
 

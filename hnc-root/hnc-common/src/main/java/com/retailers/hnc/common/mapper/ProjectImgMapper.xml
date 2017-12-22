@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.ProjectImgMapper">
+
+	<resultMap id="rm_projectImg" type="com.retailers.hnc.common.entity.ProjectImg">
+			<result property="piId" column="pi_id"/>
+			<result property="pid" column="p_id"/>
+			<result property="aid" column="a_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_projectImg_vo" type="com.retailers.hnc.common.vo.ProjectImgVo">
+		<result property="piId" column="pi_id"/>
+		<result property="pid" column="p_id"/>
+		<result property="aid" column="a_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="piUrl" column="piUrl"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="projectImg_columns">
+		pi_id,p_id,a_id,is_delete,version
+	</sql>
+	<!-- 根据项目图片表主键取得数据 -->
+	<select id="queryProjectImgByPiId" resultMap="rm_projectImg" parameterType="java.lang.Long">
+		SELECT <include refid="projectImg_columns" />
+		FROM t_project_img WHERE pi_id = #{piId}
+	</select>
+	<!-- 项目图片表查询条件组合 -->
+	<sql id="projectImg_where">
+		<where>
+			<if test="null != params.piId">
+				AND pi_id = #{params.piId}
+			</if>
+			<if test="null != params.pid">
+				AND p_id = #{params.pid}
+			</if>
+			<if test="null != params.aid">
+				AND a_id = #{params.aid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryProjectImgList" resultMap="rm_projectImg" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="projectImg_columns" />
+		FROM t_project_img
+		<include refid="projectImg_where"/>
+	</select>
+	<select id="queryProjectImgVoListByPid" resultMap="rm_projectImg_vo">
+		SELECT
+		t1.*,t2.show_url piUrl
+		FROM
+		t_project_img t1
+		LEFT JOIN t_attachment t2 ON t1.a_id=t2.id
+		WHERE
+		t1.p_id=#{pid}
+		and t1.is_delete=0
+	</select>
+	<!--添加项目图片表 -->
+	<insert id="saveProjectImg" parameterType="com.retailers.hnc.common.entity.ProjectImg" useGeneratedKeys="true" keyProperty="piId">
+		INSERT INTO t_project_img (
+			p_id,a_id,is_delete,version
+		) VALUES
+		(
+			#{pid,jdbcType=BIGINT},#{aid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改项目图片表 -->
+	<update id="updateProjectImg" parameterType="com.retailers.hnc.common.entity.ProjectImg">
+		UPDATE t_project_img
+		<set>
+            <if test="null != pid">
+                p_id = #{pid},
+            </if>
+            <if test="null != aid">
+                a_id = #{aid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE pi_id = #{piId} and version = #{version}
+	</update>
+	<!--删除项目图片表 -->
+	<delete id="deleteProjectImgByPiId" parameterType="java.lang.Long">
+		DELETE FROM t_project_img WHERE pi_id = #{piId}
+	</delete>
+</mapper>
