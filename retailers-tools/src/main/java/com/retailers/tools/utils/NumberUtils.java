@@ -1,5 +1,7 @@
 package com.retailers.tools.utils;
 
+import javafx.beans.binding.DoubleExpression;
+
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Random;
@@ -406,6 +408,24 @@ public class NumberUtils {
 	}
 
 	/**
+	 * 计算金额折扣值
+	 * @param price 金额
+	 * @param discount 折扣（折扣*100）
+	 * @return
+	 */
+	public static Long calculationDiscountPrice(Long price,Long discount){
+		if(ObjectUtils.isEmpty(discount)){
+			return price;
+		}
+		if(ObjectUtils.isEmpty(price)){
+			return null;
+		}
+		double p=NumberUtils.priceChangeYuan(price)*NumberUtils.priceChangeYuan(discount)/10;
+		System.out.println(p);
+		return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(p,2));
+	}
+
+	/**
 	 * 求合
 	 * @param num
 	 * @return
@@ -465,6 +485,8 @@ public class NumberUtils {
 		Long num=null;
 //		System.out.println(formaterNumberLong(num,2));
 
-		System.out.println(formaterNumberPower(10001l,1));
+//		System.out.println(formaterNumberPower(10001l,1));
+		System.out.println(calculationDiscountPrice(2002l,970l));
+
 	}
 }
