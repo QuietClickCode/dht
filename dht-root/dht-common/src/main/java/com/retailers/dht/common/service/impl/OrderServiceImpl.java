@@ -267,8 +267,7 @@ public class OrderServiceImpl implements OrderService {
 				long menberPrice=od.getOdActualPrice();
 				//判断用户是否是充值会员 且享受折扣
 				if(ObjectUtils.isNotEmpty(discount)&&od.getOdIsDiscount().intValue()==OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
-					double d=NumberUtils.priceChangeYuan(menberPrice)*NumberUtils.priceChangeYuan(discount);
-					menberPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(d,2));
+					menberPrice=NumberUtils.calculationDiscountPrice(menberPrice,discount);
 				}
 				od.setOdMenberPrice(menberPrice);
 				totalMenberPrice+=menberPrice;
@@ -403,8 +402,7 @@ public class OrderServiceImpl implements OrderService {
 			od.setOdActualPrice((cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num);
 			long menberPrice=od.getOdActualPrice();
 			if(ObjectUtils.isNotEmpty(discount)&&cutLog.get("isMenberdiscount").intValue()==OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
-				double d=NumberUtils.priceChangeYuan(od.getOdActualPrice())*NumberUtils.priceChangeYuan(discount);
-				menberPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(d,2));
+				menberPrice=NumberUtils.calculationDiscountPrice(menberPrice,discount);
 			}
 			od.setOdMenberPrice(menberPrice);
 			ods.add(od);
@@ -753,8 +751,7 @@ public class OrderServiceImpl implements OrderService {
 		od.setOdActualPrice(totalPrice);
 		menberPrice=totalPrice;
 		if(ObjectUtils.isNotEmpty(discount)&&goodsGdsprel.getIsMenberdiscount().intValue()==OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
-			double d=NumberUtils.priceChangeYuan(totalPrice)*NumberUtils.priceChangeYuan(discount);
-			menberPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumber(d,2));
+			menberPrice=NumberUtils.calculationDiscountPrice(menberPrice,discount);
 		}
 		od.setOdMenberPrice(menberPrice);
 		od.setOdIsDiscount(goodsGdsprel.getIsMenberdiscount());
