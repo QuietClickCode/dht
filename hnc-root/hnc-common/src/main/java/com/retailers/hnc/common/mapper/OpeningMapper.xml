@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.OpeningMapper">
+
+	<resultMap id="rm_opening" type="com.retailers.hnc.common.entity.Opening">
+			<result property="oid" column="o_id"/>
+			<result property="oname" column="o_name"/>
+			<result property="ostartTime" column="o_start_time"/>
+			<result property="oendTime" column="o_end_time"/>
+			<result property="onum" column="o_num"/>
+			<result property="omenberNum" column="o_menber_num"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_opening_vo" type="com.retailers.hnc.common.vo.OpeningVo">
+		<result property="oid" column="o_id"/>
+		<result property="oname" column="o_name"/>
+		<result property="ostartTime" column="o_start_time"/>
+		<result property="oendTime" column="o_end_time"/>
+		<result property="onum" column="o_num"/>
+		<result property="omenberNum" column="o_menber_num"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="hasFloors" column="hasFloors"/>
+	</resultMap>
+
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="opening_columns">
+		o_id,o_name,o_start_time,o_end_time,o_num,o_menber_num,is_delete,version
+	</sql>
+	<!-- 根据开盘表主键取得数据 -->
+	<select id="queryOpeningByOid" resultMap="rm_opening" parameterType="java.lang.Long">
+		SELECT <include refid="opening_columns" />
+		FROM t_opening WHERE o_id = #{oid}
+	</select>
+	<!-- 开盘表查询条件组合 -->
+	<sql id="opening_where">
+		<where>
+			<if test="null != params.oid">
+				AND t1.o_id = #{params.oid}
+			</if>
+			<if test="null != params.oname">
+				AND t1.o_name like concat('%', #{params.oname} ,'%')
+			</if>
+			<if test="null != params.ostartTimeBegin">
+				AND t1.o_start_time &gt;= #{params.ostartTime}
+			</if>
+			<if test="null != params.ostartTimeEnd">
+				AND t1.o_start_time &lt;= #{params.ostartTime}
+			</if>
+			<if test="null != params.oendTimeBegin">
+				AND t1.o_end_time &gt;= #{params.oendTime}
+			</if>
+			<if test="null != params.oendTimeEnd">
+				AND t1.o_end_time &lt;= #{params.oendTime}
+			</if>
+			<if test="null != params.onum">
+				AND t1.o_num = #{params.onum}
+			</if>
+			<if test="null != params.omenberNum">
+				AND t1.o_menber_num = #{params.omenberNum}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOpeningList" resultMap="rm_opening" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="opening_columns" />
+		FROM t_opening t1
+		<include refid="opening_where"/>
+	</select>
+
+	<select id="queryOpeningVoList" resultMap="rm_opening_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		GROUP_CONCAT(t3.fm_name) hasFloors
+		FROM
+		t_opening t1
+		LEFT JOIN t_opening_floor t2 ON t1.o_id=t2.o_id and t2.is_delete=0
+		LEFT JOIN t_floor_manage t3 ON t2.f_id=t3.fm_id and t3.is_delete=0
+		<include refid="opening_where"/>
+		GROUP BY t1.o_id
+	</select>
+	<!--添加开盘表 -->
+	<insert id="saveOpening" parameterType="com.retailers.hnc.common.entity.Opening" useGeneratedKeys="true" keyProperty="oid">
+		INSERT INTO t_opening (
+			o_name,o_start_time,o_end_time,o_num,o_menber_num,is_delete,version
+		) VALUES
+		(
+			#{oname,jdbcType=VARCHAR},#{ostartTime,jdbcType=DATE},#{oendTime,jdbcType=DATE},#{onum,jdbcType=BIGINT},#{omenberNum,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改开盘表 -->
+	<update id="updateOpening" parameterType="com.retailers.hnc.common.entity.Opening">
+		UPDATE t_opening
+		<set>
+            <if test="null != oname">
+                o_name = #{oname},
+            </if>
+            <if test="null != ostartTime">
+                o_start_time = #{ostartTime},
+            </if>
+            <if test="null != oendTime">
+                o_end_time = #{oendTime},
+            </if>
+            <if test="null != onum">
+                o_num = #{onum},
+            </if>
+            <if test="null != omenberNum">
+                o_menber_num = #{omenberNum},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE o_id = #{oid} and version = #{version}
+	</update>
+	<!--删除开盘表 -->
+	<delete id="deleteOpeningByOid" parameterType="java.lang.Long">
+		DELETE FROM t_opening WHERE o_id = #{oid}
+	</delete>
+</mapper>

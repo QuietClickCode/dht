@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.OpeningFloorMapper">
+
+	<resultMap id="rm_openingFloor" type="com.retailers.hnc.common.entity.OpeningFloor">
+			<result property="ofId" column="of_id"/>
+			<result property="oid" column="o_id"/>
+			<result property="fid" column="f_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="openingFloor_columns">
+		of_id,o_id,f_id,is_delete,version
+	</sql>
+	<!-- 根据开盘与楼栋关系表主键取得数据 -->
+	<select id="queryOpeningFloorByOfId" resultMap="rm_openingFloor" parameterType="java.lang.Long">
+		SELECT <include refid="openingFloor_columns" />
+		FROM t_opening_floor WHERE of_id = #{ofId}
+	</select>
+	<!-- 开盘与楼栋关系表查询条件组合 -->
+	<sql id="openingFloor_where">
+		<where>
+			<if test="null != params.ofId">
+				AND of_id = #{params.ofId}
+			</if>
+			<if test="null != params.oid">
+				AND o_id = #{params.oid}
+			</if>
+			<if test="null != params.fid">
+				AND f_id = #{params.fid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOpeningFloorList" resultMap="rm_openingFloor" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="openingFloor_columns" />
+		FROM t_opening_floor
+		<include refid="openingFloor_where"/>
+	</select>
+	<!--添加开盘与楼栋关系表 -->
+	<insert id="saveOpeningFloor" parameterType="com.retailers.hnc.common.entity.OpeningFloor" useGeneratedKeys="true" keyProperty="ofId">
+		INSERT INTO t_opening_floor (
+			o_id,f_id,is_delete,version
+		) VALUES
+		(
+			#{oid,jdbcType=BIGINT},#{fid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改开盘与楼栋关系表 -->
+	<update id="updateOpeningFloor" parameterType="com.retailers.hnc.common.entity.OpeningFloor">
+		UPDATE t_opening_floor
+		<set>
+            <if test="null != oid">
+                o_id = #{oid},
+            </if>
+            <if test="null != fid">
+                f_id = #{fid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE of_id = #{ofId} and version = #{version}
+	</update>
+	<!--删除开盘与楼栋关系表 -->
+	<delete id="deleteOpeningFloorByOfId" parameterType="java.lang.Long">
+		DELETE FROM t_opening_floor WHERE of_id = #{ofId}
+	</delete>
+</mapper>

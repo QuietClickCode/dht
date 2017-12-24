@@ -21,8 +21,10 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -49,8 +51,8 @@ public class ProjectController extends BaseController {
 
     @RequestMapping("saveProject")
     @ResponseBody
-    public BaseResp editProject(Project Project, HttpServletRequest request){
-        boolean flag = projectService.saveProject(Project);
+    public BaseResp editProject(Project project){
+        boolean flag = projectService.saveProject(project);
         return success(flag);
     }
     @RequestMapping("updateProject")
