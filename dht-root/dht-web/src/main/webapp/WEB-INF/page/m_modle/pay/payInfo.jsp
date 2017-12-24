@@ -147,7 +147,7 @@
     		请选择支付方式
     		<p class="p1">金额&emsp;<span>${price}</span>元</p>
     	</div>
-    	<div class="pay_mode_input_box active" attr="wallet">
+    	<div class="pay_mode_input_box active" attr="wallet" style="display: none;" id="walletPayDiv">
     		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="checked">✓</i></label>
     		<img src="/img/icon-logo.png"/>
     		<span class="span1">余额支付</span>
@@ -165,6 +165,7 @@
 <script type="text/javascript" src="/js/common/common.js" ></script>
 
 <script>
+	var showWalletContext=${showWallet};
 	var isSubmit=false;
     /**
 	 * 确认支付
@@ -339,7 +340,12 @@
 			$(this).siblings(".pay_mode_input_box").
 			removeClass("active").find("i").removeClass("checked");
 		});
-	})
+		if(showWalletContext&&showWalletContext==true){
+		    $("#walletPayDiv").show();
+		}else{
+            $("#walletPayDiv").hide();
+		}
+	});
 	function walletPay() {
 		let payPwd=getValue();
 		if(payPwd.length!=6){

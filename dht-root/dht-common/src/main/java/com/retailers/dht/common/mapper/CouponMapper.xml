@@ -96,6 +96,7 @@
 		<result property="useRange" column="useRange"/>
 		<result property="gIds" column="gIds"/>
 		<result property="ggIds" column="ggIds"/>
+		<result property="cpuId" column="cpuId"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -416,7 +417,8 @@
 			END useTime,
 			ROUND(u.cpu_val / 100, 2) couponVal,
 			a.show_url,
-			fw.gIds,fw.ggIds
+			fw.gIds,fw.ggIds,
+			u.cpu_id cpuId
 		FROM
 			t_coupon_user u,
 			t_coupon c

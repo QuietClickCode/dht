@@ -159,7 +159,7 @@
                         <input id="parea" name="parea" class="form-control" />
                     </div>
                 </div>
-                <div class="col-lg-6" style="height:49px;display: none">
+                <div class="col-lg-6" style="height:49px;">
                     <div class="input-group form-group">
                         <span class="input-group-addon">
                              容纳户数:
@@ -167,6 +167,7 @@
                         <input id="pnum" name="pnum"  class="form-control"/>
                     </div>
                 </div>
+                <br/>
                 <div class="col-lg-6" style="height:49px">
                     <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
                         <div class="row">
@@ -192,8 +193,10 @@
                                 </div>
                             </div>
                         </div>
+                        <input type="hidden" id="cpLogo">
                     </form>
                 </div>
+                <br/>
                 <div class="col-lg-6" style="height:49px">
                     <div class="input-group form-group">
                         <span class="input-group-addon">
@@ -220,12 +223,13 @@
             </div>
         </form>
         <center>
-            <button id="editSubmit" class="btn btn-success" >保存</button>
+            <button onclick="uploadProject();" class="btn btn-success" >保存</button>
         </center>
 
     </div>
 </div>
 <script src="/js/layer/layer.js"></script>
+<script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
 <script>
     var formData=$("#editorGoodsForm").serializeObject();
     var editSubmitIndex;
@@ -240,7 +244,7 @@
         });
     });
 
-    var fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
+    var fileUpload="http://image.kuaiyis.com/filesUpload?isWatermark=false&isCompress=false&imageUse=goods&time="+new Date().getTime();
     function cpImagesFormSummit(){
         var formData = new FormData($( "#cpImagesForm" )[0]);
         $.ajax({
@@ -258,7 +262,7 @@
                     $("#cpLogoDiv").hide();
                     $("#clearCpLogoDiv").show();
                     $("#uploadImage").attr("src",returndata.url);
-                    $("#editorCouponForm #cpLogo").val(returndata.original);
+                    $("#cpLogo").val(returndata.original);
                 }
                 layer.close(editSubmitIndex);
             },
@@ -270,14 +274,150 @@
 
     <!--加载项目-->
     function loadProject() {
+        $.ajax({
+            url:"/project/queryProject",
+            type:"post",
+            data: {},
+            dataType: "json",
+            success:function (data) {
+                var project = data.project;
+                if(project!=null){
+                    var pid = project.pid;
+                    var pname = project.pname;
+                    var pnum = project.pnum;
+                    var parea = project.parea;
+                    var version = project.version;
+                    var paddress = project.paddress;
+                    var pdescription = project.pdescription;
+                    var logoImgUrl = project.logoImgUrl;
+                    var imgsList = project.imgsList;
 
+                    $('#pid').val(pid);
+                    $('#pname').val(pname);
+                    $('#pnum').val(pnum);
+                    $('#parea').val(parea);
+                    $('#version').val(version);
+                    $('#paddress').val(paddress);
+                    ue.setContent(pdescription,false);
+                }
+            }
+        });
     }
 
     <!--上传项目-->
     function uploadProject() {
+//        $('#editorProjectForm').data('bootstrapValidator').validate();
+//        if(!$('#editorProjectForm').data('bootstrapValidator').isValid()){
+//            return;
+//        }
 
+        var pid = $('#pid').val();
+        var pnum = $('#pnum').val();
+        var pname = $('#pname').val();
+        var parea = $('#parea').val();
+        var version = $('#version').val();
+        var paddress = $('#paddress').val();
+        var pdescription = ue.getContent();
+        var plogoid = $('#cpLogo').val();
+
+        var url = '';
+        if(pid==''){
+            url = '/project/saveProject';
+        }else{
+            url = '/project/updateProject';
+        }
+
+        $.ajax({
+            url:url,
+            type:"post",
+            data: {pid:pid,
+                pname:pname,
+                parea:parea,
+                version:version,
+                paddress:paddress,
+                pdescription:pdescription,
+                plogoid:plogoid,
+                pnum:pnum},
+            dataType: "json",
+            success:function (data) {
+                if(data.status==0){
+                    layer.msg('操作成功');
+                }
+            }
+        });
+    }
+    
+    function validteData() {
+        $('#editorProjectForm').bootstrapValidator({
+            container: 'tooltip',
+            //不能编辑 隐藏 不可见的不做校验
+            excluded: [':disabled', ':hidden', ':not(:visible)'],
+            message: 'This value is not valid',
+            //live: 'submitted',
+            feedbackIcons: {
+                valid: 'glyphicon glyphicon-ok',
+                invalid: 'glyphicon glyphicon-remove',
+                validating: 'glyphicon glyphicon-refresh'
+            },
+            fields: {
+                pname: {
+                    message: '项目名称未通过',
+                    validators: {
+                        notEmpty: {
+                            message: '项目名称不能为空'
+                        },
+                        stringLength: {
+                            min: 1,
+                            max: 30,
+                            message: '项目名称长度在1-30之间'
+                        }
+                    }
+                },
+                paddress: {
+                    message: '地址未通过',
+                    validators: {
+                        notEmpty: {
+                            message: '地址不能为空'
+                        },
+                        stringLength: {
+                            min: 1,
+                            max: 30,
+                            message: '地址长度在1-30之间'
+                        }
+                    }
+                },
+                parea: {
+                    validators: {
+                        notEmpty: {
+                            message: '占地面积不能为空'
+                        },
+                        regexp: {
+                            regexp: /\d/,
+                            message: "只能输入数字"
+                        }
+                    }
+                },
+                pnum: {
+                    validators: {
+                        notEmpty: {
+                            message: '容纳户数不能为空'
+                        },
+                        regexp: {
+                            regexp: /\d/,
+                            message: "只能输入数字"
+                        }
+                    }
+                }
+            }
+        });
     }
 </script>
+
+<!--调用函数-->
+<script>
+    loadProject();
+</script>
+
 <!--百度编辑器-->
 <script>
     var ue = UE.getEditor('editor');

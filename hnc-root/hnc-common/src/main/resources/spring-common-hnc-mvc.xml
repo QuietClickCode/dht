@@ -20,5 +20,6 @@
 	<bean id="springUtils" class="com.retailers.tools.utils.SpringUtils" />
 	<!-- 引入权限管理 -->
 	<import resource="classpath:spring/spring-auth-application-context.xml" />
-
+	<!-- 初始化常量加载 -->
+	<bean id="systemStartFilter" class="com.retailers.hnc.common.filter.SystemStartFilter" init-method="initSysParamterConfig"/>
 </beans>

@@ -68,6 +68,10 @@ public class CouponWebVo {
      * 优惠卷使用范围（商品类型id）
      */
     private String ggIds;
+    /**
+     * 用户领取的优惠对应id
+     */
+    private Long cpuId;
 
     public Long getCpId() {
         return cpId;
@@ -259,5 +263,13 @@ public class CouponWebVo {
 
     public void setGgIds(String ggIds) {
         this.ggIds = ggIds;
+    }
+
+    public Long getCpuId() {
+        return cpuId;
+    }
+
+    public void setCpuId(Long cpuId) {
+        this.cpuId = cpuId;
     }
 }
