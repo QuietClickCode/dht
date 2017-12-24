@@ -82,6 +82,8 @@ public class OrderServiceImpl implements OrderService {
 	private GoodsGgsvalDetailService goodsGgsvalDetailService;
 	@Autowired
 	private OrderSuccessQueueMapper orderSuccessQueueMapper;
+	@Autowired
+	private CouponUserMapper couponUserMapper;
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -232,8 +234,6 @@ public class OrderServiceImpl implements OrderService {
 				//实际支付金额
 				od.setOdActualPrice(p*bgVo.getNum());
 				ods.add(od);
-				totalPrice+=od.getOdGoodsPrice();
-				actualPrice+=od.getOdActualPrice();
 			}
             //商品优惠
             if(ObjectUtils.isNotEmpty(gcpMaps)){
@@ -245,6 +245,7 @@ public class OrderServiceImpl implements OrderService {
             }
             //取得使用的优惠卷
             String couponIds=buyInfos.getCpIds();
+            List<Long> cpuIds=new ArrayList<Long>();
             //判断是否使用优惠卷
             if(ObjectUtils.isNotEmpty(couponIds)){
             	List<Long> cids=new ArrayList<Long>();
@@ -255,9 +256,16 @@ public class OrderServiceImpl implements OrderService {
             	if(ObjectUtils.isNotEmpty(couponInfos.get("userCoupons"))){
 					//用户拥有的优惠卷
 					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("userCoupons");
-					editorUserCoupon(ods,cids,gidUnGtid,cwvs);
+					List<Long> used=editorUserCoupon(ods,cids,gidUnGtid,cwvs);
+					cpuIds.addAll(used);
 				}
             }
+
+            //计算商品实际价格
+            for(OrderDetail od:ods){
+				totalPrice+=od.getOdGoodsPrice();
+				actualPrice+=od.getOdActualPrice();
+			}
 			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
@@ -273,8 +281,16 @@ public class OrderServiceImpl implements OrderService {
 				logger.error("修改商品库存失败，请重试");
 				throw new AppException("下单失败");
 			}
+			if(ObjectUtils.isNotEmpty(cpuIds)){
+				//设置用户使用优惠卷
+				long total=couponUserMapper.useCouponByOIds(uid,order.getId(),cpuIds,curDate);
+				if(cpuIds.size()!=total){
+					throw new AppException("优惠卷己被使用");
+				}
+			}
 			rtnMap.put("orderNo",orderNo);
 			rtnMap.put("totalPrice",totalPrice);
+			rtnMap.put("type",order.getOrderType());
 		}finally {
         	logger.info("创建购物订单完毕，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
 			logger.info("创建购物订单完成，生成订单号:[{}],执行时间:[{}]",orderNo,(System.currentTimeMillis()-curDate.getTime()));
@@ -302,6 +318,7 @@ public class OrderServiceImpl implements OrderService {
 			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SPECIAL_OFFER,cspId);
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
+			rtnMap.put("type",order.getOrderType());
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
@@ -326,6 +343,7 @@ public class OrderServiceImpl implements OrderService {
 			Order order = createCouponOrder(uid,buyInfos,inviterUid,OrderEnum.SECKILL,cspId);
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
+			rtnMap.put("type",order.getOrderType());
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
@@ -406,6 +424,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			rtnMap.put("orderNo",order.getOrderNo());
 			rtnMap.put("totalPrice",order.getOrderTradePrice());
+			rtnMap.put("type",order.getOrderType());
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
@@ -516,6 +535,7 @@ public class OrderServiceImpl implements OrderService {
 			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
 			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
+			rtn.put("type",order.getOrderType());
 		}finally {
 			logger.info("用户充值处理结束,执行时间:[{}],返回数据：[{}]",(System.currentTimeMillis()-curDate.getTime()),JSON.toJSON(rtn));
 		}
@@ -760,9 +780,10 @@ public class OrderServiceImpl implements OrderService {
 	        Map<Long,GoodsCouponView> allow=new HashMap<Long, GoodsCouponView>();
 	        if(ObjectUtils.isNotEmpty(allowGc.get(key))){
 	            for(GoodsCouponView gcv:allowGc.get(key)){
-                    allow.put(gcv.getGid(),gcv);
+                    allow.put(gcv.getGcpId(),gcv);
                 }
             }
+            allowGcMaps.put(Long.parseLong(key),allow);
         }
         StringBuffer error=new StringBuffer();
         //判断用户使用商品优惠是否合规格  商品上使用的优惠卷
@@ -818,7 +839,8 @@ public class OrderServiceImpl implements OrderService {
 	 * @param userHave 用户拥有的优惠卷
 	 * @throws AppException
 	 */
-    private void editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<Long,Long> gidUnGt,List<CouponWebVo> userHave)throws AppException{
+    private List<Long> editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<Long,Long> gidUnGt,List<CouponWebVo> userHave)throws AppException{
+    	List<Long> cupIds=new ArrayList<Long>();
     	Map<Long,CouponWebVo> userCouponMaps=new HashMap<Long, CouponWebVo>();
     	for(CouponWebVo cwv:userHave){
 			userCouponMaps.put(cwv.getCpId(),cwv);
@@ -837,7 +859,7 @@ public class OrderServiceImpl implements OrderService {
 		if(!ObjectUtils.isEmpty(error)){
 			throw new AppException(error.toString());
 		}
-		if(useCoupon.size()!=djgs+1){
+		if(useCoupon.size()<djgs+1){
 			throw new AppException("优惠卷选择错误 ，使用了不能叠加使用的优惠卷");
 		}
 
@@ -851,7 +873,9 @@ public class OrderServiceImpl implements OrderService {
 			}else{
 				goodsCoupon(ods,cwv,true,gidUnGt);
 			}
+			cupIds.add(cwv.getCpuId());
 		}
+		return cupIds;
     }
 
 	/**
@@ -881,6 +905,7 @@ public class OrderServiceImpl implements OrderService {
 		//设置商品价格
 		for(OrderDetail od:ods){
 			long goodsCurPrice=od.getOdActualPrice();
+			System.out.println("goodsCurPrice------------------------------------>>>:"+goodsCurPrice);
 			//根据商品id取得商品类型id
 			Long gtid=gidUnGt.get(od.getOdGoodsId());
 			if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
@@ -890,6 +915,7 @@ public class OrderServiceImpl implements OrderService {
 					goodsCurPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(goodsCurPrice*NumberUtils.formaterNumberr(cwv.getCouponVal())));
 				}
 			}
+			System.out.println("goodsCurPrice  coupon------------------------------------>>>:"+goodsCurPrice);
 			od.setOdActualPrice(goodsCurPrice);
 		}
 	}

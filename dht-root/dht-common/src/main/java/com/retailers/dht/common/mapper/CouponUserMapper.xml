@@ -127,4 +127,15 @@
 			SET  cpu_status =2
 		WHERE cp_id = #{cpuId} and cpu_status=0
 	</update>
+	<!--用户购买商品使用优惠卷-->
+	<update id="useCouponByOIds">
+		UPDATE t_coupon_user
+		SET  cpu_status =1,
+			  cpu_use_oid=#{oid},
+		cpu_use_time=#{curDate}
+		WHERE cpu_status=0 AND cpu_id in
+		<foreach collection="cpuIds" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 </mapper>
