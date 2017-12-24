@@ -34,6 +34,13 @@ public interface OrderDetailMapper {
 	 * @date 2017-12-11 23:38:12
 	 */
 	public int updateOrderDetail(OrderDetail orderDetail);
+
+	/**
+	 * 修改商品会员价（用钱包支付时，实际支付金额)
+	 * @param ods 订单详情列表
+	 * @return
+	 */
+	public int updateOrderDetails(List<OrderDetail> ods);
 	/**
 	 * 根据Id删除订单详情
 	 * @param id

@@ -255,6 +255,9 @@
             <if test="null != orderGoodsActualPayPrice">
                 order_goods_actual_pay_price = #{orderGoodsActualPayPrice},
             </if>
+			<if test="null != orderMenberPrice">
+				order_menber_price = #{orderMenberPrice},
+			</if>
             <if test="null != orderGoodsCouponPrice">
                 order_goods_coupon_price = #{orderGoodsCouponPrice},
             </if>
