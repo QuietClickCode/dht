@@ -52,4 +52,10 @@ public interface OrderSuccessQueueMapper {
 	 */
 	public List<OrderSuccessQueue> queryOrderSuccessQueueList(Pagination<OrderSuccessQueue> pagination);
 
+	/**
+	 * 取得待处理的订单列表
+	 * @return
+	 */
+	public List<OrderSuccessQueue> queryWaiteOrderSuccessQueue();
+
 }

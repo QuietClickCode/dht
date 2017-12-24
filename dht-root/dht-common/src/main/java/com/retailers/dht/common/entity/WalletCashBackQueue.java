@@ -7,19 +7,22 @@ import java.util.Date;
  * @author zhongp
  * @version 1.0
  * @since 1.8
- * @date 2017-12-20 01:43:22
+ * @date 2017-12-25 00:35:47
  */
 public class WalletCashBackQueue implements java.io.Serializable {
 
-	/**ccbqD*/
+	/**ccbqId*/
 	@NotEmpty
-	private Long ccbqD;
-	/**商品类型（第一级）*/
-	@NotEmpty
-	private Long ccbqGoodsType;
+	private Long ccbqId;
 	/**订单id*/
 	@NotEmpty
 	private Long ccbqOrderId;
+	/**关联商品id*/
+	@NotEmpty
+	private Long ccbqGid;
+	/**商品类型（第一级）*/
+	@NotEmpty
+	private Long ccbqGoodsType;
 	/**用户id*/
 	@NotEmpty
 	private Long ccbqUid;
@@ -46,23 +49,16 @@ public class WalletCashBackQueue implements java.io.Serializable {
 	public WalletCashBackQueue(){
 	}
 
-	public WalletCashBackQueue( Long ccbqD){
-		this.ccbqD = ccbqD;
+	public WalletCashBackQueue( Long ccbqId){
+		this.ccbqId = ccbqId;
 	}
 
-	public void setCcbqD(Long value) {
-		this.ccbqD = value;
+	public void setCcbqId(Long value) {
+		this.ccbqId = value;
 	}
 
-	public Long getCcbqD() {
-		return this.ccbqD;
-	}
-	public void setCcbqGoodsType(Long value) {
-		this.ccbqGoodsType = value;
-	}
-
-	public Long getCcbqGoodsType() {
-		return this.ccbqGoodsType;
+	public Long getCcbqId() {
+		return this.ccbqId;
 	}
 	public void setCcbqOrderId(Long value) {
 		this.ccbqOrderId = value;
@@ -70,6 +66,20 @@ public class WalletCashBackQueue implements java.io.Serializable {
 
 	public Long getCcbqOrderId() {
 		return this.ccbqOrderId;
+	}
+	public void setCcbqGid(Long value) {
+		this.ccbqGid = value;
+	}
+
+	public Long getCcbqGid() {
+		return this.ccbqGid;
+	}
+	public void setCcbqGoodsType(Long value) {
+		this.ccbqGoodsType = value;
+	}
+
+	public Long getCcbqGoodsType() {
+		return this.ccbqGoodsType;
 	}
 	public void setCcbqUid(Long value) {
 		this.ccbqUid = value;

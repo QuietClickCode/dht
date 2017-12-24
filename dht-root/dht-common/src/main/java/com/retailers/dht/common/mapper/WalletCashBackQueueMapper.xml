@@ -3,9 +3,10 @@
 <mapper namespace="com.retailers.dht.common.dao.WalletCashBackQueueMapper">
 
 	<resultMap id="rm_walletCashBackQueue" type="com.retailers.dht.common.entity.WalletCashBackQueue">
-			<result property="ccbqD" column="ccbq_d"/>
-			<result property="ccbqGoodsType" column="ccbq__goods_type"/>
+			<result property="ccbqId" column="ccbq_id"/>
 			<result property="ccbqOrderId" column="ccbq__order_id"/>
+			<result property="ccbqGid" column="ccbq_gid"/>
+			<result property="ccbqGoodsType" column="ccbq__goods_type"/>
 			<result property="ccbqUid" column="ccbq__uid"/>
 			<result property="ccbqMoney" column="ccbq__money"/>
 			<result property="ccbqStatus" column="ccbq__status"/>
@@ -17,24 +18,27 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="walletCashBackQueue_columns">
-		ccbq_d,ccbq__goods_type,ccbq__order_id,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+		ccbq_id,ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
 	</sql>
 	<!-- 根据钱包消费返现(包括指定可返现商品类型）主键取得数据 -->
-	<select id="queryWalletCashBackQueueByCcbqD" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
+	<select id="queryWalletCashBackQueueByCcbqId" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
 		SELECT <include refid="walletCashBackQueue_columns" />
-		FROM t_wallet_cash_back_queue WHERE ccbq_d = #{ccbqD}
+		FROM t_wallet_cash_back_queue WHERE ccbq_id = #{ccbqId}
 	</select>
 	<!-- 钱包消费返现(包括指定可返现商品类型）查询条件组合 -->
 	<sql id="walletCashBackQueue_where">
 		<where>
-			<if test="null != params.ccbqD">
-				AND ccbq_d = #{params.ccbqD}
-			</if>
-			<if test="null != params.ccbqGoodsType">
-				AND ccbq__goods_type = #{params.ccbqGoodsType}
+			<if test="null != params.ccbqId">
+				AND ccbq_id = #{params.ccbqId}
 			</if>
 			<if test="null != params.ccbqOrderId">
 				AND ccbq__order_id = #{params.ccbqOrderId}
+			</if>
+			<if test="null != params.ccbqGid">
+				AND ccbq_gid = #{params.ccbqGid}
+			</if>
+			<if test="null != params.ccbqGoodsType">
+				AND ccbq__goods_type = #{params.ccbqGoodsType}
 			</if>
 			<if test="null != params.ccbqUid">
 				AND ccbq__uid = #{params.ccbqUid}
@@ -72,23 +76,26 @@
 		<include refid="walletCashBackQueue_where"/>
 	</select>
 	<!--添加钱包消费返现(包括指定可返现商品类型） -->
-	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqD">
+	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq__goods_type,ccbq__order_id,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+			ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
 		) VALUES
 		(
-			#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqOrderId,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
+			#{ccbqOrderId,jdbcType=BIGINT},#{ccbqGid,jdbcType=BIGINT},#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改钱包消费返现(包括指定可返现商品类型） -->
 	<update id="updateWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue">
 		UPDATE t_wallet_cash_back_queue
 		<set>
-            <if test="null != ccbqGoodsType">
-                ccbq__goods_type = #{ccbqGoodsType},
-            </if>
             <if test="null != ccbqOrderId">
                 ccbq__order_id = #{ccbqOrderId},
+            </if>
+            <if test="null != ccbqGid">
+                ccbq_gid = #{ccbqGid},
+            </if>
+            <if test="null != ccbqGoodsType">
+                ccbq__goods_type = #{ccbqGoodsType},
             </if>
             <if test="null != ccbqUid">
                 ccbq__uid = #{ccbqUid},
@@ -112,10 +119,10 @@
                 version = version+1,
             </if>
 		</set>
-		WHERE ccbq_d = #{ccbqD} and version = #{version}
+		WHERE ccbq_id = #{ccbqId} and version = #{version}
 	</update>
 	<!--删除钱包消费返现(包括指定可返现商品类型） -->
-	<delete id="deleteWalletCashBackQueueByCcbqD" parameterType="java.lang.Long">
-		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_d = #{ccbqD}
+	<delete id="deleteWalletCashBackQueueByCcbqId" parameterType="java.lang.Long">
+		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_id = #{ccbqId}
 	</delete>
 </mapper>

@@ -87,4 +87,8 @@
 	<delete id="deleteOrderSuccessQueueById" parameterType="java.lang.Long">
 		DELETE FROM t_order_success_queue WHERE id = #{id}
 	</delete>
+	<!--取得待处理的订单列表 -->
+	<select id="queryWaiteOrderSuccessQueue" resultMap="rm_orderSuccessQueue">
+		SELECT <include refid="orderSuccessQueue_columns" /> FROM t_order_success_queue where execute_num&lt;=10 order by id ASC
+	</select>
 </mapper>

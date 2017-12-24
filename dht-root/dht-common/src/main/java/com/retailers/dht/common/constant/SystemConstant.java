@@ -85,6 +85,26 @@ public class SystemConstant {
      */
     public static final int USER_IS_OLD_NO=0;
     /**
+     * 平台返现队例状态 0 排队中
+     */
+    public static final long PLAT_CASH_BACK_MENOY_STATUS_LINE_UP=0;
+    /**
+     * 平台返现队例状态 1 筹款中(排到自己返现）
+     */
+    public static final long PLAT_CASH_BACK_MENOY_STATUS_LINE_FUNDRAISING=1;
+    /**
+     * 平台返现队例状态 2 结束
+     */
+    public static final long PLAT_CASH_BACK_MENOY_STATUS_END=2;
+    /**
+     * 当前 平台消费统计类型 0 直接返现
+     */
+    public static final long CURRENT_PLATFORM_SALES_TYPE_CASH=0;
+    /**
+     * 当前 平台消费统计类型 1 累计消费统计
+     */
+    public static final long CURRENT_PLATFORM_SALES_TYPE_SALES_TOTAL=1;
+    /**
      * java 队列
      */
     private static Queue<OrderProcessingQueue> queue = new LinkedList<OrderProcessingQueue>();
