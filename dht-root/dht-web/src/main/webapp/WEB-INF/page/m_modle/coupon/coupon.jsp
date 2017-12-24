@@ -8,6 +8,7 @@
     <title>领券中心</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/deal-success.css">
 </head>
 
 <body class="bge6">
@@ -82,6 +83,27 @@
          * @param row 行数据
          */
         function showCoupon(couponId,row) {
+            let html = '<div class="couponUnused"><div class="couponInfo"><div class="price">';
+            if(row.cpCoinType==0){
+                if(row.cpType==0){
+                    html+='<p>'+row.couponVal+'<span class="flag">￥</span></p>';
+                }else {
+                    html+='<p>'+row.couponVal+'<span class="flag">折</span></p>';
+                }
+            }else{
+                if(row.cpType==0){
+                    html+='<p>'+row.couponVal+'<span class="flag">￥</span></p>';
+                }else {
+                    html+='<p>'+row.couponVal+'<span class="flag">折</span></p>';
+                }
+            }
+
+            html += '</div><div class="date"><p class="test">'+row.useCondition+'</p><p>'+row.useTime+'</p>';
+            html += '</div><div class="useCoupon"><span onclick="userGrabCoupon('+row.cpId+');return false;">立即使用</span></div></div>';
+            html += '<div class="couponType"><p>'+row.useRange+'</p><span class="care_button"></span></div></div>';
+            $(couponId).append(html);
+        }
+        /*function showCoupon(couponId,row) {
             let html='<li><a href="javascript:void(0)"><div class="coupon_item_box clearfix">';
             if(row.cpCoinType==0){
                 if(row.cpType==0){
@@ -100,7 +122,7 @@
             html+='<p class="time">'+row.useTime+'</p></div></div><p class="p1">'+row.useRange+'</p>';
             html+='<span class="btn_span" onclick="userGrabCoupon('+row.cpId+');return false;">立即领取</span></a></li>';
             $(couponId).append(html);
-        }
+        }*/
         /**
          * 领取优惠卷
          * @param id 优惠卷id
@@ -133,6 +155,20 @@
                 }
             });
         }
+
+        var flag = 1;
+        $('#couponLists').on('click', '.care_button', function(){
+            if(flag == 2){
+                flag = 1;
+                $(this).prev("p").css("white-space","nowrap");
+                return;
+            }
+            if(flag == 1){
+                flag = 2;
+                $(this).prev("p").attr("style","white-space:normal");
+                return;
+            }
+        })
     </script>
 </body>
 </html>
