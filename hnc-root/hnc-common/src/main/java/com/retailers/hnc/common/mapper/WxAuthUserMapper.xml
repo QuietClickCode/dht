@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.WxAuthUserMapper">
+
+	<resultMap id="rm_wxAuthUser" type="com.retailers.hnc.common.entity.WxAuthUser">
+			<result property="wauId" column="wau_id"/>
+			<result property="wauWxId" column="wau_wx_id"/>
+			<result property="wauUid" column="wau_u_id"/>
+			<result property="wauOpenid" column="wau_openid"/>
+			<result property="wauNickname" column="wau_nickname"/>
+			<result property="wauSex" column="wau_sex"/>
+			<result property="wauLanguage" column="wau_language"/>
+			<result property="wauCity" column="wau_city"/>
+			<result property="wauProvince" column="wau_province"/>
+			<result property="wauCountry" column="wau_country"/>
+			<result property="wauHeadimgurl" column="wau_headimgurl"/>
+			<result property="wauUnionid" column="wau_unionid"/>
+			<result property="wauCreateDate" column="wau_create_date"/>
+			<result property="wauRefereeId" column="wau_referee_id"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="wxAuthUser_columns">
+		wau_id,wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,wau_referee_id,version
+	</sql>
+	<!-- 根据微信用户表主键取得数据 -->
+	<select id="queryWxAuthUserByWauId" resultMap="rm_wxAuthUser" parameterType="java.lang.Long">
+		SELECT <include refid="wxAuthUser_columns" />
+		FROM t_wx_auth_user WHERE wau_id = #{wauId}
+	</select>
+	<!-- 微信用户表查询条件组合 -->
+	<sql id="wxAuthUser_where">
+		<where>
+			<if test="null != params.wauId">
+				AND wau_id = #{params.wauId}
+			</if>
+			<if test="null != params.wauWxId">
+				AND wau_wx_id = #{params.wauWxId}
+			</if>
+			<if test="null != params.wauUid">
+				AND wau_u_id = #{params.wauUid}
+			</if>
+			<if test="null != params.wauOpenid and '' != params.wauOpenid">
+				AND wau_openid = #{params.wauOpenid}
+			</if>
+			<if test="null != params.wauNickname and '' != params.wauNickname">
+				AND wau_nickname = #{params.wauNickname}
+			</if>
+			<if test="null != params.wauSex">
+				AND wau_sex = #{params.wauSex}
+			</if>
+			<if test="null != params.wauLanguage and '' != params.wauLanguage">
+				AND wau_language = #{params.wauLanguage}
+			</if>
+			<if test="null != params.wauCity and '' != params.wauCity">
+				AND wau_city = #{params.wauCity}
+			</if>
+			<if test="null != params.wauProvince and '' != params.wauProvince">
+				AND wau_province = #{params.wauProvince}
+			</if>
+			<if test="null != params.wauCountry and '' != params.wauCountry">
+				AND wau_country = #{params.wauCountry}
+			</if>
+			<if test="null != params.wauHeadimgurl and '' != params.wauHeadimgurl">
+				AND wau_headimgurl = #{params.wauHeadimgurl}
+			</if>
+			<if test="null != params.wauUnionid and '' != params.wauUnionid">
+				AND wau_unionid = #{params.wauUnionid}
+			</if>
+			<if test="null != params.wauCreateDateBegin">
+				AND wau_create_date &gt;= #{params.wauCreateDate}
+			</if>
+			<if test="null != params.wauCreateDateEnd">
+				AND wau_create_date &lt;= #{params.wauCreateDate}
+			</if>
+			<if test="null != params.wauRefereeId">
+				AND wau_referee_id = #{params.wauRefereeId}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryWxAuthUserList" resultMap="rm_wxAuthUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="wxAuthUser_columns" />
+		FROM t_wx_auth_user
+		<include refid="wxAuthUser_where"/>
+	</select>
+	<!--添加微信用户表 -->
+	<insert id="saveWxAuthUser" parameterType="com.retailers.hnc.common.entity.WxAuthUser" useGeneratedKeys="true" keyProperty="wauId">
+		INSERT INTO t_wx_auth_user (
+			wau_wx_id,wau_u_id,wau_openid,wau_nickname,wau_sex,wau_language,wau_city,wau_province,wau_country,wau_headimgurl,wau_unionid,wau_create_date,wau_referee_id,version
+		) VALUES
+		(
+			#{wauWxId,jdbcType=BIGINT},#{wauUid,jdbcType=BIGINT},#{wauOpenid,jdbcType=VARCHAR},#{wauNickname,jdbcType=VARCHAR},#{wauSex,jdbcType=INTEGER},#{wauLanguage,jdbcType=VARCHAR},#{wauCity,jdbcType=VARCHAR},#{wauProvince,jdbcType=VARCHAR},#{wauCountry,jdbcType=VARCHAR},#{wauHeadimgurl,jdbcType=VARCHAR},#{wauUnionid,jdbcType=VARCHAR},#{wauCreateDate,jdbcType=TIMESTAMP},#{wauRefereeId,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改微信用户表 -->
+	<update id="updateWxAuthUser" parameterType="com.retailers.hnc.common.entity.WxAuthUser">
+		UPDATE t_wx_auth_user
+		<set>
+            <if test="null != wauWxId">
+                wau_wx_id = #{wauWxId},
+            </if>
+            <if test="null != wauUid">
+                wau_u_id = #{wauUid},
+            </if>
+            <if test="null != wauOpenid and '' != wauOpenid">
+                wau_openid = #{wauOpenid},
+            </if>
+            <if test="null != wauNickname and '' != wauNickname">
+                wau_nickname = #{wauNickname},
+            </if>
+            <if test="null != wauSex">
+                wau_sex = #{wauSex},
+            </if>
+            <if test="null != wauLanguage and '' != wauLanguage">
+                wau_language = #{wauLanguage},
+            </if>
+            <if test="null != wauCity and '' != wauCity">
+                wau_city = #{wauCity},
+            </if>
+            <if test="null != wauProvince and '' != wauProvince">
+                wau_province = #{wauProvince},
+            </if>
+            <if test="null != wauCountry and '' != wauCountry">
+                wau_country = #{wauCountry},
+            </if>
+            <if test="null != wauHeadimgurl and '' != wauHeadimgurl">
+                wau_headimgurl = #{wauHeadimgurl},
+            </if>
+            <if test="null != wauUnionid and '' != wauUnionid">
+                wau_unionid = #{wauUnionid},
+            </if>
+            <if test="null != wauCreateDate">
+                wau_create_date = #{wauCreateDate},
+            </if>
+            <if test="null != wauRefereeId">
+                wau_referee_id = #{wauRefereeId},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE wau_id = #{wauId} and version = #{version}
+	</update>
+	<!--删除微信用户表 -->
+	<delete id="deleteWxAuthUserByWauId" parameterType="java.lang.Long">
+		DELETE FROM t_wx_auth_user WHERE wau_id = #{wauId}
+	</delete>
+</mapper>

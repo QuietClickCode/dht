@@ -67,6 +67,8 @@ public interface GoodsDetailService {
 	public List<GoodsDetailVo> queryGoodsDetailByGdIds(String gdIds);
 
 	public boolean deleteGoodsDetailByGid(Long gid);
+
+	public Map<String,GoodsDetailVo> queryGoodsDetailVoList(List<Map<String,Long>> paramsList);
 }
 
 

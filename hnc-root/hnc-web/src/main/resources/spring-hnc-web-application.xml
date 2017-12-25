@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+
+    <context:annotation-config />
+    <!-- aop 自定义注删使用有效不加则不会生效 -->
+    <aop:aspectj-autoproxy/>
+    <!-- 扫描文件（自动将servicec层注入） -->
+    <context:component-scan base-package="com.retailers.hnc.common.service,com.retailers.wx.common.service,com.retailers.mybatis.common.service,com.retailers.hnc.web.interceptor">
+        <!--将注解Service的类都注册为java bean容器中的bean-->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>
+    <!-- mybatis 配置文件 -->
+    <import resource="classpath:spring-mybatis.xml"/>
+    <import resource="classpath:spring-common-hnc-mvc.xml"/>
+    <!-- 初始化微信token -->
+    <bean id="wxSystemInit" class="com.retailers.wx.common.utils.WxSystemInit" init-method="initWxToken"/>
+</beans>

@@ -20,10 +20,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * 描述：商品详情表Service
  * @author fanghui
@@ -170,6 +168,45 @@ public class GoodsDetailServiceImpl implements GoodsDetailService {
 	public boolean deleteGoodsDetailByGid(Long gid){
 		int status = goodsDetailMapper.deleteGoodsDetailByGid(gid);
 		return status>0 ? true:false;
+	}
+	public Map<String,GoodsDetailVo> queryGoodsDetailVoList(List<Map<String,Long>> paramsList){
+		Map<String,GoodsDetailVo> returnMap = new HashMap<String, GoodsDetailVo>();
+		if(ObjectUtils.isNotEmpty(paramsList)){
+			List<Long> normalGoodsParamsList = new ArrayList<Long>();
+			List<Long> spGoodsParamsList = new ArrayList<Long>();
+			List<Long> cpGoodsParamsList = new ArrayList<Long>();
+			for(Map<String,Long> params:paramsList){
+				Long type = params.get("type");
+				Long id = params.get("id");
+				if(type==0){
+					normalGoodsParamsList.add(id);
+				}else if(type==1){
+					cpGoodsParamsList.add(id);
+				}else if(type==2){
+					spGoodsParamsList.add(id);
+				}
+			}
+
+			List<GoodsDetailVo> list = goodsDetailMapper.queryGoodsDetailVoList(normalGoodsParamsList,spGoodsParamsList,cpGoodsParamsList);
+
+			if(ObjectUtils.isNotEmpty(list)){
+				for(GoodsDetailVo goodsDetailVo:list){
+					Long goodsId = goodsDetailVo.getGid();
+					Long type = goodsDetailVo.getType();
+					Long id = goodsDetailVo.getGdId();
+					String imgUrl = goodsDetailVo.getImgUrl();
+					if(ObjectUtils.isEmpty(imgUrl)){
+						goodsDetailVo.setImgUrl(goodsDetailVo.getGimgurl());
+					}
+					goodsDetailVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsDetailVo.getImgUrl());
+					String key = goodsId + "_" + type + "_" + id;
+					returnMap.put(key,goodsDetailVo);
+				}
+			}
+
+		}
+
+		return returnMap;
 	}
 }
 

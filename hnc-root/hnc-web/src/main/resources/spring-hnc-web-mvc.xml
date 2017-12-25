@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+           http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-4.1.xsd">
+    <!-- aop 自定义注删使用有效不加则不会生效 -->
+    <aop:aspectj-autoproxy/>
+    <!-- 返回json 方法一 需要导入 fastjson.jar包 -->
+    <mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 避免IE执行AJAX时,返回JSON出现下载文件 -->
+            <bean id="fastJsonHttpMessageConverter" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+                <property name="supportedMediaTypes">
+                    <list>
+                        <!-- 这里顺序不能反，一定先写text/html,不然ie下出现下载提示 -->
+                        <value>text/html;charset=UTF-8</value>
+                        <value>application/json;charset=UTF-8</value>
+                    </list>
+                </property>
+                <property name="features">
+                    <list>
+                        <!--设置null值也要输出，fastjson默认是关闭的-->
+                        <value>WriteMapNullValue</value>
+                        <!--设置使用文本方式输出日期，fastjson默认是long-->
+                        <value>WriteDateUseDateFormat</value>
+                        <!-- 消除对同一对象循环引用的问题，默认为false -->
+                        <value>DisableCircularReferenceDetect</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <!-- 让Spring通过自动扫描来查询和管理Bean -->
+    <context:component-scan base-package="com.retailers.hnc.web.controller,com.retailers.auth.interceptor,com.retailers.tools.exception" use-default-filters="false">
+        <!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>
+        <context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+    <!-- 排除掉service 扫描 -->
+<!--    <context:component-scan base-package="com.retailers.hnc.common.service">
+        &lt;!&ndash;将注解Service的类都注册为java bean容器中的bean&ndash;&gt;
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Component" />
+    </context:component-scan>-->
+
+    <!-- 上传配置 -->
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="utf-8" />
+        <property name="maxUploadSize" value="104857600" />
+        <property name="maxInMemorySize" value="4096" />
+    </bean>
+
+    <!-- 国际化的消息资源文件（本系统中主要用于显示/错误消息定制） -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <!-- 在web环境中一定要定位到classpath 否则默认到当前web应用下找 -->
+                <!--<value>classpath:i18n/bussiness/bussiness</value>
+                <value>classpath:i18n/entity/entity</value>-->
+            </list>
+        </property>
+        <property name="useCodeAsDefaultMessage" value="false" />
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="cacheSeconds" value="60" />
+    </bean>
+
+    <!--对jsp视图进行解析-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
+        <property name="prefix" value="/WEB-INF/page/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--对html视图进行解析-->
+    <bean id="htmlviewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="com.retailers.hnc.web.utils.HtmlResourceView"/>
+        <property name="order" value="0" />
+        <property name="prefix" value="/WEB-INF/html/"/>
+        <property name="suffix" value=".html" />
+        <property name="contentType" value="text/html;charset=UTF-8"></property>
+    </bean>
+    <!-- 容器默认的DefaultServletHandler处理 所有静态内容与无RequestMapping处理的URL-->
+    <mvc:default-servlet-handler/>
+
+    <mvc:resources location="/assets" mapping="/assets/**"     cache-period="604800"/>
+    <!--异常处理-->
+    <bean class="com.retailers.tools.exception.AppSimpleMappingExceptionResolver">
+        <property name="defaultErrorView" value="404/error"/>
+        <property name="defaultStatusCode" value="200"></property>
+        <!-- 配置多个statusCode -->
+        <property name="statusCodes">
+            <props>
+                <prop key="error">200</prop>
+            </props>
+        </property>
+        <!-- 设置日志输出级别，不定义则默认不输出警告等错误日志信息 -->
+        <property name="warnLogCategory" value="WARN"></property>
+        <property name="exceptionMappings">
+            <props>
+                <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">error</prop>
+                <prop key="java.lang.Exception">error</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!--<mvc:interceptors>-->
+        <!-- 接口请求拦截器 -->
+        <!--<mvc:interceptor>-->
+            <!--<mvc:mapping path="/**"/>-->
+            <!--<mvc:mapping path="/home/**"/>-->
+            <!--<mvc:mapping path="/user/**"/>-->
+            <!--<mvc:mapping path="/bank/**"/>-->
+            <!--<mvc:mapping path="/version/**"/>-->
+            <!--<mvc:mapping path="/shop/**"/>-->
+            <!--<mvc:mapping path="/userShipping/**"/>-->
+            <!--<bean id="reqInterceptor" class="com.retailers.hnc.web.filter.ReqInterceptor"/>-->
+        <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
+    <!-- 项目定时任务 -->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="webTaskJob" method="init" cron="0/30 * * * * ?"/>-->
+        <!--&lt;!&ndash;<task:scheduled ref="mTaskJob" method="stcokEarlyWarning" cron="0 0 0/1 * * ?"/>&ndash;&gt;-->
+    <!--</task:scheduled-tasks>-->
+    <!--<context:component-scan base-package="com.retailers.hnc.web.job" />-->
+    <!--<task:scheduled-tasks>-->
+        <!--<task:scheduled ref="wxTaskJob" method="queryWxToken" cron="0 0/3 * * * ?"/>-->
+    <!--</task:scheduled-tasks>-->
+    <!--<context:component-scan base-package="com.retailers.wx.common.job" />-->
+    <!--<bean id="orderProcess" class="com.retailers.hnc.web.job.WebTaskJob" init-method="startJob"/>-->
+</beans>
