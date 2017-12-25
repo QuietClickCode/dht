@@ -1,7 +1,7 @@
-package com.retailers.hnc.com.service;
+package com.retailers.dht.com.service;
 
+import com.retailers.dht.com.base.TestBaseJunit;
 import com.retailers.dht.common.service.OrderSuccessQueueService;
-import com.retailers.hnc.com.base.TestBaseJunit;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
