@@ -143,7 +143,7 @@
 
 	<select id="queryGoodsDetailVoList" resultMap="rm_goodsDetail_vo">
 		(SELECT
-		t1.g_id,t1.gd_id,
+		t1.g_id,t1.gd_id,t1.gd_price,
 		t2.g_name gname,
 		0 type,
 		t3.show_url img_url,
@@ -166,7 +166,7 @@
 		GROUP BY t1.gd_id)
 		UNION
 		(SELECT
-		t1.g_id,t0.gdcp_id gd_id,
+		t1.g_id,t0.gdcp_id gd_id,t1.gd_price,
 		t2.g_name gname,
 		1 type,
 		t3.show_url img_url,
@@ -190,7 +190,7 @@
 		GROUP BY t0.gdcp_id)
 		UNION
 		(SELECT
-		t1.g_id,t0.gdsp_id gd_id,
+		t1.g_id,t0.gdsp_id gd_id,t1.gd_price,
 		t2.g_name gname,
 		2 type,
 		t3.show_url img_url,

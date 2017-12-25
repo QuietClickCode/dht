@@ -7,16 +7,16 @@ import com.retailers.dht.common.entity.GoodsGgsval;
  * Created by Administrator on 2017/10/19.
  */
 public class GoodsDetailVo extends GoodsDetail {
-    private String imgUrl;//规格图片地址
+    private String imgUrl;//图片地址
     private String gsid;
-    private String gsname;
+    private String gsname;//所有的规格名称
     private String hasgsvalid;
     private String hasgsval;
     private String gunitname;
     private Long isMenberdiscount;
     private Long gclass;
     private Long type;//购买类型 0普通 1砍价 2特价/秒杀
-    private String gname;
+    private String gname;//商品名称
     private String gimgurl;
 
     public String getGname() {
