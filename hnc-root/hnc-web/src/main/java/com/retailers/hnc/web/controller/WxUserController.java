@@ -1,0 +1,130 @@
+package com.retailers.hnc.web.controller;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.retailers.hnc.common.entity.WxAuthUser;
+import com.retailers.hnc.common.service.WxAuthUserService;
+import com.retailers.hnc.web.base.BaseController;
+import com.retailers.hnc.web.constant.WebSystemConstant;
+import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
+import com.retailers.tools.encrypt.EncryptUtil;
+import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.wx.common.config.WxConfig;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.conn.ClientConnectionManager;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.PoolingClientConnectionManager;
+import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.constraints.NotEmpty;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Created by niconiconi on 2017/10/30.
+ */
+@Controller
+@RequestMapping("wxUser")
+public class WxUserController extends BaseController {
+
+    @Autowired
+    WxAuthUserService wxAuthUserService;
+
+    @RequestMapping("/login")
+    @ResponseBody
+    public String queryProjectByGt(@NotEmpty String code, WxAuthUser wxAuthUser,@NotEmpty String phone){
+        String url = "https://api.weixin.qq.com/sns/jscode2session?" +
+                "appid=" + WxConfig.APP_ID+
+                "&secret=" + WxConfig.APP_SECRET+
+                "&grant_type=authorization_code" +
+                "&js_code="+code;
+        Long curTime = System.currentTimeMillis();
+        try {
+            String respStr = "";
+            if(ObjectUtils.isNotEmpty(url)){
+                System.out.println(url);
+                respStr = GetFromServer(url);
+                System.out.println(respStr);
+
+                JSONObject jsonObject = JSON.parseObject(respStr);
+                String openid = jsonObject.getString("openid");
+                String unionid = jsonObject.getString("unionid");
+
+                Map params = new HashMap();
+                params.put("wauOpenid",openid);
+                params.put("wauUnionid",unionid);
+                List<WxAuthUser> list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+
+                if(ObjectUtils.isEmpty(list)){
+                    //保存客户的信息
+                    wxAuthUser.setWauOpenid(openid);
+                    wxAuthUser.setWauUnionid(unionid);
+
+                }
+
+                String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
+                randStr = URLEncoder.encode(randStr,"utf-8");
+                wxAuthUser = wxAuthUserService.saveWxAuthUser(wxAuthUser);
+                Map map = WebSystemConstant.globelOpenId;
+                map.put("randStr",wxAuthUser);
+                JSONObject returnJsonObject = new JSONObject();
+                returnJsonObject.put("randStr",randStr);
+                String returnStr = JSON.toJSONString(returnJsonObject);
+                return returnStr;
+            }
+            return respStr;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return "";
+    }
+
+
+
+
+public static void main(String[] a){
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx3e1ce3039c616778&secret=dae5052f2a8667bc420d76924da6a144&grant_type=authorization_code" +
+                "&js_code=013Ov7St13XU6c0aEZSt1tg0St1Ov7Se";
+        String str = GetFromServer(url);
+    System.out.println(str);
+}
+
+
+
+
+
+
+
+
+
+    public static String GetFromServer(String url) {
+        String retStr="";
+        ClientConnectionManager connManager = new PoolingClientConnectionManager();
+        DefaultHttpClient client = new DefaultHttpClient(connManager);
+
+        HttpGet get = new HttpGet(url);
+        try {
+            HttpResponse response = client.execute(get);
+            HttpEntity entity = response.getEntity();
+            retStr = EntityUtils.toString(entity);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(url);
+            return "";
+        }
+        return retStr;
+
+    }
+}

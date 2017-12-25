@@ -13,6 +13,7 @@
     <modules>
         <module>hnc-common</module>
         <module>hnc-manage</module>
+        <module>hnc-web</module>
     </modules>
     <build>
         <!--        <filters> &lt;!&ndash; 指定使用的 filter &ndash;&gt;
