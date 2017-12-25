@@ -451,7 +451,7 @@
                     }
                     $('#gdescription').html(row.gdescription);
 
-                    $('#goodsNameDiv').html(row.gname);
+                    $('#goodsNameDiv').append(row.gname);
 
                 }else{
                     nogoods();
@@ -476,7 +476,12 @@
                     var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                     var isAdvancesale = goodsConfig.isAdvancesale;
                     var isPutway = goodsConfig.isPutway;
+                    var isMenberdiscount = goodsConfig.isMenberdiscount;
 
+                    if(isMenberdiscount==0){
+                        var html = '<span class="span_tip">会员不折扣商品</span>';
+                        $('#goodsNameDiv').append(html);
+                    }
                     if(isPutway==0){
                         $('#cutmyself').hide();
                         $('.bargain-btn2').hide();

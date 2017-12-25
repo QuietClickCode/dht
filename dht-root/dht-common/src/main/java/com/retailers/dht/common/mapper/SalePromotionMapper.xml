@@ -116,7 +116,8 @@
 			and t3.goods_id=#{params.gid}
 		</if>
 		<if test="null != params.spRegion">
-			and t3.sp_region=#{params.spRegion}
+			and (t3.sp_region=#{params.spRegion}
+			or t3.sp_region=2)
 		</if>
 		GROUP BY t3.sp_id
 	</select>

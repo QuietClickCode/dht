@@ -411,7 +411,7 @@
                     queryuserisbuygoods();
                     timestape = data.rows[0].timestap*1000;
                     $('#gprice').html('￥'+parseFloat(data.rows[0].gprice/100).toFixed(2));
-                    $('#goodsNameDiv').html(data.rows[0].goodsName);
+                    $('#goodsNameDiv').append(data.rows[0].goodsName);
                     $('#minprice').html('￥'+parseFloat(data.rows[0].minprice/100).toFixed(2));
                     parentId = data.rows[0].parentId;
                     timegoing();
@@ -469,7 +469,12 @@
                     var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                     var isAdvancesale = goodsConfig.isAdvancesale;
                     var isPutway = goodsConfig.isPutway;
+                    var isMenberdiscount = goodsConfig.isMenberdiscount;
 
+                    if(isMenberdiscount==0){
+                        var html = '<span class="span_tip">会员不折扣商品</span>';
+                        $('#goodsNameDiv').append(html);
+                    }
                     if(isPutway==0){
                         $('.bargain-btn2').hide();
                         $('#putdown').show();

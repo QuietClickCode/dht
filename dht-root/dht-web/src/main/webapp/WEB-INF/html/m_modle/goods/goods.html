@@ -42,7 +42,7 @@
 	
     <div class="bargain-text box2">
     	<div class="goods_info_box">
-		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip" style="display: none">预订服务</span><span id="gname"></span></p>
+		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip" style="display: none">预订服务</span><span id="gname"></span><span id="isMenberdiscount" class="span_tip" style="display: none">会员不折扣商品</span></p>
 		    <p class="p2"><span id="gdprice" style="font-size: .3rem"></span><s><span class="mr_4" id="gprice"></span></s></p>
 		</div>
 		<div class="norms" id="" style="margin-bottom: 0;">
@@ -463,7 +463,11 @@
                         var isAllowsetdeliverytime = goodsConfig.isAllowsetdeliverytime;
                         var isAdvancesale = goodsConfig.isAdvancesale;
                         var isPutway = goodsConfig.isPutway;
+                        var isMenberdiscount = goodsConfig.isMenberdiscount;
 
+                        if(isMenberdiscount==0){
+                            $('#isMenberdiscount').show();
+                        }
                         if(isPutway==0){
                             $('.bargain-btn2').hide();
                             $('.bargain-btn3').show();

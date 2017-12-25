@@ -55,6 +55,11 @@ public interface OrderSuccessQueueService {
 	 */
 	public boolean deleteOrderSuccessQueueById(Long id);
 
+	/**
+	 * 执行订单回调处理
+	 */
+	public void executeOrderQueue();
+
 }
 
 

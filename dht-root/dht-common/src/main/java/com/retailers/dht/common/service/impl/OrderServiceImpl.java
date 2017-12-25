@@ -862,7 +862,6 @@ public class OrderServiceImpl implements OrderService {
 		if(useCoupon.size()<djgs+1){
 			throw new AppException("优惠卷选择错误 ，使用了不能叠加使用的优惠卷");
 		}
-
 		//根据使用的优惠卷重新计算商品价格
 		for(Long uc:useCoupon){
 			CouponWebVo cwv=userCouponMaps.get(uc);

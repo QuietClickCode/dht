@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CurrentPlatformSalesMapper">
+
+	<resultMap id="rm_currentPlatformSales" type="com.retailers.dht.common.entity.CurrentPlatformSales">
+			<result property="cpsId" column="cps_id"/>
+			<result property="cpsPayType" column="cps_pay_type"/>
+			<result property="cpsGoodsMainType" column="cps_goods_main_type"/>
+			<result property="cpsTotalPrice" column="cps_total_price"/>
+			<result property="cpsCashbackPrice" column="cps_cashback_price"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="currentPlatformSales_columns">
+		cps_id,cps_pay_type,cps_goods_main_type,cps_total_price,cps_cashback_price,version
+	</sql>
+	<!-- 根据目前平台销售情况主键取得数据 -->
+	<select id="queryCurrentPlatformSalesByCpsId" resultMap="rm_currentPlatformSales" parameterType="java.lang.Long">
+		SELECT <include refid="currentPlatformSales_columns" />
+		FROM t_current_platform_sales WHERE cps_id = #{cpsId}
+	</select>
+	<!-- 目前平台销售情况查询条件组合 -->
+	<sql id="currentPlatformSales_where">
+		<where>
+			<if test="null != params.cpsId">
+				AND cps_id = #{params.cpsId}
+			</if>
+			<if test="null != params.cpsPayType">
+				AND cps_pay_type = #{params.cpsPayType}
+			</if>
+			<if test="null != params.cpsGoodsMainType">
+				AND cps_goods_main_type = #{params.cpsGoodsMainType}
+			</if>
+			<if test="null != params.cpsTotalPrice">
+				AND cps_total_price = #{params.cpsTotalPrice}
+			</if>
+			<if test="null != params.cpsCashbackPrice">
+				AND cps_cashback_price = #{params.cpsCashbackPrice}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCurrentPlatformSalesList" resultMap="rm_currentPlatformSales" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="currentPlatformSales_columns" />
+		FROM t_current_platform_sales
+		<include refid="currentPlatformSales_where"/>
+	</select>
+	<!--添加目前平台销售情况 -->
+	<insert id="saveCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales" useGeneratedKeys="true" keyProperty="cpsId">
+		INSERT INTO t_current_platform_sales (
+			cps_pay_type,cps_goods_main_type,cps_total_price,cps_cashback_price,version
+		) VALUES
+		(
+			#{cpsPayType,jdbcType=BIGINT},#{cpsGoodsMainType,jdbcType=BIGINT},#{cpsTotalPrice,jdbcType=BIGINT},#{cpsCashbackPrice,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--批量添加平台当前消费情况 -->
+	<insert id="saveCurrentPlatformSaless" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales" useGeneratedKeys="true" keyProperty="cpsId">
+		INSERT INTO t_current_platform_sales (
+		cps_pay_type,cps_goods_main_type,cps_total_price,cps_cashback_price,version
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.cpsPayType,jdbcType=BIGINT},
+				#{item.cpsGoodsMainType,jdbcType=BIGINT},
+				#{item.cpsTotalPrice,jdbcType=BIGINT},
+				#{item.cpsCashbackPrice,jdbcType=BIGINT},0
+			)
+		</foreach>
+	</insert>
+	<!--修改目前平台销售情况 -->
+	<update id="updateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
+		UPDATE t_current_platform_sales
+		<set>
+            <if test="null != cpsPayType">
+                cps_pay_type = #{cpsPayType},
+            </if>
+            <if test="null != cpsGoodsMainType">
+                cps_goods_main_type = #{cpsGoodsMainType},
+            </if>
+            <if test="null != cpsTotalPrice">
+                cps_total_price = #{cpsTotalPrice},
+            </if>
+            <if test="null != cpsCashbackPrice">
+                cps_cashback_price = #{cpsCashbackPrice},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cps_id = #{cpsId} and version = #{version}
+	</update>
+	<!--批量修改当前平台销售资金 -->
+	<update id="batchUpdateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
+		UPDATE t_current_platform_sales
+		<set>
+			cps_total_price=
+			<foreach collection="list" item="item" index="index" >
+				WHEN  id=#{item.cpsId} THEN
+				#{item.cpsTotalPrice}
+			</foreach> end,
+			version = version+1,
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" >
+			(cps_id = #{item.cpsId} and version = #{item.version})
+		</foreach>
+	</update>
+	<!--删除目前平台销售情况 -->
+	<delete id="deleteCurrentPlatformSalesByCpsId" parameterType="java.lang.Long">
+		DELETE FROM t_current_platform_sales WHERE cps_id = #{cpsId}
+	</delete>
+	<!--分页查询 -->
+	<select id="queryCurrentPlatformSalesByGtype" resultMap="rm_currentPlatformSales">
+		SELECT <include refid="currentPlatformSales_columns" />
+		FROM t_current_platform_sales
+		WHERE  cps_pay_type=#{type}
+		cps_goods_main_type in
+		<foreach collection="gtypes" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+</mapper>
