@@ -8,7 +8,11 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-
+    <dependency>
+        <groupId>org.apache.httpcomponents</groupId>
+        <artifactId>httpmime</artifactId>
+        <version>4.5.3</version>
+    </dependency>
     <artifactId>dht-common</artifactId>
     <dependencies>
         <!-- 扭曲验证码生成插件-->
@@ -17,11 +21,7 @@
             <artifactId>patchca</artifactId>
             <version>1.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5.3</version>
-        </dependency>
+
         <dependency>
             <groupId>com.retailers</groupId>
             <artifactId>retailers-auth</artifactId>
