@@ -49,13 +49,24 @@ public interface UserCardPackageMapper {
 	public int userWalletPay(@Param("uid")Long uid, @Param("wallet")Long wallet, @Param("version") Integer version);
 
 	/**
-	 * 编辑用户积分
+	 * 用户消费两万返现累计
 	 * @param uid 用户id
 	 * @param integral 消费额
 	 * @param version 版本号
 	 * @return
 	 */
 	public int userIntegral(@Param("uid")Long uid, @Param("integral")Long integral, @Param("version") Integer version);
+
+	/**
+	 * 用户消费统计
+	 * @param uid 用户id
+	 * @param type 消费类型
+	 * @param price 交易金额
+	 * @param version 当前版本号
+	 * @param isCashBack 是否返现
+	 * @return
+	 */
+	public int statisticsUserSalseConsume(@Param("uid")Long uid,@Param("type")Long type,@Param("tradePrice")Long price,@Param("version") Integer version,@Param("isCashBack")Boolean isCashBack);
 
 	/**
 	 * 用户钱包消费

@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.EmployeeManageMapper">
+
+	<resultMap id="rm_employeeManage" type="com.retailers.hnc.common.entity.EmployeeManage">
+			<result property="emId" column="em_id"/>
+			<result property="emName" column="em_name"/>
+			<result property="emSex" column="em_sex"/>
+			<result property="emEntryTime" column="em_entry_time"/>
+			<result property="emTeam" column="em_team"/>
+			<result property="emPosition" column="em_position"/>
+			<result property="emPhone" column="em_phone"/>
+			<result property="wxPhone" column="wx_phone"/>
+			<result property="emIdCard" column="em_id_card"/>
+			<result property="emRemoveTime" column="em_remove_time"/>
+			<result property="emInfo" column="em_info"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="emOrder" column="em_order"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="employeeManage_columns">
+		em_id,em_name,em_sex,em_entry_time,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
+	</sql>
+	<!-- 根据员工管理主键取得数据 -->
+	<select id="queryEmployeeManageByEmId" resultMap="rm_employeeManage" parameterType="java.lang.Long">
+		SELECT <include refid="employeeManage_columns" />
+		FROM t_employee_manage WHERE em_id = #{emId}
+	</select>
+	<!-- 员工管理查询条件组合 -->
+	<sql id="employeeManage_where">
+		<where>
+			<if test="null != params.emId">
+				AND em_id = #{params.emId}
+			</if>
+			<if test="null != params.emName and '' != params.emName">
+				AND em_name = #{params.emName}
+			</if>
+			<if test="null != params.emSex">
+				AND em_sex = #{params.emSex}
+			</if>
+			<if test="null != params.emEntryTimeBegin">
+				AND em_entry_time &gt;= #{params.emEntryTime}
+			</if>
+			<if test="null != params.emEntryTimeEnd">
+				AND em_entry_time &lt;= #{params.emEntryTime}
+			</if>
+			<if test="null != params.emTeam">
+				AND em_team = #{params.emTeam}
+			</if>
+			<if test="null != params.emPosition and '' != params.emPosition">
+				AND em_position = #{params.emPosition}
+			</if>
+			<if test="null != params.emPhone and '' != params.emPhone">
+				AND em_phone = #{params.emPhone}
+			</if>
+			<if test="null != params.wxPhone and '' != params.wxPhone">
+				AND wx_phone = #{params.wxPhone}
+			</if>
+			<if test="null != params.emIdCard and '' != params.emIdCard">
+				AND em_id_card = #{params.emIdCard}
+			</if>
+			<if test="null != params.emRemoveTimeBegin">
+				AND em_remove_time &gt;= #{params.emRemoveTime}
+			</if>
+			<if test="null != params.emRemoveTimeEnd">
+				AND em_remove_time &lt;= #{params.emRemoveTime}
+			</if>
+			<if test="null != params.emInfo and '' != params.emInfo">
+				AND em_info = #{params.emInfo}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.emOrder">
+				AND em_order = #{params.emOrder}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryEmployeeManageList" resultMap="rm_employeeManage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="employeeManage_columns" />
+		FROM t_employee_manage
+		<include refid="employeeManage_where"/>
+	</select>
+	<!--添加员工管理 -->
+	<insert id="saveEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage" useGeneratedKeys="true" keyProperty="emId">
+		INSERT INTO t_employee_manage (
+			em_name,em_sex,em_entry_time,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
+		) VALUES
+		(
+			#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改员工管理 -->
+	<update id="updateEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage">
+		UPDATE t_employee_manage
+		<set>
+            <if test="null != emName and '' != emName">
+                em_name = #{emName},
+            </if>
+            <if test="null != emSex">
+                em_sex = #{emSex},
+            </if>
+            <if test="null != emEntryTime">
+                em_entry_time = #{emEntryTime},
+            </if>
+            <if test="null != emTeam">
+                em_team = #{emTeam},
+            </if>
+            <if test="null != emPosition and '' != emPosition">
+                em_position = #{emPosition},
+            </if>
+            <if test="null != emPhone and '' != emPhone">
+                em_phone = #{emPhone},
+            </if>
+            <if test="null != wxPhone and '' != wxPhone">
+                wx_phone = #{wxPhone},
+            </if>
+            <if test="null != emIdCard and '' != emIdCard">
+                em_id_card = #{emIdCard},
+            </if>
+            <if test="null != emRemoveTime">
+                em_remove_time = #{emRemoveTime},
+            </if>
+            <if test="null != emInfo and '' != emInfo">
+                em_info = #{emInfo},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != emOrder">
+                em_order = #{emOrder},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE em_id = #{emId} and version = #{version}
+	</update>
+	<!--删除员工管理 -->
+	<delete id="deleteEmployeeManageByEmId" parameterType="java.lang.Long">
+		DELETE FROM t_employee_manage WHERE em_id = #{emId}
+	</delete>
+</mapper>

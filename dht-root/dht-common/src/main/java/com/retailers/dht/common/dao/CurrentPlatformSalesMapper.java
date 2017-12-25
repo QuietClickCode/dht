@@ -23,6 +23,13 @@ public interface CurrentPlatformSalesMapper {
 	 * @date 2017-12-25 00:57:33
 	 */
 	public int saveCurrentPlatformSales(CurrentPlatformSales currentPlatformSales);
+
+	/**
+	 * 批量添加平台当前消费情况
+	 * @param currentPlatformSales
+	 * @return
+	 */
+	public int saveCurrentPlatformSaless(List<CurrentPlatformSales> currentPlatformSales);
 	/**
 	 * 编辑目前平台销售情况
 	 * @param currentPlatformSales
@@ -31,6 +38,13 @@ public interface CurrentPlatformSalesMapper {
 	 * @date 2017-12-25 00:57:33
 	 */
 	public int updateCurrentPlatformSales(CurrentPlatformSales currentPlatformSales);
+
+	/**
+	 * 批量修改当前平台销售资金
+	 * @param currentPlatformSales
+	 * @return
+	 */
+	public int batchUpdateCurrentPlatformSales(List<CurrentPlatformSales> currentPlatformSales);
 	/**
 	 * 根据CpsId删除目前平台销售情况
 	 * @param cpsId

@@ -36,6 +36,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	private AccumulativeAmountMapper accumulativeAmountMapper;
 	@Autowired
 	private CurrentPlatformSalesMapper currentPlatformSalesMapper;
+	@Autowired
+	private UserCardPackageMapper userCardPackageMapper;
 
 	public boolean saveOrderSuccessQueue(OrderSuccessQueue orderSuccessQueue) {
 		int status = orderSuccessQueueMapper.saveOrderSuccessQueue(orderSuccessQueue);
@@ -82,11 +84,12 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 									//判断是否是返现
 									if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 										//取得订单详情 进行商品分类处理
-
-
-										//设置每个类型的累加值
-//										queryGoodsClassificationByGids
+										goodsType(ods,true,order.getId(),order.getOrderBuyUid());
+									}else{
+										goodsType(ods,false,order.getId(),order.getOrderBuyUid());
 									}
+								}else{
+									goodsType(ods,false,order.getId(),order.getOrderBuyUid());
 								}
 							}
 						}else{
@@ -101,6 +104,24 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			}
 		}
 	}
+
+	/**
+	 * 统计用户消费情况
+	 * @param uid 用户id
+	 * @param orderId 订单id
+	 * @param type 类型
+	 * @param totalPrice 消费金额
+	 * @param isCashBack 是否返现
+	 */
+	private void statisticsUserSalseConsume(Long uid,Long orderId,Long type,Long totalPrice,boolean isCashBack){
+		UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(uid);
+		if(ObjectUtils.isNotEmpty(ucp)){
+			userCardPackageMapper.statisticsUserSalseConsume(uid,type,totalPrice,ucp.getVersion(),isCashBack);
+		}
+	}
+
+
+
 
 	/**
 	 * @param ods 订单详情
@@ -130,6 +151,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			//商品类型对应的价格
 			Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
 			Set<Long> gtyps=new HashSet<Long>();
+			//批量汪加商品日志
+			List<AccumulativeAmount> atas=new ArrayList<AccumulativeAmount>();
 			for(Long key:maps.keySet()){
 				WalletCashBackQueue wcbq=new WalletCashBackQueue();
 				wcbq.setCcbqUid(buyUid);
@@ -148,6 +171,14 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					gtUnPrice.put(wcbq.getCcbqGoodsType(),wcbq.getCcbqMoney());
 				}
 				gtyps.add(wcbq.getCcbqGoodsType());
+				AccumulativeAmount ata=new AccumulativeAmount();
+				ata.setAaGoodsId(key);
+				ata.setAaOrderId(orderId);
+				ata.setAaGoodsParentType(wcbq.getCcbqGoodsType());
+				ata.setAaConsumePrice(wcbq.getCcbqMoney());
+				ata.setAaCreateTime(new Date());
+				ata.setAaType(0);
+				atas.add(ata);
 			}
 			//修改各个商品大类下的累计消费金额
 			List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH,gtyps);
@@ -172,6 +203,14 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					cpfs.setCpsGoodsMainType(type);
 					batchAdd.add(cpfs);
 				}
+			}
+			//批量添加
+			if(ObjectUtils.isNotEmpty(batchAdd)){
+				currentPlatformSalesMapper.saveCurrentPlatformSaless(batchAdd);
+			}
+			//批量修改
+			if(ObjectUtils.isNotEmpty(batchUpdate)){
+				currentPlatformSalesMapper.batchUpdateCurrentPlatformSales(batchUpdate);
 			}
 		}
 	}
