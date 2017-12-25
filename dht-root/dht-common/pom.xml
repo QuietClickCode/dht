@@ -8,11 +8,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <dependency>
-        <groupId>org.apache.httpcomponents</groupId>
-        <artifactId>httpmime</artifactId>
-        <version>4.5.3</version>
-    </dependency>
     <artifactId>dht-common</artifactId>
     <dependencies>
         <!-- 扭曲验证码生成插件-->
@@ -48,6 +43,11 @@
             <groupId>com.retailers</groupId>
             <artifactId>aliyun-sms</artifactId>
             <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.5.3</version>
         </dependency>
     </dependencies>
 </project>
