@@ -120,3 +120,94 @@
     text-align: center;
     margin: 0 auto;
 }
+
+
+
+.couponUnused{
+    color: #fff;
+    position: relative;
+    border-radius: 0.2rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.2rem;
+}
+
+.couponInfo{
+
+    padding-top: 0.6rem;
+    background-color: #fe863d;
+    padding-left: 0.3rem;
+    position: relative;
+    padding-bottom: 0.6rem;
+}
+
+.couponInfo div{
+    display: inline-block;
+}
+
+.couponInfo .price{
+    font-size: 1rem;
+    padding-right: 0.4rem;
+    width: 2.1rem;
+}
+
+.flag{
+    font-size: 0.5rem;
+}
+
+.date{
+    font-size: 0.25rem;
+}
+
+.test{
+    margin-bottom: 0.3rem;
+}
+
+.useCoupon{
+    position: absolute;
+    right: 0.3rem;
+    top: 0.7rem;
+}
+
+.useCoupon span{
+    font-size: 0.3rem;
+    text-align: right;
+    display: block;
+    width: 1.9rem;
+    border-radius: 0.1rem;
+    height: 0.6rem;
+    line-height: 0.6rem;
+    background-color: #fced6d;
+    color: #000;
+    text-align: center;
+}
+
+.couponType{
+    background-color: #e0553e;
+    padding-left: 0.3rem;
+    padding-right: 0.3rem;
+    position: relative;
+}
+
+.couponType p{
+    padding-top: 0.25rem;
+    padding-bottom: 0.2rem;
+    font-size: 0.25rem;
+    width: 5.5rem;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    word-break:break-all;
+    letter-spacing: 2px;
+}
+
+.care_button{
+    display: inline-block;
+    width: 0.3rem;
+    height: 0.2rem;
+    position: absolute;
+    top: 0.3rem;
+    right: 0.3rem;
+    text-align: right;
+    background: url("/img/care-bottom.png") no-repeat;
+}

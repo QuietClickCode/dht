@@ -30,9 +30,9 @@ public class HouseTypeManageController extends BaseController{
     HouseTypeManageService houseTypeManageService;
 
     @RequestMapping("/houseManageMapping")
-    @Menu(parentRes = "sys.manager.floor",resourse = "houseManage.houseManageMapping",description = "户型管理",label = "户型管理")
+    @Menu(parentRes = "sys.manager.housetype",resourse = "houseManage.houseManageMapping",description = "户型管理",label = "户型管理")
     public String houseManage(){
-        return "floorManage/houseType";
+        return "houseType/houseType";
     }
 
     @RequestMapping("/queryHouseType")
@@ -76,5 +76,16 @@ public class HouseTypeManageController extends BaseController{
     public BaseResp removeHouseType(Long htId){
         boolean flag = houseTypeManageService.deleteHouseTypeManageByHtId(htId);
         return  success(flag);
+    }
+
+    @RequestMapping("/addFloorRelationship")
+    @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addFloorRelationship",sort = 3,parentRes = "houseManage.houseManageMapping")
+    @ResponseBody
+    public BaseResp addFloorRelationship(@RequestBody List<FloorRelationship> relationships){
+        boolean flag = houseTypeManageService.addFloorRelationship(relationships);
+        if(flag)
+            return success("添加户型成功");
+        else
+            return success("添加户型失败");
     }
 }

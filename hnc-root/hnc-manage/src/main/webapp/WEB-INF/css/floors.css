@@ -1,0 +1,30 @@
+.house_type_table{
+    float: left;
+    width: 80%;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.house_type_list{
+    float: left;
+    width: 20%;
+    height: 500px;
+    border-left: none;
+}
+
+#house_type_list{
+    padding-left: 20px;
+    list-style: none;
+}
+
+#house_type_list li{
+    list-style: none;
+    text-align: center;
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    border: 1px solid rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+    border-radius: 5px;
+    position: relative;
+}

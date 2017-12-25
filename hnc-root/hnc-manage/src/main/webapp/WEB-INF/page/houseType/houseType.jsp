@@ -35,6 +35,7 @@
         #house_type_list{
             padding-left: 20px;
             list-style: none;
+            position: relative;
         }
 
         #house_type_list li{
@@ -46,6 +47,19 @@
             border: 1px solid rgba(0,0,0,0.1);
             margin-bottom: 10px;
             border-radius: 5px;
+            position: relative;
+        }
+
+        .remove_icon{
+            width: 15px;
+            height: 15px;
+            right: -5;
+            top: -5;
+            cursor: pointer;
+            position: absolute;
+            display: block;
+            background: url("/img/remove_icon.png") no-repeat;
+            background-size: 15px 15px;
         }
     </style>
 </head>
@@ -507,7 +521,7 @@
         houseType = rowDatas.get(id);
         for(let i = 0;i<houseType.floorManages.length;i++){
             floorManagesMap.set(houseType.floorManages[i].fmId,houseType.htId);
-            $("#house_type_list").append("<li id='"+houseType.floorManages[i].fmId+"'>"+houseType.floorManages[i].fmName+"</li>");
+            $("#house_type_list").append("<li id='"+houseType.floorManages[i].fmId+"'>"+houseType.floorManages[i].fmName+"<span class='remove_icon'></span></li>");
         }
         $("#house_type_table").bootstrapTable('destroy');
         createFloorManageTable();
@@ -545,6 +559,25 @@
         floorManagesMap.clear();
         $("#house_type_list").html("");
     });
+
+    $('#house_type_list').on('click', '.remove_icon', function(){
+        let id = $(this).parent().attr("id");
+        $(this).parent().remove();
+        $("#house_type_table tbody .selected").each(function () {
+            let gid = $(this).attr("data-uniqueid");
+            if(id == gid){
+                $(this).removeClass("selected");
+                $(this).find(":input[name='parentItem']").removeAttr("checked");
+                $(".bs-checkbox .th-inner input").removeAttr("checked");
+            }
+        });
+        for(var key of floorManagesMap.keys()){
+            if(key == id){
+                floorManagesMap.delete(key);
+                console.log(floorManagesMap.size);
+            }
+        }
+    })
 </script>
 
 <1%--自定义方法--%>
@@ -593,7 +626,7 @@
                 for(var row of rows){
                     if(!floorManagesMap.has(row.fmId)){
                         floorManagesMap.set(row.fmId,houseType.htId);
-                        $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"</li>");
+                        $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"<span class='remove_icon'></span></li>");
                     }
                 }
             },
@@ -602,7 +635,7 @@
                 //判断是否己经存在
                 if(!floorManagesMap.has(row.fmId)){
                     floorManagesMap.set(row.fmId,houseType.htId);
-                    $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"</li>");
+                    $("#house_type_list").append("<li id='"+row.fmId+"'>"+row.fmName+"<span class='remove_icon'></span></li>");
                 }
             },
             //取消每一个单选框时对应的操作；
@@ -615,9 +648,8 @@
                 }
             },
             onUncheckAll:function(rows){
-                for(var row of rows){
-
-                }
+                floorManagesMap.clear();
+                $("#house_type_list").html("");
             },
             contentType : "application/x-www-form-urlencoded"  //设置传入方式 可以用getparams 取得参数  默认为：application/json  json 方式传输
         });

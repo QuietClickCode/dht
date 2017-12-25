@@ -357,7 +357,6 @@ public class NumberUtils {
 		}
 		return len;
 	}
-
 	/**
 	 * double相乘
 	 * @param price 金额

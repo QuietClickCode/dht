@@ -11,8 +11,10 @@ import com.retailers.dht.common.service.PayService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.IPUtil;
+import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.utils.wx.WXPayUtil;
@@ -55,16 +57,27 @@ public class WxPayController extends BaseController{
     @Autowired
     private UserService userService;
     @RequestMapping("payInfo")
-    public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price){
+    public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price,String type){
         ModelAndView model=new ModelAndView();
         model.addObject("orderNo",orderNo);
-        model.addObject("price",price);
+        Long price_=0l;
+        if(ObjectUtils.isNotEmpty(price)){
+            price_=Long.parseLong(price);
+            model.addObject("price", NumberUtils.formaterNumberPower(price_));
+        }
         //取得用户钱包余额
         long uid=getCurLoginUserId(request);
         UserInfoVIew uiv=userService.queryUserInfoByUid(uid);
-        if(ObjectUtils.isNotEmpty(uiv)){
+        boolean isShowWallet=true;
+        if(ObjectUtils.isNotEmpty(type)&&type.equals(OrderEnum.RECHARGE.getKey())){
+            isShowWallet=false;
+        }else if(ObjectUtils.isNotEmpty(uiv)){
             model.addObject("userWallet",uiv.getUcurWallet());
+            if(price_>uiv.getUcurWallet()){
+                isShowWallet=false;
+            }
         }
+        model.addObject("showWallet",isShowWallet);
         String url=redirectUrl(request,"pay/payInfo");;
         model.setViewName(url);
         return model;

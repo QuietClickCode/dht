@@ -3,6 +3,7 @@ import com.retailers.dht.common.entity.CouponUser;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 /**
  * 描述：用户优惠卷领取记录DAO
@@ -68,5 +69,13 @@ public interface CouponUserMapper {
 	 * @return
 	 */
 	public int expireCouponUser(Long cpId);
+	/**
+	 * 用户购买商品使用优惠卷
+	 * @param uid
+	 * @param oid
+	 * @param cpuIds
+	 * @return
+	 */
+	public long useCouponByOIds(@Param("uid") Long uid, @Param("oid") Long oid, @Param("cpuIds")List<Long> cpuIds, @Param("curDate")Date curDate);
 
 }

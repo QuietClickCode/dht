@@ -90,5 +90,4 @@ public interface CouponUseRangeMapper {
 	 * @return
 	 */
 	public List<CouponUseRange> queryCouponUseRangeByGid(@Param("type") Long type,@Param("cpIds") List<Long> cpIds,@Param("gid")Long goodsId);
-
 }

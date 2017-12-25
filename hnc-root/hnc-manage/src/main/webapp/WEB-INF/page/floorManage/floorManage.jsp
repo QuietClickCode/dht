@@ -35,6 +35,7 @@
         #house_type_list{
             padding-left: 20px;
             list-style: none;
+            position: relative;
         }
 
         #house_type_list li{
@@ -46,6 +47,19 @@
             border: 1px solid rgba(0,0,0,0.1);
             margin-bottom: 10px;
             border-radius: 5px;
+            position: relative;
+        }
+
+        .remove_icon{
+            width: 15px;
+            height: 15px;
+            right: -5;
+            top: -5;
+            cursor: pointer;
+            position: absolute;
+            display: block;
+            background: url("/img/remove_icon.png") no-repeat;
+            background-size: 15px 15px;
         }
     </style>
 </head>
@@ -450,17 +464,19 @@
 <%--添加修改与楼栋绑定的户型--%>
 <script>
     var floorManage;
+    /*打开模态框并显示与该楼栋所关联的户型*/
     function addHouseTypeManage(id) {
         floorManage = rowDatas.get(id);
         for(let i = 0;i<floorManage.typeManages.length;i++){
             floorManagesMap.set(floorManage.typeManages[i].htId,houseType.fmId);
-            $("#house_type_list").append("<li id='"+floorManage.typeManages[i].htId+"'>"+floorManage.typeManages[i].htTypeName+"</li>");
+            $("#house_type_list").append("<li id='"+floorManage.typeManages[i].htId+"'>"+floorManage.typeManages[i].htTypeName+"<span class='remove_icon'></span></li>");
         }
         $("#house_type_table").bootstrapTable('destroy');
         createFloorManageTable();
         $("#saveFloorManage").modal("show");
     }
 
+    /*绑定楼栋所关联的户型*/
     var relationships = new Array();
     $(".addFloorRelationship").click(function () {
         for (let key of floorManagesMap.keys()) {
@@ -484,12 +500,32 @@
         });
     });
 
+    /*关闭模态框时清空缓存*/
     $("#saveFloorManage").on("hidden.bs.modal",function () {
         $("#house_type_list").children().remove();
         floorManagesMap.clear();
         $("#house_type_list").html("");
         relationships.length = 0;
     });
+
+    $('#house_type_list').on('click', '.remove_icon', function(){
+        let id = $(this).parent().attr("id");
+        $(this).parent().remove();
+        $("#house_type_table tbody .selected").each(function () {
+            let gid = $(this).attr("data-uniqueid");
+            if(id == gid){
+                $(this).removeClass("selected");
+                $(this).find(":input[name='parentItem']").removeAttr("checked");
+                $(".bs-checkbox .th-inner input").removeAttr("checked");
+            }
+        });
+        for(var key of floorManagesMap.keys()){
+            if(key == id){
+                floorManagesMap.delete(key);
+                console.log(floorManagesMap.size);
+            }
+        }
+    })
 </script>
 
 
@@ -528,7 +564,7 @@
                 for(var row of rows){
                     if(!floorManagesMap.has(row.htId)){
                         floorManagesMap.set(row.htId,floorManage.fmId);
-                        $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"</li>");
+                        $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"<span class='remove_icon'></span></li>");
                     }
                 }
             },
@@ -537,7 +573,7 @@
                 //判断是否己经存在
                 if(!floorManagesMap.has(row.htId)){
                     floorManagesMap.set(row.htId,floorManage.fmId);
-                    $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"</li>");
+                    $("#house_type_list").append("<li id='"+row.htId+"'>"+row.htTypeName+"<span class='remove_icon'></span></li>");
                 }
             },
             //取消每一个单选框时对应的操作；

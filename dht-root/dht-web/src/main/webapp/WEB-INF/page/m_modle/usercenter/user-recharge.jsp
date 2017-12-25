@@ -82,7 +82,8 @@
 						if(data.status==0){
 							let orderNo=data.data.orderNo;
 							let price=data.data.price;
-							window.location.href="/wxPay/payInfo?orderNo="+orderNo+"&price="+price;
+							let type=data.data.type;
+							window.location.href="/wxPay/payInfo?orderNo="+orderNo+"&price="+price+"&type="+type;
 						}else{
 
                         }
