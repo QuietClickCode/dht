@@ -60,6 +60,13 @@ public interface OrderSuccessQueueService {
 	 */
 	public void executeOrderQueue();
 
+	/**
+	 * 编辑执行状态
+	 * @param osq
+	 * @param isSuccess
+	 */
+	public void editorExeStatus(OrderSuccessQueue osq,boolean isSuccess);
+
 }
 
 

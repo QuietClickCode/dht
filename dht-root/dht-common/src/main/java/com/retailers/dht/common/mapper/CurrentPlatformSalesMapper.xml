@@ -76,14 +76,8 @@
 	<update id="updateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
 		UPDATE t_current_platform_sales
 		<set>
-            <if test="null != cpsPayType">
-                cps_pay_type = #{cpsPayType},
-            </if>
-            <if test="null != cpsGoodsMainType">
-                cps_goods_main_type = #{cpsGoodsMainType},
-            </if>
             <if test="null != cpsTotalPrice">
-                cps_total_price = #{cpsTotalPrice},
+                cps_total_price = cps_total_price+#{cpsTotalPrice},
             </if>
             <if test="null != cpsCashbackPrice">
                 cps_cashback_price = #{cpsCashbackPrice},
@@ -98,9 +92,9 @@
 	<update id="batchUpdateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
 		UPDATE t_current_platform_sales
 		<set>
-			cps_total_price=
+			cps_total_price= CASE
 			<foreach collection="list" item="item" index="index" >
-				WHEN  id=#{item.cpsId} THEN
+				WHEN  cps_id=#{item.cpsId} THEN
 				#{item.cpsTotalPrice}
 			</foreach> end,
 			version = version+1,
@@ -114,14 +108,21 @@
 	<delete id="deleteCurrentPlatformSalesByCpsId" parameterType="java.lang.Long">
 		DELETE FROM t_current_platform_sales WHERE cps_id = #{cpsId}
 	</delete>
-	<!--分页查询 -->
+	<!--根据类型 取得当前平台排序 -->
 	<select id="queryCurrentPlatformSalesByGtype" resultMap="rm_currentPlatformSales">
 		SELECT <include refid="currentPlatformSales_columns" />
 		FROM t_current_platform_sales
 		WHERE  cps_pay_type=#{type}
-		cps_goods_main_type in
+		AND  cps_goods_main_type in
 		<foreach collection="gtypes" item="item" index="index" open="(" close=")" separator=",">
 			#{item}
 		</foreach>
+	</select>
+	<!--取得第三方消费累计金额 -->
+	<select id="queryCurrentPlatformSalesByGt" resultMap="rm_currentPlatformSales">
+		SELECT <include refid="currentPlatformSales_columns" />
+		FROM t_current_platform_sales
+		WHERE  cps_pay_type=#{type}
+		limit 1
 	</select>
 </mapper>

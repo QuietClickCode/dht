@@ -101,9 +101,13 @@ public class SystemConstant {
      */
     public static final long CURRENT_PLATFORM_SALES_TYPE_CASH=0;
     /**
-     * 当前 平台消费统计类型 1 累计消费统计
+     * 当前 平台消费统计类型 1 累计消费统计 按类分
      */
-    public static final long CURRENT_PLATFORM_SALES_TYPE_SALES_TOTAL=1;
+    public static final long CURRENT_PLATFORM_SALES_TYPE_GT_SALES_TOTAL=1;
+    /**
+     * 当前 平台消费统计类型 2 累计消费统计 总金额
+     */
+    public static final long CURRENT_PLATFORM_SALES_TYPE_SALES_TOTAL=2;
     /**
      * java 队列
      */

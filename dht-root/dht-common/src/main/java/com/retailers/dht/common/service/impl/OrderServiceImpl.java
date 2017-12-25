@@ -84,6 +84,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderSuccessQueueMapper orderSuccessQueueMapper;
 	@Autowired
 	private CouponUserMapper couponUserMapper;
+	@Autowired
+	private UserCardPackageService userCardPackageService;
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -608,7 +610,7 @@ public class OrderServiceImpl implements OrderService {
 							rechageId=od.getOdGoodsId();
 						}
 						String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
-						addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+						userCardPackageService.addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
 						User user=userMapper.queryUserByUid(order.getOrderBuyUid());
 						user.setUrechage(rechageId);
 						//修改用户会员类型
@@ -657,28 +659,28 @@ public class OrderServiceImpl implements OrderService {
 		WalletCashBackQueue wcbq=new WalletCashBackQueue();
 	}
 
-	/**
-	 *  添加用户卡包操作日志
-	 * @param uid 用户id
-	 * @param type 日志类型
-	 * @param orderId 订单id
-	 * @param val 变更值
-	 * @param curVal 当前 值
-	 * @param remark 备注
-	 * @param curDate 当前日期
-	 */
-	private void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate){
-		//添加用户钱包日志
-		LogUserCardPackage lucp=new LogUserCardPackage();
-		lucp.setUid(uid);
-		lucp.setType(type);
-		lucp.setRelationOrderId(orderId);
-		lucp.setVal(val);
-		lucp.setCurVal(curVal);
-		lucp.setRemark(remark);
-		lucp.setCreateTime(curDate);
-		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
-	}
+//	/**
+//	 *  添加用户卡包操作日志
+//	 * @param uid 用户id
+//	 * @param type 日志类型
+//	 * @param orderId 订单id
+//	 * @param val 变更值
+//	 * @param curVal 当前 值
+//	 * @param remark 备注
+//	 * @param curDate 当前日期
+//	 */
+//	private void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate){
+//		//添加用户钱包日志
+//		LogUserCardPackage lucp=new LogUserCardPackage();
+//		lucp.setUid(uid);
+//		lucp.setType(type);
+//		lucp.setRelationOrderId(orderId);
+//		lucp.setVal(val);
+//		lucp.setCurVal(curVal);
+//		lucp.setRemark(remark);
+//		lucp.setCreateTime(curDate);
+//		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
+//	}
 
 	/**
 	 * 校验收货地址
@@ -1004,7 +1006,7 @@ public class OrderServiceImpl implements OrderService {
 			//用户支付金额
 			long payPrice=total+order.getOrderLogisticsPrice();
 			//添加钱包使用日志
-			addUserCardPackageLog(uid,LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
+			userCardPackageService.addUserCardPackageLog(uid,LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
 			order.setOrderPayCallbackRemark("用户钱包支付，享受折扣"+NumberUtils.priceChangeYuan(discount)+",实际支付："+payPrice);
 			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SUCCESS);
 			orderMapper.updateOrder(order);

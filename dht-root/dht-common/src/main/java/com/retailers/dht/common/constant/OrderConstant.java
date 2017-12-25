@@ -72,5 +72,4 @@ public class OrderConstant {
      */
     public static final int BUY_GOODS_MENBER_DISCOUNT_YES=1;
 
-
 }

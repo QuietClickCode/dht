@@ -81,6 +81,30 @@
 		SELECT <include refid="user_columns" />
 		FROM t_user WHERE u_id = #{uid}
 	</select>
+	<!-- 根据用户取得推荐用户 -->
+	<select id="queryRecommendUser" resultMap="rm_user" parameterType="java.lang.Long">
+		SELECT
+		c.*
+		FROM
+		t_user c,
+		t_user u
+		WHERE
+		c.u_id=u.u_recommend_id
+		and u.u_id =#{uid}
+	</select>
+	<!-- 根据用户取得推荐用户 -->
+	<select id="queryRecommendUsers" resultMap="rm_user">
+		SELECT
+		c.*
+		FROM
+		t_user c,
+		t_user u
+		WHERE
+		c.u_id=u.u_recommend_id in
+		<foreach collection="uids" item="item" index="index" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
 	<!-- 登陆帐号 -->
 	<select id="queryUserByAccount" resultMap="rm_user">
 		SELECT <include refid="user_columns" />

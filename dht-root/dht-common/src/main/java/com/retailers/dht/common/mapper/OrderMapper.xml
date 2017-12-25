@@ -366,4 +366,18 @@
 		FROM t_order
 		<include refid="order_where"/>
 	</select>
+	<!--分页查询 -->
+	<select id="findUserFirstBuy" resultType="java.lang.Long">
+		SELECT
+			id
+		FROM
+			t_order o
+		WHERE
+			o.order_buy_uid = #{uid}
+			AND order_status IN (3, 4, 5, 9)
+			AND order_type != 'RECHARGE'
+		  ORDER BY
+			id ASC
+			LIMIT 1
+	</select>
 </mapper>

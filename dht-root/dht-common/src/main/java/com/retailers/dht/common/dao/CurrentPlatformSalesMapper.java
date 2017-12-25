@@ -78,4 +78,11 @@ public interface CurrentPlatformSalesMapper {
 	 */
 	public List<CurrentPlatformSales> queryCurrentPlatformSalesByGtype(@Param("type") Long type, @Param("gtypes") Set<Long> gtypes);
 
+	/**
+	 * 取得第三方消费累计金额
+	 * @param type
+	 * @return
+	 */
+	public CurrentPlatformSales queryCurrentPlatformSalesByGt(@Param("type") Long type);
+
 }

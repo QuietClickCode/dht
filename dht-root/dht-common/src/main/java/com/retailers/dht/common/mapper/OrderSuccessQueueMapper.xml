@@ -61,6 +61,15 @@
 			#{orderId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{executeNum,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
 		)
 	</insert>
+	<!--添加至历史 -->
+	<insert id="saveOrderSuccessQueueHistory" parameterType="com.retailers.dht.common.entity.OrderSuccessQueue">
+		INSERT INTO t_order_success_queue_history (
+		id,order_id,create_time,execute_num,status,remark
+		) VALUES
+		(
+		#{id,jdbcType=BIGINT},#{orderId,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{executeNum,jdbcType=INTEGER},#{status,jdbcType=INTEGER},#{remark,jdbcType=VARCHAR}
+		)
+	</insert>
 	<!--修改订单支付成功队例 -->
 	<update id="updateOrderSuccessQueue" parameterType="com.retailers.dht.common.entity.OrderSuccessQueue">
 		UPDATE t_order_success_queue

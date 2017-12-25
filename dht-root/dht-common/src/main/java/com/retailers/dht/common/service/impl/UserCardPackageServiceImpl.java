@@ -1,9 +1,12 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.dao.LogUserCardPackageMapper;
+import com.retailers.dht.common.entity.LogUserCardPackage;
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.dao.UserCardPackageMapper;
 import com.retailers.dht.common.service.UserCardPackageService;
@@ -22,6 +25,8 @@ import com.retailers.mybatis.pagination.Pagination;
 public class UserCardPackageServiceImpl implements UserCardPackageService {
 	@Autowired
 	private UserCardPackageMapper userCardPackageMapper;
+	@Autowired
+	private LogUserCardPackageMapper logUserCardPackageMapper;
 
 	public boolean saveUserCardPackage(UserCardPackage userCardPackage) {
 		int status = userCardPackageMapper.saveUserCardPackage(userCardPackage);
@@ -57,6 +62,29 @@ public class UserCardPackageServiceImpl implements UserCardPackageService {
 			rtn.setUcurWallet(SystemConstant.SYSTEM_DEFAULT_LONG_VAL);
 		}
 		return rtn;
+	}
+
+	/**
+	 *添加用户日志（钱包日志累计返现日志）
+	 * @param uid 用户id
+	 * @param type 操作类型
+	 * @param orderId 订单id
+	 * @param val 值
+	 * @param curVal 当前值
+	 * @param remark 备注
+	 * @param curDate 当前日期
+	 */
+	public void addUserCardPackageLog(Long uid, int type, Long orderId, Long val, Long curVal, String remark, Date curDate) {
+		//添加用户钱包日志
+		LogUserCardPackage lucp=new LogUserCardPackage();
+		lucp.setUid(uid);
+		lucp.setType(type);
+		lucp.setRelationOrderId(orderId);
+		lucp.setVal(val);
+		lucp.setCurVal(curVal);
+		lucp.setRemark(remark);
+		lucp.setCreateTime(curDate);
+		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
 	}
 }
 

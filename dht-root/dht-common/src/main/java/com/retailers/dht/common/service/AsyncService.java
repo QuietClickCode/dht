@@ -1,6 +1,7 @@
 package com.retailers.dht.common.service;
 
 import com.retailers.dht.common.entity.OrderProcessingQueue;
+import com.retailers.dht.common.entity.OrderSuccessQueue;
 
 /**
  * 系统异常执行方法
@@ -14,5 +15,12 @@ public interface AsyncService {
      * @param orderProcessingQueue
      */
     public void orderCallback(OrderProcessingQueue orderProcessingQueue);
+
+    /**
+     * 编辑执行队列
+     * @param osq
+     * @param isSuccess
+     */
+    public void editorOrderSuccessQueue(OrderSuccessQueue osq,boolean isSuccess);
 
 }

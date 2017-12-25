@@ -59,14 +59,15 @@ public interface UserCardPackageMapper {
 
 	/**
 	 * 用户消费统计
-	 * @param uid 用户id
-	 * @param type 消费类型
-	 * @param price 交易金额
-	 * @param version 当前版本号
+	 * @param uid 用户
+	 * @param type 类型
+	 * @param tradePrice 累计交易金额
+	 * @param cumulationCashPrice 累计返现金额
 	 * @param isCashBack 是否返现
+	 * @param version 版本号
 	 * @return
 	 */
-	public int statisticsUserSalseConsume(@Param("uid")Long uid,@Param("type")Long type,@Param("tradePrice")Long price,@Param("version") Integer version,@Param("isCashBack")Boolean isCashBack);
+	public int statisticsUserSalseConsume(@Param("uid")Long uid,@Param("type")Long type,@Param("tradePrice")Long tradePrice,@Param("cumulationCashPrice")Long cumulationCashPrice,@Param("isCashBack")Boolean isCashBack,@Param("version") Integer version);
 
 	/**
 	 * 用户钱包消费

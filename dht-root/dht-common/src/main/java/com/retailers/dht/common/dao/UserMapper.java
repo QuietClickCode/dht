@@ -6,6 +6,8 @@ import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
+
 /**
  * 描述：平台会员DAO
  * @author zhongp
@@ -47,6 +49,20 @@ public interface UserMapper {
 	 * @date 2017-11-23 00:47:29
 	 */
 	public User queryUserByUid(Long uid);
+
+	/**
+	 * 根据用户取得推荐用户
+	 * @param uid
+	 * @return
+	 */
+	public User queryRecommendUser(Long uid);
+
+	/**
+	 * 取得推荐人例表
+	 * @param uids
+	 * @return
+	 */
+	public List<User> queryRecommendUsers(@Param("uids") Set<Long> uids);
 
 	/**
 	 * 登陆帐号

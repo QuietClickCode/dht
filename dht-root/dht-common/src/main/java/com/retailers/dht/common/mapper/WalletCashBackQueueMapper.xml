@@ -84,6 +84,26 @@
 			#{ccbqOrderId,jdbcType=BIGINT},#{ccbqGid,jdbcType=BIGINT},#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
 		)
 	</insert>
+	<!--批量添加返现队列-->
+	<insert id="saveWalletCashBackQueues" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
+		INSERT INTO t_wallet_cash_back_queue (
+		ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.ccbqOrderId,jdbcType=BIGINT},
+				#{item.ccbqGid,jdbcType=BIGINT},
+				#{item.ccbqGoodsType,jdbcType=BIGINT},
+				#{item.ccbqUid,jdbcType=BIGINT},
+				#{item.ccbqMoney,jdbcType=BIGINT},
+				#{item.ccbqStatus,jdbcType=BIGINT},
+				#{item.ccbqCreateTime,jdbcType=TIMESTAMP},
+				#{item.ccbqCashBackTime,jdbcType=TIMESTAMP},
+				#{item.ccbqWaitTime,jdbcType=BIGINT},0
+			)
+		</foreach>
+
+	</insert>
 	<!--修改钱包消费返现(包括指定可返现商品类型） -->
 	<update id="updateWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue">
 		UPDATE t_wallet_cash_back_queue

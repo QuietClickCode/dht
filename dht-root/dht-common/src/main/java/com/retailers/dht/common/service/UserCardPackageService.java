@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.UserCardPackage;
+
+import java.util.Date;
 import java.util.Map;
 /**
  * 描述：用户钱包，积分Service
@@ -61,6 +63,18 @@ public interface UserCardPackageService {
 	 * @return
 	 */
 	public UserCardPackage queryUserCardPackage(Long uid);
+
+	/**
+	 *添加用户日志（钱包日志累计返现日志）
+	 * @param uid 用户id
+	 * @param type 操作类型
+	 * @param orderId 订单id
+	 * @param val 值
+	 * @param curVal 当前值
+	 * @param remark 备注
+	 * @param curDate 当前日期
+	 */
+	public void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate);
 
 }
 

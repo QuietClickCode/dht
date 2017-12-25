@@ -1,5 +1,6 @@
 package com.retailers.hnc.com.service;
 
+import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.dao.UserCardPackageMapper;
 import com.retailers.hnc.com.base.TestBaseJunit;
 import com.retailers.dht.common.service.OrderService;
@@ -22,6 +23,8 @@ public class OrderServiceTest extends TestBaseJunit {
     private OrderService orderService;
     @Autowired
     private UserCardPackageMapper userCardPackageMapper;
+    @Autowired
+    private OrderMapper orderMapper;
 
     @Test
     public void shoppingOrder(){
@@ -49,9 +52,16 @@ public class OrderServiceTest extends TestBaseJunit {
     public void userCardPackageMapper(){
         long uid=17;
         long type=0;
-        long tradePrice=100;
+        long tradePrice=600;
+        long cumulationCashPrice=100;
         int version =3;
-        boolean isCashBack=false;
-        userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,version,isCashBack);
+        boolean isCashBack=true;
+        userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,cumulationCashPrice,isCashBack,version);
+    }
+    @Test
+    public void findUserFirstBuy(){
+        long uid=12;
+        Long id=orderMapper.findUserFirstBuy(uid);
+        System.out.println(id);
     }
 }

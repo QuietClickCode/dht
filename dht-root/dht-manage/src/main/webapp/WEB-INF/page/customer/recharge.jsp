@@ -187,9 +187,9 @@
             field: 'rcashback',
             title: '是否返现',
             formatter:function(value,row,index){
-                var html="是";
+                var html="否";
                 if(value==1){
-                    html="否";
+                    html="是";
                 }
                 return html;
             }
@@ -256,9 +256,9 @@
                 formData["isValid"]=1;
             }
             if(rcashback){
-                formData["rcashback"]=0;
-            }else{
                 formData["rcashback"]=1;
+            }else{
+                formData["rcashback"]=0;
             }
             let url="/recharge/addRecharge";
             if(editorRechargeType==1){
@@ -429,7 +429,7 @@
             $("#editorRechargeForm #rname").val(rowData.rname);
             initRlogoForm(rowData.rlogo,rowData.rlogoUrl);
             var rcashback =false;
-            if(rowData.rcashback==0){
+            if(rowData.rcashback==1){
                 rcashback=true;
             }
             $("#editorRechargeForm #rcashback").bootstrapSwitch("state",rcashback);

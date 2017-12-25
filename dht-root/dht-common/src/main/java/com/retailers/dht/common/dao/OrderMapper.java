@@ -73,4 +73,11 @@ public interface OrderMapper {
 	 */
 	public int checkUserUnPayOrder(Long uid);
 
+	/**
+	 * 取得用户第一次购买订单
+	 * @param uid 用户id
+	 * @return
+	 */
+	public Long findUserFirstBuy(Long uid);
+
 }

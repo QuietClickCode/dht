@@ -19,6 +19,13 @@ public interface OrderSuccessQueueMapper {
 	 * @date 2017-12-24 11:30:58
 	 */
 	public int saveOrderSuccessQueue(OrderSuccessQueue orderSuccessQueue);
+
+	/**
+	 * 添加至历史
+	 * @param orderSuccessQueue
+	 * @return
+	 */
+	public int saveOrderSuccessQueueHistory(OrderSuccessQueue orderSuccessQueue);
 	/**
 	 * 编辑订单支付成功队例
 	 * @param orderSuccessQueue

@@ -19,6 +19,13 @@ public interface WalletCashBackQueueMapper {
 	 * @date 2017-12-20 01:43:22
 	 */
 	public int saveWalletCashBackQueue(WalletCashBackQueue walletCashBackQueue);
+
+	/**
+	 * 批量添加返现队列
+	 * @param walletCashBackQueues
+	 * @return
+	 */
+	public int saveWalletCashBackQueues(List<WalletCashBackQueue> walletCashBackQueues);
 	/**
 	 * 编辑钱包消费返现(包括指定可返现商品类型）
 	 * @param walletCashBackQueue

@@ -21,6 +21,14 @@ public interface AccumulativeAmountMapper {
 	 * @date 2017-12-25 00:46:54
 	 */
 	public int saveAccumulativeAmount(AccumulativeAmount accumulativeAmount);
+
+	/**
+	 * 批量添加日志
+	 * @param accumulativeAmounts
+	 * @return
+	 */
+	public int saveAccumulativeAmounts(List<AccumulativeAmount> accumulativeAmounts);
+
 	/**
 	 * 编辑平台累计金额(按商品类型分配）
 	 * @param accumulativeAmount

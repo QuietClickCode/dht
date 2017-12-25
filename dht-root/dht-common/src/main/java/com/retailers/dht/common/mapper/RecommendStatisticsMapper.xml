@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.RecommendStatisticsMapper">
+
+	<resultMap id="rm_recommendStatistics" type="com.retailers.dht.common.entity.RecommendStatistics">
+			<result property="rsId" column="rs_id"/>
+			<result property="rsType" column="rs_type"/>
+			<result property="rsStatus" column="rs_status"/>
+			<result property="rsOid" column="rs_o_id"/>
+			<result property="rsOdId" column="rs_od_id"/>
+			<result property="rsUid" column="rs_uid"/>
+			<result property="rsRecommendUid" column="rs_recommend_uid"/>
+			<result property="rsUtype" column="rs_u_type"/>
+			<result property="rsSalesPrice" column="rs_sales_price"/>
+			<result property="rsRatio" column="rs_ratio"/>
+			<result property="rsPrice" column="rs_price"/>
+			<result property="rsTime" column="rs_time"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="recommendStatistics_columns">
+		rs_id,rs_type,rs_status,rs_o_id,rs_od_id,rs_uid,rs_recommend_uid,rs_u_type,rs_sales_price,rs_ratio,rs_price,rs_time
+	</sql>
+	<!-- 根据推荐返现金额主键取得数据 -->
+	<select id="queryRecommendStatisticsByRsId" resultMap="rm_recommendStatistics" parameterType="java.lang.Long">
+		SELECT <include refid="recommendStatistics_columns" />
+		FROM t_recommend_statistics WHERE rs_id = #{rsId}
+	</select>
+	<!-- 推荐返现金额查询条件组合 -->
+	<sql id="recommendStatistics_where">
+		<where>
+			<if test="null != params.rsId">
+				AND rs_id = #{params.rsId}
+			</if>
+			<if test="null != params.rsType">
+				AND rs_type = #{params.rsType}
+			</if>
+			<if test="null != params.rsStatus">
+				AND rs_status = #{params.rsStatus}
+			</if>
+			<if test="null != params.rsOid">
+				AND rs_o_id = #{params.rsOid}
+			</if>
+			<if test="null != params.rsOdId">
+				AND rs_od_id = #{params.rsOdId}
+			</if>
+			<if test="null != params.rsUid">
+				AND rs_uid = #{params.rsUid}
+			</if>
+			<if test="null != params.rsRecommendUid">
+				AND rs_recommend_uid = #{params.rsRecommendUid}
+			</if>
+			<if test="null != params.rsUtype">
+				AND rs_u_type = #{params.rsUtype}
+			</if>
+			<if test="null != params.rsSalesPrice">
+				AND rs_sales_price = #{params.rsSalesPrice}
+			</if>
+			<if test="null != params.rsRatio">
+				AND rs_ratio = #{params.rsRatio}
+			</if>
+			<if test="null != params.rsPrice">
+				AND rs_price = #{params.rsPrice}
+			</if>
+			<if test="null != params.rsTime">
+				AND rs_time = #{params.rsTime}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryRecommendStatisticsList" resultMap="rm_recommendStatistics" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="recommendStatistics_columns" />
+		FROM t_recommend_statistics
+		<include refid="recommendStatistics_where"/>
+	</select>
+	<!--添加推荐返现金额 -->
+	<insert id="saveRecommendStatistics" parameterType="com.retailers.dht.common.entity.RecommendStatistics" useGeneratedKeys="true" keyProperty="rsId">
+		INSERT INTO t_recommend_statistics (
+			rs_type,rs_status,rs_o_id,rs_od_id,rs_uid,rs_recommend_uid,rs_u_type,rs_sales_price,rs_ratio,rs_price,rs_time
+		) VALUES
+		(
+			#{rsType,jdbcType=INTEGER},#{rsStatus,jdbcType=INTEGER},#{rsOid,jdbcType=BIGINT},#{rsOdId,jdbcType=BIGINT},#{rsUid,jdbcType=BIGINT},#{rsRecommendUid,jdbcType=BIGINT},#{rsUtype,jdbcType=BIGINT},#{rsSalesPrice,jdbcType=BIGINT},#{rsRatio,jdbcType=BIGINT},#{rsPrice,jdbcType=BIGINT},#{rsTime,jdbcType=BIGINT}
+		)
+	</insert>
+
+	<!--批量添加推广奖励-->
+	<insert id="saveRecommendStatisticss" parameterType="com.retailers.dht.common.entity.RecommendStatistics" useGeneratedKeys="true" keyProperty="rsId">
+		INSERT INTO t_recommend_statistics (
+		rs_type,rs_status,rs_o_id,rs_od_id,rs_uid,rs_recommend_uid,rs_u_type,rs_sales_price,rs_ratio,rs_price,rs_time
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.rsType,jdbcType=INTEGER},
+				#{item.rsStatus,jdbcType=INTEGER},
+				#{item.rsOid,jdbcType=BIGINT},
+				#{item.rsOdId,jdbcType=BIGINT},
+				#{item.rsUid,jdbcType=BIGINT},
+				#{item.rsRecommendUid,jdbcType=BIGINT},
+				#{item.rsUtype,jdbcType=BIGINT},
+				#{item.rsSalesPrice,jdbcType=BIGINT},
+				#{item.rsRatio,jdbcType=BIGINT},
+				#{item.rsPrice,jdbcType=BIGINT},
+				#{item.rsTime,jdbcType=BIGINT}
+			)
+		</foreach>
+	</insert>
+	<!--修改推荐返现金额 -->
+	<update id="updateRecommendStatistics" parameterType="com.retailers.dht.common.entity.RecommendStatistics">
+		UPDATE t_recommend_statistics
+		<set>
+            <if test="null != rsType">
+                rs_type = #{rsType},
+            </if>
+            <if test="null != rsStatus">
+                rs_status = #{rsStatus},
+            </if>
+            <if test="null != rsOid">
+                rs_o_id = #{rsOid},
+            </if>
+            <if test="null != rsOdId">
+                rs_od_id = #{rsOdId},
+            </if>
+            <if test="null != rsUid">
+                rs_uid = #{rsUid},
+            </if>
+            <if test="null != rsRecommendUid">
+                rs_recommend_uid = #{rsRecommendUid},
+            </if>
+            <if test="null != rsUtype">
+                rs_u_type = #{rsUtype},
+            </if>
+            <if test="null != rsSalesPrice">
+                rs_sales_price = #{rsSalesPrice},
+            </if>
+            <if test="null != rsRatio">
+                rs_ratio = #{rsRatio},
+            </if>
+            <if test="null != rsPrice">
+                rs_price = #{rsPrice},
+            </if>
+            <if test="null != rsTime">
+                rs_time = #{rsTime},
+            </if>
+		</set>
+		WHERE rs_id = #{rsId}
+	</update>
+	<!--删除推荐返现金额 -->
+	<delete id="deleteRecommendStatisticsByRsId" parameterType="java.lang.Long">
+		DELETE FROM t_recommend_statistics WHERE rs_id = #{rsId}
+	</delete>
+</mapper>

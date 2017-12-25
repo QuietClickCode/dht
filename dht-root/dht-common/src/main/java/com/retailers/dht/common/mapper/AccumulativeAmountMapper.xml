@@ -81,6 +81,25 @@
 			#{aaType,jdbcType=INTEGER},#{aaGoodsParentType,jdbcType=BIGINT},#{aaGoodsType,jdbcType=BIGINT},#{aaOrderId,jdbcType=BIGINT},#{aaGoodsId,jdbcType=BIGINT},#{aaConsumePrice,jdbcType=BIGINT},#{aaTotalConsumePrice,jdbcType=BIGINT},#{aaCreateTime,jdbcType=TIMESTAMP},#{aaRemark,jdbcType=VARCHAR},0
 		)
 	</insert>
+	<!--批量添加日志 -->
+	<insert id="saveAccumulativeAmounts" parameterType="com.retailers.dht.common.entity.AccumulativeAmount" useGeneratedKeys="true" keyProperty="aaId">
+		INSERT INTO t_accumulative_amount (
+		aa_type,aa_goods_parent_type,aa_goods_type,aa_order_id,aa_goods_id,aa_consume_price,aa_total_consume_price,aa_create_time,aa_remark,version
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.aaType,jdbcType=INTEGER},
+				#{item.aaGoodsParentType,jdbcType=BIGINT},
+				#{item.aaGoodsType,jdbcType=BIGINT},
+				#{item.aaOrderId,jdbcType=BIGINT},
+				#{item.aaGoodsId,jdbcType=BIGINT},
+				#{item.aaConsumePrice,jdbcType=BIGINT},
+				#{item.aaTotalConsumePrice,jdbcType=BIGINT},
+				#{item.aaCreateTime,jdbcType=TIMESTAMP},
+				#{item.aaRemark,jdbcType=VARCHAR},0
+			)
+		</foreach>
+	</insert>
 	<!--修改平台累计金额(按商品类型分配） -->
 	<update id="updateAccumulativeAmount" parameterType="com.retailers.dht.common.entity.AccumulativeAmount">
 		UPDATE t_accumulative_amount
