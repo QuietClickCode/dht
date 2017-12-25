@@ -148,7 +148,8 @@
 		and CURRENT_TIME()>t1.cp_start_time
 		and t2.parent_id=t1.cp_id
 		<if test="null!=params.cpRegion">
-			and t2.cp_region=#{params.cpRegion}
+			and (t2.cp_region=#{params.cpRegion}
+			or t2.cp_region=2)
 		</if>
 		and t1.is_delete=0
 		and t2.is_delete=0
@@ -180,8 +181,8 @@
 		and t1.is_delete=0
 		and t2.is_delete=0
 		<if test="null!=params.cpRegion">
-			and t2.cp_region=#{params.cpRegion}
-			or t2.cp_region=2
+			and (t2.cp_region=#{params.cpRegion}
+			or t2.cp_region=2)
 		</if>
 
 		GROUP BY t2.g_id

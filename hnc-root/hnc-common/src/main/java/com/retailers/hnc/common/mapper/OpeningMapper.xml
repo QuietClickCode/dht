@@ -9,6 +9,7 @@
 			<result property="oendTime" column="o_end_time"/>
 			<result property="onum" column="o_num"/>
 			<result property="omenberNum" column="o_menber_num"/>
+			<result property="oremark" column="o_remark"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -18,16 +19,20 @@
 		<result property="ostartTime" column="o_start_time"/>
 		<result property="oendTime" column="o_end_time"/>
 		<result property="onum" column="o_num"/>
+		<result property="oremark" column="o_remark"/>
 		<result property="omenberNum" column="o_menber_num"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="hasFloors" column="hasFloors"/>
+		<result property="fname" column="fname"/>
+		<result property="fid" column="fid"/>
+		<result property="selectedfid" column="selectedfid"/>
 	</resultMap>
 
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="opening_columns">
-		o_id,o_name,o_start_time,o_end_time,o_num,o_menber_num,is_delete,version
+		o_id,o_name,o_start_time,o_end_time,o_num,o_menber_num,o_remark,is_delete,version
 	</sql>
 	<!-- 根据开盘表主键取得数据 -->
 	<select id="queryOpeningByOid" resultMap="rm_opening" parameterType="java.lang.Long">
@@ -87,13 +92,26 @@
 		<include refid="opening_where"/>
 		GROUP BY t1.o_id
 	</select>
+
+	<select id="queryOFrelByOid" resultMap="rm_opening_vo">
+		SELECT
+		t1.fm_id fid,t1.fm_name fname,
+		GROUP_CONCAT(t2.f_id) selectedfid
+		FROM
+		t_floor_manage t1
+		LEFT JOIN t_opening_floor t2
+		ON t1.fm_id=t2.f_id and t2.o_id=#{oid} and t2.is_delete=0
+		WHERE
+		t1.is_delete=0
+		GROUP BY t1.fm_id
+	</select>
 	<!--添加开盘表 -->
 	<insert id="saveOpening" parameterType="com.retailers.hnc.common.entity.Opening" useGeneratedKeys="true" keyProperty="oid">
 		INSERT INTO t_opening (
-			o_name,o_start_time,o_end_time,o_num,o_menber_num,is_delete,version
+			o_name,o_start_time,o_end_time,o_num,o_menber_num,o_remark,is_delete,version
 		) VALUES
 		(
-			#{oname,jdbcType=VARCHAR},#{ostartTime,jdbcType=DATE},#{oendTime,jdbcType=DATE},#{onum,jdbcType=BIGINT},#{omenberNum,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{oname,jdbcType=VARCHAR},#{ostartTime,jdbcType=DATE},#{oendTime,jdbcType=DATE},#{onum,jdbcType=BIGINT},#{omenberNum,jdbcType=BIGINT},#{oremark,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改开盘表 -->
@@ -115,6 +133,9 @@
             <if test="null != omenberNum">
                 o_menber_num = #{omenberNum},
             </if>
+			<if test="null != oremark">
+				o_remark = #{oremark},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>

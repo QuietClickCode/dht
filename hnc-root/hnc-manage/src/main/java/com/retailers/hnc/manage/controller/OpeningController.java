@@ -13,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,14 +37,17 @@ public class OpeningController extends BaseController {
 
     @RequestMapping("saveOpening")
     @ResponseBody
-    public BaseResp editOpening(Opening opening){
-        boolean flag = OpeningService.saveOpening(opening);
+    public BaseResp editOpening(Opening opening,String ostartTimes,String oendTimes,String floors){
+        opening.setIsDelete(0L);
+        addDate(opening,ostartTimes,oendTimes);
+        boolean flag = OpeningService.saveOpening(opening,floors);
         return success(flag);
     }
     @RequestMapping("updateOpening")
     @ResponseBody
-    public BaseResp updateOpening(Opening opening){
-        boolean flag = OpeningService.updateOpening(opening);
+    public BaseResp updateOpening(Opening opening,String ostartTimes,String oendTimes,String floors){
+        addDate(opening,ostartTimes,oendTimes);
+        boolean flag = OpeningService.updateOpening(opening,floors);
         return success(flag);
     }
     @RequestMapping("queryOpeningList")
@@ -55,13 +60,35 @@ public class OpeningController extends BaseController {
         return queryPages(pagination);
     }
 
-    @RequestMapping("queryOFrel")
+    @RequestMapping("removeOpening")
     @ResponseBody
-    public Map<String,Object> queryOFrel(Long oid){
+    public BaseResp removeOpening(Long oid){
+        boolean flag = OpeningService.deleteOpeningByOid(oid);
+        return success(flag);
+    }
+
+    @RequestMapping("queryOFrelByOid")
+    @ResponseBody
+    public Map<String,Object> queryOFrelByOid(Long oid){
         Map params = new HashMap();
-        params.put("oname",oid);
+        params.put("oid",oid);
         params.put("isDelete",0L);
-        Pagination<Opening> pagination = null;
-        return queryPages(pagination);
+        List<OpeningVo> list = OpeningService.queryOFrelByOid(oid);
+        Map map = new HashMap();
+        map.put("ofRelList",list);
+        return map;
+    }
+
+    public void addDate(Opening opening,String ostartTimes,String oendTimes){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            Date ostartTime = sdf.parse(ostartTimes);
+            Date oendTime = sdf.parse(oendTimes);
+            opening.setOstartTime(ostartTime);
+            opening.setOendTime(oendTime);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

@@ -29,6 +29,9 @@ public class Opening implements java.io.Serializable {
 	/**预约客户总数*/
 	@NotEmpty
 	private Long omenberNum;
+	/**备注*/
+	@NotEmpty
+	private String oremark;
 	/**是否删除 0不删除 1删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -42,6 +45,14 @@ public class Opening implements java.io.Serializable {
 
 	public Opening( Long oid){
 		this.oid = oid;
+	}
+
+	public String getOremark() {
+		return oremark;
+	}
+
+	public void setOremark(String oremark) {
+		this.oremark = oremark;
 	}
 
 	public void setOid(Long value) {
