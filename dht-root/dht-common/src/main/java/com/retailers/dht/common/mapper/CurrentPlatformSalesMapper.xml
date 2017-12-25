@@ -58,6 +58,20 @@
 			#{cpsPayType,jdbcType=BIGINT},#{cpsGoodsMainType,jdbcType=BIGINT},#{cpsTotalPrice,jdbcType=BIGINT},#{cpsCashbackPrice,jdbcType=BIGINT},0
 		)
 	</insert>
+	<!--批量添加平台当前消费情况 -->
+	<insert id="saveCurrentPlatformSaless" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales" useGeneratedKeys="true" keyProperty="cpsId">
+		INSERT INTO t_current_platform_sales (
+		cps_pay_type,cps_goods_main_type,cps_total_price,cps_cashback_price,version
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.cpsPayType,jdbcType=BIGINT},
+				#{item.cpsGoodsMainType,jdbcType=BIGINT},
+				#{item.cpsTotalPrice,jdbcType=BIGINT},
+				#{item.cpsCashbackPrice,jdbcType=BIGINT},0
+			)
+		</foreach>
+	</insert>
 	<!--修改目前平台销售情况 -->
 	<update id="updateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
 		UPDATE t_current_platform_sales
@@ -79,6 +93,22 @@
             </if>
 		</set>
 		WHERE cps_id = #{cpsId} and version = #{version}
+	</update>
+	<!--批量修改当前平台销售资金 -->
+	<update id="batchUpdateCurrentPlatformSales" parameterType="com.retailers.dht.common.entity.CurrentPlatformSales">
+		UPDATE t_current_platform_sales
+		<set>
+			cps_total_price=
+			<foreach collection="list" item="item" index="index" >
+				WHEN  id=#{item.cpsId} THEN
+				#{item.cpsTotalPrice}
+			</foreach> end,
+			version = version+1,
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" >
+			(cps_id = #{item.cpsId} and version = #{item.version})
+		</foreach>
 	</update>
 	<!--删除目前平台销售情况 -->
 	<delete id="deleteCurrentPlatformSalesByCpsId" parameterType="java.lang.Long">

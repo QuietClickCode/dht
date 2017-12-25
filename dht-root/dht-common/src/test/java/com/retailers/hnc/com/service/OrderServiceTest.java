@@ -1,5 +1,6 @@
 package com.retailers.hnc.com.service;
 
+import com.retailers.dht.common.dao.UserCardPackageMapper;
 import com.retailers.hnc.com.base.TestBaseJunit;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
@@ -19,6 +20,8 @@ public class OrderServiceTest extends TestBaseJunit {
 
     @Autowired
     private OrderService orderService;
+    @Autowired
+    private UserCardPackageMapper userCardPackageMapper;
 
     @Test
     public void shoppingOrder(){
@@ -41,5 +44,14 @@ public class OrderServiceTest extends TestBaseJunit {
             e.printStackTrace();
         }
 
+    }
+    @Test
+    public void userCardPackageMapper(){
+        long uid=17;
+        long type=0;
+        long tradePrice=100;
+        int version =3;
+        boolean isCashBack=false;
+        userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,version,isCashBack);
     }
 }
