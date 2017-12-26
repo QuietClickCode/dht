@@ -8,7 +8,7 @@ import java.util.Map;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-26 12:54:20
+ * @date 2017-12-26 13:47:05
  */
 public interface ClientManageService {
 
@@ -17,9 +17,9 @@ public interface ClientManageService {
 	 * @param clientManage
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
-	public ClientManage saveClientManage(ClientManage clientManage);
+	public boolean saveClientManage(ClientManage clientManage);
 	/**
 	 * 编辑客户管理
 	 * @param clientManage
@@ -33,7 +33,7 @@ public interface ClientManageService {
 	 * @param tmId
 	 * @return clientManage
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public ClientManage queryClientManageByTmId(Long tmId);
 	/**
@@ -43,7 +43,7 @@ public interface ClientManageService {
 	 * @param pageSize 分页条数
 	 * @return 分页对象
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public Pagination<ClientManage> queryClientManageList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
@@ -51,7 +51,7 @@ public interface ClientManageService {
 	 * @param tmId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public boolean deleteClientManageByTmId(Long tmId);
 

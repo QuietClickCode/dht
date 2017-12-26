@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.ChannelMapper">
+
+	<resultMap id="rm_channel" type="com.retailers.hnc.common.entity.Channel">
+			<result property="cid" column="c_id"/>
+			<result property="cchannel" column="c_channel"/>
+			<result property="corder" column="c_order"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="channel_columns">
+		c_id,c_channel,c_order,is_show,is_delete,version
+	</sql>
+	<!-- 根据来访渠道主键取得数据 -->
+	<select id="queryChannelByCid" resultMap="rm_channel" parameterType="java.lang.Long">
+		SELECT <include refid="channel_columns" />
+		FROM t_channel WHERE c_id = #{cid}
+	</select>
+	<!-- 来访渠道查询条件组合 -->
+	<sql id="channel_where">
+		<where>
+			<if test="null != params.cid">
+				AND c_id = #{params.cid}
+			</if>
+			<if test="null != params.cchannel and '' != params.cchannel">
+				AND c_channel = #{params.cchannel}
+			</if>
+			<if test="null != params.corder">
+				AND c_order = #{params.corder}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryChannelList" resultMap="rm_channel" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="channel_columns" />
+		FROM t_channel
+		<include refid="channel_where"/>
+	</select>
+	<!--添加来访渠道 -->
+	<insert id="saveChannel" parameterType="com.retailers.hnc.common.entity.Channel" useGeneratedKeys="true" keyProperty="cid">
+		INSERT INTO t_channel (
+			c_channel,c_order,is_show,is_delete,version
+		) VALUES
+		(
+			#{cchannel,jdbcType=VARCHAR},#{corder,jdbcType=BIGINT},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改来访渠道 -->
+	<update id="updateChannel" parameterType="com.retailers.hnc.common.entity.Channel">
+		UPDATE t_channel
+		<set>
+            <if test="null != cchannel and '' != cchannel">
+                c_channel = #{cchannel},
+            </if>
+            <if test="null != corder">
+                c_order = #{corder},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE c_id = #{cid} and version = #{version}
+	</update>
+	<!--删除来访渠道 -->
+	<delete id="deleteChannelByCid" parameterType="java.lang.Long">
+		DELETE FROM t_channel WHERE c_id = #{cid}
+	</delete>
+</mapper>

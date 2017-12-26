@@ -7,7 +7,7 @@ import java.util.List;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-26 12:54:20
+ * @date 2017-12-26 13:47:05
  */
 public interface ClientManageMapper {
 
@@ -16,7 +16,7 @@ public interface ClientManageMapper {
 	 * @param clientManage
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public int saveClientManage(ClientManage clientManage);
 	/**
@@ -24,7 +24,7 @@ public interface ClientManageMapper {
 	 * @param clientManage
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public int updateClientManage(ClientManage clientManage);
 	/**
@@ -32,7 +32,7 @@ public interface ClientManageMapper {
 	 * @param tmId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public int deleteClientManageByTmId(Long tmId);
 	/**
@@ -40,7 +40,7 @@ public interface ClientManageMapper {
 	 * @param tmId
 	 * @return
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public ClientManage queryClientManageByTmId(Long tmId);
 	/**
@@ -48,7 +48,7 @@ public interface ClientManageMapper {
 	 * @param pagination 分页对象
 	 * @return  客户管理列表
 	 * @author wangjue
-	 * @date 2017-12-26 12:54:20
+	 * @date 2017-12-26 13:47:05
 	 */
 	public List<ClientManage> queryClientManageList(Pagination<ClientManage> pagination);
 

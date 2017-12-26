@@ -28,4 +28,7 @@ public class BaseMenuController {
 
     @Resourse(resourse = "sys.manager.articleManage",label = "文章管理",sort = 6)
     public String articleManage;
+
+    @Resourse(resourse = "sys.manager.orderManage",label = "订单管理",sort = 6)
+    public String orderPage;
 }

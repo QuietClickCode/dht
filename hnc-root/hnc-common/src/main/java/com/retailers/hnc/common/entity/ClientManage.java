@@ -1,12 +1,13 @@
 package com.retailers.hnc.common.entity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
+import java.util.Date;
 /**
  * 描述：客户管理对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-26 12:54:20
+ * @date 2017-12-26 13:47:05
  */
 public class ClientManage implements java.io.Serializable {
 
@@ -33,6 +34,9 @@ public class ClientManage implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 11)
 	private String tmPhone;
+	/**登记时间*/
+	@NotEmpty
+	private Date tmRegisterTime;
 	/**客户身份证号码*/
 	@NotEmpty
 	@Length(min = 1, max = 18)
@@ -110,6 +114,13 @@ public class ClientManage implements java.io.Serializable {
 
 	public String getTmPhone() {
 		return this.tmPhone;
+	}
+	public void setTmRegisterTime(Date value) {
+		this.tmRegisterTime = value;
+	}
+
+	public Date getTmRegisterTime() {
+		return this.tmRegisterTime;
 	}
 	public void setTmIdCard(String value) {
 		this.tmIdCard = value;
