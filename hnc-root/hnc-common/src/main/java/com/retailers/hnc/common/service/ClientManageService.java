@@ -19,7 +19,7 @@ public interface ClientManageService {
 	 * @author wangjue
 	 * @date 2017-12-26 12:54:20
 	 */
-	public boolean saveClientManage(ClientManage clientManage);
+	public ClientManage saveClientManage(ClientManage clientManage);
 	/**
 	 * 编辑客户管理
 	 * @param clientManage
