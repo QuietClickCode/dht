@@ -8,6 +8,11 @@
     <title>全部订单</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .price{
+            float: right;
+        }
+    </style>
 </head>
 <body class="bge6">
 <div class="specialty-title2 borderB">
@@ -16,7 +21,7 @@
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
-    <a href="#allOrder" class="active">全部订单</a>
+    <a href="#allOrder" id="allOrders" class="active">全部订单</a>
     <a id="obligation" href="#dfk">待付款</a>
     <a id="unsent" href="#dfh">待发货</a>
     <a id="receive" href="#dsh">待收货</a>
@@ -287,14 +292,39 @@
         var href = window.location.hash;
         console.log(href)
         if (href != "")
-            $(href).trigger("click");
-        queryOrderByStatus();
+            $(href).click();
+        queryOrderByStatus("",100);
+    });
+
+    $("#obligation").click(function () {
+        $("#dfk").html("");
+        queryOrderByStatus(0,0);
+    });
+
+    $("#allOrders").click(function () {
+        $("#allOrder").html("");
+        queryOrderByStatus("",100);
+    });
+
+    $("#unsent").click(function () {
+        $("#dfh").html("");
+        queryOrderByStatus(3,3);
+    });
+
+    $("#receive").click(function () {
+        $("#dsh").html("");
+        queryOrderByStatus(4,4);
+    });
+
+    $("#appraise").click(function () {
+        $("#dpj").html("");
+        queryOrderByStatus(9,9);
     });
     /**
      * 根据订单类型取得订单列表数据
      * @param orderStatus
      */
-    function queryOrderByStatus(orderStatus){
+    function queryOrderByStatus(orderStatus,num){
         var queryParams={
             pageSize: 15,
             pageNo: curPage,
@@ -306,7 +336,7 @@
             dataType: "json",
             data:queryParams,
             success: function (data) {
-                orderView(data.rows);
+                orderView(data.rows,num);
             }
         });
     }
@@ -315,7 +345,7 @@
      * 根据查询结构显示订单数据
      * @param row
      */
-    function orderView(rows){
+    function orderView(rows,num){
         if(rows){
             for(var row of rows){
                 let osMsg = '未支付';
@@ -334,7 +364,7 @@
                 }else if(row.orderStatus==9){
                     osMsg='交易完成';
                 }
-                if(row.orderStatus)
+
                 var ov='<li class="box2"><p class="start">'+row.orderNo+'&nbsp;&nbsp;'+osMsg+'</p>';
                 //购买总件数
                 let buyTotalNm=0;
@@ -344,18 +374,35 @@
                         ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
                         ov+='<img src="'+info.imgUrl+'" alt=""></a><div class="text-box">';
                         ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
-                        ov+='</a><p>'+info.gsName+'<span class="number">×'+info.odBuyNumber+'</span></p></div></div>';
+                        ov+='</a><p>规格:'+info.gsName+'<span class="number">×'+info.odBuyNumber+'</span></p></div></div>';
                         buyTotalNm+=info.odBuyNumber;
                     }
                 }
-               ov+='<div class="count-infor">';
-                ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a></div></div></li>';
-                $("#allOrder").append(ov);
+
+                if(num == 100){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a></div></div></li>';
+                    $("#allOrder").append(ov);
+                }else if(num == 0){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">取消订单</a><a href="" class="btn2">付款</a></div></div></li>';
+                    $("#dfk").append(ov);
+                }else if(num == 3){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
+                    $("#dfk").append(ov);
+                }else if(num == 4){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a href="/order/dealSuccess">确认收货</a></div></div></li>';
+                    $("#dfk").append(ov);
+                }else if(num == 9){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
+                    $("#dfk").append(ov);
+                }
             }
         }
     }
-
-
 </script>
 </body>
 
