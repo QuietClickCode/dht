@@ -16,7 +16,24 @@
 			<result property="odIsRefund" column="od_is_refund"/>
 			<result property="remark" column="remark"/>
 	</resultMap>
-
+	<resultMap id="rm_orderDetail_vo" type="com.retailers.dht.common.vo.OrderDetailVo">
+		<result property="id" column="id"/>
+		<result property="odOrderId" column="od_order_id"/>
+		<result property="odGoodsPrice" column="od_goods_price"/>
+		<result property="odActualPrice" column="od_actual_price"/>
+		<result property="odMenberPrice" column="od_menber_price"/>
+		<result property="odBuyNumber" column="od_buy_number"/>
+		<result property="odInviterNm" column="odInviterNm"/>
+		<result property="remark" column="remark"/>
+		<result property="gId" column="g_id"/>
+		<result property="gdPrice" column="gd_price"/>
+		<result property="gName" column="gname"/>
+		<result property="type" column="type"/>
+		<result property="imgUrl" column="img_url"/>
+		<result property="gImgUrl" column="gimgurl"/>
+		<result property="gsName" column="gsname"/>
+		<result property="orderType" column="orderType"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="orderDetail_columns">
 		id,od_order_id,od_goods_id,od_goods_price,od_actual_price,od_menber_price,od_buy_number,od_gd_id,od_is_discount,od_inviter_uid,od_is_refund,remark
@@ -30,6 +47,14 @@
 	<select id="queryOrderDetailByOdId" resultMap="rm_orderDetail" parameterType="java.lang.Long">
 		SELECT <include refid="orderDetail_columns" />
 		FROM t_order_detail WHERE od_order_id = #{orderId}
+	</select>
+	<!-- 根据订单号取得订单详情 -->
+	<select id="queryOrderDetailByOdIds" resultMap="rm_orderDetail">
+		SELECT <include refid="orderDetail_columns" />
+		FROM t_order_detail WHERE od_order_id IN
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")" >
+			#{item}
+		</foreach>
 	</select>
 	<!-- 订单详情查询条件组合 -->
 	<sql id="orderDetail_where">
@@ -152,4 +177,147 @@
 	<delete id="deleteOrderDetailById" parameterType="java.lang.Long">
 		DELETE FROM t_order_detail WHERE id = #{id}
 	</delete>
+
+	<!--取得购买详情 -->
+	<select id="buyOrderDetailInfos" resultMap="rm_orderDetail_vo">
+		SELECT
+		d.id,
+		d.od_order_id,
+		d.od_goods_price,
+		d.od_actual_price,
+		d.od_menber_price,
+		d.od_buy_number,
+		d.remark,
+		t.*
+		FROM
+		t_order o,
+		t_order_detail d,
+		(
+		(
+		SELECT
+		t1.g_id,
+		t1.gd_id,
+		t1.gd_price,
+		t2.g_name gname,
+		0 type,
+		t3.show_url img_url,
+		t5.show_url gimgurl,
+		GROUP_CONCAT(DISTINCT t7.gsv_val) gsname,
+		'SHOPPING' orderType
+		FROM
+		t_goods_detail t1
+		LEFT JOIN t_goods t2 ON t1.g_id = t2.g_id
+		LEFT JOIN t_attachment t3 ON t3.id = t1.gd_imgid
+		LEFT JOIN t_goods_image t4 ON t1.g_id = t4.g_id
+		LEFT JOIN t_attachment t5 ON t4.gi_id = t5.id
+		LEFT JOIN t_goods_ggsval_detail t6 ON t1.gd_id = t6.gd_id
+		LEFT JOIN t_goods_gsval t7 ON t7.gsv_id = t6.gsv_id
+		GROUP BY
+		t1.gd_id
+		)
+		UNION
+		(
+		SELECT
+		t1.g_id,
+		t0.gdcp_id gd_id,
+		t1.gd_price,
+		t2.g_name gname,
+		1 type,
+		t3.show_url img_url,
+		t5.show_url gimgurl,
+		GROUP_CONCAT(DISTINCT t7.gsv_val) gsname,
+		'CUT_PRICE' orderType
+		FROM
+		t_goods_gdcprel t0
+		LEFT JOIN t_goods_detail t1 ON t0.gd_id = t1.gd_id
+		LEFT JOIN t_goods t2 ON t1.g_id = t2.g_id
+		LEFT JOIN t_attachment t3 ON t3.id = t1.gd_imgid
+		LEFT JOIN t_goods_image t4 ON t1.g_id = t4.g_id
+		LEFT JOIN t_attachment t5 ON t4.gi_id = t5.id
+		LEFT JOIN t_goods_ggsval_detail t6 ON t1.gd_id = t6.gd_id
+		LEFT JOIN t_goods_gsval t7 ON t7.gsv_id = t6.gsv_id
+		GROUP BY
+		t0.gdcp_id
+		)
+		UNION
+		(
+		SELECT
+		t1.g_id,
+		t0.gdsp_id gd_id,
+		t1.gd_price,
+		t2.g_name gname,
+		2 type,
+		t3.show_url img_url,
+		t5.show_url gimgurl,
+		GROUP_CONCAT(DISTINCT t7.gsv_val) gsname,
+		'SECKILL' orderType
+		FROM
+		t_goods_gdsprel t0
+		LEFT JOIN t_goods_detail t1 ON t0.gd_id = t1.gd_id
+		LEFT JOIN t_goods t2 ON t1.g_id = t2.g_id
+		LEFT JOIN t_attachment t3 ON t3.id = t1.gd_imgid
+		LEFT JOIN t_goods_image t4 ON t1.g_id = t4.g_id
+		LEFT JOIN t_attachment t5 ON t4.gi_id = t5.id
+		LEFT JOIN t_goods_ggsval_detail t6 ON t1.gd_id = t6.gd_id
+		LEFT JOIN t_goods_gsval t7 ON t7.gsv_id = t6.gsv_id
+		GROUP BY
+		t0.gdsp_id
+		)
+		UNION
+		(
+		SELECT
+		t1.g_id,
+		t0.gdsp_id gd_id,
+		t1.gd_price,
+		t2.g_name gname,
+		2 type,
+		t3.show_url img_url,
+		t5.show_url gimgurl,
+		GROUP_CONCAT(DISTINCT t7.gsv_val) gsname,
+		'SPECIAL_OFFER' orderType
+		FROM
+		t_goods_gdsprel t0
+		LEFT JOIN t_goods_detail t1 ON t0.gd_id = t1.gd_id
+		LEFT JOIN t_goods t2 ON t1.g_id = t2.g_id
+		LEFT JOIN t_attachment t3 ON t3.id = t1.gd_imgid
+		LEFT JOIN t_goods_image t4 ON t1.g_id = t4.g_id
+		LEFT JOIN t_attachment t5 ON t4.gi_id = t5.id
+		LEFT JOIN t_goods_ggsval_detail t6 ON t1.gd_id = t6.gd_id
+		LEFT JOIN t_goods_gsval t7 ON t7.gsv_id = t6.gsv_id
+		GROUP BY
+		t0.gdsp_id
+		)
+		UNION
+		(
+		SELECT
+		r.r_id g_id,
+		d.od_gd_id gd_id,
+		r.r_price gd_price,
+		r.r_name gsname,
+		3 type,
+		a.show_url img_url,
+		a.show_url gimgurl,
+		r.r_name gsname,
+		'RECHARGE' orderType
+		FROM
+		t_order o,
+		t_order_detail d,
+		t_recharge r
+		LEFT JOIN t_attachment a ON r.r_logo = a.id
+		WHERE
+		o.id = d.od_order_id
+		AND d.od_gd_id = r.r_id
+		AND o.order_type = 'RECHARGE'
+		)
+		) t
+		WHERE
+		o.id = d.od_order_id
+		AND o.order_type = t.type
+		AND d.od_goods_id = t.g_id
+		AND d.od_gd_id = t.gd_id
+		AND d.od_order_id IN
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")" >
+			#{item}
+		</foreach>
+	</select>
 </mapper>

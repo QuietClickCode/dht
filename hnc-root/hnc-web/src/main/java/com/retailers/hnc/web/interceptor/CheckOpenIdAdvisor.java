@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.net.URLDecoder;
+import java.util.Date;
 import java.util.Map;
 
 /**
@@ -59,12 +60,14 @@ public class CheckOpenIdAdvisor {
                 Object obj = JoinPointUtils.getMethod(joinPoint,CheckOpenId.class);
                 if(ObjectUtils.isNotEmpty(obj)&&obj instanceof CheckOpenId){
                     CheckOpenId co = (CheckOpenId)obj;
-                    randStr = URLDecoder.decode(randStr,"utf-8");
-                    randStr = DESUtils.decryptDES(randStr, DesKey.WEB_KEY);
+//                    randStr = URLDecoder.decode(randStr,"utf-8");
+//                    randStr = DESUtils.decryptDES(randStr, DesKey.WEB_KEY);
                     Map<String,Object> map = WebSystemConstant.globelOpenId;
-                    Object randStrObj = map.get(randStr);
-                    if(ObjectUtils.isEmpty(randStrObj)){
-                        msg = "用户不能为空";
+                    Date randStrObj = (Date) map.get(randStr);
+                    boolean flag = new Date().getTime()-randStrObj.getTime()>0;
+
+                    if(ObjectUtils.isEmpty(randStrObj) || flag){
+                        msg = "用户无效";
                         redirect="/failCheckOpenId";
                         HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder
                                 .getRequestAttributes()).getResponse();

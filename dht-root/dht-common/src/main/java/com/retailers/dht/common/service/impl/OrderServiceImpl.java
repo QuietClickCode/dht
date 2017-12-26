@@ -4,7 +4,9 @@ package com.retailers.dht.common.service.impl;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.dht.common.constant.*;
+import com.retailers.dht.common.constant.CouponConstant;
+import com.retailers.dht.common.constant.LogUserCardPackageConstant;
+import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.*;
@@ -16,8 +18,10 @@ import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
-import com.retailers.tools.utils.*;
-import jdk.nashorn.internal.objects.GenericPropertyDescriptor;
+import com.retailers.tools.utils.Md5Encrypt;
+import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +62,6 @@ public class OrderServiceImpl implements OrderService {
 	private UserMapper userMapper;
     @Autowired
 	private UserCardPackageMapper userCardPackageMapper;
-    @Autowired
-	private LogUserCardPackageMapper logUserCardPackageMapper;
     @Autowired
 	private GoodsFreightService goodsFreightService;
     @Autowired
@@ -301,7 +303,6 @@ public class OrderServiceImpl implements OrderService {
 		return rtnMap;
 	}
 
-
 	/**
 	 *购买特价商品
 	 * @param uid
@@ -488,8 +489,6 @@ public class OrderServiceImpl implements OrderService {
 		return order;
 	}
 
-
-
 	/**
 	 * 用户充值
 	 * @param uid 用户id
@@ -658,30 +657,6 @@ public class OrderServiceImpl implements OrderService {
 		List<WalletCashBackQueue> list = new ArrayList<WalletCashBackQueue>();
 		WalletCashBackQueue wcbq=new WalletCashBackQueue();
 	}
-
-//	/**
-//	 *  添加用户卡包操作日志
-//	 * @param uid 用户id
-//	 * @param type 日志类型
-//	 * @param orderId 订单id
-//	 * @param val 变更值
-//	 * @param curVal 当前 值
-//	 * @param remark 备注
-//	 * @param curDate 当前日期
-//	 */
-//	private void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate){
-//		//添加用户钱包日志
-//		LogUserCardPackage lucp=new LogUserCardPackage();
-//		lucp.setUid(uid);
-//		lucp.setType(type);
-//		lucp.setRelationOrderId(orderId);
-//		lucp.setVal(val);
-//		lucp.setCurVal(curVal);
-//		lucp.setRemark(remark);
-//		lucp.setCreateTime(curDate);
-//		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
-//	}
-
 	/**
 	 * 校验收货地址
 	 * @param uid 用户
@@ -1038,6 +1013,80 @@ public class OrderServiceImpl implements OrderService {
 		}catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * 取得订单详情列表
+	 * @param params
+	 * 	查询条件
+	 * 		orderType 订单类型
+	 * 		orderNo 订单号
+	 * 		orderStatus 订单状态
+	 * 		orderPayWay	支付方式
+	 * 		orderBuyNm 购买人姓名
+	 * 		orderBuyUid 购买人id
+	 * 		orderLogisticsCode 快递单号
+	 * 		orderUaName 收货人姓名
+	 *		orderUaPhone 收货人话
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public Pagination<OrderVo> queryOrderLists(Map<String, Object> params, int pageNo, int pageSize) {
+		//取得分页订单
+		Pagination<OrderVo> page = new Pagination<OrderVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		//取得详查详情列表
+		List<OrderVo> lists = orderMapper.queryOrderInfoLists(page);
+
+		Map<Long,String> oderTypes=new HashMap<Long, String>();
+		if(ObjectUtils.isNotEmpty(lists)){
+			List<Long> orderIds=new ArrayList<Long>();
+			//取得订单详情
+			for(OrderVo ov:lists){
+				orderIds.add(ov.getId());
+				oderTypes.put(ov.getId(),ov.getOrderType());
+			}
+			//取得所有购买详情
+			List<OrderDetailVo> ods=orderDetailMapper.buyOrderDetailInfos(orderIds);
+			Map<Long,List<OrderDetailVo>> maps=new HashMap<Long, List<OrderDetailVo>	>();
+			for(OrderDetailVo od:ods){
+				if(maps.containsKey(od.getOdOrderId())){
+					maps.get(od.getOdOrderId()).add(od);
+				}else{
+					List<OrderDetailVo> odvs=new ArrayList<OrderDetailVo>();
+					odvs.add(od);
+					maps.put(od.getOdOrderId(),odvs);
+				}
+			}
+			//设置订单关联商品详情
+			for(OrderVo o:lists){
+				o.setOds(maps.get(o.getId()));
+			}
+		}
+		page.setData(lists);
+		return page;
+	}
+
+	/**
+	 * 根据订单类型取得对应的id值
+	 * @param orderType
+	 * @return
+	 */
+	private Long getTradeType(String orderType){
+		long rtn =0;
+		if(orderType.equals(OrderEnum.SHOPPING.getKey())){
+			rtn =0;
+		}else if(orderType.equals(OrderEnum.CUT_PRICE.getKey())){
+			rtn=1;
+		}else if(orderType.equals(OrderEnum.RECHARGE.getKey())){
+
+		}else if(orderType.equals(OrderEnum.SECKILL.getKey())||orderType.equals(OrderEnum.SPECIAL_OFFER.getKey())){
+			rtn = 2;
+		}
+		return rtn;
 	}
 }
 

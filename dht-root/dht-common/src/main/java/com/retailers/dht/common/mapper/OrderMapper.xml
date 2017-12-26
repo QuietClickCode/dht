@@ -43,6 +43,40 @@
 			<result property="isReal" column="is_real"/>
 			<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_order_vo" type="com.retailers.dht.common.vo.OrderVo">
+		<result property="id" column="id"/>
+		<result property="parsentId" column="parsent_id"/>
+		<result property="orderType" column="order_type"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="orderStatus" column="order_status"/>
+		<result property="orderPayWay" column="order_pay_way"/>
+		<result property="orderPayUseWay" column="order_pay_use_way"/>
+		<result property="orderPayCallbackNo" column="order_pay_callback_no"/>
+		<result property="orderPayCallbackRemark" column="order_pay_callback_remark"/>
+		<result property="orderPayCallbackDate" column="order_pay_callback_date"/>
+		<result property="orderBuyUid" column="order_buy_uid"/>
+		<result property="orderBuyNm" column="u_name"/>
+		<result property="orderTradePrice" column="order_trade_price"/>
+		<result property="orderGoodsTotalPrice" column="order_goods_total_price"/>
+		<result property="orderGoodsActualPayPrice" column="order_goods_actual_pay_price"/>
+		<result property="orderMenberPrice" column="order_menber_price"/>
+		<result property="orderGoodsCouponPrice" column="order_goods_coupon_price"/>
+		<result property="orderCouponPrice" column="order_coupon_price"/>
+		<result property="orderLogisticsPrice" column="order_logistics_price"/>
+		<result property="orderCreateDate" column="order_create_date"/>
+		<result property="orderPayDate" column="order_pay_date"/>
+		<result property="orderIntegralOrCash" column="order_integral_or_cash"/>
+		<result property="orderUaName" column="order_ua_name"/>
+		<result property="orderUaPhone" column="order_ua_phone"/>
+		<result property="orderUaAddress" column="order_ua_address"/>
+		<result property="orderDiscount" column="order_discount"/>
+		<result property="orderLogisticsCode" column="order_logistics_code"/>
+		<result property="orderSendDate" column="order_send_date"/>
+		<result property="orderSendRemark" column="order_send_remark"/>
+		<result property="orderConfirmDate" column="order_confirm_date"/>
+		<result property="orderSendAddressId" column="order_send_address_id"/>
+		<result property="version" column="version"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="order_columns">
@@ -379,5 +413,83 @@
 		  ORDER BY
 			id ASC
 			LIMIT 1
+	</select>
+
+	<!--取得订单详情 用于页面展示 -->
+	<select id="queryOrderInfoLists" resultMap="rm_order_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		id,
+		parsent_id,
+		order_type,
+		order_no,
+		order_status,
+		order_pay_way,
+		order_pay_use_way,
+		order_pay_callback_no,
+		order_pay_callback_date,
+		order_pay_callback_remark,
+		order_buy_uid,
+		u.u_name,
+		order_trade_price,
+		order_goods_total_price,
+		order_goods_actual_pay_price,
+		order_menber_price,
+		order_goods_coupon_price,
+		order_coupon_price,
+		order_logistics_price,
+		order_create_date,
+		order_pay_date,
+		order_illustrate,
+		order_integral_or_cash,
+		order_ua_name,
+		order_ua_phone,
+		order_ua_address,
+		order_discount,
+		order_logistics_code,
+		order_send_date,
+		order_send_remark,
+		order_confirm_date,
+		order_send_address_id,
+		is_real,
+		o.version
+		FROM
+		t_order o,
+		t_user u
+		WHERE
+		o.order_buy_uid = u.u_id
+		<if test="null != params.orderType and params.orderType.size>0">
+			AND order_type in
+			<foreach collection="params.orderType" item="item" index="index" separator="," open="(" close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="null != params.orderStatus and params.orderStatus.size>0">
+			AND order_status in
+			<foreach collection="params.orderStatus" item="item" index="index" separator="," open="(" close=")">
+				${item}
+			</foreach>
+		</if>
+
+		<if test="null != params.orderBuyNm and '' != params.orderBuyNm">
+			AND u_name like  concat('%', #{params.orderBuyNm}, '%')
+		</if>
+		<if test="null != params.orderBuyUid">
+			AND order_buy_uid =#{params.orderBuyUid}
+		</if>
+		<if test="null != params.orderNo and '' != params.orderNo">
+			AND order_no =#{params.orderNo}
+		</if>
+		<if test="null != params.orderPayWay">
+			AND order_pay_way =#{params.orderPayWay}
+		</if>
+		<if test="null != params.orderLogisticsCode and '' != params.orderLogisticsCode">
+			AND order_logistics_code =#{params.orderLogisticsCode}
+		</if>
+		<if test="null != params.orderUaName and '' != params.orderUaName">
+			AND order_ua_name like  concat('%', #{params.orderUaName}, '%')
+		</if>
+		<if test="null != params.orderUaPhone and '' != params.orderUaPhone">
+			AND order_ua_phone=#{params.orderUaPhone}
+		</if>
 	</select>
 </mapper>
