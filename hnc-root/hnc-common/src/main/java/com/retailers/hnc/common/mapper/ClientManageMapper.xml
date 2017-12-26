@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.ClientManageMapper">
+
+	<resultMap id="rm_clientManage" type="com.retailers.hnc.common.entity.ClientManage">
+			<result property="tmId" column="tm_id"/>
+			<result property="tmName" column="tm_name"/>
+			<result property="tmSex" column="tm_sex"/>
+			<result property="tmEmployee" column="tm_employee"/>
+			<result property="tmAge" column="tm_age"/>
+			<result property="tmStatus" column="tm_status"/>
+			<result property="tmPhone" column="tm_phone"/>
+			<result property="tmIdCard" column="tm_id_card"/>
+			<result property="tmChannel" column="tm_channel"/>
+			<result property="tmInfo" column="tm_info"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="tmOrder" column="tm_order"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="clientManage_columns">
+		tm_id,tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_phone,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+	</sql>
+	<!-- 根据客户管理主键取得数据 -->
+	<select id="queryClientManageByTmId" resultMap="rm_clientManage" parameterType="java.lang.Long">
+		SELECT <include refid="clientManage_columns" />
+		FROM t_client_manage WHERE tm_id = #{tmId}
+	</select>
+	<!-- 客户管理查询条件组合 -->
+	<sql id="clientManage_where">
+		<where>
+			<if test="null != params.tmId">
+				AND tm_id = #{params.tmId}
+			</if>
+			<if test="null != params.tmName and '' != params.tmName">
+				AND tm_name = #{params.tmName}
+			</if>
+			<if test="null != params.tmSex">
+				AND tm_sex = #{params.tmSex}
+			</if>
+			<if test="null != params.tmEmployee">
+				AND tm_employee = #{params.tmEmployee}
+			</if>
+			<if test="null != params.tmAge">
+				AND tm_age = #{params.tmAge}
+			</if>
+			<if test="null != params.tmStatus">
+				AND tm_status = #{params.tmStatus}
+			</if>
+			<if test="null != params.tmPhone and '' != params.tmPhone">
+				AND tm_phone = #{params.tmPhone}
+			</if>
+			<if test="null != params.tmIdCard and '' != params.tmIdCard">
+				AND tm_id_card = #{params.tmIdCard}
+			</if>
+			<if test="null != params.tmChannel">
+				AND tm_channel = #{params.tmChannel}
+			</if>
+			<if test="null != params.tmInfo and '' != params.tmInfo">
+				AND tm_info = #{params.tmInfo}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.tmOrder">
+				AND tm_order = #{params.tmOrder}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryClientManageList" resultMap="rm_clientManage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="clientManage_columns" />
+		FROM t_client_manage
+		<include refid="clientManage_where"/>
+	</select>
+	<!--添加客户管理 -->
+	<insert id="saveClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage" useGeneratedKeys="true" keyProperty="tmId">
+		INSERT INTO t_client_manage (
+			tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_phone,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+		) VALUES
+		(
+			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=INTEGER},#{tmStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改客户管理 -->
+	<update id="updateClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage">
+		UPDATE t_client_manage
+		<set>
+            <if test="null != tmName and '' != tmName">
+                tm_name = #{tmName},
+            </if>
+            <if test="null != tmSex">
+                tm_sex = #{tmSex},
+            </if>
+            <if test="null != tmEmployee">
+                tm_employee = #{tmEmployee},
+            </if>
+            <if test="null != tmAge">
+                tm_age = #{tmAge},
+            </if>
+            <if test="null != tmStatus">
+                tm_status = #{tmStatus},
+            </if>
+            <if test="null != tmPhone and '' != tmPhone">
+                tm_phone = #{tmPhone},
+            </if>
+            <if test="null != tmIdCard and '' != tmIdCard">
+                tm_id_card = #{tmIdCard},
+            </if>
+            <if test="null != tmChannel">
+                tm_channel = #{tmChannel},
+            </if>
+            <if test="null != tmInfo and '' != tmInfo">
+                tm_info = #{tmInfo},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != tmOrder">
+                tm_order = #{tmOrder},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE tm_id = #{tmId} and version = #{version}
+	</update>
+	<!--删除客户管理 -->
+	<delete id="deleteClientManageByTmId" parameterType="java.lang.Long">
+		DELETE FROM t_client_manage WHERE tm_id = #{tmId}
+	</delete>
+</mapper>
