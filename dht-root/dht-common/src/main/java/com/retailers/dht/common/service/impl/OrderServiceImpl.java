@@ -535,7 +535,7 @@ public class OrderServiceImpl implements OrderService {
 			orderDetail.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
 			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
-			rtn.put("price",NumberUtils.formaterNumberPower(recharge.getRprice()));
+			rtn.put("price",recharge.getRprice());
 			rtn.put("type",order.getOrderType());
 		}finally {
 			logger.info("用户充值处理结束,执行时间:[{}],返回数据：[{}]",(System.currentTimeMillis()-curDate.getTime()),JSON.toJSON(rtn));
