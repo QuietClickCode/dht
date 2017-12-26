@@ -59,30 +59,30 @@
             console.log(arg);
             console.log(t);
 
-            if(uploadImgFlag==1){
-                for(var i=0; i<arg.length; i++){
-                    var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
-                        '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
-                        '<div onclick="deleteGoodsImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
-                        '</div>';
-                    $('#uploadImgBtn').before(imgdiv);
-                    newImgArr.push(arg[i].alt);
-                }
-            }else if(uploadImgFlag==0){
-                for(var i=0; i<arg.length; i++){
-                    var html = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
-                        '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
-                        '<div onclick="deletegsgImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
-                        '</div>';
-                    $('#uploadGoodsSpecilgoodscredentialImgBtn').after(html);
-                    addImgArr.push(arg[i].alt);
-                }
+//            if(uploadImgFlag==1){
+//                for(var i=0; i<arg.length; i++){
+//                    var imgdiv = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+//                        '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
+//                        '<div onclick="deleteGoodsImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background-color: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+//                        '</div>';
+//                    $('#uploadImgBtn').before(imgdiv);
+//                    newImgArr.push(arg[i].alt);
+//                }
+//            }else if(uploadImgFlag==0){
+//                for(var i=0; i<arg.length; i++){
+//                    var html = '<div onmouseenter="showDeleteImage(this)" onmouseleave="hideDeleteImage(this)" style="width:18%;height: 100px;position: relative;float: left;margin-left: 1%;margin-right: 1%;margin-top: 10px;">'+
+//                        '<img src="'+arg[i].src+'" style="width: 100%;height: 100%;" >'+
+//                        '<div onclick="deletegsgImage(this,'+arg[i].alt+')" style="display: none; position: absolute;width: 100%;background: red;color:white;top:0px;text-align: center;cursor: pointer;z-index: 10">删除</div>'+
+//                        '</div>';
+//                    $('#uploadGoodsSpecilgoodscredentialImgBtn').after(html);
+//                    addImgArr.push(arg[i].alt);
+//                }
+//
+//            }
 
-            }
 
 
-
-            //alert('这是图片地址：'+arg[0].src);
+            alert('这是图片地址：'+arg[0].src);
         });
 
         /* 文件上传监听
@@ -117,7 +117,7 @@
         //判断路径   这里是config.json 中设置执行上传的action名称
         console.log(action)
         if (action == 'uploadimage') {
-            //return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=true&isCompress=false';
+//            return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=false&isCompress=false';
             return ueditorUploadUrl("goods",false,false);
             //上传视频
         } else if (action == 'uploadvideo') {
@@ -200,13 +200,18 @@
                 <br/>
 
                 <br/>
-                <div class="col-lg-6" style="height:49px">
+                <div class="col-lg-12" style="height:49px">
                     <div class="input-group form-group">
                         <span class="input-group-addon">
                              宣传图片:
                         </span>
-                        <div id="imgsdiv">
-
+                        <div id="imgsdiv" class="row">
+                            <div class="col-lg-2">
+                                <img style="width: 100%;height: 100%">
+                            </div>
+                            <div class="col-lg-2">
+                                <button class="btn btn-default" onclick="upImage();">+</button>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -349,7 +354,16 @@
             }
         });
     }
-    
+
+
+    //清除文件
+    function clearCpLogo(){
+        $('#dht_image_upload').filestyle('clear');
+        $("#uploadImageDiv").hide();
+        $("#cpLogoDiv").show();
+        $("#clearCpLogoDiv").hide();
+        $("#cpLogo").val('');
+    }
     function validteData() {
         $('#editorProjectForm').bootstrapValidator({
             container: 'tooltip',

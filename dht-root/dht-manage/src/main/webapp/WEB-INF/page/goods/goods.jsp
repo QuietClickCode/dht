@@ -290,14 +290,14 @@
                                                                 <%--<input id="gareaName" name="gareaName" type="text" class="form-control" />--%>
                                                             <%--</div>--%>
                                                         <%--</div>--%>
-                                                        <div class="col-lg-6" style="height:49px;">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              可售范围:
-                                                          </span>
-                                                                <input id="gsalescope" name="gsalescope" type="text" class="form-control" placeholder="以千米为单位"/>
-                                                            </div>
-                                                        </div>
+                                                        <%--<div class="col-lg-6" style="height:49px;">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                              <%--可售范围:--%>
+                                                          <%--</span>--%>
+                                                                <%--<input id="gsalescope" name="gsalescope" type="text" class="form-control" placeholder="以千米为单位"/>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
 
 
 
@@ -440,26 +440,26 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6" style="height:49px;">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            是否显示销量:
-                                                          </span>
-                                                                <div class="controls">
-                                                                    <div class="switch" tabindex="0">
-                                                                        <input id="isShowsalesvolume" name="isShowsalesvolume" type="checkbox" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-lg-6" style="height:49px;" id="gsalesvolumediv">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              销量:
-                                                          </span>
-                                                                <input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control" value="0"/>
-                                                            </div>
-                                                        </div>
+                                                        <%--<div class="col-lg-6" style="height:49px;">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                            <%--是否显示销量:--%>
+                                                          <%--</span>--%>
+                                                                <%--<div class="controls">--%>
+                                                                    <%--<div class="switch" tabindex="0">--%>
+                                                                        <%--<input id="isShowsalesvolume" name="isShowsalesvolume" type="checkbox" />--%>
+                                                                    <%--</div>--%>
+                                                                <%--</div>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
+                                                        <%--<div class="col-lg-6" style="height:49px;" id="gsalesvolumediv">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                              <%--销量:--%>
+                                                          <%--</span>--%>
+                                                                <%--<input id="gsalesvolume" name="gsalesvolume" type="text" class="form-control" value="0"/>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
 
                                                         <div class="col-lg-6" style="height:49px;">
                                                             <div class="input-group form-group">
@@ -525,20 +525,20 @@
                                                         </div>
 
 
-                                                    <div  id="iscoddiv">
-                                                        <div class="col-lg-6" style="height:49px;">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                              能否货到付款:
-                                                          </span>
-                                                                <div class="controls">
-                                                                    <div class="switch" tabindex="0">
-                                                                        <input id="isCod" name="isCod" type="checkbox" />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    <%--<div  id="iscoddiv">--%>
+                                                        <%--<div class="col-lg-6" style="height:49px;">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                              <%--能否货到付款:--%>
+                                                          <%--</span>--%>
+                                                                <%--<div class="controls">--%>
+                                                                    <%--<div class="switch" tabindex="0">--%>
+                                                                        <%--<input id="isCod" name="isCod" type="checkbox" />--%>
+                                                                    <%--</div>--%>
+                                                                <%--</div>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
+                                                    <%--</div>--%>
 
 
                                                         <div class="col-lg-6" style="height:49px;">
@@ -1022,10 +1022,10 @@
         //初始华开关选择器
         $("#isServicegoods").bootstrapSwitch();
         $("#isAllowsetdeliverytime").bootstrapSwitch();
-        $("#isShowsalesvolume").bootstrapSwitch();
+//        $("#isShowsalesvolume").bootstrapSwitch();
         $("#isMenberdiscount").bootstrapSwitch();
         $("#isPutway").bootstrapSwitch();
-        $("#isCod").bootstrapSwitch();
+//        $("#isCod").bootstrapSwitch();
         $("#isAdvancesale").bootstrapSwitch();
 
 
@@ -1170,14 +1170,14 @@
                         }
                     }
                 },
-                gsalesvolume: {
-                    message: '销量校验未通过',
-                    validators: {
-                        notEmpty: {
-                            message: '销量不能为空'
-                        }
-                    }
-                }
+//                gsalesvolume: {
+//                    message: '销量校验未通过',
+//                    validators: {
+//                        notEmpty: {
+//                            message: '销量不能为空'
+//                        }
+//                    }
+//                }
             }
         });
     }
@@ -1259,7 +1259,7 @@
         $("#gclassificationName").val('');
         $("#garea").val('');
         $("#gareaName").val('');
-        $("#gsalescope").val('');
+//        $("#gsalescope").val('');
         $("#gprice").val('');
         $("#gunitname").val('');
         $("#gproductioninaddress").val('');
@@ -1275,7 +1275,7 @@
         $("#gfreight").val('');
         $("#gstartbuy").val('');
         $("#gendbuy").val('');
-        $("#gsalesvolume").val('');
+//        $("#gsalesvolume").val('');
         $("#gedt").val('');
         $("#gdeposit").val('');
 
@@ -1285,8 +1285,8 @@
         $("#isAllowsetdeliverytime").val('');
         $("#isAllowsetdeliverytime").bootstrapSwitch("state",false);
 
-        $("#isShowsalesvolume").val('');
-        $("#isShowsalesvolume").bootstrapSwitch("state",false);
+//        $("#isShowsalesvolume").val('');
+//        $("#isShowsalesvolume").bootstrapSwitch("state",false);
 
         $("#isMenberdiscount").val('');
         $("#isMenberdiscount").bootstrapSwitch("state",true);
@@ -1297,8 +1297,8 @@
         $("#isAdvancesale").val('');
         $("#isAdvancesale").bootstrapSwitch("state",false);
 
-        $("#isCod").val('');
-        $("#isCod").bootstrapSwitch("state",false);
+//        $("#isCod").val('');
+//        $("#isCod").bootstrapSwitch("state",false);
 
         $("#isMultiplebuy").val('');
         $('#isMultiplebuy').removeAttr('checked');
@@ -1328,7 +1328,7 @@
             $("#gclassificationName").val(rowData.gclassificationName);
             $("#garea").val(rowData.garea);
             $("#gareaName").val(rowData.gareaName);
-            $("#gsalescope").val(rowData.gsalescope);
+//            $("#gsalescope").val(rowData.gsalescope);
             $("#gprice").val(parseFloat(rowData.gprice/100).toFixed(2));
             $("#gunitname").val(rowData.gunitname);
             $("#gproductioninaddress").val(rowData.gproductioninaddress);
@@ -1522,12 +1522,12 @@
                 $('#isadvancesalediv').hide();
                 $('#gdepositdiv').show();
                 $('#maincomtrayside').attr('checked','checked');
-                $('#iscoddiv').hide();
+//                $('#iscoddiv').hide();
             }else{
                 $('#allowsettimediv').show();
                 $('#isadvancesalediv').show();
                 $('#gdepositdiv').hide();
-                $('#iscoddiv').show();
+//                $('#iscoddiv').show();
             }
         });
 
@@ -1565,7 +1565,7 @@
                 formData["isAdvancesale"]=0;
                 formData["gedts"]='';
                 formData["gfreight"]=null;
-                formData["isCod"]=null;
+//                formData["isCod"]=null;
             }else{
                 formData["isServicegoods"]=0;
                 formData["gedts"]=$('#gedt').val();
@@ -1585,23 +1585,23 @@
                     formData["gedts"]='';
                 }
 
-                flag = $("#isCod").bootstrapSwitch("state");
-                if(flag){
-                    formData["isCod"]=1;
-                }else{
-                    formData["isCod"]=0;
-                }
+//                flag = $("#isCod").bootstrapSwitch("state");
+//                if(flag){
+//                    formData["isCod"]=1;
+//                }else{
+//                    formData["isCod"]=0;
+//                }
 
                 formData["gdeposit"]='';
 
             }
 
-            flag = $("#isShowsalesvolume").bootstrapSwitch("state");
-            if(flag){
-                formData["isShowsalesvolume"]=1;
-            }else{
-                formData["isShowsalesvolume"]=0;
-            }
+//            flag = $("#isShowsalesvolume").bootstrapSwitch("state");
+//            if(flag){
+//                formData["isShowsalesvolume"]=1;
+//            }else{
+//                formData["isShowsalesvolume"]=0;
+//            }
 
             flag = $("#isMenberdiscount").bootstrapSwitch("state");
             if(flag){
@@ -1675,7 +1675,7 @@
                     $('#configversion').val('');
                     $("#gstartbuy").val('');
                     $("#gendbuy").val('');
-                    $("#gsalesvolume").val('');
+//                    $("#gsalesvolume").val('');
                     $("#gedt").val('');
                     $("#gdeposit").val('');
 
@@ -1688,8 +1688,8 @@
                     $("#isAllowsetdeliverytime").val('');
                     $("#isAllowsetdeliverytime").bootstrapSwitch("state",false);
 
-                    $("#isShowsalesvolume").val('');
-                    $("#isShowsalesvolume").bootstrapSwitch("state",false);
+//                    $("#isShowsalesvolume").val('');
+//                    $("#isShowsalesvolume").bootstrapSwitch("state",false);
 
                     $("#isMenberdiscount").val('');
                     $("#isMenberdiscount").bootstrapSwitch("state",true);
@@ -1700,8 +1700,8 @@
                     $("#isAdvancesale").val('');
                     $("#isAdvancesale").bootstrapSwitch("state",false);
 
-                    $("#isCod").val('');
-                    $("#isCod").bootstrapSwitch("state",false);
+//                    $("#isCod").val('');
+//                    $("#isCod").bootstrapSwitch("state",false);
 
                     $("#isMultiplebuy").val('');
                     $('#isMultiplebuy').removeAttr('checked');
@@ -1711,7 +1711,7 @@
                     $("#gfreight").val(goodsConfig.gfreight);
                     $("#gstartbuy").val(goodsConfig.gstartbuy);
                     $("#gendbuy").val(goodsConfig.gendbuy);
-                    $("#gsalesvolume").val(goodsConfig.gsalesvolume);
+//                    $("#gsalesvolume").val(goodsConfig.gsalesvolume);
                     $("#gedt").val(goodsConfig.gedt);
                     $("#gdeposit").val(goodsConfig.gdeposit);
                     $('#configversion').val(goodsConfig.version);
@@ -1741,12 +1741,12 @@
                     }
                     $("#isAllowsetdeliverytime").bootstrapSwitch("state",flag);
 
-                    flag = false;
-                    $("#isShowsalesvolume").val(goodsConfig.isShowsalesvolume);
-                    if(goodsConfig.isShowsalesvolume==1){
-                        flag = true;
-                    }
-                    $("#isShowsalesvolume").bootstrapSwitch("state",flag);
+//                    flag = false;
+//                    $("#isShowsalesvolume").val(goodsConfig.isShowsalesvolume);
+//                    if(goodsConfig.isShowsalesvolume==1){
+//                        flag = true;
+//                    }
+//                    $("#isShowsalesvolume").bootstrapSwitch("state",flag);
 
                     flag = false;
                     $("#isMenberdiscount").val(goodsConfig.isMenberdiscount);
@@ -1772,12 +1772,12 @@
                     }
                     $("#isAdvancesale").bootstrapSwitch("state",flag);
 
-                    flag = false;
-                    $("#isCod").val(goodsConfig.isCod);
-                    if(goodsConfig.isCod==1){
-                        flag = true;
-                    }
-                    $("#isCod").bootstrapSwitch("state",flag);
+//                    flag = false;
+//                    $("#isCod").val(goodsConfig.isCod);
+//                    if(goodsConfig.isCod==1){
+//                        flag = true;
+//                    }
+//                    $("#isCod").bootstrapSwitch("state",flag);
 
 
                     flag = false;

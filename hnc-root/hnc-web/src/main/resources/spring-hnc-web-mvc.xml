@@ -130,13 +130,13 @@
     <!--</mvc:interceptors>-->
 
     <!-- 项目定时任务 -->
-    <!--<task:scheduled-tasks>-->
+    <task:scheduled-tasks>
         <!--<task:scheduled ref="webTaskJob" method="init" cron="0/30 * * * * ?"/>-->
-        <!--&lt;!&ndash;<task:scheduled ref="mTaskJob" method="stcokEarlyWarning" cron="0 0 0/1 * * ?"/>&ndash;&gt;-->
-    <!--</task:scheduled-tasks>-->
-    <!--<context:component-scan base-package="com.retailers.hnc.web.job" />-->
+        <task:scheduled ref="mTaskJob" method="clearLoginOutUser" cron="0 0 0/1 * * ?"/>
+    </task:scheduled-tasks>
+    <context:component-scan base-package="com.retailers.hnc.web.job" />
     <!--<task:scheduled-tasks>-->
-        <!--<task:scheduled ref="wxTaskJob" method="queryWxToken" cron="0 0/3 * * * ?"/>-->
+        <!--<task:scheduled ref="wxTaskJob" method="queryWxToken" cron="0/30 * * * * ?"/>-->
     <!--</task:scheduled-tasks>-->
     <!--<context:component-scan base-package="com.retailers.wx.common.job" />-->
     <!--<bean id="orderProcess" class="com.retailers.hnc.web.job.WebTaskJob" init-method="startJob"/>-->
