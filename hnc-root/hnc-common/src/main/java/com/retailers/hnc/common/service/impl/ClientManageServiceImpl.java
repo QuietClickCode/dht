@@ -13,17 +13,19 @@ import com.retailers.mybatis.pagination.Pagination;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-26 12:54:20
+ * @date 2017-12-26 13:47:05
  */
 @Service("clientmanageService")
 public class ClientManageServiceImpl implements ClientManageService {
 	@Autowired
 	private ClientManageMapper clientManageMapper;
-	public ClientManage saveClientManage(ClientManage clientManage) {
+	public boolean saveClientManage(ClientManage clientManage) {
 		int status = clientManageMapper.saveClientManage(clientManage);
-		return status == 1 ? clientManage : null;
+		return status == 1 ? true : false;
 	}
 	public boolean updateClientManage(ClientManage clientManage) {
+		ClientManage manage = queryClientManageByTmId(clientManage.getTmId());
+		clientManage.setVersion(manage.getVersion());
 		int status = clientManageMapper.updateClientManage(clientManage);
 		return status == 1 ? true : false;
 	}
@@ -41,8 +43,9 @@ public class ClientManageServiceImpl implements ClientManageService {
 		return page;
 	}
 	public boolean deleteClientManageByTmId(Long tmId) {
-		int status = clientManageMapper.deleteClientManageByTmId(tmId);
-		return status == 1 ? true : false;
+		ClientManage clientManage = queryClientManageByTmId(tmId);
+		clientManage.setIsDelete(1);
+		return updateClientManage(clientManage);
 	}
 }
 
