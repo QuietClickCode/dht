@@ -19,9 +19,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class ClientManageServiceImpl implements ClientManageService {
 	@Autowired
 	private ClientManageMapper clientManageMapper;
-	public boolean saveClientManage(ClientManage clientManage) {
+	public ClientManage saveClientManage(ClientManage clientManage) {
 		int status = clientManageMapper.saveClientManage(clientManage);
-		return status == 1 ? true : false;
+		return status == 1 ? clientManage : null;
 	}
 	public boolean updateClientManage(ClientManage clientManage) {
 		ClientManage manage = queryClientManageByTmId(clientManage.getTmId());
