@@ -1088,5 +1088,77 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return rtn;
 	}
+
+	/**
+	 * 订单确认收货
+	 * @param uid 用户id
+	 * @param orderId 订单id
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean orderConfirm(Long uid, Long orderId) throws AppException {
+		logger.info("用户确认收货");
+		Date curDate=new Date();
+		String lockKey=StringUtils.formate(SingleThreadLockConstant.CONFIRM_TRADE_ORDER,orderId+"");
+		procedureToolsService.singleLockManager(lockKey);
+		try{
+			Order order=orderMapper.queryOrderById(orderId);
+			if(ObjectUtils.isEmpty(order)){
+				throw new AppException("订单不存在");
+			}
+			if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_PAY_SEND_GOODS){
+				throw new AppException("订单状态异常");
+			}
+			if(order.getOrderBuyDel().intValue()!=0){
+				return true;
+			}
+			if(order.getOrderBuyUid().intValue()!=uid.intValue()){
+				throw new AppException("不能确认他人订单");
+			}
+			order.setOrderConfirmDate(new Date());
+			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SEND_GOODS_RECEIPT);
+			orderMapper.updateOrder(order);
+		}finally {
+			procedureToolsService.singleUnLockManager(lockKey);
+			logger.info("确认收货执行完成，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return true;
+	}
+	/**
+	 * 取消订单
+	 * @param uid 用户id
+	 * @param orderId 订单id
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean cancelOrder(Long uid, Long orderId) throws AppException {
+		logger.info("用户取消订单");
+		Date curDate=new Date();
+		String lockKey=StringUtils.formate(SingleThreadLockConstant.CONFIRM_TRADE_ORDER,orderId+"");
+		procedureToolsService.singleLockManager(lockKey);
+		try{
+			Order order=orderMapper.queryOrderById(orderId);
+			if(ObjectUtils.isEmpty(order)){
+				throw new AppException("订单不存在");
+			}
+			if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_CREATE){
+				throw new AppException("订单状态异常");
+			}
+			if(order.getOrderBuyDel().intValue()!=0){
+				return true;
+			}
+			if(order.getOrderBuyUid().intValue()!=uid.intValue()){
+				throw new AppException("不能取消他人订单");
+			}
+			order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_YES);
+			orderMapper.updateOrder(order);
+		}finally {
+			procedureToolsService.singleUnLockManager(lockKey);
+			logger.info("确认收货执行完成，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return true;
+	}
 }
 

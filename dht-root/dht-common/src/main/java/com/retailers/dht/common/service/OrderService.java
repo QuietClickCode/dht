@@ -154,6 +154,24 @@ public interface OrderService {
 	 */
 	public Pagination<OrderVo> queryOrderLists(Map<String, Object> params, int pageNo, int pageSize);
 
+	/**
+	 * 订单确认收货
+	 * @param uid 用户id
+	 * @param orderId 订单id
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean orderConfirm(Long uid,Long orderId)throws AppException;
+
+	/**
+	 * 取消订单
+	 * @param uid
+	 * @param orderId
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean cancelOrder(Long uid,Long orderId)throws AppException;
+
 }
 
 

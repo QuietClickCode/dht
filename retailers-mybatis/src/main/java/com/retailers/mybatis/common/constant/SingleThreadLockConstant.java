@@ -27,6 +27,10 @@ public class SingleThreadLockConstant {
      * 钱包支付 订单
      */
     public static final String WALLET_ORDER_PAY="walletPay";
+    /**
+     * 确认交易订单
+     */
+    public static final String CONFIRM_TRADE_ORDER="confirmOrder";
 
 
 

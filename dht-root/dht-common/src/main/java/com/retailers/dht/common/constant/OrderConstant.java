@@ -16,7 +16,18 @@ public class OrderConstant {
      * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，9 交易完成（收货后15天关闭交易，不能进行退款申请））
      */
     public static final int ORDER_STATUS_PAY_SUCCESS=3;
-
+    /**
+     * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，9 交易完成（收货后15天关闭交易，不能进行退款申请））
+     */
+    public static final int ORDER_STATUS_PAY_SEND_GOODS=4;
+    /**
+     * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，9 交易完成（收货后15天关闭交易，不能进行退款申请））
+     */
+    public static final int ORDER_STATUS_PAY_SEND_GOODS_RECEIPT=5;
+    /**
+     * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，7 取消订单（未付款），9 交易完成（收货后15天关闭交易，不能进行退款申请））
+     */
+    public static final int ORDER_STATUS_PAY_SEND_CANCEL=7;
     /**
      * 是否是真实单子 0 真实
      */

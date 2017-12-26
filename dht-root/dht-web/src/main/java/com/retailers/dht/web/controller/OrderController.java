@@ -253,6 +253,7 @@ public class OrderController extends BaseController {
         long uid=getCurLoginUserId(request);
         Map<String,Object> params=new HashMap<String, Object>();
         params.put("orderBuyUid",uid);
+        params.put("orderBuyDel",0);
         List<Long> oss=new ArrayList<Long>();
         if(ObjectUtils.isNotEmpty(orderStatus)){
             oss.add(orderStatus);
@@ -350,6 +351,50 @@ public class OrderController extends BaseController {
             logger.error("未取得缓存商品信息");
             throw new AppException("取得商品异常");
         }
+    }
+
+    /**
+     * 确认收货
+     * @param request
+     * @param orderId 订单id
+     * @return
+     */
+    @RequestMapping(value = "/orderConfirm",method = RequestMethod.POST)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp orderConfirm(HttpServletRequest request,Long orderId){
+        try{
+            orderService.orderConfirm(getCurLoginUserId(request),orderId);
+        }catch(AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
+        return success(true);
+    }
+
+    /**
+     * 用户取消订单
+     * @param request
+     * @param orderId 订单id
+     * @return
+     */
+    @RequestMapping(value = "/cancelOrder",method = RequestMethod.POST)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp cancelOrder(HttpServletRequest request,Long orderId){
+        try{
+            orderService.cancelOrder(getCurLoginUserId(request),orderId);
+        }catch(AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }catch (Exception e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
+        return success(true);
     }
 
 }

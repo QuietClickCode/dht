@@ -491,5 +491,8 @@
 		<if test="null != params.orderUaPhone and '' != params.orderUaPhone">
 			AND order_ua_phone=#{params.orderUaPhone}
 		</if>
+		<if test="null != params.orderBuyDel">
+			AND order_buy_del=#{params.orderBuyDel}
+		</if>
 	</select>
 </mapper>
