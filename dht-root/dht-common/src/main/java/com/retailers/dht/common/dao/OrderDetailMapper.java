@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.OrderDetail;
+import com.retailers.dht.common.vo.OrderDetailVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -64,6 +65,14 @@ public interface OrderDetailMapper {
 	 * @return
 	 */
 	public List<OrderDetail> queryOrderDetailByOdId(Long orderId);
+
+	/**
+	 * 根据订单号取得订单详情
+	 * @param orderId
+	 * @return
+	 */
+	public List<OrderDetail> queryOrderDetailByOdIds(List<Long> orderId);
+
 	/**
 	 * 查询订单详情列表
 	 * @param pagination 分页对象
@@ -73,4 +82,10 @@ public interface OrderDetailMapper {
 	 */
 	public List<OrderDetail> queryOrderDetailList(Pagination<OrderDetail> pagination);
 
+	/**
+	 * 取得购买详情
+	 * @param orderId
+	 * @return
+	 */
+	public List<OrderDetailVo> buyOrderDetailInfos(List<Long> orderId);
 }

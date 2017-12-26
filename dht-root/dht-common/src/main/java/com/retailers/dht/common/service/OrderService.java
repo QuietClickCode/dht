@@ -3,6 +3,7 @@ package com.retailers.dht.common.service;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.entity.OrderProcessingQueue;
 import com.retailers.dht.common.vo.BuyInfoVo;
+import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.tools.exception.AppException;
@@ -143,6 +144,15 @@ public interface OrderService {
 	 * @throws AppException
 	 */
 	public boolean walletPay(Long uid,String orderNo,String payPwd)throws AppException;
+
+	/**
+	 * 取得订单列表
+	 * @param params
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public Pagination<OrderVo> queryOrderLists(Map<String, Object> params, int pageNo, int pageSize);
 
 }
 

@@ -1,5 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Order;
+import com.retailers.dht.common.vo.OrderDetailVo;
+import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -79,5 +81,12 @@ public interface OrderMapper {
 	 * @return
 	 */
 	public Long findUserFirstBuy(Long uid);
+
+	/**
+	 * 取得订单详情
+	 * @param pagination
+	 * @return
+	 */
+	public List<OrderVo> queryOrderInfoLists(Pagination<OrderVo> pagination);
 
 }
