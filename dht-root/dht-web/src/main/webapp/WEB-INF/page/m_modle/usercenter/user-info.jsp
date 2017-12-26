@@ -146,7 +146,7 @@
                         $(".user-phone").text(userPhone);
                         $(".phoneNumber").attr("href","javascript:void(0)");
                     }
-                    if(userAddress == "")
+                    if(userAddress == null)
                         $(".user-address").text("填写收货地址");
                     else
                         $(".user-address").text(userAddress);
