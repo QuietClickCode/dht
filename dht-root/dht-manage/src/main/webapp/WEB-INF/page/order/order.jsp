@@ -202,7 +202,7 @@
             formatter:function(value,row,index){
                 rowDatas.set(row.id,row);
                 var html = '未支付';
-               if(value==1){
+                if(value==1){
                    html= "支付中";
                 }else if(value==2){
                    html='支付失败';

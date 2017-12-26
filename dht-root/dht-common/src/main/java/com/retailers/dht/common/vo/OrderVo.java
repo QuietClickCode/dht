@@ -1,6 +1,7 @@
 package com.retailers.dht.common.vo;
 
 import com.retailers.dht.common.entity.OrderDetail;
+import com.retailers.tools.utils.NumberUtils;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -183,56 +184,58 @@ public class OrderVo {
         this.orderBuyNm = orderBuyNm;
     }
 
-    public Long getOrderTradePrice() {
-        return orderTradePrice;
+    public String getOrderTradePrice()
+    {
+        return NumberUtils.formaterNumberPower(orderTradePrice);
     }
 
     public void setOrderTradePrice(Long orderTradePrice) {
         this.orderTradePrice = orderTradePrice;
     }
 
-    public Long getOrderGoodsTotalPrice() {
-        return orderGoodsTotalPrice;
+    public String getOrderGoodsTotalPrice() {
+        return NumberUtils.formaterNumberPower(orderGoodsTotalPrice);
     }
 
     public void setOrderGoodsTotalPrice(Long orderGoodsTotalPrice) {
         this.orderGoodsTotalPrice = orderGoodsTotalPrice;
     }
 
-    public Long getOrderGoodsActualPayPrice() {
-        return orderGoodsActualPayPrice;
+    public String getOrderGoodsActualPayPrice()
+    {
+        return NumberUtils.formaterNumberPower(orderGoodsActualPayPrice);
     }
 
     public void setOrderGoodsActualPayPrice(Long orderGoodsActualPayPrice) {
         this.orderGoodsActualPayPrice = orderGoodsActualPayPrice;
     }
 
-    public Long getOrderMenberPrice() {
-        return orderMenberPrice;
+    public String getOrderMenberPrice() {
+        return NumberUtils.formaterNumberPower(orderMenberPrice);
     }
 
     public void setOrderMenberPrice(Long orderMenberPrice) {
         this.orderMenberPrice = orderMenberPrice;
     }
 
-    public Long getOrderGoodsCouponPrice() {
-        return orderGoodsCouponPrice;
+    public String getOrderGoodsCouponPrice() {
+        return NumberUtils.formaterNumberPower(orderGoodsCouponPrice);
     }
 
     public void setOrderGoodsCouponPrice(Long orderGoodsCouponPrice) {
         this.orderGoodsCouponPrice = orderGoodsCouponPrice;
     }
 
-    public Long getOrderCouponPrice() {
-        return orderCouponPrice;
+    public String getOrderCouponPrice() {
+        return NumberUtils.formaterNumberPower(orderCouponPrice);
     }
 
     public void setOrderCouponPrice(Long orderCouponPrice) {
         this.orderCouponPrice = orderCouponPrice;
     }
 
-    public Long getOrderLogisticsPrice() {
-        return orderLogisticsPrice;
+    public String getOrderLogisticsPrice() {
+        return NumberUtils.formaterNumberPower(orderLogisticsPrice);
     }
 
     public void setOrderLogisticsPrice(Long orderLogisticsPrice) {
