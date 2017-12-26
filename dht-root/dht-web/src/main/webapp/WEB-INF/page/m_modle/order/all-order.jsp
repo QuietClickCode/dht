@@ -1,14 +1,6 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: niconiconi
-  Date: 2017/12/17
-  Time: 17:59
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
@@ -17,7 +9,6 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
 </head>
-
 <body class="bge6">
 <div class="specialty-title2 borderB">
     <a class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
@@ -25,7 +16,7 @@
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
-    <a href="#all-order" class="active">全部订单</a>
+    <a href="#allOrder" class="active">全部订单</a>
     <a id="obligation" href="#dfk">待付款</a>
     <a id="unsent" href="#dfh">待发货</a>
     <a id="receive" href="#dsh">待收货</a>
@@ -34,8 +25,8 @@
 
 <div class="box2">
     <!-- 全部订单 -->
-    <ul class="all-order-list box2" id="all-order">
-        <li class="box2">
+    <ul class="all-order-list box2" id="allOrder">
+        <%--<li class="box2">
             <p class="start">交易完成</p>
             <div class="order-infor">
                 <a href="" class="img">
@@ -163,7 +154,7 @@
                     <a href="" class="btn2">提醒发货</a>
                 </div>
             </div>
-        </li>
+        </li>--%>
 
     </ul>
 
@@ -290,11 +281,80 @@
 <script src="/js/tabs.js"></script>
 
 <script>
+    //当前页数据
+    var curPage=1;
     $(function(){
         var href = window.location.hash;
+        console.log(href)
         if (href != "")
             $(href).trigger("click");
+        queryOrderByStatus();
     });
+    /**
+     * 根据订单类型取得订单列表数据
+     * @param orderStatus
+     */
+    function queryOrderByStatus(orderStatus){
+        var queryParams={
+            pageSize: 15,
+            pageNo: curPage,
+            orderStatus:orderStatus
+        }
+        $.ajax({
+            url: "/order/queryUserOrder",
+            type: "post",
+            dataType: "json",
+            data:queryParams,
+            success: function (data) {
+                orderView(data.rows);
+            }
+        });
+    }
+
+    /**
+     * 根据查询结构显示订单数据
+     * @param row
+     */
+    function orderView(rows){
+        if(rows){
+            for(var row of rows){
+                let osMsg = '未支付';
+                if(row.orderStatus==1){
+                    osMsg= "支付中";
+                }else if(row.orderStatus==2){
+                    osMsg='支付失败';
+                }else if(row.orderStatus==3){
+                    osMsg='待发货';
+                }else if(row.orderStatus==4){
+                    osMsg='己发货';
+                }else if(row.orderStatus==5){
+                    osMsg='确认收货';
+                }else if(row.orderStatus==6){
+                    osMsg='发起退款';
+                }else if(row.orderStatus==9){
+                    osMsg='交易完成';
+                }
+                if(row.orderStatus)
+                var ov='<li class="box2"><p class="start">'+row.orderNo+'&nbsp;&nbsp;'+osMsg+'</p>';
+                //购买总件数
+                let buyTotalNm=0;
+                if(row.ods){
+                    let orderInfo=row.ods;
+                    for(var info of orderInfo){
+                        ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
+                        ov+='<img src="'+info.imgUrl+'" alt=""></a><div class="text-box">';
+                        ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
+                        ov+='</a><p>'+info.gsName+'<span class="number">×'+info.odBuyNumber+'</span></p></div></div>';
+                        buyTotalNm+=info.odBuyNumber;
+                    }
+                }
+               ov+='<div class="count-infor">';
+                ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a></div></div></li>';
+                $("#allOrder").append(ov);
+            }
+        }
+    }
+
 
 </script>
 </body>

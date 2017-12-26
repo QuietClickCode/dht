@@ -1,5 +1,10 @@
 package com.retailers.dht.common.vo;
 
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.tools.utils.NumberUtils;
+import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
+
 /**
  * 订单详情
  */
@@ -36,24 +41,24 @@ public class OrderDetailVo {
         this.odOrderId = odOrderId;
     }
 
-    public Long getOdGoodsPrice() {
-        return odGoodsPrice;
+    public String getOdGoodsPrice() {
+        return NumberUtils.formaterNumberPower(odGoodsPrice);
     }
 
     public void setOdGoodsPrice(Long odGoodsPrice) {
         this.odGoodsPrice = odGoodsPrice;
     }
 
-    public Long getOdActualPrice() {
-        return odActualPrice;
+    public String getOdActualPrice() {
+        return NumberUtils.formaterNumberPower(odActualPrice);
     }
 
     public void setOdActualPrice(Long odActualPrice) {
         this.odActualPrice = odActualPrice;
     }
 
-    public Long getOdMenberPrice() {
-        return odMenberPrice;
+    public String getOdMenberPrice() {
+        return NumberUtils.formaterNumberPower(odMenberPrice);
     }
 
     public void setOdMenberPrice(Long odMenberPrice) {
@@ -84,8 +89,8 @@ public class OrderDetailVo {
         this.gId = gId;
     }
 
-    public Long getGdPrice() {
-        return gdPrice;
+    public String getGdPrice() {
+        return NumberUtils.formaterNumberPower(gdPrice);
     }
 
     public void setGdPrice(Long gdPrice) {
@@ -109,6 +114,11 @@ public class OrderDetailVo {
     }
 
     public String getImgUrl() {
+        if(ObjectUtils.isNotEmpty(imgUrl)){
+            if(imgUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&imgUrl.indexOf("http://")==-1){
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,imgUrl);
+            }
+        }
         return imgUrl;
     }
 
@@ -117,6 +127,12 @@ public class OrderDetailVo {
     }
 
     public String getgImgUrl() {
+
+        if(ObjectUtils.isNotEmpty(gImgUrl)){
+            if(gImgUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&gImgUrl.indexOf("http://")==-1){
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,gImgUrl);
+            }
+        }
         return gImgUrl;
     }
 

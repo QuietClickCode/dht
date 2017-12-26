@@ -11,10 +11,13 @@ import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.dht.common.vo.GoodsGdcprelVo;
+import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.PageUtils;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -52,8 +56,12 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("orderList")
-    public String openOrderList(HttpServletRequest request){
-        return redirectUrl(request,"order/all-order");
+    public ModelAndView openOrderList(HttpServletRequest request, Long orderStatus){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("orderStatus",orderStatus);
+        String url=redirectUrl(request,"order/all-order");
+        modelAndView.setViewName(url);
+        return modelAndView;
     }
 
     /*物流信息*/
@@ -214,7 +222,7 @@ public class OrderController extends BaseController {
      * @param buyInfo 购买信息
      * @return
      */
-        @RequestMapping(value = "buyCutPrice",method = RequestMethod.POST)
+    @RequestMapping(value = "buyCutPrice",method = RequestMethod.POST)
     @ResponseBody
     public BaseResp buyCutPrice(HttpServletRequest request,@RequestBody BuyInfoVo buyInfo){
         long uid=getCurLoginUserId(request);
@@ -230,6 +238,28 @@ public class OrderController extends BaseController {
             logger.error(StringUtils.getErrorInfoFromException(e));
             return errorForSystem(e.getMessage());
         }
+    }
+
+    /**
+     * 取得用户订单
+     * @param request
+     * @param orderStatus 订单状态
+     * @return
+     */
+    @RequestMapping("queryUserOrder")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public Map<String,Object> queryUserOrder(HttpServletRequest request,Long orderStatus,PageUtils pageForm){
+        long uid=getCurLoginUserId(request);
+        Map<String,Object> params=new HashMap<String, Object>();
+        params.put("orderBuyUid",uid);
+        List<Long> oss=new ArrayList<Long>();
+        if(ObjectUtils.isNotEmpty(orderStatus)){
+            oss.add(orderStatus);
+        }
+        params.put("orderStatus",oss);
+        Pagination<OrderVo> page =  orderService.queryOrderLists(params,pageForm.getPageNo(),pageForm.getPageSize());
+        return queryPages(page);
     }
 
     /**
@@ -321,5 +351,6 @@ public class OrderController extends BaseController {
             throw new AppException("取得商品异常");
         }
     }
+
 }
 
