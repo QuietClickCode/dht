@@ -54,7 +54,7 @@ public class ClientManageController extends BaseController {
         if(ObjectUtils.isNotEmpty(tmRegisterTimes)){
             clientManage = addDate(clientManage,tmRegisterTimes);
         }
-        boolean flag = clientManageService.saveClientManage(clientManage);
+        boolean flag = clientManageService.saveClientManage(clientManage)!=null;
         if(flag)
             return success("添加客户成功");
         else
