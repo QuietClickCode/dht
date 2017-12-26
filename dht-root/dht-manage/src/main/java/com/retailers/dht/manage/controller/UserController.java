@@ -21,7 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -119,5 +121,44 @@ public class UserController extends BaseController{
             logger.error("设置用户类型出错：\r\n{}",e);
             return errorForParam(e.getMessage());
         }
+    }
+
+    /**
+     * 打开推广人员例表
+     * @return
+     */
+    @RequestMapping("openPopularizePage")
+    @Menu(label = "推广人员",description = "推广人员",resourse = "customer.openPopularizePage",parentRes = "sys.manager.customer",sort =2)
+    public String openPopularizePage(){
+        return "customer/popularize_user";
+    }
+
+    /**
+     * 会员例表
+     * @param loginNm 登陆帐号
+     * @param userNm 会员名称
+     * @param phone 手机号
+     * @param pageForm 分页信息
+     * @return
+     */
+    @RequestMapping("queryPopularizeLists")
+    @Function(label="推广会员列表", description = "推广会员列表", resourse = "customer.queryPopularizeLists",parentRes="customer.openUserPage",sort=1)
+    @ResponseBody
+    public Map<String,Object> queryPopularizeLists(String loginNm,String userNm,String phone,Long type,PageUtils pageForm){
+        Map<String,Object> params=new HashMap<String, Object>();
+        List<Long> typs=new ArrayList<Long>();
+        params.put("loginNm",loginNm);
+        params.put("userNm",userNm);
+        params.put("phone",phone);
+        if(ObjectUtils.isEmpty(type)){
+            typs.add(1l);
+            typs.add(2l);
+        }else{
+            typs.add(type);
+        }
+        params.put("types",typs);
+        params.put("isDelete",0);
+        Pagination<UserVo> pages= userService.queryUserList(params,pageForm.getPageNo(),pageForm.getPageSize());
+        return queryPages(pages);
     }
 }

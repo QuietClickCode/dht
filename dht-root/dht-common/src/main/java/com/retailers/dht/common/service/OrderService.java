@@ -172,6 +172,15 @@ public interface OrderService {
 	 */
 	public boolean cancelOrder(Long uid,Long orderId)throws AppException;
 
+	/**
+	 * 商品发货
+	 * @param uid
+	 * @param orderId
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean sendGoods(Long uid,Long orderId,String logisticsCompany,String orderLogisticsCode,String sendRemark)throws AppException;
+
 }
 
 

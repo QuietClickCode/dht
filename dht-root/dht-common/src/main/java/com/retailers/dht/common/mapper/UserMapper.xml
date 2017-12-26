@@ -229,6 +229,12 @@
 		<if test="null != params.type">
 			AND u.u_type = #{params.type}
 		</if>
+		<if test="null != params.types and params.types.size>0">
+			AND u.u_type in
+			<foreach collection="params.types" item="item" index="index" open="(" close=")" separator=",">
+				${item}
+			</foreach>
+		</if>
 	</select>
 	<!--添加平台会员 -->
 	<insert id="saveUser" parameterType="com.retailers.dht.common.entity.User" useGeneratedKeys="true" keyProperty="uid">

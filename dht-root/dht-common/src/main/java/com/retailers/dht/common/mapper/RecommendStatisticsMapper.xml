@@ -17,6 +17,24 @@
 			<result property="rsTime" column="rs_time"/>
 	</resultMap>
 
+	<resultMap id="rm_recommendStatistics_vo" type="com.retailers.dht.common.vo.RecommendStatisticsVo">
+		<result property="rsId" column="rsId"/>
+		<result property="rsType" column="rsType"/>
+		<result property="rsStatus" column="rsStatus"/>
+		<result property="rsOid" column="rsOid"/>
+		<result property="rsOrderNo" column="rsOrderNo"/>
+		<result property="rsOdId" column="rsOdId"/>
+		<result property="goodsNm" column="goodsNm"/>
+		<result property="rsUid" column="rsUid"/>
+		<result property="rsNm" column="rsNm"/>
+		<result property="rsRecommendUid" column="rsRecommendUid"/>
+		<result property="rsRecommendNm" column="rsRecommendNm"/>
+		<result property="rsUtype" column="rsUtype"/>
+		<result property="rsSalesPrice" column="rsSalesPrice"/>
+		<result property="rsRatio" column="rsRatio"/>
+		<result property="rsPrice" column="rsPrice"/>
+		<result property="rsTime" column="rsTime"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="recommendStatistics_columns">
 		rs_id,rs_type,rs_status,rs_o_id,rs_od_id,rs_uid,rs_recommend_uid,rs_u_type,rs_sales_price,rs_ratio,rs_price,rs_time
@@ -148,4 +166,54 @@
 	<delete id="deleteRecommendStatisticsByRsId" parameterType="java.lang.Long">
 		DELETE FROM t_recommend_statistics WHERE rs_id = #{rsId}
 	</delete>
+
+	<!--分页查询 -->
+	<select id="queryRecommendLists" resultMap="rm_recommendStatistics_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		re.rs_id rsId,
+		re.rs_type rsType,
+		re.rs_status rsStatus,
+		re.rs_o_id rsOid,
+		o.order_no rsOrderNo,
+		re.rs_od_id rsOdId,
+		g.g_name goodsNm,
+		re.rs_uid rsUid,
+		b.u_name rsNm,
+		re.rs_recommend_uid rsRecommendUid,
+		r.u_name rsRecommendNm,
+		re.rs_u_type rsUtype,
+		re.rs_sales_price rsSalesPrice,
+		re.rs_ratio rsRatio,
+		re.rs_price rsPrice,
+		re.rs_time rsTime
+		FROM
+		t_order o,
+		t_user b,
+		t_user r,
+		t_recommend_statistics re
+		LEFT JOIN t_order_detail od ON od.id = re.rs_od_id
+		LEFT JOIN t_goods g ON od.od_goods_id = g.g_id
+		WHERE
+		re.rs_uid = b.u_id
+		AND re.rs_recommend_uid = r.u_id
+		AND re.rs_o_id = o.id
+		<if test="null != params.startDate and '' != params.startDate">
+			AND re.rs_time >= #{params.startDate}
+		</if>
+		<if test="null != params.endDate and '' != params.endDate">
+			AND re.rs_time &lt;= #{params.endDate}
+		</if>
+		<if test="null != params.phone and '' != params.phone">
+			AND r.u_phone = #{params.phone}
+		</if>
+		<if test="null != params.type and '' != params.type">
+			AND re.rs_type = #{params.type}
+		</if>
+		<if test="null != params.userType and '' != params.userType">
+			AND re.rs_u_type = #{params.userType}
+		</if>
+		<if test="null != params.orderNo and '' != params.orderNo">
+			AND o.order_no = #{params.orderNo}
+		</if>
+	</select>
 </mapper>

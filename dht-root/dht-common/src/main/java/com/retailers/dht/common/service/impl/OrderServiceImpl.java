@@ -1160,5 +1160,42 @@ public class OrderServiceImpl implements OrderService {
 		}
 		return true;
 	}
+
+	/**
+	 * 商品发货
+	 * @param uid
+	 * @param orderId
+	 * @param orderLogisticsCode
+	 * @param sendRemark
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional
+	public boolean sendGoods(Long uid, Long orderId,String logisticsCompany,String orderLogisticsCode, String sendRemark) throws AppException {
+		logger.info("商品发货,订单ID:[{}],发货人：[{}],快递单号:[{}]",orderId,uid,orderLogisticsCode);
+		Date curDate=new Date();
+		String lockKey=StringUtils.formate(SingleThreadLockConstant.CONFIRM_TRADE_ORDER,orderId+"");
+		procedureToolsService.singleLockManager(lockKey);
+		try{
+			Order order=orderMapper.queryOrderById(orderId);
+			if(ObjectUtils.isEmpty(order)){
+				throw new AppException("订单不存在");
+			}
+			if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_PAY_SUCCESS){
+				throw new AppException("订单状态己变更");
+			}
+			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SEND_GOODS);
+			order.setOrderLogisticsCode(orderLogisticsCode);
+			order.setOrderSendDate(curDate);
+			order.setOrderLogisticsCompany(logisticsCompany);
+			order.setOrderSendUid(uid);
+			order.setOrderSendRemark(sendRemark);
+			orderMapper.updateOrder(order);
+		}finally {
+			procedureToolsService.singleUnLockManager(lockKey);
+			logger.info("商品发货结束,订单ID:[{}],发货人：[{}],快递单号:[{}],执行时间:[{}]",orderId,uid,orderLogisticsCode,(System.currentTimeMillis()-curDate.getTime()));
+		}
+		return true;
+	}
 }
 

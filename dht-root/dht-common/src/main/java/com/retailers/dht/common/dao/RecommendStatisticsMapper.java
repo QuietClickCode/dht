@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.RecommendStatistics;
+import com.retailers.dht.common.vo.RecommendStatisticsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -58,5 +59,12 @@ public interface RecommendStatisticsMapper {
 	 * @date 2017-12-25 22:18:33
 	 */
 	public List<RecommendStatistics> queryRecommendStatisticsList(Pagination<RecommendStatistics> pagination);
+
+	/**
+	 * 取得推人员业绩
+	 * @param pagination
+	 * @return
+	 */
+	public List<RecommendStatisticsVo> queryRecommendLists(Pagination<RecommendStatisticsVo> pagination);
 
 }

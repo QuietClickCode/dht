@@ -5,6 +5,7 @@ import java.util.Map;
 import com.retailers.dht.common.entity.RecommendStatistics;
 import com.retailers.dht.common.dao.RecommendStatisticsMapper;
 import com.retailers.dht.common.service.RecommendStatisticsService;
+import com.retailers.dht.common.vo.RecommendStatisticsVo;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -43,6 +44,16 @@ public class RecommendStatisticsServiceImpl implements RecommendStatisticsServic
 	public boolean deleteRecommendStatisticsByRsId(Long rsId) {
 		int status = recommendStatisticsMapper.deleteRecommendStatisticsByRsId(rsId);
 		return status == 1 ? true : false;
+	}
+
+	public Pagination<RecommendStatisticsVo> queryRecommendLists(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<RecommendStatisticsVo> page = new Pagination<RecommendStatisticsVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<RecommendStatisticsVo> list = recommendStatisticsMapper.queryRecommendLists(page);
+		page.setData(list);
+		return page;
 	}
 }
 

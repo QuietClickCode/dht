@@ -9,6 +9,7 @@ import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,10 +89,37 @@ public class OrderController extends BaseController {
         params.put("orderLogisticsCode",orderLogisticsCode);
         params.put("orderUaName",orderUaName);
         params.put("orderUaPhone",orderUaPhone);
-
-
         Pagination<OrderVo> pages = orderService.queryOrderLists(params,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(pages);
+    }
+
+    /**
+     * 商品发货
+     * @param request
+     * @param orderId 订单id
+     * @param orderLogisticsCode 快递单号
+     * @return
+     */
+    @RequestMapping("sendGoods")
+    @Function(label = "商品发货",description = "商品发货",resourse = "order.sendGoods",parentRes = "order.openOrderPage",sort =2)
+    @ResponseBody
+    public BaseResp sendGoods(HttpServletRequest request,Long orderId,String logisticsCompany,String orderLogisticsCode,String sendRemark){
+        long sysUid=getCurLoginUserId(request);
+        if(ObjectUtils.isEmpty(logisticsCompany)){
+            return errorForParam("请选择物流公司");
+        }
+        if(ObjectUtils.isEmpty(orderLogisticsCode)){
+            return errorForParam("请输入快递单号");
+        }
+        try{
+            orderService.sendGoods(sysUid,orderId,logisticsCompany,orderLogisticsCode,sendRemark);
+        }catch (AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }catch (Exception e){
+            return errorForSystem(e.getMessage());
+        }
+        return success(true);
     }
 
 }

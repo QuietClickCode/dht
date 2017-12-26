@@ -112,6 +112,10 @@ public class Order implements java.io.Serializable {
 	/**消费折扣(充值会员享受折后折）*/
 	@NotEmpty
 	private Long orderDiscount;
+	/**
+	 * 快递公司编码
+	 */
+	private String orderLogisticsCompany;
 	/**物流单号*/
 	@NotEmpty
 	@Length(min = 1, max = 255)
@@ -119,6 +123,10 @@ public class Order implements java.io.Serializable {
 	/**发货时间*/
 	@NotEmpty
 	private Date orderSendDate;
+	/**
+	 * 发货人
+	 */
+	private Long orderSendUid;
 	/**发货备注*/
 	@NotEmpty
 	@Length(min = 1, max = 255)
@@ -423,5 +431,19 @@ public class Order implements java.io.Serializable {
 		return this.version;
 	}
 
+	public String getOrderLogisticsCompany() {
+		return orderLogisticsCompany;
+	}
 
+	public void setOrderLogisticsCompany(String orderLogisticsCompany) {
+		this.orderLogisticsCompany = orderLogisticsCompany;
+	}
+
+	public Long getOrderSendUid() {
+		return orderSendUid;
+	}
+
+	public void setOrderSendUid(Long orderSendUid) {
+		this.orderSendUid = orderSendUid;
+	}
 }
