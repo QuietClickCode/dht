@@ -61,8 +61,8 @@ public class GoodsGgsvalDetailController extends BaseController {
     @RequestMapping("/clearAllGgsrel")
     @ResponseBody
     public BaseResp clearAllGgsrel(Long gid, HttpServletRequest request){
-        boolean flag=goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));
-        return success(flag);
+        goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));
+        return success(true);
     }
 
 }

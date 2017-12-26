@@ -65,14 +65,8 @@ public class GoodsDetailController extends BaseController {
     @ResponseBody
     public BaseResp addMyData(String uploaddata,Long gid, HttpServletRequest request){
         Long uid = getCurLoginUserId(request);
-        boolean f = goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));
-        if(f){
-            boolean flag = goodsDetailService.addMyData(uploaddata,gid,uid);
-            return success(flag);
-        }else{
-            return success(false);
-        }
-
-
+        goodsGgsvalDetailService.clearAllGgsrel(gid,getCurLoginUserId(request));
+        boolean flag = goodsDetailService.addMyData(uploaddata,gid,uid);
+        return success(flag);
     }
 }

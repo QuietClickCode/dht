@@ -62,7 +62,7 @@ public interface GoodsGgsvalDetailService {
 	 */
 	public boolean deleteGoodsGgsvalDetailByGgdId(Long ggdId);
 
-	public boolean clearAllGgsrel(Long gid,Long updatepersonId);
+	public void clearAllGgsrel(Long gid,Long updatepersonId);
 
 	public Pagination<GoodsInventoryVo> queryGoodsInventoryLists(Map<String, Object> params, int pageNo, int pageSize);
 

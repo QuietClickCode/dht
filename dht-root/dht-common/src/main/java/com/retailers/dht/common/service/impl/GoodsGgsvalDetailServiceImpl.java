@@ -64,7 +64,7 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
 		return status == 1 ? true : false;
 	}
 
-	public  boolean clearAllGgsrel(Long gid,Long updatepersonId){;
+	public  void clearAllGgsrel(Long gid,Long updatepersonId){;
         Goods goods = goodsService.queryGoodsByGid(gid);
         goods.setIsChecked(0L);
         goodsService.updateGoods(goods,updatepersonId);
@@ -75,8 +75,6 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
 
         boolean goodsGgsvalDetailFlag = deleteGoodsGgsvalDetailByGid(gid);
 
-
-	    return goodsGgsvalFlag&&goodsDetailFlag&&goodsGgsvalDetailFlag;
     }
 
     public Pagination<GoodsInventoryVo> queryGoodsInventoryLists(Map<String, Object> params,int pageNo,int pageSize){

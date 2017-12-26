@@ -9,6 +9,7 @@ import com.retailers.dht.common.entity.PayInfo;
 import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayInfoService;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.encrypt.Sha1DESUtils;
 import com.retailers.tools.utils.HttpClientUtil;
@@ -57,7 +58,7 @@ public class WxShareController extends BaseController{
         String jsapi_ticket = WxConfig.ACCESS_TICKET;
         Long timestamp = new Date().getTime()/1000;
         String signature = "";
-        String homePath = "http://www.kuaiyis.com";
+        String homePath = SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL;//"http://www.kuaiyis.com"
         homePath = homePath+path;
         try {
             signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);
