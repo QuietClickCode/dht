@@ -2,7 +2,9 @@ package com.retailers.hnc.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.entity.WxAuthUser;
+import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.WxAuthUserService;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.hnc.web.constant.WebSystemConstant;
@@ -41,16 +43,21 @@ public class WxUserController extends BaseController {
 
     @Autowired
     WxAuthUserService wxAuthUserService;
+    @Autowired
+    ClientManageService clientManageService;
 
     @RequestMapping("/login")
     @ResponseBody
-    public String queryProjectByGt(@NotEmpty String code, WxAuthUser wxAuthUser,@NotEmpty String phone){
+    public Map<String,Object> queryProjectByGt(String code, WxAuthUser wxAuthUser,String phone){
         String url = "https://api.weixin.qq.com/sns/jscode2session?" +
                 "appid=" + WxConfig.APP_ID+
                 "&secret=" + WxConfig.APP_SECRET+
                 "&grant_type=authorization_code" +
                 "&js_code="+code;
         Long curTime = System.currentTimeMillis();
+        Long loginouttime = 2*60*60*1000L;//有效时间两个小时
+        Date endTime = new Date(curTime+loginouttime);
+        Map returnMap = new HashMap();
         try {
             String respStr = "";
             if(ObjectUtils.isNotEmpty(url)){
@@ -61,42 +68,48 @@ public class WxUserController extends BaseController {
                 JSONObject jsonObject = JSON.parseObject(respStr);
                 String openid = jsonObject.getString("openid");
                 String unionid = jsonObject.getString("unionid");
+                if(ObjectUtils.isNotEmpty(openid)){
+                    Map params = new HashMap();
+                    params.put("wauOpenid",openid);
+                    params.put("wauUnionid",unionid);
+                    List<WxAuthUser> list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
 
-                Map params = new HashMap();
-                params.put("wauOpenid",openid);
-                params.put("wauUnionid",unionid);
-                List<WxAuthUser> list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+                    if(ObjectUtils.isEmpty(list)){
+                        //保存客户的信息
+                        ClientManage clientManage = new ClientManage();
+                        clientManage.setIsDelete(0);
+                        clientManage.setTmPhone(phone);
+                        clientManage = clientManageService.saveClientManage(clientManage);
 
-                if(ObjectUtils.isEmpty(list)){
-                    //保存客户的信息
-                    wxAuthUser.setWauOpenid(openid);
-                    wxAuthUser.setWauUnionid(unionid);
+                        wxAuthUser.setWauUid(clientManage.getTmId());
+                        wxAuthUser.setWauOpenid(openid);
+                        wxAuthUser.setWauUnionid(unionid);
+                        wxAuthUserService.saveWxAuthUser(wxAuthUser);
+                    }
 
+                    String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
+                    randStr = URLEncoder.encode(randStr,"utf-8");
+                    Map map = WebSystemConstant.globelOpenId;
+                    map.put(randStr,endTime);
+                    returnMap.put("randStr",randStr);
+                    return returnMap;
+                }else{
+                    returnMap.put("msg","您的信息有误");
                 }
 
-                String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
-                randStr = URLEncoder.encode(randStr,"utf-8");
-                wxAuthUser = wxAuthUserService.saveWxAuthUser(wxAuthUser);
-                Map map = WebSystemConstant.globelOpenId;
-                map.put("randStr",wxAuthUser);
-                JSONObject returnJsonObject = new JSONObject();
-                returnJsonObject.put("randStr",randStr);
-                String returnStr = JSON.toJSONString(returnJsonObject);
-                return returnStr;
             }
-            return respStr;
+            return returnMap;
         }catch (Exception e){
             e.printStackTrace();
         }
-        return "";
+        return returnMap;
     }
 
 
 
 
 public static void main(String[] a){
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx3e1ce3039c616778&secret=dae5052f2a8667bc420d76924da6a144&grant_type=authorization_code" +
-                "&js_code=013Ov7St13XU6c0aEZSt1tg0St1Ov7Se";
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx53881ce6778c5e1f&secret=356ea90409ec9e34064e1c860f2bf667&grant_type=authorization_code&js_code=013GT1dm0KUDNl1ktH9m0f40dm0GT1dW";
         String str = GetFromServer(url);
     System.out.println(str);
 }

@@ -129,6 +129,36 @@
 </script>
 <div class="tab-pane active" id="goodsPane">
     <div class="modal-body" style="position: relative">
+        <div class="row">
+            <div class="col-lg-6" style="height:49px">
+                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-4" id="cpLogoDiv">
+                            <div class="input-group form-group">
+                                    <span class="input-group-addon">
+                                        项目Logo:
+                                    </span>
+                                <input type="file" id="dht_image_upload" name="dht_image_upload">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="clearCpLogoDiv" style="display: none">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                        优惠卷图片:
+                                    </span>
+                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="uploadImageDiv" style="display: none">
+                            <div class="input-group form-group">
+                                <img src="" id="uploadImage" width="96px;" height="48px;">
+                            </div>
+                        </div>
+                    </div>
+                    <input type="hidden" id="cpLogo">
+                </form>
+            </div>
+        </div>
         <form id="editorProjectForm">
             <input type="hidden" name="pid" id="pid">
             <input type="hidden" name="version" id="version">
@@ -168,34 +198,7 @@
                     </div>
                 </div>
                 <br/>
-                <div class="col-lg-6" style="height:49px">
-                    <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
-                        <div class="row">
-                            <div class="col-lg-4" id="cpLogoDiv">
-                                <div class="input-group form-group">
-                                    <span class="input-group-addon">
-                                        项目Logo:
-                                    </span>
-                                    <input type="file" id="dht_image_upload" name="dht_image_upload">
-                                </div>
-                            </div>
-                            <div class="col-lg-4" id="clearCpLogoDiv" style="display: none">
-                                <div class="input-group form-group">
-                                <span class="input-group-addon">
-                                        优惠卷图片:
-                                    </span>
-                                    <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
-                                </div>
-                            </div>
-                            <div class="col-lg-4" id="uploadImageDiv" style="display: none">
-                                <div class="input-group form-group">
-                                    <img src="" id="uploadImage" width="96px;" height="48px;">
-                                </div>
-                            </div>
-                        </div>
-                        <input type="hidden" id="cpLogo">
-                    </form>
-                </div>
+
                 <br/>
                 <div class="col-lg-6" style="height:49px">
                     <div class="input-group form-group">
@@ -244,7 +247,7 @@
         });
     });
 
-    var fileUpload="http://image.kuaiyis.com/filesUpload?isWatermark=false&isCompress=false&imageUse=goods&time="+new Date().getTime();
+    var fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods";
     function cpImagesFormSummit(){
         var formData = new FormData($( "#cpImagesForm" )[0]);
         $.ajax({
