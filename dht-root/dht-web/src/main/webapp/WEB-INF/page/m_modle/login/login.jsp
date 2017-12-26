@@ -24,7 +24,7 @@
 <div class="login_app">
     <div class="form_login">
         <div class="login">
-            <span class="user_login active">用户登陆</span>
+            <span class="user_login active">用户登录</span>
             <span class="user_register">快速注册</span>
         </div>
         <!-- 是否绑定微信-->
