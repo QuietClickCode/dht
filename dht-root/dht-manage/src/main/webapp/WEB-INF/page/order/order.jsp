@@ -10,7 +10,7 @@
 <div id="toolbar" class="form-inline">
     <div class="form-group">
         <input type="text" class="form-control" id="search_orderNo" placeholder="请输入订单号">
-    </div>
+    </div>&nbsp;&nbsp;
     <div class="form-group">
         <span>订单状态:</span>
         <input type="checkbox" name="search_orderStatus" value="0"/>未支付
@@ -21,7 +21,7 @@
         <input type="checkbox" name="search_orderStatus" value="5"/>确认收货
         <input type="checkbox" name="search_orderStatus" value="6"/>发起退款
         <input type="checkbox" name="search_orderStatus" value="9"/>交易完成
-    </div>
+    </div>&nbsp;&nbsp;
     <div class="form-group">
         <span>订单类型:</span>
         <select id="search_orderType" name="search_orderType"  class="form-control" style="width: auto;">
@@ -41,19 +41,19 @@
             <option value="1">支付宝</option>
             <option value="2">钱包</option>
         </select>
-    </div>
+    </div>&nbsp;&nbsp;
     <div class="form-group">
         <input type="text" class="form-control" id="search_orderBuyNm" placeholder="请输入购买人">
-    </div>
+    </div>&nbsp;&nbsp;
     <div class="form-group">
         <input type="text" class="form-control" id="search_orderLogisticsCode" placeholder="请输入快递单号">
-    </div>
+    </div>&nbsp;&nbsp;</br>
     <div class="form-group">
         <input type="text" class="form-control" id="search_orderUaName" placeholder="请输入收货人姓名">
-    </div>
+    </div>&nbsp;&nbsp;
     <div class="form-group">
         <input type="text" class="form-control" id="search_orderUaPhone" placeholder="请输入收货人电话">
-    </div>
+    </div>&nbsp;&nbsp;
     <ex:perm url="order/queryOrderLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
