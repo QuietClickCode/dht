@@ -148,8 +148,15 @@
                     }
                     if(userAddress == null)
                         $(".user-address").text("填写收货地址");
-                    else
-                        $(".user-address").text(userAddress);
+                    else{
+
+                        if(userAddress.length > 13){
+                            console.log(userAddress.substring(0,8)+"...");
+                            $(".user-address").text(userAddress.substring(0,13)+"...");
+                        }else{
+                            $(".user-address").text(userAddress);
+                        }
+                    }
 
                     if(userHeadSrc == ""){
                         $(".user-head").remove();
