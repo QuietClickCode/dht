@@ -306,13 +306,13 @@
 		LEFT JOIN t_attachment a ON r.r_logo = a.id
 		WHERE
 		o.id = d.od_order_id
-		AND d.od_gd_id = r.r_id
+		AND d.od_goods_id = r.r_id
 		AND o.order_type = 'RECHARGE'
 		)
 		) t
 		WHERE
 		o.id = d.od_order_id
-		AND o.order_type = t.type
+		AND o.order_type = t.orderType
 		AND d.od_goods_id = t.g_id
 		AND d.od_gd_id = t.gd_id
 		AND d.od_order_id IN

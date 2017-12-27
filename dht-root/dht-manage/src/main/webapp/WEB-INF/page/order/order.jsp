@@ -16,7 +16,7 @@
         <input type="checkbox" name="search_orderStatus" value="0"/>未支付
         <input type="checkbox" name="search_orderStatus" value="1"/>支付中
         <input type="checkbox" name="search_orderStatus" value="2"/>支付失败
-        <input type="checkbox" name="search_orderStatus" value="3"/>待发货
+        <input type="checkbox" name="search_orderStatus" value="3" checked/>待发货
         <input type="checkbox" name="search_orderStatus" value="4"/>己发货
         <input type="checkbox" name="search_orderStatus" value="5"/>确认收货
         <input type="checkbox" name="search_orderStatus" value="6"/>发起退款
@@ -79,7 +79,8 @@
                               </span>
                                 <select id="logisticsCompany" name="logisticsCompany"  class="form-control" style="width: auto;">
                                     <option value="">--全部--</option>
-                                    <option value="SF">顺丰速运</option>
+                                    <option value="ZYFH">自营发货</option>
+                                    <option value="">顺丰速运</option>
                                     <option value="HTKY">百世快递</option>
                                     <option value="ZTO">中通快递</option>
                                     <option value="STO">申通快递</option>
@@ -333,7 +334,6 @@
         };
     }
     function editorDetail(index, row) {
-        console.log(row.ods);
         let html='</br><table style="width:100%;" cellpadding="1" cellspacing="0" border="1"><tbody><tr>';
         html+='<td>商品图标</td><td>商品名称</td><td>商品价格</td><td>销售价格</td><td>购买数量</td>';
         html+='</tr></tbody>'
@@ -341,11 +341,13 @@
             html+='<tr><td><img src="'+info.imgUrl+'" alt="" style="width:64px;height:48px;"></td><td>'+info.gName+'</td><td>'+info.gdPrice+'</td><td>'+info.odMenberPrice+'</td><td>'+info.odBuyNumber+'</td></tr>'
         }
         html+='</table></br>';
-        html+='<span>收货人:</span><span>'+row.orderUaName+'</span>&nbsp;&nbsp;<br>';
-        html+='<span>收货电话:</span><span>'+row.orderUaPhone+'</span>&nbsp;&nbsp;<br>';
-        html+='<span>收货人地址:</span><span>'+row.orderUaAddress+'</span>&nbsp;&nbsp;<br>';
-        if(row.orderLogisticsCode){
-            html+='<span>快递单号:</span><span>'+row.orderLogisticsCode+'</span>&nbsp;&nbsp;<br>';
+        if(row.orderType!='RECHARGE'){
+            html+='<span>收货人:</span><span>'+row.orderUaName+'</span>&nbsp;&nbsp;<br>';
+            html+='<span>收货电话:</span><span>'+row.orderUaPhone+'</span>&nbsp;&nbsp;<br>';
+            html+='<span>收货人地址:</span><span>'+row.orderUaAddress+'</span>&nbsp;&nbsp;<br>';
+            if(row.orderLogisticsCode){
+                html+='<span>快递单号:</span><span>'+row.orderLogisticsCode+'</span>&nbsp;&nbsp;<br>';
+            }
         }
         return html;
     }
