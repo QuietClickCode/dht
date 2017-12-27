@@ -390,15 +390,15 @@
                 }else if(num == 3){
                     ov+='<div class="count-infor">';
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
-                    $("#dfk").append(ov);
+                    $("#dfh").append(ov);
                 }else if(num == 4){
                     ov+='<div class="count-infor">';
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a href="/order/dealSuccess">确认收货</a></div></div></li>';
-                    $("#dfk").append(ov);
+                    $("#dsh").append(ov);
                 }else if(num == 9){
                     ov+='<div class="count-infor">';
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsCode+')<div class="btn-box"><a href="">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
-                    $("#dfk").append(ov);
+                    $("#dpj").append(ov);
                 }
             }
         }
