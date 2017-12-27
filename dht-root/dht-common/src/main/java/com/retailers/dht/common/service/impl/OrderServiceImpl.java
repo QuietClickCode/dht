@@ -241,13 +241,15 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdMenberPrice(od.getOdActualPrice());
 				ods.add(od);
 			}
+			long gcPrice=0l;
             //商品优惠
             if(ObjectUtils.isNotEmpty(gcpMaps)){
-                boolean freeShipping = editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcLists"));
+                Map<String,Object> rtnMaps= editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcLists"));
                 //判断商品优惠中是否存在包邮
-                if(freeShipping){
+                if(Boolean.valueOf(rtnMaps.get("isFreeShipping")+"")){
                     logisticsPrice=0l;
                 }
+				gcPrice=Long.valueOf(rtnMap.get("couponTotalPrice")+"");
             }
             //取得使用的优惠卷
             String couponIds=buyInfos.getCpIds();
@@ -279,7 +281,7 @@ public class OrderServiceImpl implements OrderService {
 				totalPrice+=od.getOdGoodsPrice();
 				actualPrice+=od.getOdActualPrice();
 			}
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,cpPrice,actualPrice,logisticsPrice,ods,ogcs);
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,cpPrice,gcPrice,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			//清除购物车数据
@@ -768,9 +770,11 @@ public class OrderServiceImpl implements OrderService {
      * @param useGc 用户使用商品优惠（根据gdid 对应使用的商品优惠）
      * @param allowGc 商品上挂的优惠活动
      */
-	public boolean editorGoodsCoupon(List<OrderDetail> ods,Map<Long,List<Long>>useGc,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+	public Map<String,Object> editorGoodsCoupon(List<OrderDetail> ods,Map<Long,List<Long>>useGc,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+		Map<String,Object> rtnMaps=new HashMap<String,Object>();
 	    //是否包邮
 	    boolean isFreeShipping=false;
+	    long couponTotalPrice=0l;
 	    Map<Long,Map<Long,GoodsCouponView>> allowGcMaps=new HashMap<Long, Map<Long, GoodsCouponView>>();
 	    for(String key:allowGc.keySet()){
 	        Map<Long,GoodsCouponView> allow=new HashMap<Long, GoodsCouponView>();
@@ -820,11 +824,18 @@ public class OrderServiceImpl implements OrderService {
                         }
                     }
                 }
+
+                if(gPirce<0){
+					gPirce=0;
+				}
+				couponTotalPrice+=od.getOdActualPrice()-gPirce;
                 od.setOdActualPrice(gPirce);
                 od.setOdMenberPrice(gPirce);
             }
         }
-        return isFreeShipping;
+		rtnMaps.put("isFreeShipping",isFreeShipping);
+		rtnMaps.put("couponTotalPrice",couponTotalPrice);
+        return rtnMaps;
     }
 
 	/**
