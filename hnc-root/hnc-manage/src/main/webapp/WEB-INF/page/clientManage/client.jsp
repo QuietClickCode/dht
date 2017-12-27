@@ -160,7 +160,7 @@
     function queryParams(that){
         return {
             emId:$("#emId").val(),
-            registerTimes:new Date(),
+            registerTimes:$("#registerTimes").val(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
         };
