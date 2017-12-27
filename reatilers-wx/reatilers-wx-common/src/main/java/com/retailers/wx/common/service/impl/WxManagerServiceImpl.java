@@ -109,10 +109,9 @@ public class WxManagerServiceImpl implements WxManagerService {
 			wxManagerMapper.saveWxManager(wxManager);
 		}else{
 			wxManagerMapper.deleteWxManagerByWxId(old.getWxId());
-			wxManager.setVersion(old.getVersion()+1);
 			wxManager.setIsDelete(old.getIsDelete());
 			wxManager.setIsValid(old.getIsValid());
-			wxManager.setVersion(old.getVersion());
+			wxManager.setVersion(old.getVersion()+1);
 			wxManagerMapper.saveWxManager(wxManager);
 		}
 		return true;

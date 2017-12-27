@@ -197,7 +197,7 @@
      * form 校验
      * */
     function formValidater(){
-        $('#wxPayForm')
+        $('#wxInfoForm')
             .bootstrapValidator({
                 container: 'tooltip',
                 //不能编辑 隐藏 不可见的不做校验
