@@ -34,9 +34,10 @@ public class ChannelController extends BaseController {
     @RequestMapping("/queryChannelList")
     @Function(label="来访渠道集合", description = "来访渠道集合", resourse = "channel.queryChannelList",sort=1,parentRes="channel.channelMapping")
     @ResponseBody
-    public Map<String,Object> queryChannelList(PageUtils pageForm){
+    public Map<String,Object> queryChannelList(PageUtils pageForm,String channelVal){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("cchannel",channelVal);
         Pagination<Channel> teamPagination = channelService.queryChannelList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());

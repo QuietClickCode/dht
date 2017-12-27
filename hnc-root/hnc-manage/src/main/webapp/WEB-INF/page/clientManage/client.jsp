@@ -21,7 +21,7 @@
 <div>
     <div id="toolbar" class="form-inline">
         <button class="btn btn-default saveTeam" type="button">新增团队</button>
-        <input type="text" class="form-control tname"  placeholder="请输入团队名称">
+        <input type="text" class="form-control" id="registerTimes" placeholder="请输入团队名称">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>
 </div>
@@ -152,13 +152,15 @@
     ]
 
     $(function () {
-        createTable("/clientManage/queryClientList","goodsTypeTables","tmId",treeColumns,queryParams)
+        createTable("/clientInfo/queryClientList","goodsTypeTables","tmId",treeColumns,queryParams)
     });
     /**
      * 查询条件
      **/
     function queryParams(that){
         return {
+            emId:$("#emId").val(),
+            registerTimes:new Date(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
         };
@@ -170,7 +172,7 @@
         $('#goodsTypeTables').bootstrapTable(
             "refresh",
             {
-                url:"/clientManage/queryClientList"
+                url:"/clientInfo/queryClientList"
             }
         );
     }
@@ -192,7 +194,7 @@
         if(!isSave){
             isSave = true;
             $.ajax({
-                url:"/clientManage/updateClient",
+                url:"/clientInfo/updateClient",
                 method:"post",
                 data:{
                     tmId:client['tmId'],

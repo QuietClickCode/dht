@@ -1,7 +1,10 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.hnc.common.entity.EmployeeManage;
+import com.retailers.hnc.common.vo.EmployeeManageVo;
+import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.Map;
 /**
  * 描述：员工管理Service
@@ -45,7 +48,7 @@ public interface EmployeeManageService {
 	 * @author wangjue
 	 * @date 2017-12-25 12:01:09
 	 */
-	public Pagination<EmployeeManage> queryEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<EmployeeManageVo> queryEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据emId删除员工管理
 	 * @param emId
@@ -54,6 +57,22 @@ public interface EmployeeManageService {
 	 * @date 2017-12-25 12:01:09
 	 */
 	public boolean deleteEmployeeManageByEmId(Long emId);
+
+	/**
+	 * 查询当日登记的客户
+	 * @return  返回客户集合
+	 * @author wangjue
+	 * @date 2017-12-25 12:01:09
+	 */
+	public Integer queryCurRegisterClient(Long emId);
+
+	/**
+	 * 查询所有与该置业顾问绑定的客户
+	 * @return  返回客户集合
+	 * @author wangjue
+	 * @date 2017-12-25 12:01:09
+	 */
+	public Integer queryRegisterClient(Long emId);
 
 }
 

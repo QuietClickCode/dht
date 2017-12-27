@@ -20,6 +20,24 @@
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_employeeManageVo" type="com.retailers.hnc.common.vo.EmployeeManageVo">
+		<result property="emId" column="em_id"/>
+		<result property="emName" column="em_name"/>
+		<result property="emSex" column="em_sex"/>
+		<result property="emEntryTime" column="em_entry_time"/>
+		<result property="emTeam" column="em_team"/>
+		<result property="emPosition" column="em_position"/>
+		<result property="emPhone" column="em_phone"/>
+		<result property="wxPhone" column="wx_phone"/>
+		<result property="emIdCard" column="em_id_card"/>
+		<result property="emRemoveTime" column="em_remove_time"/>
+		<result property="emInfo" column="em_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="emOrder" column="em_order"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="employeeManage_columns">
 		em_id,em_name,em_sex,em_entry_time,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
@@ -86,7 +104,7 @@
 		</where>
 	</sql>
 	<!--分页查询 -->
-	<select id="queryEmployeeManageList" resultMap="rm_employeeManage" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="queryEmployeeManageList" resultMap="rm_employeeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT <include refid="employeeManage_columns" />
 		FROM t_employee_manage
 		<include refid="employeeManage_where"/>
@@ -153,4 +171,14 @@
 	<delete id="deleteEmployeeManageByEmId" parameterType="java.lang.Long">
 		DELETE FROM t_employee_manage WHERE em_id = #{emId}
 	</delete>
+
+	<!--查询当天登记的客户-->
+	<select id="queryCurRegisterClient" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		select count(*) from t_client_manage where tm_employee = #{emId} and tm_register_time = curdate()
+	</select>
+
+	<!--查询所有登记过的客户-->
+	<select id="queryRegisterClient" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		select count(*) from t_client_manage where tm_employee = #{emId}
+	</select>
 </mapper>

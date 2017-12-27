@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.service.EmployeeManageService;
+import com.retailers.hnc.common.vo.EmployeeManageVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -40,7 +41,7 @@ public class EmployeeManageController extends BaseController{
     public Map<String,Object> queryEmployeeManageList(PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        Pagination<EmployeeManage> teamPagination = employeeManageService.queryEmployeeManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<EmployeeManageVo> teamPagination = employeeManageService.queryEmployeeManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());
         gtm.put("rows",teamPagination.getData());
