@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.RecommendStatisticsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.RecommendStatistics;
 import java.util.Map;
@@ -54,6 +55,17 @@ public interface RecommendStatisticsService {
 	 * @date 2017-12-25 22:18:33
 	 */
 	public boolean deleteRecommendStatisticsByRsId(Long rsId);
+	/**
+	 * 查询推荐返现金额列表
+	 * @param params 请求参数
+	 * @param pageNo 当前页数,从1开始
+	 * @param pageSize 分页条数
+	 * @return 分页对象
+	 * @author zhongp
+	 * @date 2017-12-25 22:18:33
+	 */
+	public Pagination<RecommendStatisticsVo> queryRecommendLists(Map<String, Object> params, int pageNo, int pageSize);
+
 
 }
 

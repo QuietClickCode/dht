@@ -61,58 +61,49 @@
 <div>
     <table id="orderTables" ></table>
 </div>
-<div class="modal fade" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser">
+<div class="modal fade" id="sendGoodsDialog" tabindex="-1" role="dialog" aria-labelledby="sendGoodsDialog">
     <div class="modal-dialog" role="document"  style="width: 800px;">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="editorSysUserTitle"></h4>
+                <h4 class="modal-title" id="sendGoodsTitle"></h4>
             </div>
             <div class="modal-body">
-                <form id="editorSysUserForm">
-                    <input type="hidden" name="uid" id="uid">
-                    <input type="hidden" name="version" id="version">
+                <form id="sendGoodsDialogForm">
+                    <input type="hidden" name="orderId" id="orderId">
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                订单号:
+                                快递公司:
                               </span>
-                                <input type="text" class="form-control" name="orderNo" id="orderNo">
+                                <select id="logisticsCompany" name="logisticsCompany"  class="form-control" style="width: auto;">
+                                    <option value="">--全部--</option>
+                                    <option value="SF">顺丰速运</option>
+                                    <option value="HTKY">百世快递</option>
+                                    <option value="ZTO">中通快递</option>
+                                    <option value="STO">申通快递</option>
+                                    <option value="YTO">圆通速递</option>
+                                    <option value="YD">韵达速递</option>
+                                    <option value="YZPY">邮政快递包裹</option>
+                                    <option value="EMS">EMS</option>
+                                    <option value="HHTT">天天快递</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-lg-6">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
-                                  订单状态:
+                                  快递单号:
                               </span>
-                                <input type="text" class="form-control" id="orderStatus" name="orderStatus"/>
+                                <input type="text" class="form-control" id="orderLogisticsCode" name="orderLogisticsCode" placeholder="请输入快递单号"/>
                             </div>
                         </div>
                     </div>
                     <br>
-                    <div class="row">
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                所属部门:
-                              </span>
-                                <input type="hidden" id="orgIds" name="orgIds"/>
-                                <input type="text" class="form-control" aria-label="..." id="orgNms" name="orgNms"  onclick="showOrgTree(); return false;">
-                            </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                是否有效:
-                              </span>
-                                <div class="controls">
-                                    <div class="switch" tabindex="0">
-                                        <input id="isValid" name="isValid" type="checkbox" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="form-group">
+                        <label for="sendRemark" class="control-label">发货备注:</label>
+                        <textarea class="form-control" id="sendRemark" name="sendRemark"></textarea>
                     </div>
                 </form>
             </div>
@@ -131,7 +122,7 @@
     //用于缓存资源表格数据
     var rowDatas=new Map();
     //编辑部门类型 0 新增 1 修改
-    var editorSysUserType=0;
+    var sendGoodsDialogType=0;
     var orgPermissionTreeObj;
     var treeColumns=[
         {checkbox: true},
@@ -228,11 +219,10 @@
             width:240,
             formatter:function(value,row,index){
                 let html='';
-                <ex:perm url="sysUser/editorSysUser">
-                html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editorOrganization(\''+row.uid+'\')"">编辑</button>&nbsp;';
-                </ex:perm>
-                <ex:perm url="	sysUser/delSysUser">
-                html+='<button type="button" id="myButton" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();deleteData(\''+row.uid+'\',this)">删除</button>';
+                <ex:perm url="order/sendGoods">
+                if(row.orderStatus==3){
+                    html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();sendGoods(\''+row.id+'\')"">发货</button>&nbsp;';
+                }
                 </ex:perm>
                 return html;
             }
@@ -240,41 +230,30 @@
     ]
 
     $(function () {
-        createTable("/order/queryOrderLists","orderTables","orgId",treeColumns,queryParams)
+        createExpandTable("/order/queryOrderLists","orderTables","orgId",treeColumns,queryParams,editorDetail)
         //初始华开关选择器
-        $("#editorSysUserForm #isValid").bootstrapSwitch();
-        $('#editorSysUser').on('hide.bs.modal', function () {
+        $("#sendGoodsDialogForm #isValid").bootstrapSwitch();
+        $('#sendGoodsDialog').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
-            clearFormValidation("editorSysUserForm",formValidater)
+            clearFormValidation("sendGoodsDialogForm",formValidater)
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
             //开启校验
-            $('#editorSysUserForm').data('bootstrapValidator').validate();
+            $('#sendGoodsDialogForm').data('bootstrapValidator').validate();
             //判断校验是否通过
-            if(!$('#editorSysUserForm').data('bootstrapValidator').isValid()){
+            if(!$('#sendGoodsDialogForm').data('bootstrapValidator').isValid()){
                 return;
             }
             var editSubmitIndex = layer.load(2);
-
             var sendData=new Array();
-            var formData=$("#editorSysUserForm").serializeObject();
-            var flag =$("#editorSysUserForm #isValid").bootstrapSwitch("state");
-            if(flag){
-                formData["isValid"]=0;
-            }else{
-                formData["isValid"]=1;
-            }
-            let url="/sysUser/addSysUser";
-            if(editorSysUserType==1){
-                url="/sysUser/editorSysUser";
-            }
+            var formData=$("#sendGoodsDialogForm").serializeObject();
             //取得form表单数据
             $.ajax({
                 type:"post",
-                url:url,
+                url:"/order/sendGoods",
                 dataType: "json",
                 data:formData,
                 success:function(data){
@@ -285,7 +264,7 @@
                         //刷新数据
                         refreshTableData();
                         //关闭弹窗
-                        $('#editorSysUser').modal('hide')
+                        $('#sendGoodsDialog').modal('hide')
                     }else{
                         layer.msg(data.msg);
                     }
@@ -298,44 +277,39 @@
      * form 校验
      * */
     function formValidater(){
-        $('#editorSysUserForm')
-                .bootstrapValidator({
-                    message: 'This value is not valid',
-                    //live: 'submitted',
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        uaccount: {
-                            message: '职工账号校验未通过',
-                            validators: {
-                                notEmpty: {
-                                    message: '职工登录账号不能为空'
-                                },
-                                stringLength: {
-                                    min: 1,
-                                    max: 30,
-                                    message: '职工登录账号长度在4-30之间'
-                                }
+        $('#sendGoodsDialogForm')
+            .bootstrapValidator({
+                message: 'This value is not valid',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    logisticsCompany: {
+                        message: '快递公司',
+                        validators: {
+                            notEmpty: {
+                                message: '快递公司不能为空'
                             }
-                        },
-                        uname: {
-                            message: '职工姓名校验未通过',
-                            validators: {
-                                notEmpty: {
-                                    message: '职工姓名不能为空'
-                                },
-                                stringLength: {
-                                    min: 2,
-                                    max: 10,
-                                    message: '职工姓名长度在2-10之间'
-                                }
+                        }
+                    },
+                    orderLogisticsCode: {
+                        message: '快递单号不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '快递单号不能为空'
+                            },
+                            stringLength: {
+                                min: 5,
+                                max: 30,
+                                message: '快递单号长度在5-30之间'
                             }
                         }
                     }
-                });
+                }
+            });
     }
     /**
      * 查询条件
@@ -345,8 +319,6 @@
         $.each($('input[name="search_orderStatus"]:checked'),function(){
             selectOrderStatus+=$(this).val()+",";
         });
-        console.log();
-
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
@@ -360,6 +332,23 @@
             orderUaPhone: $("#search_orderUaPhone").val()
         };
     }
+    function editorDetail(index, row) {
+        console.log(row.ods);
+        let html='</br><table style="width:100%;" cellpadding="1" cellspacing="0" border="1"><tbody><tr>';
+        html+='<td>商品图标</td><td>商品名称</td><td>商品价格</td><td>销售价格</td><td>购买数量</td>';
+        html+='</tr></tbody>'
+        for(var info of row.ods){
+            html+='<tr><td><img src="'+info.imgUrl+'" alt="" style="width:64px;height:48px;"></td><td>'+info.gName+'</td><td>'+info.gdPrice+'</td><td>'+info.odMenberPrice+'</td><td>'+info.odBuyNumber+'</td></tr>'
+        }
+        html+='</table></br>';
+        html+='<span>收货人:</span><span>'+row.orderUaName+'</span>&nbsp;&nbsp;<br>';
+        html+='<span>收货电话:</span><span>'+row.orderUaPhone+'</span>&nbsp;&nbsp;<br>';
+        html+='<span>收货人地址:</span><span>'+row.orderUaAddress+'</span>&nbsp;&nbsp;<br>';
+        if(row.orderLogisticsCode){
+            html+='<span>快递单号:</span><span>'+row.orderLogisticsCode+'</span>&nbsp;&nbsp;<br>';
+        }
+        return html;
+    }
     /**
      * 刷新表格数据
      **/
@@ -371,54 +360,23 @@
                 }
         );
     }
-    //删除确认框
-    function deleteData(uid){
-        //询问框
-        layer.confirm('确定要删除选中的数据吗？', {
-            btn: ['确认','取消'] //按钮
-        }, function(){
-            removeSysUser(uid);
-        }, function(){
-        });
-    }
     /**
-     * 删除部门
+     * 订单发货
      **/
-    function removeSysUser(uid){
-        $.ajax({
-            type:"post",
-            url:'/sysUser/delSysUser',
-            dataType: "json",
-            data:{uid:uid},
-            success:function(data){
-                if(data.status==0){
-                    layer.msg("删除成功");
-                    refreshTableData();
-                }else{
-                    layer.msg(data.msg);
-                }
-            }
-        });
-    }
-
-
-    var zNodes;
-    function editorOrganization(orgId){
-        editorSysUserType=1;
-        initFormData(orgId);
-        $("#editorSysUserTitle").text("编辑职工");
-        $('#editorSysUser').modal("show")
+    function sendGoods(orderId){
+        sendGoodsDialogType=1;
+        initFormData(orderId);
+        $("#sendGoodsTitle").text("商品发货");
+        $('#sendGoodsDialog').modal("show")
     }
     /**
      * 清除form 表单数据
      * */
     function clearFormData(){
-        $("#editorSysUserForm #uid").val("");
-        $("#editorSysUserForm #version").val("");
-        $("#editorSysUserForm #uaccount").val("");
-        $("#editorSysUserForm #uname").val("");
-        $("#editorSysUserForm #orgIds").val("");
-        $("#editorSysUserForm #isValid").val("");
+        $("#sendGoodsDialogForm #orderId").val("");
+        $("#sendGoodsDialogForm #logisticsCompany").val("");
+        $("#sendGoodsDialogForm #orderLogisticsCode").val("");
+        $("#sendGoodsDialogForm #sendRemark").val("");
     }
     /**
      * 清除form 表单数据
@@ -426,30 +384,8 @@
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
         if(rowData){
-            $("#editorSysUserForm #uid").val(rowData.uid);
-            $("#editorSysUserForm #version").val(rowData.version);
-            $("#editorSysUserForm #uaccount").val(rowData.uaccount);
-            $("#editorSysUserForm #uname").val(rowData.uname);
-            $("#editorSysUserForm #orgIds").val(rowData.orgIds);
-            var flag =false;
-            if(rowData.isValid==0){
-                flag=true;
-            }
-            $("#editorSysUserForm #isValid").bootstrapSwitch("state",flag);
-            $("#editorSysUserForm #orgIds").val(rowData.orgIds);
-            $("#editorSysUserForm #orgNms").val(rowData.orgNms);
+            $("#sendGoodsDialogForm #orderId").val(rowData.id);
         }
-    }
-    /**
-     * 编辑部门
-     **/
-    function addSysUser(){
-        editorSysUserType=0;
-        let orgId,orgPid;
-        initFormData();
-        $("#editorSysUserForm #isValid").bootstrapSwitch("state",true);
-        $("#editorSysUserTitle").text("添加职工");
-        $('#editorSysUser').modal("show")
     }
 </script>
 </body>

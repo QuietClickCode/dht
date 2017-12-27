@@ -3,7 +3,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>会员管理</title>
+    <title>平台推广人员</title>
     <%@include file="/common/common_bs_head_css.jsp"%>
 </head>
 <body id="contextDiv">
@@ -24,12 +24,11 @@
         <span>会员类型:</span>
         <select id="search_type" name="search_type"  class="form-control" style="width: auto;">
             <option value="">--全部--</option>
-            <option value="0">普通会员</option>
             <option value="1">兼职推广人员</option>
             <option value="2">推广人员</option>
         </select>
     </div>
-    <ex:perm url="customer/queryCustomerLists">
+    <ex:perm url="customer/queryPopularizeLists">
         <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
     </ex:perm>
 </div>
@@ -96,7 +95,7 @@
                               <span class="input-group-addon">
                                 首单提成:
                               </span>
-                              <input id="ufirstCommission" name="ufirstCommission" class="form-control" type="text" />
+                                <input id="ufirstCommission" name="ufirstCommission" class="form-control" type="text" />
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -153,30 +152,7 @@
                 return html;
             }
         },
-        {
-            field: 'rechageNm',
-            title: '会员等级'
-        },
-        {
-            field: 'uTotalWallet',
-            title: '充值总额'
-        },
-        {
-            field: 'uCurWallet',
-            title: '帐户余额'
-        },
-        {
-            field: 'consumeTotal',
-            title: '总消费'
-        },
-        {
-            field: 'walletConsumeTotal',
-            title: '钱包消费'
-        },
-        {
-            field: 'onLineConsumeTotal',
-            title: '第三方消费'
-        },
+
         {
             field: 'ucreateTime',
             title: '创建时间'
@@ -242,7 +218,7 @@
     ]
 
     $(function () {
-        createTable("/customer/queryCustomerLists","customerListsTables","orgId",treeColumns,queryParams)
+        createTable("/customer/queryPopularizeLists","customerListsTables","orgId",treeColumns,queryParams)
         //初始华开关选择器
         $('#editorCustomer').on('hide.bs.modal', function () {
             //清除数据
@@ -299,44 +275,44 @@
      * */
     function formValidater(){
         $('#editorCustomerForm')
-                .bootstrapValidator({
-                    container: 'tooltip',
-                    //不能编辑 隐藏 不可见的不做校验
-                    excluded: [':disabled', ':hidden', ':not(:visible)'],
-                    message: 'This value is not valid',
-                    //live: 'submitted',
-                    feedbackIcons: {
-                        valid: 'glyphicon glyphicon-ok',
-                        invalid: 'glyphicon glyphicon-remove',
-                        validating: 'glyphicon glyphicon-refresh'
-                    },
-                    fields: {
-                        ufirstCommission: {
-                            message: '首单提成不能为空',
-                            validators: {
-                                notEmpty: {
-                                    message: '首单提成不能为空'
-                                },
-                                regexp:{
-                                    regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                                    message:'首单提成只允许在2位整数和2位小数范围内'
-                                }
+            .bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
+                message: 'This value is not valid',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    ufirstCommission: {
+                        message: '首单提成不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '首单提成不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                                message:'首单提成只允许在2位整数和2位小数范围内'
                             }
-                        },
-                        urecommendCommission: {
-                            message: '消费提成',
-                            validators: {
-                                notEmpty: {
-                                    message: '消费提成不能为空'
-                                },
-                                regexp:{
-                                    regexp:/^([1-9]{1}|0)(\.\d{1,2})?$/,
-                                    message:'消费提成只允许在2位整数和2位小数范围内'
-                                }
+                        }
+                    },
+                    urecommendCommission: {
+                        message: '消费提成',
+                        validators: {
+                            notEmpty: {
+                                message: '消费提成不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([1-9]{1}|0)(\.\d{1,2})?$/,
+                                message:'消费提成只允许在2位整数和2位小数范围内'
                             }
                         }
                     }
-                });
+                }
+            });
     }
     /**
      * 查询条件
@@ -356,40 +332,11 @@
      **/
     function refreshTableData() {
         $('#customerListsTables').bootstrapTable(
-                "refresh",
-                {
-                    url:"/customer/queryCustomerLists"
-                }
-        );
-    }
-    //删除确认框
-    function deleteData(rid){
-        //询问框
-        layer.confirm('确定要删除选中的数据吗？', {
-            btn: ['确认','取消'] //按钮
-        }, function(){
-            removeRecharge(rid);
-        }, function(){
-        });
-    }
-    /**
-     * 删除充值金额
-     **/
-    function removeRecharge(rid){
-        $.ajax({
-            type:"post",
-            url:'/recharge/delRecharge',
-            dataType: "json",
-            data:{rid:rid},
-            success:function(data){
-                if(data.status==0){
-                    layer.msg("删除成功");
-                    refreshTableData();
-                }else{
-                    layer.msg(data.msg);
-                }
+            "refresh",
+            {
+                url:"/customer/queryPopularizeLists"
             }
-        });
+        );
     }
     function editorCustomer(uid){
         editorCustomerType=1;
