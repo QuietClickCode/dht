@@ -61,7 +61,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">修改户型</h4>
+                <h4 class="modal-title">查询登记用户</h4>
             </div>
             <div class="modal-body" style="overflow: hidden;">
                 <div id="queryFloorToolbar" class="form-inline">
@@ -168,20 +168,46 @@
 
 </script>
 
+<script>
+    function getCurRegisterClient(id) {
+        $("#house_type_table").bootstrapTable('destroy');
+        createFloorManageTable(id,getNowDate());
+        $("#saveFloorManage").modal("show");
+    }
+    
+    function getRegisterClient(id) {
+        $("#house_type_table").bootstrapTable('destroy');
+        createFloorManageTable(id);
+        $("#saveFloorManage").modal("show");
+    }
+</script>
+
+<%--自定义方法--%>
+<script>
+    function getNowDate() {
+        var date = new Date();
+        var sign1 = "-";
+        var year = date.getFullYear() // 年
+        var month = date.getMonth() + 1; // 月
+        var day  = date.getDate(); // 日
+        var currentdate = year + sign1 + month + sign1 + day;
+        return currentdate;
+    }
+</script>
 
 <script>
     var floorManagesMap = new Map();
-    function createFloorManageTable(){
+    function createFloorManageTable(id,nowDate){
         //表格的初始化
         $("#house_type_table").bootstrapTable({
-            url:"/houseManage/queryHouseType",
+            url:"/clientInfo/queryClientList",
             method: 'post',                      //请求方式（*）
             toolbar:'#queryFloorToolbar' ,                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
             cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
             sortable: false,                     //是否启用排序
             queryParams: function (params) {
-                var params=commonFloorParams(this);
+                var params=commonFloorParams(this,id,nowDate);
                 return params;
             },                                  //传递参数（*）
             pagination:true,
@@ -195,7 +221,7 @@
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
-            uniqueId: "htId",                     //每一行的唯一标识，一般为主键列
+            uniqueId: "tmId",                     //每一行的唯一标识，一般为主键列
             showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
             selectItemName: 'parentItem',
             dataType: "json",
@@ -207,10 +233,12 @@
     /**
      * 查询条件
      **/
-    function commonFloorParams(that){
+    function commonFloorParams(that,id,nowDate){
         return {
+            emId:id,
+            registerTimes:nowDate,
             pageSize: that.pageSize,
-            pageNo: that.pageNumber
+            pageNo: that.pageNumber,
         };
     }
 
@@ -226,7 +254,7 @@
         );
     }
 
-    var treeColumns=[
+    var treeFloorColumns=[
         {   checkbox: true,
             align : 'center',
             valign : 'middle'
@@ -244,6 +272,18 @@
             valign : 'middle'
         },
         {
+            field: 'tmEmployee',
+            title: '置业顾问',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'tmAge',
+            title: '客户年龄',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
             field: 'tmStatus',
             title: '购房状态',
             align : 'center',
@@ -256,34 +296,10 @@
             valign : 'middle'
         },
         {
-            field: 'tmRegisterTime',
-            title: '登记时间',
-            align : 'center',
-            valign : 'middle',
-            formatter:function (value,row,index) {
-                let html = "";
-                if(row.tmRegisterTime != "")
-                    html = row.tmRegisterTime.split(" ")[0];
-                return html;
-            }
-        },
-        {
             field: 'tmChannel',
             title: '来访渠道',
             align : 'center',
             valign : 'middle'
-        },
-        {
-            field: 'tmInfo',
-            title: '客户备注',
-            align : 'center',
-            valign : 'middle',
-            formatter:function (value,row,index) {
-                let html = "";
-                if(row.tmInfo.length != "" && row.tmInfo.length > 6)
-                    html = row.tmInfo.substring(0,6) + '...';
-                return html;
-            }
         }
     ]
 </script>

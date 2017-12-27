@@ -76,6 +76,9 @@
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
+			<if test="null != params.tmRegisterTime">
+				AND tm_register_time = #{params.tmRegisterTime}
+			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
@@ -143,4 +146,14 @@
 	<delete id="deleteClientManageByTmId" parameterType="java.lang.Long">
 		DELETE FROM t_client_manage WHERE tm_id = #{tmId}
 	</delete>
+
+	<!--查询当天登记的所有客户-->
+	<select id="queryCurClientCount" resultType="java.lang.Integer">
+		select COUNT(*) FROM t_client_manage where tm_register_time = CURDATE()
+	</select>
+
+	<!--查询所有登记过的客户-->
+	<select id="queryClientCount" resultType="java.lang.Integer">
+		select COUNT(*) FROM t_client_manage where tm_employee is not NULL
+	</select>
 </mapper>

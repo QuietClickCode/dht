@@ -74,6 +74,16 @@ public class ClientInfoController extends BaseController {
             return errorForSystem("修改客户[" + clientManage.getTmName() + "]失败");
     }
 
+    @RequestMapping("/queryClientCount")
+    @Function(label = "查询客户登记总数",description = "查询客户登记总数",resourse = "clientInfo.queryClientCount",sort = 3,parentRes = "clientInfo.clientInfoMapping")
+    @ResponseBody
+    public HashMap<String,Integer> queryClientCount(){
+        HashMap<String,Integer> clientManage = new HashMap<String,Integer>();
+        clientManage.put("CurClientCount",clientManageService.queryCurClientCount());
+        clientManage.put("ClientCount",clientManageService.queryClientCount());
+        return clientManage;
+    }
+
     public ClientManage addDate(ClientManage clientManage, String tmRegisterTimes){
         if (!ObjectUtils.isEmpty(tmRegisterTimes)) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
