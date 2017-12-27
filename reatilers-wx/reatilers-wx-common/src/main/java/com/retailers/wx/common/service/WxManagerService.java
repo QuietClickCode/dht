@@ -2,8 +2,10 @@
 package com.retailers.wx.common.service;
 
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
+import com.retailers.wx.common.vo.WxManagerVo;
 
 import java.util.Map;
 
@@ -63,7 +65,15 @@ public interface WxManagerService {
      * 取得当前使用的微信公众号
 	 * @return
      */
-	public WxManager queryCurUsedWx(WXAccountEnum wxAccountEnum);
+	public WxManagerVo queryCurUsedWx(WXAccountEnum wxAccountEnum);
+
+	/**
+	 * 微信公从号绑定
+	 * @param wxManager
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean editorWxManager(WxManager wxManager)throws AppException;
 
 }
 

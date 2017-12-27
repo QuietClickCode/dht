@@ -27,6 +27,10 @@ public class SysParameterConfigConstant {
      */
     public static final String MASTER_SERVER_PC_URL="MASTER_SERVER_PC_URL";
     /**
+     * 后台管理域名 用于微信认证
+     */
+    public static final String MASTER_SERVER_MANAGE_URL="MASTER_SERVER_MANAGE_URL";
+    /**
      * 主服务器地址（移动端）
      */
     public static final String MASTER_SERVER_MOBILE_URL="MASTER_SERVER_MOBILE_URL";

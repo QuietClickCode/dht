@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.wx.common.dao.WxPayMapper">
+
+	<resultMap id="rm_wxPay" type="com.retailers.wx.common.entity.WxPay">
+			<result property="wxId" column="wx_id"/>
+			<result property="wxMchId" column="wx_mch_id"/>
+			<result property="wxAppId" column="wx_app_id"/>
+			<result property="wxApiKey" column="wx_api_key"/>
+			<result property="wxCertificateCode" column="wx_certificate_code"/>
+			<result property="wxLocalCertificateCodeAddr" column="wx_local_certificate_code_addr"/>
+			<result property="createTime" column="create_time"/>
+			<result property="createUid" column="create_uid"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_wxPay_vo" type="com.retailers.wx.common.vo.WxPayVo">
+		<result property="wxId" column="wx_id"/>
+		<result property="wxMchId" column="wx_mch_id"/>
+		<result property="wxAppId" column="wx_app_id"/>
+		<result property="wxApiKey" column="wx_api_key"/>
+		<result property="wxCertificateCode" column="wx_certificate_code"/>
+		<result property="wxLocalCertificateCodeAddr" column="wx_local_certificate_code_addr"/>
+		<result property="createTime" column="create_time"/>
+		<result property="createUid" column="create_uid"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="wxPay_columns">
+		wx_id,wx_mch_id,wx_app_id,wx_api_key,wx_certificate_code,wx_local_certificate_code_addr,create_time,create_uid,is_delete,version
+	</sql>
+	<!-- 根据微信支付设置主键取得数据 -->
+	<select id="queryWxPayByWxId" resultMap="rm_wxPay" parameterType="java.lang.Long">
+		SELECT <include refid="wxPay_columns" />
+		FROM t_wx_pay WHERE wx_id = #{wxId}
+	</select>
+	<!-- 微信支付设置查询条件组合 -->
+	<sql id="wxPay_where">
+		<where>
+			<if test="null != params.wxId">
+				AND wx_id = #{params.wxId}
+			</if>
+			<if test="null != params.wxMchId and '' != params.wxMchId">
+				AND wx_mch_id = #{params.wxMchId}
+			</if>
+			<if test="null != params.wxAppId and '' != params.wxAppId">
+				AND wx_app_id = #{params.wxAppId}
+			</if>
+			<if test="null != params.wxApiKey and '' != params.wxApiKey">
+				AND wx_api_key = #{params.wxApiKey}
+			</if>
+			<if test="null != params.wxCertificateCode">
+				AND wx_certificate_code = #{params.wxCertificateCode}
+			</if>
+			<if test="null != params.wxLocalCertificateCodeAddr and '' != params.wxLocalCertificateCodeAddr">
+				AND wx_local_certificate_code_addr = #{params.wxLocalCertificateCodeAddr}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= TO_DATE('${params.createTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= TO_DATE('${params.createTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.createUid">
+				AND create_uid = #{params.createUid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryWxPayList" resultMap="rm_wxPay" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="wxPay_columns" />
+		FROM t_wx_pay
+		<include refid="wxPay_where"/>
+	</select>
+	<!--添加微信支付设置 -->
+	<insert id="saveWxPay" parameterType="com.retailers.wx.common.entity.WxPay" useGeneratedKeys="true" keyProperty="wxId">
+		INSERT INTO t_wx_pay (
+			wx_mch_id,wx_app_id,wx_api_key,wx_certificate_code,wx_local_certificate_code_addr,create_time,create_uid,is_delete,version
+		) VALUES
+		(
+			#{wxMchId,jdbcType=VARCHAR},#{wxAppId,jdbcType=VARCHAR},#{wxApiKey,jdbcType=VARCHAR},#{wxCertificateCode,jdbcType=BIGINT},#{wxLocalCertificateCodeAddr,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP},#{createUid,jdbcType=BIGINT},#{isDelete,jdbcType=INTEGER},
+			<if test="null != version">
+				#{version,jdbcType=INTEGER}
+			</if>
+			<if test="null == version">
+				0
+			</if>
+		)
+	</insert>
+	<!--修改微信支付设置 -->
+	<update id="updateWxPay" parameterType="com.retailers.wx.common.entity.WxPay">
+		UPDATE t_wx_pay
+		<set>
+            <if test="null != wxMchId and '' != wxMchId">
+                wx_mch_id = #{wxMchId},
+            </if>
+            <if test="null != wxAppId and '' != wxAppId">
+                wx_app_id = #{wxAppId},
+            </if>
+            <if test="null != wxApiKey and '' != wxApiKey">
+                wx_api_key = #{wxApiKey},
+            </if>
+            <if test="null != wxCertificateCode">
+                wx_certificate_code = #{wxCertificateCode},
+            </if>
+            <if test="null != wxLocalCertificateCodeAddr and '' != wxLocalCertificateCodeAddr">
+                wx_local_certificate_code_addr = #{wxLocalCertificateCodeAddr},
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != createUid">
+                create_uid = #{createUid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE wx_id = #{wxId} and version = #{version}
+	</update>
+	<!--删除微信支付设置 -->
+	<delete id="" parameterType="java.lang.Long">
+		DELETE FROM  WHERE wx_id = #{wxId}
+	</delete>
+	<update id="deleteWxPayByWxId" parameterType="com.retailers.wx.common.entity.WxPay">
+		UPDATE t_wx_pay
+		set
+		wx_app_id=CONCAT(wx_app_id,'_',wx_id),
+		is_delete = 1
+		WHERE wx_id = #{wxId}
+	</update>
+	<!-- 根据公众号管理主键取得数据 -->
+	<select id="queryCurUsedPay" resultMap="rm_wxPay_vo">
+		SELECT
+			p.*
+		FROM
+			t_wx_pay p
+		LEFT JOIN t_attachment a ON p.wx_certificate_code = a.id
+
+		WHERE
+			p.is_delete = 0
+		ORDER BY
+			p.wx_id DESC
+	</select>
+</mapper>
