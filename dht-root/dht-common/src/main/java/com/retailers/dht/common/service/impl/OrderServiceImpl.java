@@ -585,6 +585,10 @@ public class OrderServiceImpl implements OrderService {
 					isSuccess=obj.getBoolean("isSuccess");
 					if(isSuccess){
 						status=OrderConstant.ORDER_STATUS_PAY_SUCCESS;
+                        //充值订单直接设置发货且确认
+                        if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+                            status=OrderConstant.ORDER_STATUS_PAY_END;
+                        }
 					}
 				}
 				//设置支付通道（0 微信，1 支付宝，2 钱包)
