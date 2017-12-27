@@ -237,6 +237,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 				//实际支付金额
 				od.setOdActualPrice(p*bgVo.getNum());
+				od.setOdMenberPrice(od.getOdActualPrice());
 				ods.add(od);
 			}
             //商品优惠
@@ -406,6 +407,7 @@ public class OrderServiceImpl implements OrderService {
 			od.setOdIsDiscount(cutLog.get("isMenberdiscount"));
 			od.setOdGoodsPrice(cutLog.get("gdPrice"));
 			od.setOdActualPrice((cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num);
+			od.setOdMenberPrice(od.getOdActualPrice());
 			ods.add(od);
 			Long total =cutLog.get("gdPrice")*num;
 			Long actualPrice =(cutLog.get("gdPrice")-cutLog.get("finalPrice"))*num;
@@ -469,8 +471,8 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderTradePrice(actualPrice+orderLogisticsPrice);
 		order.setOrderGoodsTotalPrice(gTotalPrice);
 		order.setOrderGoodsActualPayPrice(actualPrice);
+		order.setOrderMenberPrice(actualPrice);
 		order.setOrderGoodsCouponPrice(cPrice);
-		order.setOrderGoodsCouponPrice(gcPrice);
 		order.setOrderLogisticsPrice(orderLogisticsPrice);
 		orderMapper.saveOrder(order);
 		long orderId=order.getId();
@@ -723,6 +725,7 @@ public class OrderServiceImpl implements OrderService {
 		od.setRemark(bgd.getRemark());
 		od.setOdGoodsPrice(totalPrice);
 		od.setOdActualPrice(totalPrice);
+		od.setOdMenberPrice(totalPrice);
 		od.setOdIsDiscount(goodsGdsprel.getIsMenberdiscount());
 		od.setOdInviterUid(inviterUid);
 		ods.add(od);
@@ -802,6 +805,7 @@ public class OrderServiceImpl implements OrderService {
                     }
                 }
                 od.setOdActualPrice(gPirce);
+                od.setOdMenberPrice(gPirce);
             }
         }
         return isFreeShipping;
@@ -893,6 +897,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			System.out.println("goodsCurPrice  coupon------------------------------------>>>:"+goodsCurPrice);
 			od.setOdActualPrice(goodsCurPrice);
+			od.setOdMenberPrice(goodsCurPrice);
 		}
 	}
 
