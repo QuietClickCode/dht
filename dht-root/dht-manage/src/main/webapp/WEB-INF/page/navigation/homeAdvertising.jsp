@@ -750,6 +750,10 @@
                     validators: {
                         notEmpty: {
                             message: '链接不能为空'
+                        },
+                        regexp: {
+                            regexp: /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/,
+                            message: "链接地址不合法"
                         }
                     }
                 },
@@ -794,6 +798,10 @@
                     validators: {
                         notEmpty: {
                             message: '链接不能为空'
+                        },
+                        regexp: {
+                            regexp: /http(s)?:\/\/([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/,
+                            message: "链接地址不合法"
                         }
                     }
                 }
