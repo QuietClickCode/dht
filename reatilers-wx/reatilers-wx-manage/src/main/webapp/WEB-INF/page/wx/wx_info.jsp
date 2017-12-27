@@ -106,6 +106,7 @@
        }else{
            $("#wxCodeFileUploadDiv").show();
        }
+        formValidater();
     });
     var wxCodeFileFormSubmitIdx;
     $('#wxCodeForm #dht_image_upload').filestyle({
@@ -151,6 +152,14 @@
         wxCodeFileFormSubmitIdx = layer.load(2);
         if(!submitFlag){
             submitFlag=true;
+            //开启校验
+            $('#wxInfoForm').data('bootstrapValidator').validate();
+            //判断校验是否通过
+            if(!$('#wxInfoForm').data('bootstrapValidator').isValid()){
+                layer.close(wxCodeFileFormSubmitIdx);
+                submitFlag=false;
+                return;
+            }
             var formData=$("#wxInfoForm").serializeObject();
             $.ajax({
                 url: "/wx/editorWxManager",
@@ -162,7 +171,11 @@
                    if(data.status==0){
                        layer.msg("绑定成功");
                    }else{
-                       layer.msg(data.msg);
+                       let errorMsg=data.msg;
+                       if(!errorMsg){
+                           errorMsg="保存失败，请联系管理员";
+                       }
+                       layer.msg(errorMsg);
                    }
                    submitFlag=false;
                 },
@@ -178,6 +191,51 @@
         $("#showWxCodeImageDiv").hide();
         $("#wxCodeFileUploadDiv").show();
         $("#wxInfoForm #wxQrCode").val('');
+    }
+
+    /**
+     * form 校验
+     * */
+    function formValidater(){
+        $('#wxPayForm')
+            .bootstrapValidator({
+                container: 'tooltip',
+                //不能编辑 隐藏 不可见的不做校验
+                excluded: [':disabled', ':hidden', ':not(:visible)'],
+                message: 'This value is not valid',
+                //live: 'submitted',
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    wxOriginalId: {
+                        message: '微信原始ID',
+                        validators: {
+                            notEmpty: {
+                                message: '微信原始ID不能为空'
+                            }
+                        }
+                    },
+                    appId: {
+                        message: '微信AppId',
+                        validators: {
+                            notEmpty: {
+                                message: '微信AppId不能为空'
+                            }
+                        }
+                    },
+                    appSecret: {
+                        message: '微信AppSecret',
+                        validators: {
+                            notEmpty: {
+                                message: '微信AppSecret不能为空'
+                            }
+                        }
+                    }
+                }
+            });
     }
 </script>
 </body>

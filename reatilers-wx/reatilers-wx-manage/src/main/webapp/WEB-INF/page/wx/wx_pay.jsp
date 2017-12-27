@@ -137,15 +137,15 @@
     function saveWxInfo(){
         wxCodeFileFormSubmitIdx = layer.load(2);
         if(!submitFlag){
+            submitFlag=true;
             //开启校验
             $('#wxPayForm').data('bootstrapValidator').validate();
             //判断校验是否通过
             if(!$('#wxPayForm').data('bootstrapValidator').isValid()){
                 layer.close(wxCodeFileFormSubmitIdx);
-                submitFlag=true;
+                submitFlag=false;
                 return;
             }
-            submitFlag=true;
             var formData=$("#wxPayForm").serializeObject();
             $.ajax({
                 url: "/wx/editorWxPay",
