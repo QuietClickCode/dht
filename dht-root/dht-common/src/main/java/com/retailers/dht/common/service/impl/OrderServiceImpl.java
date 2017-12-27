@@ -526,6 +526,9 @@ public class OrderServiceImpl implements OrderService {
 			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberPower(recharge.getRprice()),NumberUtils.formaterNumberPower(recharge.getRdiscount()));
 			order.setOrderIllustrate(illustrate);
 			order.setOrderCreateDate(curDate);
+            order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_NO);
+            order.setIsReal(OrderConstant.ORDER_IS_REAL_YES);
+            order.setOrderSellDel(SystemConstant.SYS_IS_DELETE_NO);
 			orderMapper.saveOrder(order);
 			OrderDetail orderDetail=new OrderDetail();
 			orderDetail.setOdOrderId(order.getId());
