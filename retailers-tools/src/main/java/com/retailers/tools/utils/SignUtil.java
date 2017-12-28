@@ -1,5 +1,6 @@
 package com.retailers.tools.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.tools.encrypt.EncryptUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,21 @@ public class SignUtil {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 加密校验
+     * @param parms
+     * @return
+     */
+    public static boolean encryptDES(Map<String,Object> parms) {
+        boolean isNext = false;
+        logger.info("取得参数信息:{}"+ JSON.toJSON(parms));
+        if(ObjectUtils.isEmpty(parms.get("t"))||ObjectUtils.isEmpty(parms.get("r"))||ObjectUtils.isEmpty(parms.get("s"))){
+            return isNext;
+        }
+        isNext = SignUtil.checkSign(parms.get("t")+"",parms.get("r")+"",parms.get("s")+"");
+        return isNext;
     }
 
     /**

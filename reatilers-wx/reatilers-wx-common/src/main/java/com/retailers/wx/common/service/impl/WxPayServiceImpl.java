@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.common.service.AttachmentService;
+import com.retailers.mybatis.common.service.SysParameterConfigService;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.wx.common.dao.WxManagerMapper;
@@ -36,6 +37,8 @@ public class WxPayServiceImpl implements WxPayService {
 	private WxManagerMapper wxManagerMapper;
 	@Autowired
 	private AttachmentService attachmentService;
+	@Autowired
+	private SysParameterConfigService sysParameterConfigService;
 
 	public boolean saveWxPay(WxPay wxPay) {
 		int status = wxPayMapper.saveWxPay(wxPay);
@@ -103,6 +106,7 @@ public class WxPayServiceImpl implements WxPayService {
 			wxPay.setVersion(old.getVersion()+1);
 			wxPayMapper.saveWxPay(wxPay);
 		}
+		sysParameterConfigService.reloadWxConfigToMemory();
 		return true;
 	}
 }

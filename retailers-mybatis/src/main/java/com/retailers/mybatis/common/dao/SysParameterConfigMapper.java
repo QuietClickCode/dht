@@ -61,4 +61,16 @@ public interface SysParameterConfigMapper {
 	 */
 	public List<SysParameterConfig> querySysParameterConfigAll();
 
+	/**
+	 * 添加服务器
+	 * @param serverInfo
+	 * @return
+	 */
+	public int addServerInfo(String serverInfo);
+	/**
+	 * 取得服务器列表
+	 * @return
+	 */
+	public List<String> queryServerLists();
+
 }

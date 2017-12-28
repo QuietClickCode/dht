@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.service.AttachmentService;
+import com.retailers.mybatis.common.service.SysParameterConfigService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
@@ -37,6 +38,9 @@ public class WxManagerServiceImpl implements WxManagerService {
 	private WxManagerMapper wxManagerMapper;
 	@Autowired
 	private AttachmentService attachmentService;
+	@Autowired
+	private SysParameterConfigService sysParameterConfigService;
+
 	public boolean saveWxManager(WxManager wxManager) {
 		int status = wxManagerMapper.saveWxManager(wxManager);
 		return status == 1 ? true : false;
@@ -114,6 +118,7 @@ public class WxManagerServiceImpl implements WxManagerService {
 			wxManager.setVersion(old.getVersion()+1);
 			wxManagerMapper.saveWxManager(wxManager);
 		}
+		sysParameterConfigService.reloadSysParameterConfig();
 		return true;
 	}
 }

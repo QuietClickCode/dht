@@ -55,6 +55,20 @@ public interface SysParameterConfigService {
 	 */
 	public void initSysParamter();
 
+	/**
+	 * 注册服务器
+	 */
+	public void registerService();
+	/**
+	 * 重新加载系统参数
+	 */
+	public void reloadSysParameterConfig();
+
+	/**
+	 * 加载微信配置至内存
+	 */
+	public void reloadWxConfigToMemory();
+
 }
 
 

@@ -44,6 +44,8 @@ public class SysParameterConfigConstant {
     public static final String USER_RECOMMEND_COMMISSION_MAX="USER_RECOMMEND_COMMISSION_MAX";
 
 
+
+
     //系统 参数对应的key值
     public static Map<String,Object> params=new HashMap<String, Object>();
 

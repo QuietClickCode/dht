@@ -39,7 +39,7 @@
         </mvc:message-converters>
     </mvc:annotation-driven>
     <!-- 让Spring通过自动扫描来查询和管理Bean -->
-    <context:component-scan base-package="com.retailers.dht.manage.controller,com.retailers.dht.common.service,com.retailers.auth.interceptor,com.retailers.tools.exception">
+    <context:component-scan base-package="com.retailers.dht.manage.controller,com.retailers.dht.common.service,com.retailers.auth.interceptor,com.retailers.tools.exception,com.retailers.dht.common.controller">
         <!-- 只扫描base-package指定下的有@Controller下的java类，并注册成bean -->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         <!--<context:include-filter type="annotation" expression="org.springframework.web.bind.annotation.RestController"/>

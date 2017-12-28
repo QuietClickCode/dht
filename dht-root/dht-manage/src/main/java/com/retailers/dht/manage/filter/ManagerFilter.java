@@ -6,8 +6,10 @@ import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.utils.CheckUserPermissionUtils;
 import com.retailers.tools.base.WriteData;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.SignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.util.WebUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -43,9 +45,22 @@ public class ManagerFilter implements Filter {
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String uri = request.getRequestURI();
         String header = request.getHeader("X-Requested-With");
-        System.out.println("header------------------------->>:"+header);
+        String path = request.getServletPath();
+        System.out.println("header------------------------->>:"+path);
+        System.out.println("uri------------------------->>:"+uri);
         if(uri.indexOf(".")<0){
-            String path = request.getServletPath();
+            //判断是否是重新加载数据方法
+            if(uri.indexOf("reaload")>=0){
+                Map<String,Object> parms = WebUtils.getParametersStartingWith(request,"");
+                if (!SignUtil.encryptDES(parms)) {
+                    WriteData.paramError("非法请求!",response);
+                    return;
+                }else{
+                    chain.doFilter(request, response);
+                    return;
+                }
+            }
+
             // 如果用户未登录，通过在IE地址栏走login.jsp或者register.jsp的页面可以直接访问资源，否则就进行拦截
             if (uri.equalsIgnoreCase("/login")||uri.equalsIgnoreCase("/wechat/sendMsg")||uri.equals("/sysUser/querySyUserByAccount")) {
                 chain.doFilter(request, response);
@@ -89,7 +104,6 @@ public class ManagerFilter implements Filter {
                         }
                     }
                 }
-//            WriteDataUtils.paramError("未登录请重新登录",response);
                 chain.doFilter(servletRequest, servletResponse);
                 return;
             }
@@ -100,4 +114,5 @@ public class ManagerFilter implements Filter {
     public void destroy() {
 
     }
+
 }
