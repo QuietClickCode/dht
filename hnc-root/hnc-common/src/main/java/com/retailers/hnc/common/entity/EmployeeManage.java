@@ -7,7 +7,7 @@ import java.util.Date;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-28 16:19:58
+ * @date 2017-12-28 16:30:35
  */
 public class EmployeeManage implements java.io.Serializable {
 
@@ -24,7 +24,7 @@ public class EmployeeManage implements java.io.Serializable {
 	/**入职时间*/
 	@NotEmpty
 	private Date emEntryTime;
-	/**0代表为置业顾问，1代表管理员*/
+	/**1代表置业顾问，2代表管理员*/
 	@NotEmpty
 	private Integer emType;
 	/**所属团队*/
