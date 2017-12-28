@@ -7,6 +7,7 @@
 			<result property="emName" column="em_name"/>
 			<result property="emSex" column="em_sex"/>
 			<result property="emEntryTime" column="em_entry_time"/>
+			<result property="emType" column="em_type"/>
 			<result property="emTeam" column="em_team"/>
 			<result property="emPosition" column="em_position"/>
 			<result property="emPhone" column="em_phone"/>
@@ -40,14 +41,14 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="employeeManage_columns">
-		em_id,em_name,em_sex,em_entry_time,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
+		em_id,em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
 	</sql>
-	<!-- 根据员工管理主键取得数据 -->
+	<!-- 根据置业顾问主键取得数据 -->
 	<select id="queryEmployeeManageByEmId" resultMap="rm_employeeManage" parameterType="java.lang.Long">
 		SELECT <include refid="employeeManage_columns" />
 		FROM t_employee_manage WHERE em_id = #{emId}
 	</select>
-	<!-- 员工管理查询条件组合 -->
+	<!-- 置业顾问查询条件组合 -->
 	<sql id="employeeManage_where">
 		<where>
 			<if test="null != params.emId">
@@ -64,6 +65,9 @@
 			</if>
 			<if test="null != params.emEntryTimeEnd">
 				AND em_entry_time &lt;= #{params.emEntryTime}
+			</if>
+			<if test="null != params.emType">
+				AND em_type = #{params.emType}
 			</if>
 			<if test="null != params.emTeam">
 				AND em_team = #{params.emTeam}
@@ -109,16 +113,16 @@
 		FROM t_employee_manage
 		<include refid="employeeManage_where"/>
 	</select>
-	<!--添加员工管理 -->
+	<!--添加置业顾问 -->
 	<insert id="saveEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage" useGeneratedKeys="true" keyProperty="emId">
 		INSERT INTO t_employee_manage (
-			em_name,em_sex,em_entry_time,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
+			em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
 		) VALUES
 		(
-			#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0
+			#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emType,jdbcType=INTEGER},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改员工管理 -->
+	<!--修改置业顾问 -->
 	<update id="updateEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage">
 		UPDATE t_employee_manage
 		<set>
@@ -130,6 +134,9 @@
             </if>
             <if test="null != emEntryTime">
                 em_entry_time = #{emEntryTime},
+            </if>
+            <if test="null != emType">
+                em_type = #{emType},
             </if>
             <if test="null != emTeam">
                 em_team = #{emTeam},
@@ -167,10 +174,11 @@
 		</set>
 		WHERE em_id = #{emId} and version = #{version}
 	</update>
-	<!--删除员工管理 -->
+	<!--删除置业顾问 -->
 	<delete id="deleteEmployeeManageByEmId" parameterType="java.lang.Long">
 		DELETE FROM t_employee_manage WHERE em_id = #{emId}
 	</delete>
+
 
 	<!--查询当天登记的客户-->
 	<select id="queryCurRegisterClient" resultType="java.lang.Integer" parameterType="java.lang.Long">

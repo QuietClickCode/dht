@@ -34,10 +34,10 @@ public class EmployeeRelationshipController {
     public Map<String,Object> queryAllClient(){
         List<EmRelationshipVo> relationshipVos = emRelationshipService.queryEmRelationshipVoList();
         System.out.println(relationshipVos.size());
-        List<EmRelationshipVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);
+        /*List<EmRelationshipVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);*/
         HashMap<String,Object> map=new HashMap<String, Object>();
         map.put("total",1000);
-        map.put("rows",rows);
+        map.put("rows",relationshipVos);
         return map;
     }
 }
