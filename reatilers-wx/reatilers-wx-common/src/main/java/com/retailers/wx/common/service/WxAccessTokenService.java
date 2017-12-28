@@ -63,6 +63,11 @@ public interface WxAccessTokenService {
 	 */
 	public void initWxToken();
 
+	/**
+	 * 初始化微信配置信息
+	 */
+	public void initWxConfig();
+
 }
 
 

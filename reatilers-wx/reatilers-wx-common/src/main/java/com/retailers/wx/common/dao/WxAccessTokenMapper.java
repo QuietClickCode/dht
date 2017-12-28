@@ -59,9 +59,9 @@ public interface WxAccessTokenMapper {
 
     /**
      * 根据微信id 取得当前使用token
-	 * @param wxId
+	 * @param wxAppId
      * @return
      */
-	public WxAccessToken queryCurWxAccessTokenByWxId(@Param("wxId") Long wxId, @Param("curDate") Date curDate);
+	public WxAccessToken queryCurWxAccessTokenByWxId(@Param("wxAppId") String wxAppId, @Param("curDate") Date curDate);
 
 }

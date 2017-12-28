@@ -99,7 +99,7 @@
 		FROM
 			t_wx_access_token w
 		WHERE
-			w.wat_wx_id = #{wxId}
+			w.wat_wx_app_id = #{wxAppId}
 		AND w.wat_token_expires_time >#{curDate}
 	</select>
 </mapper>

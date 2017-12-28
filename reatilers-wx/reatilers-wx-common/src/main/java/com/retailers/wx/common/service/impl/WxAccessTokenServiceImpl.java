@@ -14,11 +14,13 @@ import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.dao.WxAccessTokenMapper;
 import com.retailers.wx.common.dao.WxManagerMapper;
+import com.retailers.wx.common.dao.WxPayMapper;
 import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxAccessToken;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.service.WxAccessTokenService;
 import com.retailers.wx.common.utils.WxReqUtils;
+import com.retailers.wx.common.vo.WxPayVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +46,8 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 	private WxManagerMapper wxManagerMapper;
 	@Autowired
 	private ProcedureToolsService procedureToolsService;
+	@Autowired
+	private WxPayMapper wxPayMapper;
 
 	public boolean saveWxAccessToken(WxAccessToken wxAccessToken) {
 		int status = wxAccessTokenMapper.saveWxAccessToken(wxAccessToken);
@@ -73,25 +77,24 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 
 	public void initWxToken() {
 		logger.info("开始取得微信当前token");
+
+
+
+
 		Date curDate= new Date();
 		//取得当前使用微信
-		WxManager wxManager= wxManagerMapper.queryCurUsedWx(WXAccountEnum.WX_GZH.getType());
-		if(ObjectUtils.isNotEmpty(wxManager)){
-			WxConfig.APP_ID=wxManager.getAppId();
-			WxConfig.APP_SECRET=wxManager.getAppSecret();
+		if(ObjectUtils.isNotEmpty(WxConfig.APP_ID)){
 			//根据当前使用微信，取得token
-			WxAccessToken token=wxAccessTokenMapper.queryCurWxAccessTokenByWxId(wxManager.getWxId(),curDate);
+			WxAccessToken token=wxAccessTokenMapper.queryCurWxAccessTokenByWxId(WxConfig.APP_ID,curDate);
 			//判断当前token是否为空 如果当前token 还处于有效期则不进行处理。
 			if(ObjectUtils.isNotEmpty(token)){
 				WxConfig.ACCESS_TOKEN=token.getWatToken();
 				WxConfig.ACCESS_TICKET=token.getWatTicket();
 			}else{
-				pullWxToken(wxManager.getAppId(),wxManager.getAppSecret(),wxManager.getWxId());
+				pullWxToken(WxConfig.APP_ID,WxConfig.APP_SECRET);
 			}
-			System.out.println("------------------------------------------------>"+WxConfig.ACCESS_TICKET);
-			System.out.println(WxConfig.ACCESS_TICKET);
-			WxConfig.WX_TOKEN=wxManager.getWxToken();
 		}else{
+			logger.info("未配置公众号信息");
 		}
 	}
 
@@ -99,9 +102,8 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 	 * 取得微信token 和jsapi token
 	 * @param appId
 	 * @param appSecret
-	 * @param wxId
 	 */
-	private void pullWxToken(String appId,String appSecret,Long wxId){
+	private void pullWxToken(String appId,String appSecret){
 		Date curDate=new Date();
 		String key= SingleThreadLockConstant.PULL_WX_TOKEN;
 		try{
@@ -124,7 +126,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 						token.setWatTokenCreateTime(curDate);
 						token.setWatTokenExpiresTime(expiresTime);
 						token.setWatTokenExpires(expires);
-						token.setWatWxId(wxId);
+						token.setWxAppId(appId);
 						token.setWatTicket(ticket);
 						WxConfig.ACCESS_TOKEN=token.getWatToken();
 						WxConfig.ACCESS_TICKET=ticket;
@@ -134,8 +136,28 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 				}
 			}
 		}catch(AppException e){
+			logger.error(StringUtils.getErrorInfoFromException(e));
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
+		}
+	}
+
+	/**
+	 *初始化公众号配置参数
+	 */
+	public void initWxConfig() {
+		//取得当前使用微信
+		WxManager wxManager= wxManagerMapper.queryCurUsedWx(WXAccountEnum.WX_GZH.getType());
+		if(ObjectUtils.isNotEmpty(wxManager)){
+			WxConfig.APP_ID=wxManager.getAppId();
+			WxConfig.APP_SECRET=wxManager.getAppSecret();
+			WxConfig.WX_CHECK_REQ_TOKEN=wxManager.getWxToken();
+			//取得支付信息
+			WxPayVo wxPayVo= wxPayMapper.queryCurUsedPay();
+			if(ObjectUtils.isNotEmpty(wxPayVo)){
+				WxConfig.WX_MCH_ID=wxPayVo.getWxMchId();
+				WxConfig.WX_API_KEY=wxPayVo.getWxApiKey();
+			}
 		}
 	}
 }
