@@ -70,4 +70,6 @@ public interface EmployeeManageMapper {
 	 */
 	public Integer queryRegisterClient(Long emId);
 
+	public List<EmployeeManage> queryAllEmployee();
+
 }

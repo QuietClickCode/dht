@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：客户管理对象
+ * 描述：客户表对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-26 13:47:05
+ * @date 2017-12-28 15:40:49
  */
 public class ClientManage implements java.io.Serializable {
 
@@ -27,9 +27,12 @@ public class ClientManage implements java.io.Serializable {
 	/**客户年龄*/
 	@NotEmpty
 	private Integer tmAge;
-	/**购房状态*/
+	/**购房状态(0代表未购房，1代表已购房)*/
 	@NotEmpty
 	private Integer tmStatus;
+	/**0代表客户，1代表置业顾问，2代表管理员*/
+	@NotEmpty
+	private Integer tmLoginStatus;
 	/**客户电话*/
 	@NotEmpty
 	@Length(min = 1, max = 11)
@@ -107,6 +110,13 @@ public class ClientManage implements java.io.Serializable {
 
 	public Integer getTmStatus() {
 		return this.tmStatus;
+	}
+	public void setTmLoginStatus(Integer value) {
+		this.tmLoginStatus = value;
+	}
+
+	public Integer getTmLoginStatus() {
+		return this.tmLoginStatus;
 	}
 	public void setTmPhone(String value) {
 		this.tmPhone = value;

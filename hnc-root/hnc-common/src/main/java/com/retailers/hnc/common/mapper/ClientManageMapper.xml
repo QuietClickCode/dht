@@ -9,6 +9,7 @@
 			<result property="tmEmployee" column="tm_employee"/>
 			<result property="tmAge" column="tm_age"/>
 			<result property="tmStatus" column="tm_status"/>
+			<result property="tmLoginStatus" column="tm_login_status"/>
 			<result property="tmPhone" column="tm_phone"/>
 			<result property="tmRegisterTime" column="tm_register_time"/>
 			<result property="tmIdCard" column="tm_id_card"/>
@@ -21,14 +22,14 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="clientManage_columns">
-		tm_id,tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+		tm_id,tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
 	</sql>
-	<!-- 根据客户管理主键取得数据 -->
+	<!-- 根据客户表主键取得数据 -->
 	<select id="queryClientManageByTmId" resultMap="rm_clientManage" parameterType="java.lang.Long">
 		SELECT <include refid="clientManage_columns" />
 		FROM t_client_manage WHERE tm_id = #{tmId}
 	</select>
-	<!-- 客户管理查询条件组合 -->
+	<!-- 客户表查询条件组合 -->
 	<sql id="clientManage_where">
 		<where>
 			<if test="null != params.tmId">
@@ -48,6 +49,9 @@
 			</if>
 			<if test="null != params.tmStatus">
 				AND tm_status = #{params.tmStatus}
+			</if>
+			<if test="null != params.tmLoginStatus">
+				AND tm_login_status = #{params.tmLoginStatus}
 			</if>
 			<if test="null != params.tmPhone and '' != params.tmPhone">
 				AND tm_phone = #{params.tmPhone}
@@ -76,9 +80,6 @@
 			<if test="null != params.version">
 				AND version = #{params.version}
 			</if>
-			<if test="null != params.tmRegisterTime">
-				AND tm_register_time = #{params.tmRegisterTime}
-			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
@@ -87,16 +88,16 @@
 		FROM t_client_manage
 		<include refid="clientManage_where"/>
 	</select>
-	<!--添加客户管理 -->
+	<!--添加客户表 -->
 	<insert id="saveClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage" useGeneratedKeys="true" keyProperty="tmId">
 		INSERT INTO t_client_manage (
-			tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+			tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
 		) VALUES
 		(
-			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=INTEGER},#{tmStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
+			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=INTEGER},#{tmStatus,jdbcType=INTEGER},#{tmLoginStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改客户管理 -->
+	<!--修改客户表 -->
 	<update id="updateClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage">
 		UPDATE t_client_manage
 		<set>
@@ -114,6 +115,9 @@
             </if>
             <if test="null != tmStatus">
                 tm_status = #{tmStatus},
+            </if>
+            <if test="null != tmLoginStatus">
+                tm_login_status = #{tmLoginStatus},
             </if>
             <if test="null != tmPhone and '' != tmPhone">
                 tm_phone = #{tmPhone},
@@ -142,7 +146,7 @@
 		</set>
 		WHERE tm_id = #{tmId} and version = #{version}
 	</update>
-	<!--删除客户管理 -->
+	<!--删除客户表 -->
 	<delete id="deleteClientManageByTmId" parameterType="java.lang.Long">
 		DELETE FROM t_client_manage WHERE tm_id = #{tmId}
 	</delete>

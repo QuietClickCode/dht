@@ -52,4 +52,5 @@ public interface TeamMapper {
 	 */
 	public List<Team> queryTeamList(Pagination<Team> pagination);
 
+	public List<Team> queryAllTeam();
 }

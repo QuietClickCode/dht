@@ -181,4 +181,8 @@
 	<select id="queryRegisterClient" resultType="java.lang.Integer" parameterType="java.lang.Long">
 		select count(*) from t_client_manage where tm_employee = #{emId}
 	</select>
+
+	<select id="queryAllEmployee" resultMap="rm_employeeManage">
+		select * from t_employee_manage where is_delete = 0
+	</select>
 </mapper>
