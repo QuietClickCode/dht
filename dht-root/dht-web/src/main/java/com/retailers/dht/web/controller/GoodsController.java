@@ -1,6 +1,7 @@
 package com.retailers.dht.web.controller;
 
 import com.retailers.dht.common.constant.SystemConstant;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.GoodsVo;
@@ -51,9 +52,26 @@ public class GoodsController extends BaseController {
     public  String setinviter(HttpServletRequest request){
         UserInfoVIew u = new UserInfoVIew();
         u.setUid(111L);
-        setCurLoginUser(request,u);
+//        setCurLoginUser(request,u);
         return "";
     }
+
+    @RequestMapping("/queryTodayGoods")
+    @ResponseBody
+    public  Map<String,Object> queryTodayGoods(int pageNo,int pageSize){
+        List<GoodsVo> list = goodsService.queryTodayGoods(pageNo,pageSize);
+        Map map = new HashMap();
+        if(ObjectUtils.isNotEmpty(list)){
+            map.put("rows",list);
+        }
+        return map;
+    }
+
+    @RequestMapping("/gotonewgoodspage")
+    public String gotonewgoodspage(HttpServletRequest request){
+        return redirectUrl(request,"goods/today-goods-list");
+    }
+
 
     @RequestMapping("/queryGoodsById")
     @ResponseBody
@@ -153,4 +171,5 @@ public class GoodsController extends BaseController {
         return redirectUrl(request,controllerMapping+"/"+page);
 
     }
+
 }

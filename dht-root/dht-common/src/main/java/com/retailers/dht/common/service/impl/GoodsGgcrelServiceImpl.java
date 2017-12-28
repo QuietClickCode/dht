@@ -8,10 +8,13 @@ import java.util.Map;
 import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
+import com.retailers.dht.common.entity.GoodsComplimentary;
 import com.retailers.dht.common.entity.GoodsGgcrel;
 import com.retailers.dht.common.dao.GoodsGgcrelMapper;
 import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.GoodsComplimentaryService;
 import com.retailers.dht.common.service.GoodsGgcrelService;
+import com.retailers.dht.common.vo.GoodsComplimentaryVo;
 import com.retailers.dht.common.vo.GoodsGgcrelVo;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
@@ -32,6 +35,8 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 	private GoodsMapper goodsMapper;
 	@Autowired
 	private GoodsClassificationService goodsClassificationService;
+	@Autowired
+	private GoodsComplimentaryService goodsComplimentaryService;
 	public boolean saveGoodsGgcrel(String gcIds,Long gid) {
 		String[] gcIdsArr = gcIds.replaceAll(","," ").trim().split(" ");
 		int status = 0;
@@ -196,6 +201,39 @@ public class GoodsGgcrelServiceImpl implements GoodsGgcrelService {
 		}
 
 		return status == gcIdsArr.length ? true : false;
+	}
+
+	public List<GoodsComplimentaryVo> queryAllGoodsGgcrelLists(Long gid){
+		Map params = new HashMap();
+		params.put("isDelete",0L);
+		params.put("isClass",2L);
+		List<GoodsComplimentaryVo> list = goodsComplimentaryService.queryGoodsComplimentaryList(params,1,1000).getData();
+
+		Map map = new HashMap();
+		map.put("isDelete",1L);
+		map.put("isUse",0L);
+		map.put("gid",gid);
+		List<GoodsGgcrelVo> goodsGgcrelVoList = queryGoodsGgcrelList(map,1,10000).getData();
+
+		List<GoodsComplimentaryVo> indexList = new ArrayList<GoodsComplimentaryVo>();
+		for(GoodsComplimentaryVo goodsComplimentaryVo:list){
+			for(GoodsGgcrelVo goodsGgcrelVo:goodsGgcrelVoList){
+				Long goodsComplimentaryVoId = goodsComplimentaryVo.getGcId();
+				Long goodsGgcrelVoId = goodsGgcrelVo.getGcId();
+				if(goodsComplimentaryVoId==goodsGgcrelVoId){
+					indexList.add(goodsComplimentaryVo);
+				}
+
+			}
+		}
+
+		if(ObjectUtils.isNotEmpty(indexList)){
+			for(GoodsComplimentaryVo goodsComplimentaryVo:indexList){
+				list.remove(goodsComplimentaryVo);
+			}
+		}
+
+		return list;
 	}
 
 	public List<GoodsGgcrelVo> querydeletedgclass(Long gid){

@@ -305,8 +305,10 @@
     function timegoing() {
         var interval = setInterval(function () {
             var date = new Date(timestape);
-            var shi1 = Math.floor((date.getHours()-8)/10);
-            var shi2 = Math.floor((date.getHours()-8)%10);
+            var hours = Math.floor(timestape/3600000);
+
+            var shi1 = Math.floor((hours)/10%10);
+            var shi2 = Math.floor((hours)%10);
             var fen1 = Math.floor(date.getMinutes()/10);
             var fen2 = Math.floor(date.getMinutes()%10);
             var miao1 = Math.floor(date.getSeconds()/10);

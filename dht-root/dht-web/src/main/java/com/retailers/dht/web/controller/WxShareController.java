@@ -58,7 +58,7 @@ public class WxShareController extends BaseController{
         String jsapi_ticket = WxConfig.ACCESS_TICKET;
         Long timestamp = new Date().getTime()/1000;
         String signature = "";
-        String homePath = SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL;//"http://www.kuaiyis.com"
+        String homePath = "http://fhdy.s1.natapp.cc";//SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL   "http://www.kuaiyis.com"
         homePath = homePath+path;
         try {
             signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);

@@ -76,6 +76,9 @@ public class Goods implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 20)
 	private String gunitname;
+	/**利润率*/
+	@NotEmpty
+	private Long grate;
 	/**是否通过审核 0未审核 1已审核 2未通过审核*/
 	@NotEmpty
 	private Long isChecked;
@@ -90,7 +93,15 @@ public class Goods implements java.io.Serializable {
 	public Goods(){
 	}
 
-	public Goods( Long gid){
+	public Long getGrate() {
+		return grate;
+	}
+
+	public void setGrate(Long grate) {
+		this.grate = grate;
+	}
+
+	public Goods(Long gid){
 		this.gid = gid;
 	}
 

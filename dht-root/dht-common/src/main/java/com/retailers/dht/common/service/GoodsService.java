@@ -80,6 +80,8 @@ public interface GoodsService {
 	 * @return
 	 */
 	public List<Goods> queryGoodsByIds(List<Long> gIds);
+
+	public List<GoodsVo> queryTodayGoods(int pageNo,int pageSize);
 }
 
 

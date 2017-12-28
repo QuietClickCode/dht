@@ -22,6 +22,7 @@
 			<result property="gcheckperson" column="g_checkperson"/>
 			<result property="gcheckmessage" column="g_checkmessage"/>
 			<result property="gunitname" column="g_unitname"/>
+			<result property="grate" column="g_rate"/>
 			<result property="isChecked" column="is_checked"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -47,6 +48,7 @@
 		<result property="gcheckperson" column="g_checkperson"/>
 		<result property="gcheckmessage" column="g_checkmessage"/>
 		<result property="gunitname" column="g_unitname"/>
+		<result property="grate" column="g_rate"/>
 		<result property="isChecked" column="is_checked"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
@@ -55,11 +57,12 @@
 		<result property="minprice" column="minprice"/>
 		<result property="maxprice" column="maxprice"/>
 		<result property="imgUrl" column="imgurl"/>
+		<result property="gcount" column="gcount"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goods_columns">
-		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,is_checked,is_delete,version
 	</sql>
 	<!-- 根据商品表主键取得数据 -->
 	<select id="queryGoodsByGid" resultMap="rm_goods" parameterType="java.lang.Long">
@@ -192,6 +195,7 @@
 		</where>
 		GROUP BY t3.g_id
 	</select>
+
 	<select id="queryGoodsListByGclass" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
 		t5.show_url imgurl,
@@ -212,13 +216,47 @@
 
 		GROUP BY t1.g_id
 	</select>
+
+	<select id="queryTodayGoods" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t5.show_url imgurl
+		FROM
+		(SELECT
+		t1.*,
+		min(t3.gd_price) minprice,SUM(t3.gd_residueinventory) gcount
+		FROM
+		t_goods t1
+		LEFT JOIN t_goods_detail t3 ON t1.g_id=t3.g_id and t3.is_delete=0,
+		t_goods_config t2
+		WHERE
+		t1.g_id=t2.g_id
+		and t1.g_create_time=CURRENT_DATE()
+		and t2.is_putway=1
+		and t1.is_checked=1
+		and t1.is_delete=0
+		GROUP BY
+		t1.g_id) t1
+		LEFT JOIN t_goods_image t4 ON t1.g_id=t4.g_id and t4.is_delete=0
+		LEFT JOIN t_attachment t5 ON t5.id=t4.gi_id,
+		t_goods_config t2
+		WHERE
+		t1.g_id=t2.g_id
+		and t1.g_create_time=CURRENT_DATE()
+		and t2.is_putway=1
+		and t1.is_checked=1
+		and t1.is_delete=0
+		GROUP BY
+		t1.g_id
+	</select>
+
 	<!--添加商品表 -->
 	<insert id="saveGoods" parameterType="com.retailers.dht.common.entity.Goods" useGeneratedKeys="true" keyProperty="gid">
 		INSERT INTO t_goods (
-			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,is_checked,is_delete,version
+			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,is_checked,is_delete,version,g_create_time
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=BIGINT},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=BIGINT},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{grate,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0,CURRENT_DATE
 		)
 	</insert>
 	<!--修改商品表 -->
@@ -277,6 +315,9 @@
             <if test="null != gunitname and '' != gunitname">
                 g_unitname = #{gunitname},
             </if>
+			<if test="null != grate">
+				g_rate = #{grate},
+			</if>
             <if test="null != isChecked">
                 is_checked = #{isChecked},
             </if>
