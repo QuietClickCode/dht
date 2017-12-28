@@ -21,4 +21,11 @@ public class WxTaskJob {
     public void queryWxToken(){
         accessTokenService.initWxToken();
     }
+
+    /**
+     * 初始化微信配置信息
+     */
+    public void initWxConfig(){
+        accessTokenService.initWxToken();
+    }
 }
