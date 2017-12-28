@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：员工管理对象
+ * 描述：置业顾问对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-25 13:44:39
+ * @date 2017-12-28 16:19:58
  */
 public class EmployeeManage implements java.io.Serializable {
 
@@ -24,6 +24,9 @@ public class EmployeeManage implements java.io.Serializable {
 	/**入职时间*/
 	@NotEmpty
 	private Date emEntryTime;
+	/**0代表为置业顾问，1代表管理员*/
+	@NotEmpty
+	private Integer emType;
 	/**所属团队*/
 	@NotEmpty
 	private Long emTeam;
@@ -98,6 +101,13 @@ public class EmployeeManage implements java.io.Serializable {
 
 	public Date getEmEntryTime() {
 		return this.emEntryTime;
+	}
+	public void setEmType(Integer value) {
+		this.emType = value;
+	}
+
+	public Integer getEmType() {
+		return this.emType;
 	}
 	public void setEmTeam(Long value) {
 		this.emTeam = value;

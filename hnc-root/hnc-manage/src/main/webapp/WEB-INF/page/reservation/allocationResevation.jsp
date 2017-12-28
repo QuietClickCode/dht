@@ -156,7 +156,7 @@
             undefinedText:"",
             treeId:"tid",
             treeField:"propotionName",
-            treePid:"emTeam",                         //上级菜单关联id
+            treePid:"parentId",                         //上级菜单关联id
             treeRootLevel: 1,
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
