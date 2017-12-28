@@ -175,5 +175,19 @@ public class GoodsServiceImpl implements GoodsService {
 	public List<Goods> queryGoodsByIds(List<Long> gIds) {
 		return goodsMapper.queryGoodsByGids(gIds);
 	}
+
+	public List<GoodsVo> queryTodayGoods(int pageNo,int pageSize) {
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		List<GoodsVo> list = goodsMapper.queryTodayGoods(page);
+		if(ObjectUtils.isNotEmpty(list)){
+			for(GoodsVo goodsVo:list){
+				goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+			}
+
+		}
+		return list;
+	}
 }
 

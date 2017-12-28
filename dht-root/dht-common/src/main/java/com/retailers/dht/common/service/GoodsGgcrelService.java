@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.GoodsComplimentaryVo;
 import com.retailers.dht.common.vo.GoodsGgcrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgcrel;
@@ -67,6 +68,8 @@ public interface GoodsGgcrelService {
 	public List<GoodsGgcrelVo> queryGclassGoodsGgcrelLists(Long gid);
 
 	public boolean deleteGclassGoodsGgcrelByGgcId(String gcIds,Long gid);
+
+	public List<GoodsComplimentaryVo> queryAllGoodsGgcrelLists(Long gid);
 
 	public List<GoodsGgcrelVo> querydeletedgclass(Long gid);
 }

@@ -66,6 +66,7 @@ public interface GoodsMapper {
 
 	public List<GoodsVo> querySamegclassGoods(Pagination<GoodsVo> pagination);
 
+	public List<GoodsVo> queryTodayGoods(Pagination<GoodsVo> pagination);
 	/**
 	 * 取得商品列表
 	 * @param gt 商品类型
@@ -83,4 +84,5 @@ public interface GoodsMapper {
 	 * @return
 	 */
 	public int sellGoods(@Param("infos")List<Map<String,Long>> infos);
+
 }

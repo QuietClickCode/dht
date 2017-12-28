@@ -309,6 +309,14 @@
                                                                 <input id="gprice" name="gprice" type="text" class="form-control" placeholder="单位：元"/>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-6" style="height:49px;">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            利润率:
+                                                          </span>
+                                                                <input id="grate" name="grate" type="text" class="form-control" placeholder="例如提25%,请填写0.25" value="0.25"/>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-6" style="height:49px;" style="height: 49px">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
@@ -564,14 +572,14 @@
                                                             </div>
                                                         </div>
 
-                                                        <div class="col-lg-6" style="height:49px;" id="gdepositdiv">
-                                                            <div class="input-group form-group">
-                                                          <span class="input-group-addon">
-                                                            定金:
-                                                          </span>
-                                                                <input id="gdeposit" name="gdeposit" type="text" class="form-control"/>
-                                                            </div>
-                                                        </div>
+                                                        <%--<div class="col-lg-6" style="height:49px;" id="gdepositdiv">--%>
+                                                            <%--<div class="input-group form-group">--%>
+                                                          <%--<span class="input-group-addon">--%>
+                                                            <%--定金:--%>
+                                                          <%--</span>--%>
+                                                                <%--<input id="gdeposit" name="gdeposit" type="text" class="form-control"/>--%>
+                                                            <%--</div>--%>
+                                                        <%--</div>--%>
                                                     </div>
                                                 </form>
 
@@ -1048,6 +1056,7 @@
             formData["gdescription"]=UE.getEditor('editor').getContent();
             formData["garea"]=1;
             formData["gprice"] = parseInt(formData["gprice"]*100);
+            formData["grate"] = parseInt(formData["grate"]*100);
             let url="/goods/addGoods";
             if(editorGoodsType==1){
                 url="/goods/editGoods";
@@ -1114,8 +1123,8 @@
                             },
                             stringLength: {
                                 min: 2,
-                                max: 25,
-                                message: '商品名称长度在4-30之间'
+                                max: 100,
+                                message: '商品名称长度在4-100之间'
                             }
                         }
                     },
@@ -1143,7 +1152,19 @@
                             },
                             regexp:{
                                 regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
-                                message:'优惠金额只允许在10位整数和2位小数范围内'
+                                message:'商品价格只允许在10位整数和2位小数范围内'
+                            }
+                        }
+                    },
+                    grate: {
+                        message: '商品利润率为空',
+                        validators: {
+                        notEmpty: {
+                            message: '商品利润率不能为空'
+                        },
+                        regexp:{
+                            regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                                message:'商品利润率只允许在10位整数和2位小数范围内'
                             }
                         }
                     }
@@ -1261,6 +1282,7 @@
         $("#gareaName").val('');
 //        $("#gsalescope").val('');
         $("#gprice").val('');
+        $("#grate").val('');
         $("#gunitname").val('');
         $("#gproductioninaddress").val('');
         $("#gproductioninperson").val('');
@@ -1277,7 +1299,7 @@
         $("#gendbuy").val('');
 //        $("#gsalesvolume").val('');
         $("#gedt").val('');
-        $("#gdeposit").val('');
+//        $("#gdeposit").val('');
 
         $("#isServicegoods").val('');
         $("#isServicegoods").bootstrapSwitch("state",false);
@@ -1330,6 +1352,7 @@
             $("#gareaName").val(rowData.gareaName);
 //            $("#gsalescope").val(rowData.gsalescope);
             $("#gprice").val(parseFloat(rowData.gprice/100).toFixed(2));
+            $("#grate").val(parseFloat(rowData.grate/100).toFixed(2));
             $("#gunitname").val(rowData.gunitname);
             $("#gproductioninaddress").val(rowData.gproductioninaddress);
             $("#gproductioninperson").val(rowData.gproductioninperson);
@@ -1520,13 +1543,13 @@
             if(flag){
                 $('#allowsettimediv').hide();
                 $('#isadvancesalediv').hide();
-                $('#gdepositdiv').show();
+//                $('#gdepositdiv').show();
                 $('#maincomtrayside').attr('checked','checked');
 //                $('#iscoddiv').hide();
             }else{
                 $('#allowsettimediv').show();
                 $('#isadvancesalediv').show();
-                $('#gdepositdiv').hide();
+//                $('#gdepositdiv').hide();
 //                $('#iscoddiv').show();
             }
         });
@@ -1592,7 +1615,7 @@
 //                    formData["isCod"]=0;
 //                }
 
-                formData["gdeposit"]='';
+//                formData["gdeposit"]='';
 
             }
 
@@ -1677,7 +1700,7 @@
                     $("#gendbuy").val('');
 //                    $("#gsalesvolume").val('');
                     $("#gedt").val('');
-                    $("#gdeposit").val('');
+//                    $("#gdeposit").val('');
 
                     $("#gfreight").val('');
                     $("#gfreight").bootstrapSwitch("state",true);
@@ -1713,7 +1736,7 @@
                     $("#gendbuy").val(goodsConfig.gendbuy);
 //                    $("#gsalesvolume").val(goodsConfig.gsalesvolume);
                     $("#gedt").val(goodsConfig.gedt);
-                    $("#gdeposit").val(goodsConfig.gdeposit);
+//                    $("#gdeposit").val(goodsConfig.gdeposit);
                     $('#configversion').val(goodsConfig.version);
 
                     var flag;
@@ -1725,12 +1748,12 @@
                         $('#allowsettimediv').hide();
                         $('#isadvancesalediv').hide();
                         $('#gfreightdiv').hide();
-                        $('#gdepositdiv').show();
+//                        $('#gdepositdiv').show();
                     }else{
                         $('#allowsettimediv').show();
                         $('#isadvancesalediv').show();
                         $('#gfreightdiv').show();
-                        $('#gdepositdiv').hide();
+//                        $('#gdepositdiv').hide();
                     }
                     $("#isServicegoods").bootstrapSwitch("state",flag);
 
@@ -2081,7 +2104,7 @@
                             html += '<td> <input value="'+hasgsvalid[j]+'" type="hidden" /> '+hasgsval[j]+' </td>';
                         }
                         html += '<td> <input value="'+ parseFloat(rows[i].gdPrice/100).toFixed(2)+'" class="form-control" placeholder="售价" type="text" /> </td>'+
-                            '<td> <input value="'+parseFloat(rows[i].gdCostprice/100).toFixed(2)+'" class="form-control" placeholder="成本" type="text" /> </td>'+
+                            '<td> <input value="'+parseFloat(rows[i].gdCostprice/100).toFixed(2)+'" class="form-control" placeholder="成本" type="text" onblur="outsaleprice(this);"/> </td>'+
                             '<td> <input value="'+rows[i].gdInventory+'" class="form-control" placeholder="库存" disabled="disabled" type="text" /> </td>'+
                             '<td> <input value="'+rows[i].gdResidueinventory+'" class="form-control" placeholder="剩余库存" disabled="disabled" type="text" /> </td>'+
                             '<td>'+
@@ -2534,6 +2557,13 @@
     function clearggsdatas() {
         $('#goodsSpecificatiodiv').html('');
         $('#gstabel').html('');
+    }
+
+    function outsaleprice(obj) {
+        var rate = $('#grate').val();
+        var cost = $(obj).val();
+        var saleprice = (Number(rate)+1) * Number(cost);
+        $(obj).parent().prev().find('input[type=text]').val(saleprice.toFixed(2));
     }
 </script>
 
@@ -3643,6 +3673,35 @@
                 }
             }
         });
+        $.ajax({
+            type:"post",
+            url:"/goods/queryAllGoodsGgcrelLists",
+            dataType: "json",
+            data:{gid:gid},
+            success:function(data){
+                var rows = data.rows;
+                var html = '';
+                if(rows!=null && rows.length>0){
+                    for(var i=0; i<rows.length; i++){
+                        html   =  '<tr>'+
+                            '<td>'+
+                            '<div class="checkbox checkbox-info">'+
+                            '<input id="xcheckboxz'+i+'" name="gclassggcomplimentaryrelcheckbox" class="styled" type="checkbox" value="'+rows[i].gcId+'">'+
+                            '<label for="xcheckboxz'+i+'">'+
+                            '</label>'+
+                            '</div>'+
+                            '</td>'+
+                            '<td style="text-align: center;display:table-cell; vertical-align:bottom;">'+
+                            '<span style="line-height: 100%"> <span style="color:red">(所有商品有效)</span> '+rows[i].gcName+'</span>'+
+                            '</td>'+
+                            '</tr>';
+                        $('#mygcomplimentaryrelTbody').prepend(html);
+                    }
+                }
+            }
+        });
+
+
     }
 
     function searchgcs() {

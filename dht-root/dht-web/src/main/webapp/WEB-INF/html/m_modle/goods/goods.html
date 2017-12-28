@@ -45,16 +45,27 @@
 		    <p class="p1" style="position: relative;"><span id="servicespan" class="span_tip" style="display: none">预订服务</span><span id="gname"></span><span id="isMenberdiscount" class="span_tip" style="display: none">会员不折扣商品</span></p>
 		    <p class="p2"><span id="gdprice" style="font-size: .3rem"></span><s><span class="mr_4" id="gprice"></span></s></p>
 		</div>
-		<div class="norms" id="" style="margin-bottom: 0;">
+		<div class="norms"  style="margin-bottom: 0;display: none">
             <span class="name">优惠</span>
             <span class="checkbox"></span>
         </div>
-        <ul class="norms_son" id="counponul">
+        <ul class="norms_son" id="counponul" style="display: none;">
         	<!--<li>-->
         		<!--<span class="span1">促销</span>-->
         		<!--<span class="span2">满200减90</span>-->
         	<!--</li>-->
         </ul>
+        <div class="norms"  style="margin-bottom: 0;display: none">
+            <span class="name">赠品</span>
+            <span class="checkbox"></span>
+        </div>
+        <ul class="norms_son" id="zpul" style="display: none">
+            <!--<li>-->
+            <!--<span class="span1">促销</span>-->
+            <!--<span class="span2">满200减90</span>-->
+            <!--</li>-->
+        </ul>
+
         <ul class="norms_son2" id="personaddressul" style="display: none">
         	<li>
         		<span class="span1">商家</span>
@@ -1116,9 +1127,85 @@
                                 '</li>';
                            $('#counponul').append(html);
                         }
+                        $('#counponul').show();
+                        $('#counponul').prev().show();
                     }else{
-                        $('#counponul').hide();
-                        $('#counponul').prev().hide();
+
+                    }
+                }
+            });
+        }
+        <!--加载赠品-->
+        function loadzp() {
+            var index = 1;
+            $.ajax({
+                type:"post",
+                url:'/goodsGgcrel/queryGoodsGgcrelLists',
+                dataType: "json",
+                async :false,
+                data:{gid:gid,pageNo:1,pageSize:1000},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<span class="span1">赠品'+index+'</span>'+
+                                '<span class="span2">'+rows[i].gname+'</span>'+
+                                '</li>';
+                            $('#zpul').append(html);
+                            index++;
+                        }
+                        $('#zpul').show();
+                        $('#zpul').prev().show();
+                    }
+                }
+            });
+
+            $.ajax({
+                type:"post",
+                url:'/goodsGgcrel/queryGclassGoodsGgcrelLists',
+                dataType: "json",
+                async :false,
+                data:{gid:gid},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<span class="span1">赠品'+index+'</span>'+
+                                '<span class="span2">'+rows[i].gname+'</span>'+
+                                '</li>';
+                            $('#zpul').append(html);
+                            index++;
+                        }
+                        $('#zpul').show();
+                        $('#zpul').prev().show();
+                    }
+                }
+            });
+
+            $.ajax({
+                type:"post",
+                url:'/goodsGgcrel/queryAllGoodsGgcrelLists',
+                dataType: "json",
+                async :false,
+                data:{gid:gid},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<span class="span1">赠品'+index+'</span>'+
+                                '<span class="span2">'+rows[i].gname+'</span>'+
+                                '</li>';
+                            $('#zpul').append(html);
+                            index++;
+                        }
+                        $('#zpul').show();
+                        $('#zpul').prev().show();
                     }
                 }
             });
@@ -1232,6 +1319,9 @@
 
         <!--加载商品优惠-->
         loadcoupon();
+
+        <!--加载赠品-->
+        loadzp();
 
         <!--加载配置信息-->
         loadgoodsconfig();

@@ -74,7 +74,30 @@
                 <a href="" class="more">更多</a>
             </div>
         </div>
+        <!-- 今日新品 -->
+        <div class="index-title" onclick="gotonewgoodspage()">
+            <span>今日新品</span>
+            <a  class="more">全部<i class="icon-more"></i></a>
+        </div>
 
+        <ul class="seckill box2" id="newgoodsul">
+            <!--<li>-->
+            <!--<a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>-->
+            <!--<div class="text-box">-->
+            <!--<a href="" class="title overflow">皱皮百香果</a>-->
+            <!--<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>-->
+            <!--<div class="price">-->
+            <!--<span>￥6.5/斤</span>-->
+            <!--<s>￥16.5/斤</s>-->
+            <!--</div>-->
+            <!--<div class="purchase">-->
+            <!--<a href="">马上抢购</a>-->
+            <!--<span>剩余20斤</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</li>-->
+
+        </ul>
         <!-- banner -->
         <div id="banner2" class="focus">
         <div class="hd">
@@ -166,6 +189,32 @@
         </ul>
         <img id="nospecialpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
 
+        <!-- 全民砍价 -->
+        <div class="index-title" onclick="gotosecspepage(2)">
+            <span>全民砍价</span>
+            <a  class="more">全部<i class="icon-more"></i></a>
+        </div>
+
+        <ul class="seckill box2" id="cpul">
+            <!--<li>-->
+            <!--<a href="" class="img"><img data-original="img/list1.jpg" alt=""></a>-->
+            <!--<div class="text-box">-->
+            <!--<a href="" class="title overflow">皱皮百香果</a>-->
+            <!--<p class="overflow">原生态采摘皱皮才好吃 现摘百...</p>-->
+            <!--<div class="price">-->
+            <!--<span>￥6.5/斤</span>-->
+            <!--<s>￥16.5/斤</s>-->
+            <!--</div>-->
+            <!--<div class="purchase">-->
+            <!--<a href="">马上抢购</a>-->
+            <!--<span>剩余20斤</span>-->
+            <!--</div>-->
+            <!--</div>-->
+            <!--</li>-->
+
+        </ul>
+        <img id="nocpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
+
         <!-- 可能喜欢 -->
         <div class="like">
             <div class="cont">
@@ -192,6 +241,84 @@
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
     <script src="/js/footer.js"></script>
+    <!--时间减少-->
+    <script>
+        var timestape = 0;
+        function timegoing() {
+            var date = new Date(timestape);
+            var interval = setInterval(function () {
+                var hours = Math.floor(timestape/3600000);
+
+                var shi1 = Math.floor((hours)/10%10);
+                var shi2 = Math.floor((hours)%10);
+                var fen1 = Math.floor(date.getMinutes()/10);
+                var fen2 = Math.floor(date.getMinutes()%10);
+                var miao1 = Math.floor(date.getSeconds()/10);
+                var miao2 = Math.floor(date.getSeconds()%10);
+
+                $('#shi1').html(shi1);
+                $('#shi2').html(shi2);
+                $('#fen1').html(fen1);
+                $('#fen2').html(fen2);
+                $('#miao1').html(miao1);
+                $('#miao2').html(miao2);
+
+                date.setTime(date.getTime()-1000);
+                timestape -= 1000;
+                if(timestape<0){
+                    clearInterval(interval);
+                    window.location.reload();
+                }
+            },1000);
+        }
+
+    </script>
+    <script src="/js/TouchSlide.1.1.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            <!--图片懒加载-->
+            $("img").lazyload({effect: "fadeIn"});
+        });
+
+        function topbanner() {
+            TouchSlide({
+                slideCell: "#banner",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+        function midbanner() {
+            TouchSlide({
+                slideCell: "#banner2",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+        function bottombanner() {
+            TouchSlide({
+                slideCell: "#banner3",
+                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+                mainCell: ".bd ul",
+                effect: "left",
+                autoPlay: true, //自动播放
+                autoPage: true, //自动分页
+                switchLoad: "_src" //切换加载，真实图片路径为"_src"
+            });
+        }
+
+
+    </script>
+    <script src="/js/layer/layer.js"></script>
     <script>
         var curFooter="#footer_home";
     </script>
@@ -570,90 +697,139 @@
             });
         }
 
+
+        <!--加载砍价-->
+        loadcp();
+        <!--加载砍价-->
+        function loadcp() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPrice/queryCutPriceGoodsList',
+                dataType: "json",
+                async:false,
+                data:{pageNo:1,pageSize:2,spRegion:1},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        $('#cpul').html('');
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>' +
+                                '                        <a href="/bargainp/'+rows[i].gid+'.html" class="img">' +
+                                '                            <img src="'+rows[i].imgurl+'" alt="">' +
+                                '                        </a>' +
+                                '                        <div class="text-box">' +
+                                '                            <a href="/bargainp/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>' +
+                                '                            <p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>' +
+                                '                            <div class="special-prompt">' +
+                                '                                <span>砍价低至￥'+parseFloat(rows[i].minCpSale/100).toFixed(2) +'</span>' +
+                                '                            </div>' +
+                                '                            <div class="special-price">' +
+                                '                                <span>￥'+ parseFloat(rows[i].minprice/100).toFixed(2)+'</span>' +
+                                '                                <a href="/bargainp/'+rows[i].gid+'.html">我要砍价</a>' +
+                                '                            </div>' +
+                                '                        </div>' +
+                                '                    </li>';
+                            $('#cpul').append(html);
+                        }
+                    }else{
+                        loadNextcp();
+                    }
+                }
+            });
+        }
+
+        function loadNextcp() {
+            $.ajax({
+                type:"post",
+                url:'/openCutPrice/queryNextCutPriceGoodsList',
+                dataType: "json",
+                async:false,
+                data:{pageNo:1,pageSize:2,spRegion:1},
+                success:function(data){
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        var html = '';
+                        $('#cpul').html('');
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>' +
+                                '                        <a  class="img">' +
+                                '                            <img src="'+rows[i].imgurl+'" alt="">' +
+                                '                        </a>' +
+                                '                        <div class="text-box">' +
+                                '                            <a  class="title overflow">'+rows[i].gname+'</a>' +
+                                '                            <p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>' +
+                                '                            <div class="special-prompt">' +
+                                '                                <span>砍价低至￥'+rows[i].minCpSale+'</span>' +
+                                '                            </div>' +
+                                '                            <div class="special-price">' +
+                                '                                <span>￥'+rows[i].minprice+'</span>' +
+                                '                                <a style="background: #999">我要砍价</a>' +
+                                '                            </div>' +
+                                '                        </div>' +
+                                '                    </li>';
+                            $('#cpul').append(html);
+                        }
+                        pageNo++;
+                        cpflag = true;
+                    }else{
+                        $('#nocpimg').show();
+                    }
+                }
+            });
+        }
+
+
+
+        <!--加载今日新品-->
+        loadTodayGoods();
+        function loadTodayGoods() {
+            $.ajax({
+                type:"post",
+                url:'/goods/queryTodayGoods',
+                dataType: "json",
+                data:{pageNo:1,pageSize:2},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        for(var i=0;i<rows.length;i++){
+                            var minprice = rows[i].minprice;
+                            var maxprice = rows[i].maxprice;
+                            html = '<li>'+
+                                '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                                '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            html += '<span>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'/'+rows[i].gunitname+'</span>';
+                            html += '</div>'+
+                                '<div class="purchase">'+
+                                '<a href="/goods/'+rows[i].gid+'.html">马上抢购</a>'+
+                                '<span>剩余'+rows[i].gcount+rows[i].gunitname+'</span>'+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#newgoodsul').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        $('#newgoodsul').hide();
+                        $('#newgoodsul').prev().hide();
+                    }
+                }
+            });
+        }
+
         function gotosecspepage(num) {
             window.location.href='/secspep/'+num+'.special';
         }
 
+        function gotonewgoodspage() {
+            window.location.href='/goods/gotonewgoodspage';
+        }
     </script>
 
-    <!--时间减少-->
-    <script>
-        var timestape = 0;
-        function timegoing() {
-            var date = new Date(timestape);
-            var interval = setInterval(function () {
-                var shi1 = Math.floor((date.getHours()-8)/10);
-                var shi2 = Math.floor((date.getHours()-8)%10);
-                var fen1 = Math.floor(date.getMinutes()/10);
-                var fen2 = Math.floor(date.getMinutes()%10);
-                var miao1 = Math.floor(date.getSeconds()/10);
-                var miao2 = Math.floor(date.getSeconds()%10);
-
-                $('#shi1').html(shi1);
-                $('#shi2').html(shi2);
-                $('#fen1').html(fen1);
-                $('#fen2').html(fen2);
-                $('#miao1').html(miao1);
-                $('#miao2').html(miao2);
-
-                date.setTime(date.getTime()-1000);
-                timestape -= 1000;
-                if(timestape<0){
-                    clearInterval(interval);
-                window.location.reload();
-                }
-            },1000);
-        }
-
-    </script>
-
-    <script src="/js/TouchSlide.1.1.js"></script>
-
-    <script type="text/javascript">
-        $(function () {
-            <!--图片懒加载-->
-            $("img").lazyload({effect: "fadeIn"});
-        });
-
-        function topbanner() {
-            TouchSlide({
-                slideCell: "#banner",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
-            });
-        }
-
-        function midbanner() {
-            TouchSlide({
-                slideCell: "#banner2",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
-            });
-        }
-
-        function bottombanner() {
-            TouchSlide({
-                slideCell: "#banner3",
-                titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-                mainCell: ".bd ul",
-                effect: "left",
-                autoPlay: true, //自动播放
-                autoPage: true, //自动分页
-                switchLoad: "_src" //切换加载，真实图片路径为"_src"
-            });
-        }
-
-
-    </script>
-    <script src="/js/layer/layer.js"></script>
     <!--猜你喜欢-->
     <script>
         var pageNo=1;
