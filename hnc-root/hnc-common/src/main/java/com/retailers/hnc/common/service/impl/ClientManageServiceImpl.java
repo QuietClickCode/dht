@@ -47,5 +47,13 @@ public class ClientManageServiceImpl implements ClientManageService {
 		clientManage.setIsDelete(1);
 		return updateClientManage(clientManage);
 	}
+
+	public Integer queryCurClientCount() {
+		return clientManageMapper.queryCurClientCount();
+	}
+
+	public Integer queryClientCount() {
+		return clientManageMapper.queryClientCount();
+	}
 }
 

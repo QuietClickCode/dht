@@ -55,6 +55,22 @@ public interface ClientManageService {
 	 */
 	public boolean deleteClientManageByTmId(Long tmId);
 
+	/**
+	 * 查询当天登记过的客户
+	 * @return  返回当天登记过客户的总数
+	 * @author wangjue
+	 * @date 2017-12-26 13:47:05
+	 */
+	public Integer queryCurClientCount();
+
+	/**
+	 * 查询所有登记过的客户
+	 * @return  返回所有登记过客户的总数
+	 * @author wangjue
+	 * @date 2017-12-26 13:47:05
+	 */
+	public Integer queryClientCount();
+
 }
 
 

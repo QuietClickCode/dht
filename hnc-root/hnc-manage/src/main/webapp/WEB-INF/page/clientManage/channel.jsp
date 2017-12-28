@@ -20,8 +20,8 @@
 </head>
 <div>
     <div id="toolbar" class="form-inline">
-        <button class="btn btn-default saveTeam" type="button">新增团队</button>
-        <input type="text" class="form-control tname"  placeholder="请输入团队名称">
+        <button class="btn btn-default addChannel" type="button">新增来访渠道</button>
+        <input type="text" class="form-control channelVal"  placeholder="请输入来访渠道">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>
 </div>
@@ -32,7 +32,7 @@
 
 
 <%--新增团队--%>
-<div class="modal fade" id="saveTeamModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="saveChannel" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -40,7 +40,7 @@
                 <h4 class="modal-title">增加来访渠道</h4>
             </div>
             <div class="modal-body">
-                <form id="saveTeamForm">
+                <form id="saveChannelForm">
                     <div class="form-group">
                         <label>来访渠道</label>
                         <input type="text" class="form-control" name="cchannel" placeholder="请输入来访渠道">
@@ -54,14 +54,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary subSaveTeam">确定</button>
+                <button type="button" class="btn btn-primary subSaveChannel">确定</button>
             </div>
         </div>
     </div>
 </div>
 
 <%--编辑团队--%>
-<div class="modal fade" id="editTeamModal" tabindex="-1" role="dialog">
+<div class="modal fade" id="editChannel" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -69,7 +69,7 @@
                 <h4 class="modal-title">Modal title</h4>
             </div>
             <div class="modal-body">
-                <form id="editTeamForm">
+                <form id="editChannelForm">
                     <div class="form-group" style="display: none;">
                         <label>CID</label>
                         <input type="text" class="form-control" name="cid">
@@ -79,10 +79,10 @@
                         <label>是否显示</label>
                         <div>
                             <label class="radio-inline">
-                                <input type="radio" name="isShow" value="1"> 显示
+                                <input type="radio" class="isShow" name="isShow" value="1"> 显示
                             </label>
                             <label class="radio-inline">
-                                <input type="radio" name="isShow" value="0"> 隐藏
+                                <input type="radio" class="isShow" name="isShow" value="0"> 隐藏
                             </label>
                         </div>
                     </div>
@@ -100,7 +100,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary subEditTeam">确定</button>
+                <button type="button" class="btn btn-primary subEditChannel">确定</button>
             </div>
         </div>
     </div>
@@ -108,7 +108,7 @@
 
 
 <%--删除团队模态框--%>
-<div class="modal fade" id="deleteTeamModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="deleteChannel" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -120,7 +120,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary subDeleteThisTeam">确定</button>
+                <button type="button" class="btn btn-primary subDeleteThisChannel">确定</button>
             </div>
         </div>
     </div>
@@ -133,6 +133,7 @@
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<script type="text/javascript" src="/js/layer/layer.js"></script>
 
 <%--初始化表格数据--%>
 <script type="text/javascript">
@@ -165,7 +166,16 @@
             field: 'isShow',
             title: '是否显示',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                let html='';
+                if(row.isShow == 1){
+                    return "显示"
+                }else if(row.isShow == 0){
+                    return "隐藏";
+                }
+                return html;
+            }
         },
         {
             align : 'center',
@@ -175,7 +185,7 @@
                 rowDatas.set(''+row.cid+'',row);
                 let html='';
                 <ex:perm url="floorManage/updateFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();editTeam(\'' + row.tid + '\')">编辑</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();editChannel(\'' + row.cid + '\')">编辑</button>'
                 </ex:perm>
                 return html;
             }
@@ -187,7 +197,7 @@
             formatter:function (value,row,index) {
                 let html='';
                 <ex:perm url="floorManage/removeFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();removeTeam(\'' + row.tid + '\')">删除</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();removeChannel(\'' + row.cid + '\')">删除</button>'
                 </ex:perm>
                 return html;
             }
@@ -195,14 +205,14 @@
     ]
 
     $(function () {
-        createTable("/channel/queryChannelList","goodsTypeTables","tid",treeColumns,queryParams)
+        createTable("/channel/queryChannelList","goodsTypeTables","cid",treeColumns,queryParams)
     });
     /**
      * 查询条件
      **/
     function queryParams(that){
         return {
-            name: $(".tname").val(),
+            channelVal:$(".channelVal").val(),
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
         };
@@ -214,34 +224,34 @@
         $('#goodsTypeTables').bootstrapTable(
             "refresh",
             {
-                url:"/team/queryTeamList"
+                url:"/channel/queryChannelList"
             }
         );
     }
 
 </script>
 
-<%--新增团队--%>
+<%--新增来访渠道--%>
 <script>
     var isSave = false;
-    /*打开添加团队模态框*/
-    $(".saveTeam").click(function () {
-        $("#saveTeamModal").modal("show");
+    $(".addChannel").click(function () {
+        $("#saveChannel").modal("show");
     });
 
-    /*提交新建团队*/
-    $(".subSaveTeam").click(function () {
-        let bootstrapValidator = $("#saveTeamForm").data('bootstrapValidator');
+    $(".subSaveChannel").click(function () {
+        let bootstrapValidator = $("#saveChannelForm").data('bootstrapValidator');
         bootstrapValidator.validate();
         if(!bootstrapValidator.isValid())
             return;
+
         if(!isSave){
             isSave = true;
-            var floor = document.getElementById("saveTeamForm");
+            var floor = document.getElementById("saveChannelForm");
             var data = new FormData(floor);
             data.append("isDelete", 0);
+            data.append("isShow", 1);
             $.ajax({
-                url:"/team/addTeam",
+                url:"/channel/addChannel",
                 method:"post",
                 data:data,
                 processData : false,
@@ -249,41 +259,40 @@
                 success:function (data) {
                     isSave = false;
                     refreshTableData();
-                    $("#saveTeamModal").modal("hide");
-                    $("#saveTeamForm").data('bootstrapValidator').resetForm(true);
+                    /*layer.msg(data.msg,{time:'1000'});*/
+                    $("#saveChannel").modal("hide");
+                    $("#saveChannelForm").data('bootstrapValidator').resetForm(true);
                 }
             });
         }
     });
 </script>
 
-
+<%--编辑来访渠道--%>
 <script>
-    var team;
-    /*打开编辑团队模态框*/
-    function editTeam(id) {
-        team = rowDatas.get(id);
-        $("#editTeamForm input[type='text']").each(function () {
+    var channel;
+    function editChannel(id) {
+        channel = rowDatas.get(id);
+
+        $("#editChannelForm input[type='text']").each(function () {
             let name = $(this).attr("name");
-            $(this).val(team[name]);
+            $(this).val(channel[name]);
         });
-        $("#editTeamModal").modal("show");
+        radioChoose(".isShow",channel['isShow']);
+        $("#editChannel").modal("show");
     }
 
-    /*提交修改*/
-    $(".subEditTeam").click(function () {
-        let bootstrapValidator = $("#editTeamForm").data('bootstrapValidator');
+    $(".subEditChannel").click(function () {
+        let bootstrapValidator = $("#editChannelForm").data('bootstrapValidator');
         bootstrapValidator.validate();
         if(!bootstrapValidator.isValid())
             return;
-
         if(!isSave){
             isSave = true;
-            var floor = document.getElementById("editTeamForm");
+            var floor = document.getElementById("editChannelForm");
             var data = new FormData(floor);
-            data.append("isDelete", 0);
             $.ajax({
-                url:"/team/updateTeam",
+                url:"/channel/updateChannel",
                 method:"post",
                 data:data,
                 processData : false,
@@ -291,8 +300,8 @@
                 success:function (data) {
                     isSave = false;
                     refreshTableData();
-                    $("#editTeamModal").modal("hide");
-                    $("#editTeamForm").data('bootstrapValidator').resetForm(true);
+                    $("#editChannel").modal("hide");
+                    $("#editChannelForm").data('bootstrapValidator').resetForm(true);
                 }
             });
         }
@@ -302,32 +311,43 @@
 
 <%--删除团队--%>
 <script>
+    /*打开是删除团队模态框*/
+    function removeChannel(id) {
+        channel = rowDatas.get(id);
+        $("#deleteChannel").modal("show");
+    }
+
     /*提交删除*/
-    $(".subDeleteThisTeam").click(function () {
+    $(".subDeleteThisChannel").click(function () {
         $.ajax({
-            url:"/team/removeTeam",
+            url:"/channel/removeChannel",
             method:"post",
             data:{
-                tid:team['tid']
+                cid:channel['cid']
             },
             success:function (data) {
                 isSave = false;
                 refreshTableData();
-                $("#deleteTeamModal").modal("hide");
+                $("#deleteChannel").modal("hide");
             }
         });
     });
+</script>
 
-    /*打开是删除团队模态框*/
-    function removeTeam(id) {
-        team = rowDatas.get(id);
-        $("#deleteTeamModal").modal("show");
+<%--自定义方法--%>
+<script>
+    /*为单选框赋值*/
+    function radioChoose(className,num) {
+        for(let i = 0;i<$(className).length;i++){
+            if($(className).eq(i).val() == num)
+                $(className)[i].checked = 'checked';
+        }
     }
 </script>
 
 <%--表单校验--%>
 <script type="text/javascript">
-    $('#saveTeamForm').bootstrapValidator({
+    $('#saveChannelForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -335,21 +355,14 @@
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            tname: {
+            cchannel: {
                 validators: {
                     notEmpty: {
-                        message: '团队名称不能为空'
+                        message: '来访渠道不能为空'
                     }
                 }
             },
-            tcompany: {
-                validators: {
-                    notEmpty: {
-                        message: '公司名称不能为空'
-                    }
-                }
-            },
-            torder: {
+            corder: {
                 validators: {
                     notEmpty: {
                         message: '排序序号不能为空'
@@ -359,8 +372,7 @@
         }
     });
 
-
-    $('#editTeamForm').bootstrapValidator({
+    $('#editChannelForm').bootstrapValidator({
         message: 'This value is not valid',
         feedbackIcons: {
             valid: 'glyphicon glyphicon-ok',
@@ -368,21 +380,14 @@
             validating: 'glyphicon glyphicon-refresh'
         },
         fields: {
-            tname: {
+            cchannel: {
                 validators: {
                     notEmpty: {
-                        message: '团队名称不能为空'
+                        message: '来访渠道不能为空'
                     }
                 }
             },
-            tcompany: {
-                validators: {
-                    notEmpty: {
-                        message: '公司名称不能为空'
-                    }
-                }
-            },
-            torder: {
+            corder: {
                 validators: {
                     notEmpty: {
                         message: '排序序号不能为空'
@@ -391,6 +396,7 @@
             }
         }
     });
+
 </script>
 </body>
 </html>

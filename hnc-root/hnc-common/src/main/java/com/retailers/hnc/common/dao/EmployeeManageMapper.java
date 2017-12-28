@@ -1,6 +1,8 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.EmployeeManage;
+import com.retailers.hnc.common.vo.EmployeeManageVo;
 import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.List;
 /**
  * 描述：员工管理DAO
@@ -50,6 +52,22 @@ public interface EmployeeManageMapper {
 	 * @author wangjue
 	 * @date 2017-12-25 12:01:09
 	 */
-	public List<EmployeeManage> queryEmployeeManageList(Pagination<EmployeeManage> pagination);
+	public List<EmployeeManageVo> queryEmployeeManageList(Pagination<EmployeeManageVo> pagination);
+
+	/**
+	 * 查询当日登记的客户
+	 * @return  返回客户集合
+	 * @author wangjue
+	 * @date 2017-12-25 12:01:09
+	 */
+	public Integer queryCurRegisterClient(Long emId);
+
+	/**
+	 * 查询所有与该置业顾问绑定的客户
+	 * @return  返回客户集合
+	 * @author wangjue
+	 * @date 2017-12-25 12:01:09
+	 */
+	public Integer queryRegisterClient(Long emId);
 
 }

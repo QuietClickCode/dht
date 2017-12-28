@@ -2,6 +2,7 @@ package com.retailers.wx.common.dao;
 
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.wx.common.entity.WxManager;
+import com.retailers.wx.common.vo.WxManagerVo;
 
 import java.util.List;
 
@@ -59,5 +60,5 @@ public interface WxManagerMapper {
      * 取得当前使用的微信公众号
 	 * @return
      */
-	public WxManager queryCurUsedWx(String wxType);
+	public WxManagerVo queryCurUsedWx(String wxType);
 }

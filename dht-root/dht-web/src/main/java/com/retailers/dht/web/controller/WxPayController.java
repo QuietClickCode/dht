@@ -56,6 +56,8 @@ public class WxPayController extends BaseController{
     private PayService payService;
     @Autowired
     private UserService userService;
+
+
     @RequestMapping("payInfo")
     public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price,String type){
         ModelAndView model=new ModelAndView();

@@ -15,53 +15,43 @@ import java.util.Date;
 public class WxManager implements java.io.Serializable {
 
 	/**微信管理id*/
-	@NotEmpty
 	private Long wxId;
+	/**
+	 * 微信公众号图片地址
+	 */
+	private Long wxQrCode;
 	/**微信号*/
-	@NotEmpty
 	@Length(min = 1, max = 64)
 	private String wxName;
 	/**微信原始id*/
-	@NotEmpty
-	@Length(min = 1, max = 256)
+	@NotEmpty(message = "微信原始id不能为空")
+	@Length(min = 1, max = 128,message = "微信原始id长度在{min}-{max}之间")
 	private String wxOriginalId;
 	/**公众号类型*/
-	@NotEmpty
 	private String wxType;
 	/**公众号id（与app_secret 使用取得公众号token)*/
-	@NotEmpty
+	@NotEmpty(message = "公众号APPID不能为空")
 	@Length(min = 1, max = 64)
 	private String appId;
 	/**公众号秘钥（与app_id 使用取得公众号token)*/
-	@NotEmpty
-	@Length(min = 1, max = 64)
+	@NotEmpty(message = "公众号秘钥不能为空")
+	@Length(min = 1, max = 64,message = "公众号秘钥长度在{min}-{max}之间")
 	private String appSecret;
 	/**公众号权限域名*/
-	@NotEmpty
-	@Length(min = 1, max = 128)
 	private String wxDomainName;
 	/**回调地址*/
-	@NotEmpty
-	@Length(min = 1, max = 123)
 	private String wxDomainUrl;
 	/**微信token*/
-	@NotEmpty
-	@Length(min = 1, max = 255)
 	private String wxToken;
 	/**创建人*/
-	@NotEmpty
 	private Long createUid;
 	/**创建时间*/
-	@NotEmpty
 	private Date createTime;
 	/**是否删除（0 未删除，1 己删除）*/
-	@NotEmpty
 	private Integer isDelete;
 	/**是否有效（0 有效，1 失效）*/
-	@NotEmpty
 	private Integer isValid;
 	/**数据乐观锁*/
-	@NotEmpty
 	private Integer version;
 	//columns END
 
@@ -173,5 +163,11 @@ public class WxManager implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getWxQrCode() {
+		return wxQrCode;
+	}
 
+	public void setWxQrCode(Long wxQrCode) {
+		this.wxQrCode = wxQrCode;
+	}
 }

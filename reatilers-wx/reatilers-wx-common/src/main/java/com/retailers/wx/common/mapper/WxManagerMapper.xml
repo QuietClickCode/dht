@@ -4,6 +4,7 @@
 
 	<resultMap id="rm_wxManager" type="com.retailers.wx.common.entity.WxManager">
 			<result property="wxId" column="wx_id"/>
+			<result property="wxQrCode" column="wx_qr_code"/>
 			<result property="wxName" column="wx_name"/>
 			<result property="wxOriginalId" column="wx_original_id"/>
 			<result property="wxType" column="wx_type"/>
@@ -18,10 +19,27 @@
 			<result property="isValid" column="is_valid"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_wxManager_vo" type="com.retailers.wx.common.vo.WxManagerVo">
+		<result property="wxId" column="wx_id"/>
+		<result property="wxQrCode" column="wx_qr_code"/>
+		<result property="wxName" column="wx_name"/>
+		<result property="wxOriginalId" column="wx_original_id"/>
+		<result property="wxType" column="wx_type"/>
+		<result property="appId" column="app_id"/>
+		<result property="appSecret" column="app_secret"/>
+		<result property="wxDomainName" column="wx_domain_name"/>
+		<result property="wxDomainUrl" column="wx_domain_url"/>
+		<result property="wxToken" column="wx_token"/>
+		<result property="createUid" column="create_uid"/>
+		<result property="createTime" column="create_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="isValid" column="is_valid"/>
+		<result property="version" column="version"/>
+		<result property="wxQrCodeUrl" column="wxQrCodeUrl"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="wxManager_columns">
-		wx_id,wx_name,wx_original_id,wx_type,app_id,app_secret,wx_domain_name,wx_domain_url,wx_token,create_uid,create_time,is_delete,is_valid,version
+		wx_id,wx_qr_code,wx_name,wx_original_id,wx_type,app_id,app_secret,wx_domain_name,wx_domain_url,wx_token,create_uid,create_time,is_delete,is_valid,version
 	</sql>
 	<!-- 根据公众号管理主键取得数据 -->
 	<select id="queryWxManagerByWxId" resultMap="rm_wxManager" parameterType="java.lang.Long">
@@ -87,65 +105,61 @@
 	<!--添加公众号管理 -->
 	<insert id="saveWxManager" parameterType="com.retailers.wx.common.entity.WxManager" useGeneratedKeys="true" keyProperty="wxId">
 		INSERT INTO t_wx_manager (
-			wx_name,wx_original_id,wx_type,app_id,app_secret,wx_domain_name,wx_domain_url,wx_token,create_uid,create_time,is_delete,is_valid,version
+			wx_qr_code,wx_name,wx_original_id,wx_type,app_id,app_secret,wx_domain_name,wx_domain_url,wx_token,create_uid,create_time,is_delete,is_valid,version
 		) VALUES
 		(
-			#{wxName,jdbcType=VARCHAR},#{wxOriginalId,jdbcType=VARCHAR},#{wxType,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR},#{appSecret,jdbcType=VARCHAR},#{wxDomainName,jdbcType=VARCHAR},#{wxDomainUrl,jdbcType=VARCHAR},#{wxToken,jdbcType=VARCHAR},#{createUid,jdbcType=BIGINT},#{createTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},0
+			#{wxQrCode,jdbcType=VARCHAR},#{wxName,jdbcType=VARCHAR},#{wxOriginalId,jdbcType=VARCHAR},#{wxType,jdbcType=VARCHAR},#{appId,jdbcType=VARCHAR},
+			#{appSecret,jdbcType=VARCHAR},#{wxDomainName,jdbcType=VARCHAR},#{wxDomainUrl,jdbcType=VARCHAR},#{wxToken,jdbcType=VARCHAR},#{createUid,jdbcType=BIGINT},
+			#{createTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=INTEGER},#{isValid,jdbcType=INTEGER},
+			<if test="null != version">
+				#{version,jdbcType=INTEGER}
+			</if>
+			<if test="null == version">
+				0
+			</if>
+
 		)
 	</insert>
 	<!--修改公众号管理 -->
 	<update id="updateWxManager" parameterType="com.retailers.wx.common.entity.WxManager">
 		UPDATE t_wx_manager
-		<set>
-            <if test="null != wxName and '' != wxName">
+		SET
+				wx_qr_code = #{wxQrCode},
                 wx_name = #{wxName},
-            </if>
-            <if test="null != wxOriginalId and '' != wxOriginalId">
                 wx_original_id = #{wxOriginalId},
-            </if>
-            <if test="null != wxType and ''!=wxType">
                 wx_type = #{wxType},
-            </if>
-            <if test="null != appId and '' != appId">
                 app_id = #{appId},
-            </if>
-            <if test="null != appSecret and '' != appSecret">
                 app_secret = #{appSecret},
-            </if>
-            <if test="null != wxDomainName and '' != wxDomainName">
                 wx_domain_name = #{wxDomainName},
-            </if>
-            <if test="null != wxDomainUrl and '' != wxDomainUrl">
-                wx_domain_url = #{wxDomainUrl},
-            </if>
-            <if test="null != wxToken and '' != wxToken">
+				wx_domain_url = #{wxDomainUrl},
                 wx_token = #{wxToken},
-            </if>
-            <if test="null != createUid">
                 create_uid = #{createUid},
-            </if>
-            <if test="null != createTime">
                 create_time = #{createTime},
-            </if>
-            <if test="null != isDelete">
                 is_delete = #{isDelete},
-            </if>
-            <if test="null != isValid">
                 is_valid = #{isValid},
-            </if>
-            <if test="null != version">
-                version = version+1,
-            </if>
-		</set>
+                version = version+1
 		WHERE wx_id = #{wxId} and version = #{version}
 	</update>
 	<!--删除公众号管理 -->
-	<delete id="deleteWxManagerByWxId" parameterType="java.lang.Long">
-		DELETE FROM t_wx_manager WHERE wx_id = #{wxId}
-	</delete>
-
+	<update id="deleteWxManagerByWxId" parameterType="com.retailers.wx.common.entity.WxManager">
+		UPDATE t_wx_manager
+		set
+			wx_type=CONCAT(wx_type,'_',wx_id),
+			is_delete = 1,
+			is_valid = 1
+		WHERE wx_id = #{wxId}
+	</update>
 	<!-- 根据公众号管理主键取得数据 -->
-	<select id="queryCurUsedWx" resultMap="rm_wxManager">
-		SELECT * FROM t_wx_manager where is_delete =0 and is_valid=0 order by wx_id DESC LIMIT 1
+	<select id="queryCurUsedWx" resultMap="rm_wxManager_vo">
+		SELECT
+			w.*,a.show_url wxQrCodeUrl
+		FROM
+			t_wx_manager w LEFT JOIN t_attachment a on w.wx_qr_code=a.id
+		WHERE
+			is_delete = 0
+		AND is_valid = 0
+		ORDER BY
+			wx_id DESC
+		LIMIT 1
 	</select>
 </mapper>

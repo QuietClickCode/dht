@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.druid.sql.dialect.odps.ast.OdpsInsert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
@@ -240,17 +241,21 @@ public class OrderServiceImpl implements OrderService {
 				od.setOdMenberPrice(od.getOdActualPrice());
 				ods.add(od);
 			}
+			long gcPrice=0l;
             //商品优惠
             if(ObjectUtils.isNotEmpty(gcpMaps)){
-                boolean freeShipping = editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcLists"));
+                Map<String,Object> rtnMaps= editorGoodsCoupon(ods,gcpMaps,(Map<String,List<GoodsCouponView>>)couponInfos.get("gcLists"));
                 //判断商品优惠中是否存在包邮
-                if(freeShipping){
+                if(Boolean.valueOf(rtnMaps.get("isFreeShipping")+"")){
                     logisticsPrice=0l;
                 }
+				gcPrice=Long.valueOf(rtnMap.get("couponTotalPrice")+"");
             }
             //取得使用的优惠卷
             String couponIds=buyInfos.getCpIds();
             List<Long> cpuIds=new ArrayList<Long>();
+			//商品优惠金额
+			Long cpPrice=0l;
             //判断是否使用优惠卷
             if(ObjectUtils.isNotEmpty(couponIds)){
             	List<Long> cids=new ArrayList<Long>();
@@ -261,7 +266,12 @@ public class OrderServiceImpl implements OrderService {
             	if(ObjectUtils.isNotEmpty(couponInfos.get("userCoupons"))){
 					//用户拥有的优惠卷
 					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("userCoupons");
-					List<Long> used=editorUserCoupon(ods,cids,gidUnGtid,cwvs);
+					Map<Long,Long> maps=editorUserCoupon(ods,cids,gidUnGtid,cwvs);
+					List<Long> used=new ArrayList<Long>();
+					for(Long cid:maps.keySet()){
+						used.add(cid);
+						cpPrice+=maps.get(cid);
+					}
 					cpuIds.addAll(used);
 				}
             }
@@ -271,7 +281,7 @@ public class OrderServiceImpl implements OrderService {
 				totalPrice+=od.getOdGoodsPrice();
 				actualPrice+=od.getOdActualPrice();
 			}
-			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,0l,0l,actualPrice,logisticsPrice,ods,ogcs);
+			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,cpPrice,gcPrice,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
 			//清除购物车数据
@@ -473,6 +483,7 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderGoodsActualPayPrice(actualPrice);
 		order.setOrderMenberPrice(actualPrice);
 		order.setOrderGoodsCouponPrice(cPrice);
+		order.setOrderCouponPrice(gcPrice);
 		order.setOrderLogisticsPrice(orderLogisticsPrice);
 		orderMapper.saveOrder(order);
 		long orderId=order.getId();
@@ -526,6 +537,9 @@ public class OrderServiceImpl implements OrderService {
 			illustrate= StringUtils.formates(illustrate,uid, NumberUtils.formaterNumberPower(recharge.getRprice()),NumberUtils.formaterNumberPower(recharge.getRdiscount()));
 			order.setOrderIllustrate(illustrate);
 			order.setOrderCreateDate(curDate);
+            order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_NO);
+            order.setIsReal(OrderConstant.ORDER_IS_REAL_YES);
+            order.setOrderSellDel(SystemConstant.SYS_IS_DELETE_NO);
 			orderMapper.saveOrder(order);
 			OrderDetail orderDetail=new OrderDetail();
 			orderDetail.setOdOrderId(order.getId());
@@ -582,6 +596,10 @@ public class OrderServiceImpl implements OrderService {
 					isSuccess=obj.getBoolean("isSuccess");
 					if(isSuccess){
 						status=OrderConstant.ORDER_STATUS_PAY_SUCCESS;
+                        //充值订单直接设置发货且确认
+                        if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+                            status=OrderConstant.ORDER_STATUS_PAY_END;
+                        }
 					}
 				}
 				//设置支付通道（0 微信，1 支付宝，2 钱包)
@@ -752,9 +770,11 @@ public class OrderServiceImpl implements OrderService {
      * @param useGc 用户使用商品优惠（根据gdid 对应使用的商品优惠）
      * @param allowGc 商品上挂的优惠活动
      */
-	public boolean editorGoodsCoupon(List<OrderDetail> ods,Map<Long,List<Long>>useGc,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+	public Map<String,Object> editorGoodsCoupon(List<OrderDetail> ods,Map<Long,List<Long>>useGc,Map<String,List<GoodsCouponView>>allowGc)throws AppException{
+		Map<String,Object> rtnMaps=new HashMap<String,Object>();
 	    //是否包邮
 	    boolean isFreeShipping=false;
+	    long couponTotalPrice=0l;
 	    Map<Long,Map<Long,GoodsCouponView>> allowGcMaps=new HashMap<Long, Map<Long, GoodsCouponView>>();
 	    for(String key:allowGc.keySet()){
 	        Map<Long,GoodsCouponView> allow=new HashMap<Long, GoodsCouponView>();
@@ -804,11 +824,18 @@ public class OrderServiceImpl implements OrderService {
                         }
                     }
                 }
+
+                if(gPirce<0){
+					gPirce=0;
+				}
+				couponTotalPrice+=od.getOdActualPrice()-gPirce;
                 od.setOdActualPrice(gPirce);
                 od.setOdMenberPrice(gPirce);
             }
         }
-        return isFreeShipping;
+		rtnMaps.put("isFreeShipping",isFreeShipping);
+		rtnMaps.put("couponTotalPrice",couponTotalPrice);
+        return rtnMaps;
     }
 
 	/**
@@ -820,8 +847,8 @@ public class OrderServiceImpl implements OrderService {
 	 * @param userHave 用户拥有的优惠卷
 	 * @throws AppException
 	 */
-    private List<Long> editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<Long,Long> gidUnGt,List<CouponWebVo> userHave)throws AppException{
-    	List<Long> cupIds=new ArrayList<Long>();
+    private Map<Long,Long> editorUserCoupon(List<OrderDetail> ods,List<Long> useCoupon,Map<Long,Long> gidUnGt,List<CouponWebVo> userHave)throws AppException{
+		Map<Long,Long> rtnMaps=new HashMap<Long, Long>();
     	Map<Long,CouponWebVo> userCouponMaps=new HashMap<Long, CouponWebVo>();
     	for(CouponWebVo cwv:userHave){
 			userCouponMaps.put(cwv.getCpId(),cwv);
@@ -840,22 +867,23 @@ public class OrderServiceImpl implements OrderService {
 		if(!ObjectUtils.isEmpty(error)){
 			throw new AppException(error.toString());
 		}
-		if(useCoupon.size()<djgs+1){
+		if(useCoupon.size()>djgs+1){
 			throw new AppException("优惠卷选择错误 ，使用了不能叠加使用的优惠卷");
 		}
 		//根据使用的优惠卷重新计算商品价格
 		for(Long uc:useCoupon){
 			CouponWebVo cwv=userCouponMaps.get(uc);
+			long jmje=0l;
 			if(cwv.getCpIsRestricted()==CouponConstant.COUPON_USED_RANGE_ALL&&
 					ObjectUtils.isEmpty(cwv.getgIds())&&
 					ObjectUtils.isEmpty(cwv.getGgIds())){
-				goodsCoupon(ods,cwv,false,gidUnGt);
+				jmje=goodsCoupon(ods,cwv,false,gidUnGt);
 			}else{
-				goodsCoupon(ods,cwv,true,gidUnGt);
+				jmje=goodsCoupon(ods,cwv,true,gidUnGt);
 			}
-			cupIds.add(cwv.getCpuId());
+			rtnMaps.put(cwv.getCpuId(),jmje);
 		}
-		return cupIds;
+		return rtnMaps;
     }
 
 	/**
@@ -864,8 +892,11 @@ public class OrderServiceImpl implements OrderService {
 	 * @param cwv 优惠卷详情
 	 * @param isXz 是否限制使用
 	 * @param gidUnGt 商品id关联商品类型
+	 * return 返回优惠金额
 	 */
-    private void goodsCoupon(List<OrderDetail> ods,CouponWebVo cwv,boolean isXz,Map<Long,Long> gidUnGt){
+    private Long goodsCoupon(List<OrderDetail> ods,CouponWebVo cwv,boolean isXz,Map<Long,Long> gidUnGt){
+		//返回优惠金额
+		long rtnWallet=0l;
 		//商品种类
 		List<Long> spzl=new ArrayList<Long>();
 		//商品id
@@ -882,25 +913,87 @@ public class OrderServiceImpl implements OrderService {
 			}
 		}
 		//取得名个优惠卷优惠额度
+		long couponTotalPrice=0l;
+		//剩余金额
+		long syCouponTotalPrice=0l;
+		//购买商品总额
+		long buyGoodsPrice=0l;
+		Map<Long,Long> oidPrice=new HashMap<Long, Long>();
+		//允许使用传入优惠卷的商品
+		List<Long> allowPrice=new ArrayList<Long>();
+		if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
+			couponTotalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
+			syCouponTotalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
+			for(OrderDetail od:ods){
+				//根据商品id取得商品类型id
+				Long gtid=gidUnGt.get(od.getOdGoodsId());
+				if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
+					buyGoodsPrice=od.getOdActualPrice();
+					oidPrice.put(od.getId(),od.getOdActualPrice());
+					allowPrice.add(od.getId());
+				}
+			}
+			//循环取得减免金额
+			for(int i=0;i<allowPrice.size();i++){
+				Long odId=allowPrice.get(i);
+				//最后一条
+				if(i==allowPrice.size()-1){
+					oidPrice.put(odId,syCouponTotalPrice);
+				}else{
+					//本次金额
+					long price=oidPrice.get(odId);
+					//根据购买金额取得减免金额
+					long jmje=getJmje(price,buyGoodsPrice,couponTotalPrice);
+					if(jmje==0){
+						oidPrice.remove(odId);
+					}else{
+						oidPrice.put(odId,jmje);
+						syCouponTotalPrice=syCouponTotalPrice-jmje;
+					}
+				}
+			}
+		}
+
 		//设置商品价格
 		for(OrderDetail od:ods){
 			long goodsCurPrice=od.getOdActualPrice();
-			System.out.println("goodsCurPrice------------------------------------>>>:"+goodsCurPrice);
 			//根据商品id取得商品类型id
 			Long gtid=gidUnGt.get(od.getOdGoodsId());
 			if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
 				if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
-					goodsCurPrice=goodsCurPrice-NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
+					goodsCurPrice=goodsCurPrice-oidPrice.get(od.getId());
 				}else{
 					goodsCurPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(goodsCurPrice*NumberUtils.formaterNumberr(cwv.getCouponVal())));
 				}
 			}
-			System.out.println("goodsCurPrice  coupon------------------------------------>>>:"+goodsCurPrice);
+			rtnWallet+=od.getOdActualPrice()-goodsCurPrice;
 			od.setOdActualPrice(goodsCurPrice);
 			od.setOdMenberPrice(goodsCurPrice);
 		}
+		return rtnWallet;
 	}
 
+	/**
+	 * 取得优惠卷减免金额
+	 * @param buyPrice
+	 * @param totalPrice
+	 * @param couponPrice
+	 * @return
+	 */
+	private long getJmje(long buyPrice,long totalPrice,long couponPrice){
+		long jmje=0l;
+		if(totalPrice==0){
+			return jmje;
+		}
+		if(buyPrice==0){
+			return jmje;
+		}
+		//取得购买比例
+		double bl=((double)buyPrice/(double)totalPrice);
+		//取得减免金额
+		jmje=(long) bl*couponPrice;
+		return jmje;
+	}
     /**
      * 钱包支付
      * @param uid 用户id

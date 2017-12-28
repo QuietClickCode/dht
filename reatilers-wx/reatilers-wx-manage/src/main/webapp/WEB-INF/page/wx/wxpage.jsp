@@ -40,24 +40,24 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">微信原始ID:</label>
+                    <label for="wx_id" class="col-sm-3 control-label">微信原始ID:</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="微信原始ID" id="wx_id" onblur="closePopover()" onfocus="openPopover('#wx_id','第一步：登录微信公众号，左侧菜单 公众号设置—公开信息 栏目获取','/img/step_one.jpg')" readonly>
+                        <input type="text" class="form-control" placeholder="微信原始ID" id="wx_id" value="${curWx.wxName}" onblur="closePopover()" onfocus="openPopover('#wx_id','第一步：登录微信公众号，左侧菜单 公众号设置—公开信息 栏目获取','/img/step_one.jpg')">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-3 control-label">微信号:</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" id="wx_number" placeholder="微信号" onblur="closePopover()" onfocus="openPopover('#wx_number','第二步：登录微信公众号，左侧菜单  公众号设置 —注册信息 栏目获取 - 公开信息 栏目获取','/img/step_two.png')" data-toggle="popover" data-placement="right">
+                        <input type="text" class="form-control" id="wx_number" placeholder="微信号" value="${curWx.wxOriginalId}" onblur="closePopover()" onfocus="openPopover('#wx_number','第二步：登录微信公众号，左侧菜单  公众号设置 —注册信息 栏目获取 - 公开信息 栏目获取','/img/step_two.png')" data-toggle="popover" data-placement="right">
                     </div>
                 </div>
 
-                <div class="form-group">
+                <%--<div class="form-group">
                     <label for="inputPassword3" class="col-sm-3 control-label">公众号类型:</label>
                     <div class="col-sm-7">
                         <label class="radio-inline">
-                            <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" id="inlineRadio1" value="option1"> 服务号
+                            <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" id="inlineRadio1" value="1"> 服务号
                         </label>
                         <label class="radio-inline">
                             <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" value="2"> 订阅号
@@ -66,10 +66,10 @@
                             <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" value="3"> 认证服务号
                         </label>
                         <label class="radio-inline">
-                            <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" value="option3"> 认证订阅号
+                            <input type="radio" name="inlineRadioOptions" onblur="closePopover()" class="inlineRadioOptions" value="4"> 认证订阅号
                         </label>
                     </div>
-                </div>
+                </div>--%>
 
                 <div class="form-group" style="display: none;" id="pre_info">
                     <label for="inputPassword3" class="col-sm-3 control-label"></label>
@@ -114,19 +114,14 @@
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="inputEmail3" class="col-sm-3 control-label">接口域名:</label>
+                    <label for="regionMenu" class="col-sm-3 control-label">接口域名:</label>
                     <div class="col-sm-6">
-                        <select id="regionMenu" style="width: 200px;" onblur="closePopover()" onfocus="openPopover('#regionMenu','第五步：复制您选定的接口域名    第六步：登录微信公众号，将接口域名填写到：接口权限 —网页授权 —修改—网页授权域名 （如下图）','/img/step_five.jpg')"  class="form-control">
-                            <option value="">---请选择---</option>
-                            <option value="0">www.bilibili.com</option>
-                            <option value="1">www.bilibili.com</option>
-                            <option value="2">www.bilibili.com</option>
-                        </select>
+                        <input type="text" class="form-control" placeholder="微信原始ID" id="regionMenu" value="${curWx.wxName}" readonly>
                         <p class="help-block" style="margin-top: 10px;">请将接口域名填写到公众平台网页授权域名处</p>
                     </div>
                 </div>
 
-                <div class="form-group">
+                <%--<div class="form-group">
                     <label for="inputPassword3" class="col-sm-3 control-label">授权验证文件:</label>
                     <div class="col-sm-6">
                         <input type="password" style="width: 200px;display: inline-block;" onblur="closePopover()" onfocus="openPopover('#inputPassword3','第七步：请下载如图所示的MP_文件，并将文件上传到平台：验证授权文件！','/img/step_six.jpg')" class="form-control" id="inputPassword3" placeholder="授权验证文件">
@@ -134,7 +129,7 @@
                         <p class="help-block" style="margin-top: 10px;margin-bottom: 0px;">您之前已经上传了验证文件</p>
                         <p class="help-block" style="margin-top: 0px;"><ins>MP_verify_BBdZj3kUbD9sl2e7.txt</ins>，如需更新验证文件请再次上传，否则请忽略</p>
                     </div>
-                </div>
+                </div>--%>
 
                 <div class="form-group">
                     <label for="inputPassword3" class="col-sm-3 control-label"></label>

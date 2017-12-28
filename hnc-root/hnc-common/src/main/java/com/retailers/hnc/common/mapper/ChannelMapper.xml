@@ -27,7 +27,7 @@
 				AND c_id = #{params.cid}
 			</if>
 			<if test="null != params.cchannel and '' != params.cchannel">
-				AND c_channel = #{params.cchannel}
+				AND c_channel like concat('%', #{params.cchannel} ,'%')
 			</if>
 			<if test="null != params.corder">
 				AND c_order = #{params.corder}
