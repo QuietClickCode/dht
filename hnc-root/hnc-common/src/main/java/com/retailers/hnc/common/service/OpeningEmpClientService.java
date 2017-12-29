@@ -57,7 +57,7 @@ public interface OpeningEmpClientService {
 	 */
 	public boolean deleteOpeningEmpClientByOecId(Long oecId);
 
-	public Pagination<ClientIntentionVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<OpeningEmpClient> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public Pagination<ClientIntentionVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize);
 

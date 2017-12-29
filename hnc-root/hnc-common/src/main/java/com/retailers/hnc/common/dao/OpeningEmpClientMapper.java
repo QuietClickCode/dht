@@ -53,7 +53,7 @@ public interface OpeningEmpClientMapper {
 	 */
 	public List<OpeningEmpClient> queryOpeningEmpClientList(Pagination<OpeningEmpClient> pagination);
 
-	public List<ClientIntentionVo> queryNotGivenList(Pagination<ClientIntentionVo> pagination);
+	public List<OpeningEmpClient> queryNotGivenList(Pagination<OpeningEmpClient> pagination);
 
 	public List<ClientIntentionVo> queryCheckingandpassandnotpassList(Pagination<ClientIntentionVo> pagination);
 

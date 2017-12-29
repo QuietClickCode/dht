@@ -148,12 +148,17 @@
                         <label class="col-sm-3 control-label">备注:</label>
                         <div class="col-sm-9">
                             <textarea type="text" class="form-control" id="tmInfo" name="tmInfo" disabled="disabled">
-
                             </textarea>
                         </div>
                     </div>
                     <div id="invention">
-
+                        <%--<div class="form-group">--%>
+                            <%--<label class="col-sm-3 control-label">备注:</label>--%>
+                            <%--<div class="col-sm-9">--%>
+                            <%--<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">--%>
+                            <%--</textarea>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
                     </div>
                 </form>
             </div>
@@ -292,7 +297,7 @@
             $(" #tmPhone").val(rowData.tmPhone);
             $(" #tmAge").val(rowData.tmAge);
             $(" #tmIdCard").val(rowData.tmIdCard);
-            $(" #tmChannel").val(rowData.tmChannel);
+//            $(" #tmChannel").val(rowData.tmChannel);
             $(" #tmInfo").val(rowData.tmInfo);
 
             var sex = rowData.tmSex;
@@ -396,13 +401,35 @@
     }
 
     function loadInvention(cmId) {
+        $('#invention').html('');
+        $('#tmChannel').val('');
         $.ajax({
             type: "post",
             url: "/clientIntention/queryClientIntentionList",
             dataType: "json",
             data: {cmId:cmId},
             success: function (data) {
+                var rows = data.rows;
 
+                if(rows!=null &&rows.length>0){
+                    var channelName = rows[0].channelName;
+                    $('#tmChannel').val(channelName);
+                    var html = '';
+                    for(var i=0;i<rows.length;i++){
+                        var row = rows[i];
+                        html = '<div class="form-group">'+
+                        '<label class="col-sm-3 control-label">需求'+(i+1)+':</label>'+
+                        '<div class="col-sm-9">'+
+                        '<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">' +
+                            '意向楼栋:' + row.floorsName +
+                            '\n意向户型:' + row.hoursesName +
+                            '\n个性需求:'+ row.iremark +
+                        '</textarea>'+
+                        '</div>'+
+                        '</div>';
+                        $('#invention').append(html);
+                    }
+                }
             }
         });
     }

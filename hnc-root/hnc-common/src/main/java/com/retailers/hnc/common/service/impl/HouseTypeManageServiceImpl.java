@@ -63,6 +63,17 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		page.setData(list);
 		return page;
 	}
+
+	public Pagination<HouseTypeManageVo> queryFirstHouseTypeManageList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<HouseTypeManageVo> page = new Pagination<HouseTypeManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHouseTypeManageList(page);
+		page.setData(list);
+		return page;
+	}
+
 	public boolean deleteHouseTypeManageByHtId(Long htId) {
 		HouseTypeManage houseTypeManage = queryHouseTypeManageByHtId(htId);
 		houseTypeManage.setIsDelete(1);

@@ -56,12 +56,12 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return status == 1 ? true : false;
 	}
 
-	public Pagination<ClientIntentionVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
-		Pagination<ClientIntentionVo> page = new Pagination<ClientIntentionVo>();
+	public Pagination<OpeningEmpClient> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<OpeningEmpClient> page = new Pagination<OpeningEmpClient>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<ClientIntentionVo> list = openingEmpClientMapper.queryNotGivenList(page);
+		List<OpeningEmpClient> list = openingEmpClientMapper.queryNotGivenList(page);
 		page.setData(list);
 		return page;
 	}

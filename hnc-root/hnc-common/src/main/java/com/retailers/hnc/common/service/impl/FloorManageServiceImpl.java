@@ -63,6 +63,15 @@ public class FloorManageServiceImpl implements FloorManageService {
 		page.setData(list);
 		return page;
 	}
+	public Pagination<FloorManageVo> queryFirstFloorManageList(Map<String, Object> params,int pageNo,int pageSize) {
+		Pagination<FloorManageVo> page = new Pagination<FloorManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<FloorManageVo> list = floorManageMapper.queryFloorManageList(page);
+		page.setData(list);
+		return page;
+	}
 	public boolean deleteFloorManageByFmId(Long fmId) {
 		FloorManage manage = queryFloorManageByFmId(fmId);
 		manage.setIsDelete(1);

@@ -1,5 +1,6 @@
 package com.retailers.hnc.manage.controller;
 
+import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.manage.base.BaseController;
@@ -34,7 +35,7 @@ public class OpeningEmpClientController extends BaseController{
             params.put("oid",oid);
             params.put("cmName",cmName);
             params.put("eid",eid);
-            Pagination<ClientIntentionVo> pagination = openingEmpClientService.queryNotGivenList(params,pageNo,pageSize);
+            Pagination<OpeningEmpClient> pagination = openingEmpClientService.queryNotGivenList(params,pageNo,pageSize);
 
             return queryPages(pagination);
         }
