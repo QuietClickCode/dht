@@ -16,8 +16,10 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -316,5 +318,40 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	/**
+	 * 发送 POST 请求（HTTP），JSON形式
+	 * @param apiUrl
+	 * @param json json对象
+	 * @return
+	 */
+	public static String doPostBodyJson(String apiUrl, String json) {
+		CloseableHttpClient httpclient =HttpClientManager.getHttpClient();
+		HttpClientContext context = HttpClientContext.create();
+		String httpStr = null;
+		HttpPost httpPost = new HttpPost(apiUrl);
+		CloseableHttpResponse response = null;
+		try {
+			httpPost.setConfig(HttpClientManager.requestConfig);
+			StringEntity stringEntity = new StringEntity(json,"UTF-8");//解决中文乱码问题
+			stringEntity.setContentEncoding("UTF-8");
+			stringEntity.setContentType("application/json");
+			httpPost.setEntity(stringEntity);
+			response = httpclient.execute(httpPost,context);
+			HttpEntity entity = response.getEntity();
+			httpStr = EntityUtils.toString(entity, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (response != null) {
+				try {
+					EntityUtils.consume(response.getEntity());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return httpStr;
 	}
 }

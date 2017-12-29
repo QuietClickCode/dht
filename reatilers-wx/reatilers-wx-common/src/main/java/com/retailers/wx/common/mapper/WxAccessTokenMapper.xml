@@ -4,7 +4,7 @@
 
 	<resultMap id="rm_wxAccessToken" type="com.retailers.wx.common.entity.WxAccessToken">
 			<result property="watId" column="wat_id"/>
-			<result property="watWxId" column="wat_wx_id"/>
+			<result property="watWxAppId" column="wat_wx_app_id"/>
 			<result property="watToken" column="wat_token"/>
 			<result property="watTicket" column="wat_ticket"/>
 			<result property="watTokenCreateTime" column="wat_token_create_time"/>
@@ -14,7 +14,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="wxAccessToken_columns">
-		wat_id,wat_wx_id,wat_token,wat_ticket,wat_token_create_time,wat_token_expires_time,wat_token_expires
+		wat_id,wat_wx_app_id,wat_token,wat_ticket,wat_token_create_time,wat_token_expires_time,wat_token_expires
 	</sql>
 	<!-- 根据微信认证token主键取得数据 -->
 	<select id="queryWxAccessTokenByWatId" resultMap="rm_wxAccessToken" parameterType="java.lang.Long">
@@ -27,8 +27,8 @@
 			<if test="null != params.watId">
 				AND wat_id = #{params.watId}
 			</if>
-			<if test="null != params.watWxId">
-				AND wat_wx_id = #{params.watWxId}
+			<if test="null != params.watWxAppId">
+				AND wat_wx_app_id = #{params.watWxAppId}
 			</if>
 			<if test="null != params.watToken">
 				AND wat_token = #{params.watToken}
@@ -59,18 +59,18 @@
 	<!--添加微信认证token -->
 	<insert id="saveWxAccessToken" parameterType="com.retailers.wx.common.entity.WxAccessToken" useGeneratedKeys="true" keyProperty="watId">
 		INSERT INTO t_wx_access_token (
-			wat_wx_id,wat_token,wat_ticket,wat_token_create_time,wat_token_expires_time,wat_token_expires
+			wat_wx_app_id,wat_token,wat_ticket,wat_token_create_time,wat_token_expires_time,wat_token_expires
 		) VALUES
 		(
-			#{watWxId,jdbcType=BIGINT},#{watToken,jdbcType=VARCHAR},#{watTicket,jdbcType=VARCHAR},#{watTokenCreateTime,jdbcType=TIMESTAMP},#{watTokenExpiresTime,jdbcType=TIMESTAMP},#{watTokenExpires,jdbcType=INTEGER}
+			#{watWxAppId,jdbcType=BIGINT},#{watToken,jdbcType=VARCHAR},#{watTicket,jdbcType=VARCHAR},#{watTokenCreateTime,jdbcType=TIMESTAMP},#{watTokenExpiresTime,jdbcType=TIMESTAMP},#{watTokenExpires,jdbcType=INTEGER}
 		)
 	</insert>
 	<!--修改微信认证token -->
 	<update id="updateWxAccessToken" parameterType="com.retailers.wx.common.entity.WxAccessToken">
 		UPDATE t_wx_access_token
 		<set>
-            <if test="null != watWxId">
-                wat_wx_id = #{watWxId},
+            <if test="null != watWxAppId">
+                wat_wx_app_id = #{watWxAppId},
             </if>
             <if test="null != watToken">
                 wat_token = #{watToken},

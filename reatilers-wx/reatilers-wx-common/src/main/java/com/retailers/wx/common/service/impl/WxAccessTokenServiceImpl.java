@@ -77,10 +77,6 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 
 	public void initWxToken() {
 		logger.info("开始取得微信当前token");
-
-
-
-
 		Date curDate= new Date();
 		//取得当前使用微信
 		if(ObjectUtils.isNotEmpty(WxConfig.APP_ID)){
@@ -104,6 +100,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 	 * @param appSecret
 	 */
 	private void pullWxToken(String appId,String appSecret){
+		logger.info("重新取得微信token");
 		Date curDate=new Date();
 		String key= SingleThreadLockConstant.PULL_WX_TOKEN;
 		try{
@@ -113,6 +110,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 			if(ObjectUtils.isNotEmpty(rtn)){
 				WxAccessToken token = new WxAccessToken();
 				JSONObject obj = JSONObject.parseObject(rtn);
+				System.out.println(obj);
 				if(obj.containsKey("errcode")){
 				}else{
 					int expires=obj.getIntValue("expires_in");
@@ -126,7 +124,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 						token.setWatTokenCreateTime(curDate);
 						token.setWatTokenExpiresTime(expiresTime);
 						token.setWatTokenExpires(expires);
-						token.setWxAppId(appId);
+						token.setWatWxAppId(appId);
 						token.setWatTicket(ticket);
 						WxConfig.ACCESS_TOKEN=token.getWatToken();
 						WxConfig.ACCESS_TICKET=ticket;
@@ -140,12 +138,14 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 		}
+		logger.info("重新取得微信结束,执行时间:[{}]",(System.currentTimeMillis()-curDate.getTime()));
 	}
 
 	/**
 	 *初始化公众号配置参数
 	 */
 	public void initWxConfig() {
+		logger.info("初始化微信配置");
 		//取得当前使用微信
 		WxManager wxManager= wxManagerMapper.queryCurUsedWx(WXAccountEnum.WX_GZH.getType());
 		if(ObjectUtils.isNotEmpty(wxManager)){
@@ -159,6 +159,7 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 				WxConfig.WX_API_KEY=wxPayVo.getWxApiKey();
 			}
 		}
+		logger.info("初始化微信配置结束");
 	}
 }
 
