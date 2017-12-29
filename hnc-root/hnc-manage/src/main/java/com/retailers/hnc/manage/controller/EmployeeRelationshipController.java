@@ -2,8 +2,11 @@ package com.retailers.hnc.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.service.EmRelationshipService;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.manage.base.BaseController;
+import com.retailers.tools.base.BaseResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("employeeRelationship")
-public class EmployeeRelationshipController {
+public class EmployeeRelationshipController extends BaseController{
     @Autowired
     EmRelationshipService emRelationshipService;
 
@@ -57,6 +60,29 @@ public class EmployeeRelationshipController {
         map.put("total",1000);
         map.put("rows",rows);
         return map;
+    }
+
+
+    @RequestMapping("/addEmRelationship")
+    @Function(label = "添加预约关系",description = "添加预约关系",resourse = "employeeRelationship.addEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public BaseResp addEmRelationship(EmRelationship emRelationship){
+        boolean flag = emRelationshipService.saveEmRelationship(emRelationship);
+        if(flag)
+            return success("添加预约关系成功");
+        else
+            return success("添加预约关系失败");
+    }
+
+    @RequestMapping("/updateEmRelationship")
+    @Function(label = "修改预约关系",description = "修改预约关系",resourse = "employeeRelationship.updateEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public BaseResp updateEmRelationship(EmRelationship emRelationship){
+        boolean flag = emRelationshipService.updateEmRelationship(emRelationship);
+        if(flag)
+            return success("修改预约关系成功");
+        else
+            return errorForSystem("修改预约关系失败");
     }
 
 }
