@@ -32,10 +32,6 @@ public class WxAuthController {
     @RequestMapping("queryUserAuth")
     public void queryUserAuth(HttpServletResponse response,HttpServletRequest request) throws IOException {
         String userAgent = request.getHeader("user-agent");
-        System.out.println("userAgent======================================>:"+userAgent);
-
-
-
         String url="https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxa3da99ccbc1cafd0&redirect_uri="+
                 URLEncoder.encode("http://www.kuaiyis.com/wxAuth/userLogin","utf-8")+"&response_type=code&scope=snsapi_userinfo&state=aabc";
         response.sendRedirect(url);

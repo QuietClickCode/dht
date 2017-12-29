@@ -1,0 +1,405 @@
+body{
+	font-size: 14px;
+	word-wrap: break-word;
+	word-break: break-all;
+	padding: 0px;
+	margin: 0px;
+	background: #e7e8eb;
+}
+
+#container_box{
+	position: absolute;
+	margin-top: 30px;
+	left: 50%;
+	margin-left: -494px;
+	width: 988px;
+	min-height: 1000px;
+	background: #fff;
+	padding-bottom: 30px;
+}
+
+#container_box a{
+	text-decoration: none;
+	color: black;
+}
+
+.main_body{
+	padding-top: 20px;
+	min-height: 1000px;
+}
+
+.main_hd h4{
+	padding: 0 30px;
+	margin: 0px;
+	line-height: 75px;
+}
+
+.tab_navs{
+	list-style: none;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+
+.tab_navs li:first-child{
+	padding-left: 30px;
+}
+
+.img_{
+	border-bottom: 3px solid #44b549;
+}
+
+.tab_navs li:hover{
+	border-bottom: 3px solid rgba(0,0,0,0.4);
+}
+
+.tab_navs li{
+	display: inline-block;
+	line-height: 40px;
+	padding-right: 18px;
+	padding-left: 18px;
+}
+
+.img_pick_panel{
+	padding: 0px 30px;
+}
+
+.inner_main{
+	width: 2000px;
+	display: table-cell;
+	vertical-align: top;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+.inner_side{
+	width: 17%;
+	display: table-cell;
+	vertical-align: top;
+	word-wrap: break-word;
+	max-width: 240px;
+	word-break: break-all;
+	border-left: 1px solid #e7e7eb;
+}
+
+
+
+.inner_container_box{
+	border:1px solid #e7e7eb;
+}
+
+.global_mod{
+	padding: 10px 20px;
+	overflow: hidden;
+}
+
+.global_extra{
+	text-align: right;
+}
+
+.global_info{
+	float: left;
+	line-height: 33.6px;
+	margin-bottom: 0px;
+}
+
+.icon_msg_mini{
+	background: url(../wx_img/base_z381ecd.png) 0 -916px no-repeat;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+	margin-top: -3px;
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.upload_box{
+	float: right;
+}
+
+.img_water_tips{
+	float: right;
+	line-height: 33.6px;
+	color: #8d8d8d;
+}
+
+.oper_group{
+	padding: 10px 20px;
+	background-color: #f4f5f9;
+	border-bottom: 1px solid #e7e7eb;
+}
+
+.oper_group div{
+	display: inline-block;
+	margin-right: 20px;
+}
+
+.oper_group a{
+	width: 100px;
+}
+
+.img_list{
+	padding: 20px;
+	margin-right: -45px;
+	min-height: 550px;
+}
+
+.img_group{
+	list-style: none;
+	margin: 0px;
+	padding: 0px;
+	overflow: hidden;
+}
+
+.img_item{
+	margin-bottom: 20px;
+	margin-right: 15px;
+	border: 1px solid #e7e7eb;
+	float: left;
+	text-align: center;
+}
+
+.img_item_bd img{
+	width: 169px;
+	height: 169px;
+	display: block;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: cover;
+}
+
+.img_item_bd .checkbox{
+	margin: 0px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	border-top: 1px solid #e7e7eb;
+}
+
+.img_item_ft{
+	background-color: #f4f5f9;
+	border-top: 1px solid #e7e7eb;
+}
+
+.msg_card_opr_list{
+	padding-left: 0px;
+	list-style: none;
+}
+
+.msg_card_opr_list li{
+	width: 33.33%;
+	text-align: center;
+	float: left;
+}
+
+.msg_card_opr_list li a{
+	padding-top: 5px;
+	padding-bottom: 5px;
+	display: block;
+}
+
+.icon_common{
+	width: 18px;
+	height: 18px;
+	overflow: hidden;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.edit_gray{
+	background: url(../wx_img/base_z381ecd.png) 0 -4557px no-repeat;
+	
+}
+
+.edit_gray:hover{
+	background: url(../wx_img/base_z381ecd.png) 0 -4578px no-repeat;
+}
+
+.msg_card_opr_item_inner{
+	background: url(../wx_img/base_z381ecd.png) 0 -4271px no-repeat;
+}
+
+.msg_card_opr_item_inner:hover{
+	background: url(../wx_img/base_z381ecd.png) 0 -4293px no-repeat;
+}
+
+.del_gray{
+	background: url(../wx_img/base_z381ecd.png) 0 -4007px no-repeat;
+}
+
+.del_gray:hover{
+	background: url(../wx_img/base_z381ecd.png) 0 -4029px no-repeat;
+}
+
+
+.main_ft{
+	padding-left: 20px;
+	padding-right: 20px;
+	margin-bottom: 20px;
+}
+
+.nabigationBar{
+	text-align: right;
+}
+
+.wx_pagebar{
+	padding: 20px 0 0;
+	border-top: 1px solid #e7e7eb;
+}
+
+.page_nav_area a{
+	color: rgba(0,0,0,0.6);
+}
+
+.page_num{
+	vertical-align: middle;
+	display: inline-block;
+	font-size: 14px;
+	text-align: center;
+	height: 33.6px;
+	line-height: 33.6px;
+}
+
+.page_num label{
+	font-weight: 400;
+}
+
+.page_last{
+	margin-right: 4px;
+}
+
+.goto_area input{
+	vertical-align: middle;
+	width: 75px;
+	height: 33.6px;
+	line-height: 22px;
+	padding: 4px 0;
+	border: 1px solid #ccc;
+	box-shadow: none;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	border-radius: 4px;
+	-moz-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	text-align: center;
+	font-size: 14px;
+	margin-right: 4px;
+}
+
+.inner_menu{
+	list-style: none;
+	padding-left: 0px;
+}
+
+.inner_menu_item a{
+	color: black;
+	padding-left: 14px;
+	line-height: 32px;
+}
+
+.num{
+	color: #8d8d8d;
+	font-style: normal;
+	margin-left: 5px;
+}
+
+.add_menu_item{
+	position: relative;
+	line-height: 32px;
+	top: -10px;
+}
+
+.create_group{
+	padding-left: 14px;
+	color: black;
+}
+
+.add_gary{
+	width: 14px;
+	height: 14px;
+	display: inline-block;
+	overflow: hidden;
+	vertical-align: middle;
+	background: url(../wx_img/base_z381ecd.png) 0 -3094px no-repeat;
+	margin-right: 2px;
+	margin-bottom: 3px;
+}
+
+.inner_menu_item:hover{
+	background-color: #f4f5f9;
+}
+
+.popover_img_lib{
+	z-index: 100;
+	position: absolute;
+	top: 300px;
+	left: 300px;
+	display: none;
+}
+
+
+.popover_inner{
+	width: 290px;
+	border:1px solid rgba(0,0,0,0.1);
+	background-color: #fff;
+	padding: 30px;
+}
+
+
+.popover_arrow{
+	position: absolute;
+	left: 50%;
+	margin-left: -8px;
+	margin-top: -8px;
+	display: inline-block;
+	width: 0;
+	height: 0;
+	border-width: 8px;
+	border-top-width: 8px;
+	border-style: dashed;
+	border-bottom-style: dashed;
+	border-color: transparent;
+	border-bottom-color: transparent;
+	border-top-width: 0;
+	border-bottom-color: #d9dadc;
+	border-bottom-style: solid;
+}
+
+.popover_arrow_out{
+	top: 0;
+}
+
+.popover_arrow_in{
+	border-bottom-color: #fff;
+	top: 1px;
+}
+
+.prpover_inner_content{
+	margin-bottom: 20px;
+	word-wrap: break-word;
+	word-break: break-all;
+}
+
+.prpover_inner_content h4{
+	font-weight: 400;
+	font-size: 14px;
+}
+
+.prpover_inner_content input[type="text"]{
+	width: 100%;
+	height: 30px;
+}
+
+.popover_bar{
+	line-height: 33.6px;
+}
+
+.popover_bar a{
+	padding-right: 35px;
+	padding-left: 35px;
+}
+
+.prpover_inner_content .radio-inline{
+	width: 46%;
+	display: inline-block;
+	margin: 0px;
+}

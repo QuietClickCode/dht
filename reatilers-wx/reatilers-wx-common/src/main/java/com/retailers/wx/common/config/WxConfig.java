@@ -9,7 +9,7 @@ package com.retailers.wx.common.config;
 public class WxConfig {
     public static String APP_ID="";
     public static String APP_SECRET="";
-    public static String ACCESS_TOKEN="nUd7jMakoJGO5QoAdOXgVedNGZcOqt3rLcLtjp6V_d1inAJ3pZb2l5CMbT0SG_2H6VyxZKyUfaHzgWe5flm8lVwPiWqJGYbHA5paSEBI7c-TwJ1y5bjN421ze4wf4MRVLFVjAFAGAQ";
+    public static String ACCESS_TOKEN="";
     //js-sdk 耍要的token
     public static String ACCESS_TICKET="";
     //微信校验请求url token
