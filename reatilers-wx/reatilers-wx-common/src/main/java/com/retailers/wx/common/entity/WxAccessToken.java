@@ -18,7 +18,7 @@ public class WxAccessToken implements java.io.Serializable {
 	private Long watId;
 	/**关联微信id*/
 	@NotEmpty
-	private String wxAppId;
+	private String watWxAppId;
 	/**access_token是公众号的全局唯一接口调用凭据*/
 	@NotEmpty
 	private String watToken;
@@ -52,12 +52,12 @@ public class WxAccessToken implements java.io.Serializable {
 		return this.watId;
 	}
 
-	public String getWxAppId() {
-		return wxAppId;
+	public String getWatWxAppId() {
+		return watWxAppId;
 	}
 
-	public void setWxAppId(String wxAppId) {
-		this.wxAppId = wxAppId;
+	public void setWatWxAppId(String watWxAppId) {
+		this.watWxAppId = watWxAppId;
 	}
 
 	public String getWatToken() {

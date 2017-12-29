@@ -37,6 +37,17 @@
 		SELECT <include refid="houseTypeManage_columns" />
 		FROM t_house_type_manage WHERE ht_id = #{htId}
 	</select>
+
+	<select id="queryHouseTypeManageByHtIds" resultMap="rm_houseTypeManage">
+		SELECT *
+		FROM t_house_type_manage t1
+		WHERE
+		t1.is_delete=0
+		and t1.ht_id in
+		<foreach item="htId" collection="htIds" open="(" close=")" separator=",">
+			#{htId}
+		</foreach>
+	</select>
 	<!-- 户型表查询条件组合 -->
 	<sql id="houseTypeManage_where">
 		<where>

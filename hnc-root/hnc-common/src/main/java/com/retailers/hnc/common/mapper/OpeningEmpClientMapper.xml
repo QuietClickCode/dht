@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.OpeningEmpClientMapper">
+
+	<resultMap id="rm_openingEmpClient" type="com.retailers.hnc.common.entity.OpeningEmpClient">
+			<result property="oecId" column="oec_id"/>
+			<result property="oid" column="o_id"/>
+			<result property="eid" column="e_id"/>
+			<result property="cid" column="c_id"/>
+			<result property="oecStatus" column="oec_status"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_clientManage_vo" type="com.retailers.hnc.common.vo.ClientIntentionVo">
+		<result property="tmId" column="tm_id"/>
+		<result property="tmName" column="tm_name"/>
+		<result property="tmSex" column="tm_sex"/>
+		<result property="tmEmployee" column="tm_employee"/>
+		<result property="tmAge" column="tm_age"/>
+		<result property="tmStatus" column="tm_status"/>
+		<result property="tmLoginStatus" column="tm_login_status"/>
+		<result property="tmPhone" column="tm_phone"/>
+		<result property="tmRegisterTime" column="tm_register_time"/>
+		<result property="tmIdCard" column="tm_id_card"/>
+		<result property="tmChannel" column="tm_channel"/>
+		<result property="tmInfo" column="tm_info"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="tmOrder" column="tm_order"/>
+		<result property="version" column="version"/>
+		<result property="fids" column="fids"/>
+		<result property="hids" column="hids"/>
+		<result property="iremark" column="iremark"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="openingEmpClient_columns">
+		oec_id,o_id,e_id,c_id,oec_status,is_delete,version
+	</sql>
+	<!-- 根据开盘与雇员和客户的关系表主键取得数据 -->
+	<select id="queryOpeningEmpClientByOecId" resultMap="rm_openingEmpClient" parameterType="java.lang.Long">
+		SELECT <include refid="openingEmpClient_columns" />
+		FROM t_opening_emp_client WHERE oec_id = #{oecId}
+	</select>
+	<!-- 开盘与雇员和客户的关系表查询条件组合 -->
+	<sql id="openingEmpClient_where">
+		<where>
+			<if test="null != params.oecId">
+				AND oec_id = #{params.oecId}
+			</if>
+			<if test="null != params.oid">
+				AND o_id = #{params.oid}
+			</if>
+			<if test="null != params.eid">
+				AND e_id = #{params.eid}
+			</if>
+			<if test="null != params.cid">
+				AND c_id = #{params.cid}
+			</if>
+			<if test="null != params.oecStatus">
+				AND oec_status = #{params.oecStatus}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOpeningEmpClientList" resultMap="rm_openingEmpClient" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="openingEmpClient_columns" />
+		FROM t_opening_emp_client
+		<include refid="openingEmpClient_where"/>
+	</select>
+
+	<select id="queryNotGivenList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*
+		FROM
+		t_client_manage t1
+		WHERE
+		t1.is_delete=0
+		<if test="null!=params.cmName and ''!=params.cmName">
+			and t1.tm_name like concat('%', #{params.cmName} ,'%')
+		</if>
+		and t1.tm_employee=#{params.eid}
+		and t1.tm_id NOT IN
+		(SELECT
+		t1.c_id
+		FROM
+		t_opening_emp_client t1
+		WHERE
+		t1.o_id=#{params.oid}
+		and t1.e_id=#{params.eid}
+		and t1.oec_status!=0
+		and t1.is_delete=0
+		or t1.tm_status=1)
+	</select>
+
+	<select id="queryCheckingandpassandnotpassList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t2.*
+		FROM
+		t_opening_emp_client t1,
+		t_client_manage t2
+		WHERE
+		t1.e_id=${params.eid}
+		and t1.o_id=${params.oid}
+		and t1.oec_status=${params.status}
+		and t1.c_id=t2.tm_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+	</select>
+
+	<!--添加开盘与雇员和客户的关系表 -->
+	<insert id="saveOpeningEmpClient" parameterType="com.retailers.hnc.common.entity.OpeningEmpClient" useGeneratedKeys="true" keyProperty="oecId">
+		INSERT INTO t_opening_emp_client (
+			o_id,e_id,c_id,oec_status,is_delete,version
+		) VALUES
+		(
+			#{oid,jdbcType=BIGINT},#{eid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{oecStatus,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改开盘与雇员和客户的关系表 -->
+	<update id="updateOpeningEmpClient" parameterType="com.retailers.hnc.common.entity.OpeningEmpClient">
+		UPDATE t_opening_emp_client
+		<set>
+            <if test="null != oid">
+                o_id = #{oid},
+            </if>
+            <if test="null != eid">
+                e_id = #{eid},
+            </if>
+            <if test="null != cid">
+                c_id = #{cid},
+            </if>
+            <if test="null != oecStatus">
+                oec_status = #{oecStatus},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE oec_id = #{oecId} and version = #{version}
+	</update>
+	<!--删除开盘与雇员和客户的关系表 -->
+	<delete id="deleteOpeningEmpClientByOecId" parameterType="java.lang.Long">
+		DELETE FROM t_opening_emp_client WHERE oec_id = #{oecId}
+	</delete>
+</mapper>

@@ -2,6 +2,8 @@ package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.vo.FloorManageVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：楼栋管理DAO
@@ -52,5 +54,7 @@ public interface FloorManageMapper {
 	 * @date 2017-12-15 14:23:58
 	 */
 	public List<FloorManageVo> queryFloorManageList(Pagination<FloorManageVo> pagination);
+
+	public List<FloorManage> queryFloorManageByFmIds(@Param("fids") List<Long> fids);
 
 }

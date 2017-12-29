@@ -62,6 +62,8 @@ public interface FloorManageService {
 
 
 	public boolean addFloorRelationship(List<FloorRelationship> relationships);
+
+	public List<FloorManage> queryFloorManageByFmIds(String fids);
 }
 
 

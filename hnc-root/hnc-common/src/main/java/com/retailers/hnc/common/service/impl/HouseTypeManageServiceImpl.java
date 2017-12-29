@@ -11,6 +11,7 @@ package com.retailers.hnc.common.service.impl;
 		import com.retailers.hnc.common.service.HouseTypeManageService;
 		import com.retailers.hnc.common.vo.HouseTypeManageVo;
 		import com.retailers.mybatis.pagination.Pagination;
+		import com.retailers.tools.utils.ObjectUtils;
 		import org.springframework.beans.factory.annotation.Autowired;
 		import org.springframework.stereotype.Service;
 
@@ -94,6 +95,20 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 			}
 		}
 		return flag;
+	}
+
+	public List<HouseTypeManage> queryHouseTypeManageByHtIds(String htIds){
+		if(ObjectUtils.isNotEmpty(htIds)){
+			String[] htIdsArr = htIds.split(",");
+			List<Long> htIdsList = new ArrayList<Long>();
+			for(String hidStr:htIdsArr){
+				Long hidLong = Long.parseLong(hidStr);
+				htIdsList.add(hidLong);
+			}
+			List<HouseTypeManage> returnList = houseTypeManageMapper.queryHouseTypeManageByHtIds(htIdsList);
+			return returnList;
+		}
+		return null;
 	}
 }
 

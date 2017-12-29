@@ -1,5 +1,6 @@
 package com.retailers.wx.manage.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.auth.annotation.Resourse;
@@ -12,8 +13,10 @@ import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.entity.WxPay;
 import com.retailers.wx.common.service.WxManagerService;
+import com.retailers.wx.common.service.WxMenuService;
 import com.retailers.wx.common.service.WxPayService;
 import com.retailers.wx.common.vo.WxManagerVo;
+import com.retailers.wx.common.vo.WxMenu;
 import com.retailers.wx.common.vo.WxPayVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,6 +42,8 @@ public class WxController{
     private WxManagerService wxManagerService;
     @Autowired
     private WxPayService wxPayService;
+    @Autowired
+    private WxMenuService wxMenuService;
 
 
     @Resourse(resourse = "system.manager.wx",label = "微信管理",sort = 4)
@@ -134,5 +139,28 @@ public class WxController{
         }
         return rtn;
     }
+
+    /**
+     * 微信菜单管理页面
+     * @return
+     */
+    @RequestMapping("openWxMenuPage")
+    @Menu(resourse = "wx.openWxMenuPage",label = "菜单管理",parentRes = "system.manager.wx",sort = 3)
+    public ModelAndView openWxMenuPage(){
+        ModelAndView modelAndView=new ModelAndView();
+        WxMenu wxMenu =wxMenuService.queryWxMenu();
+        if(ObjectUtils.isNotEmpty(wxMenu)){
+            modelAndView.addObject("menus", JSON.toJSONString(wxMenu));
+        }else{
+            modelAndView.addObject("menus","");
+        }
+        //微信打开页面
+        String redirectUrl="wx/wx_menu";
+        //取得当前微信菜单
+        modelAndView.setViewName(redirectUrl);
+        return modelAndView;
+    }
+
+
 
 }
