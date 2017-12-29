@@ -1,6 +1,6 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.EmRelationship;
 
@@ -58,9 +58,9 @@ public interface EmRelationshipService {
 	 */
 	public boolean deleteEmRelationshipByErId(Long erId);
 
-	public List<EmRelationshipVo> queryEmRelationshipVoList();
+	public List<EmployeeAndTeamVo> queryEmRelationshipVoList();
 
-	public List<EmRelationshipVo> queryEmployeeTree(List<EmRelationshipVo> relationshipVos);
+	public List<EmployeeAndTeamVo> queryEmployeeTree(List<EmployeeAndTeamVo> relationshipVos);
 
 }
 
