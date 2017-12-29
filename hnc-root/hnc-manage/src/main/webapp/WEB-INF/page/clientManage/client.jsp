@@ -113,7 +113,7 @@
             valign : 'middle',
             formatter:function (value,row,index) {
                 let html = "";
-                if(row.tmRegisterTime != "")
+                if(row.tmRegisterTime != null)
                     html = row.tmRegisterTime.split(" ")[0];
                 return html;
             }
@@ -131,7 +131,8 @@
             valign : 'middle',
             formatter:function (value,row,index) {
                 let html = "";
-                if(row.tmInfo.length != "" && row.tmInfo.length > 6)
+                if(row.tmInfo != null)
+                    if(row.tmInfo.length > 6)
                     html = row.tmInfo.substring(0,6) + '...';
                 return html;
             }
@@ -184,6 +185,7 @@
     var client;
     function editClient(id) {
         client = rowDatas.get(id);
+        $("#tmInfo").val(client['tmInfo']);
         $("#editClientInfo").modal("show");
     }
 

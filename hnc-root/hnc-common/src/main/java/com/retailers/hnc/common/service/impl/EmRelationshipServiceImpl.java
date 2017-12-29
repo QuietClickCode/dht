@@ -1,17 +1,14 @@
 
 package com.retailers.hnc.common.service.impl;
 
-import com.retailers.hnc.common.dao.ClientManageMapper;
 import com.retailers.hnc.common.dao.EmRelationshipMapper;
 import com.retailers.hnc.common.dao.EmployeeManageMapper;
 import com.retailers.hnc.common.dao.TeamMapper;
-import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.entity.Team;
 import com.retailers.hnc.common.service.EmRelationshipService;
-import com.retailers.hnc.common.service.EmployeeManageService;
-import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,21 +62,24 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return status == 1 ? true : false;
 	}
 
-	public List<EmRelationshipVo> queryEmRelationshipVoList() {
+	public List<EmployeeAndTeamVo> queryEmRelationshipVoList() {
 		List<Team> teams = teamMapper.queryAllTeam();
-		List<EmRelationshipVo> emRelationshipVos = new ArrayList<EmRelationshipVo>();
+		List<EmployeeAndTeamVo> emRelationshipVos = new ArrayList<EmployeeAndTeamVo>();
 		for (Team team : teams) {
-			EmRelationshipVo vo = new EmRelationshipVo();
-			vo.setTid(team.getTid());
+			EmployeeAndTeamVo vo = new EmployeeAndTeamVo();
+			vo.settId(team.getTid());
+			vo.setTeamName(team.getTname());
 			vo.setTeam(team);
 			vo.setIsDelete(0L);
 			emRelationshipVos.add(vo);
 		}
 		List<EmployeeManage> employeeManages = employeeManageMapper.queryAllEmployee();
+		long tmId = emRelationshipVos.get(emRelationshipVos.size() - 1).gettId() * 10000;
 		for (EmployeeManage employeeManage : employeeManages) {
-			EmRelationshipVo vo = new EmRelationshipVo();
-			vo.setEmId(employeeManage.getEmId());
+			EmployeeAndTeamVo vo = new EmployeeAndTeamVo();
 			vo.setIsDelete(0L);
+			vo.settId(tmId++);
+			vo.setEmployeeName(employeeManage.getEmName());
 			vo.setParentId(employeeManage.getEmTeam());
 			vo.setEmployeeManage(employeeManage);
 			emRelationshipVos.add(vo);
@@ -87,13 +87,14 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return emRelationshipVos;
 	}
 
-	public List<EmRelationshipVo> queryEmployeeTree(List<EmRelationshipVo> relationshipVos) {
-		List<EmRelationshipVo> rtnList=new ArrayList<EmRelationshipVo>();
+
+	public List<EmployeeAndTeamVo> queryEmployeeTree(List<EmployeeAndTeamVo> relationshipVos) {
+		List<EmployeeAndTeamVo> rtnList=new ArrayList<EmployeeAndTeamVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
 		queryEmployeeNode(relationshipVos,child);
 		Map<Long,Long> alloShow=new HashMap<Long, Long>();
 		queryAllEmployee(null,child,alloShow);
-		for(EmRelationshipVo vo:relationshipVos){
+		for(EmployeeAndTeamVo vo:relationshipVos){
 			if(ObjectUtils.isEmpty(vo.getParentId())){
 				vo.setLevel(1l);
 				rtnList.add(vo);
@@ -123,17 +124,17 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 	}
 
 
-	private void queryEmployeeNode(List<EmRelationshipVo> list, Map<Long,Map<Long,Long>> child){
-		for(EmRelationshipVo vo:list){
+	private void queryEmployeeNode(List<EmployeeAndTeamVo> list, Map<Long,Map<Long,Long>> child){
+		for(EmployeeAndTeamVo vo:list){
 			Long parentId=vo.getParentId();
 			if(ObjectUtils.isEmpty(parentId)){
 				parentId=-1l;
 			}
 			if(child.containsKey(parentId)){
-				child.get(parentId).put(vo.getTid(),vo.getIsDelete());
+				child.get(parentId).put(vo.gettId(),vo.getIsDelete());
 			}else{
 				Map<Long,Long> maps=new HashMap<Long, Long>();
-				maps.put(vo.getTid(),vo.getIsDelete());
+				maps.put(vo.gettId(),vo.getIsDelete());
 				child.put(parentId,maps);
 			}
 		}

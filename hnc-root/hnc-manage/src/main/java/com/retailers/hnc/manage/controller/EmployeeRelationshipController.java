@@ -3,7 +3,7 @@ package com.retailers.hnc.manage.controller;
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.service.EmRelationshipService;
-import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,12 +32,14 @@ public class EmployeeRelationshipController {
     @Function(label = "查询所有团队和置业顾问",description = "查询所有团队和置业顾问",resourse = "employeeRelationship.queryAllClient",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
     @ResponseBody
     public Map<String,Object> queryAllClient(){
-        List<EmRelationshipVo> relationshipVos = emRelationshipService.queryEmRelationshipVoList();
-        System.out.println(relationshipVos.size());
-        /*List<EmRelationshipVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);*/
+        List<EmployeeAndTeamVo> relationshipVos = emRelationshipService.queryEmRelationshipVoList();
+        for(EmployeeAndTeamVo relationshipVo:relationshipVos){
+            System.out.println(relationshipVo.gettId()+" "+relationshipVo.getParentId());
+        }
+        List<EmployeeAndTeamVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);
         HashMap<String,Object> map=new HashMap<String, Object>();
         map.put("total",1000);
-        map.put("rows",relationshipVos);
+        map.put("rows",rows);
         return map;
     }
 }
