@@ -6,6 +6,31 @@
     <welcome-file-list>
         <welcome-file></welcome-file>
     </welcome-file-list>
+    <listener>
+        <listener-class>
+            com.retailers.mybatis.common.listener.StartServerListener
+        </listener-class>
+    </listener>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.js</url-pattern>
+        <url-pattern>*.mp3</url-pattern>
+        <url-pattern>*.css</url-pattern>
+        <url-pattern>*.gif</url-pattern>
+        <url-pattern>*.png</url-pattern>
+        <url-pattern>*.jpg</url-pattern>
+        <url-pattern>*.eot</url-pattern>
+        <url-pattern>*.ttf</url-pattern>
+        <url-pattern>*.eot@</url-pattern>
+        <url-pattern>*.woff</url-pattern>
+        <url-pattern>*.woff2</url-pattern>
+        <url-pattern>*.html</url-pattern>
+        <url-pattern>*.less</url-pattern>
+        <url-pattern>*.ico</url-pattern>
+        <url-pattern>*.svg</url-pattern>
+        <url-pattern>*.swf</url-pattern>
+        <!--<url-pattern>*.txt</url-pattern>-->
+    </servlet-mapping>
     <!-- 加载log4j配置文件 -->
     <listener>
         <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
@@ -63,26 +88,6 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-    <servlet-mapping>
-        <servlet-name>default</servlet-name>
-        <url-pattern>*.js</url-pattern>
-        <url-pattern>*.mp3</url-pattern>
-        <url-pattern>*.css</url-pattern>
-        <url-pattern>*.gif</url-pattern>
-        <url-pattern>*.png</url-pattern>
-        <url-pattern>*.jpg</url-pattern>
-        <url-pattern>*.eot</url-pattern>
-        <url-pattern>*.ttf</url-pattern>
-        <url-pattern>*.eot@</url-pattern>
-        <url-pattern>*.woff</url-pattern>
-        <url-pattern>*.woff2</url-pattern>
-        <!--<url-pattern>*.html</url-pattern>-->
-        <url-pattern>*.less</url-pattern>
-        <url-pattern>*.ico</url-pattern>
-        <url-pattern>*.svg</url-pattern>
-        <url-pattern>*.swf</url-pattern>
-        <url-pattern>*.txt</url-pattern>
-    </servlet-mapping>
     <!--请求日志过滤器-->
     <filter>
         <filter-name>wxFilter</filter-name>
@@ -96,4 +101,5 @@
         <filter-name>wxFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
 </web-app>

@@ -3,10 +3,12 @@ package com.retailers.dht.web.filter;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.tools.base.WriteData;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.CheckMobile;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.SignUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.util.WebUtils;
@@ -52,14 +54,24 @@ public class WxFilter implements Filter {
 
         boolean isFromMobile= CheckMobile.check(userAgent);
         String uri_ = request.getRequestURI();
-        System.out.println(uri_);
-        System.out.println(JSON.toJSON(WebUtils.getParametersStartingWith(request,"")));
         //判断是否存在推荐人
         String randStr=request.getParameter("randStr");
         if(ObjectUtils.isNotEmpty(randStr)){
             String uri = request.getRequestURI();
             cachInviter(request,randStr,false);
         }
+        //判断是否是重新加载数据方法
+        if(uri_.indexOf("reaload")>=0){
+            Map<String,Object> parms = WebUtils.getParametersStartingWith(request,"");
+            if (!SignUtil.encryptDES(parms)) {
+                WriteData.paramError("非法请求!",response);
+                return;
+            }else{
+                chain.doFilter(request, response);
+                return;
+            }
+        }
+
         //判断是否为移动端访问 移动端访问
         if(isFromMobile){
             //判断是否是微信

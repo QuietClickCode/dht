@@ -1,6 +1,7 @@
 package com.retailers.dht.common.filter;
 
 import com.retailers.mybatis.common.service.SysParameterConfigService;
+import com.retailers.wx.common.service.WxAccessTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +18,18 @@ public class SystemStartFilter {
     Logger logger = LoggerFactory.getLogger(SystemStartFilter.class);
     @Autowired
     private SysParameterConfigService sysParameterConfigService;
+    @Autowired
+    private WxAccessTokenService wxAccessTokenService;
+
     /**
      * 初始货系统统常量加载
      */
     public void initSysParamterConfig(){
-        long time = System.currentTimeMillis();
+        //初始化系统常量配置
         sysParameterConfigService.initSysParamter();
+        //注册系统服务器
+        sysParameterConfigService.registerService();
+        //初始化微信配置常
+        wxAccessTokenService.initWxConfig();
     }
 }

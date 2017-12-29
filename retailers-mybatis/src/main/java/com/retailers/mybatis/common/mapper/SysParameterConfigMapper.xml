@@ -99,5 +99,15 @@
 		SELECT <include refid="sysParameterConfig_columns" />
 		FROM t_sys_parameter_config
 	</select>
-
+	<!--添加SysParameterConfig -->
+	<insert id="addServerInfo">
+		INSERT INTO t_server_info (
+		server_info
+		) VALUES (
+		#{serverInfo}
+		) ON DUPLICATE KEY UPDATE server_info=VALUES(server_info)
+	</insert>
+	<select id="queryServerLists" resultType="string">
+		SELECT server_info FROM t_server_info
+	</select>
 </mapper>
