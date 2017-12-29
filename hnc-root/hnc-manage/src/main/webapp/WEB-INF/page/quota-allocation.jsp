@@ -21,17 +21,15 @@
 </head>
 <body>
 <div id="addandeditgoods" style="">
-    <div class="" id="editorSysUser" tabindex="-1" role="dialog" aria-labelledby="editorSysUser" >
+    <div class="" id="queryClient" tabindex="-1" role="dialog" aria-labelledby="queryClient" >
         <div class="modal-dialog" role="document"  style="width: 100%;">
             <div class="modal-content" style="margin-top: 5px;float: right;width: 100%">
                 <div class="modal-header">
-                    <h4 class="modal-title" id="editorSysUserTitle" style="float:left"></h4>
-
+                    <h4 class="modal-title" id="queryClientTitle" style="float:left"></h4>
                 </div>
                 <div class="row">
                     <div class="col-lg-2" style="margin-top: 5px">
-                        <select id="selectOpening" class="form-control">
-                            <option value="">请选择开盘</option>
+                        <select id="selectOpening" class="form-control" onchange="change();">
                         </select>
                     </div>
                 </div>
@@ -42,25 +40,33 @@
                             <div class="tabbable" id="tabs-44711">
                                 <ul class="nav nav-tabs" >
                                     <li class="active" id="navfirstli">
-                                        <a href="#notGivenPane" data-toggle="tab" id="nava1" onclick="loadDate();">未分配客户</a>
+                                        <a href="#notGivenPane" data-toggle="tab" id="nava1" >未分配客户</a>
                                     </li>
                                     <li>
-                                        <a href="#goodsConfigPane" data-toggle="tab" onclick="initGoodsConfigForm(this);" id="nava2">审核中客户</a>
+                                        <a href="#checking" data-toggle="tab"  id="nava2">审核中客户</a>
                                     </li>
                                     <li>
-                                        <a href="pass" data-toggle="tab" onclick="initGoodsConfigForm(this);" id="nava3">已通过客户</a>
+                                        <a href="#pass" data-toggle="tab"  id="nava3">已通过客户</a>
                                     </li>
                                     <li>
-                                        <a href="#goodsImagePane" data-toggle="tab" onclick="initGoodsImages();" id="nava4">未通过客户</a>
+                                        <a href="#notpass" data-toggle="tab"  id="nava4">未通过客户</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
                                     <div class="tab-pane active" id="notGivenPane">
                                         <div class="modal-body">
+                                            <div id="toolbar" class="form-inline">
+                                                <button class="btn btn-primary" type="button" onclick="checkClient()" >提交审核</button>
+                                                <div class="form-group" >
+                                                    <input type="text" class="form-control" id="search_client_name" placeholder="请输入客户姓名">
+                                                </div>
+                                                <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+                                            </div>
+
                                             <table id="notGivenTable" ></table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="goodsConfigPane">
+                                    <div class="tab-pane" id="checking">
                                         <div class="modal-body">
                                             <table id="checkingTable" ></table>
                                         </div>
@@ -70,7 +76,7 @@
                                             <table id="PassTable" ></table>
                                         </div>
                                     </div>
-                                    <div class="tab-pane" id="goodsImagePane">
+                                    <div class="tab-pane" id="notpass">
                                         <div class="modal-body">
                                             <table id="notPassTable" ></table>
                                         </div>
@@ -85,6 +91,81 @@
         </div>
     </div>
 </div>
+
+
+<div class="modal fade" id="showClientInfo" tabindex="-1" role="dialog" aria-labelledby="showClientInfo">
+    <div class="modal-dialog" role="document"  style="width: 600px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="editorgtgclTitle">客户详情</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">客户姓名:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="tmName" id="tmName"  disabled="disabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">电话:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="tmPhone" id="tmPhone"  disabled="disabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">性别:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="tmSex" name="tmSex" disabled="disabled" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">年龄:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="tmAge" name="tmAge"  disabled="disabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">身份证号码:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="tmIdCard" name="tmIdCard" disabled="disabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">渠道:</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="tmChannel" id="tmChannel" disabled="disabled">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">备注:</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" class="form-control" id="tmInfo" name="tmInfo" disabled="disabled">
+
+                            </textarea>
+                        </div>
+                    </div>
+                    <div id="invention">
+
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="editGtGclSubmit">确认</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
@@ -95,9 +176,7 @@
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
-    //编辑部门类型 0 新增 1 修改
-    var editorOpeningType=0;
-    var orgPermissionTreeObj;
+
     var treeColumns=[
         {   checkbox: true,
             align : 'center',
@@ -107,7 +186,14 @@
             field: 'tmName',
             title: '客户姓名',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                rowDatas.set(row.tmId,row);
+                var cmId = row.tmId;
+                var html = '';
+                html = '<a onclick="showClientInfo('+cmId+')">'+value+'</a>';
+                return html;
+            }
         },
         {
             field: 'tmPhone',
@@ -123,101 +209,6 @@
         }
     ]
 
-    $(function () {
-//        createTable("/OpeningEmpClient/queryNotGivenList","notGivenTable","cmId",treeColumns,queryParams)
-        //初始华开关选择器
-
-        $('#editorSysUser').on('hide.bs.modal', function () {
-            //清除数据
-            clearFormData();
-            clearFormValidation("editorOpeningForm",formValidater)
-        });
-
-        //编辑按钮提交操作
-        $("#editSubmit").click("click",function(e){
-            //开启校验
-            $('#editorOpeningForm').data('bootstrapValidator').validate();
-            //判断校验是否通过
-            if(!$('#editorOpeningForm').data('bootstrapValidator').isValid()){
-                return;
-            }
-            var editSubmitIndex = layer.load(2);
-
-            var arr = $("#reportrange").val().split(" - ");
-            $('#ostartTimes').val(arr[0]);
-            $('#oendTimes').val(arr[1]);
-
-            var formData=$("#editorOpeningForm").serializeObject();
-
-            formData["ostartTimes"] = arr[0];
-            formData["oendTimes"] = arr[1];
-            formData["oremark"] = $('#oremark').val();
-            var floors = '';
-            var checkboxs = $('#hasFloorrow').find('input[type=checkbox]:checked');
-            if(checkboxs.length>0){
-                for(var i=0;i<checkboxs.length;i++){
-                    floors += ','+checkboxs[i].value;
-                }
-                floors = floors.substr(1);
-            }
-            formData["floors"] = floors;
-            let url="/opening/saveOpening";
-            if(editorOpeningType==1){
-                url="/opening/updateOpening";
-            }
-            //取得form表单数据
-            $.ajax({
-                type:"post",
-                url:url,
-                dataType: "json",
-                data:formData,
-                success:function(data){
-                    layer.close(editSubmitIndex);
-                    if(data.status==0){
-                        //显示提示
-                        layer.msg('操作成功');
-                        //刷新数据
-                        refreshTableData();
-                        //关闭弹窗
-                        $('#editorSysUser').modal('hide')
-                    }else{
-                        layer.msg(data.msg);
-                    }
-                }
-            });
-        });
-        formValidater();
-    });
-    /**
-     * form 校验
-     * */
-    function formValidater(){
-        $('#editorOpeningForm')
-            .bootstrapValidator({
-                message: 'This value is not valid',
-                //live: 'submitted',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    glName: {
-                        message: '分配名额名称未通过',
-                        validators: {
-                            notEmpty: {
-                                message: '分配名额名称不能为空'
-                            },
-                            stringLength: {
-                                min: 1,
-                                max: 30,
-                                message: '分配名额名称长度在1-30之间'
-                            }
-                        }
-                    }
-                }
-            });
-    }
     /**
      * 查询条件
      **/
@@ -226,131 +217,107 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             oid: oid,
+            cmName:$('#search_client_name').val()
+        };
+    }
+    function queryCheckingParams(that){
+        return {
+            pageSize: that.pageSize,
+            pageNo: that.pageNumber,
+            oid: oid,
+            status:1
+        };
+    }
+    function queryPassParams(that){
+        return {
+            pageSize: that.pageSize,
+            pageNo: that.pageNumber,
+            oid: oid,
+            status:2
+        };
+    }
+    function queryNotPassParams(that){
+        return {
+            pageSize: that.pageSize,
+            pageNo: that.pageNumber,
+            oid: oid,
+            status:3
         };
     }
     /**
      * 刷新表格数据
      **/
     function refreshTableData() {
-        $('#OpeningTables').bootstrapTable(
+        $('#notGivenTable').bootstrapTable(
             "refresh",
             {
-                url:"/opening/queryOpeningList"
+                url:"/OpeningEmpClient/queryNotGivenList"
             }
         );
     }
-    //删除确认框
-    function deleteData(oid){
-        //询问框
-        layer.confirm('确定要删除选中的数据吗？', {
-            btn: ['确认','取消'] //按钮
-        }, function(){
-            removeOpening(oid);
-        }, function(){
-        });
-    }
-    /**
-     * 删除商品大类
-     **/
-    function removeOpening(oid){
-        $.ajax({
-            type:"post",
-            url:'/opening/removeOpening',
-            dataType: "json",
-            data:{oid:oid},
-            success:function(data){
-                if(data.status==0){
-                    layer.msg("删除成功");
-                    refreshTableData();
-                }else{
-                    layer.msg(data.msg);
-                }
+    function refreshCheckingTableData() {
+        $('#checkingTable').bootstrapTable(
+            "refresh",
+            {
+                url:"/OpeningEmpClient/queryCheckingandpassandnotpassList"
             }
-        });
+        );
+    }
+    function refreshPassableData() {
+        $('#PassTable').bootstrapTable(
+            "refresh",
+            {
+                url:"/OpeningEmpClient/queryCheckingandpassandnotpassList"
+            }
+        );
+    }
+    function refreshNotPassTableData() {
+        $('#notPassTable').bootstrapTable(
+            "refresh",
+            {
+                url:"/OpeningEmpClient/queryCheckingandpassandnotpassList"
+            }
+        );
     }
 
-    function editorOpening(orgId){
-        editorOpeningType=1;
-        initFormData(orgId);
-        $("#editorSysUserTitle").text("编辑分配名额");
-        $('#editorSysUser').modal("show")
-    }
-    /**
-     * 清除form 表单数据
-     * */
-    function clearFormData(){
-        $("#editorOpeningForm #uid").val("");
-        $("#editorOpeningForm #version").val("");
-        $("#editorOpeningForm #uaccount").val("");
-        $("#editorOpeningForm #uname").val("");
-        $("#editorOpeningForm #orgIds").val("");
-        $("#editorOpeningForm #isValid").val("");
-    }
-    /**
-     * 清除form 表单数据
-     * */
+
+
+
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
-        initFloors(key);
+
         if(rowData){
-            $("#editorOpeningForm #oid").val(rowData.oid);
-            $("#editorOpeningForm #oname").val(rowData.oname);
-            $("#editorOpeningForm #ostartTime").val(rowData.ostartTime);
-            $("#editorOpeningForm #oendTime").val(rowData.oendTime);
-            $("#editorOpeningForm #onum").val(rowData.onum);
-            $("#editorOpeningForm #omenberNum").val(rowData.omenberNum);
-            $("#editorOpeningForm #oendTime").val(rowData.oendTime);
-            $("#editorOpeningForm #version").val(rowData.version);
-            $("#reportrange").val(rowData.ostartTime.split(' ')[0] + ' - ' + rowData.oendTime.split(' ')[0]);
-            $("#editorOpeningForm #oremark").val(rowData.oremark);
+            loadInvention(key);
+            $(" #tmName").val(rowData.tmName);
+            $(" #tmPhone").val(rowData.tmPhone);
+            $(" #tmAge").val(rowData.tmAge);
+            $(" #tmIdCard").val(rowData.tmIdCard);
+            $(" #tmChannel").val(rowData.tmChannel);
+            $(" #tmInfo").val(rowData.tmInfo);
+
+            var sex = rowData.tmSex;
+            if(sex==0){
+                $(" #tmSex").val('女');
+            }else{
+                $(" #tmSex").val('男');
+            }
+
+
+//            $(" #version").val(rowData.version);
+//            $("#reportrange").val(rowData.ostartTime.split(' ')[0] + ' - ' + rowData.oendTime.split(' ')[0]);
+//            $(" #oremark").val(rowData.oremark);
         }else{
-            $("#editorOpeningForm #oname").val('');
-            $("#editorOpeningForm #oid").val('');
-            $("#editorOpeningForm #ostartTime").val('');
-            $("#editorOpeningForm #glEnoendTimedtime").val('');
-            $("#editorOpeningForm #onum").val('');
-            $("#editorOpeningForm #omenberNum").val('');
-            $("#editorOpeningForm #oremark").val('');
-            $("#reportrange").val('');
-            $("#searchDateRange").html('');
+//            $(" #oname").val('');
+//            $(" #oid").val('');
+//            $(" #ostartTime").val('');
+//            $(" #glEnoendTimedtime").val('');
+//            $(" #onum").val('');
+//            $(" #omenberNum").val('');
+//            $(" #oremark").val('');
+//            $("#reportrange").val('');
+//            $("#searchDateRange").html('');
 
         }
-    }
-    /**
-     * 添加商品大类
-     **/
-    function addOpening(){
-        editorOpeningType=0;
-        initFormData();
-
-        $("#editorSysUserTitle").text("添加分配名额");
-        $('#editorSysUser').modal("show")
-    }
-
-    function initFloors(oid) {
-        $.ajax({
-            type: "post",
-            url: "/opening/queryOFrelByOid",
-            dataType: "json",
-            data: {oid: oid},
-            success: function (data) {
-                var rows = data.ofRelList;
-                $('#hasFloorrow').html('');
-                var html = '';
-                for(var i=0;i<rows.length;i++){
-                    var selected = '';
-                    if(rows[i].selectedfid!=null){
-                        selected = 'checked="checked"';
-                    }else{
-                        selected = '';
-                    }
-                    html  = '<div class="col-lg-2">'+
-                        '<input type="checkbox" value="'+rows[i].fid+'" '+selected+'> '+rows[i].fname+
-                        '</div>';
-                    $('#hasFloorrow').append(html);
-                }
-            }
-        });
     }
 
     function loadOpening() {
@@ -379,9 +346,67 @@
     var oid;
     function loadDate() {
         oid = $('#selectOpening').val();
-        createTable("/OpeningEmpClient/queryNotGivenList","notGivenTable","cmId",treeColumns,queryParams)
+        createTable("/OpeningEmpClient/queryNotGivenList","notGivenTable","tmId",treeColumns,queryParams,"");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","checkingTable","tmId",treeColumns,queryCheckingParams,"miss");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","PassTable","tmId",treeColumns,queryPassParams,"miss");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",treeColumns,queryNotPassParams,"toolbar");
     }
-    
+
+    function change() {
+        oid = $('#selectOpening').val();
+        refreshTableData();
+        refreshCheckingTableData();
+        refreshPassableData();
+        refreshNotPassTableData();
+    }
+
+    function checkClient() {
+        var rows = $('#notGivenTable').bootstrapTable('getSelections');
+        console.log(rows);
+        var cmIds = '';
+        if(rows.length>0){
+            for(var i=0;i<rows.length;i++){
+                cmIds += ','+rows[i].tmId;
+            }
+            cmIds = cmIds.substr(1);
+        }else{
+            layer.msg('请您选择客户');
+            return;
+        }
+
+        $.ajax({
+            type: "post",
+            url: "/OpeningEmpClient/addCheckClient",
+            dataType: "json",
+            data: {oid:oid,cmIds:cmIds},
+            success: function (data) {
+                if(data.status==0){
+                    layer.msg('操作成功');
+                    change();
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        });
+    }
+
+    function showClientInfo(cmId) {
+        initFormData(cmId);
+        $('#showClientInfo').modal("show");
+    }
+
+    function loadInvention(cmId) {
+        $.ajax({
+            type: "post",
+            url: "/clientIntention/queryClientIntentionList",
+            dataType: "json",
+            data: {cmId:cmId},
+            success: function (data) {
+
+            }
+        });
+    }
+
     <!--日期格式化-->
     Date.prototype.pattern=function(fmt) {
         var o = {

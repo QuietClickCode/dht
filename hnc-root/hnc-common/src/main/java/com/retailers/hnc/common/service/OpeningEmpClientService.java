@@ -1,11 +1,9 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.hnc.common.entity.ClientManage;
-import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 
-import java.util.List;
 import java.util.Map;
 /**
  * 描述：开盘与雇员和客户的关系表Service
@@ -59,7 +57,13 @@ public interface OpeningEmpClientService {
 	 */
 	public boolean deleteOpeningEmpClientByOecId(Long oecId);
 
-	public List<ClientManageVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<ClientIntentionVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Pagination<ClientIntentionVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public boolean addCheckClient(Long oid,Long eid,String cmIds);
+
+	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status);
 }
 
 

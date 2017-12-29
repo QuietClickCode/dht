@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="hnc-manage:war">
+    <output-path>$PROJECT_DIR$/hnc-root/hnc-manage/target</output-path>
+    <root id="archive" name="hnc-manage.war">
+      <element id="artifact" artifact-name="hnc-manage:war exploded" />
+    </root>
+  </artifact>
+</component>

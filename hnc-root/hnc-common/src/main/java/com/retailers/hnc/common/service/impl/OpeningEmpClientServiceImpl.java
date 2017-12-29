@@ -8,7 +8,7 @@ import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.service.FloorManageService;
 import com.retailers.hnc.common.service.HouseTypeManageService;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
-import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +29,7 @@ import java.util.Map;
 public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	@Autowired
 	private OpeningEmpClientMapper openingEmpClientMapper;
-	@Autowired
-	private FloorManageService floorManageService;
-	@Autowired
-	private HouseTypeManageService houseTypeManageService;
+
 	public boolean saveOpeningEmpClient(OpeningEmpClient openingEmpClient) {
 		int status = openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
 		return status == 1 ? true : false;
@@ -59,68 +56,53 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return status == 1 ? true : false;
 	}
 
-	public List<ClientManageVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
-		Pagination<OpeningEmpClient> page = new Pagination<OpeningEmpClient>();
+	public Pagination<ClientIntentionVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<ClientIntentionVo> page = new Pagination<ClientIntentionVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<ClientManageVo> list = openingEmpClientMapper.queryNotGivenList(page);
-		return list;
+		List<ClientIntentionVo> list = openingEmpClientMapper.queryNotGivenList(page);
+		page.setData(list);
+		return page;
 	}
 
+	public Pagination<ClientIntentionVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<ClientIntentionVo> page = new Pagination<ClientIntentionVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<ClientIntentionVo> list = openingEmpClientMapper.queryCheckingandpassandnotpassList(page);
+		page.setData(list);
+		return page;
+	}
 
-	public void addIntention(List<ClientManageVo> list){
-		if(ObjectUtils.isNotEmpty(list)){
-			Map params = new HashMap();
-			params.put("isDelete",0l);
-			List<FloorManage> floorManageList = floorManageService.queryFloorManageList(params,1,10000).getData();
-			List<HouseTypeManage> houseTypeManageList = houseTypeManageService.queryHouseTypeManageList(params,1,10000).getData();
-
-
-			for(ClientManageVo clientManageVo:list){
-				List<FloorManage> floorManages = new ArrayList<FloorManage>();
-				List<HouseTypeManage> houseTypeManages = new ArrayList<HouseTypeManage>();
-
-				List<Long> fidsList = new ArrayList<Long>();
-				List<Long> htIdsList = new ArrayList<Long>();
-
-				String fidsStr = clientManageVo.getFids();
-				String hidsStr = clientManageVo.getHids();
-
-				idStringtoidList(fidsList,fidsStr);
-				idStringtoidList(htIdsList,hidsStr);
-
-				for(FloorManage floorManage:floorManageList){
-					Long fmId = floorManage.getFmId();
-					for(Long fidLong:fidsList){
-						if(fmId==fidLong){
-							floorManages.add(floorManage);
-						}
-					}
-				}
-				clientManageVo.setFloorManageList(floorManages);
-				for(HouseTypeManage houseTypeManage:houseTypeManageList){
-					Long htId = houseTypeManage.getHtId();
-					for(Long htIdLong:htIdsList){
-						if(htId==htIdLong){
-							houseTypeManages.add(houseTypeManage);
-						}
-					}
-				}
-				clientManageVo.setHouseTypeManages(houseTypeManages);
-
+	public boolean addCheckClient(Long oid,Long eid,String cmIds){
+		OpeningEmpClient openingEmpClient = new OpeningEmpClient();
+		openingEmpClient.setIsDelete(0L);
+		openingEmpClient.setOid(oid);
+		openingEmpClient.setEid(eid);
+		openingEmpClient.setOecStatus(1L);
+		int status = 0;
+		int index = 0;
+		if(ObjectUtils.isNotEmpty(cmIds)){
+			String[] cmIdsArr = cmIds.split(",");
+			index = cmIdsArr.length;
+			for(String cmIdStr:cmIdsArr){
+				Long cmIdLong = Long.parseLong(cmIdStr);
+				openingEmpClient.setCid(cmIdLong);
+				status += openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
 			}
 		}
+		return status==index?true:false;
 	}
 
-	public void idStringtoidList(List<Long> list,String str){
-		if(ObjectUtils.isNotEmpty(str)){
-			String[] hidsArr = str.split(",");
-			for(String hidStr:hidsArr){
-				Long hidsLong = Long.parseLong(hidStr);
-				list.add(hidsLong);
-			}
-		}
+	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status){
+
+
+		return false;
 	}
+
+
+
 }
 

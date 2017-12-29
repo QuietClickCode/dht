@@ -92,6 +92,7 @@
 		LEFT JOIN t_floor_manage t3 ON t2.f_id=t3.fm_id and t3.is_delete=0
 		<include refid="opening_where"/>
 		GROUP BY t1.o_id
+		ORDER BY t1.o_start_time DESC
 	</select>
 
 	<select id="queryOFrelByOid" resultMap="rm_opening_vo">

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="reatilers-wx-manage:war">
+    <output-path>$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/target</output-path>
+    <root id="archive" name="reatilers-wx-manage.war">
+      <element id="artifact" artifact-name="reatilers-wx-manage:war exploded" />
+    </root>
+  </artifact>
+</component>
