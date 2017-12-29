@@ -68,6 +68,17 @@
 		FROM t_floor_manage
 		<include refid="floorManage_where"/>
 	</select>
+
+	<select id="queryFloorManageByFmIds" resultMap="rm_floorManage">
+		SELECT *
+		FROM t_floor_manage t1
+		WHERE
+		t1.is_delete=0
+		and t1.fm_id in
+		<foreach item="fid" collection="fids" open="(" close=")" separator=",">
+			#{fid}
+		</foreach>
+	</select>
 	<!--添加楼栋管理 -->
 	<insert id="saveFloorManage" parameterType="com.retailers.hnc.common.entity.FloorManage" useGeneratedKeys="true" keyProperty="fmId">
 		INSERT INTO t_floor_manage (

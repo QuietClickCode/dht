@@ -21,5 +21,11 @@ public class ClientManageController {
         return "clientManage/clientManage";
     }
 
+    @RequestMapping("/QuotaAllocationMapping")
+    @Menu(parentRes = "sys.manager.client",resourse = "clientManage.QuotaAllocationMapping",description = "分配客户名额",label = "分配客户名额")
+    public String QuotaAllocationMapping(){
+        return "quota-allocation";
+    }
+
 
 }

@@ -10,9 +10,11 @@ import com.retailers.hnc.common.service.FloorManageService;
 import com.retailers.hnc.common.service.FloorRelationshipService;
 import com.retailers.hnc.common.vo.FloorManageVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,5 +96,19 @@ public class FloorManageServiceImpl implements FloorManageService {
 		}
 		return flag;
 	}
+	public List<FloorManage> queryFloorManageByFmIds(String fids){
+		if(ObjectUtils.isNotEmpty(fids)){
+			String[] fidsArr = fids.split(",");
+			List<Long> fidsList = new ArrayList<Long>();
+			for(String fidStr:fidsArr){
+				Long fidLong = Long.parseLong(fidStr);
+				fidsList.add(fidLong);
+			}
+			List<FloorManage> returnList = floorManageMapper.queryFloorManageByFmIds(fidsList);
+			return returnList;
+		}
+		return null;
+	}
+
 }
 

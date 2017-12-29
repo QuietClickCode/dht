@@ -62,6 +62,8 @@ public interface HouseTypeManageService {
 
 	public boolean addFloorRelationship(List<FloorRelationship> relationships);
 
+	public List<HouseTypeManage> queryHouseTypeManageByHtIds(String htIds);
+
 }
 
 

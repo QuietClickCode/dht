@@ -2,6 +2,8 @@ package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.vo.HouseTypeManageVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：户型表DAO
@@ -53,4 +55,5 @@ public interface HouseTypeManageMapper {
 	 */
 	public List<HouseTypeManageVo> queryHouseTypeManageList(Pagination<HouseTypeManageVo> pagination);
 
+	public List<HouseTypeManage> queryHouseTypeManageByHtIds(@Param("htIds") List<Long> htIds);
 }
