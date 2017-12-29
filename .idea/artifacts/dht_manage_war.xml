@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="war" name="dht-manage:war">
-    <output-path>$PROJECT_DIR$/dht-root/dht-manage/target</output-path>
-    <root id="archive" name="dht-manage-1.0-SNAPSHOT.war">
-      <element id="artifact" artifact-name="dht-manage:war exploded" />
-    </root>
-  </artifact>
-</component>
