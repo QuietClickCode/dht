@@ -8,7 +8,7 @@ import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.entity.Team;
 import com.retailers.hnc.common.service.EmRelationshipService;
-import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
+import com.retailers.hnc.common.vo.EmRelationshipVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,23 +62,23 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return status == 1 ? true : false;
 	}
 
-	public List<EmployeeAndTeamVo> queryEmRelationshipVoList() {
+	public List<EmRelationshipVo> queryEmRelationshipVoList() {
 		List<Team> teams = teamMapper.queryAllTeam();
-		List<EmployeeAndTeamVo> emRelationshipVos = new ArrayList<EmployeeAndTeamVo>();
+		List<EmRelationshipVo> emRelationshipVos = new ArrayList<EmRelationshipVo>();
 		for (Team team : teams) {
-			EmployeeAndTeamVo vo = new EmployeeAndTeamVo();
-			vo.settId(team.getTid());
+			EmRelationshipVo vo = new EmRelationshipVo();
+			vo.setTid(team.getTid());
 			vo.setTeamName(team.getTname());
 			vo.setTeam(team);
 			vo.setIsDelete(0L);
 			emRelationshipVos.add(vo);
 		}
 		List<EmployeeManage> employeeManages = employeeManageMapper.queryAllEmployee();
-		long tmId = emRelationshipVos.get(emRelationshipVos.size() - 1).gettId() * 10000;
+		long tmId = emRelationshipVos.get(emRelationshipVos.size() - 1).getTid() * 10000;
 		for (EmployeeManage employeeManage : employeeManages) {
-			EmployeeAndTeamVo vo = new EmployeeAndTeamVo();
+			EmRelationshipVo vo = new EmRelationshipVo();
 			vo.setIsDelete(0L);
-			vo.settId(tmId++);
+			vo.setTid(tmId++);
 			vo.setEmployeeName(employeeManage.getEmName());
 			vo.setParentId(employeeManage.getEmTeam());
 			vo.setEmployeeManage(employeeManage);
@@ -87,14 +87,44 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return emRelationshipVos;
 	}
 
+	public List<EmRelationshipVo> queryOpeningEmployees(Long pId) {
+		List<EmRelationship> OpeningTeams = queryOpeningTeam(pId);
+		System.out.println(OpeningTeams.size()+"Test");
+		long tmId = 1;
+		if(OpeningTeams.size() != 0)
+			tmId = OpeningTeams.get(OpeningTeams.size() - 1).getParentId() * 10000;
+		List<EmRelationshipVo> relationshipVoList = emRelationshipMapper.queryOpeningEmployees(pId);
+		for (EmRelationshipVo relationshipVo : relationshipVoList) {
+			EmployeeManage employeeManage = employeeManageMapper.queryEmployeeManageByEmId(relationshipVo.getEmId());
+			relationshipVo.setEmployeeName(employeeManage.getEmName());
+			relationshipVo.setEmployeeManage(employeeManage);
+			relationshipVo.setTid(tmId++);
+		}
 
-	public List<EmployeeAndTeamVo> queryEmployeeTree(List<EmployeeAndTeamVo> relationshipVos) {
-		List<EmployeeAndTeamVo> rtnList=new ArrayList<EmployeeAndTeamVo>();
+		for (EmRelationship relationship : OpeningTeams) {
+			Team team = teamMapper.queryTeamByTid(relationship.getParentId());
+			EmRelationshipVo vo = new EmRelationshipVo();
+			vo.setTid(team.getTid());
+			vo.setIsDelete(0l);
+			vo.setParentId(null);
+			vo.setEmployeeName(team.getTname());
+			vo.setTeam(team);
+			relationshipVoList.add(vo);
+		}
+		return relationshipVoList;
+	}
+
+	public List<EmRelationship> queryOpeningTeam(Long pId) {
+		return emRelationshipMapper.queryOpeningTeam(pId);
+	}
+
+	public List<EmRelationshipVo> queryEmployeeTree(List<EmRelationshipVo> relationshipVos) {
+		List<EmRelationshipVo> rtnList=new ArrayList<EmRelationshipVo>();
 		Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
 		queryEmployeeNode(relationshipVos,child);
 		Map<Long,Long> alloShow=new HashMap<Long, Long>();
 		queryAllEmployee(null,child,alloShow);
-		for(EmployeeAndTeamVo vo:relationshipVos){
+		for(EmRelationshipVo vo:relationshipVos){
 			if(ObjectUtils.isEmpty(vo.getParentId())){
 				vo.setLevel(1l);
 				rtnList.add(vo);
@@ -124,20 +154,22 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 	}
 
 
-	private void queryEmployeeNode(List<EmployeeAndTeamVo> list, Map<Long,Map<Long,Long>> child){
-		for(EmployeeAndTeamVo vo:list){
+	private void queryEmployeeNode(List<EmRelationshipVo> list, Map<Long,Map<Long,Long>> child){
+		for(EmRelationshipVo vo:list){
 			Long parentId=vo.getParentId();
 			if(ObjectUtils.isEmpty(parentId)){
 				parentId=-1l;
 			}
 			if(child.containsKey(parentId)){
-				child.get(parentId).put(vo.gettId(),vo.getIsDelete());
+				child.get(parentId).put(vo.getTid(),vo.getIsDelete());
 			}else{
 				Map<Long,Long> maps=new HashMap<Long, Long>();
-				maps.put(vo.gettId(),vo.getIsDelete());
+				maps.put(vo.getTid(),vo.getIsDelete());
 				child.put(parentId,maps);
 			}
 		}
 	}
+
+
 }
 
