@@ -9,6 +9,7 @@ import java.util.List;
  * Created by niconiconi on 2017/12/18.
  */
 public class HouseTypeManageVo extends HouseTypeManage {
+    private String imagePath;
     private List<FloorManage> floorManages;
 
     public List<FloorManage> getFloorManages() {
@@ -17,5 +18,13 @@ public class HouseTypeManageVo extends HouseTypeManage {
 
     public void setFloorManages(List<FloorManage> floorManages) {
         this.floorManages = floorManages;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 }

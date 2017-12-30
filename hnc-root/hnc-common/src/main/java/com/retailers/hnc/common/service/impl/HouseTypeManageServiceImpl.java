@@ -10,6 +10,9 @@ package com.retailers.hnc.common.service.impl;
 		import com.retailers.hnc.common.service.FloorRelationshipService;
 		import com.retailers.hnc.common.service.HouseTypeManageService;
 		import com.retailers.hnc.common.vo.HouseTypeManageVo;
+		import com.retailers.mybatis.common.constant.AttachmentConstant;
+		import com.retailers.mybatis.common.entity.Attachment;
+		import com.retailers.mybatis.common.service.AttachmentService;
 		import com.retailers.mybatis.pagination.Pagination;
 		import com.retailers.tools.utils.ObjectUtils;
 		import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +40,25 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 	@Autowired
 	private FloorManageMapper manageMapper;
 
+	@Autowired
+	private AttachmentService attachmentService;
+
 	public boolean saveHouseTypeManage(HouseTypeManage houseTypeManage) {
 		int status = houseTypeManageMapper.saveHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;
 	}
 	public boolean updateHouseTypeManage(HouseTypeManage houseTypeManage) {
 		HouseTypeManage manage = queryHouseTypeManageByHtId(houseTypeManage.getHtId());
+		if(houseTypeManage.getHtImage() != null){
+			if (!ObjectUtils.compare(houseTypeManage.getHtImage(),manage.getHtImage())) {
+				if(manage.getHtImage() == null)
+					attachmentService.editorAttachment(houseTypeManage.getHtImage());
+				else{
+					attachmentService.editorAttachment(manage.getHtImage(),AttachmentConstant.ATTACHMENT_STATUS_NO);
+					attachmentService.editorAttachment(houseTypeManage.getHtImage());
+				}
+			}
+		}
 		houseTypeManage.setVersion(manage.getVersion());
 		int status = houseTypeManageMapper.updateHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;
@@ -58,6 +74,11 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		page.setParams(params);
 		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHouseTypeManageList(page);
 		for (HouseTypeManageVo typeManageVo : list) {
+			if(typeManageVo.getHtImage() != null){
+				Attachment attachment = attachmentService.queryAttachmentById(typeManageVo.getHtImage());
+				if(attachment != null)
+					typeManageVo.setImagePath(AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
+			}
 			typeManageVo.setFloorManages(relationshipService.queryHouseType(typeManageVo.getHtId()));
 		}
 		page.setData(list);

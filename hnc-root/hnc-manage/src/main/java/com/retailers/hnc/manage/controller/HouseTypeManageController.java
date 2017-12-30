@@ -65,9 +65,9 @@ public class HouseTypeManageController extends BaseController{
     public BaseResp updateHouseType(HouseTypeManage manage){
         boolean flag = houseTypeManageService.updateHouseTypeManage(manage);
         if(flag)
-            return success("修改首页导航[" + manage.getHtTypeName() + "]成功");
+            return success("修改户型信息成功");
         else
-            return errorForSystem("修改首页导航[" + manage.getHtTypeName() + "]失败");
+            return errorForSystem("修改户型信息失败");
     }
 
     @RequestMapping("/removeHouseType")

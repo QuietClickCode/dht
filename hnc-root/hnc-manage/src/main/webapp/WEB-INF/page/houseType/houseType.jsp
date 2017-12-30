@@ -61,6 +61,11 @@
             background: url("/img/remove_icon.png") no-repeat;
             background-size: 15px 15px;
         }
+
+        .houseTypeImg{
+            width: 50px;
+            height: 50px;
+        }
     </style>
 </head>
 <div>
@@ -215,6 +220,34 @@
 </div>
 
 
+<%--查看户型效果图--%>
+<div class="modal fade" id="editHouseTypeImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">查看户型效果图</h4>
+            </div>
+            <div class="modal-body">
+                <form id="uploadFileForm" class="form-inline">
+                    <div class="form-group">
+                        <label >请选择图片</label>
+                        <input type="file" name="dht_image_upload" id="filed">
+                    </div>
+                    <div class="form-group">
+                        <img class="houseTypeImg" src="">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary subEditHouseTypeImg">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <%--添加删除楼栋模态框--%>
 <div class="modal fade bs-example-modal-lg" tabindex="-1" id="saveFloorManage" role="dialog" aria-labelledby="myLargeModalLabel">
     <div class="modal-dialog modal-lg" role="document">
@@ -332,7 +365,7 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                return '<button class="btn btn-primary" onclick="event.stopPropagation();">添加户型效果图</button>';
+                return '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">添加户型效果图</button>';
             }
         },
         {
@@ -578,6 +611,58 @@
             }
         }
     })
+</script>
+
+<%--添加户型效果图--%>
+<script>
+    function editHouseTypeImg(id) {
+        houseType = rowDatas.get(id);
+        $("#editHouseTypeImg").modal("show");
+    }
+
+    $(".subEditHouseTypeImg").click(function () {
+        var fd = new FormData($("#uploadFileForm")[0]);
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            dataType:"json",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                addHouseTypeImg(data.original);
+            }
+        })
+    });
+    
+    function addHouseTypeImg(original) {
+        $.ajax({
+            url:"/houseManage/updateHouseType",
+            method:"post",
+            data:{
+                htId:houseType['htId'],
+                htImage:original
+            },
+            dataType:"json",
+            success:function (data) {
+                layer.msg(data.msg);
+                $("#editHouseTypeImg").modal("hide");
+            }
+        });
+    }
+    
+    $("#filed").change(function () {
+        var file = $('#filed').get(0).files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload=function(e){
+            console.log(e);
+            $('.houseTypeImg').get(0).src = e.target.result;
+        }
+    });
 </script>
 
 <1%--自定义方法--%>
