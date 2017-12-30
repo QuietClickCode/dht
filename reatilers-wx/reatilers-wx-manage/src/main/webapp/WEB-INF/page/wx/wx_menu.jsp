@@ -524,7 +524,7 @@
 					</div>
 				</div>
 				<div class="dialog_ft">
-					<button class="btn btn-default del_menu_closed" type="button">确定</button>
+					<button class="btn btn-default del_menu_closed" type="button" onclick="delChildMenu()">确定</button>
 					<button class="btn btn-default del_menu_closed" type="button">取消</button>
 				</div>
 			</div>
@@ -543,7 +543,17 @@
 			var buttons=obj.button;
 			var count=0;
 			for(var row of buttons){
-                addTab(count,row.name);
+                //添加主菜单
+			    addTab(count,row.name);
+                //添加子菜单
+				if(row.sub_button){
+				    var childRows=row.sub_button;
+				    for(var childRow of childRows){
+				        console.log(childRow)
+						console.log(childRow.name)
+                        addChildMenu(count,childRow.name,childRow.type,childRow.url);
+					}
+				}
                 count++;
 			}
 		}
@@ -568,15 +578,20 @@
             console.log(w1)
             console.log(ow)
             let $w = w / len;
-
             if($(".menu_item:visible").length < 3){
                 $(".sub_pre_menu_box").css("width",$w+"px");
                 nextItem.css("width",$w+"px");
                 nextItem.show();
                 $(".menu_item").css("width",$w+"px");
-                $(".menu_list").append($li);
+//                $(".menu_list").append($li);
             }
         }
+        /**
+		 * 删除子菜单
+         */
+		function delChildMenu(){
+			//取得选中的子菜单
+		}
 	</script>
 </body>
 </html>

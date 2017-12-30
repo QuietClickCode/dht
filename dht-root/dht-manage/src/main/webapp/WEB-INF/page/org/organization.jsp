@@ -415,6 +415,7 @@
 				var nodeData=new Array();
                 let firstNode=new Object();
                 firstNode.name="顶端节点";
+                firstNode.id='';
                 nodeData.push(firstNode);
 				for(row of d){
 					let treeRow=new Object();
