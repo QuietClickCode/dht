@@ -49,7 +49,7 @@
                 <span>${user.rechageNm}</span>
             </div>
             <i class="news">
-                <span></span>
+                <%--<span></span>--%>
             </i>
         </div>
 
@@ -65,7 +65,7 @@
             <div class="state">
                 <a href="/order/orderList?id=#obligation">
                     <i class="icon-state1">
-                        <span>1</span>
+                        <%--<span>1</span>--%>
                     </i>
                     <p>未付款</p>
                 </a>
@@ -73,7 +73,7 @@
             <div class="state">
                 <a href="/order/orderList?id=#unsent">
                     <i class="icon-state2">
-                        <span>1</span>
+                        <%--<span>1</span>--%>
                     </i>
                     <p>待处理</p>
                 </a>
@@ -81,7 +81,7 @@
             <div class="state">
                 <a href="/order/orderList?id=#appraise">
                     <i class="icon-state3">
-                        <span>1</span>
+                        <%--<span>1</span>--%>
                     </i>
                     <p>可评价</p>
                 </a>
@@ -93,8 +93,9 @@
                 <i class="icon-care"></i>
                 <span>购物车</span>
             </div>
-            <a href="/buyCar/gotoShoppingCar" id="gotoShoppingCarA">有0件商品在等你噢
-                <span class="prompt"></span>
+            <a href="/buyCar/gotoShoppingCar" id="gotoShoppingCarA">
+                有0件商品在等你噢
+                <%--<span class="prompt" style="display: none"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -103,7 +104,7 @@
                 <span>足迹</span>
             </div>
             <a href="/userFootprint/toUserFootprintpage">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -112,7 +113,7 @@
                 <span>余额</span>
             </div>
             <a href="/user/userWallet">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -121,7 +122,7 @@
                 <span>会员卡</span>
             </div>
             <a href="/user/userMember">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -130,7 +131,7 @@
                 <span>优惠券</span>
             </div>
             <a href="/user/userCoupon">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -139,7 +140,7 @@
                 <span>返现</span>
             </div>
             <a href="">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
         <div class="user-order">
@@ -148,7 +149,7 @@
                 <span>售后服务</span>
             </div>
             <a href="">
-                <span class="prompt"></span>
+                <%--<span class="prompt"></span>--%>
             </a>
         </div>
 
@@ -180,6 +181,10 @@
                 let link = $(".user-order").eq(index).find("a").attr("href");
                 location.href = link;
             }
+        });
+
+        $(function () {
+            $("#gotoShoppingCarA").children().remove();
         });
 
 
