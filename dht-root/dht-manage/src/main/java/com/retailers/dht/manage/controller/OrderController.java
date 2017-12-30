@@ -7,6 +7,8 @@ import com.retailers.dht.common.vo.OrderDetailVo;
 import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
@@ -120,6 +123,31 @@ public class OrderController extends BaseController {
             return errorForSystem(e.getMessage());
         }
         return success(true);
+    }
+
+    /**
+     * 打开订单设置
+     * @return
+     */
+    @RequestMapping("openOrderSettingPage")
+    @Menu(label = "订单基础设置",description = "订单基础设置",resourse = "order.openOrderSettingPage",parentRes = "sys.manager.orderManage",sort = 2)
+    public ModelAndView openOrderSettingPage(){
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("params",SysParameterConfigConstant.params);
+        modelAndView.setViewName("order/order_setting");
+        return modelAndView;
+    }
+    /**
+     * 订单设置
+     * @param request
+     * @param overduExpire 订单超时时间
+     * @param autoConfirmation 自动确认收货时间
+     * @param autoEnd 订单退款时间
+     * @param defaultExpressFee 默认快递费
+     * @return
+     */
+    public String orderSetting(HttpServletRequest request,String overduExpire,String autoConfirmation,String autoEnd,String defaultExpressFee){
+        return null;
     }
 
 }

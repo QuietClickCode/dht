@@ -80,23 +80,26 @@ $(".tab_nav_left").click(function(){
 });
 
 /*添加子菜单*/
-function addChildMenu(menu_item_index){
+function addChildMenu(menu_item_index,name,type,val){
 	let menu_box = $(".sub_first_menu").eq(menu_item_index);
 	let len = $(".sub_pre_menu_box").eq(menu_item_index).find(".sub_menu").length;
+	if(!name){
+        name="子菜单名称";
+	}
 	if(len < 5){
-		let subMenu = $("<li class='sub_menu'></li>");									
-		let title = $("<span class='menu_title'>子菜单名称</span>");
+		let subMenu = $("<li class='sub_menu' type='"+type+"' val='"+val+"'></li>");
+		let title = $("<span class='menu_title'>"+name+"</span>");
 		subMenu.append(title);
 		menu_box.prepend(subMenu);
 		menu_box.find(".sub_menu:not(:last)").each(function(){
 			let index = $(this).index();
-			$(this).attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+","+index+","+this+")");
+			$(this).attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+","+index+")");
 		});
 	}else if(len == 5){
 		let firstMenu = menu_box.find(".sub_menu").eq(4);
 		firstMenu.find(".menu_add").hide();
-		firstMenu.find(".menu_title").show().text("子菜单名称");
-		firstMenu.attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+",4,"+this+")");
+		firstMenu.find(".menu_title").show().text(name);
+		firstMenu.attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+",4)");
 	}
 }
 
