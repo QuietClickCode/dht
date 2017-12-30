@@ -540,6 +540,8 @@ li,ol,ul{list-style:none}.position-r,.search{position:relative}.box,.footer ul{m
 	margin-top: .1rem;
 	color: #666;
 	border-radius: 4px;
+	padding: .2rem .8rem;
+	margin-right: .4rem;
 }
 .checkbox_service.active{
 	background: #ec3c3c;
@@ -691,11 +693,11 @@ li,ol,ul{list-style:none}.position-r,.search{position:relative}.box,.footer ul{m
 }
 .recharge_btn_box .recharge_btn{
 	width: 100%;
-	height: .6rem;
+	height: 1rem;
 	text-align: center;
 	display: block;
-	line-height: .6rem;
-	font-size: .2rem;
+	line-height: 1rem;
+	font-size: .52rem;
 	background: #05b13a;
 	color: #fff;
 	border-radius: 4px;
