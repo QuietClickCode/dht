@@ -115,14 +115,20 @@ public class GoodsController extends BaseController {
     @ResponseBody
     public BaseResp queryGoodsList( String condition, Long gclass, int pageNo, int pageSize){
         List<GoodsVo> list = new ArrayList<GoodsVo>();
-        if(!ObjectUtils.isEmpty(condition)){
-            //根据输入的条件来查询商品
-        }else if(!ObjectUtils.isEmpty(gclass)){
-            Map params = new HashMap();
-            params.put("gclass",gclass);
-            list = goodsService.queryGoodsListByGclass(params,pageNo,pageSize);
-        }else{
-            return null;
+        try{
+            if(!ObjectUtils.isEmpty(condition)){
+                //根据输入的条件来查询商品
+//                condition = URLDecoder.decode(condition,"utf-8");
+                list = goodsService.queryGoodsVoListByCondition(condition,pageNo,pageSize);
+            }else if(!ObjectUtils.isEmpty(gclass)){
+                Map params = new HashMap();
+                params.put("gclass",gclass);
+                list = goodsService.queryGoodsListByGclass(params,pageNo,pageSize);
+            }else{
+                return null;
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
         return success(list);
     }

@@ -55,6 +55,10 @@ public interface GoodsMapper {
 	 * @return
 	 */
 	public List<Goods> queryGoodsByGids(@Param("gids") List<Long> gids);
+
+	public List<Goods> queryGoodsVoListByLikeGname(@Param("gname") String gname);
+
+	public List<GoodsVo> queryGoodsVoByIds(Pagination<GoodsVo> pagination);
 	/**
 	 * 查询商品表列表
 	 * @param pagination 分页对象
