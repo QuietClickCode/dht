@@ -60,6 +60,7 @@ public interface FloorManageService {
 	 */
 	public boolean deleteFloorManageByFmId(Long fmId);
 
+	public Pagination<FloorManageVo> queryFirstFloorManageList(Map<String, Object> params,int pageNo,int pageSize);
 
 	public boolean addFloorRelationship(List<FloorRelationship> relationships);
 

@@ -1,8 +1,9 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
-import com.retailers.mybatis.pagination.Pagination;
+
 import com.retailers.hnc.common.entity.EmRelationship;
+import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.List;
 import java.util.Map;
@@ -58,9 +59,25 @@ public interface EmRelationshipService {
 	 */
 	public boolean deleteEmRelationshipByErId(Long erId);
 
-	public List<EmployeeAndTeamVo> queryEmRelationshipVoList();
+	public List<EmRelationshipVo> queryEmRelationshipVoList();
 
-	public List<EmployeeAndTeamVo> queryEmployeeTree(List<EmployeeAndTeamVo> relationshipVos);
+	public List<EmRelationshipVo> queryEmployeeTree(List<EmRelationshipVo> relationshipVos);
+
+	/**
+	 * 查询开盘期数所对置业顾问分配的名额
+	 * @return  分配预约名额关系表列表
+	 * @author wangjue
+	 * @date 2017-12-29 13:48:07
+	 */
+	public List<EmRelationshipVo> queryOpeningEmployees(Long pId);
+
+	/**
+	 * 查询开盘期数对那些团队分配了名额
+	 * @return  分配预约名额关系表列表
+	 * @author wangjue
+	 * @date 2017-12-29 13:48:07
+	 */
+	public List<EmRelationship> queryOpeningTeam(Long pId);
 
 }
 

@@ -1,11 +1,11 @@
 package com.retailers.hnc.common.entity;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
- * 描述：开盘和置业顾问关系表对象
+ * 描述：分配预约名额关系表对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-28 14:55:17
+ * @date 2017-12-29 13:48:07
  */
 public class EmRelationship implements java.io.Serializable {
 
@@ -20,7 +20,7 @@ public class EmRelationship implements java.io.Serializable {
 	private Long emId;
 	/**团队ID*/
 	@NotEmpty
-	private Long tid;
+	private Long parentId;
 	/**预约人数*/
 	@NotEmpty
 	private Long emReservation;
@@ -60,12 +60,12 @@ public class EmRelationship implements java.io.Serializable {
 	public Long getEmId() {
 		return this.emId;
 	}
-	public void setTid(Long value) {
-		this.tid = value;
+	public void setParentId(Long value) {
+		this.parentId = value;
 	}
 
-	public Long getTid() {
-		return this.tid;
+	public Long getParentId() {
+		return this.parentId;
 	}
 	public void setEmReservation(Long value) {
 		this.emReservation = value;

@@ -1,7 +1,6 @@
 package com.retailers.hnc.common.dao;
-import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
-import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -54,6 +53,8 @@ public interface OpeningEmpClientMapper {
 	 */
 	public List<OpeningEmpClient> queryOpeningEmpClientList(Pagination<OpeningEmpClient> pagination);
 
-	public List<ClientManageVo> queryNotGivenList(Pagination<OpeningEmpClient> pagination);
+	public List<OpeningEmpClient> queryNotGivenList(Pagination<OpeningEmpClient> pagination);
+
+	public List<ClientIntentionVo> queryCheckingandpassandnotpassList(Pagination<ClientIntentionVo> pagination);
 
 }

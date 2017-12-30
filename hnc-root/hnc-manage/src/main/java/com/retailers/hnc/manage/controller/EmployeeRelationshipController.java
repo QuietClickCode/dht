@@ -2,8 +2,11 @@ package com.retailers.hnc.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.service.EmRelationshipService;
-import com.retailers.hnc.common.vo.EmployeeAndTeamVo;
+import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.manage.base.BaseController;
+import com.retailers.tools.base.BaseResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,7 +21,7 @@ import java.util.Map;
  */
 @Controller
 @RequestMapping("employeeRelationship")
-public class EmployeeRelationshipController {
+public class EmployeeRelationshipController extends BaseController{
     @Autowired
     EmRelationshipService emRelationshipService;
 
@@ -32,14 +35,54 @@ public class EmployeeRelationshipController {
     @Function(label = "查询所有团队和置业顾问",description = "查询所有团队和置业顾问",resourse = "employeeRelationship.queryAllClient",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
     @ResponseBody
     public Map<String,Object> queryAllClient(){
-        List<EmployeeAndTeamVo> relationshipVos = emRelationshipService.queryEmRelationshipVoList();
-        for(EmployeeAndTeamVo relationshipVo:relationshipVos){
-            System.out.println(relationshipVo.gettId()+" "+relationshipVo.getParentId());
+        List<EmRelationshipVo> relationshipVos = emRelationshipService.queryEmRelationshipVoList();
+        for(EmRelationshipVo relationshipVo:relationshipVos){
+            System.out.println(relationshipVo.getTid()+" "+relationshipVo.getParentId());
         }
-        List<EmployeeAndTeamVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);
+        List<EmRelationshipVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);
         HashMap<String,Object> map=new HashMap<String, Object>();
         map.put("total",1000);
         map.put("rows",rows);
         return map;
     }
+
+
+    @RequestMapping("/queryAllEmployee")
+    @Function(label = "查询所有分配了预约客户的团队和置业顾问",description = "查询所有分配了预约客户的团队和置业顾问",resourse = "employeeRelationship.queryAllEmployee",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public Map<String,Object> queryAllEmployee(Long pId){
+        List<EmRelationshipVo> relationshipVos = emRelationshipService.queryOpeningEmployees(pId);
+        for(EmRelationshipVo relationshipVo:relationshipVos){
+            System.out.println(relationshipVo.getTid()+" "+relationshipVo.getParentId());
+        }
+        List<EmRelationshipVo> rows = emRelationshipService.queryEmployeeTree(relationshipVos);
+        HashMap<String,Object> map=new HashMap<String, Object>();
+        map.put("total",1000);
+        map.put("rows",rows);
+        return map;
+    }
+
+
+    @RequestMapping("/addEmRelationship")
+    @Function(label = "添加预约关系",description = "添加预约关系",resourse = "employeeRelationship.addEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public BaseResp addEmRelationship(EmRelationship emRelationship){
+        boolean flag = emRelationshipService.saveEmRelationship(emRelationship);
+        if(flag)
+            return success("添加预约关系成功");
+        else
+            return success("添加预约关系失败");
+    }
+
+    @RequestMapping("/updateEmRelationship")
+    @Function(label = "修改预约关系",description = "修改预约关系",resourse = "employeeRelationship.updateEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public BaseResp updateEmRelationship(EmRelationship emRelationship){
+        boolean flag = emRelationshipService.updateEmRelationship(emRelationship);
+        if(flag)
+            return success("修改预约关系成功");
+        else
+            return errorForSystem("修改预约关系失败");
+    }
+
 }

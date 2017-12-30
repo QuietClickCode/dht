@@ -6,22 +6,33 @@
 			<result property="erId" column="er_id"/>
 			<result property="pid" column="p_id"/>
 			<result property="emId" column="em_id"/>
-			<result property="tid" column="t_id"/>
+			<result property="parentId" column="parent_id"/>
 			<result property="emReservation" column="em_reservation"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_emRelationshipVo" type="com.retailers.hnc.common.vo.EmRelationshipVo">
+		<result property="erId" column="er_id"/>
+		<result property="pid" column="p_id"/>
+		<result property="emId" column="em_id"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="emReservation" column="em_reservation"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="emRelationship_columns">
-		er_id,p_id,em_id,t_id,em_reservation,is_delete,version
+		er_id,p_id,em_id,parent_id,em_reservation,is_delete,version
 	</sql>
-	<!-- 根据开盘和置业顾问关系表主键取得数据 -->
+	<!-- 根据分配预约名额关系表主键取得数据 -->
 	<select id="queryEmRelationshipByErId" resultMap="rm_emRelationship" parameterType="java.lang.Long">
 		SELECT <include refid="emRelationship_columns" />
 		FROM t_em_relationship WHERE er_id = #{erId}
 	</select>
-	<!-- 开盘和置业顾问关系表查询条件组合 -->
+	<!-- 分配预约名额关系表查询条件组合 -->
 	<sql id="emRelationship_where">
 		<where>
 			<if test="null != params.erId">
@@ -33,8 +44,8 @@
 			<if test="null != params.emId">
 				AND em_id = #{params.emId}
 			</if>
-			<if test="null != params.tid">
-				AND t_id = #{params.tid}
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
 			</if>
 			<if test="null != params.emReservation">
 				AND em_reservation = #{params.emReservation}
@@ -53,16 +64,16 @@
 		FROM t_em_relationship
 		<include refid="emRelationship_where"/>
 	</select>
-	<!--添加开盘和置业顾问关系表 -->
+	<!--添加分配预约名额关系表 -->
 	<insert id="saveEmRelationship" parameterType="com.retailers.hnc.common.entity.EmRelationship" useGeneratedKeys="true" keyProperty="erId">
 		INSERT INTO t_em_relationship (
-			p_id,em_id,t_id,em_reservation,is_delete,version
+			p_id,em_id,parent_id,em_reservation,is_delete,version
 		) VALUES
 		(
-			#{pid,jdbcType=BIGINT},#{emId,jdbcType=BIGINT},#{tid,jdbcType=BIGINT},#{emReservation,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{pid,jdbcType=BIGINT},#{emId,jdbcType=BIGINT},#{parentId,jdbcType=BIGINT},#{emReservation,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
-	<!--修改开盘和置业顾问关系表 -->
+	<!--修改分配预约名额关系表 -->
 	<update id="updateEmRelationship" parameterType="com.retailers.hnc.common.entity.EmRelationship">
 		UPDATE t_em_relationship
 		<set>
@@ -72,8 +83,8 @@
             <if test="null != emId">
                 em_id = #{emId},
             </if>
-            <if test="null != tid">
-                t_id = #{tid},
+            <if test="null != parentId">
+                parent_id = #{parentId},
             </if>
             <if test="null != emReservation">
                 em_reservation = #{emReservation},
@@ -87,8 +98,18 @@
 		</set>
 		WHERE er_id = #{erId} and version = #{version}
 	</update>
-	<!--删除开盘和置业顾问关系表 -->
+	<!--删除分配预约名额关系表 -->
 	<delete id="deleteEmRelationshipByErId" parameterType="java.lang.Long">
 		DELETE FROM t_em_relationship WHERE er_id = #{erId}
 	</delete>
+
+	<!--根据开盘期数查询给置业顾问所分配的预约名额-->
+	<select id="queryOpeningEmployees" resultMap="rm_emRelationshipVo" parameterType="java.lang.Long">
+		select * from t_em_relationship where p_id = #{pId}
+	</select>
+
+	<!--根据开盘期数查询有那些团队有预约名额-->
+	<select id="queryOpeningTeam" resultMap="rm_emRelationship" parameterType="java.lang.Long">
+		select distinct  parent_id FROM t_em_relationship where p_id = #{pId}
+	</select>
 </mapper>
