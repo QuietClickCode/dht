@@ -32,6 +32,10 @@ public class UserCardPackage implements java.io.Serializable {
 	/**钱包总消费*/
 	@NotEmpty
 	private Long uwalletConsumeTotal;
+	/**
+	 * 第三方消费
+	 */
+	private Long uOtherPayTotal;
 	/**version*/
 	@NotEmpty
 	private Integer version;
@@ -101,5 +105,11 @@ public class UserCardPackage implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getuOtherPayTotal() {
+		return uOtherPayTotal;
+	}
 
+	public void setuOtherPayTotal(Long uOtherPayTotal) {
+		this.uOtherPayTotal = uOtherPayTotal;
+	}
 }

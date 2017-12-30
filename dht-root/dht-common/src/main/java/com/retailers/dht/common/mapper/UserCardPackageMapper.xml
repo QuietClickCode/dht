@@ -10,12 +10,13 @@
 		<result property="ucurIntegral" column="u_cur_integral"/>
 		<result property="utotalConsume" column="u_total_consume"/>
 		<result property="uwalletConsumeTotal" column="u_wallet_consume_total"/>
+		<result property="uOtherPayTotal" column="u_other_pay_total"/>
 		<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="userCardPackage_columns">
-		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,version
+		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,version
 	</sql>
 	<!-- 根据用户钱包，积分主键取得数据 -->
 	<select id="queryUserCardPackageById" resultMap="rm_userCardPackage" parameterType="java.lang.Long">
@@ -60,40 +61,47 @@
 	<!--添加用户钱包，积分 -->
 	<insert id="saveUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_user_card_package (
-			u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,version
+			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,version
 		) VALUES
 		(
-			#{utotalWallet,jdbcType=BIGINT},#{ucurWallet,jdbcType=BIGINT},#{utotalIntegral,jdbcType=BIGINT},#{ucurIntegral,jdbcType=BIGINT},#{utotalConsume,jdbcType=BIGINT},#{uwalletConsumeTotal,jdbcType=BIGINT},0
+			#{utotalWallet,jdbcType=BIGINT},
+			#{ucurWallet,jdbcType=BIGINT},
+			#{utotalIntegral,jdbcType=BIGINT},
+			#{ucurIntegral,jdbcType=BIGINT},
+			#{utotalConsume,jdbcType=BIGINT},
+			#{uwalletConsumeTotal,jdbcType=BIGINT},
+			#{uOtherPayTotal,jdbcType=BIGINT},
+			0
 		)
 	</insert>
-	<!--修改用户钱包，积分 -->
-	<update id="updateUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage">
-		UPDATE t_user_card_package
-		<set>
-			<if test="null != utotalWallet">
-				u_total_wallet = #{utotalWallet},
-			</if>
-			<if test="null != ucurWallet">
-				u_cur_wallet = #{ucurWallet},
-			</if>
-			<if test="null != utotalIntegral">
-				u_total_integral = #{utotalIntegral},
-			</if>
-			<if test="null != ucurIntegral">
-				u_cur_integral = #{ucurIntegral},
-			</if>
-			<if test="null != utotalConsume">
-				u_total_consume = #{utotalConsume},
-			</if>
-			<if test="null != uwalletConsumeTotal">
-				u_wallet_consume_total = #{uwalletConsumeTotal},
-			</if>
-			<if test="null != version">
-				version = version+1,
-			</if>
-		</set>
-		WHERE id = #{id} and version = #{version}
-	</update>
+	<!--&lt;!&ndash;修改用户钱包，积分 &ndash;&gt;-->
+	<!--<update id="updateUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage">-->
+		<!--UPDATE t_user_card_package-->
+		<!--<set>-->
+			<!--<if test="null != utotalWallet">-->
+				<!--u_total_wallet = #{utotalWallet},-->
+			<!--</if>-->
+			<!--<if test="null != ucurWallet">-->
+				<!--u_cur_wallet = #{ucurWallet},-->
+			<!--</if>-->
+			<!--<if test="null != utotalIntegral">-->
+				<!--u_total_integral = #{utotalIntegral},-->
+			<!--</if>-->
+			<!--<if test="null != ucurIntegral">-->
+				<!--u_cur_integral = #{ucurIntegral},-->
+			<!--</if>-->
+			<!--<if test="null != utotalConsume">-->
+				<!--u_total_consume = #{utotalConsume},-->
+			<!--</if>-->
+			<!--<if test="null != uwalletConsumeTotal">-->
+				<!--u_wallet_consume_total = #{uwalletConsumeTotal},-->
+			<!--</if>-->
+			<!--<if test="null != version">-->
+				<!--version = version+1,-->
+			<!--</if>-->
+		<!--</set>-->
+		<!--WHERE id = #{id} and version = #{version}-->
+	<!--</update>-->
 	<!--用户充值-->
 	<update id="userRechage">
 		UPDATE t_user_card_package
@@ -135,7 +143,7 @@
 			</if>
 			<!-- 自然消费统计 -->
 			<if test="type==3">
-				t_other_pay_total=t_other_pay_total+#{tradePrice},
+				u_other_pay_total=u_other_pay_total+#{tradePrice},
 			</if>
 			<if test="isCashBack==false">
 				u_total_integral=u_total_integral+#{cumulationCashPrice},

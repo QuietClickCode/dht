@@ -12,7 +12,7 @@ function addTab(index){
 	let len = $(".menu_item:visible").length + 1;
 	let w = $(".menu_list").width();
 	let $w = w / len;
-	
+
 	if($(".menu_item:visible").length < 3){
 		$(".sub_pre_menu_box").css("width",$w+"px");
 		nextItem.css("width",$w+"px");
