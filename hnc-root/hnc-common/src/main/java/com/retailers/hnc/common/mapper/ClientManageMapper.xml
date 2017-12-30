@@ -36,7 +36,7 @@
 				AND tm_id = #{params.tmId}
 			</if>
 			<if test="null != params.tmName and '' != params.tmName">
-				AND tm_name = #{params.tmName}
+				AND tm_name like concat('%', #{params.tmName} ,'%')
 			</if>
 			<if test="null != params.tmSex">
 				AND tm_sex = #{params.tmSex}
@@ -160,4 +160,5 @@
 	<select id="queryClientCount" resultType="java.lang.Integer">
 		select COUNT(*) FROM t_client_manage where tm_employee is not NULL
 	</select>
+
 </mapper>

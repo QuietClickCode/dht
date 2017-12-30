@@ -34,13 +34,20 @@ public class ClientInfoController extends BaseController {
         return "clientManage/client";
     }
 
+    @RequestMapping("/EmployeeRelationMapping")
+    @Menu(parentRes = "sys.manager.client",resourse = "clientInfo.EmployeeRelationMapping",description = "查看绑定客户",label = "查看绑定客户")
+    public String EmployeeRelationMapping(){
+        return "clientManage/clientRelationship";
+    }
+
     @RequestMapping("/queryClientList")
     @Function(label="客户集合", description = "客户集合", resourse = "clientInfo.queryClientList",sort=1,parentRes="clientInfo.clientInfoMapping")
     @ResponseBody
-    public Map<String,Object> queryTeamList(PageUtils pageForm,Long emId,String registerTimes){
+    public Map<String,Object> queryTeamList(PageUtils pageForm,Long emId,String registerTimes,String tmName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
         map.put("tmEmployee",emId);
+        map.put("tmName",tmName);
         map.put("tmRegisterTime",dateFormat(registerTimes));
         Pagination<ClientManage> teamPagination = clientManageService.queryClientManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
