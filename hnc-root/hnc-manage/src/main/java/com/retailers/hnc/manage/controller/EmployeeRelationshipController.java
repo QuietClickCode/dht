@@ -67,6 +67,7 @@ public class EmployeeRelationshipController extends BaseController{
     @Function(label = "添加预约关系",description = "添加预约关系",resourse = "employeeRelationship.addEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
     @ResponseBody
     public BaseResp addEmRelationship(EmRelationship emRelationship){
+        emRelationship.setIsDelete(0l);
         boolean flag = emRelationshipService.saveEmRelationship(emRelationship);
         if(flag)
             return success("添加预约关系成功");
@@ -78,6 +79,7 @@ public class EmployeeRelationshipController extends BaseController{
     @Function(label = "修改预约关系",description = "修改预约关系",resourse = "employeeRelationship.updateEmRelationship",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
     @ResponseBody
     public BaseResp updateEmRelationship(EmRelationship emRelationship){
+        emRelationship.setIsDelete(0l);
         boolean flag = emRelationshipService.updateEmRelationship(emRelationship);
         if(flag)
             return success("修改预约关系成功");
@@ -85,4 +87,14 @@ public class EmployeeRelationshipController extends BaseController{
             return errorForSystem("修改预约关系失败");
     }
 
+
+    @RequestMapping("/queryOpeningStatus")
+    @Function(label = "查询是否绑定预约关系",description = "查询是否绑定预约关系",resourse = "employeeRelationship.queryOpeningStatus",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public HashMap<String,Integer> queryOpeningStatus(Long pId){
+        Integer flag = emRelationshipService.queryOpeningStatus(pId);
+        HashMap<String,Integer> map = new HashMap<String,Integer>();
+        map.put("flag",flag);
+        return map;
+    }
 }

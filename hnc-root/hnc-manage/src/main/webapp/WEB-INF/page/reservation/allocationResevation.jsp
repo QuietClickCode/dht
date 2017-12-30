@@ -22,10 +22,12 @@
 <body>
 <div id="toolbar" class="form-inline">
     <select id="openingMenu" class="form-control">
-        <option value="">选择开盘期数</option>
     </select>
+    <div class="form-group" style="margin-left: 40px;">
+        <label style="margin-bottom: 0px;font-weight: 400;margin-right: 10px;">当前可分配名额</label>
+        <input type="text" class="form-control" id="MenberNum" readonly placeholder="当前可分配名额">
+    </div>
 
-    <button class="btn btn-default" onclick="refreshTableData()">查询</button>
 </div>
 
 <div>
@@ -47,6 +49,156 @@
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script src="/js/toast/js/toastr.js"></script>
+<script src="/js/layer/layer.js"></script>
+
+
+<%--加载开盘期数--%>
+<script>
+    var oid;
+    var opening = new Map();
+    $(function () {
+        $.ajax({
+            url:"/opening/queryOpeningList",
+            method:"post",
+            dataType:"json",
+            data:{
+                pageNo:1,
+                pageSize:10000
+            },
+            success:function (data) {
+                for(let i = 0;i<data.rows.length;i++){
+                    opening.set(data.rows[i].oid, data.rows[i]);
+                    $("#openingMenu").append("<option id='"+data.rows[i].oid+"' value='"+data.rows[i].oid+"'>"+data.rows[i].oname+"</option>");
+                }
+                if(data.rows.length != 0){
+                    oid = data.rows[0].oid;
+                    $("#MenberNum").val(data.rows[0].omenberNum);
+                }
+                console.log(oid);
+                $("#"+oid).attr("selected","selected");
+                createOpeningStatus(oid)
+            }
+        });
+    });
+
+
+</script>
+
+<%--加载最近一期开盘的预约关系表--%>
+<script>
+    var flag;
+    function createOpeningStatus(status) {
+        $.ajax({
+            url:"/employeeRelationship/queryOpeningStatus",
+            method:"post",
+            dataType:"json",
+            data:{
+                pId:status
+            },
+            success:function (data) {
+                if(data.flag == 0){
+                    flag = false;
+                    $("#goodsClassificationTable").bootstrapTable('destroy');
+                    addEmRelationShip();
+                } else{
+                    flag = true;
+                    $("#goodsClassificationTable").bootstrapTable('destroy');
+                    createAllEmployee(status)
+                }
+
+            }
+        });
+    }
+</script>
+
+<%--选择开盘期数--%>
+<script>
+    var omenberNum;
+    $("#openingMenu").change(function () {
+        oid = $(this).val();
+        for (let key of opening.keys()) {
+            if(key == oid){
+                $("#MenberNum").val(opening.get(key).omenberNum);
+                omenberNum = opening.get(key).omenberNum;
+            }
+        }
+        createOpeningStatus($(this).val());
+    });
+</script>
+
+<script>
+    function getRelationshipNum() {
+        let num = "";
+        $(".menberNum").each(function () {
+            num += $(this).val();
+        });
+        return num;
+    }
+</script>
+
+<%--添加预约关系--%>
+<script>
+    function setEmployeeRelationship($this) {
+        console.log(getRelationshipNum());
+        if($($this).val() == "")
+            return;
+        if(flag){
+            updateEmployeeRelationship($this);
+        }else if(!flag){
+            addEmployeeRelationship($this)
+        }
+    }
+    
+    function addEmployeeRelationship($this) {
+        let val = $($this).val();
+        let num = $("#MenberNum").val();
+        if(num - val <= 0){
+            layer.msg("分配名额不足");
+            return;
+        }
+        $("#MenberNum").val(num - val);
+        $.ajax({
+            url:"/employeeRelationship/addEmRelationship",
+            method:"post",
+            dataType:"json",
+            data:{
+                emId:$($this).attr("data-emid"),
+                parentId:$($this).attr("data-parentid"),
+                pid:oid,
+                emReservation:$($this).val()
+            },
+            success:function (data) {
+                layer.msg(data.msg,{time:'1000'});
+            }
+        });
+    }
+    
+    function updateEmployeeRelationship($this) {
+        let val = $($this).val();
+        let num = $("#MenberNum").val();
+        if(num - val <= 0){
+            layer.msg("分配名额不足");
+            return;
+        }
+        $("#MenberNum").val(num - val);
+        $.ajax({
+            url:"/employeeRelationship/updateEmRelationship",
+            method:"post",
+            dataType:"json",
+            data:{
+                erId:$($this).attr("data-erid"),
+                emId:$($this).attr("data-emid"),
+                parentId:$($this).attr("data-parentid"),
+                pid:oid,
+                emReservation:$($this).val()
+            },
+            success:function (data) {
+                layer.msg(data.msg,{time:'1000'});
+            }
+        });
+    }
+</script>
+
 
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -111,8 +263,12 @@
                 title: '置业顾问分配人数',
                 formatter:function (value,row,index) {
                     let html;
-                    if(row.parentId != null)
-                        html='<input type="text" onclick="event.stopPropagation()"   class="form-control">';
+                    let num = "";
+                    if(row.emReservation != null)
+                        num = row.emReservation;
+                    if(row.parentId != null){
+                        html='<input type="text" onclick="event.stopPropagation()" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" onblur="setEmployeeRelationship(this)" value="'+num+'"   class="form-control menberNum">';
+                    }
                     return html;
                 }
 
@@ -183,8 +339,11 @@
                 title: '置业顾问分配人数',
                 formatter:function (value,row,index) {
                     let html;
+                    let num = "";
+                    if(row.emReservation != null)
+                        num = row.emReservation;
                     if(row.parentId != null)
-                        html='<input type="text" onclick="event.stopPropagation()"   class="form-control">';
+                        html='<input type="text" onclick="event.stopPropagation()" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" onblur="setEmployeeRelationship(this)" value="'+num+'"   class="form-control menberNum">';
                     return html;
                 }
 
@@ -206,30 +365,6 @@
         );
     }
 
-</script>
-
-
-
-
-<%--加载开盘期数--%>
-<script>
-    $(function () {
-        $.ajax({
-            url:"/opening/queryOpeningList",
-            method:"post",
-            dataType:"json",
-            data:{
-                pageNo:1,
-                pageSize:10000
-            },
-            success:function (data) {
-                for(let i = 0;i<data.rows.length;i++){
-                    $("#openingMenu").append("<option value='"+data.rows[i].oid+"'>"+data.rows[i].oname+"</option>");
-                }
-                addEmRelationShip();
-            }
-        });
-    });
 </script>
 </body>
 </html>

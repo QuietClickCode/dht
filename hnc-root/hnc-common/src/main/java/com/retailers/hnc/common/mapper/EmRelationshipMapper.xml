@@ -112,4 +112,14 @@
 	<select id="queryOpeningTeam" resultMap="rm_emRelationship" parameterType="java.lang.Long">
 		select distinct  parent_id FROM t_em_relationship where p_id = #{pId}
 	</select>
+
+	<!--查询该开盘是否分配过预约人员-->
+	<select id="queryOpeningStatus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		select count(*) from t_em_relationship where p_id = #{pId}
+	</select>
+
+	<!--查询该置业顾问是否分配过预约人数-->
+	<select id="queryEmployeeNum" resultMap="rm_emRelationship" parameterType="com.retailers.hnc.common.entity.EmRelationship">
+		select * from t_em_relationship where p_id = #{pid} and em_id = #{emId} and is_delete = 0
+	</select>
 </mapper>
