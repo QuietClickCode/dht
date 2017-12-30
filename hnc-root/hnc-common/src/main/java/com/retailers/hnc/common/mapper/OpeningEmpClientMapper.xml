@@ -11,8 +11,7 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
-	<resultMap id="rm_clientManage_vo" type="com.retailers.hnc.common.vo.ClientIntentionVo">
+	<resultMap id="rm_clientManage" type="com.retailers.hnc.common.vo.ClientManageVo">
 		<result property="tmId" column="tm_id"/>
 		<result property="tmName" column="tm_name"/>
 		<result property="tmSex" column="tm_sex"/>
@@ -28,11 +27,9 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="tmOrder" column="tm_order"/>
 		<result property="version" column="version"/>
-		<result property="fids" column="fids"/>
-		<result property="hids" column="hids"/>
-		<result property="iremark" column="iremark"/>
+		<result property="empName" column="empName"/>
+		<result property="oecId" column="oecId"/>
 	</resultMap>
-
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="openingEmpClient_columns">
 		oec_id,o_id,e_id,c_id,oec_status,is_delete,version
@@ -75,7 +72,7 @@
 		<include refid="openingEmpClient_where"/>
 	</select>
 
-	<select id="queryNotGivenList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="queryNotGivenList" resultMap="rm_clientManage" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
 		t1.*
 		FROM
@@ -86,6 +83,7 @@
 			and t1.tm_name like concat('%', #{params.cmName} ,'%')
 		</if>
 		and t1.tm_employee=#{params.eid}
+		and t1.tm_status=0
 		and t1.tm_id NOT IN
 		(SELECT
 		t1.c_id
@@ -93,25 +91,35 @@
 		t_opening_emp_client t1
 		WHERE
 		t1.o_id=#{params.oid}
-		and t1.e_id=#{params.eid}
+		<if test="null!=params.eid">
+			and t1.e_id=#{params.eid}
+		</if>
 		and t1.oec_status!=0
-		and t1.is_delete=0
-		or t1.tm_status=1)
+		and t1.is_delete=0)
 	</select>
 
-	<select id="queryCheckingandpassandnotpassList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+	<select id="queryCheckingandpassandnotpassList" resultMap="rm_clientManage" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
-		t2.*
+		t1.oec_id oecId,
+		t2.*,
+		t3.em_name empName
 		FROM
 		t_opening_emp_client t1,
 		t_client_manage t2
+		LEFT JOIN t_employee_manage t3 ON t2.tm_employee=t3.em_id and t3.is_delete=0
 		WHERE
-		t1.e_id=${params.eid}
-		and t1.o_id=${params.oid}
-		and t1.oec_status=${params.status}
+		t2.is_delete=0
+		<if test="null!=params.eid ">
+			and t1.e_id=#{params.eid}
+		</if>
+		<if test="null!=params.cmName and ''!=params.cmName">
+			and t2.tm_name like concat('%', #{params.cmName} ,'%')
+		</if>
+		and t1.o_id=#{params.oid}
+		and t1.oec_status=#{params.status}
 		and t1.c_id=t2.tm_id
 		and t1.is_delete=0
-		and t2.is_delete=0
+
 	</select>
 
 	<!--添加开盘与雇员和客户的关系表 -->
@@ -147,6 +155,17 @@
             </if>
 		</set>
 		WHERE oec_id = #{oecId} and version = #{version}
+	</update>
+
+	<update id="updateOpeningEmpClientByOecIds">
+		UPDATE t_opening_emp_client t1
+		SET
+		oec_status = #{status}
+		WHERE
+		t1.oec_id IN
+		<foreach collection="oecIdList" separator="," open="(" close=")" item="oecId">
+			#{oecId}
+		</foreach>
 	</update>
 	<!--删除开盘与雇员和客户的关系表 -->
 	<delete id="deleteOpeningEmpClientByOecId" parameterType="java.lang.Long">

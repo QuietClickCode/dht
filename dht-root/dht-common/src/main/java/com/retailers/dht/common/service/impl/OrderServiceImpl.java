@@ -1028,12 +1028,10 @@ public class OrderServiceImpl implements OrderService {
             }
 			//取得用户折扣 取得用户有充值记录
 			Recharge recharge=rechargeMapper.queryUserBuyRecharge(user.getUrechage());
-			//取得用户的折扣
-			long discount=recharge.getRdiscount();
+
 			//取得是否返现 0 不返现，1 返现
 			int rcashback =recharge.getRcashback();
-			//设置订单折扣
-			order.setOrderDiscount(discount);
+
 			//设置订单是否返现
 			order.setOrderIntegralOrCash(rcashback);
 			//支付方式（钱包支付)
@@ -1042,6 +1040,40 @@ public class OrderServiceImpl implements OrderService {
 			order.setOrderPayCallbackDate(curDate);
 			//支付单号
 			order.setOrderPayCallbackNo(StringUtils.formate(order.getOrderNo(),"wallet"));
+			long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
+			String discountRemark="活动购买，不享受折扣";
+			//判断是否是一般购买
+			if(order.getOrderType().equals(OrderEnum.SHOPPING.getKey())){
+				//取得用户的折扣
+				long discount=recharge.getRdiscount();
+				//设置订单折扣
+				order.setOrderDiscount(discount);
+				//钱包支付实际支付金额
+				Long total =0l;
+				//取得用户享受折扣
+				List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+				for(OrderDetail od:ods){
+					long actualPrice=od.getOdActualPrice();
+					//判断该件商品是否支持折扣
+					if(od.getOdIsDiscount().intValue()== OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
+						actualPrice = NumberUtils.calculationDiscountPrice(actualPrice,discount);
+					}
+					od.setOdMenberPrice(actualPrice);
+					total+=actualPrice;
+				}
+				//判断购买是否产生邮费
+				if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())&&order.getOrderLogisticsPrice().intValue()>0){
+					order.setOrderLogisticsPrice(NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),discount));
+				}else{
+					order.setOrderLogisticsPrice(0l);
+				}
+				//设置购买商品详情订单
+				orderDetailMapper.updateOrderDetails(ods);
+				//用户支付金额
+				payPrice=total+order.getOrderLogisticsPrice();
+				order.setOrderMenberPrice(total);
+				discountRemark="会员享受折扣:"+NumberUtils.priceChangeYuan(discount);
+			}
 			//取得用户卡包
 			UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(uid);
 			if(ObjectUtils.isEmpty(ucp.getUcurWallet())||ucp.getUcurWallet().intValue()<order.getOrderTradePrice().intValue()){
@@ -1053,38 +1085,12 @@ public class OrderServiceImpl implements OrderService {
 				logger.info("钱包支付失败，余额不足");
 				throw new AppException("钱包余额不足，请换其他支付");
 			}
-			String orderRemark="用户平台购物，消耗用户钱包，使用金额:"+NumberUtils.formaterNumberPower(order.getOrderTradePrice())+",会员享受折扣:"+NumberUtils.priceChangeYuan(discount);
-			//钱包支付实际支付金额
-			Long total =0l;
-			//取得用户享受折扣
-			List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
-			for(OrderDetail od:ods){
-				long actualPrice=od.getOdActualPrice();
-				//判断该件商品是否支持折扣
-				if(od.getOdIsDiscount().intValue()== OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
-					actualPrice = NumberUtils.calculationDiscountPrice(actualPrice,discount);
-				}
-				od.setOdMenberPrice(actualPrice);
-				total+=actualPrice;
-			}
-			order.setOrderDiscount(discount);
-
-			//判断购买是否产生邮费
-			if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())&&order.getOrderLogisticsPrice().intValue()>0){
-				order.setOrderLogisticsPrice(NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),discount));
-			}else{
-				order.setOrderLogisticsPrice(0l);
-			}
-			order.setOrderMenberPrice(total);
-			//用户支付金额
-			long payPrice=total+order.getOrderLogisticsPrice();
+			String orderRemark="用户平台购物，消耗用户钱包，使用金额:"+NumberUtils.formaterNumberPower(order.getOrderTradePrice())+","+discountRemark;
 			//添加钱包使用日志
 			userCardPackageService.addUserCardPackageLog(uid,LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
-			order.setOrderPayCallbackRemark("用户钱包支付，享受折扣"+NumberUtils.priceChangeYuan(discount)+",实际支付："+payPrice);
+			order.setOrderPayCallbackRemark("用户钱包支付，"+discountRemark+",实际支付："+payPrice);
 			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SUCCESS);
 			orderMapper.updateOrder(order);
-			//设置购买商品详情订单
-			orderDetailMapper.updateOrderDetails(ods);
 			//添加至订单回调处理
 			addOrderSuccessQueue(order.getId());
         }catch(DuplicateKeyException e){

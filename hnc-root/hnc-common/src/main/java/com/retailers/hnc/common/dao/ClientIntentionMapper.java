@@ -1,5 +1,6 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.ClientIntention;
+import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -51,5 +52,7 @@ public interface ClientIntentionMapper {
 	 * @date 2017-12-29 17:32:34
 	 */
 	public List<ClientIntention> queryClientIntentionList(Pagination<ClientIntention> pagination);
+
+	public List<ClientIntentionVo> queryClientIntentionVoList(Pagination<ClientIntentionVo> pagination);
 
 }

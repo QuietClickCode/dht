@@ -9,6 +9,7 @@ import com.retailers.hnc.common.service.FloorManageService;
 import com.retailers.hnc.common.service.HouseTypeManageService;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,22 +57,22 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return status == 1 ? true : false;
 	}
 
-	public Pagination<ClientIntentionVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
-		Pagination<ClientIntentionVo> page = new Pagination<ClientIntentionVo>();
+	public Pagination<ClientManageVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<ClientIntentionVo> list = openingEmpClientMapper.queryNotGivenList(page);
+		List<ClientManageVo> list = openingEmpClientMapper.queryNotGivenList(page);
 		page.setData(list);
 		return page;
 	}
 
-	public Pagination<ClientIntentionVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize){
-		Pagination<ClientIntentionVo> page = new Pagination<ClientIntentionVo>();
+	public Pagination<ClientManageVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<ClientIntentionVo> list = openingEmpClientMapper.queryCheckingandpassandnotpassList(page);
+		List<ClientManageVo> list = openingEmpClientMapper.queryCheckingandpassandnotpassList(page);
 		page.setData(list);
 		return page;
 	}
@@ -98,10 +99,22 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 
 	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status){
 
-
 		return false;
 	}
 
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status){
+		List<Long> oecIdList = new ArrayList<Long>();
+		if(ObjectUtils.isNotEmpty(oecIds)){
+			String[] oecIdsArr = oecIds.split(",");
+			for(String oecIdStr:oecIdsArr){
+				Long oecIdLong = Long.parseLong(oecIdStr);
+				oecIdList.add(oecIdLong);
+			}
+		}
+		int index = 0;
+		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status);
+		return index==oecIdList.size()?true:false;
+	}
 
 
 }

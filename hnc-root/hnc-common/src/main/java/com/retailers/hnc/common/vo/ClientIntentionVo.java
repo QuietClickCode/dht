@@ -10,6 +10,15 @@ import java.util.List;
 public class ClientIntentionVo extends ClientIntention {
     private String floorsName;
     private String hoursesName;
+    private String channelName;
+
+    public String getChannelName() {
+        return channelName;
+    }
+
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
 
     public String getFloorsName() {
         return floorsName;

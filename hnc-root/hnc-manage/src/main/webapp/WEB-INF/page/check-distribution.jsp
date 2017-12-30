@@ -39,9 +39,6 @@
                         <div class="col-md-12 column">
                             <div class="tabbable" id="tabs-44711">
                                 <ul class="nav nav-tabs" >
-                                    <li class="active" id="navfirstli">
-                                        <a href="#notGivenPane" data-toggle="tab" id="nava1" >未分配客户</a>
-                                    </li>
                                     <li>
                                         <a href="#checking" data-toggle="tab"  id="nava2">审核中客户</a>
                                     </li>
@@ -53,21 +50,16 @@
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                    <div class="tab-pane active" id="notGivenPane">
+                                    <div class="tab-pane active" id="checking">
                                         <div class="modal-body">
                                             <div id="toolbar" class="form-inline">
-                                                <button class="btn btn-primary" type="button" onclick="checkClient()" >提交审核</button>
+                                                <button class="btn btn-primary" type="button" onclick="checkClient(2)" >通过审核</button>
+                                                <button class="btn btn-warning" type="button" onclick="checkClient(3)" >未通过审核</button>
                                                 <div class="form-group" >
                                                     <input type="text" class="form-control" id="search_client_name" placeholder="请输入客户姓名">
                                                 </div>
-                                                <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+                                                <button class="btn btn-default" type="button" onclick="refreshCheckingTableData()">查询</button>
                                             </div>
-
-                                            <table id="notGivenTable" ></table>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane" id="checking">
-                                        <div class="modal-body">
                                             <table id="checkingTable" ></table>
                                         </div>
                                     </div>
@@ -153,11 +145,11 @@
                     </div>
                     <div id="invention">
                         <%--<div class="form-group">--%>
-                            <%--<label class="col-sm-3 control-label">备注:</label>--%>
-                            <%--<div class="col-sm-9">--%>
-                            <%--<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">--%>
-                            <%--</textarea>--%>
-                            <%--</div>--%>
+                        <%--<label class="col-sm-3 control-label">备注:</label>--%>
+                        <%--<div class="col-sm-9">--%>
+                        <%--<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">--%>
+                        <%--</textarea>--%>
+                        <%--</div>--%>
                         <%--</div>--%>
                     </div>
                 </form>
@@ -207,6 +199,12 @@
             valign : 'middle'
         },
         {
+            field: 'empName',
+            title: '职业顾问',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
             field: 'tmInfo',
             title: '备注',
             align : 'center',
@@ -214,23 +212,15 @@
         }
     ]
 
-    /**
-     * 查询条件
-     **/
-    function queryParams(that){
-        return {
-            pageSize: that.pageSize,
-            pageNo: that.pageNumber,
-            oid: oid,
-            cmName:$('#search_client_name').val()
-        };
-    }
+
     function queryCheckingParams(that){
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             oid: oid,
-            status:1
+            status:1,
+            cmName:$('#search_client_name').val(),
+            isManage:'yes'
         };
     }
     function queryPassParams(that){
@@ -238,7 +228,8 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             oid: oid,
-            status:2
+            status:2,
+            isManage:'yes'
         };
     }
     function queryNotPassParams(that){
@@ -246,20 +237,11 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             oid: oid,
-            status:3
+            status:3,
+            isManage:'yes'
         };
     }
-    /**
-     * 刷新表格数据
-     **/
-    function refreshTableData() {
-        $('#notGivenTable').bootstrapTable(
-            "refresh",
-            {
-                url:"/OpeningEmpClient/queryNotGivenList"
-            }
-        );
-    }
+
     function refreshCheckingTableData() {
         $('#checkingTable').bootstrapTable(
             "refresh",
@@ -284,8 +266,6 @@
             }
         );
     }
-
-
 
 
     function initFormData(key){
@@ -351,39 +331,35 @@
     var oid;
     function loadDate() {
         oid = $('#selectOpening').val();
-        createTable("/OpeningEmpClient/queryNotGivenList","notGivenTable","tmId",treeColumns,queryParams,"");
-        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","checkingTable","tmId",treeColumns,queryCheckingParams,"miss");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","checkingTable","tmId",treeColumns,queryCheckingParams,"");
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","PassTable","tmId",treeColumns,queryPassParams,"miss");
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",treeColumns,queryNotPassParams,"toolbar");
     }
 
     function change() {
         oid = $('#selectOpening').val();
-        refreshTableData();
         refreshCheckingTableData();
         refreshPassableData();
         refreshNotPassTableData();
     }
 
-    function checkClient() {
-        var rows = $('#notGivenTable').bootstrapTable('getSelections');
-        console.log(rows);
-        var cmIds = '';
-        if(rows.length>0){
+    function checkClient(status) {
+        var rows = $('#checkingTable').bootstrapTable('getSelections');
+        var oecIds = '';
+        if( rows!=null&&rows.length>0){
             for(var i=0;i<rows.length;i++){
-                cmIds += ','+rows[i].tmId;
+                oecIds += ','+rows[i].oecId;
             }
-            cmIds = cmIds.substr(1);
+            oecIds = oecIds.substr(1);
         }else{
             layer.msg('请您选择客户');
             return;
         }
-
         $.ajax({
             type: "post",
-            url: "/OpeningEmpClient/addCheckClient",
+            url: "/OpeningEmpClient/updateOpeningEmpClient",
             dataType: "json",
-            data: {oid:oid,cmIds:cmIds},
+            data: {oecIds:oecIds,status:status},
             success: function (data) {
                 if(data.status==0){
                     layer.msg('操作成功');
@@ -418,15 +394,15 @@
                     for(var i=0;i<rows.length;i++){
                         var row = rows[i];
                         html = '<div class="form-group">'+
-                        '<label class="col-sm-3 control-label">需求'+(i+1)+':</label>'+
-                        '<div class="col-sm-9">'+
-                        '<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">' +
+                            '<label class="col-sm-3 control-label">需求'+(i+1)+':</label>'+
+                            '<div class="col-sm-9">'+
+                            '<textarea type="text" class="form-control" id="" name="tmInfo" disabled="disabled">' +
                             '意向楼栋:' + row.floorsName +
                             '\n意向户型:' + row.hoursesName +
                             '\n个性需求:'+ row.iremark +
-                        '</textarea>'+
-                        '</div>'+
-                        '</div>';
+                            '</textarea>'+
+                            '</div>'+
+                            '</div>';
                         $('#invention').append(html);
                     }
                 }
@@ -474,44 +450,6 @@
     loadOpening();
 </script>
 
-<!--timer时间选择器-->
-<script type="text/javascript"  src="/js/daterangepicker/moment.js"></script>
-<script type="text/javascript"  src="/js/daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript">
-    $(document).ready(function (){
-        //时间插件
 
-        $('#reportrange').daterangepicker(
-            {
-                startDate: moment(),
-                minDate : moment(),
-                showDropdowns : true,
-                timePicker:true,
-                timePickerIncrement:5,
-                timePicker24Hour:true,//24 小时制
-                opens : 'right', //日期选择框的弹出位置
-                buttonClasses : [ 'btn btn-default' ],
-                applyClass : 'btn-small btn-primary blue',
-                cancelClass : 'btn-small',
-                format: 'YYYY-MM-DD',
-                locale : {
-                    format: 'YYYY-MM-DD',
-                    applyLabel : '确定',
-                    cancelLabel : '取消',
-                    fromLabel : '起始时间',
-                    toLabel : '结束时间',
-                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                    firstDay : 1
-                }
-            }, function(start, end, label) {
-                $("#editorGoodsCouponForm #gcpStartTime").val(start.format('YYYY-MM-DD'));
-                $("#editorGoodsCouponForm #gcpEndTime").val(end.format('YYYY-MM-DD'));
-                $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
-            });
-        //设置日期菜单被选项  --结束--
-    })
-</script>
 </body>
 </html>

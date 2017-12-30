@@ -1,7 +1,10 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：开盘与雇员和客户的关系表DAO
@@ -53,8 +56,9 @@ public interface OpeningEmpClientMapper {
 	 */
 	public List<OpeningEmpClient> queryOpeningEmpClientList(Pagination<OpeningEmpClient> pagination);
 
-	public List<ClientIntentionVo> queryNotGivenList(Pagination<ClientIntentionVo> pagination);
+	public List<ClientManageVo> queryNotGivenList(Pagination<ClientManageVo> pagination);
 
-	public List<ClientIntentionVo> queryCheckingandpassandnotpassList(Pagination<ClientIntentionVo> pagination);
+	public List<ClientManageVo> queryCheckingandpassandnotpassList(Pagination<ClientManageVo> pagination);
 
+	public int updateOpeningEmpClientByOecIds(@Param("oecIdList") List<Long> oecIdList,@Param("status") Long status);
 }

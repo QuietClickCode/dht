@@ -27,5 +27,10 @@ public class ClientManageController {
         return "quota-allocation";
     }
 
+    @RequestMapping("/checkDistribution")
+    @Menu(parentRes = "sys.manager.client",resourse = "clientManage.checkDistribution",description = "审核顾客分配",label = "审核顾客分配")
+    public String checkDistribution(){
+        return "check-distribution";
+    }
 
 }
