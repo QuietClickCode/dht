@@ -17,6 +17,7 @@ body{
 	width: 988px;
 	height: 100%;
 	background: #fff;
+	overflow: auto;
 }
 
 #body a{

@@ -9,15 +9,13 @@
 
 </head>
 <body style="overflow: hidden">
-	${menus}
-	aaa
 	<%--<div id="header"></div>--%>
 	<div id="body">
 		<!-- 自定义菜单使用说明区域 -->
-		<%--<div class="main_hd">
-			<h4>自定义菜单</h4>
-			<a href="" >使用说明</a>
-		</div>--%>
+		<div class="main_hd">
+			<h4>&nbsp;</h4>
+			<a href="" ></a>
+		</div>
 		<!-- 菜单发布信息 -->
 		<%--<div class="main_msg">
 			<i class="icon_msg"></i>
@@ -32,10 +30,9 @@
 						<%--博学生--%>
 					</div>
 					<div class="mobile_bd">
-						<ul class="menu_list">
-							<li class="menu_item" onclick="addTab(0)">
+						<ul class="menu_list" id="wxMenuItem">
+							<li class="menu_item" onclick="addTab(0)" id="menu_item_0">
 								<i  class='add_menu_icon'></i>
-
 								<div class="sub_pre_menu_box" style="display: none;">
 									<ul class="sub_first_menu">
 										<li class="sub_menu" onclick="event.stopPropagation();addChildMenu(0)">
@@ -44,9 +41,9 @@
 										</li>
 									</ul>
 								</div>
-							</li><li class="menu_item" style="display: none;">
+							</li>
+							<li class="menu_item" style="display: none;" id="menu_item_1">
 								<i  class='add_menu_icon'></i>
-
 								<div class="sub_pre_menu_box" style="display: none;">
 									<ul class="sub_first_menu">
 										<li class="sub_menu" onclick="event.stopPropagation();addChildMenu(1)">
@@ -55,7 +52,8 @@
 										</li>
 									</ul>
 								</div>
-							</li><li class="menu_item" style="display: none;">
+							</li>
+							<li class="menu_item" style="display: none;" id="menu_item_2">
 								<i  class='add_menu_icon'></i>
 
 								<div class="sub_pre_menu_box" style="display: none;">
@@ -533,5 +531,48 @@
 	<div id="footer"></div>
 	<%@include file="/common/common_bs_head_js.jsp"%>
 	<script type="text/javascript" src="/wx/wx_js/create_menu.js"></script>
+	<script type="text/javascript">
+		var wxMenu='${menus}';
+		//将微信菜单 转换成json 对像
+		var obj = JSON.parse(wxMenu);
+		if(obj&&obj.button){
+			var buttons=obj.button;
+			var count=0;
+			for(var row of buttons){
+                addTab(count,row.name);
+                count++;
+			}
+		}
+
+        function addTab(index,title){
+		    if(!title){
+		        title="添加菜单";
+			}
+            i += 1;
+            let item = $(".menu_item").eq(index);
+            item.find(".add_menu_icon").hide();
+            let $span = $("<span class='menu_item_name'>"+title+"</span>");
+            item.append($span);
+            item.attr("onclick","updateMenuName("+index+")");
+            let nextItem = item.next();
+            nextItem.attr("onclick","addTab("+i+")");
+            let len = $(".menu_item:visible").length + 1;
+            let w = $(".menu_list").width();
+            let w1 = $(".menu_list").innerWidth();
+            let ow = $(".menu_list").outerWidth();
+            console.log(w)
+            console.log(w1)
+            console.log(ow)
+            let $w = w / len;
+
+            if($(".menu_item:visible").length < 3){
+                $(".sub_pre_menu_box").css("width",$w+"px");
+                nextItem.css("width",$w+"px");
+                nextItem.show();
+                $(".menu_item").css("width",$w+"px");
+                $(".menu_list").append($li);
+            }
+        }
+	</script>
 </body>
 </html>
