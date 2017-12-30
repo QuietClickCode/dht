@@ -69,4 +69,20 @@ public interface EmRelationshipMapper {
 	 */
 	public List<EmRelationship> queryOpeningTeam(Long pId);
 
+	/**
+	 * 查询是否绑定置业顾问
+	 * @return  查询是否绑定置业顾问
+	 * @author wangjue
+	 * @date 2017-12-29 13:48:07
+	 */
+	public Integer queryOpeningStatus(Long pId);
+
+	/**
+	 * 查询该置业顾问是否分配过预约人数
+	 * @return  查询该置业顾问是否分配过预约人数
+	 * @author wangjue
+	 * @date 2017-12-29 13:48:07
+	 */
+	public EmRelationship queryEmployeeNum(EmRelationship emRelationship);
+
 }

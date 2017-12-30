@@ -37,10 +37,19 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 	private EmployeeManageMapper employeeManageMapper;
 
 	public boolean saveEmRelationship(EmRelationship emRelationship) {
-		int status = emRelationshipMapper.saveEmRelationship(emRelationship);
+		EmRelationship num = queryEmployeeNum(emRelationship);
+		int status;
+		if(num == null){
+			status = emRelationshipMapper.saveEmRelationship(emRelationship);
+		}else{
+			emRelationship.setErId(num.getErId());
+			return updateEmRelationship(emRelationship);
+		}
 		return status == 1 ? true : false;
 	}
 	public boolean updateEmRelationship(EmRelationship emRelationship) {
+		EmRelationship relationship = queryEmRelationshipByErId(emRelationship.getErId());
+		emRelationship.setVersion(relationship.getVersion());
 		int status = emRelationshipMapper.updateEmRelationship(emRelationship);
 		return status == 1 ? true : false;
 	}
@@ -48,7 +57,11 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return emRelationshipMapper.queryEmRelationshipByErId(erId);
 	}
 
-	public Pagination<EmRelationship> queryEmRelationshipList(Map<String, Object> params,int pageNo,int pageSize) {
+	public EmRelationship queryEmployeeNum(EmRelationship emRelationship) {
+		return emRelationshipMapper.queryEmployeeNum(emRelationship);
+	}
+
+	public Pagination<EmRelationship> queryEmRelationshipList(Map<String, Object> params, int pageNo, int pageSize) {
 		Pagination<EmRelationship> page = new Pagination<EmRelationship>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
@@ -60,6 +73,10 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 	public boolean deleteEmRelationshipByErId(Long erId) {
 		int status = emRelationshipMapper.deleteEmRelationshipByErId(erId);
 		return status == 1 ? true : false;
+	}
+
+	public Integer queryOpeningStatus(Long pId) {
+		return emRelationshipMapper.queryOpeningStatus(pId);
 	}
 
 	public List<EmRelationshipVo> queryEmRelationshipVoList() {
@@ -79,6 +96,7 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 			EmRelationshipVo vo = new EmRelationshipVo();
 			vo.setIsDelete(0L);
 			vo.setTid(tmId++);
+			vo.setEmId(employeeManage.getEmId());
 			vo.setEmployeeName(employeeManage.getEmName());
 			vo.setParentId(employeeManage.getEmTeam());
 			vo.setEmployeeManage(employeeManage);

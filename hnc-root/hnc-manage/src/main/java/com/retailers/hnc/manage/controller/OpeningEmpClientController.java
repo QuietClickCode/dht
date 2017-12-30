@@ -3,6 +3,7 @@ package com.retailers.hnc.manage.controller;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -35,7 +36,7 @@ public class OpeningEmpClientController extends BaseController{
             params.put("oid",oid);
             params.put("cmName",cmName);
             params.put("eid",eid);
-            Pagination<OpeningEmpClient> pagination = openingEmpClientService.queryNotGivenList(params,pageNo,pageSize);
+            Pagination<ClientManageVo> pagination = openingEmpClientService.queryNotGivenList(params,pageNo,pageSize);
 
             return queryPages(pagination);
         }
@@ -44,15 +45,18 @@ public class OpeningEmpClientController extends BaseController{
 
     @RequestMapping("queryCheckingandpassandnotpassList")
     @ResponseBody
-    public Map<String,Object> queryCheckingList(Long oid,Long status, HttpServletRequest request, int pageNo, int pageSize){
+    public Map<String,Object> queryCheckingList(String isManage,Long oid,Long status,String cmName, HttpServletRequest request, int pageNo, int pageSize){
         Long eid = getCurLoginUserId(request);
         Map map = new HashMap();
         if(ObjectUtils.isNotEmpty(eid)){
             Map params = new HashMap();
             params.put("oid",oid);
-            params.put("eid",eid);
             params.put("status",status);
-            Pagination<ClientIntentionVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassList(params,pageNo,pageSize);
+            params.put("cmName",cmName);
+            if(ObjectUtils.isEmpty(isManage)){
+                params.put("eid",eid);
+            }
+            Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassList(params,pageNo,pageSize);
             return queryPages(pagination);
         }
         return map;
@@ -71,6 +75,13 @@ public class OpeningEmpClientController extends BaseController{
     public BaseResp changeClientStatus(Long oid, Long status,String cmIds, HttpServletRequest request){
         Long eid = getCurLoginUserId(request);
         boolean flag = openingEmpClientService.changeClientStatus(oid,eid,cmIds,status);
+        return success(flag);
+    }
+
+    @RequestMapping("updateOpeningEmpClient")
+    @ResponseBody
+    public BaseResp updateOpeningEmpClient(String oecIds,Long status){
+        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status);
         return success(flag);
     }
 }

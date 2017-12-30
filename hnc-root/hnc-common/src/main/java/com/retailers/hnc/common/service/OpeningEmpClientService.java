@@ -1,6 +1,7 @@
 
 package com.retailers.hnc.common.service;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 
@@ -57,13 +58,16 @@ public interface OpeningEmpClientService {
 	 */
 	public boolean deleteOpeningEmpClientByOecId(Long oecId);
 
-	public Pagination<OpeningEmpClient> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<ClientManageVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
 
-	public Pagination<ClientIntentionVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<ClientManageVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public boolean addCheckClient(Long oid,Long eid,String cmIds);
 
 	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status);
+
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status);
+
 }
 
 
