@@ -176,6 +176,15 @@ public class GoodsServiceImpl implements GoodsService {
 		return goodsMapper.queryGoodsByGids(gIds);
 	}
 
+	public List<GoodsVo> queryGoodsVoByIds(Map params,int pageNo,int pageSize){
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setParams(params);
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		List<GoodsVo> list = goodsMapper.queryGoodsVoByIds(page);
+		return list;
+	}
+
 	public List<GoodsVo> queryTodayGoods(int pageNo,int pageSize) {
 		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
 		page.setPageNo(pageNo);
@@ -188,6 +197,39 @@ public class GoodsServiceImpl implements GoodsService {
 
 		}
 		return list;
+	}
+
+	public List<GoodsVo> queryGoodsVoListByCondition(String condition,int pageNo,int pageSize){
+		//先按商品名称模糊查询
+		Map params = new HashMap();
+		params.put("gname",condition);
+		params.put("isDelete",0L);
+		params.put("isChecked",1L);
+		Pagination<GoodsVo> page = new Pagination<GoodsVo>();
+		page.setParams(params);
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		List<GoodsVo> list = goodsMapper.queryGoodsList(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+		}
+		return list;
+//		Map params = new HashMap();
+//		params.put("isDelete",0L);
+//		params.put("ggName",condition);
+//		List<GoodsClassification> goodsClassifications = goodsClassificationService.queryGoodsClassificationList(params,1,99999).getData();
+//		List<Goods> list2 = new ArrayList<Goods>();
+//		if(ObjectUtils.isNotEmpty(goodsClassifications)){
+//			List<Long> gclassIds = new ArrayList<Long>();
+//
+//			for(GoodsClassification goodsClassification:goodsClassifications){
+//				gclassIds.add(goodsClassification.getGgId());
+//			}
+//			Map params2 = new HashMap();
+//			params2.put("isDelete",0L);
+//
+//		}
+//		return null;
 	}
 }
 

@@ -13,11 +13,11 @@
 <body class="bge6" onload="loaded()">
     <div class="box position-r">
         <div class="classify-search">
-            <input type="text" name="" id="" placeholder="现摘 水果">
-            <a href="" class="scan">
-                <!--<span>9+</span>-->
-            </a>
-            <span class="icon-search"></span>
+            <input type="text" name="" id="searchgoods" placeholder="现摘 水果" onkeydown="if(event.keyCode==13) {getKey()}">
+            <!--<a href="" class="scan">-->
+                <!--&lt;!&ndash;<span>9+</span>&ndash;&gt;-->
+            <!--</a>-->
+            <span class="icon-search" onclick="getKey();"></span>
         </div>
 
         <div class="classify-left" id="J_wrapperLeft">
@@ -213,6 +213,18 @@
         function imglazyload() {
             <!--图片懒加载-->
             $("img").lazyload({effect: "fadeIn"});
+        }
+
+        function getKey() {
+            gclass = null;
+            var condition = $('#searchgoods').val();
+            if(condition==''){
+                layer.msg('请输入条件');
+                return;
+            }
+            pageNo=1;
+            alert(condition);
+            window.location.href='/goods/goodsList/'+condition+'~-1.html';
         }
     </script>
 </body>

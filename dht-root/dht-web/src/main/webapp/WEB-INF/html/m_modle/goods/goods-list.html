@@ -11,147 +11,158 @@
 </head>
 
 <body class="bge6">
-    <div class="box position-r">
-        <div class="classify-search">
-            <input type="text" name="" id="searchgoods" placeholder="现摘 水果"onkeypress="getKey();">
-            <a href="" >
-                <!--<span>9+</span>-->
-            </a>
-            <span class="icon-search"></span>
-        </div>
-        
+<div class="box position-r">
+    <div class="classify-search">
+        <a onclick="returnhistory()" class="icon-return" style="float: left;background: url('/img/return.png');background-size: 100% 100%"></a>
+        <input type="text" name="" style="width: 6.1rem" id="searchgoods" placeholder="现摘 水果"onkeydown="if(event.keyCode==13) {getKey()}">
+        <!--<a href="" >-->
+            <!--<span>9+</span>-->
+        <!--</a>-->
+        <span class="icon-search" onclick="getKey()" style="float: left;margin-left: .6rem"></span>
     </div>
-    <ul class="like-list box2" style="margin-top: 5px" id="goodsul">
-        <!--<li>-->
-            <!--<a href="" class="img"><img src="/img/list2.jpg" alt=""></a>-->
-            <!--<a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
-            <!--<p>￥189</p>-->
-        <!--</li>-->
-    </ul>
-    <div class="more" id="nogoodscldiv" style="margin-top:5px;display: none">
-        <center>
-            <a style="color: red;font-size: .3rem;margin-top: 10px">已全部加载</a>
-        </center>
-    </div>
-    <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/public.js"></script>
-    <script src="/js/iscroll.js"></script>
-    <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
-    <script>
-        var path = window.location.pathname;
-        var condition;
-        var gclass;
-        var pathArr = path.substring(17,path.indexOf('.html')).split('~');
-        if(pathArr[0]!=null&&pathArr[0]!="null"){
-            condition = pathArr[0];
-            $('#searchgoods').val(condition);
-        }else{
-            gclass = parseInt(pathArr[1]);
-        }
+
+</div>
+<ul class="like-list box2" style="margin-top: 5px" id="goodsul">
+    <!--<li>-->
+    <!--<a href="" class="img"><img src="/img/list2.jpg" alt=""></a>-->
+    <!--<a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
+    <!--<p>￥189</p>-->
+    <!--</li>-->
+</ul>
+<div class="more" id="nogoodscldiv" style="margin-top:5px;display: none">
+    <center>
+        <a style="color: #999;font-size: .3rem;margin-top: 10px">已全部加载</a>
+    </center>
+</div>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/public.js"></script>
+<script src="/js/iscroll.js"></script>
+<script src="/js/layer/layer.js"></script>
+<script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+<script>
+    var path = window.location.pathname;
+    var condition;
+    var gclass;
+    var pathArr = path.substring(17,path.indexOf('.html')).split('~');
+    if(pathArr[0]!=null&&pathArr[0]!="null"){
+        condition = decodeURI(pathArr[0]);
+        $('#searchgoods').val(condition);
+    }else{
+        gclass = parseInt(pathArr[1]);
+    }
 
 
 
-        var pageNo=1;
-        var pageSize=10;
-        <!--加载商品-->
-        var flag = false;
-        function loadgoods() {
-            $.ajax({
-                type:"post",
-                url:'/goods/queryGoodsList/queryGoodsList',
-                dataType: "json",
-                async:false,
-                data:{condition:condition,gclass:gclass,pageNo:pageNo,pageSize:pageSize},
-                success:function(data){
-                    var rows = data.data;
-                    if(rows!=null&&rows.length>0){
-                        var html = '';
-                        $('#goodsul').html(html);
-                        for(var i=0;i<rows.length;i++){
-                            html = '<li>'+
-                                '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
-                                '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
-                                '<p>￥'+parseFloat(rows[i].minprice/100).toFixed(2) +'</p>'+
-                                '</li>';
-                            $('#goodsul').append(html);
-                        }
-                        pageNo++;
-                        flag=true;
-                        imglazyload();
-                        //滚动加载
-                        scrollloadgoods();
-                        if(rows.length<pageSize){
-                            console.log(111);
-                            $('#nogoodscldiv').show();
-                        }
+    var pageNo=1;
+    var pageSize=10;
+    <!--加载商品-->
+    var flag = false;
+    function loadgoods() {
+        $('#goodsul').html('');
+        $.ajax({
+            type:"post",
+            url:'/goods/queryGoodsList/queryGoodsList',
+            dataType: "json",
+            async:false,
+            data:{condition:condition,gclass:gclass,pageNo:pageNo,pageSize:pageSize},
+            success:function(data){
+                var rows = data.data;
+                if(rows!=null&&rows.length>0){
+                    var html = '';
+                    $('#goodsul').html(html);
+                    for(var i=0;i<rows.length;i++){
+                        html = '<li>'+
+                            '<a href="/goods/'+rows[i].gid+'.html" class="img"><img src="'+rows[i].imgUrl+'" alt=""></a>'+
+                            '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                            '<p>￥'+parseFloat(rows[i].minprice/100).toFixed(2) +'</p>'+
+                            '</li>';
+                        $('#goodsul').append(html);
+                    }
+                    pageNo++;
+                    flag=true;
+                    //滚动加载
+                    scrollloadgoods();
+                    if(rows.length<pageSize){
+                        $('#nogoodscldiv').show();
                     }
                 }
-            });
-        }
-
-        <!--滚动加载商品-->
-        function scrollloadgoods() {
-            $(document).ready(function(){
-                var range = 50;             //距下边界长度/单位px
-                var totalheight = 0;
-                var main = $("#goodsul");                     //主体元素
-                $(window).scroll(function(){
-                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
-
-                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
-
-                    if(($(document).height()-range) <= totalheight && flag) {
-                        flag = false;
-                        $.ajax({
-                            type:"post",
-                            url:'/goods/queryGoodsList/queryGoodsList',
-                            dataType: "json",
-                            async:false,
-                            data:{condition:condition,gclass:gclass,pageNo:pageNo,pageSize:pageSize},
-                            success:function(data){
-                                var rows = data.data;
-                                if(rows!=null&&rows.length>0){
-                                    var html = '';
-                                    $('#goodsul').html(html);
-                                    for(var i=0;i<rows.length;i++){
-                                        html = '<li>'+
-                                            '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
-                                            '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
-                                            '<p>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'</p>'+
-                                            '</li>';
-                                        $('#goodsul').append(html);
-                                    }
-                                    pageNo++;
-                                    flag=true;
-                                    imglazyload();
-                                }else{
-                                    $('#nogoodscldiv').show();
-                                }
-                            }
-                        });
-
-                    }
-                });
-            });
-        }
-
-        function imglazyload() {
-            <!--图片懒加载-->
-            $("img").lazyload({effect: "fadeIn"});
-        }
-
-        function getKey() {
-            if(event.keyCode==13){
-                gclass = null;
-                condition = $('#searchgoods').val();
-                pageNo=1;
-                loadgoods();
             }
+        });
+    }
+
+    <!--滚动加载商品-->
+    function scrollloadgoods() {
+        $(document).ready(function(){
+            var range = 50;             //距下边界长度/单位px
+            var totalheight = 0;
+            var main = $("#goodsul");                     //主体元素
+            $(window).scroll(function(){
+                var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                if(($(document).height()-range) <= totalheight && flag) {
+                    flag = false;
+                    $.ajax({
+                        type:"post",
+                        url:'/goods/queryGoodsList/queryGoodsList',
+                        dataType: "json",
+                        async:false,
+                        data:{condition:condition,gclass:gclass,pageNo:pageNo,pageSize:pageSize},
+                        success:function(data){
+                            var rows = data.data;
+                            if(rows!=null&&rows.length>0){
+                                var html = '';
+                                $('#goodsul').html(html);
+                                for(var i=0;i<rows.length;i++){
+                                    html = '<li>'+
+                                        '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
+                                        '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
+                                        '<p>￥'+parseFloat(rows[i].minprice/100).toFixed(2)+'</p>'+
+                                        '</li>';
+                                    $('#goodsul').append(html);
+                                }
+                                pageNo++;
+                                flag=true;
+                                imglazyload();
+                            }else{
+                                $('#nogoodscldiv').show();
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+    }
+
+    function imglazyload() {
+        <!--图片懒加载-->
+        $("img").lazyload({effect: "fadeIn"});
+    }
+
+    function getKey() {
+        gclass = null;
+        condition = $('#searchgoods').val();
+        if(condition==''){
+            layer.msg('请输入条件');
+            return;
         }
-    </script>
-    <script>
+        pageNo=1;
         loadgoods();
-    </script>
+    }
+    <!--返回上一页-->
+    function returnhistory() {
+        if(document.referrer===''){
+            window.location.href='/';
+        }else{
+            window.history.go(-1);
+        }
+    }
+</script>
+<script>
+    loadgoods();
+</script>
 </body>
 
 </html>

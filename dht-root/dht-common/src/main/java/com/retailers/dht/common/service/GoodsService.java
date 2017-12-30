@@ -81,7 +81,13 @@ public interface GoodsService {
 	 */
 	public List<Goods> queryGoodsByIds(List<Long> gIds);
 
+	public List<GoodsVo> queryGoodsVoByIds(Map params,int pageNo,int pageSize);
+
 	public List<GoodsVo> queryTodayGoods(int pageNo,int pageSize);
+
+
+	public List<GoodsVo> queryGoodsVoListByCondition(String condition,int pageNo,int pageSize);
+
 }
 
 
