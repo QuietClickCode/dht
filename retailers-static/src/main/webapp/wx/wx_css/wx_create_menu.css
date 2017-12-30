@@ -25,13 +25,13 @@ body{
 
 .main_hd{
 	overflow: hidden;
-	margin: 0 20px;
+	margin: 0 5px;
 }
 
 .main_hd h4{
 	float: left;
 	display: inline-block;
-	line-height: 75px;
+	line-height: 20px;
 	margin: 0px;
 
 }
