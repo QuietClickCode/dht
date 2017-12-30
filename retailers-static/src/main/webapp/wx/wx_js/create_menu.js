@@ -90,13 +90,13 @@ function addChildMenu(menu_item_index){
 		menu_box.prepend(subMenu);
 		menu_box.find(".sub_menu:not(:last)").each(function(){
 			let index = $(this).index();
-			$(this).attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+","+index+")");
+			$(this).attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+","+index+","+this+")");
 		});
 	}else if(len == 5){
 		let firstMenu = menu_box.find(".sub_menu").eq(4);
 		firstMenu.find(".menu_add").hide();
 		firstMenu.find(".menu_title").show().text("子菜单名称");
-		firstMenu.attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+",4)");
+		firstMenu.attr("onclick","event.stopPropagation();childClickFun("+menu_item_index+",4,"+this+")");
 	}
 }
 

@@ -6,7 +6,11 @@
 	<title>自定义菜单</title>
 	<%@include file="/common/common_bs_head_css.jsp"%>
 	<link rel="stylesheet" href="/wx/wx_css/wx_create_menu.css" type="text/css">
-
+	<style>
+		#wxMenuItem .menu_item{
+			float: left;
+		}
+	</style>
 </head>
 <body style="overflow: hidden">
 	<%--<div id="header"></div>--%>
