@@ -32,10 +32,10 @@ public class UserCardPackageServiceImpl implements UserCardPackageService {
 		int status = userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		return status == 1 ? true : false;
 	}
-	public boolean updateUserCardPackage(UserCardPackage userCardPackage) {
-		int status = userCardPackageMapper.updateUserCardPackage(userCardPackage);
-		return status == 1 ? true : false;
-	}
+//	public boolean updateUserCardPackage(UserCardPackage userCardPackage) {
+//		int status = userCardPackageMapper.updateUserCardPackage(userCardPackage);
+//		return status == 1 ? true : false;
+//	}
 	public UserCardPackage queryUserCardPackageById(Long id) {
 		return userCardPackageMapper.queryUserCardPackageById(id);
 	}

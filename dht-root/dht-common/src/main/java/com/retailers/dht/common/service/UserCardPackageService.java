@@ -22,14 +22,14 @@ public interface UserCardPackageService {
 	 * @date 2017-11-22 23:13:08
 	 */
 	public boolean saveUserCardPackage(UserCardPackage userCardPackage);
-	/**
-	 * 编辑用户钱包，积分
-	 * @param userCardPackage
-	 * @return
-	 * @author zhongp
-	 * @date
-	 */
-	public boolean updateUserCardPackage(UserCardPackage userCardPackage);
+//	/**
+//	 * 编辑用户钱包，积分
+//	 * @param userCardPackage
+//	 * @return
+//	 * @author zhongp
+//	 * @date
+//	 */
+//	public boolean updateUserCardPackage(UserCardPackage userCardPackage);
 	/**
 	 * 根据id查询用户钱包，积分
 	 * @param id
