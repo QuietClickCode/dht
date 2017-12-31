@@ -9,6 +9,15 @@ import com.retailers.hnc.common.entity.ClientManage;
 public class ClientManageVo extends ClientManage {
     private String empName;
     private Long oecId;
+    private String oecMsg;
+
+    public String getOecMsg() {
+        return oecMsg;
+    }
+
+    public void setOecMsg(String oecMsg) {
+        this.oecMsg = oecMsg;
+    }
 
     public Long getOecId() {
         return oecId;

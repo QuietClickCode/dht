@@ -540,12 +540,15 @@ li,ol,ul{list-style:none}.position-r,.search{position:relative}.box,.footer ul{m
 	margin-top: .1rem;
 	color: #666;
 	border-radius: 4px;
-	padding: .2rem .8rem;
+	padding: .0rem .2rem;
 	margin-right: .4rem;
+	font-size: .3rem;
 }
 .checkbox_service.active{
 	background: #ec3c3c;
 	color: #fff;
+	padding: 0rem .2rem;
+	font-size: .3rem;
 }
 .checkbox_service2{
 	padding: 0 .1rem;

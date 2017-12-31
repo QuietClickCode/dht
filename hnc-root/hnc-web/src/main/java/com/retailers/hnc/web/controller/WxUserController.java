@@ -134,7 +134,8 @@ public class WxUserController extends BaseController {
                     Map map = WebSystemConstant.globelOpenId;
                     map.put(randStr,endTime);
                     returnMap.put("randStr",randStr);
-                    returnMap.put("type",randStr);
+                    returnMap.put("type",type);
+                    System.out.println(randStr);
                     return returnMap;
                 }else{
                     returnMap.put("msg","您的信息有误");

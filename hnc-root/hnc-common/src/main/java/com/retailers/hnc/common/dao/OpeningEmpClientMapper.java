@@ -60,5 +60,5 @@ public interface OpeningEmpClientMapper {
 
 	public List<ClientManageVo> queryCheckingandpassandnotpassList(Pagination<ClientManageVo> pagination);
 
-	public int updateOpeningEmpClientByOecIds(@Param("oecIdList") List<Long> oecIdList,@Param("status") Long status);
+	public int updateOpeningEmpClientByOecIds(@Param("oecIdList") List<Long> oecIdList,@Param("status") Long status,@Param("msg") String msg);
 }

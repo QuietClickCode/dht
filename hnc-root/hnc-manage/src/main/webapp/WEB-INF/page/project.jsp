@@ -115,7 +115,6 @@
     UE.Editor.prototype._bkGetActionUrl = UE.Editor.prototype.getActionUrl;
     UE.Editor.prototype.getActionUrl = function(action) {
         //判断路径   这里是config.json 中设置执行上传的action名称
-        console.log(action)
         if (action == 'uploadimage') {
 //            return 'http://localhost:8080/file/imageUpload?type=goods&isWatermark=false&isCompress=false';
             return ueditorUploadUrl("goods",false,false);
@@ -123,7 +122,6 @@
         } else if (action == 'uploadvideo') {
             return '';
         } else {
-            console.log(this._bkGetActionUrl.call(this, action));
             return this._bkGetActionUrl.call(this, action);
         }
     }
@@ -146,7 +144,7 @@
                         <div class="col-lg-4" id="clearCpLogoDiv" style="display: none">
                             <div class="input-group form-group">
                                 <span class="input-group-addon">
-                                        优惠卷图片:
+                                        项目Logo:
                                     </span>
                                 <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
                             </div>
@@ -209,10 +207,8 @@
                         </span>
                         <div id="imgsdiv" class="row">
                             <div class="col-lg-2">
-                                <img style="width: 100%;height: 100%">
-                            </div>
-                            <div class="col-lg-2">
-                                <button class="btn btn-default" onclick="upImage();">+</button>
+                                <button class="btn btn-default" id="upimg">+</button>
+                                <input type="file" id="hideInput"  style="display: none;" multiple="true">
                             </div>
                         </div>
                     </div>
@@ -252,6 +248,19 @@
                 cpImagesFormSummit();
             }
         });
+
+        $('#upimg').click(function () {
+            document.getElementById('hideInput').click();
+        });
+
+        $('#hideInput').filestyle({
+            btnClass : "btn-primary",
+            text:"选择文件",
+            onChange:function(){
+                console.log(222);
+            }
+        });
+
     });
 
     var fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods";
@@ -309,6 +318,23 @@
                     $('#version').val(version);
                     $('#paddress').val(paddress);
                     ue.setContent(pdescription,false);
+
+                    var flag = logoImgUrl.substr(logoImgUrl.length-4)!='null';
+                    if(flag){
+                        $('#cpLogoDiv').hide();
+                        $('#clearCpLogoDiv').show();
+                        $('#uploadImageDiv').show();
+                        $('#uploadImage').attr('src',logoImgUrl);
+                    }
+
+                    if(imgsList!=null&&imgsList.length>0){
+                        for(var i=0;i<imgsList.length;i++){
+                            var html = '<div class="col-lg-2">'+
+                                '<img style="width: 100%;height: 100%" src="'+imgsList[i]+'">'+
+                                '</div>';
+                            $('#imgsdiv').append(html);
+                        }
+                    }
                 }
             }
         });
