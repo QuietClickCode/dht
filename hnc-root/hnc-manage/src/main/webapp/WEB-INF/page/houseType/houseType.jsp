@@ -66,6 +66,11 @@
             width: 50px;
             height: 50px;
         }
+
+        .houseTypeImage{
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <div>
@@ -212,6 +217,7 @@
                 <p>是否删除该户型</p>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-default editImage" data-dismiss="modal" style="display: none;">编辑</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary deleteHouseType">确定</button>
             </div>
@@ -230,12 +236,16 @@
             </div>
             <div class="modal-body">
                 <form id="uploadFileForm" class="form-inline">
-                    <div class="form-group">
+                    <div class="form-group" style="display: none;">
                         <label >请选择图片</label>
                         <input type="file" name="dht_image_upload" id="filed">
                     </div>
                     <div class="form-group">
-                        <img class="houseTypeImg" src="">
+                        <button type="button" class="btn btn-primary chooseImg">选择图片</button>
+                    </div>
+
+                    <div class="form-group houseTypeImgBox" style="display: none;">
+                        <button type="button" class="btn btn-primary houseTypeImg">选择图片</button>
                     </div>
                 </form>
             </div>
@@ -365,7 +375,12 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                return '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">添加户型效果图</button>';
+                let html = "";
+                if(row.htImage == null)
+                    html += '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">添加户型效果图</button>';
+                else
+                    html += '<img class="houseTypeImage" src="'+row.imagePath+'">';
+                return html;
             }
         },
         {
@@ -650,6 +665,7 @@
             success:function (data) {
                 layer.msg(data.msg);
                 $("#editHouseTypeImg").modal("hide");
+                refreshTableData();
             }
         });
     }
@@ -662,10 +678,15 @@
             console.log(e);
             $('.houseTypeImg').get(0).src = e.target.result;
         }
+        $(".houseTypeImgBox").show();
+    });
+
+    $(".chooseImg").click(function () {
+        $("#filed").click();
     });
 </script>
 
-<1%--自定义方法--%>
+<%--自定义方法--%>
 <script>
     /*为单选框赋值*/
     function radioChoose(className,num) {

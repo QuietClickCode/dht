@@ -66,6 +66,21 @@
                     </div>
 
                     <div class="form-group">
+                        <label class="col-sm-3 control-label">员工类型:</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" name="emType" value="1"> 置业顾问
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="emType" value="2"> 管理员
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" name="emType" value="3"> 录入员
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-sm-3 control-label">入职时间:</label>
                         <div class="col-sm-9">
                             <input type="text" class="form-control" id="emEntryTime" name="emEntryTimes"  placeholder="请输入入职时间">
@@ -162,6 +177,21 @@
                             </label>
                             <label class="radio-inline">
                                 <input type="radio" class="emSex" name="emSex" value="0"> 女
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">员工类型:</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline">
+                                <input type="radio" class="emType" name="emType" value="1"> 置业顾问
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" class="emType" name="emType" value="2"> 管理员
+                            </label>
+                            <label class="radio-inline">
+                                <input type="radio" class="emType" name="emType" value="3"> 录入员
                             </label>
                         </div>
                     </div>
@@ -462,6 +492,8 @@
             $(this).val(employee[name]);
         });
         radioChoose(".emSex",employee["emSex"]);
+        console.log(employee['emType']);
+        radioChoose(".emType",employee['emType']);
         $("#editEmEntryTime").val(employee["emEntryTime"]);
         $("#editEmRemoveTime").val(employee["emRemoveTime"]);
         $("#emInfo").val(employee["emInfo"]);

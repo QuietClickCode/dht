@@ -49,6 +49,8 @@ public class ClientInfoController extends BaseController {
         map.put("tmEmployee",emId);
         map.put("tmName",tmName);
         map.put("tmRegisterTime",dateFormat(registerTimes));
+        System.out.println(registerTimes);
+        System.out.println(dateFormat(registerTimes));
         Pagination<ClientManage> teamPagination = clientManageService.queryClientManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());

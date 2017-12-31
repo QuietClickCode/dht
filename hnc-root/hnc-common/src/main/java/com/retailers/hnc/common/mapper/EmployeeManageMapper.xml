@@ -25,6 +25,7 @@
 		<result property="emId" column="em_id"/>
 		<result property="emName" column="em_name"/>
 		<result property="emSex" column="em_sex"/>
+		<result property="emType" column="em_type"/>
 		<result property="emEntryTime" column="em_entry_time"/>
 		<result property="emTeam" column="em_team"/>
 		<result property="emPosition" column="em_position"/>

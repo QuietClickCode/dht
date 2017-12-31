@@ -24,7 +24,7 @@ public class EmployeeManage implements java.io.Serializable {
 	/**入职时间*/
 	@NotEmpty
 	private Date emEntryTime;
-	/**1代表置业顾问，2代表管理员*/
+	/**1代表置业顾问，2代表管理员，3代表操作员*/
 	@NotEmpty
 	private Integer emType;
 	/**所属团队*/

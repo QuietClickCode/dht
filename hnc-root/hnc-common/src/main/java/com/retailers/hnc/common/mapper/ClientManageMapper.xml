@@ -62,6 +62,9 @@
 			<if test="null != params.tmRegisterTimeEnd">
 				AND tm_register_time &lt;= #{params.tmRegisterTime}
 			</if>
+			<if test="null != params.tmRegisterTime">
+				AND tm_register_time = #{params.tmRegisterTime}
+			</if>
 			<if test="null != params.tmIdCard and '' != params.tmIdCard">
 				AND tm_id_card = #{params.tmIdCard}
 			</if>
