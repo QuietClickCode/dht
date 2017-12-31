@@ -11,12 +11,15 @@ import com.retailers.dht.common.service.PayService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.IPUtil;
 import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
+import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.utils.wx.WXPayUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,7 +105,8 @@ public class WxPayController extends BaseController{
 //        logger.info("微信公众号支付订单号:{}", orderNo);
 //        String apiKey="CF26762CF05A42899F1681872CE3BC89";
 //        String appId="wxfd2628cfc7f6defb";
-        String ip=request.getRemoteAddr();
+//        String ip=request.getRemoteAddr();
+        String ip=getRemoteAddrIp(request);
 //        Date curDate=new Date();
 //        TreeMap<String, String> params = new TreeMap<String, String>();
 //        String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
@@ -146,6 +150,7 @@ public class WxPayController extends BaseController{
 //        logger.info("===============================================================");
 //        return params;
         try{
+            checkWxConfig();
             //取得当前登陆id
             UserInfoVIew uiv =getCurLoginUser(request);
             Map<String,String> rtn = payService.createWxPay(orderNo,uiv.getWauOpenid(),ip);
@@ -259,8 +264,11 @@ public class WxPayController extends BaseController{
 //        }catch (Exception e){
 //            e.printStackTrace();
 //        }
+        String ip=getRemoteAddrIp(request);
+        logger.info("取得请求ip为:{}",ip);
         try{
-            String url = payService.createWxH5Pay(orderNo,"113.250.222.80");
+            checkWxConfig();
+            String url = payService.createWxH5Pay(orderNo,ip);
             return success(url);
         }catch(Exception e){
             return errorForSystem(e.getMessage());
@@ -377,4 +385,26 @@ public class WxPayController extends BaseController{
 //        info.setPcRemoteAdd(ip);
 //        payInfoService.ad dPayInfo(info);
 //    }
+
+    /**
+     * 校验微信配置
+     */
+    private void checkWxConfig()throws AppException{
+        if(ObjectUtils.isEmpty(WxConfig.WX_API_KEY)||ObjectUtils.isEmpty(WxConfig.WX_MCH_ID)||ObjectUtils.isEmpty(WxConfig.APP_ID)){
+            throw new AppException("未配置微信支付信息");
+        }
+        if(ObjectUtils.isEmpty(SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_PC_URL))){
+            throw new AppException("未配置微信支付回调地址");
+        }
+    }
+
+    /**
+     * 取得请求的ip地址
+     * @param request
+     * @return
+     */
+    private static String getRemoteAddrIp(HttpServletRequest request) {
+        String ipFromNginx = request.getHeader("X-Real-IP");
+        return ObjectUtils.isEmpty(ipFromNginx) ? request.getRemoteAddr() : ipFromNginx;
+    }
 }
