@@ -62,10 +62,11 @@ public interface WxAuthUserService {
 	/**
 	 * 根据code 取得当前 授权用户的微信信息
 	 * @param code
+	 * @param recommendId 推荐人id
 	 * @return
 	 * @throws AppException
 	 */
-	public WxAuthUser queryWxAuthUser(String code);
+	public WxAuthUser queryWxAuthUser(String code,Long recommendId);
 
 }
 

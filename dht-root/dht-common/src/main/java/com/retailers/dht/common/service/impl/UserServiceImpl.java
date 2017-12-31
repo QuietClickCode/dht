@@ -299,6 +299,9 @@ public class UserServiceImpl implements UserService {
 		user.setUstatus(UserConstant.USER_STATUS_NORMAL);
 		user.setUsex(wxAuthUser.getWauSex());
 		user.setUname(wxAuthUser.getWauNickname());
+		user.setUoldPwd(0);
+		user.setUisOld(0);
+		user.setUrecommendId(wxAuthUser.getWauRefereeId());
 		userMapper.saveUser(user);
 		//创建用户卡包
 		UserCardPackage userCardPackage=new UserCardPackage();

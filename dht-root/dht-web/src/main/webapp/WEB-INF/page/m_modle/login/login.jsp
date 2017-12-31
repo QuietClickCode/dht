@@ -191,6 +191,7 @@
                         }else{
                             window.location.href="/";
                         }
+                        return;
                     }
                     //提示
                     layer.open({
