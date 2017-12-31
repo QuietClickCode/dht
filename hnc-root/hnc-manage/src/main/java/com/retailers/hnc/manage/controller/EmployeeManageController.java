@@ -52,9 +52,8 @@ public class EmployeeManageController extends BaseController{
     @Function(label = "添加员工",description = "添加员工",resourse = "employeeManage.addEmployee",sort = 3,parentRes = "employeeManage.employeeManageMapping")
     @ResponseBody
     public BaseResp addEmployee(EmployeeManage employeeManage,String emEntryTimes,String emRemoveTimes){
-        if(ObjectUtils.isNotEmpty(emEntryTimes)&&ObjectUtils.isNotEmpty(emRemoveTimes)){
-            employeeManage = addDate(employeeManage,emEntryTimes,emRemoveTimes);
-        }
+        employeeManage.setEmEntryTime(dateFormat(emEntryTimes));
+        employeeManage.setEmRemoveTime(dateFormat(emRemoveTimes));
         boolean flag = employeeManageService.saveEmployeeManage(employeeManage);
         if(flag)
             return success("添加员工成功");
@@ -66,9 +65,8 @@ public class EmployeeManageController extends BaseController{
     @Function(label = "修改员工信息",description = "修改员工信息",resourse = "employeeManage.updateEmployee",sort = 3,parentRes = "employeeManage.employeeManageMapping")
     @ResponseBody
     public BaseResp updateEmployee(EmployeeManage employeeManage,String emEntryTimes,String emRemoveTimes){
-        if(ObjectUtils.isNotEmpty(emEntryTimes)&&ObjectUtils.isNotEmpty(emRemoveTimes)){
-            employeeManage = addDate(employeeManage,emEntryTimes,emRemoveTimes);
-        }
+        employeeManage.setEmEntryTime(dateFormat(emEntryTimes));
+        employeeManage.setEmRemoveTime(dateFormat(emRemoveTimes));
         boolean flag = employeeManageService.updateEmployeeManage(employeeManage);
         if(flag)
             return success("修改员工[" + employeeManage.getEmName() + "]成功");
@@ -97,5 +95,18 @@ public class EmployeeManageController extends BaseController{
             }
         }
         return employeeManage;
+    }
+
+    public Date dateFormat(String tmRegisterTimes){
+        Date registerTime = null;
+        if (!ObjectUtils.isEmpty(tmRegisterTimes)) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            try {
+                registerTime = sdf.parse(tmRegisterTimes);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return registerTime;
     }
 }

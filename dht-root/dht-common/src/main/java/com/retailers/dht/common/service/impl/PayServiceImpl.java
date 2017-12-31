@@ -14,10 +14,12 @@ import com.retailers.dht.common.entity.PayInfo;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.service.PayService;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
+import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.utils.WxHttpClientUtils;
 import com.retailers.wx.common.utils.wx.WXPayConstants;
 import com.retailers.wx.common.utils.wx.WXPayUtil;
@@ -67,13 +69,16 @@ public class PayServiceImpl implements PayService {
         try{
             Order order=queryOrderNo(orderNo);
             PayInfo pi=queryPayInfo(SystemConstant.PLATFORM_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_GZH,orderNo);
-            String apiKey="CF26762CF05A42899F1681872CE3BC89";
-            String appId="wxfd2628cfc7f6defb";
+//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
+//            String appId="wxfd2628cfc7f6defb";
+            String apiKey= WxConfig.WX_API_KEY;
+            String appId=WxConfig.APP_ID;
             if(ObjectUtils.isEmpty(pi)){
-                String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
+//                String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
+                String callbackUrl = StringUtils.concat(SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_PC_URL),"wxPay/callback");
                 params.put("appid", appId);
                 params.put("openid", openId);
-                params.put("mch_id", "1450860802");
+                params.put("mch_id", WxConfig.WX_MCH_ID);
                 params.put("device_info", "WEB");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
                 params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
                 params.put("body", "微信支付");//商品简单描述，该字段请按照规范传递，具体请见参数规定
@@ -174,12 +179,15 @@ public class PayServiceImpl implements PayService {
         }
         try{
             logger.info("微信H5页面支付(移动端非微信扫码支付):{}", orderNo);
-            String apiKey="CF26762CF05A42899F1681872CE3BC89";
-            String appId="wxfd2628cfc7f6defb";
+//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
+//            String appId="wxfd2628cfc7f6defb";
+            String apiKey= WxConfig.WX_API_KEY;
+            String appId=WxConfig.APP_ID;
             TreeMap<String, String> params = new TreeMap<String, String>();
-            String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
+//            String callbackUrl = "http://www.kuaiyis.com/wxPay/callback";
+            String callbackUrl = StringUtils.concat(SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_PC_URL),"wxPay/callback");
             params.put("appid", appId);
-            params.put("mch_id", "1450860802");
+            params.put("mch_id",WxConfig.WX_MCH_ID);
             params.put("device_info", "WEB");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
             params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
             params.put("body", "微信支付");//商品简单描述，该字段请按照规范传递，具体请见参数规定
