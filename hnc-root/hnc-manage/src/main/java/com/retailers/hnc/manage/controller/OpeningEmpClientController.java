@@ -1,6 +1,8 @@
 package com.retailers.hnc.manage.controller;
 
+import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
+import com.retailers.hnc.common.service.EmRelationshipService;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -25,6 +28,8 @@ import java.util.Map;
 public class OpeningEmpClientController extends BaseController{
     @Autowired
     OpeningEmpClientService openingEmpClientService;
+    @Autowired
+    EmRelationshipService emRelationshipService;
 
     @RequestMapping("queryNotGivenList")
     @ResponseBody
@@ -80,8 +85,39 @@ public class OpeningEmpClientController extends BaseController{
 
     @RequestMapping("updateOpeningEmpClient")
     @ResponseBody
-    public BaseResp updateOpeningEmpClient(String oecIds,Long status){
-        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status);
+    public BaseResp updateOpeningEmpClient(String oecIds,Long status,String msg){
+        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);
         return success(flag);
+    }
+
+    @RequestMapping("loadThisOpeningPersonNum")
+    @ResponseBody
+    public Map<String,Object> loadThisOpeningPersonNum(Long oid,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("pid",oid);
+        params.put("emId",eid);
+        List<EmRelationship> list = emRelationshipService.queryEmRelationshipList(params,1,1).getData();
+
+        Map params1 = new HashMap();
+        params1.put("isDelete",0L);
+        params1.put("oid",oid);
+        params1.put("eid",eid);
+        List<OpeningEmpClient> openingEmpClients = openingEmpClientService.queryOpeningEmpClientList(params1,1,9999).getData();
+        int index = 0;
+        for(OpeningEmpClient openingEmpClient:openingEmpClients){
+            if(openingEmpClient.getOecStatus()!=3){
+                index ++;
+            }
+        }
+        Map returnMap = new HashMap();
+        if(ObjectUtils.isNotEmpty(list)){
+            returnMap.put("personNum",list.get(0).getEmReservation());
+        }else{
+            returnMap.put("personNum",0);
+        }
+        returnMap.put("usePersonNum",index);
+        return returnMap;
     }
 }

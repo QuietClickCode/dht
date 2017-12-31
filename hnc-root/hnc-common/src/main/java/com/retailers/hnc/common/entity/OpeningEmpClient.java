@@ -26,6 +26,9 @@ public class OpeningEmpClient implements java.io.Serializable {
 	/**状态 0代分配 1审核中 2已分配 3未通过分配*/
 	@NotEmpty
 	private Long oecStatus;
+	/**审核意见*/
+	@NotEmpty
+	private String oecMsg;
 	/**是否删除 0不删除 1删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -37,7 +40,15 @@ public class OpeningEmpClient implements java.io.Serializable {
 	public OpeningEmpClient(){
 	}
 
-	public OpeningEmpClient( Long oecId){
+	public String getOecMsg() {
+		return oecMsg;
+	}
+
+	public void setOecMsg(String oecMsg) {
+		this.oecMsg = oecMsg;
+	}
+
+	public OpeningEmpClient(Long oecId){
 		this.oecId = oecId;
 	}
 

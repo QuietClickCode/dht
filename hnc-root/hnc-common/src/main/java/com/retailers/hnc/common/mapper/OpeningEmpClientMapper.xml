@@ -8,6 +8,7 @@
 			<result property="eid" column="e_id"/>
 			<result property="cid" column="c_id"/>
 			<result property="oecStatus" column="oec_status"/>
+			<result property="oecMsg" column="oec_msg"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -29,10 +30,11 @@
 		<result property="version" column="version"/>
 		<result property="empName" column="empName"/>
 		<result property="oecId" column="oecId"/>
+		<result property="oecMsg" column="oec_msg"/>
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="openingEmpClient_columns">
-		oec_id,o_id,e_id,c_id,oec_status,is_delete,version
+		oec_id,o_id,e_id,c_id,oec_status,oec_msg,is_delete,version
 	</sql>
 	<!-- 根据开盘与雇员和客户的关系表主键取得数据 -->
 	<select id="queryOpeningEmpClientByOecId" resultMap="rm_openingEmpClient" parameterType="java.lang.Long">
@@ -100,7 +102,7 @@
 
 	<select id="queryCheckingandpassandnotpassList" resultMap="rm_clientManage" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
-		t1.oec_id oecId,
+		t1.oec_id oecId,t1.oec_msg,
 		t2.*,
 		t3.em_name empName
 		FROM
@@ -125,10 +127,10 @@
 	<!--添加开盘与雇员和客户的关系表 -->
 	<insert id="saveOpeningEmpClient" parameterType="com.retailers.hnc.common.entity.OpeningEmpClient" useGeneratedKeys="true" keyProperty="oecId">
 		INSERT INTO t_opening_emp_client (
-			o_id,e_id,c_id,oec_status,is_delete,version
+			o_id,e_id,c_id,oec_status,oec_msg,is_delete,version
 		) VALUES
 		(
-			#{oid,jdbcType=BIGINT},#{eid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{oecStatus,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{oid,jdbcType=BIGINT},#{eid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{oecStatus,jdbcType=BIGINT},#{oecMsg,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改开盘与雇员和客户的关系表 -->
@@ -160,7 +162,8 @@
 	<update id="updateOpeningEmpClientByOecIds">
 		UPDATE t_opening_emp_client t1
 		SET
-		oec_status = #{status}
+		oec_status = #{status},
+		oec_msg = #{msg}
 		WHERE
 		t1.oec_id IN
 		<foreach collection="oecIdList" separator="," open="(" close=")" item="oecId">

@@ -66,7 +66,7 @@ public interface OpeningEmpClientService {
 
 	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status);
 
-	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status);
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg);
 
 }
 

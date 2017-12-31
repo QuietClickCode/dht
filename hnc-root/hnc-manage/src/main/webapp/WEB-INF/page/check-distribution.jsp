@@ -39,7 +39,7 @@
                         <div class="col-md-12 column">
                             <div class="tabbable" id="tabs-44711">
                                 <ul class="nav nav-tabs" >
-                                    <li>
+                                    <li class="active">
                                         <a href="#checking" data-toggle="tab"  id="nava2">审核中客户</a>
                                     </li>
                                     <li>
@@ -156,7 +156,30 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="editGtGclSubmit">确认</button>
+                <button type="button" class="btn btn-primary" onclick="hidemodal();">确认</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--客户审核框-->
+<div class="modal fade" id="checkClientModal" tabindex="-1" role="dialog" aria-labelledby="checkGoodsModal">
+    <div class="modal-dialog" role="document"  style="width: 800px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" >审核意见</h4>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" id="checkClientTextarea" value="">
+
+                </textarea>
+                <input type="hidden" id="oecIds">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" onclick="hidemodal()">关闭</button>
+                <button type="button" class="btn btn-primary" onclick="checkClientfunction()" >确认</button>
             </div>
         </div>
 
@@ -207,6 +230,49 @@
         {
             field: 'tmInfo',
             title: '备注',
+            align : 'center',
+            valign : 'middle'
+        }
+    ];
+    var notPassColumns=[
+        {   checkbox: true,
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'tmName',
+            title: '客户姓名',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                rowDatas.set(row.tmId,row);
+                var cmId = row.tmId;
+                var html = '';
+                html = '<a onclick="showClientInfo('+cmId+')">'+value+'</a>';
+                return html;
+            }
+        },
+        {
+            field: 'tmPhone',
+            title: '电话',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'empName',
+            title: '职业顾问',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'tmInfo',
+            title: '备注',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'oecMsg',
+            title: '审核意见',
             align : 'center',
             valign : 'middle'
         }
@@ -333,7 +399,7 @@
         oid = $('#selectOpening').val();
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","checkingTable","tmId",treeColumns,queryCheckingParams,"");
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","PassTable","tmId",treeColumns,queryPassParams,"miss");
-        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",treeColumns,queryNotPassParams,"toolbar");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",notPassColumns,queryNotPassParams,"toolbar");
     }
 
     function change() {
@@ -355,14 +421,27 @@
             layer.msg('请您选择客户');
             return;
         }
+
+        if(status==3){
+            $('#oecIds').val(oecIds);
+            $('#checkClientTextarea').val('');
+            $('#checkClientModal').modal('show');
+        }else{
+            uploadClientStatus(oecIds,status,'');
+        }
+
+    }
+
+    function uploadClientStatus(oecIds,status,msg) {
         $.ajax({
             type: "post",
             url: "/OpeningEmpClient/updateOpeningEmpClient",
             dataType: "json",
-            data: {oecIds:oecIds,status:status},
+            data: {oecIds:oecIds,status:status,msg:msg},
             success: function (data) {
                 if(data.status==0){
                     layer.msg('操作成功');
+                    hidemodal();
                     change();
                 }else{
                     layer.msg(data.msg);
@@ -408,6 +487,17 @@
                 }
             }
         });
+    }
+
+    function hidemodal() {
+        $('#showClientInfo').modal('hide');
+        $('#checkClientModal').modal('hide');
+    }
+
+    function checkClientfunction() {
+        var checkClientTextarea = $('#checkClientTextarea').val();
+        var oecIds = $('#oecIds').val();
+        uploadClientStatus(oecIds,3,checkClientTextarea);
     }
 
     <!--日期格式化-->

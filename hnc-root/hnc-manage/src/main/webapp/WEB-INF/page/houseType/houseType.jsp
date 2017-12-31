@@ -61,6 +61,16 @@
             background: url("/img/remove_icon.png") no-repeat;
             background-size: 15px 15px;
         }
+
+        .houseTypeImg{
+            width: 50px;
+            height: 50px;
+        }
+
+        .houseTypeImage{
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <div>
@@ -207,8 +217,41 @@
                 <p>是否删除该户型</p>
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-default editImage" data-dismiss="modal" style="display: none;">编辑</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
                 <button type="button" class="btn btn-primary deleteHouseType">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<%--查看户型效果图--%>
+<div class="modal fade" id="editHouseTypeImg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">查看户型效果图</h4>
+            </div>
+            <div class="modal-body">
+                <form id="uploadFileForm" class="form-inline">
+                    <div class="form-group" style="display: none;">
+                        <label >请选择图片</label>
+                        <input type="file" name="dht_image_upload" id="filed">
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-primary chooseImg">选择图片</button>
+                    </div>
+
+                    <div class="form-group houseTypeImgBox" style="display: none;">
+                        <button type="button" class="btn btn-primary houseTypeImg">选择图片</button>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-primary subEditHouseTypeImg">确定</button>
             </div>
         </div>
     </div>
@@ -332,7 +375,12 @@
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                return '<button class="btn btn-primary" onclick="event.stopPropagation();">添加户型效果图</button>';
+                let html = "";
+                if(row.htImage == null)
+                    html += '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">添加户型效果图</button>';
+                else
+                    html += '<img class="houseTypeImage" src="'+row.imagePath+'">';
+                return html;
             }
         },
         {
@@ -580,7 +628,65 @@
     })
 </script>
 
-<1%--自定义方法--%>
+<%--添加户型效果图--%>
+<script>
+    function editHouseTypeImg(id) {
+        houseType = rowDatas.get(id);
+        $("#editHouseTypeImg").modal("show");
+    }
+
+    $(".subEditHouseTypeImg").click(function () {
+        var fd = new FormData($("#uploadFileForm")[0]);
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            dataType:"json",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                addHouseTypeImg(data.original);
+            }
+        })
+    });
+    
+    function addHouseTypeImg(original) {
+        $.ajax({
+            url:"/houseManage/updateHouseType",
+            method:"post",
+            data:{
+                htId:houseType['htId'],
+                htImage:original
+            },
+            dataType:"json",
+            success:function (data) {
+                layer.msg(data.msg);
+                $("#editHouseTypeImg").modal("hide");
+                refreshTableData();
+            }
+        });
+    }
+    
+    $("#filed").change(function () {
+        var file = $('#filed').get(0).files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload=function(e){
+            console.log(e);
+            $('.houseTypeImg').get(0).src = e.target.result;
+        }
+        $(".houseTypeImgBox").show();
+    });
+
+    $(".chooseImg").click(function () {
+        $("#filed").click();
+    });
+</script>
+
+<%--自定义方法--%>
 <script>
     /*为单选框赋值*/
     function radioChoose(className,num) {

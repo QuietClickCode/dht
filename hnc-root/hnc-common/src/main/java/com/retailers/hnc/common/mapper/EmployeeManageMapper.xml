@@ -25,6 +25,7 @@
 		<result property="emId" column="em_id"/>
 		<result property="emName" column="em_name"/>
 		<result property="emSex" column="em_sex"/>
+		<result property="emType" column="em_type"/>
 		<result property="emEntryTime" column="em_entry_time"/>
 		<result property="emTeam" column="em_team"/>
 		<result property="emPosition" column="em_position"/>
@@ -114,12 +115,12 @@
 		<include refid="employeeManage_where"/>
 	</select>
 	<!--添加置业顾问 -->
-	<insert id="saveEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage" useGeneratedKeys="true" keyProperty="emId">
+    <insert id="saveEmployeeManage" parameterType="com.retailers.hnc.common.entity.EmployeeManage" useGeneratedKeys="true" keyProperty="emId">
 		INSERT INTO t_employee_manage (
-			em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
+			em_id,em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version
 		) VALUES
 		(
-			#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emType,jdbcType=INTEGER},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0
+			#{emId,jdbcType=BIGINT},#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emType,jdbcType=INTEGER},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改置业顾问 -->
