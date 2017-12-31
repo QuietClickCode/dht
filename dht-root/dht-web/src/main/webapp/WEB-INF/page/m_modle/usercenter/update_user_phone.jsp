@@ -66,12 +66,12 @@
                         <input type="number" class="input_text newPhoneNumber" placeholder="请输入新手机号码" />
                     </td>
                     <td class="td_line">
-                        <input type="button" class="btn_cod" id="btn_cod" value="获取验证码" onclick="getvalidCode(this)" />
+                        <input type="button"  class="btn_cod" id="btn_cod" value="获取验证码" onclick="getvalidCode(this)" />
                     </td>
                 </tr>
                 <tr>
                     <td class="td3 td_line" colspan="2">
-                        <input type="number" class="input_text newValidCode" placeholder="请输入验证码" />
+                        <input type="number"  class="input_text newValidCode" placeholder="请输入验证码" />
                     </td>
                 </tr>
                 <tr>

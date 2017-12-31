@@ -412,18 +412,15 @@ public class UserCenterController extends BaseController{
     @ResponseBody
     public Map<String,Object> getUserInfo(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
-        /*long uid=getCurLoginUserId(request);
-        User user = userService.queryUserByUid(uid);
+        UserInfoVIew user = getCurLoginUser(request);
         String userUphone = user.getUphone();
         userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
         map.put("userPhone",userUphone);
         map.put("sex",user.getUsex());
         map.put("nickName",user.getUname());
-        Attachment attachment = userService.queryUserHeader(user.getUimgid());
-        map.put("UserHeaderSrc", AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
-        String userAddress = addressService.queryDefaultUserAddress(uid);
-        map.put("userAddress",userAddress);*/
-        UserInfoVIew user = getCurLoginUser(request);
+        map.put("UserHeaderSrc", user.getHeadUrl());
+        String userAddress = addressService.queryDefaultUserAddress(user.getUid());
+        map.put("userAddress",userAddress);
         map.put("user",user);
         return map;
     }

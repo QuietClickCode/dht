@@ -385,7 +385,7 @@
                     $("#allOrder").append(ov);
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">取消订单</a><a href="" class="btn2">付款</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderGoodsTotalPrice+'&type='+row.orderType+'" class="btn2">付款</a></div></div></li>';
                     $("#dfk").append(ov);
                 }else if(num == 3){
                     ov+='<div class="count-infor">';
