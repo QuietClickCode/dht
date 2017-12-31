@@ -28,7 +28,11 @@
             <version>1.0-SNAPSHOT</version>
             <type>war</type>
         </dependency>
-
+        <dependency>
+            <groupId>com.retailers</groupId>
+            <artifactId>reatilers-wx-common</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
     <build>
         <finalName>hnc-manage</finalName>

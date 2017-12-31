@@ -61,6 +61,7 @@
                                                     <input type="text" class="form-control" id="search_client_name" placeholder="请输入客户姓名">
                                                 </div>
                                                 <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+                                                <span style="margin-left: 20px" id="personNum">您还有60个名额未分配</span>
                                             </div>
 
                                             <table id="notGivenTable" ></table>
@@ -164,7 +165,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                <button type="button" class="btn btn-primary" id="editGtGclSubmit">确认</button>
+                <button type="button" class="btn btn-primary" onclick="hidemodal();">确认</button>
             </div>
         </div>
 
@@ -212,7 +213,44 @@
             align : 'center',
             valign : 'middle'
         }
-    ]
+    ];
+    var notPassColumns=[
+        {   checkbox: true,
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'tmName',
+            title: '客户姓名',
+            align : 'center',
+            valign : 'middle',
+            formatter:function(value,row,index){
+                rowDatas.set(row.tmId,row);
+                var cmId = row.tmId;
+                var html = '';
+                html = '<a onclick="showClientInfo('+cmId+')">'+value+'</a>';
+                return html;
+            }
+        },
+        {
+            field: 'tmPhone',
+            title: '电话',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'tmInfo',
+            title: '备注',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'oecMsg',
+            title: '审核意见',
+            align : 'center',
+            valign : 'middle'
+        }
+    ];
 
     /**
      * 查询条件
@@ -351,14 +389,16 @@
     var oid;
     function loadDate() {
         oid = $('#selectOpening').val();
+        loadThisOpeningPersonNum();
         createTable("/OpeningEmpClient/queryNotGivenList","notGivenTable","tmId",treeColumns,queryParams,"");
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","checkingTable","tmId",treeColumns,queryCheckingParams,"miss");
         createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","PassTable","tmId",treeColumns,queryPassParams,"miss");
-        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",treeColumns,queryNotPassParams,"toolbar");
+        createTable("/OpeningEmpClient/queryCheckingandpassandnotpassList","notPassTable","tmId",notPassColumns,queryNotPassParams,"toolbar");
     }
 
     function change() {
         oid = $('#selectOpening').val();
+        loadThisOpeningPersonNum();
         refreshTableData();
         refreshCheckingTableData();
         refreshPassableData();
@@ -430,6 +470,27 @@
                         $('#invention').append(html);
                     }
                 }
+            }
+        });
+    }
+
+    function hidemodal() {
+        $('#showClientInfo').modal('hide');
+    }
+
+    var personNumber = 0;
+    <!--加载本期人数-->
+    function loadThisOpeningPersonNum() {
+        $.ajax({
+            type: "post",
+            url: "/clientIntention/queryClientIntentionList",
+            dataType: "json",
+            data: {oid:oid},
+            success: function (data) {
+                var personNum = data.personNum;
+                var usePersonNum = data.usePersonNum;
+                personNumber = Number(personNum) - Number(usePersonNum);
+                $('#personNum').html('您还有'+personNumber+'个名额未分配');
             }
         });
     }

@@ -302,6 +302,7 @@ public class UserServiceImpl implements UserService {
 		userMapper.saveUser(user);
 		//创建用户卡包
 		UserCardPackage userCardPackage=new UserCardPackage();
+		userCardPackage.setId(user.getUid());
 		userCardPackage.setUtotalWallet(0l);
 		userCardPackage.setUcurWallet(0l);
 		userCardPackage.setUtotalIntegral(0l);

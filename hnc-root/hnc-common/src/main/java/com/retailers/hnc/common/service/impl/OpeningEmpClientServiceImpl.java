@@ -102,7 +102,7 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return false;
 	}
 
-	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status){
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg){
 		List<Long> oecIdList = new ArrayList<Long>();
 		if(ObjectUtils.isNotEmpty(oecIds)){
 			String[] oecIdsArr = oecIds.split(",");
@@ -112,7 +112,7 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 			}
 		}
 		int index = 0;
-		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status);
+		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status,msg);
 		return index==oecIdList.size()?true:false;
 	}
 
