@@ -304,7 +304,7 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 			rtnMap.put("orderNo",orderNo);
-			rtnMap.put("totalPrice",totalPrice);
+			rtnMap.put("totalPrice",order.getOrderTradePrice());
 			rtnMap.put("type",order.getOrderType());
 		}finally {
         	logger.info("创建购物订单完毕，执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
