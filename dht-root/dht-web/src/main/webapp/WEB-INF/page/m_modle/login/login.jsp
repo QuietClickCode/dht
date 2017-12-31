@@ -183,7 +183,7 @@
                 type: "post",
                 dataType: "json",
                 success: function (data) {
-                    wxLoginFlag=false;
+
                     if(data.status==0){
                         let redirectUrl=$("#redirectUrl").val();
                         if(redirectUrl){
@@ -199,6 +199,7 @@
                         skin: 'msg',
                         time: 2 //2秒后自动关闭
                     });
+                    wxLoginFlag=false;
                 }
             });
         }
