@@ -5,6 +5,7 @@ import com.retailers.hnc.common.entity.ScanCode;
 import com.retailers.hnc.common.vo.ScanCodeVo;
 import com.retailers.mybatis.pagination.Pagination;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：扫码人员关系表Service
@@ -17,12 +18,12 @@ public interface ScanCodeService {
 
 	/**
 	 * 添加扫码人员关系表
-	 * @param scanCode
+	 * @param scanCodeList
 	 * @return
 	 * @author wangjue
 	 * @date 2017-12-31 12:47:06
 	 */
-	public boolean saveScanCode(ScanCode scanCode);
+	public boolean saveScanCode(List<ScanCode> scanCodeList);
 	/**
 	 * 编辑扫码人员关系表
 	 * @param scanCode

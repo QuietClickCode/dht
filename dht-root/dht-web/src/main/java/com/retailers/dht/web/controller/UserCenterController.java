@@ -14,8 +14,6 @@ import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
-import com.retailers.mybatis.common.constant.AttachmentConstant;
-import com.retailers.mybatis.common.entity.Attachment;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.NumberUtils;
@@ -414,7 +412,7 @@ public class UserCenterController extends BaseController{
     @ResponseBody
     public Map<String,Object> getUserInfo(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
-        long uid=getCurLoginUserId(request);
+        /*long uid=getCurLoginUserId(request);
         User user = userService.queryUserByUid(uid);
         String userUphone = user.getUphone();
         userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
@@ -424,7 +422,9 @@ public class UserCenterController extends BaseController{
         Attachment attachment = userService.queryUserHeader(user.getUimgid());
         map.put("UserHeaderSrc", AttachmentConstant.IMAGE_SHOW_URL+attachment.getShowUrl());
         String userAddress = addressService.queryDefaultUserAddress(uid);
-        map.put("userAddress",userAddress);
+        map.put("userAddress",userAddress);*/
+        UserInfoVIew user = getCurLoginUser(request);
+        map.put("user",user);
         return map;
     }
 

@@ -11,10 +11,12 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -57,8 +59,8 @@ public class ScanCodeConteoller extends BaseController {
     @RequestMapping("/addScanCode")
     @Function(label = "添加扫码员",description = "添加扫码员",resourse = "scanCode.addScanCode",sort = 3,parentRes = "scanCode.scanCodeMapping")
     @ResponseBody
-    public BaseResp addScanCode(ScanCode code){
-        boolean flag = codeService.saveScanCode(code);
+    public BaseResp addScanCode(@RequestBody List<ScanCode> scanCodeList){
+        boolean flag = codeService.saveScanCode(scanCodeList);
         if(flag)
             return success("添加扫码员成功");
         else

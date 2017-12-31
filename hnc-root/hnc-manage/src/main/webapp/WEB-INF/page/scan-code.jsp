@@ -20,7 +20,7 @@
 </head>
 <div>
     <div id="toolbar" class="form-inline">
-        <button class="btn btn-default saveTeam" type="button">新增团队</button>
+        <button class="btn btn-default saveScanCode" type="button">新增扫码员</button>
         <select id="openingMenu" class="form-control">
         </select>
     </div>
@@ -114,6 +114,29 @@
         rowDatas.clear();
         $("#goodsTypeTables").bootstrapTable('destroy');
         createEmployeeTable(oid);
+    });
+</script>
+
+<%--新增扫码员--%>
+<script>
+    $(".saveScanCode").click(function () {
+        $("#saveFloorManage").modal("show");
+        createFloorManageTable();
+    });
+
+    $(".addFloorRelationship").click(function () {
+        console.log(floorManagesMap.size);
+        console.log(rowDatas.size);
+        var relationships = new Array();
+        for (let key of floorManagesMap.keys()) {
+            var floorRe = new Object();
+            if(!rowDatas.has(key)){
+                floorRe['emId'] = key;
+                floorRe['oid'] = oid;
+                floorRe['isDelete'] = 0;
+                relationships.push(floorRe);
+            }
+        }
     });
 </script>
 
@@ -214,23 +237,23 @@
             columns: treeFloorColumns,
             onCheckAll:function(rows){
                 for(var row of rows){
-                    if(!floorManagesMap.has(row.htId)){
-                        floorManagesMap.set(row.htId,floorManage.fmId);
+                    if(!floorManagesMap.has(row.emId)){
+                        floorManagesMap.set(row.emId,row);
                     }
                 }
             },
             //点击每一个单选框时触发的操作
             onCheck:function(row){
                 //判断是否己经存在
-                if(!floorManagesMap.has(row.htId)){
-                    floorManagesMap.set(row.htId,floorManage.fmId);
+                if(!floorManagesMap.has(row.emId)){
+                    floorManagesMap.set(row.emId,row);
                 }
             },
             //取消每一个单选框时对应的操作；
             onUncheck:function(row){
                 //判断是否己经存在
-                if(floorManagesMap.has(row.htId)){
-                    floorManagesMap.delete(row.htId);
+                if(floorManagesMap.has(row.emId)){
+                    floorManagesMap.delete(row.emId);
                 }
             },
             onUncheckAll:function(rows){
@@ -266,37 +289,47 @@
         {   checkbox: true,
             align : 'center',
             valign : 'middle',
-            formatter:commonFloorSelectCheckFormatter
+            /*formatter:commonFloorSelectCheckFormatter*/
         },
         {
-            field: 'htTypeName',
-            title: '户型名称',
+            field: 'emName',
+            title: '员工姓名',
             align : 'center',
             valign : 'middle'
         },
         {
-            field: 'htType',
-            title: '户型',
-            align : 'center',
-            valign : 'middle'
-        },
-        {
-            field: 'htArea',
-            title: '户型面积',
+            field: 'emSex',
+            title: '员工性别',
             align : 'center',
             valign : 'middle',
             formatter:function (value,row,index) {
-                if(row.htArea != "")
-                    return row.htArea + "m²";
-                return "";
+                let html='';
+                if(row.emSex == 1){
+                    return '男';
+                }else if(row.emSex == 0){
+                    return '女';
+                }
+                return html;
             }
+        },
+        {
+            field: 'emPosition',
+            title: '职位',
+            align : 'center',
+            valign : 'middle'
+        },
+        {
+            field: 'emEntryTime',
+            title: '入职时间',
+            align : 'center',
+            valign : 'middle'
         }
     ]
 
     function commonFloorSelectCheckFormatter(value, row, index) {
         let curId = row.emId;
         for(let i = 0;i<floorManage.typeManages.length;i++){
-            if(curId == floorManage.typeManages[i].htId){
+            if(curId == floorManage.typeManages[i].emId){
                 return {
                     checked : true//设置选中
                 };

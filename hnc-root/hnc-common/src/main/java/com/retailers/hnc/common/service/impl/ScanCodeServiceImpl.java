@@ -32,8 +32,8 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 	@Autowired
 	private TeamService teamService;
 
-	public boolean saveScanCode(ScanCode scanCode) {
-		int status = scanCodeMapper.saveScanCode(scanCode);
+	public boolean saveScanCode(List<ScanCode> scanCodeList) {
+		int status = scanCodeMapper.saveScanCode(scanCodeList);
 		return status == 1 ? true : false;
 	}
 	public boolean updateScanCode(ScanCode scanCode) {

@@ -19,7 +19,7 @@ public interface ScanCodeMapper {
 	 * @author wangjue
 	 * @date 2017-12-31 12:47:06
 	 */
-	public int saveScanCode(ScanCode scanCode);
+	public int saveScanCode(List<ScanCode> scanCodeList);
 	/**
 	 * 编辑扫码人员关系表
 	 * @param scanCode

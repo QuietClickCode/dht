@@ -48,9 +48,9 @@
             <div class="vip">
                 <span>${user.rechageNm}</span>
             </div>
-            <i class="news">
-                <%--<span></span>--%>
-            </i>
+            <%--<i class="news">
+                &lt;%&ndash;<span></span>&ndash;%&gt;
+            </i>--%>
         </div>
 
         <div class="user-order">
