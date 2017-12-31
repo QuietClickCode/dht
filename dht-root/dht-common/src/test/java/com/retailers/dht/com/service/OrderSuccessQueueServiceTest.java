@@ -14,7 +14,8 @@ public class OrderSuccessQueueServiceTest extends TestBaseJunit {
     @Autowired
     private OrderSuccessQueueService orderSuccessQueueService;
     @Test
-    public void executeOrderQueue(){
+    public void executeOrderQueue()throws Exception{
         orderSuccessQueueService.executeOrderQueue();
+        Thread.sleep(10000);
     }
 }

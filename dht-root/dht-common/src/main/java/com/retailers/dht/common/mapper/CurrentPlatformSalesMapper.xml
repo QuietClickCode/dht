@@ -95,7 +95,7 @@
 			cps_total_price= CASE
 			<foreach collection="list" item="item" index="index" >
 				WHEN  cps_id=#{item.cpsId} THEN
-				#{item.cpsTotalPrice}
+				cps_total_price+#{item.cpsTotalPrice}
 			</foreach> end,
 			version = version+1,
 		</set>

@@ -1,6 +1,7 @@
 package com.retailers.dht.manage.job;
 
 import com.retailers.dht.common.service.CouponService;
+import com.retailers.dht.common.service.OrderSuccessQueueService;
 import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class ManageTaskJob {
     private ProcedureToolsService procedureToolsService;
     @Autowired
     private CouponService couponService;
+    @Autowired
+    private OrderSuccessQueueService orderSuccessQueueService;
 
     /**
      * 每小时清除未被使用的附件资源
@@ -55,6 +58,25 @@ public class ManageTaskJob {
      * 执行过期未付款的订单
      */
     public void executeOverdueUnPayOrder(){
+
+    }
+
+    /**
+     * 执行订单成功时处理的定时伤
+     */
+    public void executeOrderQueue(){
+        String key="executeOrderQueue";
+        try{
+            procedureToolsService.singleLockManager(key);
+        }catch(Exception e){
+            logger.info("正在处理订单成功回调");
+            return;
+        }
+        try{
+            orderSuccessQueueService.executeOrderQueue();
+        }finally {
+            procedureToolsService.singleUnLockManager(key);
+        }
 
     }
 
