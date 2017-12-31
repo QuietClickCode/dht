@@ -64,6 +64,7 @@
 			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,version
 		) VALUES
 		(
+			#{id,jdbcType=BIGINT},
 			#{utotalWallet,jdbcType=BIGINT},
 			#{ucurWallet,jdbcType=BIGINT},
 			#{utotalIntegral,jdbcType=BIGINT},
