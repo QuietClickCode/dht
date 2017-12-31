@@ -37,10 +37,10 @@ public class HouseTypeManageController extends BaseController{
         Long uid = getClientIdByOpenId(randStr);
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        Pagination<HouseTypeManageVo> advertisingPagination = houseTypeManageService.queryHouseTypeManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        map.put("uid",uid);
+        List<HouseTypeManageVo> list = houseTypeManageService.queryHourseTypeManageVoWithUid(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
-        gtm.put("total",advertisingPagination.getTotalCount());
-        gtm.put("rows",advertisingPagination.getData());
+        gtm.put("rows",list);
         return gtm;
     }
 

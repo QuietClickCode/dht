@@ -11,6 +11,15 @@ import java.util.List;
 public class HouseTypeManageVo extends HouseTypeManage {
     private String imagePath;
     private List<FloorManage> floorManages;
+    private Long isLike;
+
+    public Long getIsLike() {
+        return isLike;
+    }
+
+    public void setIsLike(Long isLike) {
+        this.isLike = isLike;
+    }
 
     public List<FloorManage> getFloorManages() {
         return floorManages;

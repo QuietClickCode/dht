@@ -83,18 +83,21 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("getCheckOrderData")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
     public String getCheckOrderData(HttpServletRequest request,String data){
         data += "\'isActivity\':3}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySeckill")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
     public String getCheckOrderDataBySeckill(HttpServletRequest request,String data){
         data += "\'isActivity\':1}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySpecial")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
     public String getCheckOrderDataBySpecial(HttpServletRequest request,String data){
         data += "\'isActivity\':0}";
         request.getSession().setAttribute("checkOrderData",data);
@@ -102,6 +105,7 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
     public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long goodsId,Long cspId){
         if(ObjectUtils.isNotEmpty(gdcpId)){
             Long uid = getCurLoginUserId(request);
