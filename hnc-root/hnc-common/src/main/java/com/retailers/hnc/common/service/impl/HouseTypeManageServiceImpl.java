@@ -142,5 +142,14 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		}
 		return null;
 	}
+
+	public List<HouseTypeManageVo> queryHourseTypeManageVoWithUid(Map params,int pageNo,int pageSize){
+		Pagination<HouseTypeManageVo> page = new Pagination<HouseTypeManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHourseTypeManageVoWithUid(page);
+		return list;
+	}
 }
 

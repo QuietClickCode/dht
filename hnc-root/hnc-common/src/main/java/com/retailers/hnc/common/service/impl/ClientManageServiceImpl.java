@@ -1,10 +1,15 @@
 
 package com.retailers.hnc.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.dao.ClientManageMapper;
+import com.retailers.hnc.common.entity.WxAuthUser;
 import com.retailers.hnc.common.service.ClientManageService;
+import com.retailers.hnc.common.service.WxAuthUserService;
+import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -19,6 +24,8 @@ import com.retailers.mybatis.pagination.Pagination;
 public class ClientManageServiceImpl implements ClientManageService {
 	@Autowired
 	private ClientManageMapper clientManageMapper;
+	@Autowired
+	private WxAuthUserService wxAuthUserService;
 	public ClientManage saveClientManage(ClientManage clientManage) {
 		int status = clientManageMapper.saveClientManage(clientManage);
 		return status == 1 ? clientManage : null;
@@ -54,6 +61,17 @@ public class ClientManageServiceImpl implements ClientManageService {
 
 	public Integer queryClientCount() {
 		return clientManageMapper.queryClientCount();
+	}
+	public Long queryClientManageIdByOpenid(String openid){
+		Map params = new HashMap();
+		params.put("isDelete",0L);
+		params.put("wauOpenid",openid);
+		List<WxAuthUser> wxAuthUserList = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+		if(ObjectUtils.isNotEmpty(wxAuthUserList)){
+			Long wauUid = wxAuthUserList.get(0).getWauUid();
+			return wauUid;
+		}
+		return null;
 	}
 }
 
