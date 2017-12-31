@@ -146,28 +146,30 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 				boolean isCashBack=false;
 				//返现金额
 				long cashBackMoney=0l;
+				long orderTradePrice=order.getOrderTradePrice();
 				//取得详查类型
 				if(!order.getOrderType().equals(OrderEnum.RECHARGE)){
 					//判断用户支付类型 是否马上返现 判断是否是钱包支付 是否返现
 					if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
+						orderTradePrice=order.getOrderMenberPrice()+NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),order.getOrderDiscount());
 						//判断是否是返现
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 							//取得订单详情 进行商品分类处理
-							goodsType(ods,true,order.getId(),order.getOrderBuyUid(),order.getOrderTradePrice());
+							goodsType(ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 							isCashBack=true;
 							cashBackMoney=order.getOrderMenberPrice();
 						}else{
-							goodsType(ods,false,order.getId(),order.getOrderBuyUid(),order.getOrderTradePrice());
+							goodsType(ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 						}
 					}else{
 						type=LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN;
-						goodsType(ods,false,order.getId(),order.getOrderBuyUid(),order.getOrderTradePrice());
+						goodsType(ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 					}
 					//计算推广提成
 					popularize(order,ods);
 				}
 				//添加卡包操作日志
-				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),type,order.getOrderTradePrice(),cashBackMoney,isCashBack);
+				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),type,orderTradePrice,cashBackMoney,isCashBack);
 			}else{
 				throw new AppException("订单状态异常");
 			}
