@@ -66,7 +66,7 @@
                         <input type="number" class="input_text newPhoneNumber" placeholder="请输入新手机号码" />
                     </td>
                     <td class="td_line">
-                        <input type="button"  class="btn_cod" id="btn_cod" value="获取验证码" onclick="getvalidCode(this)" />
+                        <input type="button" style="padding: 0.1rem 0.1rem;" class="btn_cod" id="btn_cod" value="获取验证码" onclick="getvalidCode(this)" />
                     </td>
                 </tr>
                 <tr>
