@@ -9,6 +9,7 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +65,7 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 	 * @return
 	 * @throws AppException
 	 */
-	public WxAuthUser queryWxAuthUser(String code){
+	public WxAuthUser queryWxAuthUser(String code,Long recommendId){
 		//跟据code取得用户信息
 		Map<String, String> result = getUserInfoAccessToken(code);//通过这个code获取access_token
 		//判断是否取得用户信息成功
@@ -72,7 +73,7 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 			String openId = result.get("openid");
 			if (ObjectUtils.isNotEmpty(openId)) {
 				logger.info("try getting user info. [openid={}]", openId);
-				WxAuthUser authUser= getUserInfo(result.get("access_token"), openId);
+				WxAuthUser authUser= getUserInfo(result.get("access_token"), openId,recommendId);
 				logger.info("received user info. [result={}]", authUser);
 				return authUser;
 			}
@@ -114,9 +115,10 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 	 * @param openId
 	 * @return
 	 */
-	private WxAuthUser getUserInfo(String accessToken, String openId) {
+	private WxAuthUser getUserInfo(String accessToken, String openId,Long recommendId) {
 		String url = String.format(WxConfig.OAUTH2_GET_USER_URL,accessToken,openId);
 		logger.info("request user info from url: {}", url);
+		logger.info("推荐人用户id--------------------->:[{}]",recommendId);
 		try {
 			String info = HttpClientUtil.doGet(url);
 			//将取得的数据信息进行utf转码
@@ -132,7 +134,7 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 				wxAuthUser.setWauCreateDate(new Date());
 				wxAuthUser.setWauWxId(1l);
 				//推荐人ID
-				wxAuthUser.setWauRefereeId(null);
+				wxAuthUser.setWauRefereeId(recommendId);
 			}
 			wxAuthUser.setWauOpenid(userInfo.get("openid").toString().replaceAll("\"", ""));
 			wxAuthUser.setWauNickname(userInfo.get("nickname").toString().replaceAll("\"", ""));
@@ -159,7 +161,8 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 			}
 			return wxAuthUser;
 		} catch (Exception ex) {
-			logger.error("fail to request wechat user info. [error={}]", ex);
+			ex.printStackTrace();
+			logger.info(StringUtils.getErrorInfoFromException(ex));
 		}
 		return null;
 	}

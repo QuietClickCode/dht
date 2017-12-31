@@ -548,7 +548,7 @@ public class UserCenterController extends BaseController{
             WxAuthUser wxAuthUser= (WxAuthUser)obj;
             UserInfoVIew userInfoVIew=userService.wxLoginNoUser(wxAuthUser);
             setCurLoginUser(request,userInfoVIew);
-            return success("新建用户成功");
+            return success("");
         }else{
             return errorForSystem("关联微信登陆帐号异常");
         }

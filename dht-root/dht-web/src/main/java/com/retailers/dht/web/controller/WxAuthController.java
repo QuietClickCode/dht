@@ -106,7 +106,13 @@ public class WxAuthController extends BaseController{
         logger.info("取得原始访问地址:{}",red);
         Map<String,Object> parms = WebUtils.getParametersStartingWith(request,"");
         logger.info("取得访问参数：{}", JSON.toJSON(parms));
-        WxAuthUser wxAuthUser=wxAuthUserService.queryWxAuthUser(code);
+        //取得推荐人
+        Long recommendId=null;
+        if(ObjectUtils.isNotEmpty(request.getSession().getAttribute(com.retailers.auth.constant.SystemConstant.SHARE_USER_SESSION_KEY))){
+            recommendId =(Long) request.getSession().getAttribute(com.retailers.auth.constant.SystemConstant.SHARE_USER_SESSION_KEY);
+        }
+        WxAuthUser wxAuthUser=wxAuthUserService.queryWxAuthUser(code,recommendId);
+        logger.info("取得微信用户信息------------------>>：{}",JSON.toJSON(wxAuthUser));
         ModelAndView modelAndView=new ModelAndView();
         if(ObjectUtils.isNotEmpty(wxAuthUser)){
             //判断该微信用户是否绑定用户
