@@ -88,6 +88,10 @@
 		SELECT <include refid="houseTypeManage_columns" />
 		FROM t_house_type_manage
 		<include refid="houseTypeManage_where"/>
+		ORDER BY ht_recommend DESC
+	</select>
+	<select id="queryHourseTypeManageVoWithUid" resultMap="rm_houseTypeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+
 	</select>
 	<!--添加户型表 -->
 	<insert id="saveHouseTypeManage" parameterType="com.retailers.hnc.common.entity.HouseTypeManage" useGeneratedKeys="true" keyProperty="htId">

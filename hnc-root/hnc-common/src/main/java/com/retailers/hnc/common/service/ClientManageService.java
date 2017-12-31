@@ -1,7 +1,10 @@
 
 package com.retailers.hnc.common.service;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.ClientManage;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：客户管理Service
@@ -71,6 +74,8 @@ public interface ClientManageService {
 	 */
 	public Integer queryClientCount();
 
+
+	public Long queryClientManageIdByOpenid(String openid);
 }
 
 

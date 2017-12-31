@@ -56,4 +56,6 @@ public interface HouseTypeManageMapper {
 	public List<HouseTypeManageVo> queryHouseTypeManageList(Pagination<HouseTypeManageVo> pagination);
 
 	public List<HouseTypeManage> queryHouseTypeManageByHtIds(@Param("htIds") List<Long> htIds);
+
+	public List<HouseTypeManageVo> queryHourseTypeManageVoWithUid(Pagination<HouseTypeManageVo> pagination);
 }
