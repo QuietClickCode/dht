@@ -385,7 +385,7 @@
                     $("#allOrder").append(ov);
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderGoodsTotalPrice+'&type='+row.orderType+'" class="btn2">付款</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="cancelOrder('+row.id+')">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderGoodsTotalPrice+'&type='+row.orderType+'" class="btn2">付款</a></div></div></li>';
                     $("#dfk").append(ov);
                 }else if(num == 3){
                     ov+='<div class="count-infor">';
@@ -393,7 +393,7 @@
                     $("#dfh").append(ov);
                 }else if(num == 4){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a href="/order/dealSuccess">确认收货</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderGoodsTotalPrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
                     $("#dsh").append(ov);
                 }else if(num == 9){
                     ov+='<div class="count-infor">';
@@ -402,6 +402,35 @@
                 }
             }
         }
+    }
+
+    /*取消订单*/
+    function cancelOrder(id) {
+        $.ajax({
+            url:"/order/cancelOrder",
+            type:"post",
+            dataType: "json",
+            data:{
+                orderId:id
+            },
+            success:function (data) {
+                window.location.reload();
+            }
+        });
+    }
+    
+    function orderConfirm(id) {
+        $.ajax({
+            url:"/order/orderConfirm",
+            type:"post",
+            dataType: "json",
+            data:{
+                orderId:id
+            },
+            success:function (data) {
+                window.location.reload();
+            }
+        });
     }
 </script>
 </body>

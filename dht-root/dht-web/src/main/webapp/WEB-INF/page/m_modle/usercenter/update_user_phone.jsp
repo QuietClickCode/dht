@@ -20,6 +20,9 @@
         #replace_nav li{
             font-size: 0.25rem;
         }
+        .td1{
+            width: 1rem;
+        }
     </style>
 </head>
 
