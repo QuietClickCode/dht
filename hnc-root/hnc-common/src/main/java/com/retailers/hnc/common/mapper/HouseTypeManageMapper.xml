@@ -26,6 +26,8 @@
 		<result property="isShow" column="is_show"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
+		<result property="imagePath" column="imagePath"/>
+		<result property="isLike" column="is_like"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -91,7 +93,17 @@
 		ORDER BY ht_recommend DESC
 	</select>
 	<select id="queryHourseTypeManageVoWithUid" resultMap="rm_houseTypeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
-
+		SELECT
+		t2.is_like,
+		t3.show_url imagePath,
+		t1.*
+		FROM
+		t_house_type_manage t1
+		LEFT JOIN t_user_like_hourse t2 ON t1.ht_id=t2.h_id and t2.is_delete=0 and t2.u_id=#{params.uid}
+		LEFT JOIN t_attachment t3 ON t3.id=t1.ht_image
+		WHERE
+		t1.is_delete=0
+		ORDER BY t1.ht_recommend DESC
 	</select>
 	<!--添加户型表 -->
 	<insert id="saveHouseTypeManage" parameterType="com.retailers.hnc.common.entity.HouseTypeManage" useGeneratedKeys="true" keyProperty="htId">

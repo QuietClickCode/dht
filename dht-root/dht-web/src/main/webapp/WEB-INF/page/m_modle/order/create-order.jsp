@@ -168,10 +168,10 @@
             <span class="name">运费</span>
             <span class="number" id="goodsFreight"><span class="mr_4">￥</span>0.00</span>
         </div>
-        <div class="price2">
-            <span class="name">会员折扣</span>
-            <span class="number"><span class="mr_4">￥</span>-0.00</span>
-        </div>
+        <%--<div class="price2">--%>
+            <%--<span class="name">会员折扣</span>--%>
+            <%--<span class="number"><span class="mr_4">￥</span>-0.00</span>--%>
+        <%--</div>--%>
         <div class="price2">
             <span class="name">商品优惠</span>
             <span class="number" id="gcpspan"><span class="mr_4">￥</span>-0.00</span>
@@ -371,6 +371,7 @@
 
         $('#goodsprice').html('<span class="mr_4">￥</span>'+parseFloat(index).toFixed(2));
         inittotalPrice = index;
+        outprice();
     }
 
     function loadAddress() {
@@ -649,6 +650,7 @@
                     $('#shouldPay').html('<span class="mr_4">￥</span>'+total.toFixed(2));
 
                     gfPrice = goodsPriceFloat;
+                    outprice();
                 }
             }
         });
@@ -728,10 +730,10 @@
                     lastCashArr.push(coupons[i]);
                 }
             }
-            console.log(firstRateArr.length);
-            console.log(firstCashArr.length);
-            console.log(lastRateArr.length);
-            console.log(lastCashArr.length);
+//            console.log(firstRateArr.length);
+//            console.log(firstCashArr.length);
+//            console.log(lastRateArr.length);
+//            console.log(lastCashArr.length);
             for(var i=0;i<firstRateArr.length;i++){
                 secondPrice = secondPrice * Number($(firstRateArr[i]).attr('val'))/10;
             }
@@ -757,11 +759,14 @@
     }
 
     function jiesuan(){
-        var addressId = $('#address').find('input[type=hidden]')[0].value;
-        if(addressId==null||addressId==''){
+        var addressP = $('#address').find('input[type=hidden]');
+        console.log(addressP.length);
+        if(addressP==null||addressP.length==0){
             layer.msg('请选择地址');
             return;
         }
+        var addressId = addressP[0].value;
+
 
 //        var rows = goodsData.data;
 //        var reqRows=new Array();
