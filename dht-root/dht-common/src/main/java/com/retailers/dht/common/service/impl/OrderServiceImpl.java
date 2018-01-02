@@ -1088,7 +1088,7 @@ public class OrderServiceImpl implements OrderService {
 			String orderRemark="用户平台购物，消耗用户钱包，使用金额:"+NumberUtils.formaterNumberPower(order.getOrderTradePrice())+","+discountRemark;
 			//添加钱包使用日志
 			userCardPackageService.addUserCardPackageLog(uid,LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
-			order.setOrderPayCallbackRemark("用户钱包支付，"+discountRemark+",实际支付："+payPrice);
+			order.setOrderPayCallbackRemark("用户钱包支付，原价，"+order.getOrderTradePrice()+",会员折扣,"+discountRemark+",实际支付："+payPrice);
 			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SUCCESS);
 			orderMapper.updateOrder(order);
 			//添加至订单回调处理
