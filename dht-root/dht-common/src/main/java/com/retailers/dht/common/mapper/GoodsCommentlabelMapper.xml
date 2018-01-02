@@ -102,7 +102,7 @@
 			gcl_name,gcl_status,gcl_level,gcl_parenid,is_class,is_delete,version
 		) VALUES
 		(
-			#{gclName,jdbcType=VARCHAR},#{gclStatus,jdbcType=BIGINT},#{gclLevel,jdbcType=VARCHAR},#{gclParenid,jdbcType=BIGINT}，#{isClass,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{gclName,jdbcType=VARCHAR},#{gclStatus,jdbcType=BIGINT},#{gclLevel,jdbcType=VARCHAR},#{gclParenid,jdbcType=BIGINT},#{isClass,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品评论表 -->

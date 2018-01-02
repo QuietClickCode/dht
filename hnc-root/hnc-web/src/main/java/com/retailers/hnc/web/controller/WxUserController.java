@@ -113,6 +113,7 @@ public class WxUserController extends BaseController {
                         clientManage.setIsDelete(0);
                         clientManage.setTmPhone(phone);
                         clientManage.setTmLoginStatus(type);
+                        clientManage.setTmRegisterTime(new Date());
                         clientManage = clientManageService.saveClientManage(clientManage);
 
                         wxAuthUser.setWauUid(clientManage.getTmId());

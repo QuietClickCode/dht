@@ -66,7 +66,9 @@ public class ClientIntentionServiceImpl implements ClientIntentionService {
 	}
 
 	public boolean deleteClientIntentionByIid(Long iid) {
-		int status = clientIntentionMapper.deleteClientIntentionByIid(iid);
+		ClientIntention clientIntention = clientIntentionMapper.queryClientIntentionByIid(iid);
+		clientIntention.setIsDelete(1l);
+		int status = clientIntentionMapper.updateClientIntention(clientIntention);
 		return status == 1 ? true : false;
 	}
 
