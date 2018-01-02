@@ -122,20 +122,20 @@
                               </span>
                                 <input type="hidden" name="isClass" id="isClass">
                                 <div class="radio radio-info" style="float: left;margin-right: 20px">
-                                    <input id="radio101" type="radio" name="isClasss" value="0" onclick="isclassfunction(this)">
+                                    <input id="radio101" type="radio" name="isClasss" value="0" onclick="isclassfunction(0)">
                                     <label for="radio101">
                                         不是
                                     </label>
                                 </div>
                                 <div class="radio radio-info" style="float: left;margin-top: 10px">
-                                    <input id="radio102" type="radio" name="isClasss" value="1" onclick="isclassfunction(this)">
+                                    <input id="radio102" type="radio" name="isClasss" value="1" onclick="isclassfunction(1)">
                                     <label for="radio102">
                                         是
                                     </label>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-4" id="goodschoose">
+                        <div class="col-lg-4" id="goodschoose" style="display: none;">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 选择商品:
@@ -143,7 +143,7 @@
                                 <button class="btn btn-default" onclick="showggclrel();">点击选择商品</button>
                             </div>
                         </div>
-                        <div class="col-lg-4" id="classchoose">
+                        <div class="col-lg-4" id="classchoose" style="display: none;">
                             <div class="input-group form-group">
                               <span class="input-group-addon">
                                 选择类型:
@@ -591,6 +591,8 @@
         $("#editorGoodsCommentlabelForm #version").val("");
         $("#editorGoodsCommentlabelForm").find('input').val("");
         $("#editorGoodsCommentlabelForm #gclStatus").bootstrapSwitch("state",true);
+        $('#goodschoose').hide();
+        $('#classchoose').hide();
     }
     /**
      * 清除form 表单数据
@@ -1110,17 +1112,22 @@
         $('#editorgcgcllrel').modal('show');
     }
 
-    function isclassfunction(obj) {
-        var val = $(obj).val();
-        if(val==0){
-            $('#goodschoose').show();
-            $('#classchoose').hide();
-            $('#isClass').val('0');
+    function isclassfunction(val) {
+        if(editorGoodsCommentlabelType==1){
+            if(val==0){
+                $('#goodschoose').show();
+                $('#classchoose').hide();
+                $('#isClass').val('0');
+            }else{
+                $('#goodschoose').hide();
+                $('#classchoose').show();
+                $('#isClass').val('1');
+            }
         }else{
             $('#goodschoose').hide();
-            $('#classchoose').show();
-            $('#isClass').val('1');
+            $('#classchoose').hide();
         }
+
     }
 </script>
 </body>
