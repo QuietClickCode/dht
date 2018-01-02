@@ -110,8 +110,11 @@
     });
 
     $("#openingMenu").change(function () {
+        $("#house_type_table").bootstrapTable('destroy');
         oid = $(this).val();
         rowDatas.clear();
+        floorManagesMap.clear();
+        console.log(rowDatas.clear());
         $("#goodsTypeTables").bootstrapTable('destroy');
         createEmployeeTable(oid);
     });
@@ -120,24 +123,38 @@
 <%--新增扫码员--%>
 <script>
     $(".saveScanCode").click(function () {
-        $("#saveFloorManage").modal("show");
         createFloorManageTable();
+        $("#saveFloorManage").modal("show");
+
     });
 
     $(".addFloorRelationship").click(function () {
-        console.log(floorManagesMap.size);
-        console.log(rowDatas.size);
-        var relationships = new Array();
+        var scanCodeList = new Array();
         for (let key of floorManagesMap.keys()) {
             var floorRe = new Object();
-            if(!rowDatas.has(key)){
                 floorRe['emId'] = key;
                 floorRe['oid'] = oid;
                 floorRe['isDelete'] = 0;
-                relationships.push(floorRe);
-            }
+                floorRe['version'] = 0;
+                scanCodeList.push(floorRe);
         }
+
+        $.ajax({
+            url:"/scanCode/addScanCode",
+            method:"post",
+            contentType: "application/json",
+            data:JSON.stringify(scanCodeList),
+            success:function (data) {
+                $("#house_type_table").bootstrapTable('destroy');
+                refreshTableData();
+                $("#saveFloorManage").modal("hide");
+            }
+        });
     });
+
+    $('#saveFloorManage').on('hidden.bs.modal', function (e) {
+        $("#house_type_table").bootstrapTable('destroy');
+    })
 </script>
 
 <%--初始化表格数据--%>
@@ -206,6 +223,7 @@
 
 <script>
     var floorManagesMap = new Map();
+
     function createFloorManageTable(){
         //表格的初始化
         $("#house_type_table").bootstrapTable({
@@ -289,7 +307,7 @@
         {   checkbox: true,
             align : 'center',
             valign : 'middle',
-            /*formatter:commonFloorSelectCheckFormatter*/
+            formatter:commonFloorSelectCheckFormatter
         },
         {
             field: 'emName',
@@ -327,13 +345,11 @@
     ]
 
     function commonFloorSelectCheckFormatter(value, row, index) {
-        let curId = row.emId;
-        for(let i = 0;i<floorManage.typeManages.length;i++){
-            if(curId == floorManage.typeManages[i].emId){
-                return {
-                    checked : true//设置选中
-                };
-            }
+        if(rowDatas.has(row.emId)){
+            floorManagesMap.set(row.emId,row);
+            return {
+                checked : true//设置选中
+            };
         }
         return {
             checked : false//设置选中

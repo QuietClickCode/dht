@@ -45,7 +45,7 @@ public class FloorManageController extends BaseController{
         if(flag)
             return success("新增楼层成功");
         else
-            return success("新增楼层失败");
+            return errorForSystem("新增楼层失败");
     }
 
     @RequestMapping("/updateFloor")

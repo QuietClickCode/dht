@@ -1,19 +1,19 @@
 
 package com.retailers.hnc.common.service.impl;
-import java.util.List;
-import java.util.Map;
 
-import com.retailers.hnc.common.entity.EmployeeManage;
-import com.retailers.hnc.common.entity.ScanCode;
 import com.retailers.hnc.common.dao.ScanCodeMapper;
-import com.retailers.hnc.common.entity.Team;
+import com.retailers.hnc.common.entity.*;
 import com.retailers.hnc.common.service.EmployeeManageService;
 import com.retailers.hnc.common.service.ScanCodeService;
 import com.retailers.hnc.common.service.TeamService;
 import com.retailers.hnc.common.vo.ScanCodeVo;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：扫码人员关系表Service
  * @author wangjue
@@ -33,8 +33,36 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 	private TeamService teamService;
 
 	public boolean saveScanCode(List<ScanCode> scanCodeList) {
-		int status = scanCodeMapper.saveScanCode(scanCodeList);
+		int status = 0;
+		if(scanCodeList.size() != 0){
+			ScanCode code = scanCodeList.get(0);
+			Long oid = code.getOid();
+			HashMap<Long,ScanCode> map = new HashMap<Long, ScanCode>();
+			for (ScanCode scanCode : scanCodeList) {
+				map.put(scanCode.getEmId(),scanCode);
+			}
+
+			List<ScanCode> scanCodes = scanCodeMapper.queryOpeningEmployee(oid);
+			for (ScanCode scanCode : scanCodes) {
+				if(map.get(scanCode.getEmId()) == null){
+					deleteScanCodeByScId(scanCode.getScId());
+				}else if(map.get(scanCode.getEmId()) != null){
+					map.remove(scanCode.getEmId());
+				}
+			}
+			scanCodes.clear();
+			for (Map.Entry<Long, ScanCode> entry : map.entrySet()) {
+				scanCodes.add(entry.getValue());
+			}
+
+			System.out.println(scanCodes.size()+"size");
+			for(ScanCode scanCode:scanCodes){
+				System.out.println(scanCode.getEmId());
+			}
+			status = scanCodeMapper.saveScanCode(scanCodes);
+		}
 		return status == 1 ? true : false;
+
 	}
 	public boolean updateScanCode(ScanCode scanCode) {
 		ScanCode code = queryScanCodeByScId(scanCode.getScId());

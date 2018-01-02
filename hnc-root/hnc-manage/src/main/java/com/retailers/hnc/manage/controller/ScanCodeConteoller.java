@@ -64,6 +64,6 @@ public class ScanCodeConteoller extends BaseController {
         if(flag)
             return success("添加扫码员成功");
         else
-            return success("添加扫码员失败");
+            return errorForSystem("添加扫码员失败");
     }
 }

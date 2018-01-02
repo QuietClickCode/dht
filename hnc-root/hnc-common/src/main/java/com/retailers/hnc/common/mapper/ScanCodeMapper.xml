@@ -54,13 +54,13 @@
 		<include refid="scanCode_where"/>
 	</select>
 	<!--添加扫码人员关系表 -->
-	<insert id="saveScanCode" parameterType="com.retailers.hnc.common.entity.ScanCode" useGeneratedKeys="true" keyProperty="scId">
-		INSERT INTO t_scan_code (
-			oid,em_id,is_delete,version
-		) VALUES
-		(
-			#{oid,jdbcType=BIGINT},#{emId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
-		)
+	<insert id="saveScanCode" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="scId">
+		INSERT INTO t_scan_code (oid,em_id,is_delete,version) VALUES
+		<foreach collection ="list" item="code" index= "index" separator =",">
+			(
+				#{code.oid},#{code.emId},#{code.isDelete},#{code.version}
+			)
+		</foreach>
 	</insert>
 	<!--修改扫码人员关系表 -->
 	<update id="updateScanCode" parameterType="com.retailers.hnc.common.entity.ScanCode">
@@ -85,4 +85,8 @@
 	<delete id="deleteScanCodeByScId" parameterType="java.lang.Long">
 		DELETE FROM t_scan_code WHERE sc_id = #{scId}
 	</delete>
+
+	<select id="queryOpeningEmployee" resultMap="rm_scanCode" parameterType="java.lang.Long">
+		select * from t_scan_code where oid = #{oid} and is_delete = 0
+	</select>
 </mapper>
