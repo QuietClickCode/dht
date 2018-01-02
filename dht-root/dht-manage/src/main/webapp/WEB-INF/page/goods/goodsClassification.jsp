@@ -111,6 +111,31 @@
                 <h4 class="modal-title" id="exampleModalLabel">编辑商品子类</h4>
             </div>
             <div class="modal-body">
+                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-4" id="cpLogoDiv">
+                            <div class="input-group form-group">
+                                    <span class="input-group-addon">
+                                        商品子类图片:
+                                    </span>
+                                <input type="file" id="dht_image_upload" name="dht_image_upload">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="clearCpLogoDiv" style="display: none;">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                        商品子类图片:
+                                    </span>
+                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="uploadImageDiv">
+                            <div class="input-group form-group">
+                                <img src="" id="uploadImage" width="96px;" height="48px;">
+                            </div>
+                        </div>
+                    </div>
+                </form>
                 <form id="editGoodsClassificationForm">
                     <input type="hidden" name="ggId" id="ggId">
                     <input type="hidden" name="version" id="version">
@@ -163,17 +188,18 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-lg-6" style="height: 34px;">
-                            <div class="input-group">
-                              <span class="input-group-addon">
-                                图片:
-                              </span>
-                                <input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>
-                                <img style="width: 50px;"src="" id="goodsClassificationImg" />
-                                <span id="goodsClassificationImgSpan" style="display: none;">无图片</span>
-                                <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
-                            </div>
-                        </div>
+                        <input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>
+                        <%--<div class="col-lg-6" style="height: 34px;">--%>
+                            <%--<div class="input-group">--%>
+                              <%--<span class="input-group-addon">--%>
+                                <%--图片:--%>
+                              <%--</span>--%>
+                                <%--<input id="ggImgpath" name="ggImgpath" type="hidden" class="form-control"/>--%>
+                                <%--<img style="width: 50px;"src="" id="goodsClassificationImg" />--%>
+                                <%--<span id="goodsClassificationImgSpan" style="display: none;">无图片</span>--%>
+                                <%--<button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
                         <div class="col-lg-6">
                             <div class="input-group">
                               <span class="input-group-addon">
@@ -242,6 +268,7 @@
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/jquery.treegrid.extension.js"></script>
+<script type="text/javascript" src="<%=path%>/js/filestyle/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript">
     $.fn.serializeObject = function()
     {
@@ -582,12 +609,18 @@
             var index = rowData.imgUrl.substring(rowData.imgUrl.length-4);
 
             if(index=='' || index==null || index=='null'){
-                $("#editGoodsClassificationForm #goodsClassificationImg").hide();
-                $("#editGoodsClassificationForm #goodsClassificationImgSpan").show();
+                $('#cpLogoDiv').show();
+                $('#clearCpLogoDiv').hide();
+                $('#uploadImageDiv').hide();
+//                $("#editGoodsClassificationForm #goodsClassificationImg").hide();
+//                $("#editGoodsClassificationForm #goodsClassificationImgSpan").show();
             }else{
-                $("#editGoodsClassificationForm #goodsClassificationImg")[0].src=rowData.imgUrl;
-                $("#editGoodsClassificationForm #goodsClassificationImg").show();
-                $("#editGoodsClassificationForm #goodsClassificationImgSpan").hide();
+                $('#cpLogoDiv').hide();
+                $('#clearCpLogoDiv').show();
+                $('#uploadImageDiv').show();
+                $("#uploadImage")[0].src=rowData.imgUrl;
+//                $("#editGoodsClassificationForm #goodsClassificationImg").show();
+//                $("#editGoodsClassificationForm #goodsClassificationImgSpan").hide();
             }
 
             var flag = false;
@@ -761,7 +794,52 @@
         });
     });
 </script>
+<script>
+    $('#cpImagesForm #dht_image_upload').filestyle({
+        btnClass : "btn-primary",
+        text:"选择文件",
+        onChange:function(){
+            editSubmitIndex = layer.load(2);
+            cpImagesFormSummit();
+        }
+    });
 
+    let fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
+    function cpImagesFormSummit(){
+        var formData = new FormData($( "#cpImagesForm" )[0]);
+        $.ajax({
+            url: fileUpload,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (returndata) {
+                if(returndata.state=="SUCCESS"){
+                    $("#uploadImageDiv").show();
+                    $("#cpLogoDiv").hide();
+                    $("#clearCpLogoDiv").show();
+                    $("#uploadImage").attr("src",returndata.url);
+                    $("#ggImgpath").val(returndata.original);
+                }
+                layer.close(editSubmitIndex);
+            },
+            error: function (returndata) {
+                layer.close(editSubmitIndex);
+            }
+        });
+    }
+    //清除文件
+    function clearCpLogo(){
+        $('#cpImagesForm #dht_image_upload').filestyle('clear');
+        $("#cpImagesForm #uploadImageDiv").hide();
+        $("#cpImagesForm #cpLogoDiv").show();
+        $("#cpImagesForm #clearCpLogoDiv").hide();
+        $("#ggImgpath").val('-1');
+    }
+</script>
 
 </body>
 </html>

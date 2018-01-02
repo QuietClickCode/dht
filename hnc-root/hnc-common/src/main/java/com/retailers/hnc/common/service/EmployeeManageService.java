@@ -49,6 +49,8 @@ public interface EmployeeManageService {
 	 * @date 2017-12-25 12:01:09
 	 */
 	public Pagination<EmployeeManageVo> queryEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Pagination<EmployeeManageVo> queryFirstEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据emId删除员工管理
 	 * @param emId

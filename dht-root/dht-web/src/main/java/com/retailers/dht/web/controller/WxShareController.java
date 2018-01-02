@@ -53,7 +53,7 @@ public class WxShareController extends BaseController{
     @RequestMapping("createWxShare")
     @ResponseBody
     public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
-        System.out.println(path);
+        path = path.substring(1);
         String noncestr = createRandomString();
         String jsapi_ticket = WxConfig.ACCESS_TICKET;
         Long timestamp = new Date().getTime()/1000;

@@ -129,21 +129,45 @@
                                 <input type="text" class="form-control" name="gbName" id="gbName">
                             </div>
                         </div>
-                        <div class="col-lg-12">
+                        <input type="hidden" class="form-control" name="gbImgpath" id="gbImgpath">
+                        <%--<div class="col-lg-12">--%>
+                            <%--<div class="input-group form-group">--%>
+                              <%--<span class="input-group-addon">--%>
+                                <%--商品品牌logo:--%>
+                              <%--</span>--%>
+                                <%--<input type="hidden" class="form-control" name="gbImgpath" id="gbImgpath">--%>
+                                <%--<img style="width: 50px;"src=""  id="logoImg"/>--%>
+                                <%--<span id="logoImgSpan">无图片</span>--%>
+                                <%--<button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>--%>
+                            <%--</div>--%>
+                        <%--</div>--%>
+                    </div>
+                    <br>
+                </form>
+                <form id="cpImagesForm" method="POST" style="margin-bottom: 0px;" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-lg-4" id="cpLogoDiv">
                             <div class="input-group form-group">
-                              <span class="input-group-addon">
-                                商品品牌logo:
-                              </span>
-                                <input type="hidden" class="form-control" name="gbImgpath" id="gbImgpath">
-                                <img style="width: 50px;"src=""  id="logoImg"/>
-                                <span id="logoImgSpan">无图片</span>
-                                <button onclick="upImage()" class="btn btn-default" style="line-height: 100%">添加图片</button>
+                                    <span class="input-group-addon">
+                                        商品品牌logo:
+                                    </span>
+                                <input type="file" id="dht_image_upload" name="dht_image_upload">
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="clearCpLogoDiv" style="display: none;">
+                            <div class="input-group form-group">
+                                <span class="input-group-addon">
+                                        商品品牌logo:
+                                    </span>
+                                <button class="btn btn-default" type="button" onclick="clearCpLogo()">清除</button>
+                            </div>
+                        </div>
+                        <div class="col-lg-4" id="uploadImageDiv">
+                            <div class="input-group form-group">
+                                <img src="" id="uploadImage" width="96px;" height="48px;">
                             </div>
                         </div>
                     </div>
-                    <br>
-
-
                 </form>
             </div>
             <div class="modal-footer">
@@ -163,6 +187,7 @@
 <script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
+<script type="text/javascript" src="<%=path%>/js/filestyle/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript">
     //用于缓存资源表格数据
     var rowDatas=new Map();
@@ -385,22 +410,23 @@
             var flag =rowData.imgUrl.substring(rowData.imgUrl.length-4)=="null";
 
             if(flag){
-                $("#editorGoodsBrandForm #logoImgSpan").show();
-                $("#editorGoodsBrandForm #logoImg").hide();
+                $("#cpLogoDiv").show();
+                $("#clearCpLogoDiv").hide();
                 return;
             }else{
-                $("#editorGoodsBrandForm #logoImg")[0].src=rowData.imgUrl;
+                $("#cpLogoDiv").hide();
+                $("#clearCpLogoDiv").show();
+                $("#uploadImage")[0].src=rowData.imgUrl;
             }
-            $("#editorGoodsBrandForm #logoImg").show();
-            $("#editorGoodsBrandForm #logoImgSpan").hide();
+//            $("#editorGoodsBrandForm #logoImg").show();
+//            $("#editorGoodsBrandForm #logoImgSpan").hide();
 
         }else{
+            $("#cpLogoDiv").show();
+            $("#clearCpLogoDiv").hide();
             $("#editorGoodsBrandForm #gbName").val('');
             $("#editorGoodsBrandForm #gbId").val('');
             $("#editorGoodsBrandForm #gbImgpath").val('');
-            $("#editorGoodsBrandForm #logoImg")[0].src='';
-            $("#editorGoodsBrandForm #logoImg").hide();
-            $("#editorGoodsBrandForm #logoImgSpan").show();
 
         }
     }
@@ -504,6 +530,52 @@
         }else{
             layer.msg("请选择需要删除的品牌！");
         }
+    }
+</script>
+<script>
+    $('#cpImagesForm #dht_image_upload').filestyle({
+        btnClass : "btn-primary",
+        text:"选择文件",
+        onChange:function(){
+            editSubmitIndex = layer.load(2);
+            cpImagesFormSummit();
+        }
+    });
+
+    let fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
+    function cpImagesFormSummit(){
+        var formData = new FormData($( "#cpImagesForm" )[0]);
+        $.ajax({
+            url: fileUpload,
+            type: 'POST',
+            data: formData,
+            async: false,
+            cache: false,
+            contentType: false,
+            processData: false,
+            dataType: "json",
+            success: function (returndata) {
+                if(returndata.state=="SUCCESS"){
+                    $("#uploadImageDiv").show();
+                    $("#cpLogoDiv").hide();
+                    $("#clearCpLogoDiv").show();
+                    $("#uploadImage").attr("src",returndata.url);
+                    $("#gbImgpath").val(returndata.original);
+                }
+                layer.close(editSubmitIndex);
+            },
+            error: function (returndata) {
+                layer.close(editSubmitIndex);
+            }
+        });
+    }
+    //清除文件
+    function clearCpLogo(){
+        $('#cpImagesForm #dht_image_upload').filestyle('clear');
+        $("#cpImagesForm #uploadImageDiv").hide();
+        $("#cpImagesForm #cpLogoDiv").show();
+        $("#cpImagesForm #clearCpLogoDiv").hide();
+        $("#gbImgpath").val('-1');
     }
 </script>
 </body>
