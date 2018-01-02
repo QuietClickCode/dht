@@ -60,10 +60,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">删除该团队</h4>
+                <h4 class="modal-title">删除扫码员</h4>
             </div>
             <div class="modal-body">
-                <p>删除该团队</p>
+                <p>删除该扫码员</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -124,6 +124,7 @@
 <script>
     $(".saveScanCode").click(function () {
         createFloorManageTable();
+        console.log(rowDatas.size);
         $("#saveFloorManage").modal("show");
 
     });
@@ -139,6 +140,11 @@
                 scanCodeList.push(floorRe);
         }
 
+        let len = scanCodeList.length;
+        if(len == 0){
+            removeOpeningEmList();
+            return;
+        }
         $.ajax({
             url:"/scanCode/addScanCode",
             method:"post",
@@ -148,6 +154,7 @@
                 $("#house_type_table").bootstrapTable('destroy');
                 refreshTableData();
                 $("#saveFloorManage").modal("hide");
+                rowDatas.clear();
             }
         });
     });
@@ -155,6 +162,52 @@
     $('#saveFloorManage').on('hidden.bs.modal', function (e) {
         $("#house_type_table").bootstrapTable('destroy');
     })
+    
+    function removeOpeningEmList() {
+        $.ajax({
+            url:"/scanCode/removeOpeningEmList",
+            method:"post",
+            dataType:"json",
+            data:{
+                oid:oid
+            },
+            success:function (data) {
+                $("#house_type_table").bootstrapTable('destroy');
+                refreshTableData();
+                layer.msg(data.msg,{time:"1000"});
+                $("#saveFloorManage").modal("hide");
+                rowDatas.clear();
+            }
+        });
+    }
+</script>
+
+<%--删除扫码员--%>
+<script>
+    var id;
+    function removeScanCode(scid) {
+        id = scid;
+        $("#deleteTeamModal").modal("show");
+    }
+
+    $(".subDeleteThisTeam").click(function () {
+        $.ajax({
+            url:"/scanCode/removeScanCode",
+            method:"post",
+            dataType:"json",
+            data:{
+                scId:id
+            },
+            success:function (data) {
+                $("#deleteTeamModal").modal("hide");
+                layer.msg(data.msg,{time:'1000'});
+                rowDatas.clear();
+                refreshTableData();
+            }
+        });
+    });
+
+
 </script>
 
 <%--初始化表格数据--%>
@@ -186,7 +239,7 @@
                 let html='';
                 rowDatas.set(row.emId,row);
                 <ex:perm url="floorManage/removeFloor">
-                html+='<button class="btn btn-primary" onclick="event.stopPropagation();">删除</button>'
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();removeScanCode(\'' + row.scId + '\')">删除</button>'
                 </ex:perm>
                 return html;
             }
@@ -273,6 +326,8 @@
                 if(floorManagesMap.has(row.emId)){
                     floorManagesMap.delete(row.emId);
                 }
+
+
             },
             onUncheckAll:function(rows){
                 floorManagesMap.clear();

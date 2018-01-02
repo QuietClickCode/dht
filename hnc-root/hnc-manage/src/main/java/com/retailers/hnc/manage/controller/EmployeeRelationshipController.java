@@ -9,6 +9,7 @@ import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -60,6 +61,17 @@ public class EmployeeRelationshipController extends BaseController{
         map.put("total",1000);
         map.put("rows",rows);
         return map;
+    }
+
+    @RequestMapping("/addEmRelationshipList")
+    @Function(label = "批量添加预约客户",description = "批量添加预约客户",resourse = "employeeRelationship.addEmRelationshipList",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public BaseResp addEmRelationshipList(@RequestBody List<EmRelationship> emRelationships){
+        boolean flag = emRelationshipService.saveEmRelationshipList(emRelationships);
+        if(flag)
+            return success("添加预约关系成功");
+        else
+            return success("添加预约关系失败");
     }
 
 

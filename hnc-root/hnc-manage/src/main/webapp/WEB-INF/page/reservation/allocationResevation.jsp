@@ -23,11 +23,11 @@
 <div id="toolbar" class="form-inline">
     <select id="openingMenu" class="form-control">
     </select>
+    <button class="btn btn-default subEmRelationship" type="button">确定</button>
     <div class="form-group" style="margin-left: 40px;">
         <label style="margin-bottom: 0px;font-weight: 400;margin-right: 10px;">当前可分配名额</label>
         <input type="text" class="form-control" id="MenberNum" readonly placeholder="当前可分配名额">
     </div>
-
 </div>
 
 <div>
@@ -56,6 +56,7 @@
 <script>
     var oid;
     var opening = new Map();
+    var omenberNumber;
     $(function () {
         $.ajax({
             url:"/opening/queryOpeningList",
@@ -73,8 +74,8 @@
                 if(data.rows.length != 0){
                     oid = data.rows[0].oid;
                     $("#MenberNum").val(data.rows[0].omenberNum);
+                    omenberNumber = data.rows[0].omenberNum;
                 }
-                console.log(oid);
                 $("#"+oid).attr("selected","selected");
                 createOpeningStatus(oid)
             }
@@ -111,20 +112,58 @@
 
 <%--选择开盘期数--%>
 <script>
-    var omenberNum;
     $("#openingMenu").change(function () {
         oid = $(this).val();
         for (let key of opening.keys()) {
             if(key == oid){
                 $("#MenberNum").val(opening.get(key).omenberNum);
-                omenberNum = opening.get(key).omenberNum;
+                omenberNumber = opening.get(key).omenberNum;
             }
         }
         createOpeningStatus($(this).val());
     });
 </script>
 
+<%--添加预约关系--%>
 <script>
+    $(".subEmRelationship").click(function () {
+        var scanCodeList = new Array();
+        $(".menberNum").each(function () {
+            var floorRe = new Object();
+            floorRe['pid'] = oid;
+            floorRe['emId'] = $(this).attr("data-emid");
+            floorRe['parentId'] = $(this).attr("data-parentid");
+            floorRe['emReservation'] = $(this).val();
+            floorRe['isDelete'] = 0;
+            floorRe['version'] = 0;
+            scanCodeList.push(floorRe);
+        });
+
+        $.ajax({
+            url:"/employeeRelationship/addEmRelationshipList",
+            method:"post",
+            contentType: "application/json",
+            data:JSON.stringify(scanCodeList),
+            success:function (data) {
+
+            }
+        });
+    });
+
+    function addEmployeeRelationship($this) {
+        let count = 0;
+        $(".menberNum").each(function () {
+            count = Number(count) + Number($(this).val());
+         });
+        if(count > omenberNumber){
+            layer.msg("当前可分配名额不足");
+            return;
+        }
+        $("#MenberNum").val(omenberNumber - count);
+    }
+</script>
+
+<%--<script>
     function getRelationshipNum() {
         let num = "";
         $(".menberNum").each(function () {
@@ -132,14 +171,26 @@
         });
         return num;
     }
-</script>
+</script>--%>
 
-<%--添加预约关系--%>
+<%--&lt;%&ndash;添加预约关系&ndash;%&gt;
 <script>
+    var menberNumber;
+    function getMenberCount($this) {
+        menberNumber = $($this).val();
+        if(menberNumber == ""){
+            menberNumber = 0;
+            return;
+        }
+    }
+
     function setEmployeeRelationship($this) {
-        console.log(getRelationshipNum());
         if($($this).val() == "")
             return;
+        let parentId = $($this).attr("data-parentid");
+        let val = $($this).val();
+        $("#a"+parentId).val(val);
+        console.log($("#a"+parentId).val());
         if(flag){
             updateEmployeeRelationship($this);
         }else if(!flag){
@@ -150,11 +201,14 @@
     function addEmployeeRelationship($this) {
         let val = $($this).val();
         let num = $("#MenberNum").val();
-        if(num - val <= 0){
+        if(menberNumber == val)
+            return;
+        if(num - val < 0){
             layer.msg("分配名额不足");
             return;
         }
-        $("#MenberNum").val(num - val);
+        let n = Number(num) + Number(menberNumber) - Number(val);
+        $("#MenberNum").val(n);
         $.ajax({
             url:"/employeeRelationship/addEmRelationship",
             method:"post",
@@ -174,11 +228,13 @@
     function updateEmployeeRelationship($this) {
         let val = $($this).val();
         let num = $("#MenberNum").val();
-        if(num - val <= 0){
+        if(menberNumber == val)
+            return;
+        if(num - val < 0){
             layer.msg("分配名额不足");
             return;
         }
-        $("#MenberNum").val(num - val);
+        $("#MenberNum").val(num + menberNumber - val);
         $.ajax({
             url:"/employeeRelationship/updateEmRelationship",
             method:"post",
@@ -195,7 +251,7 @@
             }
         });
     }
-</script>
+</script>--%>
 
 
 <script type="text/javascript">
@@ -242,7 +298,6 @@
                 align : 'left',
                 valign : 'middle',
                 title: '团队名称'
-
             },{
                 field: 'employeeName',
                 align : 'center',
@@ -252,7 +307,13 @@
             },{
                 align : 'center',
                 valign : 'middle',
-                title: '团队总分配预约数'
+                title: '团队总分配预约数',
+                formatter:function (value,row,index) {
+                    let html = "";
+                    if(row.parentId == null)
+                        html += "<p id='a"+row.tid+"'></p>";
+                    return html;
+                }
 
             },{
                 field: 'reservationCount',
@@ -264,8 +325,10 @@
                     let num = "";
                     if(row.emReservation != null)
                         num = row.emReservation;
+                    let count = $("#MenberNum").val();
+                    $("#MenberNum").val(count - num);
                     if(row.parentId != null){
-                        html='<input type="text" onclick="event.stopPropagation()" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" onblur="setEmployeeRelationship(this)" value="'+num+'"   class="form-control menberNum">';
+                        html='<input type="text" onclick="event.stopPropagation()" onblur="addEmployeeRelationship(this)" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'"  value="'+num+'"   class="form-control menberNum">';
                     }
                     return html;
                 }
@@ -328,7 +391,13 @@
             },{
                 align : 'center',
                 valign : 'middle',
-                title: '团队总分配预约数'
+                title: '团队总分配预约数',
+                formatter:function (value,row,index) {
+                    let html = "";
+                    if(row.parentId == null)
+                        html += "<p id='a"+row.tid+"'></p>";
+                    return html;
+                }
 
             },{
                 field: 'reservationCount',
@@ -340,8 +409,10 @@
                     let num = "";
                     if(row.emReservation != null)
                         num = row.emReservation;
+                    let count = $("#MenberNum").val();
+                    $("#MenberNum").val(count - num);
                     if(row.parentId != null)
-                        html='<input type="text" onclick="event.stopPropagation()" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" onblur="setEmployeeRelationship(this)" value="'+num+'"   class="form-control menberNum">';
+                        html='<input type="text" onclick="event.stopPropagation()" onblur="addEmployeeRelationship(this)" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" value="'+num+'" disabled   class="form-control menberNum">';
                     return html;
                 }
 

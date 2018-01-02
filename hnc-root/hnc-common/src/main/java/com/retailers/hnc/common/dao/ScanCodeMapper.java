@@ -55,4 +55,6 @@ public interface ScanCodeMapper {
 
 	public List<ScanCode> queryOpeningEmployee(Long oid);
 
+	public int deleteOpeningEmployee(Long oid);
+
 }

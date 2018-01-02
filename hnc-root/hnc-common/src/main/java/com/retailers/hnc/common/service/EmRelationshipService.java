@@ -95,6 +95,8 @@ public interface EmRelationshipService {
 	 */
 	public EmRelationship queryEmployeeNum(EmRelationship emRelationship);
 
+	public boolean saveEmRelationshipList(List<EmRelationship> emRelationships);
+
 }
 
 

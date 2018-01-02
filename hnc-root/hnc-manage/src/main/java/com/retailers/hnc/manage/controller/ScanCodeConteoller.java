@@ -66,4 +66,16 @@ public class ScanCodeConteoller extends BaseController {
         else
             return errorForSystem("添加扫码员失败");
     }
+
+    @RequestMapping("/removeOpeningEmList")
+    @Function(label = "删除所有和该开盘所绑定得扫码员",description = "删除所有和该开盘所绑定得扫码员",resourse = "scanCode.removeOpeningEmList",sort = 3,parentRes = "scanCode.scanCodeMapping")
+    @ResponseBody
+    public BaseResp removeOpeningEmList(Long oid){
+        boolean flag = codeService.deleteOpeningEmployee(oid);
+        System.out.println(flag);
+        if(flag)
+            return success("删除所有和该开盘所绑定得扫码员成功");
+        else
+            return errorForSystem("删除所有和该开盘所绑定得扫码员失败");
+    }
 }

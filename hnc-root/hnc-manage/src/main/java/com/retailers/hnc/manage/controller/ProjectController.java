@@ -2,19 +2,13 @@ package com.retailers.hnc.manage.controller;
 
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.Project;
+import com.retailers.hnc.common.entity.ProjectImg;
+import com.retailers.hnc.common.service.ProjectImgService;
 import com.retailers.hnc.common.service.ProjectService;
 import com.retailers.hnc.common.vo.ProjectVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
-import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.ObjectUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ClientConnectionManager;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.conn.PoolingClientConnectionManager;
-import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +27,9 @@ public class ProjectController extends BaseController {
 
     @Autowired
     ProjectService projectService;
+
+    @Autowired
+    ProjectImgService imgService;
 
     @RequestMapping("/openProject")
     @Menu(parentRes = "sys.manager.project",resourse = "project.openProject",description = "项目管理",sort = 1,label = "项目管理")
@@ -64,6 +61,12 @@ public class ProjectController extends BaseController {
         return map;
     }
 
+    @RequestMapping("saveProjectImg")
+    @ResponseBody
+    public BaseResp savaProjectImg(ProjectImg projectImg){
+        boolean flag = imgService.saveProjectImg(projectImg);
+        return success(flag);
+    }
 
 
 
