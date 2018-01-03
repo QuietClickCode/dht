@@ -249,7 +249,10 @@ public class OrderServiceImpl implements OrderService {
                 if(Boolean.valueOf(rtnMaps.get("isFreeShipping")+"")){
                     logisticsPrice=0l;
                 }
-				gcPrice=Long.valueOf(rtnMap.get("couponTotalPrice")+"");
+                if(ObjectUtils.isNotEmpty(rtnMap.get("couponTotalPrice"))){
+					gcPrice=Long.valueOf(rtnMap.get("couponTotalPrice")+"");
+				}
+
             }
             //取得使用的优惠卷
             String couponIds=buyInfos.getCpIds();
