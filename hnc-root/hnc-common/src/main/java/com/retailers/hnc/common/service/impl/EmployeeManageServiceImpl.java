@@ -82,6 +82,15 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 		page.setData(list);
 		return page;
 	}
+	public Pagination<EmployeeManageVo> queryEmployeeManageByNotInPhone(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<EmployeeManageVo> page = new Pagination<EmployeeManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<EmployeeManageVo> list = employeeManageMapper.queryEmployeeManageByNotInPhone(page);
+		page.setData(list);
+		return page;
+	}
 	public boolean deleteEmployeeManageByEmId(Long emId) {
 		EmployeeManage employeeManage = queryEmployeeManageByEmId(emId);
 		employeeManage.setIsDelete(1);

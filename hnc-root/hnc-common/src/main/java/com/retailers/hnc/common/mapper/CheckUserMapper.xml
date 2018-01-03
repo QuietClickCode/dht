@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.CheckUserMapper">
+
+	<resultMap id="rm_checkUser" type="com.retailers.hnc.common.entity.CheckUser">
+			<result property="cuId" column="cu_id"/>
+			<result property="oid" column="o_id"/>
+			<result property="cid" column="c_id"/>
+			<result property="cuValidateCode" column="cu_validate_code"/>
+			<result property="isUse" column="is_use"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="checkUser_columns">
+		cu_id,o_id,c_id,cu_validate_code,is_use,is_delete,version
+	</sql>
+	<!-- 根据客户通过审核记录表主键取得数据 -->
+	<select id="queryCheckUserByCuId" resultMap="rm_checkUser" parameterType="java.lang.Long">
+		SELECT <include refid="checkUser_columns" />
+		FROM t_check_user WHERE cu_id = #{cuId}
+	</select>
+	<!-- 客户通过审核记录表查询条件组合 -->
+	<sql id="checkUser_where">
+		<where>
+			<if test="null != params.cuId">
+				AND cu_id = #{params.cuId}
+			</if>
+			<if test="null != params.oid">
+				AND o_id = #{params.oid}
+			</if>
+			<if test="null != params.cid">
+				AND c_id = #{params.cid}
+			</if>
+			<if test="null != params.cuValidateCode and '' != params.cuValidateCode">
+				AND cu_validate_code = #{params.cuValidateCode}
+			</if>
+			<if test="null != params.isUse">
+				AND is_use = #{params.isUse}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCheckUserList" resultMap="rm_checkUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="checkUser_columns" />
+		FROM t_check_user
+		<include refid="checkUser_where"/>
+	</select>
+	<!--添加客户通过审核记录表 -->
+	<insert id="saveCheckUser" parameterType="com.retailers.hnc.common.entity.CheckUser" useGeneratedKeys="true" keyProperty="cuId">
+		INSERT INTO t_check_user (
+			o_id,c_id,cu_validate_code,is_use,is_delete,version
+		) VALUES
+		(
+			#{oid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{cuValidateCode,jdbcType=VARCHAR},#{isUse,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改客户通过审核记录表 -->
+	<update id="updateCheckUser" parameterType="com.retailers.hnc.common.entity.CheckUser">
+		UPDATE t_check_user
+		<set>
+            <if test="null != oid">
+                o_id = #{oid},
+            </if>
+            <if test="null != cid">
+                c_id = #{cid},
+            </if>
+            <if test="null != cuValidateCode and '' != cuValidateCode">
+                cu_validate_code = #{cuValidateCode},
+            </if>
+            <if test="null != isUse">
+                is_use = #{isUse},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cu_id = #{cuId} and version = #{version}
+	</update>
+	<!--删除客户通过审核记录表 -->
+	<delete id="deleteCheckUserByCuId" parameterType="java.lang.Long">
+		DELETE FROM t_check_user WHERE cu_id = #{cuId}
+	</delete>
+</mapper>

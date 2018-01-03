@@ -7,8 +7,16 @@ import com.retailers.hnc.common.entity.EmployeeManage;
  */
 public class EmployeeManageVo extends EmployeeManage {
     private Integer CurRegisterClientCount;
-
     private Integer RegisterClientCount;
+    private String headImgUrl;
+
+    public String getHeadImgUrl() {
+        return headImgUrl;
+    }
+
+    public void setHeadImgUrl(String headImgUrl) {
+        this.headImgUrl = headImgUrl;
+    }
 
     public Integer getCurRegisterClientCount() {
         return CurRegisterClientCount;

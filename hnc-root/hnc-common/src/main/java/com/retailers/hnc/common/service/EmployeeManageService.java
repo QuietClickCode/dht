@@ -51,6 +51,9 @@ public interface EmployeeManageService {
 	public Pagination<EmployeeManageVo> queryEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public Pagination<EmployeeManageVo> queryFirstEmployeeManageList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Pagination<EmployeeManageVo> queryEmployeeManageByNotInPhone(Map<String, Object> params, int pageNo, int pageSize);
+
 	/**
 	 * 根据emId删除员工管理
 	 * @param emId

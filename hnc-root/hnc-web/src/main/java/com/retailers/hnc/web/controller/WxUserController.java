@@ -22,6 +22,7 @@ import org.apache.http.conn.ClientConnectionManager;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.util.EntityUtils;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,12 +47,18 @@ public class WxUserController extends BaseController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public Map<String,Object> queryProjectByGt(String code, WxAuthUser wxAuthUser,String encryptedData,String iv){
-
+    public Map<String,Object> login(@Param("code") String code, WxAuthUser wxAuthUser, String encryptedData, String iv){
+        System.out.println(code);
         return loginReturnMap(code,wxAuthUser,encryptedData,iv);
     }
 
 
+    @RequestMapping("/getAccessToken")
+    @ResponseBody
+    public Map<String,Object> getAccessToken(String validateCode){
+
+        return null;
+    }
 
     @RequestMapping("/checkClientComeIn")
     @ResponseBody
@@ -119,6 +126,7 @@ public class WxUserController extends BaseController {
                         wxAuthUser.setWauUid(clientManage.getTmId());
                         wxAuthUser.setWauOpenid(openid);
                         wxAuthUser.setWauUnionid(unionid);
+                        wxAuthUser.setWauCreateDate(new Date());
                         wxAuthUserService.saveWxAuthUser(wxAuthUser);
                     }else{
                         WxAuthUser wxAuthUser1 = list.get(0);
@@ -132,8 +140,7 @@ public class WxUserController extends BaseController {
 
                     String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
                     randStr = URLEncoder.encode(randStr,"utf-8");
-                    Map map = WebSystemConstant.globelOpenId;
-                    map.put(randStr,endTime);
+                    WebSystemConstant.putValue(randStr,endTime);
                     returnMap.put("randStr",randStr);
                     returnMap.put("type",type);
                     returnMap.put("phone",phone);

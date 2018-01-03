@@ -43,5 +43,16 @@ public class EmployeeManageController extends BaseController{
         return gtm;
     }
 
-
+    @RequestMapping("/queryEmployeeManageByNotInPhone")
+    @ResponseBody
+    public Map<String,Object> queryEmployeeManageByNotInPhone(String phone,int pageNo,int pageSize){
+        Long eid = getEmpIdByWxPhone(phone);
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("eid",eid);
+        Pagination<EmployeeManageVo> teamPagination = employeeManageService.queryEmployeeManageByNotInPhone(map,pageNo,pageSize);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",teamPagination.getTotalCount());
+        gtm.put("rows",teamPagination.getData());
+        return gtm;
+    }
 }

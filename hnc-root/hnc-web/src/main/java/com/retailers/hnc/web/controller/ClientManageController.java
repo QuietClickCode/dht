@@ -45,4 +45,13 @@ public class ClientManageController extends BaseController {
         return map;
     }
 
+    @RequestMapping("updateClientManageId")
+    @CheckOpenId
+    @ResponseBody
+    public BaseResp updateClientManageId(String randStr,ClientManage clientManage){
+        Long cid = getClientIdByOpenId(randStr);
+        clientManage.setTmId(cid);
+        boolean flag = clientManageService.updateClientManage(clientManage);
+        return success(flag);
+    }
 }

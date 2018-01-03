@@ -53,7 +53,7 @@ public interface EmployeeManageMapper {
 	 */
 	public List<EmployeeManageVo> queryEmployeeManageList(Pagination<EmployeeManageVo> pagination);
 
-
+	public List<EmployeeManageVo> queryFrstEmployeeManageList(Pagination<EmployeeManageVo> pagination);
 	/**
 	 * 查询当日登记的客户
 	 * @return  返回客户集合
@@ -71,5 +71,7 @@ public interface EmployeeManageMapper {
 	public Integer queryRegisterClient(Long emId);
 
 	public List<EmployeeManage> queryAllEmployee();
+
+	public List<EmployeeManageVo> queryEmployeeManageByNotInPhone(Pagination<EmployeeManageVo> pagination);
 
 }
