@@ -92,7 +92,11 @@ public class GoodsCouponVo {
 
     public Long getGcpCondition() {
         if(ObjectUtils.isNotEmpty(gcpCondition)){
-            return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(gcpCondition,2));
+            if(gcpUnits.intValue()==0){
+                return NumberUtils.priceChangeFen(NumberUtils.formaterNumber(gcpCondition,2));
+            }else{
+                return gcpCondition.longValue();
+            }
         }
         return null;
     }

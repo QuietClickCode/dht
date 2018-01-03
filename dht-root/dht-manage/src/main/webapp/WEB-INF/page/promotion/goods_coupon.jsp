@@ -219,13 +219,22 @@
                 var html="现金";
                 if(value==1){
                     html="折扣";
+                }else if(value==2){
+                    html="包邮";
                 }
                 return html;
             }
         },
         {
             field: 'gcpConditions',
-            title: '优惠条件'
+            title: '优惠条件',
+            formatter:function(value,row,index){
+                var html=value+"元";
+                if(row.gcpUnits==1){
+                    html=value+"件";
+                }
+                return html;
+            }
         },
         {
             field: 'gcpStartTime',
