@@ -200,15 +200,17 @@
                 <br/>
 
                 <br/>
-                <div class="col-lg-12" style="height:49px">
+                <div class="col-lg-12">
                     <div class="input-group form-group">
                         <span class="input-group-addon">
                              宣传图片:
                         </span>
-                        <div id="imgsdiv" class="row">
+                        <div id="imgsdiv" class="row" style="height: 50px;vertical-align: middle;">
                             <div class="col-lg-2">
-                                <button class="btn btn-default" id="upimg">+</button>
-                                <input type="file" id="hideInput"  style="display: none;" multiple="true">
+                                <a class="btn btn-default" onclick="event.stopPropagation()" id="uploadImg">+</a>
+                                <form id="test">
+                                    <input type="file" id="demo"  name="dht_image_upload"  style="">
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -249,9 +251,49 @@
             }
         });
 
-        $('#upimg').click(function () {
-            document.getElementById('hideInput').click();
+
+
+        $("#uploadImg").click(function () {
+
+
+            var files = $("#demo").get(0).files;
+            var fd = new FormData($( "#test" )[0]);
+            if(files[0] == undefined)
+                return;
+            fd.append("imageUse","image/jpeg");
+            fd.append("isWatermark","false");
+            fd.append("isCompress", "false");
+            fd.append("dht_image_upload",files[0]);
+            $.ajax({
+                url:"/file/imageUpload",
+                type:"post",
+                dataType:"json",
+                data: fd,
+                processData : false,
+                contentType : false,
+                success:function (data) {
+                    $("#imgsdiv").append($('<div class="col-lg-2"><img style="width: 100%;height: 100%" src="'+data.url+'"></div>'));
+                    setProjectImg(data.original);
+                }
+            })
         });
+        
+        function setProjectImg(original) {
+            $.ajax({
+                url:"/project/saveProjectImg",
+                type:"post",
+                dataType:"json",
+                data:{
+                    pid:pid,
+                    aid:original,
+                    isDelete:0
+                },
+                success:function (data) {
+                    layer.msg(data.msg,{time:"1000"});
+                }
+            });
+        }
+
 
         $('#hideInput').filestyle({
             btnClass : "btn-primary",
@@ -291,6 +333,7 @@
         });
     }
 
+    var pid;
     <!--加载项目-->
     function loadProject() {
         $.ajax({
@@ -301,7 +344,7 @@
             success:function (data) {
                 var project = data.project;
                 if(project!=null){
-                    var pid = project.pid;
+                    pid = project.pid;
                     var pname = project.pname;
                     var pnum = project.pnum;
                     var parea = project.parea;

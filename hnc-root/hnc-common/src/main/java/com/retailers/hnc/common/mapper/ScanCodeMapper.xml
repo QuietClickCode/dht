@@ -89,4 +89,8 @@
 	<select id="queryOpeningEmployee" resultMap="rm_scanCode" parameterType="java.lang.Long">
 		select * from t_scan_code where oid = #{oid} and is_delete = 0
 	</select>
+
+	<update id="deleteOpeningEmployee" parameterType="java.lang.Long">
+		update t_scan_code set is_delete = 1 where oid = #{oid} and is_delete = 0
+	</update>
 </mapper>

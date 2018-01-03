@@ -1096,7 +1096,7 @@
                                         html = '<li>'+
                                             '<a href="/goods/'+rows[i].gid+'.html" class="img"><img data-original="'+rows[i].imgUrl+'" alt=""></a>'+
                                             '<a href="/goods/'+rows[i].gid+'.html" class="title overflow">'+rows[i].gname+'</a>'+
-                                            '<p>￥'+rows[i].minprice+'</p>'+
+                                            '<p>￥'+(Number(rows[i].minprice)/100).toFixed(2) +'</p>'+
                                             '</li>';
                                         main.append(html);
                                     }

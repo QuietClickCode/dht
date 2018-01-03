@@ -85,4 +85,6 @@ public interface EmRelationshipMapper {
 	 */
 	public EmRelationship queryEmployeeNum(EmRelationship emRelationship);
 
+	public int saveEmRelationshipList(List<EmRelationship> emRelationships);
+
 }

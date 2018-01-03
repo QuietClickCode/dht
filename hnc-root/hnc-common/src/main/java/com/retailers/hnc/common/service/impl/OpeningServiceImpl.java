@@ -81,6 +81,12 @@ public class OpeningServiceImpl implements OpeningService {
 		List<OpeningVo> lsit = openingMapper.queryOFrelByOid(oid);
 		return lsit;
 	}
+
+	public Opening queryEarlyOpening(){
+		Opening opening = openingMapper.queryEarlyOpening();
+		return opening;
+	}
+
 	public void addOFrel(int status,Opening opening,String floors){
 		if(status==1){
 			OpeningFloor openingFloor = new OpeningFloor();

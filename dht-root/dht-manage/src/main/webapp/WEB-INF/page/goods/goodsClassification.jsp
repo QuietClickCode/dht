@@ -618,6 +618,9 @@
                 $('#cpLogoDiv').hide();
                 $('#clearCpLogoDiv').show();
                 $('#uploadImageDiv').show();
+                $('#cpLogoDiv').show();
+                $('#clearCpLogoDiv').hide();
+                $('#uploadImageDiv').hide();
                 $("#uploadImage")[0].src=rowData.imgUrl;
 //                $("#editGoodsClassificationForm #goodsClassificationImg").show();
 //                $("#editGoodsClassificationForm #goodsClassificationImgSpan").hide();
@@ -660,7 +663,7 @@
             $("#editGoodsClassificationForm #parentNm").val('');
             $("#editGoodsClassificationForm #parentId").val('');
             $("#editGoodsClassificationForm #ggImgpath").val('');
-            $("#editGoodsClassificationForm #goodsClassificationImg")[0].src='';
+            $("#uploadImage")[0].src='';
             $("#editGoodsClassificationForm #ggOrder").val('');
         }
 

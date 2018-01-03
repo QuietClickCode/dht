@@ -31,6 +31,7 @@ public class GoodsGtgclrelServiceImpl implements GoodsGtgclrelService {
 	public boolean saveGoodsGtgclrel(String gclIds,Long gtId) {
 		int status = 0;
 		GoodsGtgclrel goodsGtgclrel = new GoodsGtgclrel();
+		gclIds = gclIds.substring(1);
 		String[] gclIdArr = gclIds.split(",");
 		for(int i=0; i<gclIdArr.length; i++){
 			Long gclId = Long.parseLong(gclIdArr[i]);

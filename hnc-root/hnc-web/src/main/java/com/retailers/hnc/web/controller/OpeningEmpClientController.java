@@ -1,10 +1,10 @@
 package com.retailers.hnc.web.controller;
 
 import com.retailers.hnc.common.entity.EmRelationship;
+import com.retailers.hnc.common.entity.EmployeeManage;
+import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
-import com.retailers.hnc.common.service.ClientManageService;
-import com.retailers.hnc.common.service.EmRelationshipService;
-import com.retailers.hnc.common.service.OpeningEmpClientService;
+import com.retailers.hnc.common.service.*;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
@@ -33,66 +33,89 @@ public class OpeningEmpClientController extends BaseController{
     EmRelationshipService emRelationshipService;
     @Autowired
     ClientManageService clientManageService;
+    @Autowired
+    EmployeeManageService employeeManageService;
+    @Autowired
+    OpeningService openingService;
 
-//    @RequestMapping("queryNotGivenList")
-//    @ResponseBody
-//    public Map<String,Object> queryOpening(String randStr,Long oid,String cmName, HttpServletRequest request, int pageNo, int pageSize){
-//        Long cid = getClientIdByOpenId(randStr);
-//        Map map = new HashMap();
-//        if(ObjectUtils.isNotEmpty(eid)){
-//            Map params = new HashMap();
-//            params.put("oid",oid);
-//            params.put("cmName",cmName);
-//            params.put("eid",eid);
-//            Pagination<ClientManageVo> pagination = openingEmpClientService.queryNotGivenList(params,pageNo,pageSize);
-//
-//            return queryPages(pagination);
-//        }
-//        return map;
-//    }
+    @RequestMapping("queryNotGivenListWeb")
+    @CheckOpenId
+    @ResponseBody
+    public Map<String,Object> queryNotGivenListWeb(String phone,String cmName, HttpServletRequest request, int pageNo, int pageSize){
+        Map map = new HashMap();
+        Long eid = getEmpIdByWxPhone(phone);
+        Map params1 = new HashMap();
+        params1.put("isDelete",0L);
+        params1.put("eid",eid);
+        Pagination<ClientManageVo> pagination = openingEmpClientService.queryNotGivenListWeb(params1,pageNo,pageSize);
+        map.put("rows",pagination.getData());
+        return map;
+    }
 
-//    @RequestMapping("queryCheckingandpassandnotpassList")
-//    @CheckOpenId
-//    @ResponseBody
-//    public Map<String,Object> queryCheckingList(String isManage,Long oid,Long status,String cmName, HttpServletRequest request, int pageNo, int pageSize){
-//        Long eid = getCurLoginUserId(request);
-//        Map map = new HashMap();
-//        if(ObjectUtils.isNotEmpty(eid)){
-//            Map params = new HashMap();
-//            params.put("oid",oid);
-//            params.put("status",status);
-//            params.put("cmName",cmName);
-//            if(ObjectUtils.isEmpty(isManage)){
-//                params.put("eid",eid);
-//            }
-//            Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassList(params,pageNo,pageSize);
-//            return queryPages(pagination);
-//        }
-//        return map;
-//    }
+    @RequestMapping("queryCheckingandpassandnotpassListWeb")
+    @CheckOpenId
+    @ResponseBody
+    public Map<String,Object> queryCheckingandpassandnotpassListWeb(String isManage,Long status,String phone, int pageNo, int pageSize){
+        Map map = new HashMap();
+        Long eid = getEmpIdByWxPhone(phone);
 
-//    @RequestMapping("addCheckClient")
-//    @ResponseBody
-//    public BaseResp addCheckClient(Long oid,String cmIds, HttpServletRequest request){
-//        Long eid = getCurLoginUserId(request);
-//        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds);
-//        return success(flag);
-//    }
+        if(ObjectUtils.isNotEmpty(eid)){
+            Map params1 = new HashMap();
+            params1.put("status",status);
+            if(ObjectUtils.isEmpty(isManage)){
+                params1.put("eid",eid);
+            }
+            Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassListWeb(params1,pageNo,pageSize);
+            List<ClientManageVo> list  = pagination.getData();
+            map.put("total",pagination.getTotalCount());
+            map.put("rows",list);
+        }
+        return map;
+    }
 
-//    @RequestMapping("changeClientStatus")
-//    @ResponseBody
-//    public BaseResp changeClientStatus(Long oid, Long status,String cmIds, HttpServletRequest request){
-//        Long eid = getCurLoginUserId(request);
-//        boolean flag = openingEmpClientService.changeClientStatus(oid,eid,cmIds,status);
-//        return success(flag);
-//    }
-//
-//    @RequestMapping("updateOpeningEmpClient")
-//    @ResponseBody
-//    public BaseResp updateOpeningEmpClient(String oecIds,Long status,String msg){
-//        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);
-//        return success(flag);
-//    }
+    @RequestMapping("queryCheckingandpassandnotpassNumWeb")
+    @CheckOpenId
+    @ResponseBody
+    public Map<String,Object> queryCheckingandpassandnotpassNumWeb(String isManage,String phone){
+        Long eid = getEmpIdByWxPhone(phone);
+        Map map = new HashMap();
+        Opening opening = openingService.queryEarlyOpening();
+        Long oid = opening.getOid();
+        if(ObjectUtils.isNotEmpty(eid)){
+            Map params = new HashMap();
+            params.put("oid",oid);
+            if(ObjectUtils.isEmpty(isManage)){
+                params.put("eid",eid);
+                //通过oid eid查询分配名额
+
+            }else{
+                map.put("total",opening.getOmenberNum());
+            }
+            map.putAll(openingEmpClientService.queryCheckingandpassandnotpassNumWeb(params));
+        }
+        return map;
+    }
+
+    @RequestMapping("addCheckClient")
+    @CheckOpenId
+    @ResponseBody
+    public BaseResp addCheckClient(String cmIds,String phone){
+        Opening opening = openingService.queryEarlyOpening();
+        Long oid = opening.getOid();
+        Long eid = getEmpIdByWxPhone(phone);
+        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds);
+        return success(flag);
+    }
+
+    @RequestMapping("updateOpeningEmpClient")
+    @CheckOpenId
+    @ResponseBody
+    public BaseResp updateOpeningEmpClient( String oecIds,Long status,String msg){
+        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);
+        return success(flag);
+    }
+
+
 //
 //    @RequestMapping("loadThisOpeningPersonNum")
 //    @ResponseBody

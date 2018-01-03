@@ -4,12 +4,15 @@ package com.retailers.hnc.common.service.impl;
 import com.retailers.hnc.common.dao.OpeningEmpClientMapper;
 import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.HouseTypeManage;
+import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.service.FloorManageService;
 import com.retailers.hnc.common.service.HouseTypeManageService;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
+import com.retailers.hnc.common.service.OpeningService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.OpeningEmpClientVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +33,12 @@ import java.util.Map;
 public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	@Autowired
 	private OpeningEmpClientMapper openingEmpClientMapper;
+	@Autowired
+	private OpeningService openingService;
+	@Autowired
+	private FloorManageService floorManageService;
+	@Autowired
+	private HouseTypeManageService houseTypeManageService;
 
 	public boolean saveOpeningEmpClient(OpeningEmpClient openingEmpClient) {
 		int status = openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
@@ -67,12 +76,64 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return page;
 	}
 
+	public Pagination<ClientManageVo> queryNotGivenListWeb(Map<String, Object> params, int pageNo, int pageSize){
+		Opening opening = openingService.queryEarlyOpening();
+		params.put("oid",opening.getOid());
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<ClientManageVo> list = openingEmpClientMapper.queryNotGivenListWeb(page);
+
+
+		page.setData(list);
+		return page;
+	}
+
 	public Pagination<ClientManageVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize){
 		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<ClientManageVo> list = openingEmpClientMapper.queryCheckingandpassandnotpassList(page);
+		page.setData(list);
+		return page;
+	}
+
+	public Pagination<ClientManageVo> queryCheckingandpassandnotpassListWeb(Map<String, Object> params, int pageNo, int pageSize){
+		Opening opening = openingService.queryEarlyOpening();
+		params.put("oid",opening.getOid());
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<ClientManageVo> list = openingEmpClientMapper.queryCheckingandpassandnotpassListWeb(page);
+		for(ClientManageVo clientManageVo:list){
+			String hids = clientManageVo.getHids();
+			String fids = clientManageVo.getFids();
+
+			if(ObjectUtils.isNotEmpty(hids)&&ObjectUtils.isNotEmpty(fids)){
+				List<FloorManage> floorManages = floorManageService.queryFloorManageByFmIds(fids);
+				List<HouseTypeManage> houseTypeManages = houseTypeManageService.queryHouseTypeManageByHtIds(hids);
+				String floorsName = "";
+				String hoursesName = "";
+				for(FloorManage floorManage:floorManages){
+					floorsName += ","+floorManage.getFmName();
+				}
+				for(HouseTypeManage houseTypeManage:houseTypeManages){
+					hoursesName += ","+houseTypeManage.getHtTypeName();
+				}
+				if(ObjectUtils.isNotEmpty(floorsName)){
+					floorsName = floorsName.substring(1);
+				}
+				if(ObjectUtils.isNotEmpty(hoursesName)){
+					hoursesName = hoursesName.substring(1);
+				}
+				clientManageVo.setFloorsName(floorsName);
+				clientManageVo.setHoursesName(hoursesName);
+			}
+
+		}
 		page.setData(list);
 		return page;
 	}
@@ -97,11 +158,6 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return status==index?true:false;
 	}
 
-	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status){
-
-		return false;
-	}
-
 	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg){
 		List<Long> oecIdList = new ArrayList<Long>();
 		if(ObjectUtils.isNotEmpty(oecIds)){
@@ -116,6 +172,59 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return index==oecIdList.size()?true:false;
 	}
 
+	public boolean checkCanChangeEmpNum(Long oid,Long eid,Long num){
+		Map params = new HashMap();
+		params.put("isDelete",0L);
+		params.put("oid",oid);
+		params.put("eid",eid);
+		params.put("oecStatus",2);
+		List<OpeningEmpClient> openingEmpClients = queryOpeningEmpClientList(params,1,99999).getData();
+		if(ObjectUtils.isNotEmpty(openingEmpClients)){
+			int length = openingEmpClients.size();
+			if(length>=num){
+				return false;
+			}
+		}
+		params.put("oecStatus",1);
+		openingEmpClients = queryOpeningEmpClientList(params,1,99999).getData();
+		List<Long> oecIds = new ArrayList<Long>();
+		for (OpeningEmpClient openingEmpClient:openingEmpClients){
+			oecIds.add(openingEmpClient.getOecId());
+		}
+		System.out.println(oecIds.size());
+		if(ObjectUtils.isNotEmpty(oecIds)){
+			openingEmpClientMapper.deleteOpeningEmpClientByOecIds(oecIds);
+		}
+		return true;
+	}
 
+	public Map queryCheckingandpassandnotpassNumWeb(Map params){
+		Map map = new HashMap();
+		List<OpeningEmpClientVo> openingEmpClients = openingEmpClientMapper.queryCheckingandpassandnotpassNumWeb(params);
+		if(ObjectUtils.isNotEmpty(openingEmpClients)){
+			for(OpeningEmpClientVo openingEmpClientVo:openingEmpClients){
+				Long status = openingEmpClientVo.getOecStatus();
+				Long num = openingEmpClientVo.getCount();
+				if(status==1){
+					map.put("checkingNum",num);
+				}else if(status==2){
+					map.put("passNum",num);
+				}else if(status==3){
+					map.put("notpassNum",num);
+				}
+			}
+		}
+		return map;
+	}
+
+	public List<Long> StringtoList(String str){
+		String[] strArr = str.split(",");
+		List<Long> returnList = new ArrayList<Long>();
+		for(String strStr:strArr){
+			Long l = Long.parseLong(strStr);
+			returnList.add(l);
+		}
+		return returnList;
+	}
 }
 
