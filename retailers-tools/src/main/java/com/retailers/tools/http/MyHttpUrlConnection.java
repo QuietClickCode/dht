@@ -81,7 +81,7 @@ public class MyHttpUrlConnection {
         byte[] bt2 = Base64.decode(iv);
         byte[] bt3 = Base64.decode(encryptData);
         try{
-            String jsonStr = new String(MyHttpUrlConnection.decrypt(bt1,bt2,bt3);
+            String jsonStr = new String(MyHttpUrlConnection.decrypt(bt1,bt2,bt3));
             JSONObject jsonObject = JSON.parseObject(jsonStr);
             String purePhoneNumber = jsonObject.getString("purePhoneNumber");
             return purePhoneNumber;
