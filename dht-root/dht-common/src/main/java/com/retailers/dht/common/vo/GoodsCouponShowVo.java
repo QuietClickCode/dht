@@ -218,7 +218,11 @@ public class GoodsCouponShowVo {
         this.spNm = spNm;
     }
     public String getGcpConditions() {
-        return NumberUtils.formaterNumberPower(gcpCondition);
+        if(gcpUnits==0){
+            return NumberUtils.formaterNumberPower(gcpCondition);
+        }else{
+            return gcpCondition+"";
+        }
     }
     public String getGcpMoneys() {
         if(ObjectUtils.isNotEmpty(gcpMoney)){
