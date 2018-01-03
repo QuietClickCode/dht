@@ -1,86 +1,2945 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>优惠卷</title>
-    <script src="/js/Adaptive.js"></script>
-    <link rel="stylesheet" href="/css/style.css">
+    <title>大汇堂</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="shortcut icon" href="" type="image/x-icon">
+    <link href="/css/main.css" rel="stylesheet"/>
+	<link href="/css/Layer/skin/layer.css" rel="stylesheet"/>
+	<link href="/css/pager.css" rel="stylesheet"/>
+	<link href="/css/LoginPop/pop.css" rel="stylesheet"/>
+
+    <link href="/css/index.css" rel="stylesheet" />
+	<link rel="stylesheet" href="css/base.css" />
+    <script src="/js/jquery-1.9.1.min.js"></script>
+	<script src="/js/jquery.SuperSlide.2.1.1.js"></script>
+	<script src="/js/Layer/layer.js"></script>
+	<script src="/js/jquery.base64.js"></script>
+	<script src="/js/infrastructure.js"></script>
+	<script src="/js/common.js"></script>
+	<link rel="stylesheet" type="text/css" href="/css/style.css"/>
+
+    <link rel="stylesheet" type="text/css" href="/css/no-online.css">
 </head>
+<body>
+<!--未上线遮罩层，待上线时，还得去掉（样式也得去掉）-->
+<div class="dia-wrap">
+    <div class="heigh-light"></div>
 
-<body class="bge6">
-    <div class="specialty-title2 borderB">
-        <a href="" class="icon-return"></a>
-        <span>优惠卷</span>
+    <div class="no-online-wrap">
+        <p class="no-online-p1">大汇堂电商平台升级中</p>
+        <p class="no-online-p2">微信端升级完成啦！</p>
+        <p class="no-online-p3">请客官移步微信端买买买！</p>
+        <p class="no-online-p4">扫码抢秒杀、买特价，更有各种优惠券随抢随用！</p>
+        <p class="no-online-p5">扫一扫</p>
+        <img src="/images/weixin2.png">
+        <a class="link" href="http://old.zgrmdht.com">查看原有消费记录，请点击</a>
     </div>
+</div>
 
-    <div class="coupon-tab" id="J_couponTab">
-        <a href="#wsy" class="active">
-            <p>未使用</p>
-            <p>(6)</p>
-        </a>
-        <a href="#ysy">
-            <p>已使用</p>
-            <p>(6)</p>
-        </a>
-        <a href="#ysx">
-            <p>已失效</p>
-            <p>(6)</p>
-        </a>
-    </div>
+    <!--顶部-->
 
-    <div class="coupon-cont box2">
+<!--顶部-->
+<!-- 额外增加的内容 -->
+<form style="display:none">
+    <input type="password" />
+</form>
+<input type="password" style="width: 0; height: 0; float: left; visibility: hidden"/>
 
-        <div class="coupon-box" id="wsy">
-            <div class="more-coupon">
-                <a href="">
-                    <span class="icon-coupon"></span>
-                    <span class="text">领取更多优惠券</span>
-                    <i class="icon-coupon-right"></i>
-                </a>
+<!--页面顶部-->
+		<div class="page_top">
+			<div class="page_top_main">
+				<select name="" class="select_city">
+					<option value="0">城市版</option>
+					<option value="1">农村版</option>
+				</select>
+				<div class="login_box">
+					<!--<span><a href="index.html">首页</a>&emsp;Hi,晏紫东的椰子冻</span>-->
+					<a href="javascript:;" class="a_login_box open_login">登录</a>
+					<span>|</span>
+					<a href="" class="a_register_box">注册</a>
+				</div>
+				<div class="shopping_car_box">
+					<img src="/images/shopping-car.png"/>
+					购物车
+					<img class="icon_back1" src="/images/icon-back.png"/>
+
+					<div class="shopping_car_son">
+
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <!--顶部-->
+	<div class="header">
+        <div class="w1200">
+            <h1 class="header-home">
+                <a class="header-home-logo" href="/images/logo.png" title="大汇堂">大汇堂</a>
+            </h1>
+
+            <div class="header-searchbar">
+                <div class="header-searchbar-box">
+                    <input type="text" name="key" id="keyWord" value="" class="header-searchbar-input" placeholder="请输入关键字">
+                    <button type="button" class="header-searchbar-button" onclick="search($('#keyWord').val());">搜索</button>
+                </div>
+
             </div>
 
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon2.png" alt="">
-            </a>
+            <div class="header_code_box">
+            	<img src="images/weinxin-code.png"/>
+            </div>
         </div>
-
-        <div class="coupon-box displayN" id="ysy">
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon3.png" alt="">
-            </a>
-        </div>
-
-        <div class="coupon-box displayN" id="ysx">
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
-            <a href="" class="coupon-img">
-                <img src="/img/coupon4.png" alt="">
-            </a>
-        </div>
-
     </div>
 
-    <script src="/js/jquery-1.9.1.min.js"></script>
-    <script src="/js/tabs.js"></script>
-</body>
+    <!--搜索栏-->
+    <!--导航、banner-->
+    <div class="navmenu">
+        <!--导航菜单-->
+        <div class="header-wrap">
+            <div class="navwrap">
+                <div id="nav">
+                    <div class="navbar clearfix">
+                        <a href="" target="_blank" title="首页">首页</a>
+                        <a href="" target="_blank" title="地方特产">地方特产</a>
+                        <a href="" target="_blank" title="好物预购">好物预购</a>
+                        <a href="" target="_blank" title="优惠券">优惠券</a>
+                    </div>
+                    <div class="pros subpage on">
+                        <h2 onclick="javascript: window.location.href = '/AllGoodsCategory'">全部商品分类</h2>
+                        <ul class="prosul clearfix" id="proinfo">
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=837" style="margin: 0 !important;" title="食品茶酒">食品茶酒</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="休闲零食">休闲零食<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="坚果"><em></em>坚果</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="糕点饼干">糕点饼干<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="曲奇"><em></em>曲奇</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="干货">干货<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="菌菇"><em></em>菌菇</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="糖果/巧克力">糖果/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="巧克力"><em></em>巧克力</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="茶">茶<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="红茶"><em></em>红茶</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="冲调">冲调<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="麦片"><em></em>麦片</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="咖啡及可可">咖啡及...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="速溶咖啡"><em></em>速溶咖啡</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="方便食品">方便食品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="方便面"><em></em>方便面</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="食用油">食用油<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="橄榄油"><em></em>橄榄油</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="调味佐餐">调味佐餐<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="酱油"><em></em>酱油</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="水饮/乳品/果汁">水饮/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="乳品饮料"><em></em>乳品饮料</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="米面杂粮">米面杂粮<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="大米"><em></em>大米</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="啤酒/白酒">啤酒/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="黑啤"><em></em>黑啤</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="葡萄酒">葡萄酒<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="红葡萄酒"><em></em>红葡萄酒</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="洋酒">洋酒<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="威士忌"><em></em>威士忌</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="套装礼盒">套装礼盒<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="白酒礼盒"><em></em>白酒礼盒</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="" style="margin: 0 !important;" title="农特产品">农特产品</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="农特产品">农特产品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="水果特产"><em></em>水果特产</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="" style="margin: 0 !important;" title="母婴用品">母婴用品</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="奶粉">奶粉<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="婴幼儿配方"><em></em>婴幼儿...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="婴儿食品">婴儿食品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="婴幼儿营养品"><em></em>婴幼儿...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="喂养用品">喂养用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="口水巾"><em></em>口水巾</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="婴幼儿尿裤">婴幼儿...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="隔尿床垫"><em></em>隔尿床垫</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="护理用品">护理用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="耳鼻护理"><em></em>耳鼻护理</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="清洁/洗浴/护肤">清洁/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="口腔护理"><em></em>口腔护理</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="妈妈用品">妈妈用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="妊娠纹修护"><em></em>妊娠纹...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="孕妇装">孕妇装<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="运动服"><em></em>运动服</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="婴儿服鞋">婴儿服鞋<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="婴儿服饰"><em></em>婴儿服饰</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="童车、推车">童车、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="三轮、四轮推车"><em></em>三轮、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="" target="_blank" title="儿童安全座椅及配件">儿童安...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="儿童安全座椅"><em></em>儿童安...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2367" target="_blank" title="婴儿寝具">婴儿寝具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2452" target="_blank" title="抱枕"><em></em>抱枕</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2368" target="_blank" title="儿童家具">儿童家具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2464" target="_blank" title="便携餐椅"><em></em>便携餐椅</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2369" target="_blank" title="育儿房装饰">育儿房...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2480" target="_blank" title="墙角装饰"><em></em>墙角装饰</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2370" target="_blank" title="外出用品">外出用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2488" target="_blank" title="育儿背巾"><em></em>育儿背巾</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2371" target="_blank" title="学校用品">学校用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="早教机、点读机"><em></em>早教机...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2372" target="_blank" title="安全防护">安全防护<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2503" target="_blank" title="婴儿监控器"><em></em>婴儿监...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2373" target="_blank" title="纪念品">纪念品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2507" target="_blank" title="婴儿手膜、胎发袋"><em></em>婴儿手...</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=1915" style="margin: 0 !important;" title="儿童玩具">儿童玩具</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2508" target="_blank" title="婴幼玩具">婴幼玩具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="" target="_blank" title="拨浪鼓、摇铃、床铃"><em></em>拨浪鼓...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2509" target="_blank" title="毛绒布艺">毛绒布艺<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                        <a href="GoodsSerach?cate_id=2541" target="_blank" title="毛绒玩具、公仔"><em></em>毛绒玩...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2510" target="_blank" title="娃娃">娃娃<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2550" target="_blank" title="普通娃娃"><em></em>普通娃娃</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2511" target="_blank" title="模型组装及收藏">模型组...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2557" target="_blank" title="动物"><em></em>动物</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2512" target="_blank" title="创意玩具">创意玩具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2563" target="_blank" title="钥匙环"><em></em>钥匙环</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2513" target="_blank" title="遥控电动玩具">遥控电...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2570" target="_blank" title="飞机"><em></em>飞机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2514" target="_blank" title="游戏">游戏<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2580" target="_blank" title="桌游"><em></em>桌游</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2515" target="_blank" title="绘画、DIY制作">绘画、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2603" target="_blank" title="木艺"><em></em>木艺</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2516" target="_blank" title="动漫玩具及周边">动漫玩...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2618" target="_blank" title="动漫周边"><em></em>动漫周边</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2517" target="_blank" title="益智、科教玩具">益智、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="早教机、点读机"><em></em>早教机...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2518" target="_blank" title="运动户外产品">运动户...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2630" target="_blank" title="气枪、软弹枪"><em></em>气枪、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2519" target="_blank" title="拼图">拼图<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2651" target="_blank" title="纸质拼图"><em></em>纸质拼图</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2520" target="_blank" title="音乐玩具">音乐玩具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2658" target="_blank" title="钢琴与键盘乐器"><em></em>钢琴与...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2521" target="_blank" title="角色扮演及扮装游戏">角色扮...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="斗篷、外套、背心及翅膀"><em></em>斗篷、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2522" target="_blank" title="派对、节日、聚会">派对、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2670" target="_blank" title="邀请函"><em></em>邀请函</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=888" style="margin: 0 !important;" title="个护美妆">个护美妆</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=889" target="_blank" title="面部护肤">面部护肤<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2320" target="_blank" title="面膜"><em></em>面膜</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=891" target="_blank" title="美发护发">美发护发<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2329" target="_blank" title="洗发水"><em></em>洗发水</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=892" target="_blank" title="彩妆">彩妆<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2335" target="_blank" title="面部"><em></em>面部</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=890" target="_blank" title="身体护理">身体护理<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2341" target="_blank" title="沐浴"><em></em>沐浴</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=893" target="_blank" title="男士护理">男士护理<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2348" target="_blank" title="面部护理"><em></em>面部护理</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=894" target="_blank" title="香水">香水<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2353" target="_blank" title="女士香水"><em></em>女士香水</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=895" target="_blank" title="工具和配件">工具和...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2357" target="_blank" title="美容仪"><em></em>美容仪</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=798" style="margin: 0 !important;" title="服饰箱包">服饰箱包</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=799" target="_blank" title="女装">女装<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=800" target="_blank" title="T恤、Polo衫、背心"><em></em>T恤、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=810" target="_blank" title="男装">男装<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=811" target="_blank" title="T恤、Polo衫、背心"><em></em>T恤、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1955" target="_blank" title="皮具箱包">皮具箱包<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=1956" target="_blank" title="双肩背包"><em></em>双肩背包</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1968" target="_blank" title="服饰配件">服饰配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=1969" target="_blank" title="皮带、腰带"><em></em>皮带、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4508" target="_blank" title="儿童服饰">儿童服饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4509" target="_blank" title="上衣"><em></em>上衣</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=898" style="margin: 0 !important;" title="腕表眼镜">腕表眼镜</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2897" target="_blank" title="钟表">钟表<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2900" target="_blank" title="腕表"><em></em>腕表</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2898" target="_blank" title="配件">配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2902" target="_blank" title="表盒"><em></em>表盒</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2899" target="_blank" title="钟">钟<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2904" target="_blank" title="闹钟"><em></em>闹钟</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4434" target="_blank" title="眼镜">眼镜<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4435" target="_blank" title="墨镜"><em></em>墨镜</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4446" target="_blank" title="烟具">烟具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4447" target="_blank" title="电子烟"><em></em>电子烟</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=829" style="margin: 0 !important;" title="精品鞋靴">精品鞋靴</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=831" target="_blank" title="女鞋">女鞋<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2275" target="_blank" title="单鞋"><em></em>单鞋</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=832" target="_blank" title="男鞋">男鞋<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2287" target="_blank" title="商务休闲鞋"><em></em>商务休...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=830" target="_blank" title="女童鞋">女童鞋<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2298" target="_blank" title="运动鞋"><em></em>运动鞋</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=833" target="_blank" title="男童鞋">男童鞋<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2307" target="_blank" title="运动鞋"><em></em>运动鞋</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=834" target="_blank" title="鞋靴配件">鞋靴配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2316" target="_blank" title="皮鞋护理"><em></em>皮鞋护理</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=901" style="margin: 0 !important;" title="珠宝首饰">珠宝首饰</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3099" target="_blank" title="珠宝首饰">珠宝首饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3106" target="_blank" title="项链、吊坠"><em></em>项链、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3100" target="_blank" title="头饰">头饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3115" target="_blank" title="发夹"><em></em>发夹</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3101" target="_blank" title="耳饰">耳饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3124" target="_blank" title="耳钉"><em></em>耳钉</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3102" target="_blank" title="身体首饰/零部件">身体首...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3128" target="_blank" title="身体穿刺首饰"><em></em>身体穿...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3103" target="_blank" title="衬衫/领带饰品">衬衫/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3134" target="_blank" title="袖扣"><em></em>袖扣</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3104" target="_blank" title="装饰品/摆件/挂件">装饰品...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3138" target="_blank" title="摆件"><em></em>摆件</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3105" target="_blank" title="首饰收纳">首饰收纳<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3145" target="_blank" title="首饰盒"><em></em>首饰盒</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=4283" style="margin: 0 !important;" title="运动户外">运动户外</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=851" target="_blank" title="运动服饰">运动服饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=852" target="_blank" title="羽毛球服"><em></em>羽毛球服</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1991" target="_blank" title="电子设备">电子设备<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=1992" target="_blank" title="热量计算器"><em></em>热量计...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2005" target="_blank" title="运动包">运动包<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2006" target="_blank" title="露营、徒步单肩包"><em></em>露营、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2021" target="_blank" title="羽毛球">羽毛球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2022" target="_blank" title="羽毛球"><em></em>羽毛球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2032" target="_blank" title="网球">网球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2033" target="_blank" title="网球"><em></em>网球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2043" target="_blank" title="乒乓球">乒乓球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2044" target="_blank" title="乒乓球"><em></em>乒乓球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2050" target="_blank" title="足球">足球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2051" target="_blank" title="足球"><em></em>足球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2064" target="_blank" title="篮球">篮球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2065" target="_blank" title="篮球"><em></em>篮球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2073" target="_blank" title="排球">排球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2074" target="_blank" title="排球"><em></em>排球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2083" target="_blank" title="露营/徒步">露营/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2084" target="_blank" title="户外服装"><em></em>户外服装</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2110" target="_blank" title="健身/训练">健身/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2111" target="_blank" title="健身车"><em></em>健身车</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2124" target="_blank" title="瑜伽">瑜伽<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2125" target="_blank" title="瑜伽服"><em></em>瑜伽服</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2135" target="_blank" title="跑步">跑步<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2136" target="_blank" title="跑步服"><em></em>跑步服</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2146" target="_blank" title="冰雪运动">冰雪运动<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2147" target="_blank" title="滑雪"><em></em>滑雪</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2151" target="_blank" title="登山/攀岩">登山/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2152" target="_blank" title="攀岩绳包"><em></em>攀岩绳包</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2161" target="_blank" title="钓鱼">钓鱼<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2162" target="_blank" title="浮漂"><em></em>浮漂</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2170" target="_blank" title="水上运动">水上运动<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2171" target="_blank" title="泳镜"><em></em>泳镜</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2184" target="_blank" title="骑行运动">骑行运动<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2185" target="_blank" title="滑板平衡车"><em></em>滑板平...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2199" target="_blank" title="轮滑/滑板">轮滑/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2200" target="_blank" title="直排"><em></em>直排</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2217" target="_blank" title="高尔夫">高尔夫<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2218" target="_blank" title="高尔夫"><em></em>高尔夫</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2228" target="_blank" title="棒球">棒球<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2229" target="_blank" title="棒球"><em></em>棒球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2239" target="_blank" title="趣味运动">趣味运动<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2240" target="_blank" title="台球"><em></em>台球</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2244" target="_blank" title="运动迷用品">运动迷...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2245" target="_blank" title="运动迷家居用品"><em></em>运动迷...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2253" target="_blank" title="舞蹈">舞蹈<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2254" target="_blank" title="跳舞毯"><em></em>跳舞毯</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2259" target="_blank" title="拳击">拳击<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2260" target="_blank" title="拳击"><em></em>拳击</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2270" target="_blank" title="武术/跆拳道">武术/...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="武术、跆拳道脚靶"><em></em>武术、...</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=936" style="margin: 0 !important;" title="数码产品">数码产品</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=937" target="_blank" title="手机及配件">手机及...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=938" target="_blank" title="手机"><em></em>手机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=941" target="_blank" title="4G、3G上网">4G、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=942" target="_blank" title="中国移动"><em></em>中国移动</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=946" target="_blank" title="电脑产品">电脑产品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=947" target="_blank" title="平板电脑"><em></em>平板电脑</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=954" target="_blank" title="笔记本">笔记本<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=955" target="_blank" title="笔记本电脑"><em></em>笔记本...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2677" target="_blank" title="台式机、一体机">台式机...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2711" target="_blank" title="一体机"><em></em>一体机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2679" target="_blank" title="镜头">镜头<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2716" target="_blank" title="微单镜头"><em></em>微单镜头</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2681" target="_blank" title="数码相机">数码相机<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2722" target="_blank" title="运动相机"><em></em>运动相机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2682" target="_blank" title="望远镜">望远镜<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2726" target="_blank" title="双筒望远镜"><em></em>双筒望...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2683" target="_blank" title="摄影配件">摄影配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="电池、电源、充电器"><em></em>电池、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2685" target="_blank" title="监控摄像机及配件">监控摄...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="迷你、微型摄像机"><em></em>迷你、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2686" target="_blank" title="水下摄影器材">水下摄...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2759" target="_blank" title="水下滤镜"><em></em>水下滤镜</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2687" target="_blank" title="无人机及配件">无人机...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2764" target="_blank" title="无人机配件"><em></em>无人机...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2688" target="_blank" title="数码影音">数码影音<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2775" target="_blank" title="耳机"><em></em>耳机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2689" target="_blank" title="耳机音箱">耳机音箱<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2795" target="_blank" title="电脑、便携音箱"><em></em>电脑、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2691" target="_blank" title="智能设备">智能设备<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2807" target="_blank" title="智能手环"><em></em>智能手环</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2692" target="_blank" title="影音播放器">影音播...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2811" target="_blank" title="MP3、MP4播放器"><em></em>MP3...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2693" target="_blank" title="数码配件">数码配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2813" target="_blank" title="移动电源"><em></em>移动电源</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2694" target="_blank" title="网络K歌装备">网络K...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2823" target="_blank" title="网络K歌装备"><em></em>网络K...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2695" target="_blank" title="外设产品">外设产品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="鼠标键盘、输入配置"><em></em>鼠标键...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2696" target="_blank" title="存储">存储<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2842" target="_blank" title="移动硬盘"><em></em>移动硬盘</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2697" target="_blank" title="电脑组件">电脑组件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2850" target="_blank" title="显示器配件"><em></em>显示器...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2698" target="_blank" title="网络设备">网络设备<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2864" target="_blank" title="路由器"><em></em>路由器</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2699" target="_blank" title="打印、绘图、扫描">打印、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2871" target="_blank" title="打印机"><em></em>打印机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2702" target="_blank" title="其他配件">其他配件<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2886" target="_blank" title="插座、插线板"><em></em>插座、...</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=965" style="margin: 0 !important;" title="家用电器">家用电器</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=966" target="_blank" title="居家电器">居家电器<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2907" target="_blank" title="空气净化器"><em></em>空气净...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=967" target="_blank" title="厨房电器">厨房电器<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2921" target="_blank" title="电饭煲"><em></em>电饭煲</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=968" target="_blank" title="个人护理电器">个人护...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2943" target="_blank" title="电动牙刷"><em></em>电动牙刷</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=977" style="margin: 0 !important;" title="家具家居">家具家居</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=978" target="_blank" title="锅具壶具">锅具壶具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=979" target="_blank" title="炒锅"><em></em>炒锅</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=986" target="_blank" title="餐具厨具">餐具厨具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=987" target="_blank" title="餐具套装"><em></em>餐具套装</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3888" target="_blank" title="烘焙用品">烘焙用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3908" target="_blank" title="烘焙模具"><em></em>烘焙模具</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3889" target="_blank" title="咖啡用品">咖啡用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3913" target="_blank" title="咖啡机"><em></em>咖啡机</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3890" target="_blank" title="保鲜用品">保鲜用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3918" target="_blank" title="保鲜盒"><em></em>保鲜盒</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3891" target="_blank" title="厨房清洁">厨房清洁<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3923" target="_blank" title="垃圾桶"><em></em>垃圾桶</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3892" target="_blank" title="烧烤用具">烧烤用具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3932" target="_blank" title="烧烤炉"><em></em>烧烤炉</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3893" target="_blank" title="厨房装饰">厨房装饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3894" target="_blank" title="水具、茶具">水具、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3947" target="_blank" title="茶壶"><em></em>茶壶</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3895" target="_blank" title="酒具">酒具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3955" target="_blank" title="开瓶器"><em></em>开瓶器</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3896" target="_blank" title="家居整理">家居整理<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3964" target="_blank" title="收纳箱"><em></em>收纳箱</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3897" target="_blank" title="床上用品">床上用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3974" target="_blank" title="被子"><em></em>被子</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3898" target="_blank" title="家居装饰">家居装饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3986" target="_blank" title="布艺装饰"><em></em>布艺装饰</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3900" target="_blank" title="浴室用品">浴室用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4007" target="_blank" title="毛巾浴巾"><em></em>毛巾浴巾</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3902" target="_blank" title="雨具、防护">雨具、...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4023" target="_blank" title="保暖用品"><em></em>保暖用品</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3903" target="_blank" title="缝洗晒熨">缝洗晒熨<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4027" target="_blank" title="晾晒架"><em></em>晾晒架</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4496" target="_blank" title="家居家具">家居家具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4497" target="_blank" title="床"><em></em>床</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4501" target="_blank" title="家居灯饰">家居灯饰<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4502" target="_blank" title="吊灯"><em></em>吊灯</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=1600" style="margin: 0 !important;" title="办公用品">办公用品</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1601" target="_blank" title="办公设备">办公设备<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2961" target="_blank" title="单功能打印机"><em></em>单功能...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1602" target="_blank" title="办公耗材">办公耗材<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2983" target="_blank" title="硒鼓"><em></em>硒鼓</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1603" target="_blank" title="纸类">纸类<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2990" target="_blank" title="纸张"><em></em>纸张</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1604" target="_blank" title="日常办公用品">日常办...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=2993" target="_blank" title="桌上用品"><em></em>桌上用品</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1606" target="_blank" title="书写工具">书写工具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3001" target="_blank" title="圆珠笔"><em></em>圆珠笔</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1605" target="_blank" title="展示用品">展示用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3019" target="_blank" title="投影胶片"><em></em>投影胶片</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1607" target="_blank" title="办公家具灯具">办公家...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3037" target="_blank" title="桌子"><em></em>桌子</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2954" target="_blank" title="办公清洁用品">办公清...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3047" target="_blank" title="清洁套装"><em></em>清洁套装</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2955" target="_blank" title="办公礼品包装">办公礼...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3051" target="_blank" title="礼品包装纸"><em></em>礼品包...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2956" target="_blank" title="日历台历与日程安排">日历台...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3054" target="_blank" title="台历"><em></em>台历</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2957" target="_blank" title="信封与邮寄用品">信封与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3060" target="_blank" title="信封"><em></em>信封</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2958" target="_blank" title="财务用品">财务用品<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3067" target="_blank" title="计算器"><em></em>计算器</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2959" target="_blank" title="教具文具">教具文具<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3079" target="_blank" title="地球仪"><em></em>地球仪</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=2960" target="_blank" title="电子教育">电子教育<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3093" target="_blank" title="点读机及附件"><em></em>点读机...</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="food subnav on" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                    <a class="ti" href="GoodsSerach?cate_id=925" style="margin: 0 !important;" title="图书音像">图书音像</a>
+                                    <div class="prosmore hide" style="width: 800px; height: 480px; overflow-y: auto; overflow-x: hidden; display: none;">
+                                        <div class="subitems">
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1775" target="_blank" title="影视">影视<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3177" target="_blank" title="电视剧"><em></em>电视剧</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1779" target="_blank" title="教育音像">教育音像<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3184" target="_blank" title="幼儿与学前"><em></em>幼儿与...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1780" target="_blank" title="少儿">少儿<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="幼儿启蒙"><em></em>幼儿启蒙</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1781" target="_blank" title="文学">文学<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3216" target="_blank" title="文学理论"><em></em>文学理论</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1782" target="_blank" title="小说">小说<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3229" target="_blank" title="推理小说"><em></em>推理小说</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1783" target="_blank" title="历史">历史<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3247" target="_blank" title="中国史"><em></em>中国史</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1784" target="_blank" title="社会科学">社会科学<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3261" target="_blank" title="社会学"><em></em>社会学</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1785" target="_blank" title="艺术与摄影">艺术与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="艺术理论与评论"><em></em>艺术理...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1786" target="_blank" title="经济管理">经济管理<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="经济学理论与读物"><em></em>经济学...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1787" target="_blank" title="哲学与宗教">哲学与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="中国哲学"><em></em>中国哲学</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1788" target="_blank" title="传记">传记<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3316" target="_blank" title="财经人物"><em></em>财经人物</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1789" target="_blank" title="科学与自然">科学与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3332" target="_blank" title="科普读物"><em></em>科普读物</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1790" target="_blank" title="励志与成功">励志与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3351" target="_blank" title="成功学"><em></em>成功学</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3151" target="_blank" title="国学">国学<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3374" target="_blank" title="经部"><em></em>经部</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3152" target="_blank" title="政治与军事">政治与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3383" target="_blank" title="政治理论"><em></em>政治理论</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3153" target="_blank" title="外语学习">外语学习<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3392" target="_blank" title="特色、品牌外语"><em></em>特色、...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3154" target="_blank" title="心理学">心理学<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="" target="_blank" title="心理学经典著作"><em></em>心理学...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3155" target="_blank" title="旅游与地图">旅游与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3432" target="_blank" title="旅游随笔"><em></em>旅游随笔</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3156" target="_blank" title="法律">法律<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3439" target="_blank" title="理论法学"><em></em>理论法学</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3157" target="_blank" title="青春动漫">青春动漫<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3462" target="_blank" title="青春小说"><em></em>青春小说</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3158" target="_blank" title="计算机与互联网">计算机...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3473" target="_blank" title="编程与开发"><em></em>编程与...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3373" target="_blank" title="词典与工具书">词典与...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3503" target="_blank" title="百科全书"><em></em>百科全书</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3161" target="_blank" title="医学">医学<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3528" target="_blank" title="基础理论"><em></em>基础理论</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3162" target="_blank" title="烹饪美食与酒">烹饪美...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3558" target="_blank" title="饮食文化"><em></em>饮食文化</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3163" target="_blank" title="考试辅导">考试辅导<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3575" target="_blank" title="小考"><em></em>小考</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3165" target="_blank" title="科技">科技<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3608" target="_blank" title="摄影技术"><em></em>摄影技术</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3166" target="_blank" title="期刊杂志">期刊杂志<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3631" target="_blank" title="期刊合订本"><em></em>期刊合...</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3167" target="_blank" title="养生保健">养生保健<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3649" target="_blank" title="养生"><em></em>养生</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3159" target="_blank" title="中小学教辅">中小学...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3495" target="_blank" title="初中"><em></em>初中</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3168" target="_blank" title="大中专教材">大中专...<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3658" target="_blank" title="本科"><em></em>本科</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3169" target="_blank" title="婚恋家庭">婚恋家庭<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3667" target="_blank" title="孕产护理"><em></em>孕产护理</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3170" target="_blank" title="时尚娱乐">时尚娱乐<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3671" target="_blank" title="美容化妆"><em></em>美容化妆</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3171" target="_blank" title="家居休闲">家居休闲<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3681" target="_blank" title="家居装修"><em></em>家居装修</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=1648" target="_blank" title="书画">书画<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=1762" target="_blank" title="篆书"><em></em>篆书</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=3175" target="_blank" title="体育">体育<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=3719" target="_blank" title="体育理论"><em></em>体育理论</a>
+                                                    </dd>
+                                                </dl>
+                                                <dl class="fore1">
+                                                    <dt><a href="GoodsSerach?cate_id=4526" target="_blank" title="乐器">乐器<i>&gt;</i></a></dt>
+                                                    <dd>
+                                                            <a href="GoodsSerach?cate_id=4527" target="_blank" title="儿童乐器"><em></em>儿童乐器</a>
+                                                    </dd>
+                                                </dl>
+                                        </div>
+                                    </div>
+                                </li>
+                            <li class="food subnav on more" mon="type=subnav&amp;action=click" style="height: 30px; line-height: 30px; visibility: visible;">
+                                <a class="ti" href="AllGoodsCategory" style="margin: 0 !important;" title="查看全部分类">查看全部分类</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--右列表-->
+                    <div class="index_user">
+                        <div class="index_user_i">
+                            <img src="images/photo.jpg">
+                        </div>
+                        <div class="login_box2 clearfix">
+                        	<a href="javascript:;" class="a_login_box2 open_login">登录</a>
+                        	<a href="" class="a_register_box2">注册</a>
+                        </div>
+                        <div class="index_news_box">
+                        	<p class="p1">快讯<a href="">更多></a></p>
+                        	<ul class="index_news_list">
+                        		<li>
+                        			<a href="">大汇堂返现细则</a>
+                        		</li>
+                        		<li>
+                        			<a href="">关于会员注册充值流程、运费说关于会员注册充值流程、运费说</a>
+                        		</li>
+                        		<li>
+                        			<a href="">大汇堂召开”11.11”工作部署会大汇堂召开”11.11”工作部署会</a>
+                        		</li>
+                        		<li>
+                        			<a href="">大汇堂春节囤货啦</a>
+                        		</li>
+                        	</ul>
+                        </div>
 
+                        <div class="index_vip_link">
+                        	<p class="p1">
+                        		<span>会员排名公示</span>
+                        		<a href="">查看排名</a>
+                        	</p>
+                        </div>
+                    </div>
+                    <!--右列表-->
+                </div>
+            </div>
+        </div>
+        <!--导航菜单-->
+        <!--banner-->
+        <div class="banner" id="focus">
+            <div id="focus_m" class="banner_m">
+                <ul>
+                    <li><a href="" target="_blank"><img src="http://img.manjiwang.com/upload/201710/11/20171011093728882133ac222afd1742cda7a04eab4f3180bc.jpg"></a></li>
+                    <li><a href="" target="_blank"><img src="http://file.manjiwang.com/?52470b99f435672f04ec024d966a17ec"></a></li>
+                    <li><a href="" target="_blank"><img src="http://img.manjiwang.com/upload/201710/11/201710111048033123aa2eb5fe1ffd4f74b65a4ee740ea6e99.jpg"></a></li>
+                    <li><a href="" target="_blank"><img src="http://img.manjiwang.com/upload/201710/11/201710111339418548c38ce727f2f14e22872554cdddc492c3.jpg"></a></li>
+                    <li><a href="" target="_blank"><img src="http://img.manjiwang.com/upload/201710/11/20171011133924604843abe473ca4b4f26a9e8d2c3ca6485d3.jpg"></a></li>
+
+                </ul>
+            </div>
+        </div>
+        <!--banner-->
+
+    </div>
+    <!--导航、banner-->
+
+    <ul class="index_section1 clearfix">
+    	<li>
+    		<a href=""><img src="images/index-img1.jpg"/></a>
+    	</li>
+    	<li>
+    		<a href=""><img src="images/index-img2.jpg"/></a>
+    	</li>
+    	<li>
+    		<a href=""><img src="images/index-img3.jpg"/></a>
+    	</li>
+    	<li>
+    		<a href=""><img src="images/index-img4.jpg"/></a>
+    	</li>
+    	<li>
+    		<a href=""><img src="images/index-img5.jpg"/></a>
+    	</li>
+    	<li>
+    		<a href=""><img src="images/index-img6.jpg"/></a>
+    	</li>
+    </ul>
+    <!--限时秒杀-->
+    <div class="index_common_section1 clearfix">
+        <div class="common_section1_left sk_time_box background1">
+        	<p class="p1">限时秒杀</p>
+        	<p class="p2">本场剩余</p>
+            <div class="sk_time">
+                <span class="span1">0</span>
+                <span class="span1">0</span>
+                <span>:</span>
+                <span class="span1">0</span>
+                <span class="span1">0</span>
+                <span>:</span>
+                <span class="span1">0</span>
+                <span class="span1">0</span>
+            </div>
+            <img class="img" src="images/1dd946be4f54373faaac1f60f15cb491.png"/>
+        </div>
+        <ul class="common_section1_right">
+        	<li class="common_section1_item1">
+        		<img class="img1" src="images/sec-img1.jpg"/>
+        		<a href="" class="p1">石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产</a>
+        		<p class="p2 clearfix">
+        			<span class="span1">￥6.50</span>
+        			<span class="span2">￥30.0</span>
+        		</p>
+        		<div class="tip1">
+        			<p>仅剩</p>
+        			<p>136</p>
+        		</div>
+        		<a href="" class="section_mask1">
+        			<p class="p1">9:00</p>
+        			<p class="p2">即将开始</p>
+        		</a>
+        	</li>
+
+        	<li class="common_section1_item1">
+        		<img class="img1" src="images/sec-img1.jpg"/>
+        		<a href="" class="p1">石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产</a>
+        		<p class="p2 clearfix">
+        			<span class="span1">￥6.50</span>
+        			<span class="span2">￥30.0</span>
+        		</p>
+        		<div class="tip1">
+        			<p>仅剩</p>
+        			<p>136</p>
+        		</div>
+        		<a href="" class="section_mask1">
+        			<p class="p1">9:00</p>
+        			<p class="p2">即将开始</p>
+        		</a>
+        	</li>
+        	<li class="common_section1_item1">
+        		<img class="img1" src="images/sec-img1.jpg"/>
+        		<a href="" class="p1">石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产</a>
+        		<p class="p2 clearfix">
+        			<span class="span1">￥6.50</span>
+        			<span class="span2">￥30.0</span>
+        		</p>
+        		<div class="tip1">
+        			<p>仅剩</p>
+        			<p>136</p>
+        		</div>
+        		<a href="" class="section_mask1">
+        			<p class="p1">9:00</p>
+        			<p class="p2">即将开始</p>
+        		</a>
+        	</li>
+        	<li class="common_section1_item1">
+        		<img class="img1" src="images/sec-img1.jpg"/>
+        		<a href="" class="p1">石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产</a>
+        		<p class="p2 clearfix">
+        			<span class="span1">￥6.50</span>
+        			<span class="span2">￥30.0</span>
+        		</p>
+        		<div class="tip1">
+        			<p>仅剩</p>
+        			<p>136</p>
+        		</div>
+        		<a href="" class="section_mask1">
+        			<p class="p1">9:00</p>
+        			<p class="p2">即将开始</p>
+        		</a>
+        	</li>
+        	<li class="common_section1_item1">
+        		<img class="img1" src="images/sec-img1.jpg"/>
+        		<a href="" class="p1">石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产石柱 青猕猴桃农家自产</a>
+        		<p class="p2 clearfix">
+        			<span class="span1">￥6.50</span>
+        			<span class="span2">￥30.0</span>
+        		</p>
+        		<div class="tip1">
+        			<p>仅剩</p>
+        			<p>136</p>
+        		</div>
+        		<a href="" class="section_mask1">
+        			<p class="p1">9:00</p>
+        			<p class="p2">即将开始</p>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+    <!--限时秒杀-->
+    <!--今日特价-->
+    <div class="index_common_section1 clearfix">
+        <div class="common_section1_left background2">
+        	<p class="title1">今日特价</p>
+        	<p class="title2">甄选好货</p>
+        	<img src="images/1111.png"/>
+        </div>
+        <ul class="common_section1_right common_section1_right2 clearfix">
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p2">
+        				<span class="span1">￥55.55</span>
+        				<span class="span2">￥100.00</span>
+        			</p>
+        			<div class="index_tip1">明日预告</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p2">
+        				<span class="span1">￥55.55</span>
+        				<span class="span2">￥100.00</span>
+        			</p>
+        			<div class="index_tip1">明日预告</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p2">
+        				<span class="span1">￥55.55</span>
+        				<span class="span2">￥100.00</span>
+        			</p>
+        			<div class="index_tip1">明日预告</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p2">
+        				<span class="span1">￥55.55</span>
+        				<span class="span2">￥100.00</span>
+        			</p>
+        			<div class="index_tip1">明日预告</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p2">
+        				<span class="span1">￥55.55</span>
+        				<span class="span2">￥100.00</span>
+        			</p>
+        			<div class="index_tip1">明日预告</div>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+    <!--今日特价-->
+    <!--好友砍价-->
+    <div class="index_common_section1 clearfix">
+        <div class="common_section1_left background3">
+        	<p class="title1">好友砍价</p>
+        	<p class="title2">砍至最低价</p>
+        	<img src="images/1111.png"/>
+        </div>
+        <ul class="common_section1_right common_section1_right2 clearfix">
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p3">
+        				<span>原价：</span>￥5000.00
+        			</p>
+        			<div class="index_tip2">最低砍至500</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p3">
+        				<span>原价：</span>￥5000.00
+        			</p>
+        			<div class="index_tip2">最低砍至500</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p3">
+        				<span>原价：</span>￥5000.00
+        			</p>
+        			<div class="index_tip2">最低砍至500</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p3">
+        				<span>原价：</span>￥5000.00
+        			</p>
+        			<div class="index_tip2">最低砍至500</div>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/2222.png"/>
+        			<p class="p1">秋季 短款不规则显瘦毛衣短款不规则显瘦毛衣</p>
+        			<p class="p3">
+        				<span>原价：</span>￥5000.00
+        			</p>
+        			<div class="index_tip2">最低砍至500</div>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+    <!--好友砍价-->
+    <!--广告位1-->
+    <div class="ad_box1">
+    	<img src="images/ad-bg1.jpg"/>
+    </div>
+    <!--广告位1 end-->
+    <!--新鲜水果-->
+    <div class="floor_main_list clearfix" id="F1">
+        <div class="floor_left">
+        	<p class="title1 bg_F1_t1">1F新鲜水果</p>
+        	<div class="floor_left_mid">
+        		<img src="images/img1.jpg"/>
+        	</div>
+        	<div class="floor_left_bottom bg_F1_t2">
+
+        	</div>
+        </div>
+        <div class="floor_right">
+        	<ul class="floor_right_nav_list1 clearfix">
+        		<li class="active">热卖水果</li>
+        		<li>特价水果</li>
+        		<li>应季水果</li>
+        	</ul>
+        	<div class="floor_right_container1">
+        		<div class="floor_right_item1 active">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item1">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥66.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item1">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥99.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        	</div>
+        </div>
+    </div>
+    <!--家用电器-->
+    <div class="floor_main_list clearfix" id="F2">
+        <div class="floor_left">
+        	<p class="title1 bg_F2_t1">2F家用电器</p>
+        	<div class="floor_left_mid">
+        		<img src="images/img1.jpg"/>
+        	</div>
+        	<div class="floor_left_bottom bg_F2_t2">
+
+        	</div>
+        </div>
+        <div class="floor_right">
+        	<ul class="floor_right_nav_list2 clearfix">
+        		<li class="active">热卖水果</li>
+        		<li>特价水果</li>
+        		<li>应季水果</li>
+        	</ul>
+        	<div class="floor_right_container2">
+        		<div class="floor_right_item2 active">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item2">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥66.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item2">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥99.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        	</div>
+        </div>
+    </div>
+    <!--居家生活-->
+    <div class="floor_main_list clearfix" id="F3">
+        <div class="floor_left">
+        	<p class="title1 bg_F3_t1">3F居家生活</p>
+        	<div class="floor_left_mid">
+        		<img src="images/img1.jpg"/>
+        	</div>
+        	<div class="floor_left_bottom bg_F3_t2">
+
+        	</div>
+        </div>
+        <div class="floor_right">
+        	<ul class="floor_right_nav_list3 clearfix">
+        		<li class="active">热卖水果</li>
+        		<li>特价水果</li>
+        		<li>应季水果</li>
+        	</ul>
+        	<div class="floor_right_container3">
+        		<div class="floor_right_item3 active">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item3">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥66.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item3">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥99.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        	</div>
+        </div>
+    </div>
+    <!--数码电子-->
+    <div class="floor_main_list clearfix" id="F4">
+        <div class="floor_left">
+        	<p class="title1 bg_F4_t1">4F数码电子</p>
+        	<div class="floor_left_mid">
+        		<img src="images/img1.jpg"/>
+        	</div>
+        	<div class="floor_left_bottom bg_F4_t2">
+
+        	</div>
+        </div>
+        <div class="floor_right">
+        	<ul class="floor_right_nav_list4 clearfix">
+        		<li class="active">热卖水果</li>
+        		<li>特价水果</li>
+        		<li>应季水果</li>
+        	</ul>
+        	<div class="floor_right_container4">
+        		<div class="floor_right_item4 active">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item4">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥66.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item4">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥99.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        	</div>
+        </div>
+    </div>
+    <!--办公用品-->
+    <div class="floor_main_list clearfix" id="F5">
+        <div class="floor_left">
+        	<p class="title1 bg_F5_t1">5F办公用品</p>
+        	<div class="floor_left_mid">
+        		<img src="images/img1.jpg"/>
+        	</div>
+        	<div class="floor_left_bottom bg_F5_t2">
+
+        	</div>
+        </div>
+        <div class="floor_right">
+        	<ul class="floor_right_nav_list5 clearfix">
+        		<li class="active">热卖水果</li>
+        		<li>特价水果</li>
+        		<li>应季水果</li>
+        	</ul>
+        	<div class="floor_right_container5">
+        		<div class="floor_right_item5 active">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item5">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥66.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        		<div class="floor_right_item5">
+        			<ul class="goods_list_box">
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥99.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        				<li>
+        					<a href="">
+        						<img src="images/3333.png"/>
+        						<p class="title">石柱水果百香果皱皮水果酸甜可口农家自产安全生态</p>
+        						<p class="money">￥88.88</p>
+        					</a>
+        				</li>
+        			</ul>
+        		</div>
+        	</div>
+        </div>
+    </div>
+    <!--为你推荐-->
+    <div class="floor_main_list for_recommend clearfix" id="F6">
+        <img class="adv_img1" src="images/adv-img1.jpg"/>
+        <p class="title1">为你推荐</p>
+        <ul class="for_recommend_list">
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        	<li>
+        		<a href="">
+        			<img src="images/5555.jpg"/>
+        			<p class="p1">格之格88a硒鼓易加粉适用惠普格之格88a硒鼓易加粉适用惠普m1136 p1108 126a hp1007 388a</p>
+        			<p class="p2">￥555.00</p>
+        		</a>
+        	</li>
+        </ul>
+    </div>
+
+<!--底部-->
+<div class="footer_main">
+	<div class="w1200 clearfix">
+		<ul class="footer_list1 clearfix">
+			<li>
+				<img src="images/footer-icon1.png"/>
+			</li>
+			<li>
+				<img src="images/footer-icon2.png"/>
+			</li>
+			<li>
+				<img src="images/footer-icon3.png"/>
+			</li>
+			<li>
+				<img src="images/footer-icon4.png"/>
+			</li>
+		</ul>
+		<div class="clearfix">
+			<ul class="footer_list2">
+				<li>
+					<p class="title">新手入门</p>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+				</li>
+				<li>
+					<p class="title">新手入门</p>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+				</li>
+				<li>
+					<p class="title">新手入门</p>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+				</li>
+				<li>
+					<p class="title">新手入门</p>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+					<a href="">底部链接</a>
+				</li>
+			</ul>
+			<div class="footer_cod_box">
+				<img src="images/weixin2.png"/>
+				<p>公众号</p>
+			</div>
+			<div class="footer_call_box">
+				<p>客服电话：023-73378565转830</p>
+				<p>客服邮箱：kf@dahuitang.com</p>
+				<p>投诉电话：023-73378565转830</p>
+				<p>投诉邮箱：kf@dahuitang.com</p>
+			</div>
+		</div>
+
+
+		<div class="mt_40">
+			<p class="font14 color3 text_center">重庆大汇堂有限公司</p>
+			<p class="font14 color3 text_center mt_10">备案号</p>
+		</div>
+	</div>
+</div>
+    <!--底部-->
+
+    <!--左侧楼层-->
+    <div class="lift_list">
+        <ul>
+            <li class="title">导航</li>
+            <li class="F1" isbackground="#33ae75"><a href="javascript:;" name="F1">新鲜水果</a></li>
+            <li class="F2" isbackground="#76919f"><a href="javascript:;" name="F2">家用电器</a></li>
+            <li class="F3" isbackground="#766059"><a href="javascript:;" name="F3">居家生活</a></li>
+            <li class="F4" isbackground="#34a6a4"><a href="javascript:;" name="F4">数码电子</a></li>
+            <li class="F5" isbackground="#5d425b"><a href="javascript:;" name="F5">办公用品</a></li>
+            <li class="F6" isbackground="#000000"><a href="javascript:;" name="F6">为你推荐</a></li>
+            <li class="backtop">
+                <a href="#site_nav" name="top">
+                    <i></i>TOP
+                </a>
+            </li>
+        </ul>
+    </div>
+<!--登录弹出框-->
+<div class="login_popup" id="login_popup">
+	<div class="login_popup_son">
+		<span class="close_login_box"><img src="images/close-icon.png"/></span>
+		<ul class="login_popup_son_list">
+			<li class="active">扫码登录</li>
+			<li>账户登录</li>
+		</ul>
+		<div class="login_popup_main">
+			<!--扫码登录-->
+			<div class="login_popup_item active">
+				<img class="login_cod_img" src="images/weixin2.png"/>
+				<p class="login_tips1">打开微信     扫描二维码</p>
+			</div>
+			<!--账户登录-->
+			<div class="login_popup_item">
+				<form class="login_form" action="" method="post">
+					<div class="login_input_box">
+						<img class="input_icon" src="images/user-icon.png"/>
+						<input type="" class="pl_50" name="" id="" value="" />
+					</div>
+					<div class="login_input_box">
+						<img class="input_icon" src="images/paw-icon.png"/>
+						<input type="" class="pl_50" name="" id="" value="" />
+					</div>
+					<div class="login_input_box text_right">
+						<a href="">忘记密码？</a>
+					</div>
+					<div class="login_input_box">
+						<input type="submit" class="login_btn" value="登录"/>
+					</div>
+				</form>
+			</div>
+		</div>
+		<a class="footer_register_link" href=""><img src="images/link-icon.png"/>注册新账号</a>
+	</div>
+</div>
+<!--登录弹出框end-->
+    <!--左侧楼层-->
+    <script src="Scripts/Index/banner.js"></script>
+    <script type="text/javascript">
+
+        //导航
+        $("#nav").slide({
+            type: "menu", // 效果类型，针对菜单/导航而引入的参数（默认slide）
+            titCell: "#pro", //鼠标触发对象
+            targetCell: "#proinfo", //titCell里面包含的要显示/消失的对象
+            effect: "slideDown", //targetCell下拉效果
+            delayTime: 300, //效果时间
+            triggerTime: 0, //鼠标延迟触发时间（默认150）
+            returnDefault: true //鼠标移走后返回默认状态，例如默认频道是“预告片”，鼠标移走后会返回“预告片”（默认false）
+        });
+
+        jQuery("#nav").slide({
+            type: "menu", // 效果类型，针对菜单/导航而引入的参数（默认slide）
+            titCell: ".subnav", //鼠标触发对象
+            targetCell: ".prosmore", //titCell里面包含的要显示/消失的对象
+            //effect:"slideDown", targetCell下拉效果
+            delayTime: 200, //效果时间
+            triggerTime: 0, //鼠标延迟触发时间（默认150）
+            returnDefault: true //鼠标移走后返回默认状态，例如默认频道是“预告片”，鼠标移走后会返回“预告片”（默认false）
+        });
+
+
+        //jQuery(".fullSlide").slide({ titCell:".hd ul", mainCell:".bd ul", effect:"fold",  autoPlay:true, autoPage:true, trigger:"click" });//banner
+        jQuery(".fullSlide").slide({ mainCell: ".bd ul", effect: "fold", autoPlay: true, delayTime: 600, trigger: "click" });
+
+        $(".picScroll").slide({ mainCell: ".picList", effect: "left", vis: 4, pnLoop: false, scroll: 4, autoPage: true }); //图片滚动
+
+
+
+
+
+        //移除最后一行图片边框
+        $(".index_floor_upright ul li:last-child").css("border", "0");
+        //楼层定位
+        $(function () {
+            lift_left = ($(window).width() - 1200) / 2;
+            if ($(window).width() < 1210) {
+                $(".lift_list").css("left", "0");
+            } else {
+                if ($(window).width() < 1310) {
+                    $(".lift_list").css({ 'left': lift_left });
+                } else {
+                    $(".lift_list").css({ 'left': lift_left - 56 });
+                }
+            }
+        });
+        $(window).resize(function () {
+            lift_left = ($(window).width() - 1200) / 2;
+            //alert(lift_left);
+            if ($(window).width() < 1210) {
+                $(".lift_list").css("left", "0");
+            } else {
+                if ($(window).width() < 1310) {
+                    $(".lift_list").css({ 'left': lift_left });
+                } else {
+                    $(".lift_list").css({ 'left': lift_left - 56 });
+                }
+            }
+        });
+
+        //$("#F1 .index_floor").css("height", "565px");
+        //alert($("#F1").offset().top);
+        //鼠标滑动事件
+        var arr = new Array();
+        for (i = 1; i <= $(".lift_list li").length - 2; i++) {
+            arr[i] = $("#F" + i).offset().top - $(window).height() / 2;
+            //arr1[i]=$("#F"+i).offset().top-$(window).height()/2;
+        }
+        var lift_top = ($(window).height() - $(".lift_list").height()) / 2;
+        $(document).ready(function () {
+            if ($(document).scrollTop() >= arr[1] && $(document).scrollTop() <= arr[6] + 800) {
+                $(".lift_list").css({ position: 'absolute', 'top': lift_top + $(document).scrollTop(), display: 'block' }).show();
+            } else {
+                $(".lift_list").css("display", "none");
+            }
+        });
+        //滚动事件
+        $(window).scroll(function () {
+            var scrollTop = $(document).scrollTop();
+            var scrollLeft = $(document).scrollLeft();
+            var lift_top = ($(window).height() - $(".lift_list").height()) / 2;
+            if ($(document).scrollTop() >= arr[1] && $(document).scrollTop() <= arr[6] + 800) {
+                $(".lift_list").css({ position: 'absolute', 'top': lift_top + scrollTop, display: 'block' }).show();
+            } else {
+                $(".lift_list").css("display", "none");
+            }
+
+
+            //搜索栏浮动
+            if (scrollTop >= 200) {
+                $(".header").addClass("headertop");
+                $(".indexcity").css("display", "none");
+            } else {
+                $(".header").removeClass("headertop");
+                $(".indexcity").css("display", "block");
+            }
+
+            //右侧栏返回顶部
+            if ($(document).scrollTop() > 300) {
+                $(".nc_appbar_b").show();
+            } else {
+                $(".nc_appbar_b").hide();
+            }
+
+            //循环判断所在楼层
+            for (i = 1; i <= $(".lift_list li").length - 2; i++) {
+
+                var $h = $("#F" + i).outerHeight(true);
+                var $this_h = $("#F" + i).offset().top + $h - 300;
+
+                if ($this_h >= scrollTop) { //楼层的top大于滚动条的距离
+
+                    //设置当前为选中状态
+                    $(".F" + i).addClass("active").css("background", $(".F" + i).attr("isbackground")).siblings("li").removeClass("active").attr("style", "");
+
+                    //设置导航为红色背景
+                    $(".lift_list .title").css("background", "#dd342f");
+
+                    return false; //中断循环
+                }
+
+            }
+        });
+
+
+        //楼层鼠标悬浮事件
+        $(".lift_list li").hover(function () {
+            $(this).css("background", $(this).attr("isbackground"));
+        }, function () {
+            if (!$(this).hasClass("active")) {
+                $(this).attr("style", "");
+            }
+        });
+
+        //楼层单击事件
+        $(".lift_list").on("click", "li", function () {
+            var $name = $(this).find('a').attr("name"); //获得id值
+            $(this).addClass("active").css("background", $(this).attr("isbackground")).siblings().removeClass("active").attr("style", "");
+            $("html,body").animate({ scrollTop: $("#" + $name).offset().top - 200 }, 200);
+            return false;
+        });
+
+
+    </script>
+    <script>
+    	window.onload = function(){
+		    /*倒计时*/
+		    downTime();
+		};
+    	/*倒计时*/
+		function downTime(){
+		    /*需要倒计时的时间*/
+
+		    var time = 5 * 60 * 60 ;
+		    var timer = null;
+
+		    /*操作dom*/
+		    var skTime = document.querySelector('.sk_time');
+		    /*所有的SPAN*/
+		    var spans = skTime.querySelectorAll('span');
+
+		    timer = setInterval(function(){
+		        if(time <= 0){
+		            clearInterval(timer);
+		            return false;
+		        }
+		        time -- ;
+		        /*格式化*/
+		        var h = Math.floor(time/3600);
+		        var m = Math.floor(time%3600/60);
+		        var s = time%60;
+
+		        console.log(h);
+		        console.log(m);
+		        console.log(s);
+
+		        spans[0].innerHTML = Math.floor(h/10);
+		        spans[1].innerHTML = h%10;
+
+		        spans[3].innerHTML = Math.floor(m/10);
+		        spans[4].innerHTML = m%10;
+
+		        spans[6].innerHTML = Math.floor(s/10);
+		        spans[7].innerHTML = s%10;
+
+		    },1000);
+
+
+		}
+
+		$(".floor_right_nav_list1 > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".floor_right_nav_list1 > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".floor_right_container1 > .floor_right_item1").eq(index).addClass("active").siblings(".floor_right_item1").removeClass("active");
+	       });
+	       $(".floor_right_nav_list2 > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".floor_right_nav_list2 > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".floor_right_container2 > .floor_right_item2").eq(index).addClass("active").siblings(".floor_right_item2").removeClass("active");
+	       });
+	       $(".floor_right_nav_list3 > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".floor_right_nav_list3 > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".floor_right_container3 > .floor_right_item3").eq(index).addClass("active").siblings(".floor_right_item3").removeClass("active");
+	       });
+	       $(".floor_right_nav_list4 > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".floor_right_nav_list4 > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".floor_right_container4 > .floor_right_item4").eq(index).addClass("active").siblings(".floor_right_item4").removeClass("active");
+	       });
+	       $(".floor_right_nav_list5 > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".floor_right_nav_list5 > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".floor_right_container5 > .floor_right_item5").eq(index).addClass("active").siblings(".floor_right_item5").removeClass("active");
+	       });
+
+	       //登录弹出框
+	        $(".login_popup_son_list > li").click(function(){
+	            var $this = $(this),
+	                index = $this.index(".login_popup_son_list > li");
+	            $this.addClass("active").siblings("li").removeClass("active");
+	            $(".login_popup_main > .login_popup_item").eq(index).addClass("active").siblings(".login_popup_item").removeClass("active");
+	       });
+
+	       $(".open_login").click(function(){
+	       		$("#login_popup").show()
+	       })
+	       $(".close_login_box").click(function(){
+	       		$("#login_popup").hide()
+	       })
+    </script>
+</body>
 </html>

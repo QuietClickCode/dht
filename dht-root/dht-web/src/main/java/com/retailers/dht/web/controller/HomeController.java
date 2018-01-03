@@ -41,6 +41,14 @@ public class HomeController extends BaseController {
         return redirectUrl(request,"index");
     }
 
+    /**
+     * pc 端强制转换
+     * @return
+     */
+    @RequestMapping("pcPage")
+    public String pcPage(HttpServletRequest request){
+        return "pc_modle/pc_remind";
+    }
 
     @RequestMapping("/home/{id}.html")
     public String randomHome(HttpServletRequest request, @PathVariable("id")String id){

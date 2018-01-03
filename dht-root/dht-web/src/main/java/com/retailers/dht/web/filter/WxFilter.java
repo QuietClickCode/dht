@@ -71,15 +71,15 @@ public class WxFilter implements Filter {
                 return;
             }
         }
+        String uri = request.getRequestURI();
+        if(uri.indexOf(".")>=0&&uri.indexOf(".html")<0){
+            chain.doFilter(servletRequest, servletResponse);
+            return;
+        }
         //判断是否为移动端访问 移动端访问
         if(isFromMobile){
             //判断是否是微信
             if(userAgent.indexOf("micromessenger")>0){
-                String uri = request.getRequestURI();
-                if(uri.indexOf(".")>=0&&uri.indexOf(".html")<0){
-                    chain.doFilter(servletRequest, servletResponse);
-                    return;
-                }
                 //判断是否己授权登录
                 Object obj =  request.getSession().getAttribute(SystemConstant.IS_PULL_WX_USER_INFO);
                 //未登录 页面重定向 获取用户openid
@@ -93,6 +93,11 @@ public class WxFilter implements Filter {
                 }
                 //判断是否绑定用户
             }
+        }else{
+            //跳转至公众号授权注册页面
+            RequestDispatcher dispatcher = request.getRequestDispatcher("/pcPage");
+            dispatcher.forward(request, response);
+            return;
         }
         chain.doFilter(servletRequest, servletResponse);
         return;
