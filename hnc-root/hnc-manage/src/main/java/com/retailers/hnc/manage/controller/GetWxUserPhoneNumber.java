@@ -3,7 +3,7 @@ package com.retailers.hnc.manage.controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.hnc.manage.base.BaseController;
-import com.retailers.tools.http.MyHttpUrlConnection;
+import com.retailers.hnc.common.util.MyHttpUrlConnection;
 import com.retailers.tools.utils.Base64;
 import com.retailers.wx.common.config.WxConfig;
 import org.springframework.stereotype.Controller;

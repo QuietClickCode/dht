@@ -1,4 +1,4 @@
-package com.retailers.tools.http;
+package com.retailers.hnc.common.util;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
@@ -76,7 +76,7 @@ public class MyHttpUrlConnection {
         return cipher.doFinal(encData);
     }
 
-    public String decryptPhoneData(String encryptData,String iv,String sessionKey){
+    public static String decryptPhoneData(String encryptData,String iv,String sessionKey){
         byte[] bt1 = Base64.decode(sessionKey);
         byte[] bt2 = Base64.decode(iv);
         byte[] bt3 = Base64.decode(encryptData);
@@ -92,19 +92,5 @@ public class MyHttpUrlConnection {
         return null;
     }
 
-    public static void main(String[] args) {
-        String iv = "pnHQ0VRWLJeGNIzgHkRh5Q==";
-        String sessionkey = "D1JyVulT4gp9YhTnlfO26w==";
-        String endata = "WIzO1dvfJeRNvSjnUHYQMy4UJJ0WFHVlnReYVK9tps3VrC/EbcdmXC90F2tvUkaEhLxfDfNGbwZRLgU1s/JY1zzA0cwsvNV3ESGQkw5MxzxBjAUQKPBWFZGPRrO2CV+/K0oslicrOy+SHCFbcl54gwO6Kw05DO9XZeFbFLsAOp/hTqMVSJ7a8Kg/ItvI16efFz8JoS0/A9y/x2Oqn0t01w==";
-        byte[] bt1 = Base64.decode(sessionkey);
-        byte[] bt2 = Base64.decode(iv);
-        byte[] bt3 = Base64.decode(endata);
-        try {
-            System.out.println(new String(MyHttpUrlConnection.decrypt(bt1,bt2,bt3)));
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-    }
 
 }

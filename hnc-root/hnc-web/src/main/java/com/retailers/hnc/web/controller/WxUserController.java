@@ -10,10 +10,9 @@ import com.retailers.hnc.common.service.EmployeeManageService;
 import com.retailers.hnc.common.service.WxAuthUserService;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.hnc.web.constant.WebSystemConstant;
-import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
-import com.retailers.tools.encrypt.EncryptUtil;
+import com.retailers.hnc.common.util.MyHttpUrlConnection;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.wx.common.config.WxConfig;
 import org.apache.http.HttpEntity;
@@ -28,13 +27,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.validation.constraints.NotEmpty;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by niconiconi on 2017/10/30.
@@ -52,8 +46,17 @@ public class WxUserController extends BaseController {
 
     @RequestMapping("/login")
     @ResponseBody
-    public Map<String,Object> queryProjectByGt(String code, WxAuthUser wxAuthUser,String phone){
-        return loginReturnMap(code,wxAuthUser,phone);
+    public Map<String,Object> queryProjectByGt(String code, WxAuthUser wxAuthUser,String encryptedData,String iv){
+
+        return loginReturnMap(code,wxAuthUser,encryptedData,iv);
+    }
+
+
+
+    @RequestMapping("/checkClientComeIn")
+    @ResponseBody
+    public Map<String,Object> checkClientComeIn(String validateCode){
+        return null;
     }
 
 
@@ -65,12 +68,7 @@ public class WxUserController extends BaseController {
 
 
 
-
-
-
-
-
-    public Map<String,Object> loginReturnMap(String code,WxAuthUser wxAuthUser,String phone) {
+    public Map<String,Object> loginReturnMap(String code,WxAuthUser wxAuthUser,String encryptedData,String iv) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?" +
                 "appid=" + WxConfig.APP_ID+
                 "&secret=" + WxConfig.APP_SECRET+
@@ -90,6 +88,8 @@ public class WxUserController extends BaseController {
                 JSONObject jsonObject = JSON.parseObject(respStr);
                 String openid = jsonObject.getString("openid");
                 String unionid = jsonObject.getString("unionid");
+                String sessionKey = jsonObject.getString("session_key");
+                String phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
                 if(ObjectUtils.isNotEmpty(openid)){
                     Map params = new HashMap();
                     params.put("wauOpenid",openid);
@@ -136,6 +136,7 @@ public class WxUserController extends BaseController {
                     map.put(randStr,endTime);
                     returnMap.put("randStr",randStr);
                     returnMap.put("type",type);
+                    returnMap.put("phone",phone);
                     System.out.println(randStr);
                     return returnMap;
                 }else{
@@ -154,6 +155,7 @@ public static void main(String[] a){
         String str = GetFromServer(url);
     System.out.println(str);
 }
+
 
     public static String GetFromServer(String url) {
         String retStr="";
