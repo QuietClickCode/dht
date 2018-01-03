@@ -1,9 +1,8 @@
 
 package com.retailers.hnc.common.service;
-import com.retailers.hnc.common.vo.ClientIntentionVo;
+import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.hnc.common.entity.OpeningEmpClient;
 
 import java.util.Map;
 /**

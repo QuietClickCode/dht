@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.service.EmRelationshipService;
+import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
@@ -25,6 +26,9 @@ import java.util.Map;
 public class EmployeeRelationshipController extends BaseController{
     @Autowired
     EmRelationshipService emRelationshipService;
+
+    @Autowired
+    OpeningEmpClientService empClientService;
 
     @RequestMapping("/EmployeeRelationshipMapping")
     @Menu(parentRes = "sys.manager.appointment",resourse = "employeeRelationship.EmployeeRelationshipMapping",description = "分配预约名额",label = "分配预约名额")
@@ -101,7 +105,6 @@ public class EmployeeRelationshipController extends BaseController{
 
 
     @RequestMapping("/queryOpeningStatus")
-    @Function(label = "查询是否绑定预约关系",description = "查询是否绑定预约关系",resourse = "employeeRelationship.queryOpeningStatus",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
     @ResponseBody
     public HashMap<String,Integer> queryOpeningStatus(Long pId){
         Integer flag = emRelationshipService.queryOpeningStatus(pId);
@@ -109,4 +112,16 @@ public class EmployeeRelationshipController extends BaseController{
         map.put("flag",flag);
         return map;
     }
+
+    @RequestMapping("/checkCanChangeEmpNum")
+    @ResponseBody
+    public HashMap<String,Object> checkCanChangeEmpNum(Long oid,Long eid,Long num){
+        Boolean flag = empClientService.checkCanChangeEmpNum(oid,eid,num);
+
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("flag",flag);
+        return map;
+    }
+
+
 }

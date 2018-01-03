@@ -127,6 +127,10 @@
 <%--添加预约关系--%>
 <script>
     $(".subEmRelationship").click(function () {
+        if(!flag){
+            layer.msg("请重新分配预约名额",{time:"1000"});
+            return;
+        }
         var scanCodeList = new Array();
         $(".menberNum").each(function () {
             var floorRe = new Object();
@@ -150,108 +154,39 @@
         });
     });
 
+    var flag;
+
     function addEmployeeRelationship($this) {
         let count = 0;
         $(".menberNum").each(function () {
             count = Number(count) + Number($(this).val());
          });
         if(count > omenberNumber){
+            flag = false;
             layer.msg("当前可分配名额不足");
             return;
         }
+        checkCanChangeEmpNum($this);
+        flag = true;
         $("#MenberNum").val(omenberNumber - count);
     }
+    
+    function checkCanChangeEmpNum($this) {
+        $.ajax({
+            url:"/employeeRelationship/checkCanChangeEmpNum",
+            method:"post",
+            dataType:"json",
+            data:{
+                oid:oid,
+                eid:$($this).attr("data-emid"),
+                num:$($this).val()
+            },
+            success:function (data) {
+                console.log(data.flag);
+            }
+        });
+    }
 </script>
-
-<%--<script>
-    function getRelationshipNum() {
-        let num = "";
-        $(".menberNum").each(function () {
-            num += $(this).val();
-        });
-        return num;
-    }
-</script>--%>
-
-<%--&lt;%&ndash;添加预约关系&ndash;%&gt;
-<script>
-    var menberNumber;
-    function getMenberCount($this) {
-        menberNumber = $($this).val();
-        if(menberNumber == ""){
-            menberNumber = 0;
-            return;
-        }
-    }
-
-    function setEmployeeRelationship($this) {
-        if($($this).val() == "")
-            return;
-        let parentId = $($this).attr("data-parentid");
-        let val = $($this).val();
-        $("#a"+parentId).val(val);
-        console.log($("#a"+parentId).val());
-        if(flag){
-            updateEmployeeRelationship($this);
-        }else if(!flag){
-            addEmployeeRelationship($this)
-        }
-    }
-    
-    function addEmployeeRelationship($this) {
-        let val = $($this).val();
-        let num = $("#MenberNum").val();
-        if(menberNumber == val)
-            return;
-        if(num - val < 0){
-            layer.msg("分配名额不足");
-            return;
-        }
-        let n = Number(num) + Number(menberNumber) - Number(val);
-        $("#MenberNum").val(n);
-        $.ajax({
-            url:"/employeeRelationship/addEmRelationship",
-            method:"post",
-            dataType:"json",
-            data:{
-                emId:$($this).attr("data-emid"),
-                parentId:$($this).attr("data-parentid"),
-                pid:oid,
-                emReservation:$($this).val()
-            },
-            success:function (data) {
-                layer.msg(data.msg,{time:'1000'});
-            }
-        });
-    }
-    
-    function updateEmployeeRelationship($this) {
-        let val = $($this).val();
-        let num = $("#MenberNum").val();
-        if(menberNumber == val)
-            return;
-        if(num - val < 0){
-            layer.msg("分配名额不足");
-            return;
-        }
-        $("#MenberNum").val(num + menberNumber - val);
-        $.ajax({
-            url:"/employeeRelationship/updateEmRelationship",
-            method:"post",
-            dataType:"json",
-            data:{
-                erId:$($this).attr("data-erid"),
-                emId:$($this).attr("data-emid"),
-                parentId:$($this).attr("data-parentid"),
-                pid:oid,
-                emReservation:$($this).val()
-            },
-            success:function (data) {
-                layer.msg(data.msg,{time:'1000'});
-            }
-        });
-    }
-</script>--%>
 
 
 <script type="text/javascript">

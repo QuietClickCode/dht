@@ -125,10 +125,10 @@
 
 	<!--批量添加置业顾问 -->
 	<insert id="saveEmRelationshipList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="erId">
-		INSERT INTO t_em_relationship (p_id,em_id,parent_id,em_reservation,is_delete) VALUES
+		INSERT INTO t_em_relationship (p_id,em_id,parent_id,em_reservation,is_delete,version) VALUES
 		<foreach collection ="list" item="em" index= "index" separator =",">
 			(
-			#{em.pid},#{em.emId},#{em.parentId},#{em.emReservation},#{em.isDelete}
+			#{em.pid},#{em.emId},#{em.parentId},#{em.emReservation},#{em.isDelete},#{em.version}
 			)
 		</foreach>
 	</insert>

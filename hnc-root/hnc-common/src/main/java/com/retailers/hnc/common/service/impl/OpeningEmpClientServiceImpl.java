@@ -191,7 +191,10 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		for (OpeningEmpClient openingEmpClient:openingEmpClients){
 			oecIds.add(openingEmpClient.getOecId());
 		}
-		openingEmpClientMapper.deleteOpeningEmpClientByOecIds(oecIds);
+		System.out.println(oecIds.size());
+		if(ObjectUtils.isNotEmpty(oecIds)){
+			openingEmpClientMapper.deleteOpeningEmpClientByOecIds(oecIds);
+		}
 		return true;
 	}
 

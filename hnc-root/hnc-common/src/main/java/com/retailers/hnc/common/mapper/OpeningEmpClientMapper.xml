@@ -262,10 +262,9 @@
 	</delete>
 
 	<update id="deleteOpeningEmpClientByOecIds">
-		UPDATE t_opening_emp_client
-		SET is_delete=1
-		WHERE
-		WHERE oec_id IN
+		UPDATE t_opening_emp_client t1
+		SET t1.is_delete=1
+		WHERE t1.oec_id IN
 		<foreach collection="oecIds" separator="," open="(" close=")" item="oecId">
 			#{oecId}
 		</foreach>
