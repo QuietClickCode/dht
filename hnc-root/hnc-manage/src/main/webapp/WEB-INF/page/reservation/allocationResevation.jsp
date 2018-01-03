@@ -149,13 +149,14 @@
             contentType: "application/json",
             data:JSON.stringify(scanCodeList),
             success:function (data) {
-
+                layer.msg("分配成功");
+                refreshTableData();
             }
         });
     });
 
     var flag;
-
+    var status;
     function addEmployeeRelationship($this) {
         let count = 0;
         $(".menberNum").each(function () {
@@ -166,7 +167,11 @@
             layer.msg("当前可分配名额不足");
             return;
         }
-        checkCanChangeEmpNum($this);
+        if($($this).val() != ""){
+            checkCanChangeEmpNum($this);
+            if(!status)
+                return;
+        }
         flag = true;
         $("#MenberNum").val(omenberNumber - count);
     }
@@ -182,7 +187,10 @@
                 num:$($this).val()
             },
             success:function (data) {
-                console.log(data.flag);
+                status = data.flag;
+                if(!data.flag) {
+                    layer.msg("请重新分配",{time:"1000"});
+                }
             }
         });
     }
@@ -364,7 +372,7 @@
         $('#goodsClassificationTable').bootstrapTable(
             "refresh",
             {
-                url:"/openSalePromotion/querySalePromotionLists"
+                url:"/employeeRelationship/queryAllClient"
             }
         );
     }
