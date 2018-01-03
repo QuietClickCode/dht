@@ -100,10 +100,10 @@
         <div class="list">
             <span class="name">优惠详情</span>
         </div>
-        <div class="list">
-            <span class="name">会员折扣</span>
-            <span class="text">5.8折</span>
-        </div>
+        <%--<div class="list">--%>
+            <%--<span class="name">会员折扣</span>--%>
+            <%--<span class="text">5.8折</span>--%>
+        <%--</div>--%>
         <div class="list coupon-wrap">
             <a href="javascript: ;">
                 <span class="name">优惠券</span>
@@ -466,7 +466,7 @@
                                     small = '打'
                                     strong = row.couponVal;
                                     small1 = '折';
-                                }else{
+                                }else if(cpType==0){
                                     small = '￥';
                                     strong = row.couponVal;
                                 }
@@ -523,8 +523,10 @@
                                         var yh = '';
                                         if(type==0){
                                             yh = '￥'+val;
-                                        }else{
+                                        }else if(type==1){
                                             yh = '打'+val+'折';
+                                        }else{
+                                            yh = '包邮';
                                         }
                                         html += '<span>'+yh+'</span>'+
                                             '</li>';
@@ -661,6 +663,8 @@
         var downprice = 0;
         var goodsdivs = $('.order-product');
         var gcpdowncutprice = 0;
+        var isFreeFreight = false;
+        var freeFreightIndex = 0;
         if(goodsdivs!=null && goodsdivs.length>0){
             for(var i=0;i<goodsdivs.length;i++){
                 var goods = $(goodsdivs[i]);
@@ -671,13 +675,18 @@
                 if(gcps!=null&&gcps.length>0){
                     var gcpRateArr = new Array();
                     var gcpCashArr = new Array();
-
+                    var freeFreightArr = new Array();
                     for(var j=0;j<gcps.length;j++){
                         var gcpType = $(gcps[j]).attr('gcptype');
                         if(gcpType==1){
                             gcpRateArr.push(gcps[j]);
-                        }else{
+                        }else if(gcpType==0){
                             gcpCashArr.push(gcps[j]);
+                        }else if (gcpType==2){
+                            if(freeFreightIndex==0){
+                                isFreeFreight = true;
+                            }
+                            freeFreightArr.push(gcps[j]);
                         }
                     }
                     var ingdPrice = Number(gdprice);
@@ -689,10 +698,13 @@
                         var val =  Number($(gcpCashArr[j]).attr('val'));
                         ingdPrice = ingdPrice - val;
                     }
+                    if(freeFreightArr.length==0){
+                        isFreeFreight = isFreeFreight&&false;
+                    }
                     ingdPrice = ingdPrice.toFixed(2);
                     var nowoneprice = (gdprice - ingdPrice).toFixed(2);
 
-                    gcpdowncutprice += Number(nowoneprice) * num;
+                    gcpdowncutprice += Number(nowoneprice);
                     downprice += nowoneprice;
                 }
             }
@@ -752,6 +764,12 @@
         $('#couponspan').html('<span class="mr_4">￥</span>-'+coupondowncutprice.toFixed(2));
         lastPrice = lastPrice - coupondowncutprice +gfPrice;
         var cutdownprice = gcpdowncutprice+coupondowncutprice;
+
+        if(isFreeFreight){
+            cutdownprice += gfPrice;
+            lastPrice = lastPrice - gfPrice;
+            $('#goodsFreight').html('<span class="mr_4">￥</span>0');
+        }
 
         $('#cutdownprice').html('<span class="mr_4">￥</span>'+Number(cutdownprice).toFixed(2));
         $('#finalPrice').html('<span class="mr_4">￥</span>'+ Number(lastPrice).toFixed(2));
