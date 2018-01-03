@@ -59,6 +59,8 @@ public interface ScanCodeService {
 	 */
 	public boolean deleteScanCodeByScId(Long scId);
 
+	public boolean deleteOpeningEmployee(Long oid);
+
 }
 
 

@@ -33,7 +33,7 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 	private TeamService teamService;
 
 	public boolean saveScanCode(List<ScanCode> scanCodeList) {
-		int status = 0;
+		int status = 1;
 		if(scanCodeList.size() != 0){
 			ScanCode code = scanCodeList.get(0);
 			Long oid = code.getOid();
@@ -55,11 +55,12 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 				scanCodes.add(entry.getValue());
 			}
 
-			System.out.println(scanCodes.size()+"size");
 			for(ScanCode scanCode:scanCodes){
 				System.out.println(scanCode.getEmId());
 			}
-			status = scanCodeMapper.saveScanCode(scanCodes);
+
+			if(scanCodes.size() != 0)
+				status = scanCodeMapper.saveScanCode(scanCodes);
 		}
 		return status == 1 ? true : false;
 
@@ -74,7 +75,13 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 		return scanCodeMapper.queryScanCodeByScId(scId);
 	}
 
-	public Pagination<ScanCodeVo> queryScanCodeList(Map<String, Object> params,int pageNo,int pageSize) {
+	public boolean deleteOpeningEmployee(Long oid) {
+		int status = scanCodeMapper.deleteOpeningEmployee(oid);
+		System.out.println(status);
+		return status != 0 ? true : false;
+	}
+
+	public Pagination<ScanCodeVo> queryScanCodeList(Map<String, Object> params, int pageNo, int pageSize) {
 		Pagination<ScanCodeVo> page = new Pagination<ScanCodeVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);

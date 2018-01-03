@@ -57,6 +57,11 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return emRelationshipMapper.queryEmRelationshipByErId(erId);
 	}
 
+	public boolean saveEmRelationshipList(List<EmRelationship> emRelationships) {
+		int status = emRelationshipMapper.saveEmRelationshipList(emRelationships);
+		return status == 1 ? true : false;
+	}
+
 	public EmRelationship queryEmployeeNum(EmRelationship emRelationship) {
 		return emRelationshipMapper.queryEmployeeNum(emRelationship);
 	}

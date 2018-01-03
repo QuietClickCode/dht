@@ -122,4 +122,14 @@
 	<select id="queryEmployeeNum" resultMap="rm_emRelationship" parameterType="com.retailers.hnc.common.entity.EmRelationship">
 		select * from t_em_relationship where p_id = #{pid} and em_id = #{emId} and is_delete = 0
 	</select>
+
+	<!--批量添加置业顾问 -->
+	<insert id="saveEmRelationshipList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="erId">
+		INSERT INTO t_em_relationship (p_id,em_id,parent_id,em_reservation,is_delete) VALUES
+		<foreach collection ="list" item="em" index= "index" separator =",">
+			(
+			#{em.pid},#{em.emId},#{em.parentId},#{em.emReservation},#{em.isDelete}
+			)
+		</foreach>
+	</insert>
 </mapper>
