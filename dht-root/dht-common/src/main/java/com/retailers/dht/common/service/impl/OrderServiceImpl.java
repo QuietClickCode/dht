@@ -249,8 +249,8 @@ public class OrderServiceImpl implements OrderService {
                 if(Boolean.valueOf(rtnMaps.get("isFreeShipping")+"")){
                     logisticsPrice=0l;
                 }
-                if(ObjectUtils.isNotEmpty(rtnMap.get("couponTotalPrice"))){
-					gcPrice=Long.valueOf(rtnMap.get("couponTotalPrice")+"");
+                if(ObjectUtils.isNotEmpty(rtnMaps.get("couponTotalPrice"))){
+					gcPrice=Long.valueOf(rtnMaps.get("couponTotalPrice")+"");
 				}
 
             }
