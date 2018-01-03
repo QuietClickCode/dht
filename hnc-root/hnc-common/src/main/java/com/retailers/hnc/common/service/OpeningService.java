@@ -61,6 +61,8 @@ public interface OpeningService {
 	public Pagination<OpeningVo> queryOpeningVoList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public List<OpeningVo> queryOFrelByOid(Long oid);
+
+	public Opening queryEarlyOpening();
 }
 
 

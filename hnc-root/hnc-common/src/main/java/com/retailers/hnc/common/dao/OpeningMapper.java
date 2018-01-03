@@ -56,4 +56,6 @@ public interface OpeningMapper {
 	public List<OpeningVo> queryOpeningVoList(Pagination<OpeningVo> pagination);
 
 	public List<OpeningVo> queryOFrelByOid(Long oid);
+
+	public Opening queryEarlyOpening();
 }

@@ -466,6 +466,7 @@
      * */
     function initFormData(key){
         var rowData=rowDatas.get(parseInt(key,10));
+
         if(rowData){
             $("#editorGoodsLabelForm #glId").val(rowData.glId);
             $("#editorGoodsLabelForm #glName").val(rowData.glName);
@@ -493,6 +494,9 @@
             $("#editorGoodsLabelForm #glStarttime").val('');
             $("#editorGoodsLabelForm #glEndtime").val('');
             $("#searchDateRange").html('');
+
+            $('#reportrange').val(' - 2023-12-31 23:59:59');
+
             document.getElementById("isGoodsShow").checked = true;
             $('#chosebtn').hide();
         }
@@ -502,8 +506,7 @@
      **/
     function addGoodsLabel(){
         editorGoodsLabelType=0;
-        initFormData();
-
+        initFormData(-1);
         $("#editorSysUserTitle").text("添加商品标签");
         $('#editorSysUser').modal("show")
     }
@@ -934,6 +937,7 @@
         $('#reportrange').daterangepicker(
             {
                 startDate: moment(),
+                endDate:"2023-12-31 23:59:59",
                 minDate : moment(),
                 showDropdowns : true,
                 timePicker:true,

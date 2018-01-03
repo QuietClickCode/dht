@@ -2,10 +2,13 @@ package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.OpeningEmpClientVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：开盘与雇员和客户的关系表DAO
  * @author fanghui
@@ -39,6 +42,8 @@ public interface OpeningEmpClientMapper {
 	 * @date 2017-12-29 09:01:40
 	 */
 	public int deleteOpeningEmpClientByOecId(Long oecId);
+
+	public int deleteOpeningEmpClientByOecIds(@Param("oecIds") List<Long> oecIds);
 	/**
 	 * 根据OecId查询开盘与雇员和客户的关系表
 	 * @param oecId
@@ -61,4 +66,10 @@ public interface OpeningEmpClientMapper {
 	public List<ClientManageVo> queryCheckingandpassandnotpassList(Pagination<ClientManageVo> pagination);
 
 	public int updateOpeningEmpClientByOecIds(@Param("oecIdList") List<Long> oecIdList,@Param("status") Long status,@Param("msg") String msg);
+
+	public List<ClientManageVo> queryCheckingandpassandnotpassListWeb(Pagination<ClientManageVo> pagination);
+
+	public List<ClientManageVo> queryNotGivenListWeb(Pagination<ClientManageVo> pagination);
+
+	public List<OpeningEmpClientVo> queryCheckingandpassandnotpassNumWeb(@Param("params") Map params);
 }

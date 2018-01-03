@@ -61,7 +61,12 @@ public class GoodsGtgclrelController extends BaseController {
     @RequestMapping("/addGoodsGtgclrel")
     @ResponseBody
     public BaseResp addGoodsGtgclrel(String gclIds,Long gtId){
-        boolean flag=goodsGtgclrelService.saveGoodsGtgclrel(gclIds,gtId);
+        boolean flag=false;
+        if(ObjectUtils.isNotEmpty(gclIds)){
+            gclIds = gclIds.substring(1);
+            flag = goodsGtgclrelService.saveGoodsGtgclrel(gclIds,gtId);
+        }
+
         return success(flag);
     }
 

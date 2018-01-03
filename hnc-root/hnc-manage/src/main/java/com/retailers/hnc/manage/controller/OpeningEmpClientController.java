@@ -75,14 +75,6 @@ public class OpeningEmpClientController extends BaseController{
         return success(flag);
     }
 
-    @RequestMapping("changeClientStatus")
-    @ResponseBody
-    public BaseResp changeClientStatus(Long oid, Long status,String cmIds, HttpServletRequest request){
-        Long eid = getCurLoginUserId(request);
-        boolean flag = openingEmpClientService.changeClientStatus(oid,eid,cmIds,status);
-        return success(flag);
-    }
-
     @RequestMapping("updateOpeningEmpClient")
     @ResponseBody
     public BaseResp updateOpeningEmpClient(String oecIds,Long status,String msg){

@@ -10,6 +10,51 @@ public class ClientManageVo extends ClientManage {
     private String empName;
     private Long oecId;
     private String oecMsg;
+    private String hids;
+    private String fids;
+    private String floorsName;
+    private String hoursesName;
+    private String imgurl;
+
+    public String getImgurl() {
+        return imgurl;
+    }
+
+    public void setImgurl(String imgurl) {
+        this.imgurl = imgurl;
+    }
+
+    public String getHoursesName() {
+        return hoursesName;
+    }
+
+    public void setHoursesName(String hoursesName) {
+        this.hoursesName = hoursesName;
+    }
+
+    public String getFloorsName() {
+        return floorsName;
+    }
+
+    public void setFloorsName(String floorsName) {
+        this.floorsName = floorsName;
+    }
+
+    public String getFids() {
+        return fids;
+    }
+
+    public void setFids(String fids) {
+        this.fids = fids;
+    }
+
+    public String getHids() {
+        return hids;
+    }
+
+    public void setHids(String hids) {
+        this.hids = hids;
+    }
 
     public String getOecMsg() {
         return oecMsg;

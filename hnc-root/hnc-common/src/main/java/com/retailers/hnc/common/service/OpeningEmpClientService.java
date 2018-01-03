@@ -60,14 +60,19 @@ public interface OpeningEmpClientService {
 
 	public Pagination<ClientManageVo> queryNotGivenList(Map<String, Object> params, int pageNo, int pageSize);
 
+	public Pagination<ClientManageVo> queryNotGivenListWeb(Map<String, Object> params, int pageNo, int pageSize);
+
 	public Pagination<ClientManageVo> queryCheckingandpassandnotpassList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Pagination<ClientManageVo> queryCheckingandpassandnotpassListWeb(Map<String, Object> params, int pageNo, int pageSize);
 
 	public boolean addCheckClient(Long oid,Long eid,String cmIds);
 
-	public boolean changeClientStatus(Long oid,Long eid,String cmIds,Long status);
-
 	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg);
 
+	public boolean checkCanChangeEmpNum(Long oid,Long eid,Long num);
+
+	public Map queryCheckingandpassandnotpassNumWeb(Map params);
 }
 
 
