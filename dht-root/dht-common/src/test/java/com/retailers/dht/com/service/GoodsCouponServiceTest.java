@@ -133,8 +133,8 @@ public class GoodsCouponServiceTest extends TestBaseJunit {
         long uid=11;
         List<BuyGoodsDetailVo> bg=new ArrayList<BuyGoodsDetailVo>();
         BuyGoodsDetailVo vo =new BuyGoodsDetailVo();
-        vo.setGdId(857l);
-        vo.setNum(7);
+        vo.setGdId(859l);
+        vo.setNum(2);
         bg.add(vo);
         Map<String,Object> map = goodsCouponService.queryGoodsCouponLists(uid,bg);
         System.out.println(JSON.toJSON(map));

@@ -119,7 +119,7 @@ public class GoodsCouponVo {
 
     public Date getGcpStartTime() {
         if(ObjectUtils.isNotEmpty(gcpStartTime)){
-            return DateUtil.stringToDate(gcpEndTime,DateUtil.DATE_WITHSECOND_FORMAT);
+            return DateUtil.stringToDate(gcpStartTime,DateUtil.DATE_WITHSECOND_FORMAT);
         }
         return null;
     }
