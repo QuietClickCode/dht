@@ -28,4 +28,5 @@
     <import resource="classpath:spring-common-hnc-mvc.xml"/>
     <!-- 初始化微信token -->
     <bean id="wxSystemInit" class="com.retailers.wx.common.utils.WxSystemInit" init-method="initWxToken"/>
+    <bean id="getWxAccessToken" class="com.retailers.hnc.web.job.ManageTaskJob" init-method="getAccessToken"/>
 </beans>

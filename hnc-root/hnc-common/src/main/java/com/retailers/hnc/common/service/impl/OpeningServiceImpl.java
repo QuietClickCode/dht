@@ -87,6 +87,11 @@ public class OpeningServiceImpl implements OpeningService {
 		return opening;
 	}
 
+	public Opening queryRuningOpening(){
+		Opening opening = openingMapper.queryRuningOpening();
+		return opening;
+	}
+
 	public void addOFrel(int status,Opening opening,String floors){
 		if(status==1){
 			OpeningFloor openingFloor = new OpeningFloor();

@@ -7,7 +7,7 @@ import java.util.Date;
  * @author fanghui
  * @version 1.0
  * @since 1.8
- * @date 2018-01-03 23:28:11
+ * @date 2018-01-04 00:14:34
  */
 public class CheckUser implements java.io.Serializable {
 
@@ -27,6 +27,9 @@ public class CheckUser implements java.io.Serializable {
 	/**是否使用 0未使用 1已使用*/
 	@NotEmpty
 	private Long isUse;
+	/**使用时间*/
+	@NotEmpty
+	private Date useTime;
 	/**是否删除 0没删除 1已删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -76,6 +79,13 @@ public class CheckUser implements java.io.Serializable {
 
 	public Long getIsUse() {
 		return this.isUse;
+	}
+	public void setUseTime(Date value) {
+		this.useTime = value;
+	}
+
+	public Date getUseTime() {
+		return this.useTime;
 	}
 	public void setIsDelete(Long value) {
 		this.isDelete = value;
