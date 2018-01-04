@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletResponse;
@@ -41,23 +42,42 @@ public class EWMCodeUrlController extends BaseController {
         jsonObject.put("scene",scene);
         jsonObject.put("width",width);
         String jsonStr = jsonObject.toJSONString();
-        Map map = new HashMap();
-        String resp = HttpClientUtil.doPostBodyJson(url,jsonStr);
-        System.out.println(resp);
-        try {
-            System.out.println();
-            byte[] bytes = resp.getBytes("UTF-8");
-            System.out.println(bytes.length);
-            response.setContentType("text/html;charset=UTF-8");
-            ServletOutputStream out = response.getOutputStream();
-            out.write(bytes);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+        setResponseHeaders(response);
+        HttpClientUtil.doPostRQCode(url,jsonStr,response);
+
+
+//        try {
+//            System.out.println();
+//            byte[] bytes = resp.getBytes("UTF-8");
+//            System.out.println(bytes.length);
+//            response.setContentType("text/html;charset=UTF-8");
+//            ServletOutputStream out = response.getOutputStream();
+//            out.write(bytes);
+//        }catch (Exception e){
+//            e.printStackTrace();
+//        }
     }
 
-
-
+    protected void setResponseHeaders(HttpServletResponse response) {
+        response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-cache, no-store");
+        response.setHeader("Pragma", "no-cache");
+        long time = System.currentTimeMillis();
+        response.setDateHeader("Last-Modified", time);
+        response.setDateHeader("Date", time);
+        response.setDateHeader("Expires", time);
+    }
+    public static final byte[] input2byte(InputStream inStream)
+            throws IOException {
+        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
+        byte[] buff = new byte[100];
+        int rc = 0;
+        while ((rc = inStream.read(buff, 0, 100)) > 0) {
+            swapStream.write(buff, 0, rc);
+        }
+        byte[] in2b = swapStream.toByteArray();
+        return in2b;
+    }
 
 }
 

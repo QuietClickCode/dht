@@ -25,10 +25,9 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.*;
 
@@ -353,5 +352,64 @@ public class HttpClientUtil {
 			}
 		}
 		return httpStr;
+	}
+
+
+	/**
+	 * 发送 POST 请求（HTTP），JSON形式
+	 * @param apiUrl
+	 * @param json json对象
+	 * @return
+	 */
+	public static InputStream doPostRQCode(String apiUrl, String json,HttpServletResponse out) {
+		CloseableHttpClient httpclient =HttpClientManager.getHttpClient();
+		HttpClientContext context = HttpClientContext.create();
+		String httpStr = null;
+		HttpPost httpPost = new HttpPost(apiUrl);
+		CloseableHttpResponse response = null;
+		try {
+			httpPost.setConfig(HttpClientManager.requestConfig);
+			StringEntity stringEntity = new StringEntity(json,"UTF-8");//解决中文乱码问题
+			stringEntity.setContentEncoding("UTF-8");
+			stringEntity.setContentType("application/json");
+			httpPost.setEntity(stringEntity);
+			response = httpclient.execute(httpPost,context);
+//			HttpEntity entity = response.getEntity();
+//			HttpResponse response = httpClient.execute(httpPost);
+			if (response != null) {
+				HttpEntity resEntity = response.getEntity();
+				if (resEntity != null) {
+					InputStream instreams = resEntity.getContent();
+
+					try{
+						OutputStream outputStream=out.getOutputStream();
+						byte[] buffer=new byte[1024];
+						int len = 0;
+						while((len=instreams.read(buffer))!=-1){
+							outputStream.write(buffer,0,len);
+						}
+						outputStream.close();
+						instreams.close();
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+
+
+//					saveToImgByInputStream(instreams, "D:\\", "apr.jpg");
+				}
+			}
+//			httpStr = EntityUtils.toString(entity, "UTF-8");
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (response != null) {
+				try {
+					EntityUtils.consume(response.getEntity());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return null;
 	}
 }
