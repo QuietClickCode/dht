@@ -2,10 +2,8 @@ package com.retailers.hnc.web.controller;
 
 import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.entity.EmployeeManage;
-import com.retailers.hnc.common.entity.UserLikeHourse;
 import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.EmployeeManageService;
-import com.retailers.hnc.common.service.UserLikeHourseService;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
@@ -53,5 +51,16 @@ public class ClientManageController extends BaseController {
         clientManage.setTmId(cid);
         boolean flag = clientManageService.updateClientManage(clientManage);
         return success(flag);
+    }
+
+    @RequestMapping("queryClientManageById")
+    @CheckOpenId
+    @ResponseBody
+    public Map<String,Object> queryClientManageById(String randStr){
+        Long cid = getClientIdByOpenId(randStr);
+        ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
+        Map map = new HashMap();
+        map.put("user",clientManage);
+        return map;
     }
 }
