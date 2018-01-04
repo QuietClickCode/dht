@@ -374,13 +374,10 @@ public class HttpClientUtil {
 			stringEntity.setContentType("application/json");
 			httpPost.setEntity(stringEntity);
 			response = httpclient.execute(httpPost,context);
-//			HttpEntity entity = response.getEntity();
-//			HttpResponse response = httpClient.execute(httpPost);
 			if (response != null) {
 				HttpEntity resEntity = response.getEntity();
 				if (resEntity != null) {
 					InputStream instreams = resEntity.getContent();
-
 					try{
 						OutputStream outputStream=out.getOutputStream();
 						byte[] buffer=new byte[1024];
@@ -393,8 +390,6 @@ public class HttpClientUtil {
 					}catch(Exception e){
 						e.printStackTrace();
 					}
-
-
 //					saveToImgByInputStream(instreams, "D:\\", "apr.jpg");
 				}
 			}

@@ -44,18 +44,6 @@ public class EWMCodeUrlController extends BaseController {
         String jsonStr = jsonObject.toJSONString();
         setResponseHeaders(response);
         HttpClientUtil.doPostRQCode(url,jsonStr,response);
-
-
-//        try {
-//            System.out.println();
-//            byte[] bytes = resp.getBytes("UTF-8");
-//            System.out.println(bytes.length);
-//            response.setContentType("text/html;charset=UTF-8");
-//            ServletOutputStream out = response.getOutputStream();
-//            out.write(bytes);
-//        }catch (Exception e){
-//            e.printStackTrace();
-//        }
     }
 
     protected void setResponseHeaders(HttpServletResponse response) {
