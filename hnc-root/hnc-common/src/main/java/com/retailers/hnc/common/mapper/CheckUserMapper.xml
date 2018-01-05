@@ -8,13 +8,24 @@
 			<result property="cid" column="c_id"/>
 			<result property="cuValidateCode" column="cu_validate_code"/>
 			<result property="isUse" column="is_use"/>
+			<result property="useTime" column="use_time"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_checkUser_vo" type="com.retailers.hnc.common.vo.CheckUserVo">
+		<result property="cuId" column="cu_id"/>
+		<result property="oid" column="o_id"/>
+		<result property="cid" column="c_id"/>
+		<result property="cuValidateCode" column="cu_validate_code"/>
+		<result property="isUse" column="is_use"/>
+		<result property="useTime" column="use_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="openingDate" column="openingDate"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="checkUser_columns">
-		cu_id,o_id,c_id,cu_validate_code,is_use,is_delete,version
+		cu_id,o_id,c_id,cu_validate_code,is_use,use_time,is_delete,version
 	</sql>
 	<!-- 根据客户通过审核记录表主键取得数据 -->
 	<select id="queryCheckUserByCuId" resultMap="rm_checkUser" parameterType="java.lang.Long">
@@ -39,6 +50,12 @@
 			<if test="null != params.isUse">
 				AND is_use = #{params.isUse}
 			</if>
+			<if test="null != params.useTimeBegin">
+				AND use_time &gt;= #{params.useTime}
+			</if>
+			<if test="null != params.useTimeEnd">
+				AND use_time &lt;= #{params.useTime}
+			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
 			</if>
@@ -53,13 +70,30 @@
 		FROM t_check_user
 		<include refid="checkUser_where"/>
 	</select>
+
+	<select id="queryCheckUserValidateCode" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.*,
+		t3.o_start_time openingDate
+		FROM
+		t_check_user t1
+		LEFT JOIN t_opening t3 ON t1.o_id=t3.o_id and t3.is_delete=0
+		WHERE
+		t1.is_delete=0
+		and t1.c_id=#{cid}
+		and t1.o_id=
+		(SELECT t2.o_id
+		from t_opening t2
+		WHERE
+		t2.o_end_time>CURRENT_DATE() limit 1)
+	</select>
 	<!--添加客户通过审核记录表 -->
 	<insert id="saveCheckUser" parameterType="com.retailers.hnc.common.entity.CheckUser" useGeneratedKeys="true" keyProperty="cuId">
 		INSERT INTO t_check_user (
-			o_id,c_id,cu_validate_code,is_use,is_delete,version
+			o_id,c_id,cu_validate_code,is_use,use_time,is_delete,version
 		) VALUES
 		(
-			#{oid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{cuValidateCode,jdbcType=VARCHAR},#{isUse,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{oid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{cuValidateCode,jdbcType=VARCHAR},#{isUse,jdbcType=BIGINT},#{useTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改客户通过审核记录表 -->
@@ -77,6 +111,9 @@
             </if>
             <if test="null != isUse">
                 is_use = #{isUse},
+            </if>
+            <if test="null != useTime">
+                use_time = #{useTime},
             </if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},

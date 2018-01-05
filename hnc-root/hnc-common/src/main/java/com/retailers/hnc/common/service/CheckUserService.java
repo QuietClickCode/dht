@@ -1,5 +1,6 @@
 
 package com.retailers.hnc.common.service;
+import com.retailers.hnc.common.vo.CheckUserVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.CheckUser;
 import java.util.Map;
@@ -56,6 +57,8 @@ public interface CheckUserService {
 	public boolean deleteCheckUserByCuId(Long cuId);
 
 	public Map checkUser(String validateCode,Long eid);
+
+	public CheckUserVo queryCheckUserValidateCode( Long cid);
 }
 
 

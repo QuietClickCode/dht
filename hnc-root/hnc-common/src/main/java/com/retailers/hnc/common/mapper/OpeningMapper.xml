@@ -118,6 +118,15 @@
 		ORDER BY t1.o_start_time ASC
 		LIMIT 1
 	</select>
+
+	<select id="queryRuningOpening" resultMap="rm_opening">
+		SELECT
+		t1.*
+		FROM
+		t_opening t1
+		WHERE
+		CURRENT_DATE() BETWEEN t1.o_start_time and t1.o_end_time
+	</select>
 	<!--添加开盘表 -->
 	<insert id="saveOpening" parameterType="com.retailers.hnc.common.entity.Opening" useGeneratedKeys="true" keyProperty="oid">
 		INSERT INTO t_opening (

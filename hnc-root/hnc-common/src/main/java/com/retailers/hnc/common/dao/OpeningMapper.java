@@ -58,4 +58,6 @@ public interface OpeningMapper {
 	public List<OpeningVo> queryOFrelByOid(Long oid);
 
 	public Opening queryEarlyOpening();
+
+	public Opening queryRuningOpening();
 }

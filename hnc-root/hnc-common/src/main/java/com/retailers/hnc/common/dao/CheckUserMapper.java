@@ -1,6 +1,9 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.CheckUser;
+import com.retailers.hnc.common.vo.CheckUserVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：客户通过审核记录表DAO
@@ -52,4 +55,5 @@ public interface CheckUserMapper {
 	 */
 	public List<CheckUser> queryCheckUserList(Pagination<CheckUser> pagination);
 
+	public CheckUserVo queryCheckUserValidateCode(@Param("cid") Long cid);
 }

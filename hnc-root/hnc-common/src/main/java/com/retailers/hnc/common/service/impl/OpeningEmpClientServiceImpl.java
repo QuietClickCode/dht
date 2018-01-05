@@ -2,19 +2,14 @@
 package com.retailers.hnc.common.service.impl;
 
 import com.retailers.hnc.common.dao.OpeningEmpClientMapper;
-import com.retailers.hnc.common.entity.FloorManage;
-import com.retailers.hnc.common.entity.HouseTypeManage;
-import com.retailers.hnc.common.entity.Opening;
-import com.retailers.hnc.common.entity.OpeningEmpClient;
-import com.retailers.hnc.common.service.FloorManageService;
-import com.retailers.hnc.common.service.HouseTypeManageService;
-import com.retailers.hnc.common.service.OpeningEmpClientService;
-import com.retailers.hnc.common.service.OpeningService;
+import com.retailers.hnc.common.entity.*;
+import com.retailers.hnc.common.service.*;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.common.vo.OpeningEmpClientVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.wx.common.utils.wx.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +34,8 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	private FloorManageService floorManageService;
 	@Autowired
 	private HouseTypeManageService houseTypeManageService;
+	@Autowired
+	private CheckUserService checkUserService;
 
 	public boolean saveOpeningEmpClient(OpeningEmpClient openingEmpClient) {
 		int status = openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
@@ -166,9 +163,23 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 				Long oecIdLong = Long.parseLong(oecIdStr);
 				oecIdList.add(oecIdLong);
 			}
+
 		}
 		int index = 0;
 		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status,msg);
+		if(index==oecIdList.size()){
+			for(Long oecIdLong:oecIdList){
+				OpeningEmpClient openingEmpClient = queryOpeningEmpClientByOecId(oecIdLong);
+				CheckUser checkUser = new CheckUser();
+				checkUser.setIsUse(0L);
+				checkUser.setIsDelete(0L);
+				checkUser.setCid(openingEmpClient.getCid());
+				checkUser.setOid(openingEmpClient.getOid());
+				checkUser.setCuValidateCode(WXPayUtil.getStringRandom(32));
+				checkUser.setIsDelete(0L);
+				checkUserService.saveCheckUser(checkUser);
+			}
+		}
 		return index==oecIdList.size()?true:false;
 	}
 
