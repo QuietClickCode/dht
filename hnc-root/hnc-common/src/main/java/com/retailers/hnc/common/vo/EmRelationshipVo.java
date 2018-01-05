@@ -14,6 +14,15 @@ public class EmRelationshipVo extends EmRelationship {
     private Team team;
     private EmployeeManage employeeManage;
     private Long level;
+    private Long count;
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
+    }
 
     public String getTeamName() {
         return teamName;

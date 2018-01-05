@@ -52,6 +52,21 @@ public class WxUserController extends BaseController {
         return loginReturnMap(code,wxAuthUser,encryptedData,iv);
     }
 
+//    @RequestMapping("/saveUserInfo")
+//    @ResponseBody
+//    public void saveUserInfo(String randStr, WxAuthUser wxAuthUser, String encryptedData, String iv){
+//        Long cid = getClientIdByOpenId(randStr);
+//        Map params = new HashMap();
+//        params.put("wauUid",cid);
+//        List list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+//        if(ObjectUtils.isNotEmpty(list)){
+//            WxAuthUser wx = (WxAuthUser)list.get(0);
+//            wxAuthUser.setWauId(wx.getWauId());
+//            wxAuthUserService.updateWxAuthUser(wxAuthUser);
+//        }
+//    }
+
+
 
     @RequestMapping("/getAccessToken")
     @ResponseBody
@@ -82,7 +97,7 @@ public class WxUserController extends BaseController {
                 "&grant_type=authorization_code" +
                 "&js_code="+code;
         Long curTime = System.currentTimeMillis();
-        Long loginouttime = 2*60*60*1000L;//有效时间两个小时
+        Long loginouttime = 24*60*60*1000L;//有效时间24个小时
         Date endTime = new Date(curTime+loginouttime);
         Map returnMap = new HashMap();
         try {

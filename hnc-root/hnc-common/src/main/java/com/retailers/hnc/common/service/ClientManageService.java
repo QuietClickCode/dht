@@ -1,6 +1,8 @@
 
 package com.retailers.hnc.common.service;
+import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.OpeningVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.ClientManage;
 
@@ -49,6 +51,8 @@ public interface ClientManageService {
 	 * @date 2017-12-26 13:47:05
 	 */
 	public Pagination<ClientManage> queryClientManageList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Pagination<ClientManageVo> queryClientManageListWeb(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据tmId删除客户管理
 	 * @param tmId
@@ -76,6 +80,10 @@ public interface ClientManageService {
 
 
 	public Long queryClientManageIdByOpenid(String openid);
+
+	public List<ClientManageVo> queryClientManagerCount();
+
+	public OpeningVo queryEarlyCanComeIn(Long cid);
 }
 
 

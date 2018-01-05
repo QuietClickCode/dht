@@ -3,6 +3,8 @@ package com.retailers.hnc.common.service;
 import com.retailers.hnc.common.vo.CheckUserVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.CheckUser;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：客户通过审核记录表Service
@@ -59,6 +61,12 @@ public interface CheckUserService {
 	public Map checkUser(String validateCode,Long eid);
 
 	public CheckUserVo queryCheckUserValidateCode( Long cid);
+
+	public List<CheckUserVo> queryCheckUserVoList(Map<String, Object> params, int pageNo, int pageSize);
+
+	public Map queryCheckUserNum(Long oid);
+
+	public List<CheckUserVo> queryAchievement( Map params);
 }
 
 

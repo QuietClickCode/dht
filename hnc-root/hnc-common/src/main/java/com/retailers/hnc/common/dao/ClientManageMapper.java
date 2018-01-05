@@ -1,6 +1,10 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.ClientManage;
+import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.OpeningVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：客户表DAO
@@ -52,6 +56,7 @@ public interface ClientManageMapper {
 	 */
 	public List<ClientManage> queryClientManageList(Pagination<ClientManage> pagination);
 
+	public List<ClientManageVo> queryClientManageListWeb(Pagination<ClientManageVo> pagination);
 	/**
 	 * 查询当天登记过的客户
 	 * @return  返回当天登记过客户的总数
@@ -68,4 +73,7 @@ public interface ClientManageMapper {
 	 */
 	public Integer queryClientCount();
 
+	public List<ClientManageVo> queryClientManagerCount();
+
+	public OpeningVo queryEarlyCanComeIn(@Param("cid") Long cid);
 }

@@ -19,7 +19,38 @@
 			<result property="tmOrder" column="tm_order"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_clientManage_vo" type="com.retailers.hnc.common.vo.ClientManageVo">
+		<result property="tmId" column="tm_id"/>
+		<result property="tmName" column="tm_name"/>
+		<result property="tmSex" column="tm_sex"/>
+		<result property="tmEmployee" column="tm_employee"/>
+		<result property="tmAge" column="tm_age"/>
+		<result property="tmStatus" column="tm_status"/>
+		<result property="tmLoginStatus" column="tm_login_status"/>
+		<result property="tmPhone" column="tm_phone"/>
+		<result property="tmRegisterTime" column="tm_register_time"/>
+		<result property="tmIdCard" column="tm_id_card"/>
+		<result property="tmChannel" column="tm_channel"/>
+		<result property="tmInfo" column="tm_info"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="tmOrder" column="tm_order"/>
+		<result property="version" column="version"/>
+		<result property="hids" column="hids"/>
+		<result property="fids" column="fids"/>
+		<result property="count" column="count"/>
+	</resultMap>
+	<resultMap id="rm_opening_vo" type="com.retailers.hnc.common.vo.OpeningVo">
+		<result property="oid" column="o_id"/>
+		<result property="oname" column="o_name"/>
+		<result property="ostartTime" column="o_start_time"/>
+		<result property="oendTime" column="o_end_time"/>
+		<result property="onum" column="o_num"/>
+		<result property="omenberNum" column="o_menber_num"/>
+		<result property="oremark" column="o_remark"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="cuValidateCode" column="cuValidateCode"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="clientManage_columns">
 		tm_id,tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
@@ -90,6 +121,48 @@
 		SELECT <include refid="clientManage_columns" />
 		FROM t_client_manage
 		<include refid="clientManage_where"/>
+	</select>
+	<select id="queryClientManageListWeb" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		  SELECT
+			t1.*,
+			t2.f_ids fids,t2.h_ids hids
+		  FROM t_client_manage t1
+		  LEFT JOIN t_client_intention t2 ON t1.tm_id=t2.cm_id and t2.is_delete=0
+			WHERE
+			t1.is_delete=0
+			<if test="null!=params.tmEmployee">
+				and t1.tm_employee=#{params.tmEmployee}
+			</if>
+			<if test="null!=params.tmRegisterTime">
+				and t1.tm_register_time=CURRENT_DATE()
+			</if>
+
+			GROUP BY t1.tm_id
+	</select>
+
+	<select id="queryClientManagerCount" resultMap="rm_clientManage_vo">
+		SELECT
+		t1.tm_employee,count(*) count
+		FROM
+		t_client_manage t1
+		WHERE
+		t1.tm_employee is NOT NULL
+		GROUP BY t1.tm_employee
+	</select>
+
+	<select id="queryEarlyCanComeIn">
+		SELECT
+		t1.*,
+		t2.cu_validate_code cuValidateCode
+		FROM
+		t_opening t1,
+		t_check_user t2
+		WHERE
+		t1.o_id=t2.o_id
+		and t1.o_end_time>=CURRENT_DATE()
+		and t2.c_id=1
+		ORDER BY t1.o_end_time ASC
+		LIMIT 1
 	</select>
 	<!--添加客户表 -->
 	<insert id="saveClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage" useGeneratedKeys="true" keyProperty="tmId">

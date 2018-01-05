@@ -26,7 +26,6 @@ public class ClientIntentionController extends BaseController{
     ClientIntentionService clientIntentionService;
 
     @RequestMapping("/queryClientIntentionList")
-    @CheckOpenId
     @ResponseBody
     public Map<String,Object> queryClientIntentionList(String randStr){
         Long cid = getClientIdByOpenId(randStr);
@@ -39,7 +38,6 @@ public class ClientIntentionController extends BaseController{
     }
 
     @RequestMapping("/deleteClientIntention")
-    @CheckOpenId
     @ResponseBody
     public BaseResp deleteClientIntention(Long iid){
         boolean flag = clientIntentionService.deleteClientIntentionByIid(iid);
@@ -47,7 +45,6 @@ public class ClientIntentionController extends BaseController{
     }
 
     @RequestMapping("/saveClientIntention")
-    @CheckOpenId
     @ResponseBody
     public BaseResp saveClientIntention(ClientIntention clientIntention,String randStr){
         Long cmId = getClientIdByOpenId(randStr);
@@ -58,7 +55,6 @@ public class ClientIntentionController extends BaseController{
     }
 
     @RequestMapping("/updateClientIntention")
-    @CheckOpenId
     @ResponseBody
     public BaseResp updateClientIntention(ClientIntention clientIntention,String randStr){
         Long cmId = getClientIdByOpenId(randStr);

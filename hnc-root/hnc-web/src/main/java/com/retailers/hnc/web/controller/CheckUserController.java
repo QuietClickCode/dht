@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +31,6 @@ public class CheckUserController extends BaseController {
     CheckUserService checkUserService;
 
     @RequestMapping("updateCheckUser")
-    @CheckOpenId
     @ResponseBody
     public Map updateCheckUser(String validateCode,String phone){
         Long eid = getEmpIdByWxPhone(phone);
@@ -39,7 +39,6 @@ public class CheckUserController extends BaseController {
     }
 
     @RequestMapping("queryUsedOrNotUse")
-    @CheckOpenId
     @ResponseBody
     public Map queryUsedOrNotUse(String randStr,Long isUse){
         Long cid = getClientIdByOpenId(randStr);
@@ -54,7 +53,6 @@ public class CheckUserController extends BaseController {
     }
 
     @RequestMapping("queryCheckUserValidateCode")
-    @CheckOpenId
     @ResponseBody
     public Map queryCheckUserValidateCode(String randStr){
         Long cid = getClientIdByOpenId(randStr);
@@ -63,7 +61,59 @@ public class CheckUserController extends BaseController {
         if(ObjectUtils.isNotEmpty(checkUserVo)){
             map.put("row",checkUserVo);
         }
-
         return map;
+    }
+
+    @RequestMapping("queryCheckUserVoList")
+    @ResponseBody
+    public Map queryCheckUserVoList(String phone,Long isUse,String isManage,Long oid,int pageNo,int pageSize){
+        Long eid = getEmpIdByWxPhone(phone);
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("isUse",isUse);
+        params.put("oid",oid);
+        if(ObjectUtils.isEmpty(isManage)){
+            params.put("eid",eid);
+        }
+        List<CheckUserVo> checkUserVos = checkUserService.queryCheckUserVoList(params,pageNo,pageSize);
+        Map map = new HashMap();
+        map.put("rows",checkUserVos);
+        return map;
+    }
+
+    @RequestMapping("queryCheckUserNum")
+    @ResponseBody
+    public Map queryCheckUserNum(Long oid){
+        return checkUserService.queryCheckUserNum(oid);
+    }
+
+    @RequestMapping("queryAchievement")
+    @ResponseBody
+    public Map queryAchievement(Long oid,String empIds,String tids){
+        List<Long> emIdList = StringToList(empIds);
+        List<Long> tidsList = StringToList(tids);
+        Map params = new HashMap();
+        if(ObjectUtils.isNotEmpty(tids)){
+            params.put("tidList",tidsList);
+        }else{
+            params.put("emIdList",emIdList);
+        }
+        Map map = new HashMap();
+        List<CheckUserVo> list = checkUserService.queryAchievement(params);
+        map.put("rows",list);
+        return map;
+    }
+
+    public List<Long> StringToList(String str){
+        String[] strArr = str.split(",");
+        if(ObjectUtils.isNotEmpty(strArr)){
+            List<Long> list = new ArrayList<Long>();
+            for(String strStr:strArr){
+                Long l = Long.parseLong(strStr);
+                list.add(l);
+            }
+            return list;
+        }
+        return null;
     }
 }

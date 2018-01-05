@@ -39,7 +39,6 @@ public class OpeningEmpClientController extends BaseController{
     OpeningService openingService;
 
     @RequestMapping("queryNotGivenListWeb")
-    @CheckOpenId
     @ResponseBody
     public Map<String,Object> queryNotGivenListWeb(String phone,String cmName, HttpServletRequest request, int pageNo, int pageSize){
         Map map = new HashMap();
@@ -53,7 +52,6 @@ public class OpeningEmpClientController extends BaseController{
     }
 
     @RequestMapping("queryCheckingandpassandnotpassListWeb")
-    @CheckOpenId
     @ResponseBody
     public Map<String,Object> queryCheckingandpassandnotpassListWeb(String isManage,Long status,String phone, int pageNo, int pageSize){
         Map map = new HashMap();
@@ -74,7 +72,6 @@ public class OpeningEmpClientController extends BaseController{
     }
 
     @RequestMapping("queryCheckingandpassandnotpassNumWeb")
-    @CheckOpenId
     @ResponseBody
     public Map<String,Object> queryCheckingandpassandnotpassNumWeb(String isManage,String phone){
         Long eid = getEmpIdByWxPhone(phone);
@@ -97,7 +94,6 @@ public class OpeningEmpClientController extends BaseController{
     }
 
     @RequestMapping("addCheckClient")
-    @CheckOpenId
     @ResponseBody
     public BaseResp addCheckClient(String cmIds,String phone){
         Opening opening = openingService.queryEarlyOpening();
@@ -108,7 +104,6 @@ public class OpeningEmpClientController extends BaseController{
     }
 
     @RequestMapping("updateOpeningEmpClient")
-    @CheckOpenId
     @ResponseBody
     public BaseResp updateOpeningEmpClient( String oecIds,Long status,String msg){
         boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);

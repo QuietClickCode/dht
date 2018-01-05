@@ -63,10 +63,9 @@ public class CheckOpenIdAdvisor {
 //                    randStr = URLDecoder.decode(randStr,"utf-8");
 //                    randStr = DESUtils.decryptDES(randStr, DesKey.WEB_KEY);
                     Map<String,Object> map = WebSystemConstant.globelOpenId;
-                    Date randStrObj = (Date) map.get(randStr);
-                    boolean flag = new Date().getTime()-randStrObj.getTime()>0;
+                    Object randStrObj =  map.get(randStr);
 
-                    if(ObjectUtils.isEmpty(randStrObj) || flag){
+                    if(ObjectUtils.isEmpty(randStrObj)){
                         msg = "用户无效";
                         redirect="/failCheckOpenId";
                         HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder

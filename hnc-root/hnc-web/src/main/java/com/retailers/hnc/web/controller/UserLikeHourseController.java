@@ -29,7 +29,6 @@ public class UserLikeHourseController extends BaseController {
     UserLikeHourseService userLikeHourseService;
 
     @RequestMapping("saveUserLikeHourse")
-    @CheckOpenId
     @ResponseBody
     public BaseResp userLikeHourseService(String randStr,Long hid,Long isLike){
         Long cid = getClientIdByOpenId(randStr);
