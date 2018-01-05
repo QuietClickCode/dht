@@ -152,14 +152,14 @@
                 return false;
 			}
 
-			if(!$("#uaPhone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
+			/*if(!$("#uaPhone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
                 layer.open({
                     content: '手机格式不正确'
                     ,skin: 'msg'
                     ,time: 1 //2秒后自动关闭
                 });
                 return false;
-			}
+			}*/
 			if($("#uaAddress").val() == ""){
                 layer.open({
                     content: '收货地址不能为空'
