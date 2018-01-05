@@ -33,6 +33,7 @@ public class ClientManageController extends BaseController {
     @ResponseBody
     public Map<String,Object> queryEmpByClientManageId(String randStr){
         Long cid = getClientIdByOpenId(randStr);
+        System.out.println(cid);
         ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
         Long empId = clientManage.getTmEmployee();
         Map map = new HashMap();
@@ -58,6 +59,7 @@ public class ClientManageController extends BaseController {
     @ResponseBody
     public Map<String,Object> queryClientManageById(String randStr){
         Long cid = getClientIdByOpenId(randStr);
+        System.out.println(cid);
         ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
         Map map = new HashMap();
         map.put("user",clientManage);
