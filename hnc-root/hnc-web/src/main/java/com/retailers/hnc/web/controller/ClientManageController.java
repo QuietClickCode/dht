@@ -44,6 +44,7 @@ public class ClientManageController extends BaseController {
         return map;
     }
 
+
     @RequestMapping("updateClientManageId")
     @CheckOpenId
     @ResponseBody

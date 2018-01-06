@@ -38,6 +38,18 @@ public class ClientIntentionController extends BaseController{
         return map;
     }
 
+    @RequestMapping("/queryAllHouseType")
+    @CheckOpenId
+    @ResponseBody
+    public Map<String,Object> queryAllHouseType(String fmIds){
+        Map<String,Object> map = new HashMap<String,Object>();
+        if(ObjectUtils.isNotEmpty(fmIds))
+            map.put("houseTypeList", clientIntentionService.queryAllHouseType(fmIds));
+        return map;
+    }
+
+
+
     @RequestMapping("/deleteClientIntention")
     @CheckOpenId
     @ResponseBody
@@ -61,6 +73,7 @@ public class ClientIntentionController extends BaseController{
     @CheckOpenId
     @ResponseBody
     public BaseResp updateClientIntention(ClientIntention clientIntention,String randStr){
+        System.out.println(clientIntention.getIid()+" "+clientIntention.getFids());
         Long cmId = getClientIdByOpenId(randStr);
         clientIntention.setCmId(cmId);
         clientIntention.setIsDelete(0L);

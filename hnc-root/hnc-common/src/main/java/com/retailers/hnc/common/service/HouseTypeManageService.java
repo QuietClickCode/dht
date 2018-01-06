@@ -67,6 +67,9 @@ public interface HouseTypeManageService {
 	public Pagination<HouseTypeManageVo> queryFirstHouseTypeManageList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public List<HouseTypeManageVo> queryHourseTypeManageVoWithUid(Map params,int pageNo,int pageSize);
+
+	public List<HouseTypeManage> queryAllHouseType(List<Integer> list);
+
 }
 
 
