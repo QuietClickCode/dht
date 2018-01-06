@@ -1,8 +1,10 @@
 
 package com.retailers.hnc.common.service;
+
+import com.retailers.hnc.common.entity.ClientIntention;
+import com.retailers.hnc.common.entity.HouseTypeManage;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.hnc.common.entity.ClientIntention;
 
 import java.util.List;
 import java.util.Map;
@@ -59,6 +61,8 @@ public interface ClientIntentionService {
 	public boolean deleteClientIntentionByIid(Long iid);
 
 	public List<ClientIntentionVo> queryClientIntentionVoListByCmId(Long cmId);
+
+	public List<HouseTypeManage> queryAllHouseType(String fmIds);
 
 }
 

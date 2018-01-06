@@ -45,6 +45,7 @@ public class ClientManageController extends BaseController {
         return map;
     }
 
+
     @RequestMapping("updateClientManageId")
     @ResponseBody
     public BaseResp updateClientManageId(String randStr,ClientManage clientManage){

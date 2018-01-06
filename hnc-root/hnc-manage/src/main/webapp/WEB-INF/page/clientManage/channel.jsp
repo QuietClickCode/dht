@@ -7,16 +7,16 @@
     <%@include file="/common/common_bs_head_css.jsp"%>
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/zTreeStyle/zTreeStyle.css">
     <link rel="stylesheet" href="<%=path%>/js/ztree/css/demo.css">
-    <link rel="stylesheet" href="/js/validate/css/bootstrapValidator.min.css">
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.config.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/ueditor/ueditor.all.min.js"> </script>
-    <script type="text/javascript" src="/js/validate/bootstrapValidator.min.js"></script>
+    <link rel="stylesheet" href="<%=path%>/js/validate/css/bootstrapValidator.min.css">
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.config.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.all.min.js"> </script>
+    <script type="text/javascript" src="<%=path%>js/validate/bootstrapValidator.min.js"></script>
 
     <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
     <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="/ueditor/lang/zh-cn/zh-cn.js"></script>
-    <script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
-    <script type="text/javascript" charset="utf-8" src="/js/common/form.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/lang/zh-cn/zh-cn.js"></script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/js/jquery.min.js"> </script>
+    <script type="text/javascript" charset="utf-8" src="<%=path%>/js/common/form.js"> </script>
 </head>
 <div>
     <div id="toolbar" class="form-inline">
@@ -130,10 +130,10 @@
 <%@include file="/common/common_bs_head_js.jsp"%>
 <script type="text/javascript" src="<%=path%>/js/bootstrap/bootstrap-switch.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.core.min.js"></script>
-<script type="text/javascript" src="/js/ztree/jquery.ztree.excheck.min.js"></script>
-<script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
-<script type="text/javascript" src="/js/common/form.js"></script>
-<script type="text/javascript" src="/js/layer/layer.js"></script>
+<script type="text/javascript" src="<%=path%>/js/ztree/jquery.ztree.excheck.min.js"></script>
+<script type="text/javascript" src="<%=path%>/js/common/bootstrap_table.js"></script>
+<script type="text/javascript" src="<%=path%>/js/common/form.js"></script>
+<script type="text/javascript" src="<%=path%>/js/layer/layer.js"></script>
 
 <%--初始化表格数据--%>
 <script type="text/javascript">

@@ -152,4 +152,14 @@
 	<delete id="deleteHouseTypeManageByHtId" parameterType="java.lang.Long">
 		DELETE FROM t_house_type_manage WHERE ht_id = #{htId}
 	</delete>
+
+	<!--根据楼栋查询所有绑定的户型-->
+	<select id="queryAllHouseType" parameterType="java.util.List" resultMap="rm_houseTypeManage">
+		select t3.* FROM t_floor_relationship t1 LEFT JOIN t_house_type_manage t3
+		  ON t1.fr_id=t3.ht_id and t3.is_delete=0 WHERE t1.is_delete=0
+			and fm_id in
+			<foreach collection="list" item="type" open="(" close=")" separator=",">
+				#{type}
+			</foreach>
+	</select>
 </mapper>

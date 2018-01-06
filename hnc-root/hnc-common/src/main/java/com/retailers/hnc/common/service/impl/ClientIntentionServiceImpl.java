@@ -39,11 +39,33 @@ public class ClientIntentionServiceImpl implements ClientIntentionService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateClientIntention(ClientIntention clientIntention) {
+		ClientIntention intention = queryClientIntentionByIid(clientIntention.getIid());
+		clientIntention.setVersion(intention.getVersion());
 		int status = clientIntentionMapper.updateClientIntention(clientIntention);
 		return status == 1 ? true : false;
 	}
 	public ClientIntention queryClientIntentionByIid(Long iid) {
 		return clientIntentionMapper.queryClientIntentionByIid(iid);
+	}
+
+	public List<HouseTypeManage> queryAllHouseType(String fmIds){
+		String[] h = fmIds.split(",");
+		List<Integer> housetypes = new ArrayList<Integer>();
+		for(String s:h){
+			System.out.println(s);
+			housetypes.add(new Integer((s)));
+		}
+		List<HouseTypeManage> houseTypeManages = houseTypeManageService.queryAllHouseType(housetypes);
+		HashMap<Long,HouseTypeManage> map = new HashMap<Long, HouseTypeManage>();
+		for (HouseTypeManage houseTypeManage : houseTypeManages) {
+			if(!map.containsKey(houseTypeManage.getHtId()))
+				map.put(houseTypeManage.getHtId(),houseTypeManage);
+		}
+		houseTypeManages.clear();
+		for (Map.Entry<Long,HouseTypeManage> entry : map.entrySet()) {
+			houseTypeManages.add(entry.getValue());
+		}
+		return houseTypeManages;
 	}
 
 	public Pagination<ClientIntention> queryClientIntentionList(Map<String, Object> params,int pageNo,int pageSize) {
