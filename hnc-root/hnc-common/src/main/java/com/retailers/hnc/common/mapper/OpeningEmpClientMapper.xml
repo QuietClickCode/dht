@@ -203,9 +203,9 @@
 		t_opening_emp_client t1
 		WHERE
 		t1.is_delete=0
-		and t1.o_id=1
+		and t1.o_id=#{params.oid}
 		<if test="null!=params.eid">
-			and t1.e_id=-1
+			and t1.e_id=#{params.eid}
 		</if>
 		GROUP BY t1.oec_status
 	</select>

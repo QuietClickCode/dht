@@ -203,6 +203,10 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 					map.put("notpassNum",num);
 				}
 			}
+		}else{
+			map.put("checkingNum",0);
+			map.put("passNum",0);
+			map.put("notpassNum",0);
 		}
 		return map;
 	}

@@ -64,4 +64,6 @@ public interface CheckUserMapper {
 	public List<CheckUserVo> queryCheckUserNum(@Param("oid") Long oid);
 
 	public List<CheckUserVo> queryAchievement(@Param("params") Map params);
+
+	public List<CheckUserVo> queryUsedOrNotUse(Pagination<CheckUserVo> pagination);
 }

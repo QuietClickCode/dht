@@ -37,6 +37,7 @@
 		<result property="version" column="version"/>
 		<result property="hids" column="hids"/>
 		<result property="fids" column="fids"/>
+		<result property="imgurl" column="imgurl"/>
 		<result property="count" column="count"/>
 	</resultMap>
 	<resultMap id="rm_opening_vo" type="com.retailers.hnc.common.vo.OpeningVo">
@@ -125,9 +126,11 @@
 	<select id="queryClientManageListWeb" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		  SELECT
 			t1.*,
-			t2.f_ids fids,t2.h_ids hids
+			t2.f_ids fids,t2.h_ids hids,
+		t3.wau_headimgurl imgurl
 		  FROM t_client_manage t1
 		  LEFT JOIN t_client_intention t2 ON t1.tm_id=t2.cm_id and t2.is_delete=0
+		LEFT JOIN t_wx_auth_user t3 ON  t1.tm_id=t3.wau_u_id
 			WHERE
 			t1.is_delete=0
 			<if test="null!=params.tmEmployee">

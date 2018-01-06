@@ -55,4 +55,17 @@ public class EmployeeManageController extends BaseController{
         gtm.put("rows",teamPagination.getData());
         return gtm;
     }
+
+    @RequestMapping("/queryEmployeeManageList")
+    @ResponseBody
+    public Map<String,Object> queryEmployeeManageList(int pageNo,int pageSize){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("emType",1);
+        map.put("isDelete",0);
+        Pagination<EmployeeManageVo> teamPagination = employeeManageService.queryFirstEmployeeManageList(map,pageNo,pageSize);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",teamPagination.getTotalCount());
+        gtm.put("rows",teamPagination.getData());
+        return gtm;
+    }
 }

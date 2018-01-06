@@ -62,11 +62,14 @@ public interface CheckUserService {
 
 	public CheckUserVo queryCheckUserValidateCode( Long cid);
 
-	public List<CheckUserVo> queryCheckUserVoList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<CheckUserVo> queryCheckUserVoList(Map<String, Object> params, int pageNo, int pageSize);
 
 	public Map queryCheckUserNum(Long oid);
 
 	public List<CheckUserVo> queryAchievement( Map params);
+
+	public List<CheckUserVo> queryUsedOrNotUse(Map<String, Object> params, int pageNo, int pageSize);
+
 }
 
 

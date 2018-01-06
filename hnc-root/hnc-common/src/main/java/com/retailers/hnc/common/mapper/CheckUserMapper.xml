@@ -93,7 +93,7 @@
 		(SELECT t2.o_id
 		from t_opening t2
 		WHERE
-		t2.o_end_time>CURRENT_DATE() limit 1)
+		t2.o_end_time>CURRENT_DATE() ORDER BY t2.o_end_time ASC limit 1)
 	</select>
 
 	<select id="queryCheckUserVoList" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
@@ -101,7 +101,7 @@
 		t1.*,
 		t2.tm_name clientName,t2.tm_phone clientPhone,
 		t3.wau_headimgurl headImgUrl,
-		t4.em_name ename
+		t4.em_name empName
 		FROM
 		t_check_user t1,
 		t_client_manage t2
@@ -112,7 +112,10 @@
 		and t2.is_delete=0
 		and t1.c_id=t2.tm_id
 		and t1.o_id=#{params.oid}
-		and t1.is_use=#{params.isUse}
+		<if test="null!=params.isUse">
+			and t1.is_use=#{params.isUse}
+		</if>
+
 		<if test="null!=params.eid">
 			and t2.tm_employee=#{params.eid}
 		</if>
@@ -160,6 +163,22 @@
 			</foreach>
 		</if>
 		and t1.is_use=#{params.isUse}
+	</select>
+
+	<select id="queryUsedOrNotUse" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t2.o_start_time openingDate
+		FROM
+		t_check_user t1,
+		t_opening t2
+		WHERE
+		t1.o_id=t2.o_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+		and CURRENT_DATE()>t2.o_end_time
+		and t1.is_use=#{params.isUse}
+		and t1.c_id=#{params.cid}
 	</select>
 	<!--添加客户通过审核记录表 -->
 	<insert id="saveCheckUser" parameterType="com.retailers.hnc.common.entity.CheckUser" useGeneratedKeys="true" keyProperty="cuId">

@@ -32,17 +32,17 @@ public class ClientInfoController extends BaseController {
 
     @RequestMapping("/queryClientList")
     @ResponseBody
-    public Map<String,Object> queryTeamList(PageUtils pageForm,String phone,String registerTimes,String tmName){
+    public Map<String,Object> queryTeamList(PageUtils pageForm,Long emId,String registerTimes,String tmName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        if(ObjectUtils.isNotEmpty(phone)){
-            Long emId = getEmpIdByWxPhone(phone);
+        if(ObjectUtils.isNotEmpty(emId)){
             map.put("tmEmployee",emId);
         }
         map.put("tmName",tmName);
-        map.put("tmRegisterTime",dateFormat(registerTimes));
+        if(ObjectUtils.isNotEmpty(registerTimes)){
+            map.put("tmRegisterTime",registerTimes);
+        }
         System.out.println(registerTimes);
-        System.out.println(dateFormat(registerTimes));
         Pagination<ClientManageVo> teamPagination = clientManageService.queryClientManageListWeb(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());
@@ -61,6 +61,15 @@ public class ClientInfoController extends BaseController {
             return success("添加客户成功");
         else
             return success("添加客户失败");
+    }
+
+    @RequestMapping("/queryClientByCmId")
+    @ResponseBody
+    public Map queryClientByCmId(Long cmId){
+        ClientManage clientManage = clientManageService.queryClientManageByTmId(cmId);
+        Map map = new HashMap();
+        map.put("row",clientManage);
+        return map;
     }
 
     @RequestMapping("/updateClient")

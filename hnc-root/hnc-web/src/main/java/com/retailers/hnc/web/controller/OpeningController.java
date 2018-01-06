@@ -44,6 +44,16 @@ public class OpeningController extends BaseController {
         return map;
     }
 
+    @RequestMapping("queryEarlyOpening")
+    @ResponseBody
+    public Map<String,Object> queryEarlyOpening(){
+        Opening opening = OpeningService.queryEarlyOpening();
+        Map map = new HashMap();
+        if(ObjectUtils.isNotEmpty(opening)){
+            map.put("row",opening);
+        }
+        return map;
+    }
 
     @RequestMapping("queryOFrelByOid")
     @ResponseBody

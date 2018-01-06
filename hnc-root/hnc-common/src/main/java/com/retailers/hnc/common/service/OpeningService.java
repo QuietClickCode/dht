@@ -64,6 +64,8 @@ public interface OpeningService {
 
 	public Opening queryEarlyOpening();
 
+	public Opening queryLastOpening();
+
 	public Opening queryRuningOpening();
 }
 

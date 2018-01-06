@@ -103,13 +103,14 @@ public class CheckUserServiceImpl implements CheckUserService {
 		CheckUserVo checkUserVo = checkUserMapper.queryCheckUserValidateCode(cid);
 		return checkUserVo;
 	}
-	public List<CheckUserVo> queryCheckUserVoList(Map<String, Object> params, int pageNo, int pageSize){
+	public Pagination<CheckUserVo> queryCheckUserVoList(Map<String, Object> params, int pageNo, int pageSize){
 		Pagination<CheckUserVo> page = new Pagination<CheckUserVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<CheckUserVo> list = checkUserMapper.queryCheckUserVoList(page);
-		return list;
+		page.setData(list);
+		return page;
 	}
 	public Map queryCheckUserNum(Long oid){
 		List<CheckUserVo> list = checkUserMapper.queryCheckUserNum(oid);
@@ -142,6 +143,15 @@ public class CheckUserServiceImpl implements CheckUserService {
 			}
 		}
 		return list1;
+	}
+
+	public List<CheckUserVo> queryUsedOrNotUse(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<CheckUserVo> page = new Pagination<CheckUserVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<CheckUserVo> list = checkUserMapper.queryUsedOrNotUse(page);
+		return list;
 	}
 }
 

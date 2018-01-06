@@ -8,6 +8,7 @@ import com.retailers.hnc.common.entity.WxAuthUser;
 import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.EmployeeManageService;
 import com.retailers.hnc.common.service.WxAuthUserService;
+import com.retailers.hnc.common.util.MyHttpUrlConnection;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.hnc.web.constant.WebSystemConstant;
 import com.retailers.tools.encrypt.DESUtils;
@@ -68,15 +69,6 @@ public class WxUserController extends BaseController {
 //        }
 //    }
 
-
-
-    @RequestMapping("/getAccessToken")
-    @ResponseBody
-    public Map<String,Object> getAccessToken(String validateCode){
-
-        return null;
-    }
-
     @RequestMapping("/checkClientComeIn")
     @ResponseBody
     public Map<String,Object> checkClientComeIn(String validateCode){
@@ -114,7 +106,7 @@ public class WxUserController extends BaseController {
                 String unionid = jsonObject.getString("unionid");
                 String sessionKey = jsonObject.getString("session_key");
                 String phone = "";
-//                phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
+                phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
                 if(ObjectUtils.isNotEmpty(openid)){
                     Map params = new HashMap();
                     params.put("wauOpenid",openid);
@@ -124,7 +116,11 @@ public class WxUserController extends BaseController {
                     Integer type = 0;
                     Map map1 = new HashMap();
                     map1.put("isDelete",0L);
-                    map1.put("wxPhone",phone);
+                    if(ObjectUtils.isNotEmpty(phone)){
+                        map1.put("wxPhone",phone);
+                    }else{
+                        map1.put("wxPhone","-1");
+                    }
                     List<EmployeeManage> empList = employeeManageService.queryEmployeeManageList(map1,1,1).getData();
                     if(ObjectUtils.isNotEmpty(empList)){
                         EmployeeManage employeeManage = empList.get(0);

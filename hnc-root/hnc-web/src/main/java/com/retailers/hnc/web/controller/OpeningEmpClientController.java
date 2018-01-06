@@ -40,7 +40,7 @@ public class OpeningEmpClientController extends BaseController{
 
     @RequestMapping("queryNotGivenListWeb")
     @ResponseBody
-    public Map<String,Object> queryNotGivenListWeb(String phone,String cmName, HttpServletRequest request, int pageNo, int pageSize){
+    public Map<String,Object> queryNotGivenListWeb(String phone, int pageNo, int pageSize){
         Map map = new HashMap();
         Long eid = getEmpIdByWxPhone(phone);
         Map params1 = new HashMap();
@@ -48,6 +48,7 @@ public class OpeningEmpClientController extends BaseController{
         params1.put("eid",eid);
         Pagination<ClientManageVo> pagination = openingEmpClientService.queryNotGivenListWeb(params1,pageNo,pageSize);
         map.put("rows",pagination.getData());
+        map.put("notgivenNum",pagination.getTotalCount());
         return map;
     }
 
@@ -55,12 +56,12 @@ public class OpeningEmpClientController extends BaseController{
     @ResponseBody
     public Map<String,Object> queryCheckingandpassandnotpassListWeb(String isManage,Long status,String phone, int pageNo, int pageSize){
         Map map = new HashMap();
-        Long eid = getEmpIdByWxPhone(phone);
 
-        if(ObjectUtils.isNotEmpty(eid)){
+        if(ObjectUtils.isNotEmpty(phone)){
             Map params1 = new HashMap();
             params1.put("status",status);
             if(ObjectUtils.isEmpty(isManage)){
+                Long eid = getEmpIdByWxPhone(phone);
                 params1.put("eid",eid);
             }
             Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassListWeb(params1,pageNo,pageSize);
@@ -74,22 +75,36 @@ public class OpeningEmpClientController extends BaseController{
     @RequestMapping("queryCheckingandpassandnotpassNumWeb")
     @ResponseBody
     public Map<String,Object> queryCheckingandpassandnotpassNumWeb(String isManage,String phone){
-        Long eid = getEmpIdByWxPhone(phone);
         Map map = new HashMap();
         Opening opening = openingService.queryEarlyOpening();
         Long oid = opening.getOid();
-        if(ObjectUtils.isNotEmpty(eid)){
+        if(ObjectUtils.isNotEmpty(phone)){
             Map params = new HashMap();
             params.put("oid",oid);
-            if(ObjectUtils.isEmpty(isManage)){
+            if(ObjectUtils.isNotEmpty(phone)){
+                Long eid = getEmpIdByWxPhone(phone);
                 params.put("eid",eid);
                 //通过oid eid查询分配名额
-
+                Map paramstotalNumberParams = new HashMap();
+                paramstotalNumberParams.put("pid",oid);
+                paramstotalNumberParams.put("emId",eid);
+                paramstotalNumberParams.put("isDelete",0L);
+                List<EmRelationship> list = emRelationshipService.queryEmRelationshipList(paramstotalNumberParams,1,1).getData();
+                if(ObjectUtils.isNotEmpty(list)){
+                    EmRelationship emRelationship = list.get(0);
+                    Long total = emRelationship.getEmReservation();
+                    if(ObjectUtils.isNotEmpty(total)){
+                        map.put("total",total);
+                    }else{
+                        map.put("total",0);
+                    }
+                }
             }else{
                 map.put("total",opening.getOmenberNum());
             }
             map.putAll(openingEmpClientService.queryCheckingandpassandnotpassNumWeb(params));
         }
+
         return map;
     }
 
