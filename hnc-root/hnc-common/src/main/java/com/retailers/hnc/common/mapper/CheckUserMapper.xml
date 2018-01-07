@@ -165,6 +165,62 @@
 		and t1.is_use=#{params.isUse}
 	</select>
 
+	<select id="queryAllAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse}
+		LEFT JOIN t_team t3 ON t3.t_id=t1.em_team
+		where
+		 t1.is_delete=0
+
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryTeamAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse},
+		t_team t3
+		WHERE
+		t3.t_id=t1.em_team
+		and t1.is_delete=0
+		and t3.t_id IN
+		<foreach collection="params.tidList" item="tid" open="(" close=")" separator=",">
+			#{tid}
+		</foreach>
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryEmpAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse},
+		t_team t3
+		WHERE
+		t3.t_id=t1.em_team
+		and t1.is_delete=0
+		and t1.em_id IN
+		<foreach collection="params.emIdList" item="emId" open="(" close=")" separator=",">
+			#{emId}
+		</foreach>
+		GROUP BY t1.em_id
+	</select>
+
 	<select id="queryUsedOrNotUse" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT
 		t1.*,
