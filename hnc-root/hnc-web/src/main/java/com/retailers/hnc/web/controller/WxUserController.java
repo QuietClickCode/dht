@@ -8,6 +8,7 @@ import com.retailers.hnc.common.entity.WxAuthUser;
 import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.EmployeeManageService;
 import com.retailers.hnc.common.service.WxAuthUserService;
+import com.retailers.hnc.common.util.MyHttpUrlConnection;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.hnc.web.constant.WebSystemConstant;
 import com.retailers.tools.encrypt.DESUtils;
@@ -54,13 +55,19 @@ public class WxUserController extends BaseController {
         return loginReturnMap(code,wxAuthUser,encryptedData,iv);
     }
 
-
-    @RequestMapping("/getAccessToken")
-    @ResponseBody
-    public Map<String,Object> getAccessToken(String validateCode){
-
-        return null;
-    }
+//    @RequestMapping("/saveUserInfo")
+//    @ResponseBody
+//    public void saveUserInfo(String randStr, WxAuthUser wxAuthUser, String encryptedData, String iv){
+//        Long cid = getClientIdByOpenId(randStr);
+//        Map params = new HashMap();
+//        params.put("wauUid",cid);
+//        List list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+//        if(ObjectUtils.isNotEmpty(list)){
+//            WxAuthUser wx = (WxAuthUser)list.get(0);
+//            wxAuthUser.setWauId(wx.getWauId());
+//            wxAuthUserService.updateWxAuthUser(wxAuthUser);
+//        }
+//    }
 
     @RequestMapping("/checkClientComeIn")
     @ResponseBody
@@ -84,7 +91,7 @@ public class WxUserController extends BaseController {
                 "&grant_type=authorization_code" +
                 "&js_code="+code;
         Long curTime = System.currentTimeMillis();
-        Long loginouttime = 2*60*60*1000L;//有效时间两个小时
+        Long loginouttime = 24*60*60*1000L;//有效时间24个小时
         Date endTime = new Date(curTime+loginouttime);
         Map returnMap = new HashMap();
         try {
@@ -99,7 +106,7 @@ public class WxUserController extends BaseController {
                 String unionid = jsonObject.getString("unionid");
                 String sessionKey = jsonObject.getString("session_key");
                 String phone = "";
-//                phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
+                phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
                 if(ObjectUtils.isNotEmpty(openid)){
                     Map params = new HashMap();
                     params.put("wauOpenid",openid);
@@ -109,7 +116,11 @@ public class WxUserController extends BaseController {
                     Integer type = 0;
                     Map map1 = new HashMap();
                     map1.put("isDelete",0L);
-                    map1.put("wxPhone",phone);
+                    if(ObjectUtils.isNotEmpty(phone)){
+                        map1.put("wxPhone",phone);
+                    }else{
+                        map1.put("wxPhone","-1");
+                    }
                     List<EmployeeManage> empList = employeeManageService.queryEmployeeManageList(map1,1,1).getData();
                     if(ObjectUtils.isNotEmpty(empList)){
                         EmployeeManage employeeManage = empList.get(0);

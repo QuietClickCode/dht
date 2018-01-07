@@ -13,6 +13,15 @@ public class OpeningVo extends Opening {
     private String fname;
     private Long fid;
     private String selectedfid;
+    private String cuValidateCode;
+
+    public String getCuValidateCode() {
+        return cuValidateCode;
+    }
+
+    public void setCuValidateCode(String cuValidateCode) {
+        this.cuValidateCode = cuValidateCode;
+    }
 
     public String getFname() {
         return fname;

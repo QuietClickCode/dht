@@ -5,10 +5,13 @@ import java.util.List;
 import java.util.Map;
 import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.dao.ClientManageMapper;
+import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.entity.WxAuthUser;
 import com.retailers.hnc.common.service.ClientManageService;
+import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.service.WxAuthUserService;
 import com.retailers.hnc.common.vo.ClientManageVo;
+import com.retailers.hnc.common.vo.OpeningVo;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,8 @@ public class ClientManageServiceImpl implements ClientManageService {
 	private ClientManageMapper clientManageMapper;
 	@Autowired
 	private WxAuthUserService wxAuthUserService;
+	@Autowired
+	private OpeningEmpClientService openingEmpClientService;
 	public ClientManage saveClientManage(ClientManage clientManage) {
 		int status = clientManageMapper.saveClientManage(clientManage);
 		return status == 1 ? clientManage : null;
@@ -46,6 +51,20 @@ public class ClientManageServiceImpl implements ClientManageService {
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<ClientManage> list = clientManageMapper.queryClientManageList(page);
+		page.setData(list);
+		return page;
+	}
+	public Pagination<ClientManageVo> queryClientManageListWeb(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<ClientManageVo> list = clientManageMapper.queryClientManageListWeb(page);
+		for(ClientManageVo clientManageVo:list){
+			String hids = clientManageVo.getHids();
+			String fids = clientManageVo.getFids();
+			openingEmpClientService.addFloorsAndHourses(hids,fids,clientManageVo);
+		}
 		page.setData(list);
 		return page;
 	}
@@ -72,6 +91,12 @@ public class ClientManageServiceImpl implements ClientManageService {
 			return wauUid;
 		}
 		return null;
+	}
+	public List<ClientManageVo> queryClientManagerCount(){
+		return clientManageMapper.queryClientManagerCount();
+	}
+	public OpeningVo queryEarlyCanComeIn(Long cid){
+		return clientManageMapper.queryEarlyCanComeIn(cid);
 	}
 }
 

@@ -119,6 +119,17 @@
 		LIMIT 1
 	</select>
 
+	<select id="queryLastOpening" resultMap="rm_opening">
+		SELECT
+		t1.*
+		FROM
+		t_opening t1
+		WHERE
+		 CURRENT_DATE()>t1.o_end_time
+		ORDER BY t1.o_end_time DESC
+		LIMIT 1
+	</select>
+
 	<select id="queryRuningOpening" resultMap="rm_opening">
 		SELECT
 		t1.*

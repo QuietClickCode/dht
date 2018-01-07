@@ -72,6 +72,8 @@ public interface OpeningEmpClientService {
 	public boolean checkCanChangeEmpNum(Long oid,Long eid,Long num);
 
 	public Map queryCheckingandpassandnotpassNumWeb(Map params);
+
+	public void addFloorsAndHourses(String hids,String fids,ClientManageVo clientManageVo);
 }
 
 

@@ -108,28 +108,7 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		for(ClientManageVo clientManageVo:list){
 			String hids = clientManageVo.getHids();
 			String fids = clientManageVo.getFids();
-
-			if(ObjectUtils.isNotEmpty(hids)&&ObjectUtils.isNotEmpty(fids)){
-				List<FloorManage> floorManages = floorManageService.queryFloorManageByFmIds(fids);
-				List<HouseTypeManage> houseTypeManages = houseTypeManageService.queryHouseTypeManageByHtIds(hids);
-				String floorsName = "";
-				String hoursesName = "";
-				for(FloorManage floorManage:floorManages){
-					floorsName += ","+floorManage.getFmName();
-				}
-				for(HouseTypeManage houseTypeManage:houseTypeManages){
-					hoursesName += ","+houseTypeManage.getHtTypeName();
-				}
-				if(ObjectUtils.isNotEmpty(floorsName)){
-					floorsName = floorsName.substring(1);
-				}
-				if(ObjectUtils.isNotEmpty(hoursesName)){
-					hoursesName = hoursesName.substring(1);
-				}
-				clientManageVo.setFloorsName(floorsName);
-				clientManageVo.setHoursesName(hoursesName);
-			}
-
+			addFloorsAndHourses(hids,fids,clientManageVo);
 		}
 		page.setData(list);
 		return page;
@@ -224,6 +203,10 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 					map.put("notpassNum",num);
 				}
 			}
+		}else{
+			map.put("checkingNum",0);
+			map.put("passNum",0);
+			map.put("notpassNum",0);
 		}
 		return map;
 	}
@@ -236,6 +219,29 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 			returnList.add(l);
 		}
 		return returnList;
+	}
+
+	public void addFloorsAndHourses(String hids,String fids,ClientManageVo clientManageVo){
+		if(ObjectUtils.isNotEmpty(hids)&&ObjectUtils.isNotEmpty(fids)){
+			List<FloorManage> floorManages = floorManageService.queryFloorManageByFmIds(fids);
+			List<HouseTypeManage> houseTypeManages = houseTypeManageService.queryHouseTypeManageByHtIds(hids);
+			String floorsName = "";
+			String hoursesName = "";
+			for(FloorManage floorManage:floorManages){
+				floorsName += ","+floorManage.getFmName();
+			}
+			for(HouseTypeManage houseTypeManage:houseTypeManages){
+				hoursesName += ","+houseTypeManage.getHtTypeName();
+			}
+			if(ObjectUtils.isNotEmpty(floorsName)){
+				floorsName = floorsName.substring(1);
+			}
+			if(ObjectUtils.isNotEmpty(hoursesName)){
+				hoursesName = hoursesName.substring(1);
+			}
+			clientManageVo.setFloorsName(floorsName);
+			clientManageVo.setHoursesName(hoursesName);
+		}
 	}
 }
 

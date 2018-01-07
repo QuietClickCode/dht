@@ -5,6 +5,8 @@ import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：客户通过审核记录表DAO
  * @author fanghui
@@ -56,4 +58,12 @@ public interface CheckUserMapper {
 	public List<CheckUser> queryCheckUserList(Pagination<CheckUser> pagination);
 
 	public CheckUserVo queryCheckUserValidateCode(@Param("cid") Long cid);
+
+	public List<CheckUserVo> queryCheckUserVoList(Pagination<CheckUserVo> pagination);
+
+	public List<CheckUserVo> queryCheckUserNum(@Param("oid") Long oid);
+
+	public List<CheckUserVo> queryAchievement(@Param("params") Map params);
+
+	public List<CheckUserVo> queryUsedOrNotUse(Pagination<CheckUserVo> pagination);
 }

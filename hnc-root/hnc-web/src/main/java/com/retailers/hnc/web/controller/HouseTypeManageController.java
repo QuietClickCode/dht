@@ -31,7 +31,6 @@ public class HouseTypeManageController extends BaseController{
     HouseTypeManageService houseTypeManageService;
 
     @RequestMapping("/queryHouseType")
-    @CheckOpenId
     @ResponseBody
     public Map<String,Object> queryHouseTypeList(PageUtils pageForm,String randStr){
         Long uid = getClientIdByOpenId(randStr);

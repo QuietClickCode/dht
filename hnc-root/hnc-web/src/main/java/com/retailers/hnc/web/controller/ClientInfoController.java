@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.service.ClientManageService;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -30,20 +31,19 @@ public class ClientInfoController extends BaseController {
     ClientManageService clientManageService;
 
     @RequestMapping("/queryClientList")
-    @CheckOpenId
     @ResponseBody
-    public Map<String,Object> queryTeamList(PageUtils pageForm,String phone,String registerTimes,String tmName){
+    public Map<String,Object> queryTeamList(PageUtils pageForm,Long emId,String registerTimes,String tmName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        if(ObjectUtils.isNotEmpty(phone)){
-            Long emId = getEmpIdByWxPhone(phone);
+        if(ObjectUtils.isNotEmpty(emId)){
             map.put("tmEmployee",emId);
         }
         map.put("tmName",tmName);
-        map.put("tmRegisterTime",dateFormat(registerTimes));
+        if(ObjectUtils.isNotEmpty(registerTimes)){
+            map.put("tmRegisterTime",registerTimes);
+        }
         System.out.println(registerTimes);
-        System.out.println(dateFormat(registerTimes));
-        Pagination<ClientManage> teamPagination = clientManageService.queryClientManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<ClientManageVo> teamPagination = clientManageService.queryClientManageListWeb(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());
         gtm.put("rows",teamPagination.getData());
@@ -51,7 +51,6 @@ public class ClientInfoController extends BaseController {
     }
 
     @RequestMapping("/addClient")
-    @Function(label = "添加客户",description = "添加客户",resourse = "clientInfo.addClient",sort = 3,parentRes = "clientInfo.clientInfoMapping")
     @ResponseBody
     public BaseResp addClient(ClientManage clientManage,String tmRegisterTimes){
         if(ObjectUtils.isNotEmpty(tmRegisterTimes)){
@@ -64,8 +63,16 @@ public class ClientInfoController extends BaseController {
             return success("添加客户失败");
     }
 
+    @RequestMapping("/queryClientByCmId")
+    @ResponseBody
+    public Map queryClientByCmId(Long cmId){
+        ClientManage clientManage = clientManageService.queryClientManageByTmId(cmId);
+        Map map = new HashMap();
+        map.put("row",clientManage);
+        return map;
+    }
+
     @RequestMapping("/updateClient")
-    @Function(label = "修改客户信息",description = "修改客户信息",resourse = "clientInfo.updateClient",sort = 3,parentRes = "clientInfo.clientInfoMapping")
     @ResponseBody
     public BaseResp updateClient(ClientManage clientManage){
         boolean flag = clientManageService.updateClientManage(clientManage);
@@ -76,7 +83,6 @@ public class ClientInfoController extends BaseController {
     }
 
     @RequestMapping("/queryClientCount")
-    @Function(label = "查询客户登记总数",description = "查询客户登记总数",resourse = "clientInfo.queryClientCount",sort = 3,parentRes = "clientInfo.clientInfoMapping")
     @ResponseBody
     public HashMap<String,Integer> queryClientCount(){
         HashMap<String,Integer> clientManage = new HashMap<String,Integer>();

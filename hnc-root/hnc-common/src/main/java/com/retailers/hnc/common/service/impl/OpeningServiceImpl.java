@@ -86,7 +86,10 @@ public class OpeningServiceImpl implements OpeningService {
 		Opening opening = openingMapper.queryEarlyOpening();
 		return opening;
 	}
-
+	public Opening queryLastOpening(){
+		Opening opening = openingMapper.queryLastOpening();
+		return opening;
+	}
 	public Opening queryRuningOpening(){
 		Opening opening = openingMapper.queryRuningOpening();
 		return opening;

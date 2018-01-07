@@ -15,6 +15,15 @@ public class ClientManageVo extends ClientManage {
     private String floorsName;
     private String hoursesName;
     private String imgurl;
+    private Long count;
+
+    public Long getCount() {
+        return count;
+    }
+
+    public void setCount(Long count) {
+        this.count = count;
+    }
 
     public String getImgurl() {
         return imgurl;

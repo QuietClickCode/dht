@@ -134,6 +134,7 @@
 		LEFT JOIN t_wx_auth_user t3 ON t2.tm_id=t3.wau_u_id
 		WHERE
 		t1.is_delete=0
+		and t1.em_type=1
 		and t1.em_id !=#{params.eid}
 	</select>
 	<!--添加置业顾问 -->
