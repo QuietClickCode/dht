@@ -3,6 +3,7 @@ package com.retailers.hnc.common.service;
 
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.List;
@@ -96,6 +97,10 @@ public interface EmRelationshipService {
 	public EmRelationship queryEmployeeNum(EmRelationship emRelationship);
 
 	public boolean saveEmRelationshipList(List<EmRelationship> emRelationships);
+
+//	public List<EmRelationshipVo> queryEmRelationshipVoTreeList();
+
+	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship);
 
 }
 

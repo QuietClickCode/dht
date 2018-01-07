@@ -5,6 +5,7 @@ import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.vo.EmployeeManageVo;
 import com.retailers.mybatis.pagination.Pagination;
 
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：员工管理Service
@@ -78,6 +79,8 @@ public interface EmployeeManageService {
 	 * @date 2017-12-25 12:01:09
 	 */
 	public Integer queryRegisterClient(Long emId);
+
+	public List<EmployeeManage> queryAllEmployeeByTeam(Long teamId);
 
 }
 

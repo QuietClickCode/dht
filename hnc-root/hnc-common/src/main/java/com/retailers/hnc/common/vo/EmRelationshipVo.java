@@ -4,6 +4,8 @@ import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.entity.Team;
 
+import java.util.List;
+
 /**
  * Created by niconiconi on 2017/12/29.
  */
@@ -13,6 +15,7 @@ public class EmRelationshipVo extends EmRelationship {
     private Long tid;
     private Team team;
     private EmployeeManage employeeManage;
+    private List<EmployeeManage> employeeManages;
     private Long level;
 
     public String getTeamName() {
@@ -61,5 +64,13 @@ public class EmRelationshipVo extends EmRelationship {
 
     public void setLevel(Long level) {
         this.level = level;
+    }
+
+    public List<EmployeeManage> getEmployeeManages() {
+        return employeeManages;
+    }
+
+    public void setEmployeeManages(List<EmployeeManage> employeeManages) {
+        this.employeeManages = employeeManages;
     }
 }

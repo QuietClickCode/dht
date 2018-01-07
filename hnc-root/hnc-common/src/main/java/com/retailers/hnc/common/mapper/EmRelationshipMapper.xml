@@ -22,6 +22,16 @@
 		<result property="version" column="version"/>
 	</resultMap>
 
+	<resultMap id="rm_EmployeeRelationshipVo" type="com.retailers.hnc.common.vo.EmployeeRelationshipVo">
+		<result property="erid" column="er_id"/>
+		<result property="pid" column="p_id"/>
+		<result property="emReservation" column="em_reservation"/>
+		<result property="count" column="count"/>
+		<result property="emid" column="em_id"/>
+		<result property="emName" column="em_name"/>
+		<result property="emTeam" column="em_team"/>
+	</resultMap>
+
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="emRelationship_columns">
@@ -132,4 +142,15 @@
 			)
 		</foreach>
 	</insert>
+
+	<select id="queryReservationInfo" resultMap="rm_EmployeeRelationshipVo" parameterType="com.retailers.hnc.common.entity.EmRelationship">
+		select t2.er_id,t2.p_id,t2.em_reservation,COUNT(t3.tm_employee) as count,t1.em_id,t1.em_name,t1.em_team
+		from t_employee_manage t1
+		LEFT JOIN t_em_relationship t2 on t1.em_id = t2.em_id  and t2.is_delete = 0 and t2.p_id = #{pid}
+		LEFT JOIN t_client_manage t3 ON t1.em_id=t3.tm_employee and t3.is_delete=0 and t3.tm_login_status=0
+		 where
+		t1.em_type = 1
+		and t1.is_delete = 0 and t1.em_team = #{parentId}
+		GROUP BY t1.em_id
+	</select>
 </mapper>

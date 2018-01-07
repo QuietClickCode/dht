@@ -104,5 +104,9 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 	public Integer queryRegisterClient(Long emId) {
 		return employeeManageMapper.queryRegisterClient(emId);
 	}
+
+	public List<EmployeeManage> queryAllEmployeeByTeam(Long teamId) {
+		return employeeManageMapper.queryAllEmployeeByTeam(teamId);
+	}
 }
 

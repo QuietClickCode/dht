@@ -74,4 +74,7 @@ public interface EmployeeManageMapper {
 
 	public List<EmployeeManageVo> queryEmployeeManageByNotInPhone(Pagination<EmployeeManageVo> pagination);
 
+
+	public List<EmployeeManage> queryAllEmployeeByTeam(Long teamId);
+
 }

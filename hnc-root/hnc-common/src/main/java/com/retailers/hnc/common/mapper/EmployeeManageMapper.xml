@@ -216,4 +216,9 @@
 	<select id="queryAllEmployee" resultMap="rm_employeeManage">
 		select * from t_employee_manage where is_delete = 0
 	</select>
+
+	<!--查询该团队所有置业顾问-->
+	<select id="queryAllEmployeeByTeam" resultMap="rm_employeeManage" parameterType="java.lang.Long">
+		select * from t_employee_manage where em_team = #{teamId}
+	</select>
 </mapper>

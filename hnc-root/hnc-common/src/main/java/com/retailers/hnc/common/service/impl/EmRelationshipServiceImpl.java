@@ -9,6 +9,7 @@ import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.entity.Team;
 import com.retailers.hnc.common.service.EmRelationshipService;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -106,6 +107,35 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 			vo.setParentId(employeeManage.getEmTeam());
 			vo.setEmployeeManage(employeeManage);
 			emRelationshipVos.add(vo);
+		}
+		return emRelationshipVos;
+	}
+
+	/*public List<EmRelationshipVo> queryEmRelationshipVoTreeList() {
+		List<Team> teams = teamMapper.queryAllTeam();
+		List<EmRelationshipVo> emRelationshipVos = new ArrayList<EmRelationshipVo>();
+		for (Team team : teams) {
+			EmRelationshipVo vo = new EmRelationshipVo();
+			vo.setTid(team.getTid());
+			vo.setEmployeeManages(employeeManageMapper.queryAllEmployeeByTeam(team.getTid()));
+			vo.setTeamName(team.getTname());
+			vo.setTeam(team);
+			vo.setIsDelete(0L);
+			emRelationshipVos.add(vo);
+		}
+		return emRelationshipVos;
+	}*/
+
+	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship) {
+		List<Team> teams = teamMapper.queryAllTeam();
+		List<EmployeeRelationshipVo> emRelationshipVos = new ArrayList<EmployeeRelationshipVo>();
+		for (Team team : teams) {
+			EmployeeRelationshipVo relationshipVo = new EmployeeRelationshipVo();
+			relationshipVo.setEmTeam(team.getTid());
+			relationshipVo.setTeamName(team.getTname());
+			relationship.setParentId(team.getTid());
+			relationshipVo.setEmployeeManages(emRelationshipMapper.queryReservationInfo(relationship));
+			emRelationshipVos.add(relationshipVo);
 		}
 		return emRelationshipVos;
 	}

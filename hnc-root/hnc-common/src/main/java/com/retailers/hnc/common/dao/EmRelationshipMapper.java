@@ -1,6 +1,7 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -86,5 +87,7 @@ public interface EmRelationshipMapper {
 	public EmRelationship queryEmployeeNum(EmRelationship emRelationship);
 
 	public int saveEmRelationshipList(List<EmRelationship> emRelationships);
+
+	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship);
 
 }

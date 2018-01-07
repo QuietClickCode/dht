@@ -5,6 +5,7 @@ import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.service.EmRelationshipService;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +46,18 @@ public class EmployeeRelationshipController extends BaseController{
         map.put("rows",rows);
         return map;
     }
+
+    @RequestMapping("/queryEmRelationshipVoTreeList")
+    @Function(label = "查询所有团队和置业顾问用于前端树型结构展示",description = "查询所有团队和置业顾问用于前端树型结构展示",resourse = "employeeRelationship.queryEmRelationshipVoTreeList",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public Map<String,Object> queryEmRelationshipVoTreeList(EmRelationship relationship){
+        List<EmployeeRelationshipVo> rows = emRelationshipService.queryReservationInfo(relationship);
+        HashMap<String,Object> map=new HashMap<String, Object>();
+        map.put("total",1000);
+        map.put("rows",rows);
+        return map;
+    }
+
 
 
     @RequestMapping("/queryAllEmployee")
