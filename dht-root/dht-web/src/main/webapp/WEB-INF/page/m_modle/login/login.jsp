@@ -18,6 +18,39 @@
             position: absolute;
             bottom: 0.1rem;
         }
+        .container{
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+        }
+
+        .container_box{
+            margin-top: 4rem;
+        }
+        .login_btn{
+            display: block;
+            text-align: center;
+            padding-top: 0.3rem;
+            padding-bottom: 0.3rem;
+            width: 70%;
+            margin-left: 15%;
+            margin-bottom: 0.5rem;
+            font-size: 0.3rem;
+        }
+
+        .container_box :first-child{
+            background-color: #169bd5;
+            color: #fff;
+            border-radius: 0.1rem;
+        }
+
+        .container_box :last-child{
+            border:1px solid rgba(0,0,0,0.2);
+            border-radius: 0.1rem;
+            margin-bottom: 0px;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +124,13 @@
                 <a href="javascript:void(0);" onclick="haveUser()">已有账号</a>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="container_box">
+        <a class="login_btn">有大汇堂电脑端账号，登录绑定</a>
+        <a class="login_btn">无大汇堂电脑端账号，直接进入</a>
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
