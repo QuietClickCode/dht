@@ -32,7 +32,7 @@ public class UserShareController extends BaseController{
 
 
     @RequestMapping("/saveUserShare")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp saveUserShare(UserShare userShare, HttpServletRequest request){
         Long uid = getCurLoginUserId(request);

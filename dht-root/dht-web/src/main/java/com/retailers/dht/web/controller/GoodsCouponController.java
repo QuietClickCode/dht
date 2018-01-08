@@ -48,7 +48,7 @@ public class GoodsCouponController extends BaseController{
      * @return
      */
     @RequestMapping("queryGoodsCouponLists")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp queryGoodsCouponLists(HttpServletRequest request, @RequestBody List<BuyGoodsDetailVo> bgs){
         Long uid = getCurLoginUserId(request);

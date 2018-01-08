@@ -69,7 +69,7 @@ public class CouponController extends BaseController{
      */
     @RequestMapping("queryUserCoupon")
     @ResponseBody
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public Map<String,Object> queryUserCoupon(HttpServletRequest request, PageUtils pageForm, long type){
         long uid=getCurLoginUserId(request);
         Pagination<CouponWebVo> pages=couponService.queryUserCoupon(uid,type,pageForm.getPageNo(),pageForm.getPageSize());
@@ -83,7 +83,7 @@ public class CouponController extends BaseController{
      * @return
      */
     @RequestMapping("userGrabCoupon")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = "未登录，请登录后操作")
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp userGrabCoupon(HttpServletRequest request,long cpId){
         long userId=getCurLoginUserId(request);
@@ -131,7 +131,7 @@ public class CouponController extends BaseController{
      * @return
      */
     @RequestMapping("queryCouponByGid")
-    @CheckSession(key =SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key =SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public @ResponseBody BaseResp queryCouponByGid(HttpServletRequest request, String gid){
         //取得当前用户
         Long curUid=getCurLoginUserId(request);
@@ -145,7 +145,7 @@ public class CouponController extends BaseController{
      * @return
      */
     @RequestMapping("queryCouponListsByBuy")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp queryCouponListsByBuy(HttpServletRequest request, @RequestBody List<BuyGoodsDetailVo> bgs){
         Long uid = getCurLoginUserId(request);

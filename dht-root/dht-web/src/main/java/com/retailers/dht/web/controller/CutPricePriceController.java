@@ -28,7 +28,7 @@ public class CutPricePriceController extends BaseController{
     CutPricePriceService cutPricePriceService;
 
     @RequestMapping("/saveCutPricePrice")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp queryCutPriceListsByGid(CutPricePrice cutPricePrice, HttpServletRequest request){
         cutPricePrice.setIsDelete(0L);
@@ -37,7 +37,7 @@ public class CutPricePriceController extends BaseController{
         return success(flag);
     }
     @RequestMapping("/queryCutPricePrice")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryCutPricePrice(Long gid, HttpServletRequest request){
         Long uid = getCurLoginUserId(request);
