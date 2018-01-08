@@ -39,6 +39,8 @@
 		<result property="fids" column="fids"/>
 		<result property="imgurl" column="imgurl"/>
 		<result property="count" column="count"/>
+		<result property="nickName" column="nickName"/>
+		<result property="chennelName" column="chennelName"/>
 	</resultMap>
 	<resultMap id="rm_opening_vo" type="com.retailers.hnc.common.vo.OpeningVo">
 		<result property="oid" column="o_id"/>
@@ -60,6 +62,20 @@
 	<select id="queryClientManageByTmId" resultMap="rm_clientManage" parameterType="java.lang.Long">
 		SELECT <include refid="clientManage_columns" />
 		FROM t_client_manage WHERE tm_id = #{tmId}
+	</select>
+
+	<select id="queryClientManageVoByTmId" resultMap="rm_clientManage_vo">
+		SELECT
+		t1.*,
+		t2.wau_headimgurl imgurl,t2.wau_nickname nickName,
+		t3.c_channel chennelName
+		FROM
+		t_client_manage t1
+		LEFT JOIN t_wx_auth_user t2 ON t1.tm_id=t2.wau_u_id
+		LEFT JOIN t_channel t3 ON t1.tm_channel=t3.c_id and t3.is_delete=0
+		WHERE
+		t1.tm_id=#{tmId}
+		and t1.is_delete=0
 	</select>
 	<!-- 客户表查询条件组合 -->
 	<sql id="clientManage_where">

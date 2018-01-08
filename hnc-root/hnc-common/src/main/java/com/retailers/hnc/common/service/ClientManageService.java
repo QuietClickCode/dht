@@ -41,6 +41,7 @@ public interface ClientManageService {
 	 * @date 2017-12-26 13:47:05
 	 */
 	public ClientManage queryClientManageByTmId(Long tmId);
+	public ClientManageVo queryClientManageVoByTmId(Long tmId);
 	/**
 	 * 查询客户管理列表
 	 * @param params 请求参数
