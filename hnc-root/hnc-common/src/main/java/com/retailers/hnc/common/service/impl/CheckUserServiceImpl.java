@@ -1,5 +1,6 @@
 
 package com.retailers.hnc.common.service.impl;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -125,10 +126,26 @@ public class CheckUserServiceImpl implements CheckUserService {
 		return map;
 	}
 	public List<CheckUserVo> queryAchievement( Map params){
-		params.put("isUse",0);
-		List<CheckUserVo> list1 = checkUserMapper.queryAchievement(params);
-		params.put("isUse",1);
-		List<CheckUserVo> list2 = checkUserMapper.queryAchievement(params);
+		Object obj1 = params.get("tidList");
+		Object obj2 = params.get("emIdList");
+		List<CheckUserVo> list1 = new ArrayList<CheckUserVo>();
+		List<CheckUserVo> list2 = new ArrayList<CheckUserVo>();
+		if(ObjectUtils.isEmpty(obj1)&&ObjectUtils.isEmpty(obj2) ){
+			params.put("isUse",0);
+			list1 = checkUserMapper.queryAllAchievement(params);
+			params.put("isUse",1);
+			list2 = checkUserMapper.queryAllAchievement(params);
+		}else if (ObjectUtils.isNotEmpty(obj1)){
+			params.put("isUse",0);
+			list1 = checkUserMapper.queryTeamAchievement(params);
+			params.put("isUse",1);
+			list2 = checkUserMapper.queryTeamAchievement(params);
+		}else if(ObjectUtils.isNotEmpty(obj2)){
+			params.put("isUse",0);
+			list1 = checkUserMapper.queryEmpAchievement(params);
+			params.put("isUse",1);
+			list2 = checkUserMapper.queryEmpAchievement(params);
+		}
 		for(CheckUserVo checkUserVo:list1){
 			checkUserVo.setNotuseNum(checkUserVo.getCount());
 		}

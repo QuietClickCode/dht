@@ -65,5 +65,11 @@ public interface CheckUserMapper {
 
 	public List<CheckUserVo> queryAchievement(@Param("params") Map params);
 
+	public List<CheckUserVo> queryTeamAchievement(@Param("params") Map params);
+
+	public List<CheckUserVo> queryEmpAchievement(@Param("params") Map params);
+
+	public List<CheckUserVo> queryAllAchievement(@Param("params") Map params);
+
 	public List<CheckUserVo> queryUsedOrNotUse(Pagination<CheckUserVo> pagination);
 }

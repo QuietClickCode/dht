@@ -37,17 +37,17 @@ public class ClientIntentionController extends BaseController{
         return map;
     }
 
-    @RequestMapping("/queryAllHouseType")
-    @CheckOpenId
+    @RequestMapping("/queryClientIntentionListByCmId")
     @ResponseBody
-    public Map<String,Object> queryAllHouseType(String fmIds){
+    public Map<String,Object> queryClientIntentionListByCmId(Long cmId){
+        Long cid = cmId;
         Map<String,Object> map = new HashMap<String,Object>();
-        if(ObjectUtils.isNotEmpty(fmIds))
-            map.put("houseTypeList", clientIntentionService.queryAllHouseType(fmIds));
+        List<ClientIntentionVo> list = clientIntentionService.queryClientIntentionVoListByCmId(cid);
+        if(ObjectUtils.isNotEmpty(list)){
+            map.put("rows",list);
+        }
         return map;
     }
-
-
 
     @RequestMapping("/deleteClientIntention")
     @ResponseBody
@@ -69,7 +69,6 @@ public class ClientIntentionController extends BaseController{
     @RequestMapping("/updateClientIntention")
     @ResponseBody
     public BaseResp updateClientIntention(ClientIntention clientIntention,String randStr){
-        System.out.println(clientIntention.getIid()+" "+clientIntention.getFids());
         Long cmId = getClientIdByOpenId(randStr);
         clientIntention.setCmId(cmId);
         clientIntention.setIsDelete(0L);

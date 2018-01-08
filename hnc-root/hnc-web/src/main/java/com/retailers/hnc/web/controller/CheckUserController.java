@@ -8,6 +8,9 @@ import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.EmployeeManageService;
 import com.retailers.hnc.common.service.OpeningService;
 import com.retailers.hnc.common.vo.CheckUserVo;
+import com.retailers.hnc.common.vo.EmpDataVo;
+import com.retailers.hnc.common.vo.GroupDataVo;
+import com.retailers.hnc.common.vo.GroupItemVo;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
@@ -114,9 +117,81 @@ public class CheckUserController extends BaseController {
         }else{
             params.put("emIdList",emIdList);
         }
+        params.put("oid",oid);
         Map map = new HashMap();
         List<CheckUserVo> list = checkUserService.queryAchievement(params);
-        map.put("rows",list);
+
+        //封装成前端所需要的对象
+        GroupDataVo groupDataVo = new GroupDataVo();
+        List<GroupItemVo> groupItemVoList = new ArrayList<GroupItemVo>();
+
+        for(CheckUserVo checkUserVo:list){
+            Long tid = checkUserVo.getTid();
+            String tname = checkUserVo.getTname();
+            GroupItemVo groupItemVo = new GroupItemVo();
+            groupItemVo.setTid(tid);
+            groupItemVo.setTname(tname);
+            if(ObjectUtils.isNotEmpty(groupItemVoList)){
+                boolean flag = true;
+                for(GroupItemVo groupItemVo1:groupItemVoList){
+                    if(groupItemVo1.getTid()==tid){
+                        flag = false;
+                        break;
+                    }
+                }
+                if(flag){
+                    groupItemVoList.add(groupItemVo);
+                }
+            }else{
+                groupItemVoList.add(groupItemVo);
+            }
+        }
+
+        Long todayTotal = 0L;
+        Long noPresent = 0L;
+        Long regisTotal = 0L;
+
+        if(ObjectUtils.isNotEmpty(groupItemVoList)){
+            for(GroupItemVo groupItemVo:groupItemVoList){
+                Long groupTodayTotal = 0L;
+                Long groupNoPresent = 0L;
+                Long groupRegisTotal = 0L;
+                List<EmpDataVo> empDataVos = new ArrayList<EmpDataVo>();
+                for(CheckUserVo checkUserVo:list){
+                    Long tid1 = checkUserVo.getTid();
+                    Long tid2 = groupItemVo.getTid();
+                    if(tid1==tid2){
+                        EmpDataVo empDataVo = new EmpDataVo();
+                        Long useNum = checkUserVo.getUseNum();
+                        Long notuseNum = checkUserVo.getNotuseNum();
+                        Long total = useNum + notuseNum;
+                        String empName = checkUserVo.getEmpName();
+                        empDataVo.setAgentTodayPresent(checkUserVo.getUseNum());
+                        empDataVo.setAgentNoPresent(notuseNum);
+                        empDataVo.setAgentRegisTotal(total);
+                        empDataVo.setEmpName(empName);
+                        empDataVo.setTid(tid1);
+                        empDataVos.add(empDataVo);
+                        groupTodayTotal += useNum;
+                        groupNoPresent += notuseNum;
+                        groupRegisTotal += total;
+                    }
+                }
+                groupItemVo.setGroupItem(empDataVos);
+                groupItemVo.setGroupNoPresent(groupNoPresent);
+                groupItemVo.setGroupTodayTotal(groupTodayTotal);
+                groupItemVo.setGroupRegisTotal(groupRegisTotal);
+                todayTotal += groupTodayTotal;
+                noPresent += groupNoPresent;
+                regisTotal += groupRegisTotal;
+            }
+        }
+        groupDataVo.setGroup(groupItemVoList);
+        groupDataVo.setNoPresent(noPresent);
+        groupDataVo.setTodayTotal(todayTotal);
+        groupDataVo.setRegisTotal(regisTotal);
+
+        map.put("rows",groupDataVo);
         return map;
     }
 

@@ -1,10 +1,12 @@
 package com.retailers.hnc.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.service.*;
+import com.retailers.hnc.common.service.impl.OpeningEmpClientServiceImpl;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
@@ -56,19 +58,16 @@ public class OpeningEmpClientController extends BaseController{
     @ResponseBody
     public Map<String,Object> queryCheckingandpassandnotpassListWeb(String isManage,Long status,String phone, int pageNo, int pageSize){
         Map map = new HashMap();
-
+        Map params1 = new HashMap();
+        params1.put("status",status);
         if(ObjectUtils.isNotEmpty(phone)){
-            Map params1 = new HashMap();
-            params1.put("status",status);
-            if(ObjectUtils.isEmpty(isManage)){
-                Long eid = getEmpIdByWxPhone(phone);
-                params1.put("eid",eid);
-            }
-            Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassListWeb(params1,pageNo,pageSize);
-            List<ClientManageVo> list  = pagination.getData();
-            map.put("total",pagination.getTotalCount());
-            map.put("rows",list);
+            Long eid = getEmpIdByWxPhone(phone);
+            params1.put("eid",eid);
         }
+        Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassListWeb(params1,pageNo,pageSize);
+        List<ClientManageVo> list  = pagination.getData();
+        map.put("total",pagination.getTotalCount());
+        map.put("rows",list);
         return map;
     }
 
@@ -98,6 +97,8 @@ public class OpeningEmpClientController extends BaseController{
                     }else{
                         map.put("total",0);
                     }
+                }else{
+                    map.put("total",0);
                 }
             }else{
                 map.put("total",opening.getOmenberNum());

@@ -55,6 +55,17 @@ public class OpeningController extends BaseController {
         return map;
     }
 
+    @RequestMapping("queryLastOpening")
+    @ResponseBody
+    public Map<String,Object> queryLastOpening(){
+        Opening opening = OpeningService.queryLastOpening();
+        Map map = new HashMap();
+        if(ObjectUtils.isNotEmpty(opening)){
+            map.put("row",opening);
+        }
+        return map;
+    }
+
     @RequestMapping("queryOFrelByOid")
     @ResponseBody
     public Map<String,Object> queryOFrelByOid(Long oid){

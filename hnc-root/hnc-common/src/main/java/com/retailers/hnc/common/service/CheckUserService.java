@@ -68,6 +68,8 @@ public interface CheckUserService {
 
 	public List<CheckUserVo> queryAchievement( Map params);
 
+
+
 	public List<CheckUserVo> queryUsedOrNotUse(Map<String, Object> params, int pageNo, int pageSize);
 
 }

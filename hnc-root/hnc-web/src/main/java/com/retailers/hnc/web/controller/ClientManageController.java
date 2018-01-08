@@ -68,8 +68,9 @@ public class ClientManageController extends BaseController {
 
     @RequestMapping("clientManageBindEmployeeManege")
     @ResponseBody
-    public BaseResp clientManageBindEmployeeManege(String randStr,Long emId){
+    public BaseResp clientManageBindEmployeeManege(String randStr,String phone){
         Long cid = getClientIdByOpenId(randStr);
+        Long emId = getEmpIdByWxPhone(phone);
         ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
         Long eid = clientManage.getTmEmployee();
         if(ObjectUtils.isNotEmpty(eid)){
