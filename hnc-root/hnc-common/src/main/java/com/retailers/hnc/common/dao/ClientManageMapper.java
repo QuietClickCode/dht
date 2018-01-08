@@ -47,6 +47,8 @@ public interface ClientManageMapper {
 	 * @date 2017-12-28 15:40:49
 	 */
 	public ClientManage queryClientManageByTmId(Long tmId);
+
+	public ClientManageVo queryClientManageVoByTmId(Long tmId);
 	/**
 	 * 查询客户表列表
 	 * @param pagination 分页对象

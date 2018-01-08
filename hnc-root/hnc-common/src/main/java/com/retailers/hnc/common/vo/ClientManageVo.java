@@ -16,6 +16,24 @@ public class ClientManageVo extends ClientManage {
     private String hoursesName;
     private String imgurl;
     private Long count;
+    private String nickName;
+    private String chennelName;
+
+    public String getChennelName() {
+        return chennelName;
+    }
+
+    public void setChennelName(String chennelName) {
+        this.chennelName = chennelName;
+    }
+
+    public String getNickName() {
+        return nickName;
+    }
+
+    public void setNickName(String nickName) {
+        this.nickName = nickName;
+    }
 
     public Long getCount() {
         return count;

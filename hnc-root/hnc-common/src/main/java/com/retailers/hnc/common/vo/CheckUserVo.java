@@ -20,6 +20,15 @@ public class CheckUserVo extends CheckUser {
     private Long tid;
     private Long useNum;
     private Long notuseNum;
+    private Long level;
+
+    public Long getLevel() {
+        return level;
+    }
+
+    public void setLevel(Long level) {
+        this.level = level;
+    }
 
     public Long getEmpId() {
         return empId;

@@ -45,6 +45,10 @@ public class ClientManageServiceImpl implements ClientManageService {
 		return clientManageMapper.queryClientManageByTmId(tmId);
 	}
 
+	public ClientManageVo queryClientManageVoByTmId(Long tmId) {
+		return clientManageMapper.queryClientManageVoByTmId(tmId);
+	}
+
 	public Pagination<ClientManage> queryClientManageList(Map<String, Object> params,int pageNo,int pageSize) {
 		Pagination<ClientManage> page = new Pagination<ClientManage>();
 		page.setPageNo(pageNo);
