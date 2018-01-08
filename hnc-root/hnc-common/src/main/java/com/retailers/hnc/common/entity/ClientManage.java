@@ -3,11 +3,11 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 import java.util.Date;
 /**
- * 描述：客户表对象
+ * 描述：用户表对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-28 15:40:49
+ * @date 2018-01-08 15:03:40
  */
 public class ClientManage implements java.io.Serializable {
 
@@ -18,15 +18,20 @@ public class ClientManage implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 200)
 	private String tmName;
-	/**客户性别*/
+	/**客户性别(0代表女，1代表男)*/
 	@NotEmpty
 	private Integer tmSex;
 	/**所属置业顾问*/
 	@NotEmpty
 	private Long tmEmployee;
+	/**常驻区域*/
+	@NotEmpty
+	@Length(min = 1, max = 20)
+	private String tmArea;
 	/**客户年龄*/
 	@NotEmpty
-	private Integer tmAge;
+	@Length(min = 1, max = 20)
+	private String tmAge;
 	/**购房状态(0代表未购房，1代表已购房)*/
 	@NotEmpty
 	private Integer tmStatus;
@@ -97,11 +102,18 @@ public class ClientManage implements java.io.Serializable {
 	public Long getTmEmployee() {
 		return this.tmEmployee;
 	}
-	public void setTmAge(Integer value) {
+	public void setTmArea(String value) {
+		this.tmArea = value;
+	}
+
+	public String getTmArea() {
+		return this.tmArea;
+	}
+	public void setTmAge(String value) {
 		this.tmAge = value;
 	}
 
-	public Integer getTmAge() {
+	public String getTmAge() {
 		return this.tmAge;
 	}
 	public void setTmStatus(Integer value) {
