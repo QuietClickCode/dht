@@ -3,7 +3,6 @@ package com.retailers.hnc.web.controller;
 import com.retailers.hnc.common.entity.ClientIntention;
 import com.retailers.hnc.common.service.ClientIntentionService;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
-import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
@@ -34,6 +33,15 @@ public class ClientIntentionController extends BaseController{
         if(ObjectUtils.isNotEmpty(list)){
             map.put("rows",list);
         }
+        return map;
+    }
+
+    @RequestMapping("/queryAllHouseType")
+    @ResponseBody
+    public Map<String,Object> queryAllHouseType(String fmIds){
+        Map<String,Object> map = new HashMap<String,Object>();
+        if(ObjectUtils.isNotEmpty(fmIds))
+            map.put("houseTypeList", clientIntentionService.queryAllHouseType(fmIds));
         return map;
     }
 

@@ -9,6 +9,7 @@
 			<result property="tmEmployee" column="tm_employee"/>
 			<result property="tmAge" column="tm_age"/>
 			<result property="tmStatus" column="tm_status"/>
+			<result property="tmArea" column="tm_area"/>
 			<result property="tmLoginStatus" column="tm_login_status"/>
 			<result property="tmPhone" column="tm_phone"/>
 			<result property="tmRegisterTime" column="tm_register_time"/>
@@ -26,6 +27,7 @@
 		<result property="tmEmployee" column="tm_employee"/>
 		<result property="tmAge" column="tm_age"/>
 		<result property="tmStatus" column="tm_status"/>
+		<result property="tmArea" column="tm_area"/>
 		<result property="tmLoginStatus" column="tm_login_status"/>
 		<result property="tmPhone" column="tm_phone"/>
 		<result property="tmRegisterTime" column="tm_register_time"/>
@@ -56,7 +58,7 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="clientManage_columns">
-		tm_id,tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+		tm_id,tm_name,tm_sex,tm_employee,tm_area,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
 	</sql>
 	<!-- 根据客户表主键取得数据 -->
 	<select id="queryClientManageByTmId" resultMap="rm_clientManage" parameterType="java.lang.Long">
@@ -100,6 +102,9 @@
 			</if>
 			<if test="null != params.tmLoginStatus">
 				AND tm_login_status = #{params.tmLoginStatus}
+			</if>
+			<if test="null != params.tmArea and '' != params.tmArea">
+				AND tm_area = #{params.tmArea}
 			</if>
 			<if test="null != params.tmPhone and '' != params.tmPhone">
 				AND tm_phone = #{params.tmPhone}
@@ -186,10 +191,10 @@
 	<!--添加客户表 -->
 	<insert id="saveClientManage" parameterType="com.retailers.hnc.common.entity.ClientManage" useGeneratedKeys="true" keyProperty="tmId">
 		INSERT INTO t_client_manage (
-			tm_name,tm_sex,tm_employee,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
+			tm_name,tm_sex,tm_employee,tm_area,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
 		) VALUES
 		(
-			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=INTEGER},#{tmStatus,jdbcType=INTEGER},#{tmLoginStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
+			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=VARCHAR},#{tmStatus,jdbcType=INTEGER},#{tmLoginStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改客户表 -->
@@ -208,6 +213,9 @@
             <if test="null != tmAge">
                 tm_age = #{tmAge},
             </if>
+			<if test="null != tmArea and '' != tmArea">
+				tm_area = #{tmArea},
+			</if>
             <if test="null != tmStatus">
                 tm_status = #{tmStatus},
             </if>
