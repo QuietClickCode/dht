@@ -1,7 +1,10 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：钱包消费返现(包括指定可返现商品类型）Service
@@ -54,6 +57,13 @@ public interface WalletCashBackQueueService {
 	 * @date 2017-12-20 01:43:22
 	 */
 	public boolean deleteWalletCashBackQueueByCcbqD(Long ccbqD);
+
+	/**
+	 * 取得排名公式
+	 * @param gcId
+	 * @return
+	 */
+	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId);
 
 }
 

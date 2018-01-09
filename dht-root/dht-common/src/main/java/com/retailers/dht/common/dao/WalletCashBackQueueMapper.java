@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
+import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -58,5 +59,12 @@ public interface WalletCashBackQueueMapper {
 	 * @date 2017-12-20 01:43:22
 	 */
 	public List<WalletCashBackQueue> queryWalletCashBackQueueList(Pagination<WalletCashBackQueue> pagination);
+
+	/**
+	 * 取得各个商品种 的返现例表
+	 * @param gcId 商品类型
+	 * @return
+	 */
+	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId);
 
 }

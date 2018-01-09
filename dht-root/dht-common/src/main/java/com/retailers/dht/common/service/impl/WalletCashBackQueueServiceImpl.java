@@ -1,10 +1,14 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.dao.WalletCashBackQueueMapper;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
+import com.retailers.dht.common.view.WalletCashBackQueueView;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -43,6 +47,11 @@ public class WalletCashBackQueueServiceImpl implements WalletCashBackQueueServic
 	public boolean deleteWalletCashBackQueueByCcbqD(Long ccbqD) {
 		int status = walletCashBackQueueMapper.deleteWalletCashBackQueueByCcbqD(ccbqD);
 		return status == 1 ? true : false;
+	}
+
+	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId) {
+		List<WalletCashBackQueueView>lists= walletCashBackQueueMapper.queryWalletCashBackQueues(gcId);
+		return lists;
 	}
 }
 

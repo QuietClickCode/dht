@@ -132,7 +132,13 @@
 		where is_delete!=1
 		and is_show=1
 	</select>
-
+	<select id="queryAllGoodsClassificationParent" resultMap="rm_goodsClassification_vo">
+		SELECT <include refid="goodsClassification_columns" />
+		FROM t_goods_classification
+		where is_delete!=1
+		and is_show=1
+		AND parent_Id IS NULL
+	</select>
 	<!--添加商品子类表 -->
 	<insert id="saveGoodsClassification" parameterType="com.retailers.dht.common.entity.GoodsClassification" useGeneratedKeys="true" keyProperty="ggId">
 		INSERT INTO t_goods_classification (

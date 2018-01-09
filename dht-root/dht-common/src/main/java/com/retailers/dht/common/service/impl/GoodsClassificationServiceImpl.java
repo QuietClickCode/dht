@@ -369,8 +369,13 @@ public class GoodsClassificationServiceImpl implements GoodsClassificationServic
 		return rtn;
 	}
 
+	public List<GoodsClassification> queryParent() {
+		//取得所有的
+		List<GoodsClassification> list =goodsClassificationMapper.queryAllGoodsClassificationParent();
+		return list;
+	}
 
-	private Long topNode(Map<Long,Long> map,Long id){
+	private Long topNode(Map<Long,Long> map, Long id){
 		//取得该节点的直接上级
 		Long parsentIds=map.get(id);
 		while (ObjectUtils.isNotEmpty(map.get(parsentIds))){
