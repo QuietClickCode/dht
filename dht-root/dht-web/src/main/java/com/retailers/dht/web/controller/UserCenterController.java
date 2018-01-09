@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -67,8 +68,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userMember")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
-    public String openUserMember(HttpServletRequest request){
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserMember(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-member");
     }
     /**
@@ -77,8 +78,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userWallet")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",isOpenPage = true)
-    public ModelAndView openUserWallet(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public ModelAndView openUserWallet(HttpServletRequest request,HttpServletResponse response){
         ModelAndView modelAndView=new ModelAndView();
         Long uId=getCurLoginUserId(request);
         UserInfoVIew user = userService.queryUserInfoByUid(uId);
@@ -92,7 +93,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userDetailInfo")
-    public String openUserDetailInfo(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserDetailInfo(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-info");
     }
 
@@ -102,7 +104,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userRecharge")
-    public String userRecharge(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String userRecharge(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-recharge");
     }
 
@@ -113,7 +116,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userAddress")
-    public String openUserAddress(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserAddress(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-address");
     }
 
@@ -123,7 +127,8 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("userCoupon")
-    public String openUserCoupon(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserCoupon(HttpServletRequest request, HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-coupon");
     }
 
@@ -131,7 +136,8 @@ public class UserCenterController extends BaseController{
      *  绑定手机页面
      */
     @RequestMapping("UserPhone")
-    public String openUserPhone(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserPhone(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-phone");
     }
 
@@ -139,7 +145,8 @@ public class UserCenterController extends BaseController{
      *  安全管理页面
      */
     @RequestMapping("UserSafety")
-    public String openUserSafety(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserSafety(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-safety");
     }
 
@@ -147,7 +154,8 @@ public class UserCenterController extends BaseController{
      *  修改昵称页面
      */
     @RequestMapping("UserNickName")
-    public String openUserNickName(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUserNickName(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user-nickname");
     }
 
@@ -155,7 +163,8 @@ public class UserCenterController extends BaseController{
      *  更改手机号页面
      */
     @RequestMapping("updateUserPhone")
-    public String openUpdateUserPhone(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUpdateUserPhone(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/update_user_phone");
     }
 
@@ -163,7 +172,8 @@ public class UserCenterController extends BaseController{
      *  修改支付密码页面
      */
     @RequestMapping("updatePayPwd")
-    public String openUpdatePayPwd(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openUpdatePayPwd(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/update_pay_password");
     }
 
@@ -171,7 +181,8 @@ public class UserCenterController extends BaseController{
      *  设置支付密码页面
      */
     @RequestMapping("setPayPwd")
-    public String openSetPayPwd(HttpServletRequest request){
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String openSetPayPwd(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"usercenter/user_set_pay_password");
     }
 
@@ -181,7 +192,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("queryUserCardPackage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp queryUserCardPackage(HttpServletRequest request){
         long uid=getCurLoginUserId(request);
@@ -196,7 +207,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("updateUserName")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp updateUserName(HttpServletRequest request,String name){
         long uid=getCurLoginUserId(request);
@@ -218,7 +229,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("updateUserSex")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp updateUserSex(HttpServletRequest request,Integer sex){
         long uid=getCurLoginUserId(request);
@@ -240,7 +251,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("updateUserHead")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp updateUserHead(HttpServletRequest request,Long attachmentId){
         long uid=getCurLoginUserId(request);
@@ -263,7 +274,7 @@ public class UserCenterController extends BaseController{
      */
     @RequestMapping("sendSmsValidCode")
     @ResponseBody
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp sendSmsValidCode(HttpServletRequest request,String phone){
         long uid=getCurLoginUserId(request);
         if(ObjectUtils.isEmpty(phone)){
@@ -284,7 +295,7 @@ public class UserCenterController extends BaseController{
      */
     @RequestMapping("verifyValidCode")
     @ResponseBody
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp verifyValidCode(HttpServletRequest request,String phone,int type,String code,Date curDate){
         boolean flag = smsSendRecordService.queryCurSmsSendRecordByPhone(phone,type,code,curDate);
         return success(flag);
@@ -296,7 +307,7 @@ public class UserCenterController extends BaseController{
 
     @RequestMapping("checkSendSms")
     @ResponseBody
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp verifyValidCode(HttpServletRequest request,String phone,long type,Date curDate){
         long uid=getCurLoginUserId(request);
         int time = smsSendRecordService.checkSendSms(uid,phone,type,curDate);
@@ -313,7 +324,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("bindPhone")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp bindPhone(HttpServletRequest request,String phone,String code){
         long uid=getCurLoginUserId(request);
@@ -338,7 +349,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("checkPhone")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp checkPhone(HttpServletRequest request,String phone){
         long uid=getCurLoginUserId(request);
@@ -360,7 +371,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("changePayPwd")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp changePayPwd(HttpServletRequest request,String oldPayPwd,String payPwd){
         long uid=getCurLoginUserId(request);
@@ -385,7 +396,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("addPayPwd")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp addPayPwd(HttpServletRequest request,String payPwd){
         long uid=getCurLoginUserId(request);
@@ -408,7 +419,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("getUserInfo")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> getUserInfo(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -430,7 +441,7 @@ public class UserCenterController extends BaseController{
      *  获取当前用户ID
      */
     @RequestMapping("queryLoginUserId")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryLoginUserId(HttpServletRequest request){
         Long uId=getCurLoginUserId(request);
@@ -443,7 +454,7 @@ public class UserCenterController extends BaseController{
      *  获取当前用户昵称
      */
     @RequestMapping("queryLoginUserName")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryLoginUserName(HttpServletRequest request){
         Long uId=getCurLoginUserId(request);
@@ -457,7 +468,7 @@ public class UserCenterController extends BaseController{
      *  当前用户是否登陆
      */
     @RequestMapping("queryLoginUser")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryLoginUser(HttpServletRequest request){
         HashMap<String,Object> map = new HashMap<String,Object>();
@@ -475,7 +486,7 @@ public class UserCenterController extends BaseController{
      *  获取当前用户支付密码是否为空
      */
     @RequestMapping("queryLoginUserPayPwd")
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryLoginUserPayPwd(HttpServletRequest request){
         Long uId=getCurLoginUserId(request);
@@ -558,7 +569,7 @@ public class UserCenterController extends BaseController{
      * @return
      */
     @RequestMapping("editorUserUseModule")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp editorUserUseModule(HttpServletRequest request,Integer module){
         long uid=getCurLoginUserId(request);

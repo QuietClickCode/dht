@@ -51,7 +51,6 @@ public class WxFilter implements Filter {
         }else{
             userAgent="";
         }
-
         boolean isFromMobile= CheckMobile.check(userAgent);
         String uri_ = request.getRequestURI();
         //判断是否存在推荐人

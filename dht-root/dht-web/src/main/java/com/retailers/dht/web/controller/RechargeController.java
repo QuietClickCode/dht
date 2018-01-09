@@ -14,6 +14,7 @@ import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -41,6 +42,7 @@ public class RechargeController extends BaseController {
      * @return
      */
     @RequestMapping("queryRechargeLists")
+    @ResponseBody
     public BaseResp queryRecharges(HttpServletRequest request){
         List<RechargeView> list = rechargeService.queryRechargeLists();
         return success(list);
@@ -53,7 +55,7 @@ public class RechargeController extends BaseController {
      * @return
      */
     @RequestMapping("userRecharges")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp userRecharges(HttpServletRequest request,String rid){
         long curUid=getCurLoginUserId(request);
         if(ObjectUtils.isEmpty(rid)){

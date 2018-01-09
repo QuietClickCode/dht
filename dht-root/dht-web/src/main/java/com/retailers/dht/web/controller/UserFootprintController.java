@@ -33,13 +33,13 @@ public class UserFootprintController extends BaseController{
     UserFootprintService userFootprintService;
 
     @RequestMapping("/toUserFootprintpage")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String toUserFootprintpage(HttpServletRequest request, HttpServletResponse response) {
         return redirectUrl(request,"user/footprint");
     }
 
     @RequestMapping("/saveUserFootprint")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp saveUserFootprint(HttpServletRequest request, UserFootprint userFootprint) {
         Long uid = getCurLoginUserId(request);
@@ -51,7 +51,7 @@ public class UserFootprintController extends BaseController{
     }
 
     @RequestMapping("/queryUserFootprint")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryUserFootprint(HttpServletRequest request,int pageNo,int pageSize,Long isDelete) {
         Long uid = getCurLoginUserId(request);
@@ -65,7 +65,7 @@ public class UserFootprintController extends BaseController{
     }
 
     @RequestMapping("/delonefootprint")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp delonefootprint(Long ufId) {
         boolean flag = userFootprintService.deleteUserFootprintByUfId(ufId);
@@ -73,7 +73,7 @@ public class UserFootprintController extends BaseController{
     }
 
     @RequestMapping("/delallfootprint")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp delallfootprint(HttpServletRequest request) {
         Long uid = getCurLoginUserId(request);
