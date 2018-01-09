@@ -50,6 +50,25 @@ public class ClientInfoController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/queryClientListByPhone")
+    @ResponseBody
+    public Map<String,Object> queryClientListByPhone(PageUtils pageForm,String phone,String registerTimes,Long tmLoginStatus){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("isDelete",0);
+        Long emId = getEmpIdByWxPhone(phone);
+        map.put("tmEmployee",emId);
+        map.put("tmLoginStatus",tmLoginStatus);
+        if(ObjectUtils.isNotEmpty(registerTimes)){
+            map.put("tmRegisterTime",registerTimes);
+        }
+        System.out.println(registerTimes);
+        Pagination<ClientManageVo> teamPagination = clientManageService.queryClientManageListWeb(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",teamPagination.getTotalCount());
+        gtm.put("rows",teamPagination.getData());
+        return gtm;
+    }
+
     @RequestMapping("/addClient")
     @ResponseBody
     public BaseResp addClient(ClientManage clientManage,String tmRegisterTimes){
