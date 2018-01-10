@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -51,12 +52,14 @@ public class OrderController extends BaseController {
     GoodsGdcprelService goodsGdcprelService;
 
     @RequestMapping("checkOrder")
-    public String checkOrder(HttpServletRequest request){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String checkOrder(HttpServletRequest request, HttpServletResponse response){
         return redirectUrl(request,"order/create-order");
     }
 
     @RequestMapping("orderList")
-    public ModelAndView openOrderList(HttpServletRequest request, Long orderStatus){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public ModelAndView openOrderList(HttpServletRequest request,HttpServletResponse response, Long orderStatus){
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("orderStatus",orderStatus);
         String url=redirectUrl(request,"order/all-order");
@@ -66,47 +69,50 @@ public class OrderController extends BaseController {
 
     /*物流信息*/
     @RequestMapping("checkLogistics")
-    public String checkLogistics(HttpServletRequest request){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String checkLogistics(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"order/logistics");
     }
 
     /*评价订单*/
     @RequestMapping("checkAppraise")
-    public String checkAppraise(HttpServletRequest request){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String checkAppraise(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"order/appraise-order");
     }
 
     /*确认收货*/
     @RequestMapping("dealSuccess")
-    public String dealSuccess(HttpServletRequest request){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String dealSuccess(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"order/deal-succeed");
     }
 
     @RequestMapping("getCheckOrderData")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
-    public String getCheckOrderData(HttpServletRequest request,String data){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String getCheckOrderData(HttpServletRequest request,HttpServletResponse response,String data){
         data += "\'isActivity\':3}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySeckill")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
-    public String getCheckOrderDataBySeckill(HttpServletRequest request,String data){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String getCheckOrderDataBySeckill(HttpServletRequest request,HttpServletResponse response,String data){
         data += "\'isActivity\':1}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySpecial")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
-    public String getCheckOrderDataBySpecial(HttpServletRequest request,String data){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String getCheckOrderDataBySpecial(HttpServletRequest request,HttpServletResponse response,String data){
         data += "\'isActivity\':0}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
 
     @RequestMapping("getCheckOrderDataByCutPrice")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage")
-    public String getCheckOrderDataByCutPrice(HttpServletRequest request,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long goodsId,Long cspId){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String getCheckOrderDataByCutPrice(HttpServletRequest request,HttpServletResponse response,String gname,String imgurl,String remark,Long gdcpId,Float gdprice,Long goodsId,Long cspId){
         if(ObjectUtils.isNotEmpty(gdcpId)){
             Long uid = getCurLoginUserId(request);
             GoodsGdcprelVo goodsGdcprelVo = goodsGdcprelService.queryCheckOrderData(gdcpId,uid);
@@ -140,12 +146,14 @@ public class OrderController extends BaseController {
     }
 
     @RequestMapping("choseAddress")
-    public String choseAddress(HttpServletRequest request){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String choseAddress(HttpServletRequest request,HttpServletResponse response){
         return redirectUrl(request,"order/user-address");
     }
 
     @RequestMapping("getAddressData")
-    public String choseAddress(HttpServletRequest request, UserAddress userAddress){
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String choseAddress(HttpServletRequest request,HttpServletResponse response, UserAddress userAddress){
         request.getSession().setAttribute("checkOrderAddress",userAddress);
         return "redirect:/order/checkOrder";
     }
@@ -156,7 +164,7 @@ public class OrderController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/buyGoods",method = RequestMethod.POST)
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp buyGoods(HttpServletRequest request, @RequestBody BuyInfoVo buyInfo){
         long uid=getCurLoginUserId(request);
@@ -251,7 +259,7 @@ public class OrderController extends BaseController {
      * @return
      */
     @RequestMapping("queryUserOrder")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryUserOrder(HttpServletRequest request,Long orderStatus,PageUtils pageForm){
         long uid=getCurLoginUserId(request);
@@ -364,7 +372,7 @@ public class OrderController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/orderConfirm",method = RequestMethod.POST)
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp orderConfirm(HttpServletRequest request,Long orderId){
         try{
@@ -386,7 +394,7 @@ public class OrderController extends BaseController {
      * @return
      */
     @RequestMapping(value = "/cancelOrder",method = RequestMethod.POST)
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp cancelOrder(HttpServletRequest request,Long orderId){
         try{

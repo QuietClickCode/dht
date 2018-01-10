@@ -121,12 +121,13 @@ public class WxUserController extends BaseController {
                     }else{
                         map1.put("wxPhone","-1");
                     }
+                    System.out.println("phone:"+phone);
                     List<EmployeeManage> empList = employeeManageService.queryEmployeeManageList(map1,1,1).getData();
                     if(ObjectUtils.isNotEmpty(empList)){
                         EmployeeManage employeeManage = empList.get(0);
                         type = employeeManage.getEmType();
                     }
-
+                    System.out.println("type1:"+type);
                     List<WxAuthUser> list = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
                     if(ObjectUtils.isEmpty(list)){
                         //保存客户的信息
@@ -151,7 +152,7 @@ public class WxUserController extends BaseController {
                             clientManageService.updateClientManage(clientManage);
                         }
                     }
-
+                    System.out.println("type2:"+type);
                     String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
                     randStr = URLEncoder.encode(randStr,"utf-8");
                     WebSystemConstant.putValue(randStr,endTime);

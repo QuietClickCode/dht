@@ -35,7 +35,7 @@ public class BuyCarController extends BaseController{
 
 
     @RequestMapping("/saveBuyCar")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request){
         buyCar.setIsDelete(0L);
@@ -51,7 +51,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/queryBuyCarList")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> queryBuyCar(HttpServletRequest request,int pageNo,int pageSize,Long isPutway){
         Long uid = getCurLoginUserId(request);
@@ -69,7 +69,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/updateBuyCar")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp updateBuyCar(BuyCar buyCar){
         boolean flag = buyCarService.updateBuyCar(buyCar);
@@ -77,7 +77,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/deleteBuyCar")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp deleteBuyCar(String buyCarIds){
         boolean flag = buyCarService.deleteBuyCarByBcIds(buyCarIds);
@@ -85,7 +85,7 @@ public class BuyCarController extends BaseController{
     }
 
     @RequestMapping("/querybuycarcount")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public Map<String,Object> querybuycarcount(HttpServletRequest request){
         Long uid = getCurLoginUserId(request);

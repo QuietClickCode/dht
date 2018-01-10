@@ -34,6 +34,10 @@ public class SystemConstant {
      */
     public static final String LOG_USER_SESSION_KEY="user";
     /**
+     * 用户未登陆提示信息
+     */
+    public static final String USER_UN_LOGIN_ALERT_MSG="当前用户未登录，请登录后操作";
+    /**
      * 分享用户session 存入key
      */
     public static final String SHARE_USER_SESSION_KEY="shareUser";

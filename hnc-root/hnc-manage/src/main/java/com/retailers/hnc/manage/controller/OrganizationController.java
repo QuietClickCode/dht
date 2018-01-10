@@ -36,14 +36,12 @@ public class OrganizationController extends BaseController {
 
     @RequestMapping("openOrganization")
     @Menu(parentRes = "sys.manager.employee",resourse = "organization.openOrganization",description = "角色管理",sort = 1,label = "角色管理")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     public String openOrganization(){
         return "org/organization";
     }
 
     @RequestMapping("queryOrganizationLists")
     @Function(label="角色列表", description = "所有角色列表（树型展示)", resourse = "organization.queryOrganizationLists",sort=1,parentRes="organization.openOrganization")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public Map<String,Object> queryOrganizationLists(){
         List<OrganizationVo> menu=organizationService.queryOrganizationLists(null);
@@ -60,7 +58,6 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @RequestMapping("queryOrgNode")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp queryMenuNode(Long orgId){
         List<OrganizationVo> menu=organizationService.queryOrganizationLists(orgId);
@@ -74,7 +71,6 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("addOrganization")
     @Function(label = "添加角色",parentRes = "organization.openOrganization",resourse = "organization.addOrganization",description = "添加角色",sort = 2)
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp addOrganization( Organization org){
         try{
@@ -96,7 +92,6 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("editOrganization")
     @Function(label = "编辑角色",parentRes = "organization.openOrganization",resourse = "organization.editOrganization",description = "编辑角色",sort = 2)
-    @CheckSession(key=SystemConstant.LOG_USER_SESSION_KEY,msg = "未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editOrganization(Organization org){
         boolean flag = organizationService.editOrg(org);
@@ -114,7 +109,6 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("/removeOrg")
     @Function(label="删除角色", description = "删除角色", resourse = "organization.removeOrg",sort=3,parentRes="organization.openOrganization")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp removeOrg(Long orgId){
         boolean flag=organizationService.removeOrg(orgId);
@@ -128,7 +122,6 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("/reqOrgPermission")
     @Function(label="取得角色权限", description = "取得角色权限", resourse = "organization.reqOrgPermission",sort=3,parentRes="organization.openOrganization")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp reqOrgPermission(Long orgId){
         List<ZTreeVo> rtn = organizationService.reqOrgPermission(orgId);
@@ -142,7 +135,6 @@ public class OrganizationController extends BaseController {
      */
     @RequestMapping("/editorOrgPermission")
     @Function(label="编辑权限", description = "编辑权限", resourse = "organization.editorOrgPermission",sort=3,parentRes="organization.openOrganization")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp editorOrgPermission(Long orgId,String resIds){
         if(ObjectUtils.isEmpty(orgId)){
@@ -158,7 +150,6 @@ public class OrganizationController extends BaseController {
      * @return
      */
     @RequestMapping("/reqOrgTree")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp reqOrgTree(String selectOrgIds){
         List<ZTreeVo> rtn = organizationService.reqOrgTree(selectOrgIds);

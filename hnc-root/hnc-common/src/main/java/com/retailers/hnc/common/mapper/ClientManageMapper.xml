@@ -194,7 +194,7 @@
 			tm_name,tm_sex,tm_employee,tm_area,tm_age,tm_status,tm_login_status,tm_phone,tm_register_time,tm_id_card,tm_channel,tm_info,is_delete,tm_order,version
 		) VALUES
 		(
-			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmAge,jdbcType=VARCHAR},#{tmStatus,jdbcType=INTEGER},#{tmLoginStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
+			#{tmName,jdbcType=VARCHAR},#{tmSex,jdbcType=INTEGER},#{tmEmployee,jdbcType=BIGINT},#{tmArea,jdbcType=VARCHAR},#{tmAge,jdbcType=VARCHAR},#{tmStatus,jdbcType=INTEGER},#{tmLoginStatus,jdbcType=INTEGER},#{tmPhone,jdbcType=VARCHAR},#{tmRegisterTime,jdbcType=DATE},#{tmIdCard,jdbcType=VARCHAR},#{tmChannel,jdbcType=BIGINT},#{tmInfo,jdbcType=VARCHAR},#{isDelete,jdbcType=INTEGER},#{tmOrder,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改客户表 -->

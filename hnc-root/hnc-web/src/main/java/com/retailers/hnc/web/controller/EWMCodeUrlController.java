@@ -38,7 +38,7 @@ public class EWMCodeUrlController extends BaseController {
         String url = "https://api.weixin.qq.com/wxa/getwxacodeunlimit?access_token="+ WxConfig.ACCESS_TOKEN;
         System.out.println(url);
         JSONObject jsonObject = new JSONObject();
-        jsonObject.put("path",path);
+        jsonObject.put("page",path);
         jsonObject.put("scene",scene);
         jsonObject.put("width",width);
         String jsonStr = jsonObject.toJSONString();

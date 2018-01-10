@@ -27,7 +27,7 @@ public class GoodsIsBuycpController extends BaseController {
     GoodsIsbuycpService goodsIsbuycpService;
 
     @RequestMapping("/querygoodsIsbuycp")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public  Map<String,Object> queryGoodsById(Long cpId,HttpServletRequest request){
         Long uid = getCurLoginUserId(request);

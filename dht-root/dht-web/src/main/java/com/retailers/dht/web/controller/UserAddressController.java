@@ -29,7 +29,7 @@ public class UserAddressController extends BaseController {
     private UserAddressService userAddressService;
 
     @RequestMapping("openAddUserAddress")
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public ModelAndView openAddUserAddress(HttpServletRequest request,Long uaId){
         ModelAndView mv = new ModelAndView();
         if(ObjectUtils.isNotEmpty(uaId)){
@@ -63,7 +63,7 @@ public class UserAddressController extends BaseController {
      */
     @RequestMapping("addUserAddress")
     @ResponseBody
-    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY)
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp addUserAddress(HttpServletRequest request, UserAddress userAddress){
         Long uId=getCurLoginUserId(request);
         userAddress.setUaUid(uId);

@@ -59,7 +59,7 @@
     <div class="form_login">
         <div class="login">
             <span class="user_login active">用户登录</span>
-            <span class="user_register">快速注册</span>
+            <span class="user_register" style="display: none;">快速注册</span>
         </div>
         <!-- 是否绑定微信-->
         <input type="hidden" name="isBindWx" id="isBindWx" value="${isBindWx}">
@@ -111,7 +111,7 @@
     </div>
 </div>
 
-<div class="ui_draggable" id="sfczzhDiv"></div>
+<%--<div class="ui_draggable" id="sfczzhDiv"></div>
 <div class="popover" id="sfczzhtsDiv">
     <div class="dialog">
         <div class="dialog_hd">
@@ -126,12 +126,12 @@
             </div>
         </div>
     </div>
-</div>
+</div>--%>
 
-<div class="container">
+<div class="container" id="accountSelectDiv">
     <div class="container_box">
-        <a class="login_btn">有大汇堂电脑端账号，登录绑定</a>
-        <a class="login_btn">无大汇堂电脑端账号，直接进入</a>
+        <a class="login_btn" onclick="haveUser()">有大汇堂电脑端账号，登录绑定</a>
+        <a class="login_btn" onclick="wxLoginNoUser()">暂无大汇堂电脑端账号，直接进入</a>
     </div>
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
@@ -247,8 +247,8 @@
     }
 
     function haveUser(){
-        $("#sfczzhDiv").hide();
-        $("#sfczzhtsDiv").hide();
+        $("#accountSelectDiv").hide();
+//        $("#sfczzhtsDiv").hide();
     }
 </script>
 </body>

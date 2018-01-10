@@ -65,6 +65,12 @@ public interface GoodsClassificationMapper {
 	//根据商品大类取得所有子类
 	public List<GoodsClassification> queryAllGoodsClassificationByGtId();
 
+	/**
+	 * 取得商品种类顶层
+	 * @return
+	 */
+	public List<GoodsClassification> queryAllGoodsClassificationParent();
+
 	public List<GoodsClassificationVo> queryGoodsClassificationListByParentId(Map map);
 
 	public List<GoodsClassification> selectAllGClassList();

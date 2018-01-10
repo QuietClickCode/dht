@@ -3,22 +3,38 @@
 <mapper namespace="com.retailers.dht.common.dao.WalletCashBackQueueMapper">
 
 	<resultMap id="rm_walletCashBackQueue" type="com.retailers.dht.common.entity.WalletCashBackQueue">
-			<result property="ccbqId" column="ccbq_id"/>
-			<result property="ccbqOrderId" column="ccbq__order_id"/>
-			<result property="ccbqGid" column="ccbq_gid"/>
-			<result property="ccbqGoodsType" column="ccbq__goods_type"/>
-			<result property="ccbqUid" column="ccbq__uid"/>
-			<result property="ccbqMoney" column="ccbq__money"/>
-			<result property="ccbqStatus" column="ccbq__status"/>
-			<result property="ccbqCreateTime" column="ccbq__create_time"/>
-			<result property="ccbqCashBackTime" column="ccbq__cash_back_time"/>
-			<result property="ccbqWaitTime" column="ccbq__wait_time"/>
-			<result property="version" column="version"/>
+		<result property="ccbqId" column="ccbq_id"/>
+		<result property="ccbqOrderId" column="ccbq_order_id"/>
+		<result property="ccbqGid" column="ccbq_gid"/>
+		<result property="ccbqGoodsType" column="ccbq_goods_type"/>
+		<result property="ccbqUid" column="ccbq_uid"/>
+		<result property="ccbqMoney" column="ccbq_money"/>
+		<result property="ccbqStatus" column="ccbq_status"/>
+		<result property="ccbqCreateTime" column="ccbq_create_time"/>
+		<result property="ccbqCashBackTime" column="ccbq_cash_back_time"/>
+		<result property="ccbqWaitTime" column="ccbq_wait_time"/>
+		<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="rm_walletCashBackQueue_view" type="com.retailers.dht.common.view.WalletCashBackQueueView">
+		<result property="ccbqId" column="ccbq_id"/>
+		<result property="ccbqOrderId" column="ccbq_order_id"/>
+		<result property="ccbqGid" column="ccbq_gid"/>
+		<result property="ccbqGoodsType" column="ccbq_goods_type"/>
+		<result property="ccbqUid" column="ccbq_uid"/>
+		<result property="ccbqMoney" column="ccbq_money"/>
+		<result property="ccbqStatus" column="ccbq_status"/>
+		<result property="ccbqCreateTime" column="ccbq_create_time"/>
+		<result property="ccbqCashBackTime" column="ccbq_cash_back_time"/>
+		<result property="ccbqWaitTime" column="ccbq_wait_time"/>
+		<result property="userName" column="u_name"/>
+		<result property="userHead" column="wau_headimgurl"/>
+		<result property="orderNo" column="order_no"/>
+		<result property="curCashQueue" column="curCashQueue"/>
+		<result property="rownum" column="rownum"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="walletCashBackQueue_columns">
-		ccbq_id,ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+		ccbq_id,ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 	</sql>
 	<!-- 根据钱包消费返现(包括指定可返现商品类型）主键取得数据 -->
 	<select id="queryWalletCashBackQueueByCcbqId" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
@@ -32,37 +48,37 @@
 				AND ccbq_id = #{params.ccbqId}
 			</if>
 			<if test="null != params.ccbqOrderId">
-				AND ccbq__order_id = #{params.ccbqOrderId}
+				AND ccbq_order_id = #{params.ccbqOrderId}
 			</if>
 			<if test="null != params.ccbqGid">
 				AND ccbq_gid = #{params.ccbqGid}
 			</if>
 			<if test="null != params.ccbqGoodsType">
-				AND ccbq__goods_type = #{params.ccbqGoodsType}
+				AND ccbq_goods_type = #{params.ccbqGoodsType}
 			</if>
 			<if test="null != params.ccbqUid">
-				AND ccbq__uid = #{params.ccbqUid}
+				AND ccbq_uid = #{params.ccbqUid}
 			</if>
 			<if test="null != params.ccbqMoney">
-				AND ccbq__money = #{params.ccbqMoney}
+				AND ccbq_money = #{params.ccbqMoney}
 			</if>
 			<if test="null != params.ccbqStatus">
-				AND ccbq__status = #{params.ccbqStatus}
+				AND ccbq_status = #{params.ccbqStatus}
 			</if>
 			<if test="null != params.ccbqCreateTimeBegin">
-				AND ccbq__create_time &gt;= TO_DATE('${params.ccbqCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND ccbq_create_time &gt;= TO_DATE('${params.ccbqCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.ccbqCreateTimeEnd">
-				AND ccbq__create_time &lt;= TO_DATE('${params.ccbqCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND ccbq_create_time &lt;= TO_DATE('${params.ccbqCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.ccbqCashBackTimeBegin">
-				AND ccbq__cash_back_time &gt;= TO_DATE('${params.ccbqCashBackTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+				AND ccbq_cash_back_time &gt;= TO_DATE('${params.ccbqCashBackTimeBegin}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.ccbqCashBackTimeEnd">
-				AND ccbq__cash_back_time &lt;= TO_DATE('${params.ccbqCashBackTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+				AND ccbq_cash_back_time &lt;= TO_DATE('${params.ccbqCashBackTimeEnd}','yyyy-mm-dd hh24:mi:ss')
 			</if>
 			<if test="null != params.ccbqWaitTime">
-				AND ccbq__wait_time = #{params.ccbqWaitTime}
+				AND ccbq_wait_time = #{params.ccbqWaitTime}
 			</if>
 			<if test="null != params.version">
 				AND version = #{params.version}
@@ -78,7 +94,7 @@
 	<!--添加钱包消费返现(包括指定可返现商品类型） -->
 	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+			ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		(
 			#{ccbqOrderId,jdbcType=BIGINT},#{ccbqGid,jdbcType=BIGINT},#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
@@ -87,7 +103,7 @@
 	<!--批量添加返现队列-->
 	<insert id="saveWalletCashBackQueues" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-		ccbq__order_id,ccbq_gid,ccbq__goods_type,ccbq__uid,ccbq__money,ccbq__status,ccbq__create_time,ccbq__cash_back_time,ccbq__wait_time,version
+			ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator="," >
 			(
@@ -108,36 +124,36 @@
 	<update id="updateWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue">
 		UPDATE t_wallet_cash_back_queue
 		<set>
-            <if test="null != ccbqOrderId">
-                ccbq__order_id = #{ccbqOrderId},
-            </if>
-            <if test="null != ccbqGid">
-                ccbq_gid = #{ccbqGid},
-            </if>
-            <if test="null != ccbqGoodsType">
-                ccbq__goods_type = #{ccbqGoodsType},
-            </if>
-            <if test="null != ccbqUid">
-                ccbq__uid = #{ccbqUid},
-            </if>
-            <if test="null != ccbqMoney">
-                ccbq__money = #{ccbqMoney},
-            </if>
-            <if test="null != ccbqStatus">
-                ccbq__status = #{ccbqStatus},
-            </if>
-            <if test="null != ccbqCreateTime">
-                ccbq__create_time = #{ccbqCreateTime},
-            </if>
-            <if test="null != ccbqCashBackTime">
-                ccbq__cash_back_time = #{ccbqCashBackTime},
-            </if>
-            <if test="null != ccbqWaitTime">
-                ccbq__wait_time = #{ccbqWaitTime},
-            </if>
-            <if test="null != version">
-                version = version+1,
-            </if>
+			<if test="null != ccbqOrderId">
+				ccbq_order_id = #{ccbqOrderId},
+			</if>
+			<if test="null != ccbqGid">
+				ccbq_gid = #{ccbqGid},
+			</if>
+			<if test="null != ccbqGoodsType">
+				ccbq_goods_type = #{ccbqGoodsType},
+			</if>
+			<if test="null != ccbqUid">
+				ccbq_uid = #{ccbqUid},
+			</if>
+			<if test="null != ccbqMoney">
+				ccbq_money = #{ccbqMoney},
+			</if>
+			<if test="null != ccbqStatus">
+				ccbq_status = #{ccbqStatus},
+			</if>
+			<if test="null != ccbqCreateTime">
+				ccbq_create_time = #{ccbqCreateTime},
+			</if>
+			<if test="null != ccbqCashBackTime">
+				ccbq_cash_back_time = #{ccbqCashBackTime},
+			</if>
+			<if test="null != ccbqWaitTime">
+				ccbq_wait_time = #{ccbqWaitTime},
+			</if>
+			<if test="null != version">
+				version = version+1,
+			</if>
 		</set>
 		WHERE ccbq_id = #{ccbqId} and version = #{version}
 	</update>
@@ -145,4 +161,70 @@
 	<delete id="deleteWalletCashBackQueueByCcbqId" parameterType="java.lang.Long">
 		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_id = #{ccbqId}
 	</delete>
+
+	<!--分页查询 -->
+	<select id="queryWalletCashBackQueues" resultMap="rm_walletCashBackQueue_view" parameterType="java.lang.Long">
+		SELECT
+			r.rownum,
+			IFNULL(c.curCashQueue,-1) curCashQueue,
+			wc.ccbq_id,
+			ccbq_order_id,
+			ccbq_gid,
+			ccbq_goods_type,
+			ccbq_uid,
+			ccbq_money,
+			ccbq_status,
+			ccbq_create_time,
+			ccbq_cash_back_time,
+			ccbq_wait_time,
+			u.u_name,
+			wu.wau_headimgurl,
+			o.order_no
+		FROM
+			t_wallet_cash_back_queue wc
+		LEFT JOIN (
+			SELECT
+				@curCashRowNum := @curCashRowNum + 1 AS curCashQueue,
+				d.ccbq_id
+			FROM
+				(SELECT @curCashRowNum := 0) r,
+				(
+					SELECT
+						ccbq_id
+					FROM
+						t_wallet_cash_back_queue wc
+					WHERE
+						ccbq_status != 2
+						AND ccbq_goods_type = #{gcId}
+					ORDER BY
+						ccbq_id ASC
+				) d
+		) c ON wc.ccbq_id = c.ccbq_id
+		LEFT JOIN (
+			SELECT
+				@rownum := @rownum + 1 AS rownum,
+				d.ccbq_id
+			FROM
+				(SELECT @rownum := 0) r,
+				(
+					SELECT
+						ccbq_id
+					FROM
+						t_wallet_cash_back_queue wc
+						WHERE
+						 ccbq_goods_type = #{gcId}
+					ORDER BY
+						ccbq_id ASC
+				) d
+		) r ON wc.ccbq_id = r.ccbq_id,
+		 t_user u
+		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id,
+		 t_order o
+		WHERE
+			wc.ccbq_uid = u.u_id
+		AND wc.ccbq_order_id = o.id
+		AND ccbq_goods_type = #{gcId}
+		ORDER BY
+			ccbq_id ASC
+	</select>
 </mapper>
