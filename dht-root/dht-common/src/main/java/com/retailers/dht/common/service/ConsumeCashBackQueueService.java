@@ -55,6 +55,8 @@ public interface ConsumeCashBackQueueService {
 	 */
 	public boolean deleteConsumeCashBackQueueByIcbqId(Long icbqId);
 
+
+
 }
 
 

@@ -109,7 +109,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					isSuccess=true;
 					transactionManager.commit(ts);
 					msg="执行成功,执行时间:"+ DateUtil.dateToString(curDate,DateUtil.DATE_WITHSECOND_FORMAT)+",待待时间："+(curDate.getTime()-osq.getCreateTime().getTime())+
-					"方法执行时间:"+(System.currentTimeMillis()-curDate.getTime())+"";
+					"，方法执行时间:"+(System.currentTimeMillis()-curDate.getTime())+"";
 				}catch (AppException e){
 					msg=e.getMessage();
 					e.printStackTrace();
@@ -190,7 +190,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			userCardPackageMapper.statisticsUserSalseConsume(uid,type,totalPrice,cumulationCashPrice,isCashBack,ucp.getVersion());
 			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(totalPrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
 			//添加用户累计返现日志
-			if(isCashBack){
+			if(!isCashBack){
 				userCardPackageService.addUserCardPackageLog(uid, LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,totalPrice,ucp.getUcurIntegral(),remark,new Date());
 			}
 		}

@@ -98,6 +98,12 @@ public interface GoodsClassificationService {
 	 */
 	public Map<Long,Map<String,Long>> queryGoodsClassificationByGids(List<Long> gids);
 
+	/**
+	 * 取得商品种类顶层
+	 * @return
+	 */
+	public List<GoodsClassification> queryParent();
+
 }
 
 
