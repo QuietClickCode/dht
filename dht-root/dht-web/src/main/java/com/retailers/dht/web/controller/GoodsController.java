@@ -79,7 +79,7 @@ public class GoodsController extends BaseController {
         Map params = new HashMap();
         params.put("gid",gid);
         params.put("isDelete",0L);
-        params.put("isShow",isShow);
+//        params.put("isShow",isShow);
         params.put("isChecked",isChecked);
         Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,1,1);
         Map<String,Object> gtm = new HashMap<String,Object>();

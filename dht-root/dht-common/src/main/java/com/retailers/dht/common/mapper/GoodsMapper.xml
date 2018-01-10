@@ -183,9 +183,7 @@
 			<if test="null != params.version">
 				AND t1.version = #{params.version}
 			</if>
-			<if test="null != params.isShow">
-				and t1.g_id=t7.g_id
-			</if>
+
 		</where>
 	</sql>
 
@@ -200,9 +198,10 @@
 		LEFT JOIN t_goods_classification t3 ON t1.g_classification=t3.gg_id and t3.is_delete=0
 		LEFT JOIN t_goods_detail t4 on t1.g_id=t4.g_id and t4.is_delete=0
 		LEFT JOIN t_goods_image t5 ON t1.g_id=t5.g_id and t5.is_delete=0
-		LEFT JOIN t_attachment t6 ON t5.gi_id=t6.id, t_goods_config t7
+		LEFT JOIN t_attachment t6 ON t5.gi_id=t6.id
 		<include refid="goods_where"/>
 		GROUP BY t1.g_id
+		ORDER BY t1.g_id DESC
 	</select>
 
 	<select id="querySamegclassGoods" resultMap="rm_goods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
