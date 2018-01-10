@@ -8,6 +8,12 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/new.css">
+    <style>
+        .address{
+            height: auto;
+            overflow: hidden;
+        }
+    </style>
 </head>
 <body class="bge6">
 <div class="box">
@@ -29,7 +35,7 @@
             <i class="icon-right"></i>
         </a>
         <a href="/order/choseAddress">
-            <img id="ordernoaddressimg" style="display: none;width: 100%;height: 100%" src="/img/ordernoaddress.jpg">
+            <img id="ordernoaddressimg" style="display: none;width: 100%;" src="/img/ordernoaddress.jpg">
         </a>
 
     </div>
