@@ -51,7 +51,6 @@
 <script src="/js/toast/js/toastr.js"></script>
 <script src="/js/layer/layer.js"></script>
 
-
 <%--加载开盘期数--%>
 <script>
     var oid;
@@ -77,40 +76,13 @@
                     omenberNumber = data.rows[0].omenberNum;
                 }
                 $("#"+oid).attr("selected","selected");
-                createOpeningStatus(oid)
             }
         });
     });
 </script>
 
-<%--加载最近一期开盘的预约关系表--%>
-<script>
-    var flag;
-    function createOpeningStatus(status) {
-        $.ajax({
-            url:"/employeeRelationship/queryOpeningStatus",
-            method:"post",
-            dataType:"json",
-            data:{
-                pId:status
-            },
-            success:function (data) {
-                if(data.flag == 0){
-                    flag = false;
-                    $("#goodsClassificationTable").bootstrapTable('destroy');
-                    addEmRelationShip();
-                } else{
-                    flag = true;
-                    $("#goodsClassificationTable").bootstrapTable('destroy');
-                    createAllEmployee(status)
-                }
 
-            }
-        });
-    }
-</script>
 
-<%--选择开盘期数--%>
 <script>
     $("#openingMenu").change(function () {
         oid = $(this).val();
@@ -120,89 +92,22 @@
                 omenberNumber = opening.get(key).omenberNum;
             }
         }
-        createOpeningStatus($(this).val());
+        console.log(oid);
     });
 </script>
 
-<%--添加预约关系--%>
 <script>
-    $(".subEmRelationship").click(function () {
-        if(!flag){
-            layer.msg("请重新分配预约名额",{time:"1000"});
-            return;
-        }
-        var scanCodeList = new Array();
-        $(".menberNum").each(function () {
-            var floorRe = new Object();
-            floorRe['pid'] = oid;
-            floorRe['emId'] = $(this).attr("data-emid");
-            floorRe['parentId'] = $(this).attr("data-parentid");
-            floorRe['emReservation'] = $(this).val();
-            floorRe['isDelete'] = 0;
-            floorRe['version'] = 0;
-            scanCodeList.push(floorRe);
-        });
 
-        $.ajax({
-            url:"/employeeRelationship/addEmRelationshipList",
-            method:"post",
-            contentType: "application/json",
-            data:JSON.stringify(scanCodeList),
-            success:function (data) {
-                layer.msg("分配成功");
-                refreshTableData();
-            }
-        });
-    });
-
-    var flag;
-    var status;
-    function addEmployeeRelationship($this) {
-        let count = 0;
-        $(".menberNum").each(function () {
-            count = Number(count) + Number($(this).val());
-         });
-        if(count > omenberNumber){
-            flag = false;
-            layer.msg("当前可分配名额不足");
-            return;
-        }
-        if($($this).val() != ""){
-            checkCanChangeEmpNum($this);
-            if(!status)
-                return;
-        }
-        flag = true;
-        $("#MenberNum").val(omenberNumber - count);
-    }
-    
-    function checkCanChangeEmpNum($this) {
-        $.ajax({
-            url:"/employeeRelationship/checkCanChangeEmpNum",
-            method:"post",
-            dataType:"json",
-            data:{
-                oid:oid,
-                eid:$($this).attr("data-emid"),
-                num:$($this).val()
-            },
-            success:function (data) {
-                status = data.flag;
-                if(!data.flag) {
-                    layer.msg("请重新分配",{time:"1000"});
-                }
-            }
-        });
-    }
 </script>
+
 
 
 <script type="text/javascript">
     //用于缓存资源表格数据
-    var rowDatas=new Map();
-    function addEmRelationShip() {
+    $(function () {
+        var rowDatas=new Map();
         $('#goodsClassificationTable').bootstrapTable({
-            url:"/employeeRelationship/queryAllClient",
+            url:"/employeeRelationship/queryAllEmRelationshipVoList",
             method: 'post',                      //请求方式（*）
             toolbar: '#toolbar',                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色
@@ -211,7 +116,7 @@
             sortable: false,                     //是否启用排序
             sortOrder: "asc",                   //排序方式
             queryParams: function (params) {
-
+                pid:1
             },                                  //传递参数（*）
             sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
             pageNumber: 1,                      //初始化加载第一页，默认第一页
@@ -225,8 +130,9 @@
             treeId:"tid",
             contentType:"application/x-www-form-urlencoded",
             treeField:"teamName",
-            treePid:"parentId",                         //上级菜单关联id
+            treePid:"emTeam",                         //上级菜单关联id
             treeRootLevel: 1,
+            treeCollapseAll: true,
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行
@@ -242,7 +148,7 @@
                 valign : 'middle',
                 title: '团队名称'
             },{
-                field: 'employeeName',
+                field: 'emName',
                 align : 'center',
                 valign : 'middle',
                 title: '置业顾问名称'
@@ -253,25 +159,26 @@
                 title: '团队总分配预约数',
                 formatter:function (value,row,index) {
                     let html = "";
-                    if(row.parentId == null)
-                        html += "<p id='a"+row.tid+"'></p>";
+                    if(row.emTeam != null){
+                        if(row.parentId == null)
+                            html += "<p id='a"+row.tid+"'></p>";
+                    }
+
                     return html;
                 }
 
             },{
-                field: 'reservationCount',
+                field: 'emReservation',
                 align : 'center',
                 valign : 'middle',
                 title: '置业顾问分配人数',
                 formatter:function (value,row,index) {
-                    let html;
-                    let num = "";
-                    if(row.emReservation != null)
-                        num = row.emReservation;
-                    let count = $("#MenberNum").val();
-                    $("#MenberNum").val(count - num);
-                    if(row.parentId != null){
-                        html='<input type="text" onclick="event.stopPropagation()" onblur="addEmployeeRelationship(this)" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'"  value="'+num+'"   class="form-control menberNum">';
+                    let html = "";
+                    if(row.emTeam != null){
+                        if(row.emReservation != null)
+                            html = row.emReservation;
+                        else
+                            html = 0;
                     }
                     return html;
                 }
@@ -279,103 +186,7 @@
             }],
 
         });
-    }
-
-    function createAllEmployee(pId) {
-        $('#goodsClassificationTable').bootstrapTable({
-            url:"/employeeRelationship/queryAllEmployee",
-            method: 'post',                      //请求方式（*）
-            toolbar: '#toolbar',                //工具按钮用哪个容器
-            striped: true,                      //是否显示行间隔色
-            cache: false,                       //是否使用缓存，默认为true，所以一般情况下需要设置一下这个属性（*）
-            //pagination: true,                   //是否显示分页（*）
-            sortable: false,                     //是否启用排序
-            sortOrder: "asc",                   //排序方式
-            queryParams: function (params) {
-                return {
-                    pId:pId
-                };
-            },                                  //传递参数（*）
-            sidePagination: "server",           //分页方式：client客户端分页，server服务端分页（*）
-            pageNumber: 1,                      //初始化加载第一页，默认第一页
-            pageSize: 10,                       //每页的记录行数（*）
-            pageList: [10, 25, 50, 100],        //可供选择的每页的行数（*）
-//            search: true,                       //是否显示表格搜索，此搜索是客户端搜索，不会进服务端，所以，个人感觉意义不大
-            strictSearch: true,
-            showColumns: true,                  //是否显示所有的列
-            treeView: true,
-            undefinedText:"",
-            treeId:"tid",
-            contentType:"application/x-www-form-urlencoded",
-            treeField:"teamName",
-            treePid:"parentId",                         //上级菜单关联id
-            treeRootLevel: 1,
-            showRefresh: true,                  //是否显示刷新按钮
-            minimumCountColumns: 2,             //最少允许的列数
-            clickToSelect: true,                //是否启用点击选中行
-            uniqueId: "tid",                     //每一行的唯一标识，一般为主键列
-            showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
-            selectItemName: 'parentItem',
-            dataType:"json",
-            columns: [{
-                checkbox: true
-            },{
-                field: 'teamName',
-                align : 'left',
-                valign : 'middle',
-                title: '团队名称'
-
-            },{
-                field: 'employeeName',
-                align : 'center',
-                valign : 'middle',
-                title: '置业顾问名称'
-
-            },{
-                align : 'center',
-                valign : 'middle',
-                title: '团队总分配预约数',
-                formatter:function (value,row,index) {
-                    let html = "";
-                    if(row.parentId == null)
-                        html += "<p id='a"+row.tid+"'></p>";
-                    return html;
-                }
-
-            },{
-                field: 'reservationCount',
-                align : 'center',
-                valign : 'middle',
-                title: '置业顾问分配人数',
-                formatter:function (value,row,index) {
-                    let html;
-                    let num = "";
-                    if(row.emReservation != null)
-                        num = row.emReservation;
-                    let count = $("#MenberNum").val();
-                    $("#MenberNum").val(count - num);
-                    if(row.parentId != null)
-                        html='<input type="text" onclick="event.stopPropagation()" onblur="addEmployeeRelationship(this)" data-erid="'+row.erId+'" data-emid = "'+row.emId+'" data-parentid = "'+row.parentId+'" value="'+num+'" disabled   class="form-control menberNum">';
-                    return html;
-                }
-
-            }],
-
-        });
-    }
-
-
-    /**
-     * 刷新表格数据
-     **/
-    function refreshTableData() {
-        $('#goodsClassificationTable').bootstrapTable(
-            "refresh",
-            {
-                url:"/employeeRelationship/queryAllClient"
-            }
-        );
-    }
+    });
 
 </script>
 </body>

@@ -153,4 +153,15 @@
 		and t1.is_delete = 0 and t1.em_team = #{parentId}
 		GROUP BY t1.em_id
 	</select>
+
+	<select id="queryAllEmRelationshipVoList" resultMap="rm_EmployeeRelationshipVo" parameterType="java.lang.Long">
+		select t2.er_id,t2.p_id,t2.em_reservation,COUNT(t3.tm_employee) as count,t1.em_id,t1.em_name,t1.em_team
+		from t_employee_manage t1
+		LEFT JOIN t_em_relationship t2 on t1.em_id = t2.em_id  and t2.is_delete = 0 and t2.p_id = #{pid}
+		LEFT JOIN t_client_manage t3 ON t1.em_id=t3.tm_employee and t3.is_delete=0 and t3.tm_login_status=0
+		where
+		t1.em_type = 1
+		and t1.is_delete = 0
+		GROUP BY t1.em_id
+	</select>
 </mapper>
