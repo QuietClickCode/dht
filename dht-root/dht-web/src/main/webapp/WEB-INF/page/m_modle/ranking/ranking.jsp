@@ -10,8 +10,22 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <style>
+        ::-webkit-scrollbar {display:none}
         .price{
             float: right;
+        }
+
+        .rannk_tb tr th{
+            font-size: 0.3rem;
+        }
+
+        .all-order-tab{
+            overflow-x: scroll;
+
+        }
+
+        .all-order-tab a{
+            width: 1.5rem;
         }
     </style>
 </head>
@@ -22,9 +36,22 @@
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
-    <c:forEach items="${gts}" var="goodsTypes" varStatus="vs">
-        <a href="#gt_${goodsTypes.ggId}" onclick="selectGts(${goodsTypes.ggId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${goodsTypes.ggId}">${goodsTypes.ggName}</a>
-    </c:forEach>
+    <div style="width: 30rem;">
+        <c:forEach items="${gts}" var="goodsTypes" varStatus="vs">
+            <a href="#gt_${goodsTypes.ggId}" onclick="selectGts(${goodsTypes.ggId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${goodsTypes.ggId}">${goodsTypes.ggName}</a>
+        </c:forEach>
+        <a href="">蔬菜</a>
+        <a href="">水果</a>
+        <a href="">蔬菜</a>
+        <a href="">水果</a>
+        <a href="">蔬菜</a>
+        <a href="">水果</a>
+        <a href="">蔬菜</a>
+        <a href="">水果</a>
+        <a href="">蔬菜</a>
+        <a href="">水果</a>
+    </div>
+
 </div>
 
 <div class="box2">
