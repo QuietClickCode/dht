@@ -1,7 +1,9 @@
 package com.retailers.hnc.manage.controller;
 
 import com.retailers.auth.annotation.Menu;
+import com.retailers.hnc.common.entity.Team;
 import com.retailers.hnc.common.service.CheckUserService;
+import com.retailers.hnc.common.service.TeamService;
 import com.retailers.hnc.common.vo.CheckUserVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.tools.utils.ObjectUtils;
@@ -10,10 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2017/9/28.
@@ -25,6 +24,9 @@ public class CheckUserController extends BaseController {
     @Autowired
     CheckUserService checkUserService;
 
+    @Autowired
+    TeamService teamService;
+
     @RequestMapping("/employeeManageMapping")
     @Menu(parentRes = "sys.manager.employee",resourse = "checkUser.checkUserMapping",description = "业绩查询",label = "业绩查询")
     public String employeeManageMapping(){
@@ -34,8 +36,12 @@ public class CheckUserController extends BaseController {
     @RequestMapping("queryAchievement")
     @ResponseBody
     public Map queryAchievement(Long oid,String empIds,String tids){
-        List<Long> emIdList = StringToList(empIds);
-        List<Long> tidsList = StringToList(tids);
+        List<Long> emIdList = null;
+        List<Long> tidsList = null;
+        if(!ObjectUtils.isEmpty(empIds))
+            emIdList = StringToList(empIds);
+        if(!ObjectUtils.isEmpty(tids))
+            tidsList = StringToList(tids);
         Map params = new HashMap();
         if(ObjectUtils.isNotEmpty(tids)){
             params.put("tidList",tidsList);
@@ -45,94 +51,56 @@ public class CheckUserController extends BaseController {
         params.put("oid",oid);
         Map map = new HashMap();
         List<CheckUserVo> list = checkUserService.queryAchievement(params);
-
+        long id = 30000;
+        HashSet<Long> set = new HashSet<Long>();
         for(CheckUserVo checkUserVo:list){
-            checkUserVo.setTid(-checkUserVo.getTid());
+            set.add(checkUserVo.getTid());
+            checkUserVo.setTid(checkUserVo.getTid());
+            checkUserVo.setTname("");
+            checkUserVo.setLevel(2L);
+            checkUserVo.setId(id++);
         }
+        List<Team> teams = teamService.queryAllTeam();
 
-        //加载组
-        CheckUserVo checkUserVo = new CheckUserVo();
-        List<CheckUserVo> teamList = new ArrayList<CheckUserVo>();
-        for(CheckUserVo checkUserVo1:list){
-            Long tid = checkUserVo1.getTid();
-            String tname = checkUserVo1.getTname();
-
-            checkUserVo.setCuId(tid);
-            checkUserVo.setClientName(tname);
-
-            if(ObjectUtils.isNotEmpty(list)){
-                boolean flag = true;
-                for(CheckUserVo checkUserVo2:teamList){
-                    if(checkUserVo2.getCuId()==tid){
-                        flag = false;
-                        break;
+        if(emIdList != null){
+            for (Long aLong:set){
+                for (Team team : teams) {
+                    if(aLong == team.getTid()){
+                        CheckUserVo userVo = new CheckUserVo();
+                        userVo.setId(team.getTid());
+                        userVo.setTname(team.getTname());
+                        userVo.setLevel(1L);
+                        setCheckUserCount(userVo,list);
+                        list.add(userVo);
                     }
                 }
-                if(flag){
-                    teamList.add(checkUserVo);
+            }
+        }else if(tidsList != null){
+            for (Long aLong : tidsList) {
+                for (Team team : teams) {
+                    if(aLong == team.getTid()){
+                        CheckUserVo userVo = new CheckUserVo();
+                        userVo.setId(team.getTid());
+                        userVo.setTname(team.getTname());
+                        userVo.setLevel(1L);
+                        setCheckUserCount(userVo,list);
+                        list.add(userVo);
+                    }
                 }
-            }else{
-                teamList.add(checkUserVo);
+            }
+        }else if(empIds == null && tids == null){
+            for (Team team : teams) {
+                CheckUserVo userVo = new CheckUserVo();
+                userVo.setId(team.getTid());
+                userVo.setTname(team.getTname());
+                userVo.setLevel(1L);
+                setCheckUserCount(userVo,list);
+                list.add(userVo);
+            }
         }
-        }
-        list.addAll(teamList);
-
-
-        list = queryEmployeeTree(list);
 
         map.put("rows",list);
         return map;
-    }
-
-    //分页相关方法
-    public List<CheckUserVo> queryEmployeeTree(List<CheckUserVo> relationshipVos) {
-        List<CheckUserVo> rtnList=new ArrayList<CheckUserVo>();
-        Map<Long,Map<Long,Long>> child=new HashMap<Long, Map<Long, Long>>();
-        queryEmployeeNode(relationshipVos,child);
-        Map<Long,Long> alloShow=new HashMap<Long, Long>();
-        queryAllEmployee(null,child,alloShow);
-        for(CheckUserVo vo:relationshipVos){
-            if(ObjectUtils.isEmpty(vo.getTid())){
-                vo.setLevel(1l);
-                rtnList.add(vo);
-            }else{
-                if(alloShow.containsKey(vo.getTid())){
-                    rtnList.add(vo);
-                }
-                vo.setLevel(2l);
-            }
-        }
-        return rtnList;
-    }
-
-    private void queryEmployeeNode(List<CheckUserVo> list, Map<Long,Map<Long,Long>> child){
-        for(CheckUserVo vo:list){
-            Long parentId=vo.getTid();
-            if(ObjectUtils.isEmpty(parentId)){
-                parentId=-1l;
-            }
-            if(child.containsKey(parentId)){
-                child.get(parentId).put(vo.getTid(),vo.getIsDelete());
-            }else{
-                Map<Long,Long> maps=new HashMap<Long, Long>();
-                maps.put(vo.getTid(),vo.getIsDelete());
-                child.put(parentId,maps);
-            }
-        }
-    }
-    private void queryAllEmployee(Long parentId,Map<Long,Map<Long,Long>> map,Map<Long,Long>allowMap){
-        if(ObjectUtils.isEmpty(parentId)){
-            parentId=-1l;
-        }
-        Map<Long,Long> child=map.get(parentId);
-        if(ObjectUtils.isNotEmpty(child)&&!child.isEmpty()){
-            for(Long key:child.keySet()){
-                allowMap.put(key,key);
-                if(map.containsKey(key)){
-                    queryAllEmployee(key,map,allowMap);
-                }
-            }
-        }
     }
 
     public List<Long> StringToList(String str){
@@ -146,5 +114,21 @@ public class CheckUserController extends BaseController {
             return list;
         }
         return null;
+    }
+
+    public void setCheckUserCount(CheckUserVo userVo,List<CheckUserVo> userVos){
+        Long groupUseTotal = 0L;
+        Long groupNoUseTotal = 0L;
+        Long groupCount = 0L;
+        for (CheckUserVo vo : userVos) {
+            if(userVo.getId() == vo.getTid()){
+                groupUseTotal += vo.getUseNum();
+                groupNoUseTotal += vo.getNotuseNum();
+                groupCount += vo.getCount();
+            }
+        }
+        userVo.setNotuseNum(groupNoUseTotal);
+        userVo.setUseNum(groupUseTotal);
+        userVo.setCount(groupUseTotal + groupNoUseTotal);
     }
 }
