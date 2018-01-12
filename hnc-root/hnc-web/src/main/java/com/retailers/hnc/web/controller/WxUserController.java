@@ -142,6 +142,7 @@ public class WxUserController extends BaseController {
                         wxAuthUser.setWauOpenid(openid);
                         wxAuthUser.setWauUnionid(unionid);
                         wxAuthUser.setWauCreateDate(new Date());
+                        wxAuthUser.setWauWxId(0L);
                         wxAuthUserService.saveWxAuthUser(wxAuthUser);
                     }else{
                         WxAuthUser wxAuthUser1 = list.get(0);
