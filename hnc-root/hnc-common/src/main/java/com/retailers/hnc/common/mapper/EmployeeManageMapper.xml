@@ -36,6 +36,10 @@
 		<result property="emInfo" column="em_info"/>
 		<result property="isShow" column="is_show"/>
 		<result property="isDelete" column="is_delete"/>
+		<!--当天登记过的客户-->
+		<!--<result property="CurRegisterClientCount" column="curRegisterClientCount"/>-->
+		<!--所有登记过的客户-->
+		<!--<result property="RegisterClientCount" column="registerClientCount"/>-->
 		<result property="emOrder" column="em_order"/>
 		<result property="version" column="version"/>
 		<result property="headImgUrl" column="headImgUrl"/>

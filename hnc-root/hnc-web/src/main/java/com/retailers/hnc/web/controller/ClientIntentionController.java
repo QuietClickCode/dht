@@ -28,6 +28,7 @@ public class ClientIntentionController extends BaseController{
     @ResponseBody
     public Map<String,Object> queryClientIntentionList(String randStr){
         Long cid = getClientIdByOpenId(randStr);
+        System.out.println(cid);
         Map<String,Object> map = new HashMap<String,Object>();
         List<ClientIntentionVo> list = clientIntentionService.queryClientIntentionVoListByCmId(cid);
         if(ObjectUtils.isNotEmpty(list)){

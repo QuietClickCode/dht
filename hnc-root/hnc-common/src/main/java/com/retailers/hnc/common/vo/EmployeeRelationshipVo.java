@@ -24,6 +24,10 @@ public class EmployeeRelationshipVo{
     private String TeamName;
     //所属该团队的置业顾问
     private List<EmployeeRelationshipVo> employeeManages;
+    //父级ID
+    private Long tid;
+    //层级关系
+    private Long level;
 
     public Long getErid() {
         return erid;
@@ -95,5 +99,21 @@ public class EmployeeRelationshipVo{
 
     public void setEmployeeManages(List<EmployeeRelationshipVo> employeeManages) {
         this.employeeManages = employeeManages;
+    }
+
+    public Long getLevel() {
+        return level;
+    }
+
+    public void setLevel(Long level) {
+        this.level = level;
+    }
+
+    public Long getTid() {
+        return tid;
+    }
+
+    public void setTid(Long tid) {
+        this.tid = tid;
     }
 }

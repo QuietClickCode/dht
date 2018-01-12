@@ -3,6 +3,7 @@ import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
 import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.mybatis.pagination.Pagination;
+
 import java.util.List;
 /**
  * 描述：分配预约名额关系表DAO
@@ -89,5 +90,7 @@ public interface EmRelationshipMapper {
 	public int saveEmRelationshipList(List<EmRelationship> emRelationships);
 
 	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship);
+
+	public List<EmployeeRelationshipVo> queryAllEmRelationshipVoList(Long pid);
 
 }

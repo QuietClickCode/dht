@@ -6,6 +6,7 @@ import com.retailers.hnc.common.entity.EmRelationship;
 import com.retailers.hnc.common.service.EmRelationshipService;
 import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.vo.EmRelationshipVo;
+import com.retailers.hnc.common.vo.EmployeeRelationshipVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,19 @@ public class EmployeeRelationshipController extends BaseController{
         map.put("rows",rows);
         return map;
     }
+
+    @RequestMapping("/queryAllEmRelationshipVoList")
+    @Function(label = "查询所有职业顾问",description = "查询所有职业顾问",resourse = "employeeRelationship.queryAllEmRelationshipVoList",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")
+    @ResponseBody
+    public Map<String,Object> queryAllEmRelationshipVoList(Long pid){
+        List<EmployeeRelationshipVo> rows = emRelationshipService.queryAllEmRelationshipVoList(pid);
+        HashMap<String,Object> map=new HashMap<String, Object>();
+        map.put("total",1000);
+        map.put("rows",rows);
+        return map;
+    }
+
+
 
     @RequestMapping("/addEmRelationshipList")
     @Function(label = "批量添加预约客户",description = "批量添加预约客户",resourse = "employeeRelationship.addEmRelationshipList",sort = 3,parentRes = "employeeRelationship.EmployeeRelationshipMapping")

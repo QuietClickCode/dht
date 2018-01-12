@@ -71,14 +71,14 @@ public class OpeningEmpClientController extends BaseController{
     @ResponseBody
     public BaseResp addCheckClient(Long oid,String cmIds, HttpServletRequest request){
         Long eid = getCurLoginUserId(request);
-        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds);
+        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds,HNCGZHConstant.ACCESS_TOKEN);
         return success(flag);
     }
 
     @RequestMapping("updateOpeningEmpClient")
     @ResponseBody
     public BaseResp updateOpeningEmpClient(String oecIds,Long status,String msg){
-        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);
+        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg,HNCGZHConstant.ACCESS_TOKEN);
         return success(flag);
     }
 

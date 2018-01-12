@@ -40,9 +40,9 @@ public class CheckUserController extends BaseController {
 
     @RequestMapping("updateCheckUser")
     @ResponseBody
-    public Map updateCheckUser(String validateCode,String phone){
+    public Map updateCheckUser(String validataCode,String phone){
         Long eid = getEmpIdByWxPhone(phone);
-        Map map = checkUserService.checkUser(validateCode,eid);
+        Map map = checkUserService.checkUser(validataCode,eid);
         return map;
     }
 
@@ -64,7 +64,7 @@ public class CheckUserController extends BaseController {
     @ResponseBody
     public Map queryCheckUserValidateCode(String randStr){
         Long cid = getClientIdByOpenId(randStr);
-        System.out.println(cid);
+//        System.out.println(cid);
         CheckUserVo checkUserVo = checkUserService.queryCheckUserValidateCode(cid);
         Map map = new HashMap();
         if(ObjectUtils.isNotEmpty(checkUserVo)){
@@ -109,8 +109,15 @@ public class CheckUserController extends BaseController {
     @RequestMapping("queryAchievement")
     @ResponseBody
     public Map queryAchievement(Long oid,String empIds,String tids){
-        List<Long> emIdList = StringToList(empIds);
-        List<Long> tidsList = StringToList(tids);
+        List<Long> emIdList = new ArrayList<Long>();
+        List<Long> tidsList = new ArrayList<Long>();
+        if(ObjectUtils.isNotEmpty(empIds)){
+            emIdList = StringToList(empIds);
+        }
+        if(ObjectUtils.isNotEmpty(tids)){
+            tidsList = StringToList(tids);
+        }
+
         Map params = new HashMap();
         if(ObjectUtils.isNotEmpty(tids)){
             params.put("tidList",tidsList);

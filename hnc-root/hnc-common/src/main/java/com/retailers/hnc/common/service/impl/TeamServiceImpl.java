@@ -47,5 +47,9 @@ public class TeamServiceImpl implements TeamService {
 		team.setIsDelete(1);
 		return updateTeam(team);
 	}
+
+	public List<Team> queryAllTeam() {
+		return teamMapper.queryAllTeam();
+	}
 }
 

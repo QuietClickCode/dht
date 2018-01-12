@@ -285,6 +285,7 @@
             treeField:"faName",
             treePid:"parentId",                         //上级菜单关联id
             treeRootLevel: 1,
+            treeCollapseAll: true,
             showRefresh: true,                  //是否显示刷新按钮
             minimumCountColumns: 2,             //最少允许的列数
             clickToSelect: true,                //是否启用点击选中行

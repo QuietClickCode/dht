@@ -2,6 +2,8 @@
 package com.retailers.hnc.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.WxAuthUser;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：微信用户表Service
@@ -55,6 +57,7 @@ public interface WxAuthUserService {
 	 */
 	public boolean deleteWxAuthUserByWauId(Long wauId);
 
+	public List<WxAuthUser> queryWxAuthUserListByParams(Map<String, Object> params);
 }
 
 

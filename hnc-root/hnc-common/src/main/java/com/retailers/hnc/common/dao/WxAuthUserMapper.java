@@ -1,7 +1,11 @@
 package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.WxAuthUser;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：微信用户表DAO
  * @author fanghui
@@ -51,5 +55,9 @@ public interface WxAuthUserMapper {
 	 * @date 2017-12-25 16:08:40
 	 */
 	public List<WxAuthUser> queryWxAuthUserList(Pagination<WxAuthUser> pagination);
+
+	public int saveGZHUser(@Param("list") List<WxAuthUser> list);
+
+	public List<WxAuthUser> queryWxAuthUserListByParams(@Param("params") Map<String,Object> params);
 
 }

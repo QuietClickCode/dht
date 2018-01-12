@@ -102,6 +102,8 @@ public interface EmRelationshipService {
 
 	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship);
 
+	public List<EmployeeRelationshipVo> queryAllEmRelationshipVoList(Long pid);
+
 }
 
 

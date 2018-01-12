@@ -319,6 +319,7 @@
             clickToSelect: true,                //是否启用点击选中行
             uniqueId: "ggId",                     //每一行的唯一标识，一般为主键列
             showToggle: true,                    //是否显示详细视图和列表视图的切换按钮
+            treeCollapseAll: true,             //默认树形结构处于关闭状态
             selectItemName: 'parentItem',
             dataType:"json",
             columns: [{

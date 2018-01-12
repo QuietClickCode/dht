@@ -410,7 +410,7 @@
                                                     </div>
                                                 </form>
                                                 <center>
-                                                    <button id="editSubmit" class="btn btn-success" >保存</button>
+                                                    <button id="editSubmit" class="btn btn-success" >下一步</button>
                                                 </center>
 
                                             </div>
@@ -584,7 +584,7 @@
                                                 </form>
 
                                                 <center>
-                                                    <button id="editGoodsConfigSubmit" class="btn btn-success" >保存</button>
+                                                    <button id="editGoodsConfigSubmit" class="btn btn-success" >下一步</button>
                                                 </center>
                                             </div>
 
@@ -608,7 +608,7 @@
                                                     </div>
                                                 </form>
                                                 <center>
-                                                    <button id="editGoodsImageSubmit" class="btn btn-success" >保存</button>
+                                                    <button id="editGoodsImageSubmit" class="btn btn-success" >下一步</button>
                                                 </center>
                                             </div>
                                         </div>
@@ -625,7 +625,7 @@
                                                     </div>
                                                 </div>
                                                 <center>
-                                                    <button id="editGoodsSpecificatioSubmit" class="btn btn-success" >保存</button>
+                                                    <button id="editGoodsSpecificatioSubmit" class="btn btn-success" >下一步</button>
                                                 </center>
                                             </div>
                                         </div>
@@ -637,9 +637,7 @@
                                                             <option>请选择品牌</option>
                                                         </select>
                                                     </div>
-                                                    <ex:perm url="/goods/addGoodsGgbrel">
-                                                        <button class="btn btn-default" type="button" onclick="addggbrel()">确定</button>
-                                                    </ex:perm>
+                                                        <button id="addgbrel" class="btn btn-default" type="button" onclick="addggbrel()">下一步</button>
                                                 </center>
 
                                             </div>
@@ -683,6 +681,9 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <center>
+                                                    <button  class="btn btn-default" type="button" onclick="nextStep('nava7')">下一步</button>
+                                                </center>
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="goodsCommentlabelPane">
@@ -747,6 +748,9 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <center>
+                                                    <button  class="btn btn-default" type="button" onclick="nextStep('nava8')">下一步</button>
+                                                </center>
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="goodsCouponPane">
@@ -789,6 +793,9 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <center>
+                                                    <button onclick="nextStep('nava9')" class="btn btn-success" >下一步</button>
+                                                </center>
                                             </div>
                                         </div>
                                         <div class="tab-pane" id="goodsSpecilgoodscredentialPane">
@@ -826,7 +833,7 @@
 
 
                                                 <center>
-                                                    <button id="editGoodsSpecilgoodscredentialSubmit" class="btn btn-success" >保存</button>
+                                                    <button id="editGoodsSpecilgoodscredentialSubmit" class="btn btn-success" >下一步</button>
                                                 </center>
                                             </div>
                                         </div>
@@ -869,6 +876,9 @@
                                                         </table>
                                                     </div>
                                                 </div>
+                                                <center>
+                                                    <button class="btn btn-success" onclick="returnback();">完成</button>
+                                                </center>
                                             </div>
                                         </div>
                                     </div>
@@ -1081,12 +1091,14 @@
                             $('#version').val(1);
                             editorGoodsType=1;
                             refreshTableData();
+                            document.getElementById('nava2').click();
                         }
                     }else{
                         if(data.status==0){
                             toastr.success("操作成功！");
                             $('#version').val(parseInt($('#version').val()) +2);
                             refreshTableData();
+                            document.getElementById('nava2').click();
                         }else{
                             toastr.error("操作失败！");
                         }
@@ -1289,7 +1301,7 @@
         $("#gpickaddress").val('');
         $("#gpickperson").val('');
         $("#gmaindirection").val('0');
-        $('#maincomtrayside').get(0).checked=true;
+        $('#maincityandcom').get(0).checked=true;
         UE.getEditor('editor').setContent('', false);
 
         $('#gcId').val('');
@@ -1528,6 +1540,10 @@
     function closeCheckGoodsModal() {
         $('#checkGoodsModal').modal('hide');
     }
+
+    function nextStep(eleId) {
+        document.getElementById(eleId).click();
+    }
 </script>
 
 <!--百度编辑器-->
@@ -1663,7 +1679,7 @@
                     if(data.status==0){
                         //显示提示
                         toastr.success('操作成功！');
-                        document.getElementById('nava2').click();
+                        document.getElementById('nava3').click();
                         refreshTableData();
                     }else{
                         toastr.error('操作失败！');
@@ -1924,6 +1940,7 @@
 
         deleteArr=[];
         newImgArr=[];
+        document.getElementById('nava4').click();
     });
 
     <!--点击删除按钮-->
@@ -2452,7 +2469,12 @@
                        async :false,
                        data:{uploaddata:uploaddata,gid:gid},
                        success:function(data){
-
+                           if(data.status==0){
+                               toastr.success("操作成功！");
+                               document.getElementById('nava5').click();
+                           }else{
+                               toastr.warning("系统错误！");
+                           }
                        }
                    });
                }
@@ -2638,6 +2660,7 @@
             success: function (data) {
                 updateGoodsSetNotChecked();
                 toastr.success('操作成功!');
+                document.getElementById('nava6').click();
             }
         });
     }
@@ -3441,11 +3464,13 @@
                             if(i==addImgArr.length-1){
                                 addImgArr=[];
                             }
+
                         }
                     });
                 }
                 toastr.success('操作成功');
                 updateGoodsSetNotChecked();
+
             }
 
             if(delImgArr!=null && delImgArr.length>0){
@@ -3533,7 +3558,7 @@
                 updateGoodsSetNotChecked();
             }
 
-
+            nextStep('nava10');
         });
     });
     

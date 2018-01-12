@@ -44,5 +44,9 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 		int status = wxAuthUserMapper.deleteWxAuthUserByWauId(wauId);
 		return status == 1 ? true : false;
 	}
+
+	public List<WxAuthUser> queryWxAuthUserListByParams(Map<String, Object> params){
+		return wxAuthUserMapper.queryWxAuthUserListByParams(params);
+	}
 }
 

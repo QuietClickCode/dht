@@ -126,6 +126,25 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		return emRelationshipVos;
 	}*/
 
+	public List<EmployeeRelationshipVo> queryAllEmRelationshipVoList(Long pid) {
+		List<Team> teams = teamMapper.queryAllTeam();
+		long tid =  teams.size() * 100;
+		List<EmployeeRelationshipVo> employeeRelationshipVos = emRelationshipMapper.queryAllEmRelationshipVoList(pid);
+		for(EmployeeRelationshipVo relationshipVo:employeeRelationshipVos){
+			relationshipVo.setLevel(2L);
+			relationshipVo.setTid(null);
+			relationshipVo.setTid(tid++);
+		}
+		for(Team team:teams){
+			EmployeeRelationshipVo relationshipVo = new EmployeeRelationshipVo();
+			relationshipVo.setTeamName(team.getTname());
+			relationshipVo.setTid(team.getTid());
+			relationshipVo.setLevel(1L);
+			employeeRelationshipVos.add(relationshipVo);
+		}
+		return employeeRelationshipVos;
+	}
+
 	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship) {
 		List<Team> teams = teamMapper.queryAllTeam();
 		List<EmployeeRelationshipVo> emRelationshipVos = new ArrayList<EmployeeRelationshipVo>();

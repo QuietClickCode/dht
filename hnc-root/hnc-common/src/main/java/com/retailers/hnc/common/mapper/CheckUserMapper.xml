@@ -93,7 +93,7 @@
 		(SELECT t2.o_id
 		from t_opening t2
 		WHERE
-		t2.o_end_time>CURRENT_DATE() ORDER BY t2.o_end_time ASC limit 1)
+		t2.o_end_time>=CURRENT_DATE() ORDER BY t2.o_end_time ASC limit 1)
 	</select>
 
 	<select id="queryCheckUserVoList" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
