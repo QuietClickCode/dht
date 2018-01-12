@@ -10,6 +10,7 @@ import com.retailers.hnc.common.service.impl.OpeningEmpClientServiceImpl;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.web.annotation.CheckOpenId;
 import com.retailers.hnc.web.base.BaseController;
+import com.retailers.hnc.web.constant.HNCGZHConstant;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
@@ -115,14 +116,14 @@ public class OpeningEmpClientController extends BaseController{
         Opening opening = openingService.queryEarlyOpening();
         Long oid = opening.getOid();
         Long eid = getEmpIdByWxPhone(phone);
-        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds);
+        boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds,HNCGZHConstant.ACCESS_TOKEN);
         return success(flag);
     }
 
     @RequestMapping("updateOpeningEmpClient")
     @ResponseBody
     public BaseResp updateOpeningEmpClient( String oecIds,Long status,String msg){
-        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg);
+        boolean flag = openingEmpClientService.updateOpeningEmpClientByOecIds(oecIds,status,msg, HNCGZHConstant.ACCESS_TOKEN);
         return success(flag);
     }
 

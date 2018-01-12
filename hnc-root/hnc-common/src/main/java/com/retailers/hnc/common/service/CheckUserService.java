@@ -22,7 +22,7 @@ public interface CheckUserService {
 	 * @author fanghui
 	 * @date 2018-01-03 23:28:11
 	 */
-	public boolean saveCheckUser(CheckUser checkUser);
+	public boolean saveCheckUser(CheckUser checkUser,String accessToken);
 	/**
 	 * 编辑客户通过审核记录表
 	 * @param checkUser

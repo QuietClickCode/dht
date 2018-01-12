@@ -1,9 +1,12 @@
 
 package com.retailers.hnc.common.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.retailers.hnc.common.dao.OpeningEmpClientMapper;
 import com.retailers.hnc.common.entity.*;
 import com.retailers.hnc.common.service.*;
+import com.retailers.hnc.common.util.HttpUtils;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.common.vo.OpeningEmpClientVo;
@@ -13,10 +16,9 @@ import com.retailers.wx.common.utils.wx.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
+
 /**
  * 描述：开盘与雇员和客户的关系表Service
  * @author fanghui
@@ -36,6 +38,12 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	private HouseTypeManageService houseTypeManageService;
 	@Autowired
 	private CheckUserService checkUserService;
+	@Autowired
+	private EmployeeManageService employeeManageService;
+	@Autowired
+	private WxAuthUserService wxAuthUserService;
+	@Autowired
+	private ClientManageService clientManageService;
 
 	public boolean saveOpeningEmpClient(OpeningEmpClient openingEmpClient) {
 		int status = openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
@@ -114,7 +122,7 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		return page;
 	}
 
-	public boolean addCheckClient(Long oid,Long eid,String cmIds){
+	public boolean addCheckClient(Long oid,Long eid,String cmIds,String accessToken){
 		OpeningEmpClient openingEmpClient = new OpeningEmpClient();
 		openingEmpClient.setIsDelete(0L);
 		openingEmpClient.setOid(oid);
@@ -131,10 +139,14 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 				status += openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
 			}
 		}
+		//给管理员发送消息,通知有置业顾问提交审核
+		if(status==index){
+			sendModalMsg(oid,eid,accessToken);
+		}
 		return status==index?true:false;
 	}
 
-	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg){
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg,String accessToken){
 		List<Long> oecIdList = new ArrayList<Long>();
 		if(ObjectUtils.isNotEmpty(oecIds)){
 			String[] oecIdsArr = oecIds.split(",");
@@ -146,19 +158,23 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		}
 		int index = 0;
 		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status,msg);
-		if(index==oecIdList.size()){
-			for(Long oecIdLong:oecIdList){
-				OpeningEmpClient openingEmpClient = queryOpeningEmpClientByOecId(oecIdLong);
-				CheckUser checkUser = new CheckUser();
-				checkUser.setIsUse(0L);
-				checkUser.setIsDelete(0L);
-				checkUser.setCid(openingEmpClient.getCid());
-				checkUser.setOid(openingEmpClient.getOid());
-				checkUser.setCuValidateCode(WXPayUtil.getStringRandom(32));
-				checkUser.setIsDelete(0L);
-				checkUserService.saveCheckUser(checkUser);
+		System.out.println(status);
+		if(status==2){
+			if(index==oecIdList.size()){
+				for(Long oecIdLong:oecIdList){
+					OpeningEmpClient openingEmpClient = queryOpeningEmpClientByOecId(oecIdLong);
+					CheckUser checkUser = new CheckUser();
+					checkUser.setIsUse(0L);
+					checkUser.setIsDelete(0L);
+					checkUser.setCid(openingEmpClient.getCid());
+					checkUser.setOid(openingEmpClient.getOid());
+					checkUser.setCuValidateCode(WXPayUtil.getStringRandom(32));
+					checkUser.setIsDelete(0L);
+					checkUserService.saveCheckUser(checkUser,accessToken);
+				}
 			}
 		}
+
 		return index==oecIdList.size()?true:false;
 	}
 
@@ -241,6 +257,76 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 			}
 			clientManageVo.setFloorsName(floorsName);
 			clientManageVo.setHoursesName(hoursesName);
+		}
+	}
+
+	public void sendModalMsg(Long oid,Long eid,String accessToken){
+		Opening opening = openingService.queryOpeningByOid(oid);
+		EmployeeManage employeeManage = employeeManageService.queryEmployeeManageByEmId(eid);
+
+		//发消息给客户通知看房
+		String first = "置业顾问"+employeeManage.getEmName()+"提交审核名单";
+		String keynote1 = opening.getOname();//clientManage.getTmName()==null||clientManage.getTmName()=="null"?nickName:clientManage.getTmName();
+		String keynote2 = "客户看房审批";
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String keynote3 = sdf.format(new Date());
+		String remark = "请您尽快审核";
+
+		JSONObject dataJsonObject = new JSONObject();
+
+		JSONObject valJsonObjFirst = new JSONObject();
+		valJsonObjFirst.put("value",first);
+		dataJsonObject.put("first",valJsonObjFirst);
+
+		JSONObject valJsonObjkeyword1 = new JSONObject();
+		valJsonObjkeyword1.put("value",keynote1);
+		dataJsonObject.put("keyword1",valJsonObjkeyword1);
+
+		JSONObject valJsonObjkeyword2 = new JSONObject();
+		valJsonObjkeyword2.put("value",keynote2);
+		dataJsonObject.put("keyword2",valJsonObjkeyword2);
+
+		JSONObject valJsonObjkeyword3 = new JSONObject();
+		valJsonObjkeyword3.put("value",keynote3);
+		dataJsonObject.put("keyword3",valJsonObjkeyword3);
+
+		JSONObject valJsonObjremark = new JSONObject();
+		valJsonObjremark.put("value",remark);
+		dataJsonObject.put("remark",valJsonObjremark);
+
+		JSONObject minJsonObj = new JSONObject();
+		minJsonObj.put("appid","wx53881ce6778c5e1f");
+		minJsonObj.put("pagepath","pages/manage/wait-audit/wait-audit");
+
+		JSONObject allJsonData = new JSONObject();
+		allJsonData.put("data",dataJsonObject);
+
+		allJsonData.put("template_id","thwmet3fFMGmkoG0fhaLcnxftgzRpONv4mFdJBZ3lPg");
+		allJsonData.put("miniprogram",minJsonObj);
+
+		Map paramsend = new HashMap();
+		paramsend.put("tmLoginStatus","2");
+		List<ClientManage> clientManageList = clientManageService.queryClientManageList(paramsend,1,100).getData();
+		List<Long> cids = new ArrayList<Long>();
+		for(ClientManage clientManage1:clientManageList){
+			cids.add(clientManage1.getTmId());
+		}
+		Map map1 = new HashMap();
+		map1.put("cids",cids);
+		List<WxAuthUser> wxAuthUserList = wxAuthUserService.queryWxAuthUserListByParams(map1);
+		List<String> manageWxAuthUserList = new ArrayList<String>();
+		for(WxAuthUser wxAuthUser:wxAuthUserList){
+			manageWxAuthUserList.add(wxAuthUser.getWauUnionid());
+		}
+		Map map2 = new HashMap();
+		map2.put("unionids",manageWxAuthUserList);
+		List<WxAuthUser> wxAuthUsersManage = wxAuthUserService.queryWxAuthUserListByParams(map2);
+		for(WxAuthUser wxAuthUser:wxAuthUsersManage){
+			String openid = wxAuthUser.getWauOpenid();
+			allJsonData.put("touser",openid);
+			String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+accessToken;
+			String res = HttpUtils.reqPost(url, JSON.toJSONString(allJsonData));
+			System.out.println(res);
 		}
 	}
 }
