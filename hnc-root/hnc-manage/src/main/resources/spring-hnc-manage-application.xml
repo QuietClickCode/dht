@@ -20,4 +20,6 @@
     <!-- mybatis 配置文件 -->
     <import resource="classpath:spring-mybatis.xml" />
     <import resource="classpath:spring-common-hnc-mvc.xml" />
+
+    <bean id="wxJob" class="com.retailers.hnc.manage.job.WxJob" init-method="getGZHAccessToken"></bean>
 </beans>

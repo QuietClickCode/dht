@@ -88,6 +88,25 @@
 		FROM t_wx_auth_user
 		<include refid="wxAuthUser_where"/>
 	</select>
+	<select id="queryWxAuthUserListByParams" resultMap="rm_wxAuthUser">
+		SELECT <include refid="wxAuthUser_columns" />
+		FROM t_wx_auth_user t1
+		WHERE
+		1=1
+		<if test="null!=params.cids">
+			and t1.wau_u_id IN
+			<foreach collection="params.cids" separator="," open="(" close=")" item="cid">
+				#{cid}
+			</foreach>
+		</if>
+		<if test="null!=params.unionids">
+			and t1.wau_unionid IN
+			<foreach collection="params.unionids" separator="," open="(" close=")" item="unionid">
+				#{unionid}
+			</foreach>
+			and t1.wau_wx_id=1
+		</if>
+	</select>
 	<!--添加微信用户表 -->
 	<insert id="saveWxAuthUser" parameterType="com.retailers.hnc.common.entity.WxAuthUser" useGeneratedKeys="true" keyProperty="wauId">
 		INSERT INTO t_wx_auth_user (
@@ -96,6 +115,15 @@
 		(
 			#{wauWxId,jdbcType=BIGINT},#{wauUid,jdbcType=BIGINT},#{wauOpenid,jdbcType=VARCHAR},#{wauNickname,jdbcType=VARCHAR},#{wauSex,jdbcType=INTEGER},#{wauLanguage,jdbcType=VARCHAR},#{wauCity,jdbcType=VARCHAR},#{wauProvince,jdbcType=VARCHAR},#{wauCountry,jdbcType=VARCHAR},#{wauHeadimgurl,jdbcType=VARCHAR},#{wauUnionid,jdbcType=VARCHAR},#{wauCreateDate,jdbcType=TIMESTAMP},#{wauRefereeId,jdbcType=BIGINT},0
 		)
+	</insert>
+	<insert id="saveGZHUser">
+		INSERT INTO t_wx_auth_user (
+			wau_wx_id,wau_openid,wau_unionid
+		) VALUES
+		<foreach collection="list" separator="," item="wxAuthUser" >
+			(#{wxAuthUser.wauWxId},#{wxAuthUser.wauOpenid},#{wxAuthUser.wauUnionid})
+		</foreach>
+		ON DUPLICATE KEY UPDATE wau_wx_id=VALUES(wau_wx_id),wau_openid=VALUES(wau_openid),wau_unionid=VALUES(wau_unionid);
 	</insert>
 	<!--修改微信用户表 -->
 	<update id="updateWxAuthUser" parameterType="com.retailers.hnc.common.entity.WxAuthUser">

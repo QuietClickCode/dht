@@ -354,13 +354,14 @@
             field: 'emEntryTime',
             title: '入职时间',
             align : 'center',
-            valign : 'middle'
-        },
-        {
-            field: 'emRemoveTime',
-            title: '调动时间',
-            align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                let html = '';
+                if(row.emEntryTime != null){
+                    html += row.emEntryTime.substring(0,10);
+                }
+                return html;
+            }
         },
         {
             field: 'emPosition',

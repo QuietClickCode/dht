@@ -2,6 +2,8 @@
 package com.retailers.hnc.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.hnc.common.entity.Team;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：团队表Service
@@ -54,6 +56,8 @@ public interface TeamService {
 	 * @date 2017-12-22 13:58:29
 	 */
 	public boolean deleteTeamByTid(Long tid);
+
+	public List<Team> queryAllTeam();
 
 }
 

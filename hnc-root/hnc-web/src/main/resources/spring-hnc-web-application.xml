@@ -17,7 +17,7 @@
     <!-- aop 自定义注删使用有效不加则不会生效 -->
     <aop:aspectj-autoproxy/>
     <!-- 扫描文件（自动将servicec层注入） -->
-    <context:component-scan base-package="com.retailers.hnc.common.service,com.retailers.wx.common.service,com.retailers.mybatis.common.service,com.retailers.hnc.web.interceptor">
+    <context:component-scan base-package="com.retailers.hnc.common.service,com.retailers.hnc.common.util,com.retailers.wx.common.service,com.retailers.mybatis.common.service,com.retailers.hnc.web.interceptor">
         <!--将注解Service的类都注册为java bean容器中的bean-->
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
@@ -29,4 +29,6 @@
     <!-- 初始化微信token -->
     <bean id="wxSystemInit" class="com.retailers.wx.common.utils.WxSystemInit" init-method="initWxToken"/>
     <bean id="getWxAccessToken" class="com.retailers.hnc.web.job.ManageTaskJob" init-method="getAccessToken"/>
+    <bean id="getGZHAccessToken" class="com.retailers.hnc.web.job.ManageTaskJob" init-method="getGZHAccessToken"/>
+    <!--<bean id="getGZHUserMsg" class="com.retailers.hnc.web.job.ManageTaskJob" init-method="getGZHUserMsg"/>-->
 </beans>

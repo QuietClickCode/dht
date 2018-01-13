@@ -53,6 +53,7 @@ public class WxFilter implements Filter {
         }
         boolean isFromMobile= CheckMobile.check(userAgent);
         String uri_ = request.getRequestURI();
+        logger.info("请求url：[{}]",uri_);
         //判断是否存在推荐人
         String randStr=request.getParameter("randStr");
         if(ObjectUtils.isNotEmpty(randStr)){

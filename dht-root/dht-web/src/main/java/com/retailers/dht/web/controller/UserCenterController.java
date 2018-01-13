@@ -425,7 +425,9 @@ public class UserCenterController extends BaseController{
         HashMap<String,Object> map = new HashMap<String,Object>();
         UserInfoVIew user = getCurLoginUser(request);
         String userUphone = user.getUphone();
-        userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        if(ObjectUtils.isNotEmpty(userUphone)){
+            userUphone = userUphone.replaceAll("(\\d{3})\\d{4}(\\d{4})","$1****$2");
+        }
         map.put("userPhone",userUphone);
         map.put("sex",user.getUsex());
         map.put("nickName",user.getUname());

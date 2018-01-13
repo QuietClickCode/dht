@@ -65,9 +65,9 @@ public interface OpeningEmpClientService {
 
 	public Pagination<ClientManageVo> queryCheckingandpassandnotpassListWeb(Map<String, Object> params, int pageNo, int pageSize);
 
-	public boolean addCheckClient(Long oid,Long eid,String cmIds);
+	public boolean addCheckClient(Long oid,Long eid,String cmIds,String accessToken);
 
-	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg);
+	public boolean updateOpeningEmpClientByOecIds(String oecIds,Long status,String msg,String accessToken);
 
 	public boolean checkCanChangeEmpNum(Long oid,Long eid,Long num);
 
