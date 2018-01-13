@@ -23,6 +23,7 @@
 			<result property="gcheckmessage" column="g_checkmessage"/>
 			<result property="gunitname" column="g_unitname"/>
 			<result property="grate" column="g_rate"/>
+			<result property="rtId" column="rt_id"/>
 			<result property="isChecked" column="is_checked"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
@@ -49,6 +50,7 @@
 		<result property="gcheckmessage" column="g_checkmessage"/>
 		<result property="gunitname" column="g_unitname"/>
 		<result property="grate" column="g_rate"/>
+		<result property="rtId" column="rt_id"/>
 		<result property="isChecked" column="is_checked"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
@@ -62,7 +64,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goods_columns">
-		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,is_checked,is_delete,version
+		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,rt_id,is_checked,is_delete,version
 	</sql>
 	<!-- 根据商品表主键取得数据 -->
 	<select id="queryGoodsByGid" resultMap="rm_goods" parameterType="java.lang.Long">
@@ -286,10 +288,10 @@
 	<!--添加商品表 -->
 	<insert id="saveGoods" parameterType="com.retailers.dht.common.entity.Goods" useGeneratedKeys="true" keyProperty="gid">
 		INSERT INTO t_goods (
-			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,is_checked,is_delete,version,g_create_time
+			g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,rt_id,is_checked,is_delete,version,g_create_time
 		) VALUES
 		(
-			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=BIGINT},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{grate,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0,CURRENT_DATE
+			#{gname,jdbcType=VARCHAR},#{gvender,jdbcType=BIGINT},#{gshop,jdbcType=BIGINT},#{gclassification,jdbcType=BIGINT},#{gbrand,jdbcType=BIGINT},#{garea,jdbcType=BIGINT},#{gsalescope,jdbcType=BIGINT},#{gmaindirection,jdbcType=BIGINT},#{gdescription,jdbcType=VARCHAR},#{gproductioninperson,jdbcType=VARCHAR},#{gproductioninaddress,jdbcType=VARCHAR},#{gpickperson,jdbcType=VARCHAR},#{gpickaddress,jdbcType=VARCHAR},#{gcopyid,jdbcType=BIGINT},#{gprice,jdbcType=BIGINT},#{gcheckperson,jdbcType=BIGINT},#{gcheckmessage,jdbcType=VARCHAR},#{gunitname,jdbcType=VARCHAR},#{grate,jdbcType=BIGINT},#{rtId,jdbcType=BIGINT},#{isChecked,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0,CURRENT_DATE
 		)
 	</insert>
 	<!--修改商品表 -->
@@ -350,6 +352,9 @@
             </if>
 			<if test="null != grate">
 				g_rate = #{grate},
+			</if>
+			<if test="null != rtId">
+				rt_id = #{rtId},
 			</if>
             <if test="null != isChecked">
                 is_checked = #{isChecked},

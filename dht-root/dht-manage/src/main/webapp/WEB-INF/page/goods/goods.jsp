@@ -317,6 +317,16 @@
                                                                 <input id="grate" name="grate" type="text" class="form-control" placeholder="例如提25%,请填写0.25" value="0.25"/>
                                                             </div>
                                                         </div>
+                                                        <div class="col-lg-6" style="height:49px;">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                            返现类型:
+                                                          </span>
+                                                                <select id="rtId" name="rtId" class="form-control">
+
+                                                                </select>
+                                                            </div>
+                                                        </div>
                                                         <div class="col-lg-6" style="height:49px;" style="height: 49px">
                                                             <div class="input-group form-group">
                                                           <span class="input-group-addon">
@@ -1037,6 +1047,24 @@
     $(function () {
         createTable("/goods/queryGoodsLists","GoodsTables","gbId",treeColumns,queryParams);
 
+        //加载返现类型
+        $.ajax({
+            type:"post",
+            url:"/goods/queryReturnListLists",
+            dataType: "json",
+            data:{pageNo:1,pageSize:99},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        var html = '<option value="'+rows[i].rtId+'">'+rows[i].rtName+'</option>';
+                        $('#rtId').append(html);
+                    }
+                }
+
+            }
+        });
+
         //初始华开关选择器
         $("#isServicegoods").bootstrapSwitch();
         $("#isAllowsetdeliverytime").bootstrapSwitch();
@@ -1380,9 +1408,32 @@
             if(rowData.gmaindirection==2){
                 $('#maincityandcom').get(0).checked=true;
             }
+            var rtId = rowData.rtId;
+//            $("#rtId").val(rtId);
+            set_select_checked('rtId',''+rtId);
+//            $("#rtId").find("option[value="+rtId+"]").attr("selected",true);
+//            var rows = $('#rtId').children();
+//            for(var i=0;i<rows.length;i++){
+//                var rid = rows[i].value;
+//                if(rid==rtId){
+//                    $(rows[i]).attr('selected','selected');
+//
+//                }
+//            }
             UE.getEditor('editor').setContent(rowData.gdescription, false);
         }else{
             clearFormData();
+        }
+    }
+
+    function set_select_checked(selectId, checkValue){
+        var select = document.getElementById(selectId);
+
+        for (var i = 0; i < select.options.length; i++){
+            if (select.options[i].value == checkValue){
+                select.options[i].selected = true;
+                break;
+            }
         }
     }
     /**
@@ -1401,7 +1452,6 @@
         if(level!=1){
             $(obj).siblings().removeClass('myactive');
             $(obj).addClass('myactive');
-
             $(obj).siblings().css('color','#337AB7');
             $(obj).css('color','#fff');
         }
@@ -2082,7 +2132,12 @@
                                     '</div>';
                             }
                         }
-                            html += '</div>'+
+                            html += '<div class="col-lg-2">'+
+                                '<div class="checkbox checkbox-info" style="display: block">' +
+                                '<button class="btn btn-default" onclick="addgsval(this);">+</button>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>'+
                             '</div>'+
                             '</div>';
                         $('#goodsSpecificatiodiv').append(html);
@@ -2586,6 +2641,52 @@
         var cost = $(obj).val();
         var saleprice = (Number(rate)+1) * Number(cost);
         $(obj).parent().prev().find('input[type=text]').val(saleprice.toFixed(2));
+    }
+
+    function addgsval(obj) {
+        var html = '<div class="col-lg-2">' +
+            '<div class="checkbox checkbox-info" style="display: block">' +
+            '<input type="text" style="width: 60px">' +
+            '<span onclick="addgsvaldata(this);" style="cursor: pointer">确认</span>' +
+            '<span onclick="cansol(this);" style="margin-left: 10px;cursor: pointer">取消</span>' +
+            '</div>' +
+            '</div>';
+        $(obj).parent().parent().before(html);
+    }
+
+    function addgsvaldata(obj) {
+        var gid = $('#gid').val();
+        var gsval = $(obj).prev().val();
+        if(gsval==''){
+            toastr.warning('不能为空!');
+            return;
+        }
+        var gsid = $(obj).parent().parent().parent().parent().prev().find('input[type=hidden]')[0].value;
+
+        $.ajax({
+            type: "post",
+            url: "/goods/addGoodsGsval",
+            dataType: "json",
+            data: {gid:gid,gsvVal:gsval,gsId:gsid},
+            success: function (data) {
+                var row = data.row;
+                if(row==null){
+                    toastr.warning('增加失败!');
+                }else{
+                    var gsval = row.gsvVal;
+                    var gsvId = row.gsvId;
+                    var html = '';
+                    html = '<input onclick="createtabel();" id="gsvalId1"'+gsval+' class="styled" name="gsvalId" value="'+gsvId+'" type="checkbox">' +
+                        '<label for="gsvalId1'+gsval+'">'+gsval+'</label>';
+                    $(obj).parent().html(html);
+                }
+            }
+        });
+
+    }
+
+    function cansol(obj) {
+        $(obj).parent().parent().remove();
     }
 </script>
 

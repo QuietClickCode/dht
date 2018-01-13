@@ -19,9 +19,9 @@ import com.retailers.mybatis.pagination.Pagination;
 public class GoodsGsvalServiceImpl implements GoodsGsvalService {
 	@Autowired
 	private GoodsGsvalMapper goodsGsvalMapper;
-	public boolean saveGoodsGsval(GoodsGsval goodsGsval) {
+	public GoodsGsval saveGoodsGsval(GoodsGsval goodsGsval) {
 		int status = goodsGsvalMapper.saveGoodsGsval(goodsGsval);
-		return status == 1 ? true : false;
+		return status == 1 ? goodsGsval : null;
 	}
 	public boolean updateGoodsGsval(GoodsGsval goodsGsval) {
 		int status = goodsGsvalMapper.updateGoodsGsval(goodsGsval);
