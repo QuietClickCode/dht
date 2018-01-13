@@ -6,13 +6,14 @@
 			<result property="gsvId" column="gsv_id"/>
 			<result property="gsId" column="gs_id"/>
 			<result property="gsvVal" column="gsv_val"/>
+			<result property="gid" column="g_id"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGsval_columns">
-		gsv_id,gs_id,gsv_val,is_delete,version
+		gsv_id,gs_id,gsv_val,g_id,is_delete,version
 	</sql>
 	<!-- 根据商品规格值表主键取得数据 -->
 	<select id="queryGoodsGsvalByGsvId" resultMap="rm_goodsGsval" parameterType="java.lang.Long">
@@ -31,6 +32,9 @@
 			<if test="null != params.gsvVal and '' != params.gsvVal">
 				AND gsv_val = #{params.gsvVal}
 			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
 			</if>
@@ -48,10 +52,10 @@
 	<!--添加商品规格值表 -->
 	<insert id="saveGoodsGsval" parameterType="com.retailers.dht.common.entity.GoodsGsval" useGeneratedKeys="true" keyProperty="gsvId">
 		INSERT INTO t_goods_gsval (
-			gs_id,gsv_val,is_delete,version
+			gs_id,gsv_val,g_id,is_delete,version
 		) VALUES
 		(
-			#{gsId,jdbcType=BIGINT},#{gsvVal,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+			#{gsId,jdbcType=BIGINT},#{gsvVal,jdbcType=VARCHAR},#{gid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品规格值表 -->
@@ -67,6 +71,9 @@
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
+			<if test="null != gid">
+				g_id = #{gid},
+			</if>
             <if test="null != version">
                 version = version+1,
             </if>

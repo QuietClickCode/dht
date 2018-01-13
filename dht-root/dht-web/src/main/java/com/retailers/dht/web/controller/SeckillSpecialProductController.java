@@ -151,4 +151,6 @@ public class SeckillSpecialProductController extends BaseController {
         }
         return redirectUrl(request,dir+"/"+page);
     }
+
+
 }

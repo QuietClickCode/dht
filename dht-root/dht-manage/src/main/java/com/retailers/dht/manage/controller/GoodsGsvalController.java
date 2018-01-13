@@ -51,6 +51,7 @@ public class GoodsGsvalController extends BaseController {
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("gsId",gsId);
         map.put("isDelete",0);
+        map.put("gid",-1);
         Pagination<GoodsGsval> GoodsGsvalPagination = goodsGsvalService.queryGoodsGsvalList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",GoodsGsvalPagination.getTotalCount());
@@ -60,10 +61,12 @@ public class GoodsGsvalController extends BaseController {
 
     @RequestMapping("/addGoodsGsval")
     @ResponseBody
-    public BaseResp addGoodsGsval(GoodsGsval goodsGsval){
+    public Map addGoodsGsval(GoodsGsval goodsGsval){
         goodsGsval.setIsDelete(0L);
-        boolean flag=goodsGsvalService.saveGoodsGsval(goodsGsval);
-        return success(flag);
+        goodsGsval=goodsGsvalService.saveGoodsGsval(goodsGsval);
+        Map map = new HashMap();
+        map.put("row",goodsGsval);
+        return map;
     }
 
 }

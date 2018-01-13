@@ -70,6 +70,7 @@
 
 		WHERE
 		t1.g_id=#{gid}
+		and (t5.g_id=-1 or t5.g_id=#{gid})
 		and t1.g_classification=t2.gg_id
 		and t2.gg_home=t3.gt_id
 		and t3.gt_id=t6.gt_id
