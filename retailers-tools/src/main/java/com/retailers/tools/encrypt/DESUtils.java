@@ -107,11 +107,11 @@ public class DESUtils{
         return str;
     }
     public static void main(String args[]) throws Exception {
-//        System.out.println(encryptDES("35",DesKey.WEB_KEY));
+        System.out.println(encryptDES("我是中国人，我爱中国",DesKey.WEB_KEY));
 //
 //        System.out.println(encryptDES("35",DesKey.WEB_KEY));
-        System.out.println(decryptDES(URLDecoder.decode("uUODsnCRYTk%3D"),DesKey.WEB_KEY));
-        System.out.println(decryptDES("+tvTITYd1AS7KLotqFWQfO097ll91p1F",DesKey.WEB_KEY));
+//        System.out.println(decryptDES(URLDecoder.decode("uUODsnCRYTk%3D"),DesKey.WEB_KEY));
+//        System.out.println(decryptDES("+tvTITYd1AS7KLotqFWQfO097ll91p1F",DesKey.WEB_KEY));
 //        System.out.println(URLEncoder.encode(encryptDES("35",DesKey.WEB_KEY),"utf-8"));
 //        System.out.println(decryptDES(URLDecoder.decode("W6wGZiOTbDQ=","utf-8"),DesKey.WEB_KEY));
 //        System.out.println(decryptDES(URLDecoder.decode("W6wGZiOTbDQ=","utf-8"),DesKey.WEB_KEY));
@@ -120,6 +120,6 @@ public class DESUtils{
 //        System.out.println(encryptDES("16",DesKey.WEB_KEY));
 //        System.out.println(URLEncoder.encode(encryptDES("16",DesKey.WEB_KEY),"utf-8"));
 //        System.out.println(decryptDES("pHRW0BbLWzg=",DesKey.WEB_KEY));
-        encryptDES(StringUtils.formate("123",System.currentTimeMillis()+""),DesKey.WEB_KEY);
+//        encryptDES(StringUtils.formate("123",System.currentTimeMillis()+""),DesKey.WEB_KEY);
     }
 }
