@@ -188,10 +188,10 @@ public class DESPlus {
     public static void main(String[] args) {
         // TODO Auto-generated method stub
         try {
-            String test = "Hellow Word!";
+            String test = "我是中国人，我爱中国";
             //DESPlus des = new DESPlus();//默认密钥
 
-            DESPlus des = new DESPlus(DesKey.WEB_KEY+DesKey.WEB_KEY);//自定义密钥
+            DESPlus des = new DESPlus(DesKey.WEB_KEY);//自定义密钥
             System.out.println("加密前的字符："+test);
             System.out.println("加密后的字符："+des.encrypt(test));
             System.out.println("解密后的字符："+des.decrypt(des.encrypt(test)));

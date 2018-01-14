@@ -104,6 +104,7 @@ public class WxShareController extends BaseController{
         try{
             OutputStream outputStream=response.getOutputStream();
             ShareImageUtils.generateShareImage("测试商品","￥12.36","www.baidu.com",goodsImgUrl,outputStream);
+            outputStream.close();
         }catch (Exception e){
             e.printStackTrace();
         }
