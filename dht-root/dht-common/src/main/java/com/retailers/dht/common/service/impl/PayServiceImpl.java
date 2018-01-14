@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.constant.OrderProcessingQueueConstant;
 import com.retailers.dht.common.constant.SystemConstant;
-import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.dao.OrderProcessingQueueMapper;
 import com.retailers.dht.common.dao.PayInfoMapper;
 import com.retailers.dht.common.entity.Order;
@@ -68,7 +67,7 @@ public class PayServiceImpl implements PayService {
         procedureToolsService.singleLockManager(key);
         try{
             Order order=queryOrderNo(orderNo);
-            PayInfo pi=queryPayInfo(SystemConstant.PLATFORM_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_GZH,orderNo);
+            PayInfo pi=queryPayInfo(OrderConstant.ORDER_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_GZH,orderNo);
 //            String apiKey="CF26762CF05A42899F1681872CE3BC89";
 //            String appId="wxfd2628cfc7f6defb";
             String apiKey= WxConfig.WX_API_KEY;
@@ -238,7 +237,7 @@ public class PayServiceImpl implements PayService {
      */
     private void savePayInfo(Map<String,String> obj,String prePayId,int payType,String orderNo,String ip){
         PayInfo info=new PayInfo();
-        info.setPiWay(SystemConstant.PLATFORM_PAY_WAY_WX);
+        info.setPiWay(OrderConstant.ORDER_PAY_WAY_WX);
         info.setPiType(payType);
         info.setPiContext(JSON.toJSONString(obj));
         info.setPiPrepayId(prePayId);

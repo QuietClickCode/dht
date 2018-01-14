@@ -61,7 +61,13 @@
 		<result property="imgUrl" column="imgurl"/>
 		<result property="gcount" column="gcount"/>
 	</resultMap>
-
+	<resultMap id="rm_goods_return_vo" type="com.retailers.dht.common.vo.GoodsReturnVo">
+		<result property="gid" column="g_id"/>
+		<result property="gName" column="g_name"/>
+		<result property="rtId" column="rt_id"/>
+		<result property="rtName" column="rt_name"/>
+		<result property="rtType" column="rt_type"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goods_columns">
 		g_id,g_name,g_vender,g_shop,g_classification,g_brand,g_area,g_salescope,g_maindirection,g_description,g_productioninperson,g_productioninaddress,g_pickperson,g_pickaddress,g_copyid,g_price,g_checkperson,g_checkmessage,g_unitname,g_rate,rt_id,is_checked,is_delete,version
@@ -381,4 +387,23 @@
 	<!--批量出售商品-->
 	<update id="sellGoods" parameterType="java.util.Map">
 	</update>
+
+	<!-- 根据商品取得商品返现类型 -->
+	<select id="queryGoodsReturn" resultMap="rm_goods_return_vo">
+		SELECT
+			g.g_id,
+			g.g_name,
+			r.rt_id,
+			r.rt_name,
+			r.rt_type
+		FROM
+			t_goods g,
+			t_return_list r
+		WHERE
+			g.rt_id = r.rt_id
+			AND g.g_id in
+			<foreach collection="gids" item="item" index="index" open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+	</select>
 </mapper>

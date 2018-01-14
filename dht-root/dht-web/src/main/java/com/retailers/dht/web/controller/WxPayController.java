@@ -287,7 +287,7 @@ public class WxPayController extends BaseController{
         PayCallback pc=new PayCallback();
         String ip=request.getRemoteAddr();
         pc.setPcRemoteAdd(ip);
-        pc.setPcWay(SystemConstant.PLATFORM_PAY_WAY_WX);
+        pc.setPcWay(OrderConstant.ORDER_PAY_WAY_WX);
         try {
             os = response.getOutputStream();
             InputStream is = request.getInputStream();

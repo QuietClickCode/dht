@@ -139,14 +139,14 @@
 		UPDATE t_user_card_package
 		<set>
 			<!-- 钱包支付 -->
-			<if test="type==0">
+			<if test="type==2">
 				u_wallet_consume_total=u_wallet_consume_total+#{tradePrice},
 			</if>
 			<!-- 自然消费统计 -->
-			<if test="type==3">
+			<if test="type!=2">
 				u_other_pay_total=u_other_pay_total+#{tradePrice},
 			</if>
-			<if test="isCashBack==false">
+			<if test="cumulationCashPrice!=null and cumulationCashPrice>0">
 				u_total_integral=u_total_integral+#{cumulationCashPrice},
 				u_cur_integral=u_cur_integral+#{cumulationCashPrice},
 			</if>

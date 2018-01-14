@@ -92,13 +92,6 @@ public interface GoodsClassificationService {
 	public List<Long> queryGoodsClassificationChilds(Long curNode);
 
 	/**
-	 * 取得所有商品所属类型
-	 * @param gids
-	 * @return
-	 */
-	public Map<Long,Map<String,Long>> queryGoodsClassificationByGids(List<Long> gids);
-
-	/**
 	 * 取得商品种类顶层
 	 * @return
 	 */

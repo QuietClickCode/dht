@@ -11,18 +11,18 @@ import java.util.Queue;
  * 大汇堂系统 常量配置
  */
 public class SystemConstant {
-    /**
-     * 平台支付方式 0 微信
-     */
-    public static final  int PLATFORM_PAY_WAY_WX=0;
-    /**
-     * 平台支付方式 1 支付宝
-     */
-    public static final  int PLATFORM_PAY_WAY_ALIPY=1;
-    /**
-     * 平台支付方式 2 钱包支付
-     */
-    public static final int PALTFORM_PAY_WAY_WALLET=2;
+//    /**
+//     * 平台支付方式 0 微信
+//     */
+//    public static final  int PLATFORM_PAY_WAY_WX=0;
+//    /**
+//     * 平台支付方式 1 支付宝
+//     */
+//    public static final  int PLATFORM_PAY_WAY_ALIPY=1;
+//    /**
+//     * 平台支付方式 2 钱包支付
+//     */
+//    public static final int PALTFORM_PAY_WAY_WALLET=2;
 
     /**
      * 微信支付方式 1 公众号

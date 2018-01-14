@@ -10,6 +10,7 @@ import com.retailers.dht.common.entity.GoodsCopy;
 import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.utils.AttachmentUploadImageUtils;
+import com.retailers.dht.common.vo.GoodsReturnVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.common.service.AttachmentService;
@@ -230,6 +231,22 @@ public class GoodsServiceImpl implements GoodsService {
 //
 //		}
 //		return null;
+	}
+
+	/**
+	 * 取得商品返现情况
+	 * @param gids
+	 * @return
+	 */
+	public Map<Long, GoodsReturnVo> queryGoodsReturn(List<Long> gids) {
+		Map<Long,GoodsReturnVo> rtn=new HashMap<Long, GoodsReturnVo>();
+		List<GoodsReturnVo> lists = goodsMapper.queryGoodsReturn(gids);
+		if(ObjectUtils.isNotEmpty(lists)){
+			for(GoodsReturnVo grv:lists){
+				rtn.put(grv.getGid(),grv);
+			}
+		}
+		return rtn;
 	}
 }
 
