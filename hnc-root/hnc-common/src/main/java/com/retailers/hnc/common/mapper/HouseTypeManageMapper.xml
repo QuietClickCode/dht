@@ -102,11 +102,13 @@
 		SELECT
 		t2.is_like,
 		t3.show_url imagePath,
+		t4.show_url showImgPath,
 		t1.*
 		FROM
 		t_house_type_manage t1
 		LEFT JOIN t_user_like_hourse t2 ON t1.ht_id=t2.h_id and t2.is_delete=0 and t2.u_id=#{params.uid}
 		LEFT JOIN t_attachment t3 ON t3.id=t1.ht_image
+		LEFT JOIN t_attachment t4 ON t4.id=t1.ht_showImg
 		WHERE
 		t1.is_delete=0
 		ORDER BY t1.ht_recommend DESC
