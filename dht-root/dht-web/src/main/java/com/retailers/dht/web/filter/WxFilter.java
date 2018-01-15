@@ -53,6 +53,7 @@ public class WxFilter implements Filter {
         }
         boolean isFromMobile= CheckMobile.check(userAgent);
         String uri_ = request.getRequestURI();
+        logger.info("请求url：[{}]",uri_);
         //判断是否存在推荐人
         String randStr=request.getParameter("randStr");
         if(ObjectUtils.isNotEmpty(randStr)){
@@ -93,6 +94,11 @@ public class WxFilter implements Filter {
                 //判断是否绑定用户
             }
         }else{
+            //判断是否是微信支付回调
+            if(uri.indexOf("wxPay/callback")>=0){
+                chain.doFilter(servletRequest, servletResponse);
+                return;
+            }
             //跳转至公众号授权注册页面
             RequestDispatcher dispatcher = request.getRequestDispatcher("/pcPage");
             dispatcher.forward(request, response);

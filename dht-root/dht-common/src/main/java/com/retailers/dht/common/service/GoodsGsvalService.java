@@ -19,7 +19,7 @@ public interface GoodsGsvalService {
 	 * @author fanghui
 	 * @date 2017-10-18 09:46:10
 	 */
-	public boolean saveGoodsGsval(GoodsGsval goodsGsval);
+	public GoodsGsval saveGoodsGsval(GoodsGsval goodsGsval);
 	/**
 	 * 编辑商品规格值表
 	 * @param goodsGsval

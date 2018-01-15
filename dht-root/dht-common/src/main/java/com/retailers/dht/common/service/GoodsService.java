@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.auth.vo.ZTreeVo;
+import com.retailers.dht.common.vo.GoodsReturnVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Goods;
@@ -87,6 +88,13 @@ public interface GoodsService {
 
 
 	public List<GoodsVo> queryGoodsVoListByCondition(String condition,int pageNo,int pageSize);
+
+	/**
+	 *根据商品id 取得返现情况（该 商品是否立即返现，商品所属返现类型）
+	 * @param gids
+	 * @return
+	 */
+	public Map<Long,GoodsReturnVo> queryGoodsReturn(List<Long> gids);
 
 }
 

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.ReturnListMapper">
+
+	<resultMap id="rm_returnList" type="com.retailers.dht.common.entity.ReturnList">
+			<result property="rtId" column="rt_id"/>
+			<result property="rtName" column="rt_name"/>
+			<result property="rtType" column="rt_type"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="returnList_columns">
+		rt_id,rt_name,rt_type,is_delete,version
+	</sql>
+	<!-- 根据返现类型表主键取得数据 -->
+	<select id="queryReturnListByRtId" resultMap="rm_returnList" parameterType="java.lang.Long">
+		SELECT <include refid="returnList_columns" />
+		FROM t_return_list WHERE rt_id = #{rtId}
+	</select>
+	<!-- 返现类型表查询条件组合 -->
+	<sql id="returnList_where">
+		<where>
+			<if test="null != params.rtId">
+				AND rt_id = #{params.rtId}
+			</if>
+			<if test="null != params.rtName and '' != params.rtName">
+				AND rt_name like concat('%',  #{params.rtName}, '%')
+			</if>
+			<if test="null != params.rtType">
+				AND rt_type = #{params.rtType}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryReturnListList" resultMap="rm_returnList" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="returnList_columns" />
+		FROM t_return_list
+		<include refid="returnList_where"/>
+	</select>
+	<!--添加返现类型表 -->
+	<insert id="saveReturnList" parameterType="com.retailers.dht.common.entity.ReturnList" useGeneratedKeys="true" keyProperty="rtId">
+		INSERT INTO t_return_list (
+			rt_name,rt_type,is_delete,version
+		) VALUES
+		(
+			#{rtName,jdbcType=VARCHAR},#{rtType,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改返现类型表 -->
+	<update id="updateReturnList" parameterType="com.retailers.dht.common.entity.ReturnList">
+		UPDATE t_return_list
+		<set>
+            <if test="null != rtName and '' != rtName">
+                rt_name = #{rtName},
+            </if>
+            <if test="null != rtType">
+                rt_type = #{rtType},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE rt_id = #{rtId} and version = #{version}
+	</update>
+	<!--删除返现类型表 -->
+	<delete id="deleteReturnListByRtId" parameterType="java.lang.Long">
+		DELETE FROM t_return_list WHERE rt_id = #{rtId}
+	</delete>
+</mapper>

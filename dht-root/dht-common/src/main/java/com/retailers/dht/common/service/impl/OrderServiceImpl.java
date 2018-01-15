@@ -1,12 +1,11 @@
 
 package com.retailers.dht.common.service.impl;
 
-import com.alibaba.druid.sql.dialect.odps.ast.OdpsInsert;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.constant.CouponConstant;
-import com.retailers.dht.common.constant.LogUserCardPackageConstant;
+import com.retailers.dht.common.constant.UserCardPackageConstant;
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
@@ -632,7 +631,7 @@ public class OrderServiceImpl implements OrderService {
 							rechageId=od.getOdGoodsId();
 						}
 						String remark=StringUtils.formates("用户充值，充值金额:[{}],充值前金额:[{}]",NumberUtils.formaterNumberPower(order.getOrderTradePrice()),NumberUtils.formaterNumberPower(ucp.getUcurWallet()));
-						userCardPackageService.addUserCardPackageLog(ucp.getId(),LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
+						userCardPackageService.addUserCardPackageLog(ucp.getId(), UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN,order.getId(),order.getOrderTradePrice(),ucp.getUcurWallet(),remark,curDate);
 						User user=userMapper.queryUserByUid(order.getOrderBuyUid());
 						user.setUrechage(rechageId);
 						//修改用户会员类型
@@ -1031,7 +1030,6 @@ public class OrderServiceImpl implements OrderService {
             }
 			//取得用户折扣 取得用户有充值记录
 			Recharge recharge=rechargeMapper.queryUserBuyRecharge(user.getUrechage());
-
 			//取得是否返现 0 不返现，1 返现
 			int rcashback =recharge.getRcashback();
 
@@ -1090,7 +1088,7 @@ public class OrderServiceImpl implements OrderService {
 			}
 			String orderRemark="用户平台购物，消耗用户钱包，使用金额:"+NumberUtils.formaterNumberPower(order.getOrderTradePrice())+","+discountRemark;
 			//添加钱包使用日志
-			userCardPackageService.addUserCardPackageLog(uid,LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
+			userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_OUT,order.getId(),payPrice,ucp.getUcurWallet(),orderRemark,curDate);
 			order.setOrderPayCallbackRemark("用户钱包支付，原价，"+order.getOrderTradePrice()+",会员折扣,"+discountRemark+",实际支付："+payPrice);
 			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SUCCESS);
 			orderMapper.updateOrder(order);

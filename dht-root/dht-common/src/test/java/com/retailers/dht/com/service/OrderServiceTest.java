@@ -53,12 +53,12 @@ public class OrderServiceTest extends TestBaseJunit {
     @Test
     public void userCardPackageMapper(){
         long uid=17;
-        long type=0;
+        int type=0;
         long tradePrice=600;
         long cumulationCashPrice=100;
         int version =3;
         boolean isCashBack=true;
-        userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,cumulationCashPrice,isCashBack,version);
+        userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,cumulationCashPrice,version);
     }
     @Test
     public void findUserFirstBuy(){

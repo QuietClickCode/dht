@@ -62,7 +62,7 @@ public class ManageTaskJob {
     }
 
     /**
-     * 执行订单成功时处理的定时伤
+     * 执行订单成功时处理的定时任务
      */
     public void executeOrderQueue(){
         String key="executeOrderQueue";

@@ -6,9 +6,10 @@ import com.retailers.dht.common.constant.*;
 import com.retailers.dht.common.dao.*;
 import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.AsyncService;
-import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.service.OrderSuccessQueueService;
 import com.retailers.dht.common.service.UserCardPackageService;
+import com.retailers.dht.common.vo.GoodsReturnVo;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
@@ -20,7 +21,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
@@ -44,8 +44,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	@Autowired
 	private OrderDetailMapper orderDetailMapper;
 	@Autowired
-	private GoodsClassificationService goodsClassificationService;
-	@Autowired
 	private AccumulativeAmountMapper accumulativeAmountMapper;
 	@Autowired
 	private WalletCashBackQueueMapper walletCashBackQueueMapper;
@@ -61,6 +59,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	private RecommendStatisticsMapper recommendStatisticsMapper;
 	@Autowired
 	private AsyncService asyncService;
+	@Autowired
+	private GoodsService goodsService;
 
 
 	public boolean saveOrderSuccessQueue(OrderSuccessQueue orderSuccessQueue) {
@@ -140,12 +140,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		if(ObjectUtils.isNotEmpty(order)){
 			List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
 			if(order.getOrderStatus().intValue()== OrderConstant.ORDER_STATUS_PAY_SUCCESS||order.getOrderStatus().intValue()==OrderConstant.ORDER_STATUS_PAY_SEND_GOODS){
-				//支付类型（0 钱包，1 第三方支付）
-				long type=LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WALLET_IN;
-				//是否返现
-				boolean isCashBack=false;
-				//返现金额
-				long cashBackMoney=0l;
+				//交易总金额
 				long orderTradePrice=order.getOrderTradePrice();
 				//取得详查类型
 				if(!order.getOrderType().equals(OrderEnum.RECHARGE)){
@@ -155,61 +150,57 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 						//判断是否是返现
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 							//取得订单详情 进行商品分类处理
-							goodsType(ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
-							isCashBack=true;
-							cashBackMoney=order.getOrderMenberPrice();
+							goodsType(order,ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+							order.getOrderMenberPrice();
 						}else{
-							goodsType(ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+							goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 						}
 					}else{
-						type=LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN;
-						goodsType(ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+						goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 					}
 					//计算推广提成
 					popularize(order,ods);
 				}
-				//添加卡包操作日志
-				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),type,orderTradePrice,cashBackMoney,isCashBack);
 			}else{
 				throw new AppException("订单状态异常");
 			}
 		}
 	}
-
 	/**
-	 * 统计用户消费情况
+	 * 用户消费统计
 	 * @param uid 用户id
 	 * @param orderId 订单id
-	 * @param type 类型
-	 * @param totalPrice 消费金额
-	 * @param isCashBack 是否返现
+	 * @param type 支付类型
+	 * @param tradePrice 交易金额
+	 * @param unCasPrice 未返现金额
 	 */
-	private void statisticsUserSalseConsume(Long uid,Long orderId,Long type,Long totalPrice,Long cumulationCashPrice,boolean isCashBack){
+	private void statisticsUserSalseConsume(Long uid,Long orderId,Integer type,Long tradePrice,Long unCasPrice){
 		UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(uid);
 		if(ObjectUtils.isNotEmpty(ucp)){
-			userCardPackageMapper.statisticsUserSalseConsume(uid,type,totalPrice,cumulationCashPrice,isCashBack,ucp.getVersion());
-			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(totalPrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
+			userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,unCasPrice,ucp.getVersion());
+			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
 			//添加用户累计返现日志
-			if(!isCashBack){
-				userCardPackageService.addUserCardPackageLog(uid, LogUserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,totalPrice,ucp.getUcurIntegral(),remark,new Date());
+			if(ObjectUtils.isNotEmpty(unCasPrice)&&unCasPrice>0){
+				userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,unCasPrice,ucp.getUcurIntegral(),remark,new Date());
 			}
 		}
 	}
 	/**
 	 * 设置返现队列
+	 * @param order 购物订单
 	 * @param ods 订单详情
 	 * @param isCash 是否返现
 	 * @param buyUid 购买用户id
 	 * @return
 	 */
-	private void goodsType(List<OrderDetail> ods,Boolean isCash,Long orderId,Long buyUid,Long tradePrice){
+	private void goodsType(Order order,List<OrderDetail> ods,Boolean isCash,Long orderId,Long buyUid,Long tradePrice){
 		Date curDate=new Date();
 		List<Long> goodsIds=new ArrayList<Long>();
 		for(OrderDetail od:ods){
 			goodsIds.add(od.getOdGoodsId());
 		}
 		//根据商品id取得商品类型
-		Map<Long,Map<String,Long>> maps=goodsClassificationService.queryGoodsClassificationByGids(goodsIds);
+		Map<Long,GoodsReturnVo> maps=goodsService.queryGoodsReturn(goodsIds);
 		//是否返现
 		if(isCash){
 			orderCashBack(maps,orderId,ods,buyUid);
@@ -224,24 +215,25 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			long unCashPrice=0l;
 			for(OrderDetail od:ods){
 				if(ObjectUtils.isNotEmpty(maps)&& maps.containsKey(od.getOdGoodsId())){
-					//判断该商品是否立即返现 立即返现
-					if(maps.get(od.getOdGoodsId()).get("topNodesCash").intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
+					if(maps.get(od.getOdGoodsId()).getRtType().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 						cash.add(od);
 						cashPrice+=od.getOdMenberPrice();
 					}else{
 						unCash.add(od);
-						System.out.println(JSON.toJSON(od)+"<--->"+od.getOdMenberPrice());
-						unCashPrice+=od.getOdMenberPrice();
 					}
 				}
 			}
+			unCashPrice=tradePrice-cashPrice;
 			//判断是否存在立即返现列表
 			if(ObjectUtils.isNotEmpty(cash)){
 				orderCashBack(maps,orderId,cash,buyUid);
 			}
 			if(ObjectUtils.isNotEmpty(unCash)){
-				orderUnCashBack(maps,orderId,unCash,buyUid,tradePrice-cashPrice);
+				orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 			}
+
+			//添加卡包操作日志
+			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
 		}
 	}
 
@@ -252,7 +244,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	 * @param ods 商品购买列表
 	 * @param buyUid
 	 */
-	private void orderCashBack(Map<Long,Map<String,Long>> maps,Long orderId,List<OrderDetail> ods,Long buyUid){
+	private void orderCashBack(Map<Long,GoodsReturnVo> maps,Long orderId,List<OrderDetail> ods,Long buyUid){
 		logger.info("进入订单返现方法,订单id:[{}],商品关联的类型：[{}],购买人id：[{}]",orderId, JSON.toJSON(maps),buyUid);
 		Date curDate=new Date();
 		//商品合并
@@ -276,7 +268,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			WalletCashBackQueue wcbq=new WalletCashBackQueue();
 			wcbq.setCcbqUid(buyUid);
 			//设置商品顶层节点
-			wcbq.setCcbqGoodsType(maps.get(key).get("topNodes"));
+			wcbq.setCcbqGoodsType(maps.get(key).getRtId());
 			wcbq.setCcbqOrderId(orderId);
 			wcbq.setCcbqMoney(buyGoodsIdTotalPrice(hbsp.get(key)));
 			wcbq.setCcbqStatus(SystemConstant.PLAT_CASH_BACK_MENOY_STATUS_LINE_UP);
@@ -346,10 +338,10 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	 * @param maps
 	 * @param orderId 订单id
 	 * @param ods 商品购买列表
-	 * @param buyUid
-	 * @param totalPrice
+	 * @param buyUid 购买用户id
+	 * @param totalPrice 总金额
 	 */
-	private void orderUnCashBack(Map<Long,Map<String,Long>> maps,Long orderId,List<OrderDetail> ods,Long buyUid,Long totalPrice){
+	private void orderUnCashBack(Map<Long,GoodsReturnVo> maps,Long orderId,List<OrderDetail> ods,Long buyUid,Long totalPrice){
 		logger.info("进入普通消费累计方法,订单id:[{}],商品关联的类型：[{}],购买人id：[{}],累计金额：[{}]",orderId, JSON.toJSON(maps),buyUid,totalPrice);
 		Date curDate=new Date();
 		//商品合并
@@ -368,7 +360,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
 		Set<Long> gtyps=new HashSet<Long>();
 		for(Long key:maps.keySet()){
-			Long gt=maps.get(key).get("topNodes");
+			Long gt=maps.get(key).getRtId();
 			long money=buyGoodsIdTotalPrice(hbsp.get(key));
 			//取得该类型下的累计金额
 			if(gtUnPrice.containsKey(gt)){
@@ -443,7 +435,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			//判断用户是否存在推荐人
 			if(ObjectUtils.isNotEmpty(user)&&(ObjectUtils.isNotEmpty(user.getUtype())&&user.getUtype().intValue()!= UserConstant.USER_TYPE_PT)){
 				//设置首单推荐奖励
-				RecommendStatistics rs=savePopularize(RecommendStatisticsConstant.RECOMMENT_TYPE_FIRST,order.getId(),-1l,order.getOrderBuyUid(),user,order.getOrderTradePrice());
+				RecommendStatistics rs=savePopularize(RecommendStatisticsConstant.RECOMMENT_TYPE_FIRST,order.getId(),-1l,order.getOrderBuyUid(),user,order.getOrderMenberPrice());
 				rsLists.add(rs);
 			}
 		//不是首单
@@ -466,7 +458,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 						User user=uMaps.get(od.getOdInviterUid());
 						if(ObjectUtils.isNotEmpty(user)&&ObjectUtils.isNotEmpty(user.getUtype())&&user.getUtype().intValue()!=UserConstant.USER_TYPE_PT){
 							//设置首单推荐奖励
-							RecommendStatistics rs=savePopularize(RecommendStatisticsConstant.RECOMMENT_TYPE_SHARE,order.getId(),od.getId(),order.getOrderBuyUid(),user,order.getOrderTradePrice());
+							RecommendStatistics rs=savePopularize(RecommendStatisticsConstant.RECOMMENT_TYPE_SHARE,order.getId(),od.getId(),order.getOrderBuyUid(),user,od.getOdMenberPrice());
 							rsLists.add(rs);
 						}
 					}

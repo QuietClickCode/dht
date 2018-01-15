@@ -47,6 +47,7 @@
             <artifactId>jedis</artifactId>
             <version>2.9.0</version>
         </dependency>
+
         <!--<dependency>-->
         <!--<groupId>commons-logging</groupId>-->
         <!--<artifactId>commons-logging</artifactId>-->
@@ -61,6 +62,18 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
             <version>1.6</version>
+        </dependency>
+        <!--  二维码生成插件-->
+        <dependency>
+            <groupId>com.google.zxing</groupId>
+            <artifactId>core</artifactId>
+            <version>3.3.1</version>
+        </dependency>
+        <!-- 图片处理类（加水印，图片压缩） -->
+        <dependency>
+            <groupId>net.coobird</groupId>
+            <artifactId>thumbnailator</artifactId>
+            <version>0.4.8</version>
         </dependency>
     </dependencies>
     <build>
@@ -84,6 +97,7 @@
                     <include>**/*.xml</include>
                     <include>**/*.tld</include>
                     <include>**/*.json</include>
+                    <include>**/*.png</include>
                 </includes>
             </resource>
         </resources>

@@ -12,10 +12,7 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.encrypt.Sha1DESUtils;
-import com.retailers.tools.utils.HttpClientUtil;
-import com.retailers.tools.utils.IPUtil;
-import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.StringUtils;
+import com.retailers.tools.utils.*;
 import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.utils.WxHttpClientUtils;
 import com.retailers.wx.common.utils.wx.WXPayConstants;
@@ -41,6 +38,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.PublicKey;
@@ -99,5 +97,22 @@ public class WxShareController extends BaseController{
         JSONObject jsonObject = JSON.parseObject(respStr);
         return jsonObject.getString("access_token");
     }
+    @RequestMapping("shareImage")
+    public void shareImage(HttpServletResponse response){
+        setResponseHeaders(response);
+        String goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
+        try{
+            OutputStream outputStream=response.getOutputStream();
+            ShareImageUtils.generateShareImage("测试商品","￥12.36","www.baidu.com",goodsImgUrl,outputStream);
+            outputStream.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
+    }
+    protected void setResponseHeaders(HttpServletResponse response) {
+        response.setContentType("image/png");
+        response.setHeader("Cache-Control", "no-cache, no-store");
+        response.setHeader("Pragma", "no-cache");
+    }
 }

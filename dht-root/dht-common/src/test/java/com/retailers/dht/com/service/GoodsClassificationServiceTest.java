@@ -45,12 +45,4 @@ public class GoodsClassificationServiceTest extends TestBaseJunit {
         Collections.sort(lists);
         System.out.println(JSON.toJSON(lists));
     }
-
-    @Test
-    public void queryGoodsClassificationByGids(){
-        List<Long> gids= Arrays.asList(57l,51l);
-        Map<Long,Map<String,Long>> rtn=goodsClassificationService.queryGoodsClassificationByGids(gids);
-        System.out.println(JSON.toJSON(rtn));
-    }
-
 }

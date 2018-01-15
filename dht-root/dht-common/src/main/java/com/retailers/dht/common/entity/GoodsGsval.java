@@ -21,6 +21,9 @@ public class GoodsGsval implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 255)
 	private String gsvVal;
+	/**商品id 某个商品特有的规格属性 如果为通用 则为-1*/
+	@NotEmpty
+	private Long gid;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -32,7 +35,15 @@ public class GoodsGsval implements java.io.Serializable {
 	public GoodsGsval(){
 	}
 
-	public GoodsGsval( Long gsvId){
+	public Long getGid() {
+		return gid;
+	}
+
+	public void setGid(Long gid) {
+		this.gid = gid;
+	}
+
+	public GoodsGsval(Long gsvId){
 		this.gsvId = gsvId;
 	}
 

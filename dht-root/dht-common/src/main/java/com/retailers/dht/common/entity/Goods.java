@@ -79,6 +79,9 @@ public class Goods implements java.io.Serializable {
 	/**利润率*/
 	@NotEmpty
 	private Long grate;
+	/**返现类型id*/
+	@NotEmpty
+	private Long rtId;
 	/**是否通过审核 0未审核 1已审核 2未通过审核*/
 	@NotEmpty
 	private Long isChecked;
@@ -91,6 +94,14 @@ public class Goods implements java.io.Serializable {
 	//columns END
 
 	public Goods(){
+	}
+
+	public Long getRtId() {
+		return rtId;
+	}
+
+	public void setRtId(Long rtId) {
+		this.rtId = rtId;
 	}
 
 	public Long getGrate() {

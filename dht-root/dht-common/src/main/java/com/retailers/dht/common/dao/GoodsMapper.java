@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.Goods;
+import com.retailers.dht.common.vo.GoodsReturnVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -88,5 +89,12 @@ public interface GoodsMapper {
 	 * @return
 	 */
 	public int sellGoods(@Param("infos")List<Map<String,Long>> infos);
+
+	/**
+	 * 根据商品取得商品返现类型
+	 * @param gids
+	 * @return
+	 */
+	public List<GoodsReturnVo> queryGoodsReturn(@Param("gids")List<Long> gids);
 
 }
