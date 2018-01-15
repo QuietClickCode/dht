@@ -2,6 +2,8 @@ package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：钱包消费返现(包括指定可返现商品类型）DAO
@@ -66,5 +68,13 @@ public interface WalletCashBackQueueMapper {
 	 * @return
 	 */
 	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId);
+
+	/**
+	 * 取得用户排名公式
+	 * @param sUid 用户id
+	 * @param types 排名为公式 类型 (0 己返现，1 正在排队)
+	 * @return
+	 */
+	public List<WalletCashBackQueueView> queryUserRankingLists(@Param("sUid") Long sUid,@Param("types") List<Long> types);
 
 }

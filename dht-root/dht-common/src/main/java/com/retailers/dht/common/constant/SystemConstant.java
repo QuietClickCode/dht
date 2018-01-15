@@ -93,9 +93,11 @@ public class SystemConstant {
      */
     public static final long PLAT_CASH_BACK_MENOY_STATUS_LINE_FUNDRAISING=1;
     /**
-     * 平台返现队例状态 2 结束
+     * 平台返现队例状态 2 己返现
      */
     public static final long PLAT_CASH_BACK_MENOY_STATUS_END=2;
+
+
     /**
      * 当前 平台消费统计类型 0 直接返现
      */
