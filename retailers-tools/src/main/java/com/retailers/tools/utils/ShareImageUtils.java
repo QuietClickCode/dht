@@ -13,6 +13,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
 import java.util.Hashtable;
@@ -47,10 +48,10 @@ public class ShareImageUtils {
      * 二维码尺寸高度
      */
     private static final int QRCODE_HEIGHT = 130;
-    /**
-     * 分享默认背景较长片
-     */
-    private static final String DEFAULT_IMAGE="d:\\share_image.png";
+//    /**
+//     * 分享默认背景较长片
+//     */
+//    private static final String DEFAULT_IMAGE="d:\\share_image.png";
     /**
      * 标题 字体大小
      */
@@ -89,6 +90,7 @@ public class ShareImageUtils {
                 .watermark(new com.retailers.tools.image.Positions(new Point(0,120)), goodsImg, 1f)//商品图片
                 .watermark(new com.retailers.tools.image.Positions(new Point(98,647)), generateQRcode(url), 1f)//分享二维码
                 .outputFormat("png")
+//                .toFile("d:\\abczpaman.png");
                 .toOutputStream(out);
     }
     /**
@@ -137,8 +139,8 @@ public class ShareImageUtils {
     }
 
     private static BufferedImage addText(String goodsNm,String price)throws Exception{
-        File file = new File(DEFAULT_IMAGE);
-        Image image = ImageIO.read(file);
+        InputStream in=ShareImageUtils.class.getResourceAsStream("/share_image.png");
+        Image image = ImageIO.read(in);
         int width = image.getWidth(null);
         int height = image.getHeight(null);
         BufferedImage bi = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -165,7 +167,6 @@ public class ShareImageUtils {
         //取得标题 宽度
         title_width = (DEFAULT_IMG_WIDTH/2-title_width/2);
         int price_height=fmPrice.getHeight();
-        System.out.println(price_height);
         g.drawString(price, title_width, FONT_TOP_HEIGHT+title_height+price_height);//商品价格
         g.dispose();
         return  bi;

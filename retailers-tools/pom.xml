@@ -97,6 +97,7 @@
                     <include>**/*.xml</include>
                     <include>**/*.tld</include>
                     <include>**/*.json</include>
+                    <include>**/*.png</include>
                 </includes>
             </resource>
         </resources>
