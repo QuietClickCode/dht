@@ -88,7 +88,7 @@
     ]
 
     $(function () {
-        createExpandTable("/ranking/queryRankingList","orderTables","orgId",treeColumns,queryParams)
+        createTable("/ranking/queryRankingList","orderTables","orgId",treeColumns,queryParams)
     });
     /**
      * 查询条件
