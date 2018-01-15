@@ -111,7 +111,7 @@
 			ht_type_name,ht_type,ht_area,ht_recommend,ht_image,ht_info,is_show,is_delete,version
 		) VALUES
 		(
-			#{htTypeName,jdbcType=VARCHAR},#{htType,jdbcType=VARCHAR},#{htArea,jdbcType=BIGINT},#{htRecommend,jdbcType=INTEGER},#{htImage,jdbcType=BIGINT},#{htInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+			#{htTypeName,jdbcType=VARCHAR},#{htType,jdbcType=VARCHAR},#{htArea,jdbcType=DOUBLE},#{htRecommend,jdbcType=INTEGER},#{htImage,jdbcType=BIGINT},#{htInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
 		)
 	</insert>
 	<!--修改户型表 -->

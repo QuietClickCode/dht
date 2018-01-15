@@ -78,4 +78,13 @@ public interface ClientManageMapper {
 	public List<ClientManageVo> queryClientManagerCount();
 
 	public OpeningVo queryEarlyCanComeIn(@Param("cid") Long cid);
+
+	/**
+	 * 查询客户表列表
+	 * @param pagination 分页对象
+	 * @return  客户表列表
+	 * @author wangjue
+	 * @date 2017-12-28 15:40:49
+	 */
+	public List<ClientManageVo> queryClientManageVoList(Pagination<ClientManageVo> pagination);
 }

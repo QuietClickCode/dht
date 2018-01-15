@@ -2,11 +2,11 @@ package com.retailers.hnc.common.entity;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 /**
- * 描述：户型表对象
+ * 描述：管理员对象
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2017-12-18 11:36:10
+ * @date 2018-01-15 17:11:22
  */
 public class HouseTypeManage implements java.io.Serializable {
 
@@ -23,7 +23,7 @@ public class HouseTypeManage implements java.io.Serializable {
 	private String htType;
 	/**户型面积*/
 	@NotEmpty
-	private Long htArea;
+	private Double htArea;
 	/**是否主推(0代表非主推类型，1代表主推类型）*/
 	@NotEmpty
 	private Integer htRecommend;
@@ -73,11 +73,11 @@ public class HouseTypeManage implements java.io.Serializable {
 	public String getHtType() {
 		return this.htType;
 	}
-	public void setHtArea(Long value) {
+	public void setHtArea(Double value) {
 		this.htArea = value;
 	}
 
-	public Long getHtArea() {
+	public Double getHtArea() {
 		return this.htArea;
 	}
 	public void setHtRecommend(Integer value) {

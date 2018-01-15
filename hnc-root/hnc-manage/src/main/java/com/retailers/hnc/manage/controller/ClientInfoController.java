@@ -59,6 +59,23 @@ public class ClientInfoController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/queryClientListVo")
+    @ResponseBody
+    public Map<String,Object> queryClientListVo(PageUtils pageForm,Long emId,String registerTimes,String tmName){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("isDelete",0);
+        map.put("tmEmployee",emId);
+        map.put("tmName",tmName);
+        map.put("tmRegisterTime",dateFormat(registerTimes));
+        System.out.println(registerTimes);
+        System.out.println(dateFormat(registerTimes));
+        Pagination<ClientManageVo> teamPagination = clientManageService.queryClientManageVoList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",teamPagination.getTotalCount());
+        gtm.put("rows",teamPagination.getData());
+        return gtm;
+    }
+
     @RequestMapping("/addClient")
     @Function(label = "添加客户",description = "添加客户",resourse = "clientInfo.addClient",sort = 3,parentRes = "clientInfo.clientInfoMapping")
     @ResponseBody
