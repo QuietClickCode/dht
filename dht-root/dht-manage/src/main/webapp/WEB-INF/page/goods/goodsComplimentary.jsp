@@ -586,7 +586,7 @@
         $("#editorGoodsComplimentaryTitle").text("添加赠品");
         $('#editorGoodsComplimentary').modal("show")
     }
-    
+
 </script>
 
 <!--赠品与子类关系1-->
@@ -822,7 +822,7 @@
         $('#deleteggcrelbtn').hide();
         $.ajax({
             type: "post",
-            url: "/goods/queryGoodsLists",
+            url: "/goods/coupnGoodsLists",
             dataType: "json",
             data: {gname: gnamecopy,pageNo: 1, pageSize: 100},
             success: function (data) {
@@ -1019,7 +1019,7 @@
 
         $.ajax({
             type:"post",
-            url:"/goods/queryGoodsLists",
+            url:"/goods/coupnGoodsLists",
             dataType: "json",
             data:{gname:gname,pageNo:1,pageSize:100},
             success:function(data){
