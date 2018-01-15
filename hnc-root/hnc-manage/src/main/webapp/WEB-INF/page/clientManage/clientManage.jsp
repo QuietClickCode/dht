@@ -20,7 +20,6 @@
 </head>
 <div>
     <div id="toolbar" class="form-inline">
-        <button class="btn btn-default saveTeam" type="button">新增团队</button>
         <input type="text" class="form-control tname"  placeholder="请输入团队名称">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>

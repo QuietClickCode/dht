@@ -48,6 +48,8 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		return status == 1 ? true : false;
 	}
 	public boolean updateHouseTypeManage(HouseTypeManage houseTypeManage) {
+
+		System.out.println(houseTypeManage.getHtShowImg() +" " + houseTypeManage.getHtImage());
 		HouseTypeManage manage = queryHouseTypeManageByHtId(houseTypeManage.getHtId());
 		if(houseTypeManage.getHtImage() != null){
 			if (!ObjectUtils.compare(houseTypeManage.getHtImage(),manage.getHtImage())) {
@@ -59,6 +61,19 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 				}
 			}
 		}
+
+
+		if(houseTypeManage.getHtShowImg() != null){
+			if (!ObjectUtils.compare(houseTypeManage.getHtShowImg(),manage.getHtShowImg())) {
+				if(manage.getHtShowImg() == null)
+					attachmentService.editorAttachment(houseTypeManage.getHtShowImg());
+				else{
+					attachmentService.editorAttachment(manage.getHtShowImg(),AttachmentConstant.ATTACHMENT_STATUS_NO);
+					attachmentService.editorAttachment(houseTypeManage.getHtShowImg());
+				}
+			}
+		}
+
 		houseTypeManage.setVersion(manage.getVersion());
 		int status = houseTypeManageMapper.updateHouseTypeManage(houseTypeManage);
 		return status == 1 ? true : false;

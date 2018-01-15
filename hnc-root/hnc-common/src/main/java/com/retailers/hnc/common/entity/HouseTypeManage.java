@@ -6,7 +6,7 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author wangjue
  * @version 1.0
  * @since 1.8
- * @date 2018-01-15 17:11:22
+ * @date 2018-01-15 18:13:01
  */
 public class HouseTypeManage implements java.io.Serializable {
 
@@ -30,6 +30,9 @@ public class HouseTypeManage implements java.io.Serializable {
 	/**户型效果图*/
 	@NotEmpty
 	private Long htImage;
+	/**htShowImg*/
+	@NotEmpty
+	private Long htShowImg;
 	/**户型描述*/
 	@NotEmpty
 	@Length(min = 1, max = 20000)
@@ -93,6 +96,13 @@ public class HouseTypeManage implements java.io.Serializable {
 
 	public Long getHtImage() {
 		return this.htImage;
+	}
+	public void setHtShowImg(Long value) {
+		this.htShowImg = value;
+	}
+
+	public Long getHtShowImg() {
+		return this.htShowImg;
 	}
 	public void setHtInfo(String value) {
 		this.htInfo = value;
