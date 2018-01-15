@@ -540,7 +540,7 @@
     function createFloorManageTable(){
         //表格的初始化
         $("#house_type_table").bootstrapTable({
-            url:"/houseManage/queryHouseType",
+            url:"/houseManage/queryAllHouseType",
             method: 'post',                      //请求方式（*）
             toolbar:'#queryFloorToolbar' ,                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色

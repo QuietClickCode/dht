@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class HouseTypeManageVo extends HouseTypeManage {
     private String imagePath;
+    private String showImgPath;
     private List<FloorManage> floorManages;
     private Long isLike;
 
@@ -35,5 +36,13 @@ public class HouseTypeManageVo extends HouseTypeManage {
 
     public void setImagePath(String imagePath) {
         this.imagePath = imagePath;
+    }
+
+    public String getShowImgPath() {
+        return showImgPath;
+    }
+
+    public void setShowImgPath(String showImgPath) {
+        this.showImgPath = showImgPath;
     }
 }
