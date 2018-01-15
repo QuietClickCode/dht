@@ -51,6 +51,7 @@ public interface FloorManageService {
 	 * @date 2017-12-15 14:23:58
 	 */
 	public Pagination<FloorManageVo> queryFloorManageList(Map<String, Object> params, int pageNo, int pageSize);
+
 	/**
 	 * 根据fmId删除楼栋管理
 	 * @param fmId

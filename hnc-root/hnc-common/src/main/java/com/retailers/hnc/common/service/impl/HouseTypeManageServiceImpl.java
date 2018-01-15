@@ -170,6 +170,7 @@ public class HouseTypeManageServiceImpl implements HouseTypeManageService {
 		List<HouseTypeManageVo> list = houseTypeManageMapper.queryHourseTypeManageVoWithUid(page);
 		for(HouseTypeManageVo houseTypeManageVo:list){
 			houseTypeManageVo.setImagePath(AttachmentConstant.IMAGE_SHOW_URL+houseTypeManageVo.getImagePath());
+			houseTypeManageVo.setShowImgPath(AttachmentConstant.IMAGE_SHOW_URL+houseTypeManageVo.getShowImgPath());
 		}
 		return list;
 	}
