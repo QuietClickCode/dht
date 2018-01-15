@@ -26,6 +26,8 @@ public class MainController extends BaseController {
 	@RequestMapping(value={"/index","/"})
 	public String index(HttpServletRequest request){
 		SysUser sysUser=getCurLoginUser(request);
+
+		System.out.println(sysUser.getUid());
 		if(ObjectUtils.isEmpty(sysUser)){
 			SysUser info = new SysUser();
 			info.setUid(-1l);
@@ -43,4 +45,10 @@ public class MainController extends BaseController {
 		request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,info);
 		return "main";
 	}
+
+	@RequestMapping(value={"/login"})
+	public String login(HttpServletRequest request){
+		return "login";
+	}
+
 }

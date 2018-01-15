@@ -98,7 +98,7 @@
             valign : 'middle'
         },
         {
-            field: 'tmEmployee',
+            field: 'empName',
             title: '置业顾问',
             align : 'center',
             valign : 'middle'

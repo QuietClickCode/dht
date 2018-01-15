@@ -4,6 +4,7 @@ import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
 import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.service.ClientManageService;
+import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -51,7 +52,7 @@ public class ClientInfoController extends BaseController {
         map.put("tmRegisterTime",dateFormat(registerTimes));
         System.out.println(registerTimes);
         System.out.println(dateFormat(registerTimes));
-        Pagination<ClientManage> teamPagination = clientManageService.queryClientManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Pagination<ClientManageVo> teamPagination = clientManageService.queryClientManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());
         gtm.put("rows",teamPagination.getData());

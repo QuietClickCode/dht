@@ -274,14 +274,19 @@
             class:'house_type',
             formatter:function (value,row,index) {
                 let html = "";
-                if(row.typeManages.length == 0)
-                    return '<button class="btn btn-primary" onclick="event.stopPropagation();addHouseTypeManage(\'' + row.fmId + '\')">添加户型</button>';
-                else{
-                    for(let i = 0;i<row.typeManages.length;i++){
-                        html +=''+row.typeManages[i].htTypeName+' '
-                    }
+                for(let i = 0;i<row.typeManages.length;i++){
+                    html +=''+row.typeManages[i].htTypeName+' '
                 }
                 return html;
+            }
+        },
+        {
+            title: '编辑户型',
+            align : 'center',
+            valign : 'middle',
+            class:'house_type',
+            formatter:function (value,row,index) {
+                return '<button class="btn btn-primary" onclick="event.stopPropagation();addHouseTypeManage(\'' + row.fmId + '\')">编辑户型</button>';
             }
         },
         {
@@ -467,8 +472,9 @@
     /*打开模态框并显示与该楼栋所关联的户型*/
     function addHouseTypeManage(id) {
         floorManage = rowDatas.get(id);
+        console.log(floorManage);
         for(let i = 0;i<floorManage.typeManages.length;i++){
-            floorManagesMap.set(floorManage.typeManages[i].htId,houseType.fmId);
+            floorManagesMap.set(floorManage.typeManages[i].htId,floorManage.fmId);
             $("#house_type_list").append("<li id='"+floorManage.typeManages[i].htId+"'>"+floorManage.typeManages[i].htTypeName+"<span class='remove_icon'></span></li>");
         }
         $("#house_type_table").bootstrapTable('destroy');

@@ -1,14 +1,18 @@
 
 package com.retailers.hnc.common.service.impl;
-import java.util.List;
-import java.util.Map;
-import com.retailers.hnc.common.entity.ProjectImg;
+
 import com.retailers.hnc.common.dao.ProjectImgMapper;
+import com.retailers.hnc.common.entity.ProjectImg;
 import com.retailers.hnc.common.service.ProjectImgService;
 import com.retailers.hnc.common.vo.ProjectImgVo;
-import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
 /**
  * 描述：项目图片表Service
  * @author fanghui
@@ -20,7 +24,12 @@ import com.retailers.mybatis.pagination.Pagination;
 public class ProjectImgServiceImpl implements ProjectImgService {
 	@Autowired
 	private ProjectImgMapper projectImgMapper;
+
+	@Autowired
+	private AttachmentService attachmentService;
+
 	public boolean saveProjectImg(ProjectImg projectImg) {
+		attachmentService.editorAttachment(projectImg.getAid());
 		int status = projectImgMapper.saveProjectImg(projectImg);
 		return status == 1 ? true : false;
 	}
@@ -42,6 +51,8 @@ public class ProjectImgServiceImpl implements ProjectImgService {
 		return page;
 	}
 	public boolean deleteProjectImgByPiId(Long piId) {
+		Long imgId = queryProjectImgByPiId(piId).getAid();
+		attachmentService.editorAttachment(imgId, AttachmentConstant.ATTACHMENT_STATUS_NO);
 		int status = projectImgMapper.deleteProjectImgByPiId(piId);
 		return status == 1 ? true : false;
 	}

@@ -254,8 +254,6 @@
 
 
         $("#uploadImg").click(function () {
-
-
             var files = $("#demo").get(0).files;
             var fd = new FormData($( "#test" )[0]);
             if(files[0] == undefined)
@@ -373,7 +371,7 @@
                     if(imgsList!=null&&imgsList.length>0){
                         for(var i=0;i<imgsList.length;i++){
                             var html = '<div class="col-lg-2">'+
-                                '<img style="width: 100%;height: 100%" src="'+imgsList[i]+'">'+
+                                '<img style="width: 100%;height: 100%" src="'+imgsList[i]+'">'+'<span style="display: none">1111</span>'
                                 '</div>';
                             $('#imgsdiv').append(html);
                         }
