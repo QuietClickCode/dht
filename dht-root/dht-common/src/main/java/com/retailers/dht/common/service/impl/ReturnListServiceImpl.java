@@ -40,6 +40,16 @@ public class ReturnListServiceImpl implements ReturnListService {
 		page.setData(list);
 		return page;
 	}
+
+	/**
+	 *
+	 * @return
+	 */
+	public List<ReturnList> queryAllReturnListList() {
+		List<ReturnList> list = returnListMapper.queryAllReturnListList();
+		return list;
+	}
+
 	public boolean deleteReturnListByRtId(Long rtId) {
 		ReturnList returnList = returnListMapper.queryReturnListByRtId(rtId);
 		returnList.setIsDelete(1L);

@@ -4,7 +4,9 @@ import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.GoodsClassification;
+import com.retailers.dht.common.entity.ReturnList;
 import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.dht.web.base.BaseController;
@@ -35,7 +37,7 @@ public class WalletCashBackQueueController extends BaseController {
     @Autowired
     private WalletCashBackQueueService walletCashBackQueueService;
     @Autowired
-    private GoodsClassificationService goodsClassificationService;
+    private ReturnListService returnListService;
 
     /**
      * 打开排名公式页面
@@ -43,7 +45,7 @@ public class WalletCashBackQueueController extends BaseController {
      */
     @RequestMapping("index")
     public ModelAndView openRankingPage(HttpServletRequest request){
-        List<GoodsClassification> list = goodsClassificationService.queryParent();
+        List<ReturnList> list = returnListService.queryAllReturnListList();
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("gts",list);
         modelAndView.setViewName(redirectUrl(request,"ranking/ranking"));
@@ -72,7 +74,7 @@ public class WalletCashBackQueueController extends BaseController {
     @RequestMapping("openUserRankingLists")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
     public String openUserRankingLists(HttpServletRequest request, HttpServletResponse response){
-        return redirectUrl(request,"usercenter/user_ranking");
+        return redirectUrl(request,"ranking/user_ranking");
     }
 
     /**

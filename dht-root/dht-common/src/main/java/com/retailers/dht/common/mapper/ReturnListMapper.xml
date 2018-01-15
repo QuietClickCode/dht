@@ -77,4 +77,10 @@
 	<delete id="deleteReturnListByRtId" parameterType="java.lang.Long">
 		DELETE FROM t_return_list WHERE rt_id = #{rtId}
 	</delete>
+
+	<!--取得所有的返现列表 -->
+	<select id="queryAllReturnListList" resultMap="rm_returnList">
+		SELECT <include refid="returnList_columns" />
+		FROM t_return_list WHERE  is_delete=0
+	</select>
 </mapper>
