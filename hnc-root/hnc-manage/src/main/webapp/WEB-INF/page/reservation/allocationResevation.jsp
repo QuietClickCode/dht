@@ -216,6 +216,7 @@
                 treePid:"emTeam",                         //上级菜单关联id
                 treeRootLevel: 1,
                 showRefresh: true,                  //是否显示刷新按钮
+
                 minimumCountColumns: 2,             //最少允许的列数
                 clickToSelect: true,                //是否启用点击选中行
                 uniqueId: "tid",                     //每一行的唯一标识，一般为主键列
@@ -241,11 +242,9 @@
                     title: '团队总分配预约数',
                     formatter:function (value,row,index) {
                         let html = "";
-                        if(row.emTeam != null){
-                            if(row.parentId == null)
-                                html += "<p id='a"+row.tid+"'></p>";
+                        if(row.level == 1){
+                            html += "<p>"+row.count+"</p>";
                         }
-
                         return html;
                     }
 

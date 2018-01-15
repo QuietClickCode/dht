@@ -92,7 +92,7 @@ public class FloorManageServiceImpl implements FloorManageService {
 			List<HouseTypeManage> houseTypeManages = relationshipService.queryFloorType(fmId);
 			for (HouseTypeManage houseTypeManage : houseTypeManages) {
 				if(map.get(houseTypeManage.getHtId()) == null){
-					flag = relationshipService.queryFloorRelationship(fmId,houseTypeManage.getHtId());
+					flag = relationshipService.queryHouseTypeRelationship(fmId,houseTypeManage.getHtId());
 				}else if(map.get(houseTypeManage.getHtId()) != null){
 					map.remove(houseTypeManage.getHtId());
 				}

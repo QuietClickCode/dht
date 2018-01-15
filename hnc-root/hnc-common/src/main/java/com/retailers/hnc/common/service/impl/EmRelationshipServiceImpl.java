@@ -132,6 +132,8 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 		List<EmployeeRelationshipVo> employeeRelationshipVos = emRelationshipMapper.queryAllEmRelationshipVoList(pid);
 		for(EmployeeRelationshipVo relationshipVo:employeeRelationshipVos){
 			relationshipVo.setLevel(2L);
+			if(relationshipVo.getEmReservation() == null)
+				relationshipVo.setEmReservation(0L);
 			relationshipVo.setTid(null);
 			relationshipVo.setTid(tid++);
 		}
@@ -140,9 +142,20 @@ public class EmRelationshipServiceImpl implements EmRelationshipService {
 			relationshipVo.setTeamName(team.getTname());
 			relationshipVo.setTid(team.getTid());
 			relationshipVo.setLevel(1L);
+			setTeamCount(relationshipVo,employeeRelationshipVos);
 			employeeRelationshipVos.add(relationshipVo);
 		}
 		return employeeRelationshipVos;
+	}
+
+	public void setTeamCount(EmployeeRelationshipVo vo,List<EmployeeRelationshipVo> employeeRelationshipVos){
+		Long count = 0L;
+		for (EmployeeRelationshipVo employeeRelationshipVo : employeeRelationshipVos) {
+			if(employeeRelationshipVo.getEmTeam() == vo.getTid()){
+				count += employeeRelationshipVo.getEmReservation();
+			}
+		}
+		vo.setCount(count);
 	}
 
 	public List<EmployeeRelationshipVo> queryReservationInfo(EmRelationship relationship) {

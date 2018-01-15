@@ -245,7 +245,8 @@
                     </div>
 
                     <div class="form-group houseTypeImgBox" style="display: none;">
-                        <button type="button" class="btn btn-primary houseTypeImg">选择图片</button>
+                        <%--<button type="button" class="btn btn-primary houseTypeImg">选择图片</button>--%>
+                        <img src="" class="houseTypeImg">
                     </div>
                 </form>
             </div>
@@ -379,7 +380,7 @@
                 if(row.htImage == null)
                     html += '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">添加户型效果图</button>';
                 else
-                    html += '<img class="houseTypeImage" src="'+row.imagePath+'">';
+                    html += '<img class="houseTypeImage" data-src="'+row.imagePath+'" src="">';
                 return html;
             }
         },
@@ -390,12 +391,34 @@
             class:'house_type',
             formatter:function (value,row,index) {
                 let html = "";
-                if(row.floorManages.length == 0)
-                    return '<button class="btn btn-primary" onclick="event.stopPropagation();addFloorManage(\''+row.htId+'\')">添加楼栋</button>';
-                else
-                    for(let i = 0;i<row.floorManages.length;i++){
-                        html += ''+row.floorManages[i].fmName+' '
-                    }
+                for(let i = 0;i<row.floorManages.length;i++){
+                    html += ''+row.floorManages[i].fmName+' '
+                }
+
+                if(html.length > 4){
+                    return html.substring(0,4) + '...';
+                }
+                return html;
+            }
+        },
+        {
+            title: '编辑图片',
+            align : 'center',
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                let html = "";
+                html += '<button class="btn btn-primary" onclick="event.stopPropagation();editHouseTypeImg(\''+row.htId+'\')">编辑图片</button>';
+                return html;
+            }
+        },
+        {
+            align : 'center',
+            valign : 'middle',
+            title: '编辑楼栋',
+            formatter:function (value,row,index) {
+                rowDatas.set(''+row.htId+'',row);
+                let html='';
+                html+='<button class="btn btn-primary" onclick="event.stopPropagation();addFloorManage(\''+row.htId+'\')">编辑楼栋</button>'
                 return html;
             }
         },
@@ -429,6 +452,14 @@
     $(function () {
         createTable("/houseManage/queryHouseType","goodsTypeTables","htId",treeColumns,queryParams)
     });
+
+    $('#goodsTypeTables').on('load-success.bs.table', function (e, data){
+        $(".houseTypeImage").each(function () {
+            let val = $(this).attr("data-src");
+            $(this).attr("src",val);
+        });
+    });
+
     /**
      * 查询条件
      **/
@@ -567,6 +598,7 @@
 <script>
     function addFloorManage(id) {
         houseType = rowDatas.get(id);
+        console.log(houseType);
         for(let i = 0;i<houseType.floorManages.length;i++){
             floorManagesMap.set(houseType.floorManages[i].fmId,houseType.htId);
             $("#house_type_list").append("<li id='"+houseType.floorManages[i].fmId+"'>"+houseType.floorManages[i].fmName+"<span class='remove_icon'></span></li>");

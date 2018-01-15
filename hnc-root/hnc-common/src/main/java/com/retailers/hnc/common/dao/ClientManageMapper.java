@@ -56,7 +56,7 @@ public interface ClientManageMapper {
 	 * @author wangjue
 	 * @date 2017-12-28 15:40:49
 	 */
-	public List<ClientManage> queryClientManageList(Pagination<ClientManage> pagination);
+	public List<ClientManageVo> queryClientManageList(Pagination<ClientManageVo> pagination);
 
 	public List<ClientManageVo> queryClientManageListWeb(Pagination<ClientManageVo> pagination);
 	/**
