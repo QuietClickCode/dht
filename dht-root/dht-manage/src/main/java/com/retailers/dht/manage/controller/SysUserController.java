@@ -73,8 +73,8 @@ public class SysUserController extends BaseController {
      * @return
      */
     @RequestMapping("querySyUserByAccount")
-    @Function(label="根据账号查找用户", description = "根据账号查找用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
+//    @Function(label="根据账号查找用户", description = "根据账号查找用户", resourse = "sysUser.querySyUserByAccount",sort=1,parentRes="sysUser.openSysUserPage")
+//    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg="未登陆，请重新登录",redirectUrl = "http://www.baidu.com")
     @ResponseBody
     public BaseResp querySyUserByAccount(HttpServletRequest request, String account,String sysUserPwd){
         try {
