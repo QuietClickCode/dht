@@ -82,6 +82,18 @@ public class FloorManageController extends BaseController{
         return gtm;
     }
 
+    @RequestMapping("/queryAllFloorList")
+    @ResponseBody
+    public Map<String,Object> queryAllFloorList(PageUtils pageForm){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("isDelete",0);
+        Pagination<FloorManageVo> advertisingPagination = manageService.queryFirstFloorManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",advertisingPagination.getTotalCount());
+        gtm.put("rows",advertisingPagination.getData());
+        return gtm;
+    }
+
     @RequestMapping("/addHouseTypeRelationship")
     @Function(label = "添加户型",description = "添加户型",resourse = "floorManage.addHouseTypeRelationship",sort = 3,parentRes = "floorManage.floorManageMapping")
     @ResponseBody

@@ -54,6 +54,10 @@ public class WalletCashBackQueueView {
      * 订单编号
      */
     private String orderNo;
+    /**
+     * 排名公示名称
+     */
+    private String rtName;
 
     public Long getRownum() {
         return rownum;
@@ -184,5 +188,13 @@ public class WalletCashBackQueueView {
 
     public void setOrderNo(String orderNo) {
         this.orderNo = orderNo;
+    }
+
+    public String getRtName() {
+        return rtName;
+    }
+
+    public void setRtName(String rtName) {
+        this.rtName = rtName;
     }
 }

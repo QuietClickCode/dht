@@ -95,7 +95,10 @@
             field: 'tmSex',
             title: '客户性别',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+
+            }
         },
         {
             field: 'empName',
@@ -176,7 +179,7 @@
     ]
 
     $(function () {
-        createTable("/clientInfo/queryClientList","goodsTypeTables","tmId",treeColumns,queryParams)
+        createTable("/clientInfo/queryClientListVo","goodsTypeTables","tmId",treeColumns,queryParams)
     });
     /**
      * 查询条件

@@ -113,6 +113,11 @@ public class ManageTaskJob {
 
 
 
+    public void testJob(){
+        logger.info("开始测试");
+        logger.info("测试中");
+        logger.info("结束测试");
+    }
 
 
 }

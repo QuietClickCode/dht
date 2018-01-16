@@ -141,12 +141,13 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryClientManageList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
-		<!--SELECT <include refid="clientManage_columns" />,t2.em_name,t3.c_channel as chennelName
+		SELECT <include refid="clientManage_columns" />
 		FROM t_client_manage
 		<include refid="clientManage_where"/>
-		LEFT JOIN t_employee_manage t2
-		on t1.tm_employee = t2.em_id and t2.is_delete = 0
-		LEFT JOIN t_channel t3 on t1.tm_channel = t3.c_id and t3.is_delete = 0-->
+	</select>
+
+	<!--分页查询 -->
+	<select id="queryClientManageVoList" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		select t1.*,t2.em_name,t3.c_channel as chennelName
 		from t_client_manage t1
 		LEFT JOIN t_employee_manage t2
@@ -154,6 +155,8 @@
 		LEFT JOIN t_channel t3 on t1.tm_channel = t3.c_id and t3.is_delete = 0
 		where t1.is_delete = 0
 	</select>
+
+
 	<select id="queryClientManageListWeb" resultMap="rm_clientManage_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		  SELECT
 			t1.*,

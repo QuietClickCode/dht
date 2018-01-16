@@ -84,6 +84,17 @@ public interface ClientManageService {
 	public List<ClientManageVo> queryClientManagerCount();
 
 	public OpeningVo queryEarlyCanComeIn(Long cid);
+
+	/**
+	 * 查询客户表列表
+	 * @param params 请求参数
+	 * @param pageNo 当前页数,从1开始
+	 * @param pageSize 分页条数
+	 * @return  客户表列表
+	 * @author wangjue
+	 * @date 2017-12-28 15:40:49
+	 */
+	public Pagination<ClientManageVo> queryClientManageVoList(Map<String, Object> params, int pageNo, int pageSize);
 }
 
 
