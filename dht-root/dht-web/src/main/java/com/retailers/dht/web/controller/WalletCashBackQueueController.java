@@ -1,8 +1,12 @@
 package com.retailers.dht.web.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.retailers.auth.annotation.CheckSession;
+import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.GoodsClassification;
+import com.retailers.dht.common.entity.ReturnList;
 import com.retailers.dht.common.service.GoodsClassificationService;
+import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.dht.web.base.BaseController;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,7 +37,7 @@ public class WalletCashBackQueueController extends BaseController {
     @Autowired
     private WalletCashBackQueueService walletCashBackQueueService;
     @Autowired
-    private GoodsClassificationService goodsClassificationService;
+    private ReturnListService returnListService;
 
     /**
      * 打开排名公式页面
@@ -40,7 +45,7 @@ public class WalletCashBackQueueController extends BaseController {
      */
     @RequestMapping("index")
     public ModelAndView openRankingPage(HttpServletRequest request){
-        List<GoodsClassification> list = goodsClassificationService.queryParent();
+        List<ReturnList> list = returnListService.queryAllReturnListList();
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("gts",list);
         modelAndView.setViewName(redirectUrl(request,"ranking/ranking"));
@@ -58,6 +63,33 @@ public class WalletCashBackQueueController extends BaseController {
             return errorForParam("商品类型ID不能为空");
         }
         List<WalletCashBackQueueView> list = walletCashBackQueueService.queryWalletCashBackQueues(gcId);
+        return success(list);
+    }
+    /**
+     * 打开用户排名公示列表
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("openUserRankingLists")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
+    public String openUserRankingLists(HttpServletRequest request, HttpServletResponse response){
+        return redirectUrl(request,"ranking/user_ranking");
+    }
+
+    /**
+     * 取得我的返现队列
+     * @param request
+     * @param type 请求类型（0 己返现，1 正在排队）
+     * @return
+     */
+    @RequestMapping("queryUserRankingLists")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY)
+    @ResponseBody
+    public BaseResp queryUserRankingLists(HttpServletRequest request,Long type){
+        // 取得当前登陆用户id
+        long sUid=getCurLoginUserId(request);
+        List<WalletCashBackQueueView> list = walletCashBackQueueService.queryUserRankingLists(sUid,type);
         return success(list);
     }
 }

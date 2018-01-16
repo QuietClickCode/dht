@@ -102,5 +102,15 @@ public class ClientManageServiceImpl implements ClientManageService {
 	public OpeningVo queryEarlyCanComeIn(Long cid){
 		return clientManageMapper.queryEarlyCanComeIn(cid);
 	}
+
+	public Pagination<ClientManageVo> queryClientManageVoList(Map<String, Object> params,int pageNo,int pageSize) {
+		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<ClientManageVo> list = clientManageMapper.queryClientManageVoList(page);
+		page.setData(list);
+		return page;
+	}
 }
 

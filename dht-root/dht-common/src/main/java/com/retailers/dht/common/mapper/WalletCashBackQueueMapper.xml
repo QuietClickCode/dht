@@ -31,6 +31,7 @@
 		<result property="orderNo" column="order_no"/>
 		<result property="curCashQueue" column="curCashQueue"/>
 		<result property="rownum" column="rownum"/>
+		<result property="rtName" column="rt_name"/>
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="walletCashBackQueue_columns">
@@ -225,6 +226,74 @@
 		AND wc.ccbq_order_id = o.id
 		AND ccbq_goods_type = #{gcId}
 		ORDER BY
+			ccbq_id ASC
+	</select>
+
+	<!--取得用户排名公式 -->
+	<select id="queryUserRankingLists" resultMap="rm_walletCashBackQueue_view">
+		SELECT
+			r.curCashQueue,
+			wc.ccbq_id,
+			ccbq_order_id,
+			ccbq_gid,
+			wc.ccbq_goods_type,
+			ccbq_uid,
+			ccbq_money,
+			ccbq_status,
+			ccbq_create_time,
+			ccbq_cash_back_time,
+			ccbq_wait_time,
+			u.u_name,
+			wu.wau_headimgurl,
+			o.order_no,
+			rl.rt_name
+		FROM
+			t_wallet_cash_back_queue wc
+		LEFT JOIN (
+			SELECT
+				CASE
+			WHEN ccbq_goods_type =@lastType THEN
+				@curCashRowNum := @curCashRowNum + 1
+			ELSE
+				@curCashRowNum := 1
+			END curCashQueue,
+			@lastType := d.ccbq_goods_type AS lastType,
+			d.ccbq_goods_type,
+			d.ccbq_id
+		FROM
+			(SELECT @curCashRowNum := 0) r,
+			(SELECT @lastType := NULL) t,
+			(
+				SELECT
+					ccbq_id,
+					ccbq_goods_type
+				FROM
+					t_wallet_cash_back_queue wc
+				WHERE
+					<foreach collection="types" item="item" index="index" separator=" or " open="(" close=")">
+						wc.ccbq_status=#{item}
+					</foreach>
+				ORDER BY
+					ccbq_goods_type DESC,
+					ccbq_id ASC
+			) d
+		) r ON wc.ccbq_id = r.ccbq_id
+		AND wc.ccbq_goods_type = r.ccbq_goods_type,
+		 t_user u
+		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id,
+		 t_order o,
+		 t_return_list rl
+		WHERE
+			wc.ccbq_uid = u.u_id
+		AND wc.ccbq_order_id = o.id
+		AND wc.ccbq_goods_type = rl.rt_id
+		AND wc.ccbq_uid=#{sUid}
+		AND
+		<foreach collection="types" item="item" index="index" separator=" or " open="(" close=")">
+			wc.ccbq_status=#{item}
+		</foreach>
+		ORDER BY
+			ccbq_goods_type DESC,
 			ccbq_id ASC
 	</select>
 </mapper>

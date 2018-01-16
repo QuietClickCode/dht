@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.ReturnList;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：返现类型表Service
@@ -46,6 +48,12 @@ public interface ReturnListService {
 	 * @date 2018-01-13 10:29:40
 	 */
 	public Pagination<ReturnList> queryReturnListList(Map<String, Object> params, int pageNo, int pageSize);
+
+	/**
+	 * 取得所有的排名公示列表
+	 * @return
+	 */
+	public List<ReturnList> queryAllReturnListList();
 	/**
 	 * 根据rtId删除返现类型表
 	 * @param rtId

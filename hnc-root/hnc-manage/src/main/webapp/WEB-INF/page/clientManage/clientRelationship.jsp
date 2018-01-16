@@ -95,10 +95,13 @@
             field: 'tmSex',
             title: '客户性别',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+
+            }
         },
         {
-            field: 'tmEmployee',
+            field: 'empName',
             title: '置业顾问',
             align : 'center',
             valign : 'middle'
@@ -176,7 +179,7 @@
     ]
 
     $(function () {
-        createTable("/clientInfo/queryClientList","goodsTypeTables","tmId",treeColumns,queryParams)
+        createTable("/clientInfo/queryClientListVo","goodsTypeTables","tmId",treeColumns,queryParams)
     });
     /**
      * 查询条件

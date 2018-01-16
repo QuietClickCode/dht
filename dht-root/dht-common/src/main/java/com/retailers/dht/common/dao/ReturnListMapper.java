@@ -52,4 +52,10 @@ public interface ReturnListMapper {
 	 */
 	public List<ReturnList> queryReturnListList(Pagination<ReturnList> pagination);
 
+	/**
+	 * 取得所有的返现列表
+	 * @return
+	 */
+	public List<ReturnList> queryAllReturnListList();
+
 }

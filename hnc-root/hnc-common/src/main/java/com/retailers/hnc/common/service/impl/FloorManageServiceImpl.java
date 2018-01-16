@@ -63,7 +63,8 @@ public class FloorManageServiceImpl implements FloorManageService {
 		page.setData(list);
 		return page;
 	}
-	public Pagination<FloorManageVo> queryFirstFloorManageList(Map<String, Object> params,int pageNo,int pageSize) {
+
+	public Pagination<FloorManageVo> queryFirstFloorManageList(Map<String, Object> params, int pageNo, int pageSize) {
 		Pagination<FloorManageVo> page = new Pagination<FloorManageVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);

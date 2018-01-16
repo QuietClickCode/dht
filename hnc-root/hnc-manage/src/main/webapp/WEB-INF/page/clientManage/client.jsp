@@ -20,7 +20,6 @@
 </head>
 <div>
     <div id="toolbar" class="form-inline">
-        <button class="btn btn-default saveTeam" type="button">新增团队</button>
         <input type="text" class="form-control" id="registerTimes" placeholder="请输入团队名称">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>
@@ -80,7 +79,16 @@
             field: 'tmSex',
             title: '客户性别',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                let html = "";
+                if(row.tmSex == 0)
+                    return "女";
+                if(row.tmSex == 1)
+                    return "男";
+                return html;
+            }
+
         },
         {
             field: 'empName',
@@ -98,7 +106,15 @@
             field: 'tmStatus',
             title: '购房状态',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function (value,row,index) {
+                let html = "";
+                if(row.tmStatus == 0)
+                    return "未购房";
+                if(row.tmStatus == 1)
+                    return "已购房";
+                return html;
+            }
         },
         {
             field: 'tmPhone',
@@ -153,7 +169,7 @@
     ]
 
     $(function () {
-        createTable("/clientInfo/queryClientList","goodsTypeTables","tmId",treeColumns,queryParams)
+        createTable("/clientInfo/queryClientListVo","goodsTypeTables","tmId",treeColumns,queryParams)
     });
     /**
      * 查询条件

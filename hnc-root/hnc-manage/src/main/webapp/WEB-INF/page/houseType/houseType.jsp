@@ -71,6 +71,16 @@
             width: 40px;
             height: 40px;
         }
+
+        .houseTypeShowImg{
+            width: 50px;
+            height: 50px;
+        }
+
+        .houseTypeShowImage{
+            width: 40px;
+            height: 40px;
+        }
     </style>
 </head>
 <div>
@@ -241,18 +251,35 @@
                         <input type="file" name="dht_image_upload" id="filed">
                     </div>
                     <div class="form-group">
-                        <button type="button" class="btn btn-primary chooseImg">选择图片</button>
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default subEditHouseTypeImg">上传</button>
+                            <button type="button" class="btn btn-default chooseImg">选择图片</button>
+                        </div>
                     </div>
-
                     <div class="form-group houseTypeImgBox" style="display: none;">
-                        <%--<button type="button" class="btn btn-primary houseTypeImg">选择图片</button>--%>
                         <img src="" class="houseTypeImg">
+                    </div>
+                </form>
+
+                <form id="uploadShowImg" class="form-inline">
+                    <div class="form-group" style="display: none;">
+                        <label >请选择图片</label>
+                        <input type="file" name="dht_image_upload" id="showImg">
+                    </div>
+                    <div class="form-group">
+                        <div class="btn-group" role="group" aria-label="...">
+                            <button type="button" class="btn btn-default subEditHouseTypeShowImg">上传</button>
+                            <button type="button" class="btn btn-default chooseShowImg">选择图片</button>
+                        </div>
+                    </div>
+                    <div class="form-group houseTypeShowImgBox" style="display: none;">
+                        <img src="" class="houseTypeShowImg">
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-                <button type="button" class="btn btn-primary subEditHouseTypeImg">确定</button>
+                <button type="button" class="btn btn-primary ">确定</button>
             </div>
         </div>
     </div>
@@ -696,8 +723,8 @@
             dataType:"json",
             success:function (data) {
                 layer.msg(data.msg);
-                $("#editHouseTypeImg").modal("hide");
-                refreshTableData();
+//                $("#editHouseTypeImg").modal("hide");
+//                refreshTableData();
             }
         });
     }
@@ -718,6 +745,59 @@
     });
 </script>
 
+<%--添加户型效果图--%>
+<script>
+    $(".subEditHouseTypeShowImg").click(function () {
+        var fd = new FormData($("#uploadShowImg")[0]);
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            dataType:"json",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                addHouseTypeShowImg(data.original);
+            }
+        })
+    });
+
+    function addHouseTypeShowImg(original) {
+        $.ajax({
+            url:"/houseManage/updateHouseType",
+            method:"post",
+            data:{
+                htId:houseType['htId'],
+                htShowImg:original
+            },
+            dataType:"json",
+            success:function (data) {
+                layer.msg(data.msg);
+//                $("#editHouseTypeImg").modal("hide");
+//                refreshTableData();
+            }
+        });
+    }
+
+    $("#showImg").change(function () {
+        var file = $('#showImg').get(0).files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload=function(e){
+            console.log(e);
+            $('.houseTypeShowImg').get(0).src = e.target.result;
+        }
+        $(".houseTypeShowImgBox").show();
+    });
+
+    $(".chooseShowImg").click(function () {
+        $("#showImg").click();
+    });
+</script>
+
 <%--自定义方法--%>
 <script>
     /*为单选框赋值*/
@@ -734,7 +814,7 @@
     function createFloorManageTable(){
         //表格的初始化
         $("#house_type_table").bootstrapTable({
-            url:"/floorManage/queryFloorList",
+            url:"/floorManage/queryAllFloorList",
             method: 'post',                      //请求方式（*）
             toolbar:'#queryFloorToolbar' ,                //工具按钮用哪个容器
             striped: true,                      //是否显示行间隔色

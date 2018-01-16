@@ -48,6 +48,18 @@ public class HouseTypeManageController extends BaseController{
         return gtm;
     }
 
+    @RequestMapping("/queryAllHouseType")
+    @ResponseBody
+    public Map<String,Object> queryAllHouseType(PageUtils pageForm){
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("isDelete",0);
+        Pagination<HouseTypeManageVo> advertisingPagination = houseTypeManageService.queryFirstHouseTypeManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",advertisingPagination.getTotalCount());
+        gtm.put("rows",advertisingPagination.getData());
+        return gtm;
+    }
+
     @RequestMapping("/addHouseType")
     @Function(label = "添加户型",description = "添加户型",resourse = "houseManage.addHouseType",sort = 3,parentRes = "houseManage.houseManageMapping")
     @ResponseBody

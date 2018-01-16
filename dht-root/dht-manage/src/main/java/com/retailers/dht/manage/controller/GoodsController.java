@@ -74,7 +74,11 @@ public class GoodsController extends BaseController {
         gtm.put("rows",GoodsPagination.getData());
         return gtm;
     }
-
+    @RequestMapping("/coupnGoodsLists")
+    @ResponseBody
+    public  Map<String,Object> coupnGoodsLists(String gname,Long gclassification,Long gmaindirection,Long isChecked,PageUtils pageForm){
+        return queryGoodsLists(gname,gclassification,gmaindirection,isChecked,pageForm);
+    }
     @RequestMapping("/queryGoodsById")
     @Function(label="商品列表", description = "所有商品列表", resourse = "goods.queryGoodsById",sort=1,parentRes="goods.openGoods")
     @ResponseBody
