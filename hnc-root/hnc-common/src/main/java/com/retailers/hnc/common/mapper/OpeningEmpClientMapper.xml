@@ -99,7 +99,7 @@
 			and t1.tm_name like concat('%', #{params.cmName} ,'%')
 		</if>
 		and t1.tm_employee=#{params.eid}
-		and t1.tm_status=0
+		and t1.tm_login_status=0
 		and t1.tm_id NOT IN
 		(SELECT
 		t1.c_id

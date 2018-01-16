@@ -26,15 +26,17 @@ public class MainController extends BaseController {
 	@RequestMapping(value={"/index","/"})
 	public String index(HttpServletRequest request){
 		SysUser sysUser=getCurLoginUser(request);
-
-		System.out.println(sysUser.getUid());
 		if(ObjectUtils.isEmpty(sysUser)){
-			SysUser info = new SysUser();
-			info.setUid(-1l);
-			info.setUaccount("admin");
-			info.setUname("测试");
-			setCurLoginUser(request,info);
+			return "redirect:/login";
 		}
+		System.out.println(sysUser.getUid());
+//		if(ObjectUtils.isEmpty(sysUser)){
+//			SysUser info = new SysUser();
+//			info.setUid(-1l);
+//			info.setUaccount("admin");
+//			info.setUname("测试");
+//			setCurLoginUser(request,info);
+//		}
 		return "index";
 	}
 	@RequestMapping(value={"/main"})

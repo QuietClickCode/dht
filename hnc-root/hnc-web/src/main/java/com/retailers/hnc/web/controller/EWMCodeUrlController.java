@@ -2,6 +2,12 @@ package com.retailers.hnc.web.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.WriterException;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.qrcode.QRCodeWriter;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.ObjectUtils;
@@ -65,6 +71,31 @@ public class EWMCodeUrlController extends BaseController {
         }
         byte[] in2b = swapStream.toByteArray();
         return in2b;
+    }
+
+    @RequestMapping("getQRCode")
+    @ResponseBody
+    public void getOneCode(String scene,HttpServletResponse resp) throws  Exception{
+        String url = scene;
+        if (url != null && !"".equals(url)) {
+            ServletOutputStream stream = null;
+            try {
+
+                int width = 200;//图片的宽度
+                int height = 200;//高度
+                stream = resp.getOutputStream();
+                QRCodeWriter writer = new QRCodeWriter();
+                BitMatrix m = writer.encode(url, BarcodeFormat.QR_CODE, width, height);
+                MatrixToImageWriter.writeToStream(m, "png", stream);
+            } catch (WriterException e) {
+                e.printStackTrace();
+            } finally {
+                if (stream != null) {
+                    stream.flush();
+                    stream.close();
+                }
+            }
+        }
     }
 
 }

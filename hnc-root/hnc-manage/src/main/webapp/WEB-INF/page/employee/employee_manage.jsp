@@ -344,12 +344,7 @@
                 return html;
             }
         },
-        {
-            field: 'emPosition',
-            title: '职位',
-            align : 'center',
-            valign : 'middle'
-        },
+
         {
             field: 'emEntryTime',
             title: '入职时间',

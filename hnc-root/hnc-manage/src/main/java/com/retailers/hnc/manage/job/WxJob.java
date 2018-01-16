@@ -22,6 +22,7 @@ public class WxJob {
         String appsecret = HNCGZHConstant.APP_SECRET;//"356ea90409ec9e34064e1c860f2bf667";
         String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appsecret;
         String str = HttpClientUtil.doGet(url);
+        System.out.println(str);
         JSONObject jsonObject = JSON.parseObject(str);
         String accessToken = jsonObject.getString("access_token");
         HNCGZHConstant.ACCESS_TOKEN = accessToken;
