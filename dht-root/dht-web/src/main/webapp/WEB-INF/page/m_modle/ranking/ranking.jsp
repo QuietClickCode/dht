@@ -37,18 +37,18 @@
 
 <div class="all-order-tab" id="J_allOrderTab">
     <div style="width: 30rem;">
-        <c:forEach items="${gts}" var="goodsTypes" varStatus="vs">
-            <a href="#gt_${goodsTypes.ggId}" onclick="selectGts(${goodsTypes.ggId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${goodsTypes.ggId}">${goodsTypes.ggName}</a>
+        <c:forEach items="${gts}" var="rtnList" varStatus="vs">
+            <a href="#gt_${rtnList.rtId}" onclick="selectGts(${rtnList.rtId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${rtnList.rtId}">${rtnList.rtName}</a>
         </c:forEach>
     </div>
 
 </div>
 
 <div class="box2">
-    <c:forEach items="${gts}" var="goodsTypes" varStatus="vs">
-        <div class="rank_layout <c:if test="${vs.index!=0}">displayN</c:if>" id="gt_${goodsTypes.ggId}">
+    <c:forEach items="${gts}" var="rtnList" varStatus="vs">
+        <div class="rank_layout <c:if test="${vs.index!=0}">displayN</c:if>" id="gt_${rtnList.rtId}">
             <div class="rank_title">
-                平台实时消费金额:<span id="saleTotalPrice_${goodsTypes.ggId}"></span>
+                平台实时消费金额:<span id="saleTotalPrice_${rtnList.rtId}"></span>
             </div>
             <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0">
                 <tr>
@@ -58,7 +58,7 @@
                     <th class="th4">状态</th>
                 </tr>
             </table>
-            <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0" id="tbl_${goodsTypes.ggId}">
+            <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0" id="tbl_${rtnList.rtId}">
             </table>
         </div>
         <%--<ul class="all-order-list displayN" >--%>
@@ -131,7 +131,7 @@
                 $("#tbl_"+gcId).append(html);
             }
         }
-        $("#saleTotalPrice_"+gcId).append(buyTotalPrice/100);
+        $("#saleTotalPrice_"+gcId).html(buyTotalPrice/100);
     }
 </script>
 </body>

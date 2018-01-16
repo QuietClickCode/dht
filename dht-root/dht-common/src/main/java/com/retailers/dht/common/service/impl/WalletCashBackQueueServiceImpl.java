@@ -1,10 +1,12 @@
 
 package com.retailers.dht.common.service.impl;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
+import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.dao.WalletCashBackQueueMapper;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
@@ -51,6 +53,24 @@ public class WalletCashBackQueueServiceImpl implements WalletCashBackQueueServic
 
 	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId) {
 		List<WalletCashBackQueueView>lists= walletCashBackQueueMapper.queryWalletCashBackQueues(gcId);
+		return lists;
+	}
+
+	/**
+	 *
+	 * @param sUid 用户id
+	 * @param type 排名为公式 类型 (0 己返现，1 正在排队)
+	 * @return
+	 */
+	public List<WalletCashBackQueueView> queryUserRankingLists(Long sUid, Long type) {
+		List<Long> types=new ArrayList<Long>();
+		if(type.intValue()==0){
+			types.add(SystemConstant.PLAT_CASH_BACK_MENOY_STATUS_END);
+		}else{
+			types.add(SystemConstant.PLAT_CASH_BACK_MENOY_STATUS_LINE_UP);
+			types.add(SystemConstant.PLAT_CASH_BACK_MENOY_STATUS_LINE_FUNDRAISING);
+		}
+		List<WalletCashBackQueueView>lists= walletCashBackQueueMapper.queryUserRankingLists(sUid,types);
 		return lists;
 	}
 }
