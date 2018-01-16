@@ -40,16 +40,6 @@
         <c:forEach items="${gts}" var="goodsTypes" varStatus="vs">
             <a href="#gt_${goodsTypes.ggId}" onclick="selectGts(${goodsTypes.ggId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${goodsTypes.ggId}">${goodsTypes.ggName}</a>
         </c:forEach>
-        <a href="">蔬菜</a>
-        <a href="">水果</a>
-        <a href="">蔬菜</a>
-        <a href="">水果</a>
-        <a href="">蔬菜</a>
-        <a href="">水果</a>
-        <a href="">蔬菜</a>
-        <a href="">水果</a>
-        <a href="">蔬菜</a>
-        <a href="">水果</a>
     </div>
 
 </div>
