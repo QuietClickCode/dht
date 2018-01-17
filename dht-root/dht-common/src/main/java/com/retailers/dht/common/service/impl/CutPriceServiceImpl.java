@@ -59,6 +59,9 @@ public class CutPriceServiceImpl implements CutPriceService {
 	}
 	public List<CutPriceVo> queryCutPriceTree(){
 		List<CutPriceVo> CutPriceList = cutPriceMapper.queryCutPriceTree();
+		for(CutPriceVo cutPriceVo:CutPriceList){
+			cutPriceVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+cutPriceVo.getImgurl());
+		}
 		List<CutPriceVo> rntList = new ArrayList<CutPriceVo>();
 		Map<Long, Map<Long, Long>> child = new HashMap<Long, Map<Long, Long>>();
 		queryChildNode(CutPriceList, child);

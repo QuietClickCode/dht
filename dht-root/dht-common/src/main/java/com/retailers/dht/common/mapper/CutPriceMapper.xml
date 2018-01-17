@@ -189,11 +189,14 @@
 	</select>
 
 	<select id="queryCutPriceTree" resultMap="rm_cutPrice_vo">
-		SELECT t1.*,t2.g_name gname
+		SELECT t1.*,t2.g_name gname,t4.show_url imgurl
 		from t_cut_price t1
 		LEFT JOIN t_goods t2 ON t1.g_id=t2.g_id and t2.is_delete=0
+		LEFT JOIN t_goods_image t3 ON t1.g_id=t3.g_id and t3.is_delete=0
+		LEFT JOIN t_attachment t4 ON t3.gi_id=t4.id
 		WHERE
 		t1.is_delete=0
+		GROUP BY t1.g_id,t1.cp_id
 		ORDER BY t1.cp_end_time DESC
 	</select>
 

@@ -20,7 +20,17 @@
 <body class="bge6">
 <!--分享引导-->
 <div class="guide-share" style="display: none;position: fixed">
-    <button class="i-know" onclick="ikonw();"></button>
+    <!--<button class="i-know" onclick="ikonw();"></button>-->
+    <div class="heigh-light"></div>
+
+    <img class="guide-share-arrows" src="/img/arrows.png" >
+
+    <div class="dia-wrap">
+        <span id="dia-close" onclick="ikonw();"></span>
+
+        <img id="shareImg" class="show-goods" src="" style="height: 100%;"/>
+
+    </div>
 </div>
     <div class="specialty-title2 borderB">
         <a onclick="returnhistory();" class="icon-return"></a>
@@ -357,6 +367,14 @@
         var pageSize=10;
         var parentId;
 
+        //获取参数
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return  unescape(r[2]); return null;
+        }
+
         <!--初始化banner-->
         function initbanner() {
             TouchSlide({
@@ -406,6 +424,7 @@
         }
 
         var spId;
+        var minPrice;
         <!--加载剩余时间-->
         function loadtimestape() {
             $.ajax({
@@ -422,6 +441,7 @@
                         $('#gprice').html('￥'+ parseFloat(data.rows[0].gprice/100).toFixed(2));
                         $('#goodsNameDiv').append(data.rows[0].goodsName);
                         $('#minprice').html('￥'+ parseFloat(data.rows[0].minprice/100).toFixed(2));
+                        minPrice = parseFloat(data.rows[0].minprice/100).toFixed(2);
                         parentId = data.rows[0].parentId;
                         timegoing();
                     }else{
@@ -490,12 +510,7 @@
                             $('#hasBuy').hide();
                             $('.special').hide();
                         }
-                        if(isAdvancesale==1){
-                            $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
-                            $('#isAdvancesalediv').show();
-                        }else{
-                            $('#isAdvancesalediv').hide();
-                        }
+
                         if(isServiceGoods==1){
                             $('.showaddressfreigh').hide();
                             $($('#open_time').find('span')[1]).html('请选择服务时间');
@@ -507,6 +522,12 @@
                             $('.select_input').show();
                             $('#select_time').hide();
                             $('#isAdvancesalediv').show();
+                        }
+                        if(isAdvancesale==1){
+                            $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
+                            $('#isAdvancesalediv').show();
+                        }else{
+                            $('#isAdvancesalediv').hide();
                         }
                         if(isAllowsetdeliverytime==1){
                             $('#open_time').show();
@@ -1019,7 +1040,7 @@
                         initaddress();
                         $("#J_mark").show();
                     }else{
-                        layer.msg('您还未登录');
+                        layer.msg('暂无收货地址');
                     }
                 }
             });
@@ -1206,7 +1227,7 @@
                 url:'/wxShare/createWxShare',
                 dataType: "json",
                 async :false,
-                data:{path:path},
+                data:{path:path,randStr:GetQueryString('randStr')},
                 success:function(data){
                     if(data!=null){
                         homePath = data.homePath;
@@ -1217,7 +1238,7 @@
                         var signature = data.signature;
                         wx.config({
 
-                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                            debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 
                             appId: appId, // 必填，公众号的唯一标识
 
@@ -1337,12 +1358,23 @@
 
         <!--调用分享函数-->
         function shareGoods() {
+            var goodsPrice = minPrice;
+            var goodsImgUrl = $('#goodsImagesul').find('img')[0].src;
+            var url = path;
+            var goodsNm = $('#goodsNameDiv').html();
+            goodsNm = goodsNm.substring(0,10);
+            var src = '/wxShare/shareImage?goodsPrice='+goodsPrice+'&goodsImgUrl='+goodsImgUrl+'&url='+url+'&goodsNm='+goodsNm;
+            $('#shareImg').attr('src',src);
+            if($('#shareImg').attr('src')==''){
+                $('#shareImg').attr('src',src);
+            }
             $('.bge6').css('overflow', 'hidden');
             $('.guide-share').fadeIn('slow');
         }
 
         <!--点击知道了-->
         function ikonw() {
+
             $('.bge6').css('overflow', 'auto');
             $('.guide-share').fadeOut('slow');
         }

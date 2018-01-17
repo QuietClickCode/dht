@@ -371,6 +371,7 @@
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script src="/js/toast/js/toastr.js"></script>
+<script type="text/javascript" src="/common/popover.js"></script>
 
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -423,8 +424,33 @@
                 field: 'goodsName',
                 align : 'center',
                 valign : 'middle',
-                title: '商品名称'
+                title: '商品名称',
+                formatter:function (value,row,index) {
+                    let html = value;
+                    var pid = row.parentId;
+                    var goodsType = '';
+                    var url = '';
+                    var goodsNm = value;
+                    var imgUrl = row.imgurl;
+                    if (pid != null) {
+                        var prow = rowDatas.get(pid);
+                        var type = prow.spType;
+                        if (type == 0) {
+                            goodsType = '特价商品';
+                            url = '/specialp/' + row.goodsId + '.html';
+                        } else {
+                            goodsType = '秒杀商品';
+                            url = '/seckillp/' + row.goodsId + '.html';
+                        }
 
+                        var params = 'goodsImgUrl=' + imgUrl + '&url=' + url + '&goodsPrice='+goodsType+'&goodsNm=' + goodsNm;
+                        var img = '<img onclick="popover(this);" src="/wxShare/shareImage?' + params + '" style="width:20px;height: 20px;margin-left: 0px;float: left"/>';
+                        html = img + html;
+                    }
+
+
+                    return html;
+                }
             },{
                 field: 'spOrder',
                 align : 'center',

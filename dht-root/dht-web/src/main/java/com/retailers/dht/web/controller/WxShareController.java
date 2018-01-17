@@ -11,6 +11,8 @@ import com.retailers.dht.common.service.PayInfoService;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.encrypt.DESUtils;
+import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.encrypt.Sha1DESUtils;
 import com.retailers.tools.utils.*;
 import com.retailers.wx.common.config.WxConfig;
@@ -50,14 +52,19 @@ public class WxShareController extends BaseController{
 
     @RequestMapping("createWxShare")
     @ResponseBody
-    public  Map<String,Object> createWxPay(HttpServletRequest request,String path) {
+    public  Map<String,Object> createWxShare(HttpServletRequest request,String path,String randStr) {
         path = path.substring(1);
         String noncestr = createRandomString();
         String jsapi_ticket = WxConfig.ACCESS_TICKET;
+        System.out.println("jsapi_ticket:"+jsapi_ticket);
         Long timestamp = new Date().getTime()/1000;
         String signature = "";
-        String homePath = SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL);  //"http://fhdy.s1.natapp.cc";//SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL   "http://www.kuaiyis.com"
+        String homePath = SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL);//"http://fhdy.s1.natapp.cc/";  //;//SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL   "http://www.kuaiyis.com"
         homePath = homePath+path;
+        if(ObjectUtils.isNotEmpty(randStr)){
+            homePath  = homePath +"?randStr="+randStr;
+        }
+        System.out.println(homePath);
         try {
             signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);
         }catch (Exception e){
@@ -98,12 +105,16 @@ public class WxShareController extends BaseController{
         return jsonObject.getString("access_token");
     }
     @RequestMapping("shareImage")
-    public void shareImage(HttpServletResponse response){
+    public void shareImage(HttpServletRequest request,HttpServletResponse response,String goodsImgUrl,String url,String goodsPrice,String goodsNm){
         setResponseHeaders(response);
-        String goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
+//        goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
         try{
+            url = url.substring(1);
+            Long uid = getCurLoginUserId(request);
+            String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""), DesKey.WEB_KEY);
+            url = SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL)+url+"?randStr="+randStr;
             OutputStream outputStream=response.getOutputStream();
-            ShareImageUtils.generateShareImage("测试商品","￥12.36","www.baidu.com",goodsImgUrl,outputStream);
+            ShareImageUtils.generateShareImage(goodsNm,"￥"+goodsPrice,url,goodsImgUrl,outputStream);
             outputStream.close();
         }catch (Exception e){
             e.printStackTrace();

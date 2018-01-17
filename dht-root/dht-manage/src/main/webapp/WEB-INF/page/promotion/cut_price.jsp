@@ -357,6 +357,7 @@
 <script type="text/javascript" src="/js/common/bootstrap_table.js"></script>
 <script type="text/javascript" src="/js/common/form.js"></script>
 <script src="/js/toast/js/toastr.js"></script>
+<script type="text/javascript" src="/common/popover.js"></script>
 
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -409,7 +410,26 @@
                 field: 'gname',
                 align : 'center',
                 valign : 'middle',
-                title: '商品名称'
+                title: '商品名称',
+                formatter:function (value,row,index) {
+                    let html = value;
+                    var goodsType = '';
+                    var url = '';
+                    var goodsNm = value;
+                    var imgUrl = row.imgurl;
+                    var pid = row.parentId;
+                    if (pid != null) {
+                        goodsType = '砍价商品';
+                        url = '/bargainp/'+row.gid+'.html';
+
+                        var params = 'goodsImgUrl=' + imgUrl + '&url=' + url + '&goodsPrice='+goodsType+'&goodsNm=' + goodsNm;
+                        var img = '<img onclick="popover(this);" src="/wxShare/shareImage?' + params + '" style="width:20px;height: 20px;margin-left: 0px;float: left"/>';
+                        html = img + html;
+                    }
+
+
+                    return html;
+                }
 
             },{
                 field: 'cpStartTime',

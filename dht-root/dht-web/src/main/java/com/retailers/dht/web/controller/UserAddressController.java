@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -51,6 +52,9 @@ public class UserAddressController extends BaseController {
     @ResponseBody
     public Map<String,Object> queryUserAddress(HttpServletRequest request, PageUtils pageForm){
         Long uId=getCurLoginUserId(request);
+        if(ObjectUtils.isEmpty(uId)){
+            return new HashMap();
+        }
         Pagination<UserAddress> page= userAddressService.queryUserAddress(uId,pageForm.getPageNo(),pageForm.getPageSize());
         return queryPages(page);
     }

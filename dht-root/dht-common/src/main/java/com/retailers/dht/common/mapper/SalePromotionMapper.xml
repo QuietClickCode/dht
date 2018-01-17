@@ -40,57 +40,59 @@
 	<sql id="salePromotion_where">
 		<where>
 			<if test="null != params.spId">
-				AND sp_id = #{params.spId}
+				AND t1.sp_id = #{params.spId}
 			</if>
 			<if test="null != params.propotionName and '' != params.propotionName">
-				AND propotion_name = #{params.propotionName}
+				AND t1.propotion_name = #{params.propotionName}
 			</if>
 			<if test="null != params.goodsId">
-				AND goods_id = #{params.goodsId}
+				AND t1.goods_id = #{params.goodsId}
 			</if>
 			<if test="null != params.goodsName and '' != params.goodsName">
-				AND goods_name = #{params.goodsName}
+				AND t1.goods_name = #{params.goodsName}
 			</if>
 			<if test="null != params.parentId">
-				AND parent_id = #{params.parentId}
+				AND t1.parent_id = #{params.parentId}
 			</if>
 			<if test="null != params.spType">
-				AND sp_type = #{params.spType}
+				AND t1.sp_type = #{params.spType}
 			</if>
 			<if test="null != params.spOrder">
-				AND sp_order = #{params.spOrder}
+				AND t1.sp_order = #{params.spOrder}
 			</if>
 			<if test="null != params.isCoupon">
-				AND is_coupon = #{params.isCoupon}
+				AND t1.is_coupon = #{params.isCoupon}
 			</if>
 			<if test="null != params.spRegion">
-				AND sp_region = #{params.spRegion}
+				AND t1.sp_region = #{params.spRegion}
 			</if>
 			<if test="null != params.spStartTimeBegin">
-				AND sp_start_time &gt;= #{params.spStartTime}
+				AND t1.sp_start_time &gt;= #{params.spStartTime}
 			</if>
 			<if test="null != params.spStartTimeEnd">
-				AND sp_start_time &lt;= #{params.spStartTime}
+				AND t1.sp_start_time &lt;= #{params.spStartTime}
 			</if>
 			<if test="null != params.spEndTimeBegin">
-				AND sp_end_time &gt;= #{params.spEndTime}
+				AND t1.sp_end_time &gt;= #{params.spEndTime}
 			</if>
 			<if test="null != params.spEndTimeEnd">
-				AND sp_end_time &lt;= #{params.spEndTime}
+				AND t1.sp_end_time &lt;= #{params.spEndTime}
 			</if>
 			<if test="null != params.isDelete">
-				AND is_delete = #{params.isDelete}
+				AND t1.is_delete = #{params.isDelete}
 			</if>
 			<if test="null != params.version">
-				AND version = #{params.version}
+				AND t1.version = #{params.version}
 			</if>
 		</where>
 	</sql>
 	<!--分页查询 -->
 	<select id="querySalePromotionList" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="salePromotion_columns" />
-		FROM t_sale_promotion
-		<include refid="salePromotion_where"/> ORDER BY sp_order
+		SELECT t1.*,t3.show_url imgurl
+		FROM t_sale_promotion t1
+		LEFT JOIN t_goods_image t2 ON t1.goods_id=t2.g_id and t2.is_delete=0
+		LEFT JOIN t_attachment t3 ON t3.id=t2.gi_id
+		<include refid="salePromotion_where"/> GROUP BY t1.goods_id,t1.sp_id ORDER BY t1.sp_order
 	</select>
 
 	<select id="querySalePromotionListWeb" resultMap="rm_salePromotion" parameterType="com.retailers.mybatis.pagination.Pagination">

@@ -89,7 +89,17 @@
 
 <body class="bge6">
 <div class="guide-share" style="display: none;position: fixed">
-    <button class="i-know" onclick="ikonw();"></button>
+    <!--<button class="i-know" onclick="ikonw();"></button>-->
+    <div class="heigh-light"></div>
+
+    <img class="guide-share-arrows" src="/img/arrows.png" >
+
+    <div class="dia-wrap">
+        <span id="dia-close" onclick="ikonw();"></span>
+
+        <img id="shareImg" class="show-goods" src="" style="height: 100%;"/>
+
+    </div>
 </div>
     <div class="specialty-title2 borderB">
         <a onclick="returnhistory();" class="icon-return"></a>
@@ -256,6 +266,15 @@
         var path = window.location.pathname;
         var pathArr = path.substring(11,path.indexOf('.html')).split('~');
         var gid = parseInt(pathArr[0]);
+
+        //获取参数
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return  unescape(r[2]); return null;
+        }
+
         <!--初始化banner-->
         function initbanner() {
             TouchSlide({
@@ -373,6 +392,7 @@
 
         var gdcpId;
         var remark;
+        var minPrice = '';
         <!--加载砍价日志-->
         function loadcutpricrlog() {
             $.ajax({
@@ -388,6 +408,7 @@
                         var cpPrice = parseFloat(rows[0].cpPrice/100).toFixed(2) ;
                         var cpMostperson = rows[0].cpMostperson;
                         var cpLestperson = rows[0].cpLestperson;
+                        minPrice = cpPrice;
                         gdcpId = rows[0].gdcpId;
                         remark = rows[0].remark;
                         var logul = $('.bargain_info_list');
@@ -502,6 +523,15 @@
 
         <!--调用分享函数-->
         function shareGoods() {
+            var goodsPrice = minPrice;
+            var goodsImgUrl = $('#goodsImagesul').find('img')[0].src;
+            var url = path;
+            var goodsNm = $('#goodsNameDiv').html();
+            goodsNm = goodsNm.substring(0,10);
+            var src = '/wxShare/shareImage?goodsPrice='+goodsPrice+'&goodsImgUrl='+goodsImgUrl+'&url='+url+'&goodsNm='+goodsNm;
+            if($('#shareImg').attr('src')==''){
+                $('#shareImg').attr('src',src);
+            }
             $('.bge6').css('overflow', 'hidden');
             $('.guide-share').fadeIn('slow');
         }
@@ -564,7 +594,7 @@
                 url:'/wxShare/createWxShare',
                 dataType: "json",
                 async :false,
-                data:{path:path},
+                data:{path:path,randStr:GetQueryString('randStr')},
                 success:function(data){
                     if(data!=null){
                         homePath = data.homePath;
@@ -575,7 +605,7 @@
                         var signature = data.signature;
                         wx.config({
 
-                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 
                             appId: appId, // 必填，公众号的唯一标识
 
