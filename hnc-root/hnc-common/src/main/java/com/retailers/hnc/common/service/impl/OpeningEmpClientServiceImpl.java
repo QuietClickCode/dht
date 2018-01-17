@@ -83,6 +83,9 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 
 	public Pagination<ClientManageVo> queryNotGivenListWeb(Map<String, Object> params, int pageNo, int pageSize){
 		Opening opening = openingService.queryEarlyOpening();
+		if(ObjectUtils.isEmpty(opening)){
+			return null;
+		}
 		params.put("oid",opening.getOid());
 		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
 		page.setPageNo(pageNo);
@@ -107,6 +110,9 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 
 	public Pagination<ClientManageVo> queryCheckingandpassandnotpassListWeb(Map<String, Object> params, int pageNo, int pageSize){
 		Opening opening = openingService.queryEarlyOpening();
+		if(ObjectUtils.isEmpty(opening)){
+			return null;
+		}
 		params.put("oid",opening.getOid());
 		Pagination<ClientManageVo> page = new Pagination<ClientManageVo>();
 		page.setPageNo(pageNo);

@@ -50,6 +50,10 @@ public class OpeningEmpClientController extends BaseController{
         params1.put("isDelete",0L);
         params1.put("eid",eid);
         Pagination<ClientManageVo> pagination = openingEmpClientService.queryNotGivenListWeb(params1,pageNo,pageSize);
+        if(ObjectUtils.isEmpty(pagination)){
+            map.put("status",-1);
+            return map;
+        }
         map.put("rows",pagination.getData());
         map.put("notgivenNum",pagination.getTotalCount());
         return map;
@@ -66,6 +70,10 @@ public class OpeningEmpClientController extends BaseController{
             params1.put("eid",eid);
         }
         Pagination<ClientManageVo> pagination = openingEmpClientService.queryCheckingandpassandnotpassListWeb(params1,pageNo,pageSize);
+        if(ObjectUtils.isEmpty(pagination)){
+            map.put("status",-1);
+            return map;
+        }
         List<ClientManageVo> list  = pagination.getData();
         map.put("total",pagination.getTotalCount());
         map.put("rows",list);
@@ -77,6 +85,10 @@ public class OpeningEmpClientController extends BaseController{
     public Map<String,Object> queryCheckingandpassandnotpassNumWeb(String isManage,String phone){
         Map map = new HashMap();
         Opening opening = openingService.queryEarlyOpening();
+        if(ObjectUtils.isEmpty(opening)){
+            map.put("status",-1);
+            return  map;
+        }
         Long oid = opening.getOid();
         if(ObjectUtils.isNotEmpty(phone)){
             Map params = new HashMap();

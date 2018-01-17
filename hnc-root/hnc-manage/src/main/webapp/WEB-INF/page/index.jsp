@@ -12,7 +12,7 @@
     <meta http-equiv="refresh" content="0;ie.html" />
     <![endif]-->
     <%@include file="/common/common_bs_head_css.jsp"%>
-    <%--<link rel="shortcut icon" href="/logo.ico">--%>
+    <link rel="shortcut icon" href="/logo.ico">
     <link href="<%=path%>/main/css/bootstrap.min14ed.css?v=3.3.6" rel="stylesheet">
     <link href="<%=path%>/main/css/font-awesome.min93e3.css?v=4.4.0" rel="stylesheet">
     <link href="<%=path%>/main/css/animate.min.css" rel="stylesheet">

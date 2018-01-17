@@ -21,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,10 +39,26 @@ public class CheckUserController extends BaseController {
     @Autowired
     OpeningService openingService;
 
+    //手机端
     @RequestMapping("updateCheckUser")
     @ResponseBody
     public Map updateCheckUser(String validataCode,String phone){
         Long eid = getEmpIdByWxPhone(phone);
+        Map map = checkUserService.checkUser(validataCode,eid);
+        return map;
+    }
+
+    //电脑端
+    @RequestMapping("validateCheckUser")
+    @ResponseBody
+    public Map validateCheckUser(String validataCode,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+//        System.out.println("eid:"+eid);
+        if(ObjectUtils.isEmpty(eid)){
+            Map rm= new HashMap();
+            rm.put("status","3");
+            return  rm;
+        }
         Map map = checkUserService.checkUser(validataCode,eid);
         return map;
     }
