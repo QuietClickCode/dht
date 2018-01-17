@@ -65,6 +65,26 @@ public class WalletCashBackQueueController extends BaseController {
         List<WalletCashBackQueueView> list = walletCashBackQueueService.queryWalletCashBackQueues(gcId);
         return success(list);
     }
+
+
+    /**
+     * 打开用户提现详情
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("openCashDetails")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
+    public ModelAndView openCashDetails(HttpServletRequest request, HttpServletResponse response){
+        long uid=getCurLoginUserId(request);
+        //取得用户返现详情
+        Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("details",details);
+        modelAndView.setViewName(redirectUrl(request,"ranking/user_cash_detail"));
+        return modelAndView;
+    }
+
     /**
      * 打开用户排名公示列表
      * @param request
@@ -74,6 +94,9 @@ public class WalletCashBackQueueController extends BaseController {
     @RequestMapping("openUserRankingLists")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
     public String openUserRankingLists(HttpServletRequest request, HttpServletResponse response){
+        long uid=getCurLoginUserId(request);
+        //取得用户返现详情
+        Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
         return redirectUrl(request,"ranking/user_ranking");
     }
 

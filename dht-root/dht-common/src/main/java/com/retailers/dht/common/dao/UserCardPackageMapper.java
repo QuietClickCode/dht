@@ -21,15 +21,6 @@ public interface UserCardPackageMapper {
 	 * @date 2017-11-22 23:13:08
 	 */
 	public int saveUserCardPackage(UserCardPackage userCardPackage);
-//	/**
-//	 * 编辑用户钱包，积分
-//	 * @param userCardPackage
-//	 * @return
-//	 * @author zhongp
-//	 * @date 2017-11-22 23:13:08
-//	 */
-//	public int updateUserCardPackage(UserCardPackage userCardPackage);
-
 	/**
 	 * 用户充值
 	 * @param uid 用户id
