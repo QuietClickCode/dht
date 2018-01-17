@@ -89,6 +89,8 @@
 	<update id="updateSysUser" parameterType="com.retailers.auth.entity.SysUser">
 		UPDATE t_sys_user
 		<set>
+				u_password = #{upassword},
+				u_create_time = #{ucreateTime},
                 u_name = #{uname},
                 is_valid = #{isValid},
                 is_delete = #{isDelete},
@@ -96,6 +98,8 @@
 		</set>
 		WHERE u_id = #{uid} and version = #{version}
 	</update>
+
+
 	<!--删除公司员工表 -->
 	<delete id="deleteSysUserByUid" parameterType="java.lang.Long">
 		DELETE FROM t_sys_user WHERE u_id = #{uid}

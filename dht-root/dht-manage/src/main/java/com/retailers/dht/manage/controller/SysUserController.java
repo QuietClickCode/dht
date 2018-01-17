@@ -13,7 +13,6 @@ import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
-import org.omg.CORBA.ObjectHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
@@ -84,6 +82,20 @@ public class SysUserController extends BaseController {
             return errorForSystem(e.getMessage());
         }
         return success("/index");
+    }
+
+    /*
+    * 修改密码
+    * */
+    @RequestMapping("editSysUserPassword")
+    @ResponseBody
+    public BaseResp editSysUserPassword(HttpServletRequest request, String account,String sysUserPwd,String newPwd){
+        try {
+            boolean flag=sysUserService.editSysUserPassword(account,sysUserPwd,newPwd);
+        } catch (AppException e) {
+            return errorForSystem(e.getMessage());
+        }
+        return success(true);
     }
 
     /**

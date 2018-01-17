@@ -89,6 +89,8 @@ public interface SysUserService {
 	 */
 	public SysUser querySyUserByAccount(String account,String sysUserPwd) throws AppException;
 
+	public boolean editSysUserPassword(String account,String sysUserPwd,String newPwd)throws AppException;
+
 }
 
 

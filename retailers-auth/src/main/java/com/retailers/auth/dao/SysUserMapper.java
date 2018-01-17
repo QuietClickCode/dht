@@ -76,4 +76,5 @@ public interface SysUserMapper {
 	 */
 	public SysUser querySyUserByAccount(String account);
 
+
 }
