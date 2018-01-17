@@ -94,9 +94,6 @@ public class WalletCashBackQueueController extends BaseController {
     @RequestMapping("openUserRankingLists")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
     public String openUserRankingLists(HttpServletRequest request, HttpServletResponse response){
-        long uid=getCurLoginUserId(request);
-        //取得用户返现详情
-        Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
         return redirectUrl(request,"ranking/user_ranking");
     }
 
