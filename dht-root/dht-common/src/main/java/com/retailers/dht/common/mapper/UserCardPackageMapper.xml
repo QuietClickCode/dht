@@ -11,12 +11,14 @@
 		<result property="utotalConsume" column="u_total_consume"/>
 		<result property="uwalletConsumeTotal" column="u_wallet_consume_total"/>
 		<result property="uOtherPayTotal" column="u_other_pay_total"/>
+		<result property="ucashTotalPrice" column="u_cash_total_price"/>
+		<result property="ucashCurPrice" column="u_cash_cur_price"/>
 		<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="userCardPackage_columns">
-		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,version
+		id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,u_cash_total_price,u_cash_cur_price,version
 	</sql>
 	<!-- 根据用户钱包，积分主键取得数据 -->
 	<select id="queryUserCardPackageById" resultMap="rm_userCardPackage" parameterType="java.lang.Long">
@@ -61,7 +63,7 @@
 	<!--添加用户钱包，积分 -->
 	<insert id="saveUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage" useGeneratedKeys="true" keyProperty="id">
 		INSERT INTO t_user_card_package (
-			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,version
+			id,u_total_wallet,u_cur_wallet,u_total_integral,u_cur_integral,u_total_consume,u_wallet_consume_total,u_other_pay_total,u_cash_total_price,u_cash_cur_price,version
 		) VALUES
 		(
 			#{id,jdbcType=BIGINT},
@@ -72,37 +74,11 @@
 			#{utotalConsume,jdbcType=BIGINT},
 			#{uwalletConsumeTotal,jdbcType=BIGINT},
 			#{uOtherPayTotal,jdbcType=BIGINT},
+			#{ucashTotalPrice,jdbcType=BIGINT},
+			#{ucashCurPrice,jdbcType=BIGINT},
 			0
 		)
 	</insert>
-	<!--&lt;!&ndash;修改用户钱包，积分 &ndash;&gt;-->
-	<!--<update id="updateUserCardPackage" parameterType="com.retailers.dht.common.entity.UserCardPackage">-->
-		<!--UPDATE t_user_card_package-->
-		<!--<set>-->
-			<!--<if test="null != utotalWallet">-->
-				<!--u_total_wallet = #{utotalWallet},-->
-			<!--</if>-->
-			<!--<if test="null != ucurWallet">-->
-				<!--u_cur_wallet = #{ucurWallet},-->
-			<!--</if>-->
-			<!--<if test="null != utotalIntegral">-->
-				<!--u_total_integral = #{utotalIntegral},-->
-			<!--</if>-->
-			<!--<if test="null != ucurIntegral">-->
-				<!--u_cur_integral = #{ucurIntegral},-->
-			<!--</if>-->
-			<!--<if test="null != utotalConsume">-->
-				<!--u_total_consume = #{utotalConsume},-->
-			<!--</if>-->
-			<!--<if test="null != uwalletConsumeTotal">-->
-				<!--u_wallet_consume_total = #{uwalletConsumeTotal},-->
-			<!--</if>-->
-			<!--<if test="null != version">-->
-				<!--version = version+1,-->
-			<!--</if>-->
-		<!--</set>-->
-		<!--WHERE id = #{id} and version = #{version}-->
-	<!--</update>-->
 	<!--用户充值-->
 	<update id="userRechage">
 		UPDATE t_user_card_package

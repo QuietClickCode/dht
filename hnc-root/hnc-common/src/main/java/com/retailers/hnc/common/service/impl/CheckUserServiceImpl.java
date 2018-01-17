@@ -74,7 +74,7 @@ public class CheckUserServiceImpl implements CheckUserService {
 			paramss.put("oid",oid);
 			paramss.put("emId",eid);
 			List<ScanCode> scanCodes = scanCodeService.queryScanCodeList(paramss,1,1).getData();
-			if(ObjectUtils.isNotEmpty(scanCodes)){
+			if(ObjectUtils.isNotEmpty(scanCodes)&&eid!=null){
 				Map params = new HashMap();
 				params.put("oid",oid);
 				params.put("isDelete",0L);

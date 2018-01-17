@@ -33,15 +33,17 @@ public class ClientManageController extends BaseController {
     @RequestMapping("queryEmpByClientManageId")
     @ResponseBody
     public Map<String,Object> queryEmpByClientManageId(String randStr){
-        Long cid = getClientIdByOpenId(randStr);
-        System.out.println(cid);
-        ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
-        Long empId = clientManage.getTmEmployee();
         Map map = new HashMap();
-        if(ObjectUtils.isNotEmpty(empId)){
-            EmployeeManage employeeManage = employeeManageService.queryEmployeeManageByEmId(empId);
-            map.put("emp",employeeManage);
+        Long cid = getClientIdByOpenId(randStr);
+        if(ObjectUtils.isNotEmpty(cid)){
+            ClientManage clientManage = clientManageService.queryClientManageByTmId(cid);
+            Long empId = clientManage.getTmEmployee();
+            if(ObjectUtils.isNotEmpty(empId)){
+                EmployeeManage employeeManage = employeeManageService.queryEmployeeManageByEmId(empId);
+                map.put("emp",employeeManage);
+            }
         }
+
         return map;
     }
 

@@ -1,5 +1,6 @@
 
 package com.retailers.hnc.common.service.impl;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -53,6 +54,19 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 	public boolean updateEmployeeManage(EmployeeManage employeeManage) {
 		EmployeeManage manage = queryEmployeeManageByEmId(employeeManage.getEmId());
 		employeeManage.setVersion(manage.getVersion());
+
+		Pagination<OrgUser> page = new Pagination<OrgUser>();
+		page.setPageNo(1);
+		page.setPageSize(1);
+		Map params = new HashMap();
+		params.put("ouSid",manage.getEmId());
+		page.setParams(params);
+		List<OrgUser> orgUserList = orgUserMapper.queryOrgUserList(page);
+		if(ObjectUtils.isNotEmpty(orgUserList)){
+			OrgUser orgUser = orgUserList.get(0);
+			orgUser.setOuOrgId(Long.parseLong(""+employeeManage.getEmType()));
+			orgUserMapper.updateOrgUser(orgUser);
+		}
 		int status = employeeManageMapper.updateEmployeeManage(employeeManage);
 		return status == 1 ? true : false;
 	}
@@ -94,7 +108,18 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 	public boolean deleteEmployeeManageByEmId(Long emId) {
 		EmployeeManage employeeManage = queryEmployeeManageByEmId(emId);
 		employeeManage.setIsDelete(1);
-		return updateEmployeeManage(employeeManage);
+
+		Pagination<OrgUser> page = new Pagination<OrgUser>();
+		page.setPageNo(1);
+		page.setPageSize(1);
+		Map params = new HashMap();
+		params.put("ouSid",employeeManage.getEmId());
+		page.setParams(params);
+		OrgUser orgUser = orgUserMapper.queryOrgUserList(page).get(0);
+		orgUserMapper.deleteOrgUserByOuId(orgUser.getOuId());
+
+		int status = employeeManageMapper.updateEmployeeManage(employeeManage);
+		return status==1?true:false;
 	}
 
 	public Integer queryCurRegisterClient(Long emId) {

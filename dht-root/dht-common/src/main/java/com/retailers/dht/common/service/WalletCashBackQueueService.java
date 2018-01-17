@@ -66,6 +66,13 @@ public interface WalletCashBackQueueService {
 	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId);
 
 	/**
+	 * 取得用户返现详情
+	 * @param uid
+	 * @return
+	 */
+	public Map<String,String> queryUserCashBackDetail(Long uid);
+
+	/**
 	 * 取得用户排名公式
 	 * @param sUid 用户id
 	 * @param type 排名为公式 类型 (0 己返现，1 正在排队)

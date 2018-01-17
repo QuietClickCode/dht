@@ -39,4 +39,11 @@ public class WalletCashBackQueueServiceTest extends TestBaseJunit {
         List<WalletCashBackQueueView>lists= walletCashBackQueueService.queryUserRankingLists(sUid,type);
         System.out.println(JSON.toJSON(lists));
     }
+
+    @Test
+    public void queryUserCashBackDetail(){
+        long suid=25;
+        Map<String,String> maps=walletCashBackQueueService.queryUserCashBackDetail(suid);
+        System.out.println(JSON.toJSON(maps));
+    }
 }

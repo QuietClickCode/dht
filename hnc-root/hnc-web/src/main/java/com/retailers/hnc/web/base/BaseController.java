@@ -1,6 +1,8 @@
 package com.retailers.hnc.web.base;
 
 
+import com.retailers.auth.constant.SystemConstant;
+import com.retailers.auth.entity.SysUser;
 import com.retailers.hnc.common.entity.EmployeeManage;
 import com.retailers.hnc.common.service.ClientManageService;
 import com.retailers.hnc.common.service.EmployeeManageService;
@@ -63,4 +65,21 @@ public class BaseController extends BaseWrite {
         return eid;
     }
 
+    protected Long getCurLoginUserId(HttpServletRequest request){
+        Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        SysUser sysUser=null;
+        if(ObjectUtils.isNotEmpty(obj)){
+            sysUser=(SysUser)obj;
+            return sysUser.getUid();
+        }
+        return null;
+    }
+    /**
+     * 取得当前登陆用户
+     * @param request
+     * @return
+     */
+    protected void setCurLoginUser(HttpServletRequest request,SysUser sysUser){
+        request.getSession().setAttribute(SystemConstant.LOG_USER_SESSION_KEY,sysUser);
+    }
 }

@@ -2,13 +2,11 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
-import com.retailers.dht.common.entity.Recharge;
 import com.retailers.dht.common.entity.ReturnList;
 import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.dht.manage.base.BaseController;
-import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -47,6 +45,9 @@ public class WalletCashBackQueueController extends BaseController {
         modelAndView.setViewName("ranking/ranking");
         return modelAndView;
     }
+
+
+
 
     /**
      * 取得返现列表

@@ -36,6 +36,14 @@ public class UserCardPackage implements java.io.Serializable {
 	 * 第三方消费
 	 */
 	private Long uOtherPayTotal;
+	/**
+	 * 反现总金额
+	 */
+	private Long ucashTotalPrice;
+	/**
+	 * 返现当前余额
+	 */
+	private Long ucashCurPrice;
 	/**version*/
 	@NotEmpty
 	private Integer version;
@@ -111,5 +119,21 @@ public class UserCardPackage implements java.io.Serializable {
 
 	public void setuOtherPayTotal(Long uOtherPayTotal) {
 		this.uOtherPayTotal = uOtherPayTotal;
+	}
+
+	public Long getUcashTotalPrice() {
+		return ucashTotalPrice;
+	}
+
+	public void setUcashTotalPrice(Long ucashTotalPrice) {
+		this.ucashTotalPrice = ucashTotalPrice;
+	}
+
+	public Long getUcashCurPrice() {
+		return ucashCurPrice;
+	}
+
+	public void setUcashCurPrice(Long ucashCurPrice) {
+		this.ucashCurPrice = ucashCurPrice;
 	}
 }

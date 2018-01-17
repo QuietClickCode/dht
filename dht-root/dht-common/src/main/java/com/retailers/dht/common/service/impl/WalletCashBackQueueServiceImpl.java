@@ -1,16 +1,17 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.dao.WalletCashBackQueueMapper;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
+import com.retailers.dht.common.view.UserCashBackDetailView;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
+import com.retailers.tools.utils.DateUtil;
+import com.retailers.tools.utils.NumberUtils;
+import jdk.management.resource.internal.TotalResourceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -54,6 +55,29 @@ public class WalletCashBackQueueServiceImpl implements WalletCashBackQueueServic
 	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId) {
 		List<WalletCashBackQueueView>lists= walletCashBackQueueMapper.queryWalletCashBackQueues(gcId);
 		return lists;
+	}
+
+	/**
+	 * 取得用户返现详情
+	 * @param uid
+	 * @return
+	 */
+	public Map<String, String> queryUserCashBackDetail(Long uid) {
+		Map<String,Long> map=new HashMap<String, Long>();
+		Date curDate=new Date();
+		List<UserCashBackDetailView> list = walletCashBackQueueMapper.queryUserCashBackDetail(uid, DateUtil.addDays(curDate,-7));
+		for(UserCashBackDetailView ucbd:list){
+			map.put(ucbd.getType(),ucbd.getPrice());
+		}
+		//计算页面显示详情 待提现-不可提现 =可提现
+		long allowCash=map.get("waitCash")-map.get("unCash");
+		map.remove("unCash");
+		Map<String,String> rtn=new HashMap<String, String>();
+		for(String key:map.keySet()){
+			rtn.put(key, NumberUtils.formaterNumberPower(map.get(key)));
+		}
+		rtn.put("allowCash",NumberUtils.formaterNumberPower(allowCash));
+		return rtn;
 	}
 
 	/**
