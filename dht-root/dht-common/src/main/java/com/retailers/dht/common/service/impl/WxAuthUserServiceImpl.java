@@ -144,7 +144,9 @@ public class WxAuthUserServiceImpl implements WxAuthUserService {
 			wxAuthUser.setWauProvince(userInfo.get("province").toString().replaceAll("\"", ""));
 			wxAuthUser.setWauCountry(userInfo.get("country").toString().replaceAll("\"", ""));
 			wxAuthUser.setWauHeadimgurl(userInfo.get("headimgurl").toString().replaceAll("\"", ""));
-			wxAuthUser.setWauUnionid(userInfo.get("unionid").toString().replaceAll("\"", ""));
+			if(userInfo.containsKey("unionid")&&ObjectUtils.isNotEmpty(userInfo.get("unionid"))){
+				wxAuthUser.setWauUnionid(userInfo.get("unionid").toString().replaceAll("\"", ""));
+			}
 			//判断是否关联用户
 			if(ObjectUtils.isEmpty(wxAuthUser.getWauUid())){
 				//根据uuid 取得相关用户
