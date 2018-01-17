@@ -25,7 +25,20 @@
         }
 
         .all-order-tab a{
-            width: 1.5rem;
+            width: 1.4rem;
+        }
+
+        .right_icon{
+            display: block;
+            position: absolute;
+            right: 0;
+            z-index: 9999;
+            width: 0.5rem;
+            height: 0.7rem;
+            line-height: 0.55rem;
+            background: url("/img/right_icon.jpg")no-repeat;
+            background-size: 0.5rem 0.5rem;
+            background-position: 0.05rem 0.07rem;
         }
     </style>
 </head>
@@ -36,10 +49,25 @@
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
-    <div style="width: 30rem;">
+    <div style="width: 30rem;padding-right: 0.5rem;">
         <c:forEach items="${gts}" var="rtnList" varStatus="vs">
             <a href="#gt_${rtnList.rtId}" onclick="selectGts(${rtnList.rtId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${rtnList.rtId}">${rtnList.rtName}</a>
         </c:forEach>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+        <a>蔬菜</a>
+
+        <span class="right_icon"></span>
     </div>
 
 </div>
