@@ -517,12 +517,8 @@
                         $('#putdown').show();
                         $('#hasBuy').hide();
                     }
-                    if(isAdvancesale==1){
-                        $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
-                        $('#isAdvancesalediv').show();
-                    }else{
-                        $('#isAdvancesalediv').hide();
-                    }
+//                    console.log(isAdvancesale==1)
+
                     if(isServiceGoods==1){
                         $('.showaddressfreigh').hide();
                         $($('#open_time').find('span')[1]).html('请选择服务时间');
@@ -535,6 +531,12 @@
                         $('.select_input').show();
                         $('#select_time').hide();
                         $('#isAdvancesalediv').show();
+                    }
+                    if(isAdvancesale==1){
+                        $($('#isAdvancesalediv').find('span').get(1)).html(goodsConfig.gedt+'发货');
+                        $('#isAdvancesalediv').show();
+                    }else{
+                        $('#isAdvancesalediv').hide();
                     }
                     if(isAllowsetdeliverytime==1){
                         $('#open_time').show();
