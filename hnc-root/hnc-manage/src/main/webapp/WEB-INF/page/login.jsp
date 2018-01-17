@@ -92,6 +92,17 @@
             text-align: center;
             cursor: pointer;
         }
+
+        .contaniner_ft{
+            position: absolute;
+            z-index: 9999;
+            bottom: 0;
+            right: 0;
+        }
+
+        .contaniner_ft a{
+            color: #fff;
+        }
     </style>
 </head>
 <body>
@@ -112,7 +123,9 @@
         </div>
     </div>
 </div>
-
+<div class="contaniner_ft">
+    <a href="http://www.miitbeian.gov.cn" target="_blank">渝ICP备18000231号</a>
+</div>
 <script>
     $(".submit").click(function () {
         let phone = $(".account").val();
