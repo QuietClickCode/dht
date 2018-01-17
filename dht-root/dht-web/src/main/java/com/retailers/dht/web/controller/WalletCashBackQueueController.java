@@ -1,16 +1,12 @@
 package com.retailers.dht.web.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
-import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.ReturnList;
-import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.dht.web.base.BaseController;
-import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
