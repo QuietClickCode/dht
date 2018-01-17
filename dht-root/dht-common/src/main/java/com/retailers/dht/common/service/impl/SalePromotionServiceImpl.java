@@ -53,6 +53,9 @@ public class SalePromotionServiceImpl implements SalePromotionService {
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<SalePromotionVo> list = salePromotionMapper.querySalePromotionList(page);
+		for(SalePromotionVo salePromotionVo:list){
+			salePromotionVo.setImgurl(AttachmentConstant.IMAGE_SHOW_URL+salePromotionVo.getImgurl());
+		}
 		page.setData(list);
 		return page;
 	}

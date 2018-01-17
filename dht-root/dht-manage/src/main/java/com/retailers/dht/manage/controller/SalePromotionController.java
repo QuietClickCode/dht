@@ -76,7 +76,7 @@ public class SalePromotionController extends BaseController{
     public Map<String,Object> querySalePromotionLists(String name){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
-        Pagination<SalePromotionVo> advertisingPagination = promotionService.querySalePromotionList(map,1,100);
+        Pagination<SalePromotionVo> advertisingPagination = promotionService.querySalePromotionList(map,1,99999);
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",1000);
         List<SalePromotionVo> promotionVos = promotionService.querySalePromotionTree(advertisingPagination.getData());

@@ -87,11 +87,7 @@ public class CutPriceLogServiceImpl implements CutPriceLogService {
 			page.setPageSize(1000);
 			page.setParams(params);
 			list = cutPriceLogMapper.queryCutPriceLogVoList(page);
-			if(!ObjectUtils.isEmpty(list)){
-				for(CutPriceLogVo cutPriceLogVo:list){
-					cutPriceLogVo.setUimgurl(AttachmentConstant.IMAGE_SHOW_URL+cutPriceLogVo.getUimgurl());
-				}
-			}
+
 		}
 		return list;
 	}

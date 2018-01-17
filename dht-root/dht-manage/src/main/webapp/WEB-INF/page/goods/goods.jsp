@@ -964,6 +964,7 @@
 <script type="text/javascript" src="<%=path%>/js/common/form.js"></script>
 <script src="<%=path%>/js/toast/js/toastr.js"></script>
 <script type="text/javascript" src="<%=path%>/js/laydate/laydate.js"></script>
+<script type="text/javascript" src="/common/popover.js"></script>
 <!--商品基本信息-->
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -980,7 +981,22 @@
             field: 'gname',
             title: '商品名称',
             align : 'center',
-            valign : 'middle'
+            valign : 'middle',
+            formatter:function(value,row,index){
+                let html=value;
+                var isChecked = row.isChecked;
+                if(isChecked==1){
+                    var goodsImgUrl = row.imgUrl;
+                    var url = '/goods/'+row.gid+'.html';
+//                    var goodsPrice = '￥'+(parseFloat(row.minprice)/100).toFixed(2);
+                    var goodsNm = value;
+
+                    var params = 'goodsImgUrl='+goodsImgUrl+'&url='+url+'&goodsPrice=&goodsNm='+goodsNm;
+                    var img = '<img onclick="popover(this);" src="/wxShare/shareImage?'+params+'" style="width:20px;height: 20px;margin-left: 0px;float: left"/>';
+                    html = img+html;
+                }
+                return html;
+            }
         },
         {
             field: 'gclassificationName',

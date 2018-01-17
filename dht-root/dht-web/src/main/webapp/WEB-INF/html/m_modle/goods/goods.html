@@ -24,7 +24,17 @@
 <body class="bge6">
 <!--分享引导-->
 <div class="guide-share" style="display: none;position: fixed" >
-    <button class="i-know" onclick="ikonw();"></button>
+    <!--<button class="i-know" onclick="ikonw();"></button>-->
+    <div class="heigh-light"></div>
+
+    <img class="guide-share-arrows" src="/img/arrows.png" >
+
+    <div class="dia-wrap">
+        <span id="dia-close" onclick="ikonw();"></span>
+
+        <img id="shareImg" class="show-goods" src="" style="height: 100%;"/>
+
+    </div>
 </div>
 
     <div class="specialty-title2 borderB">
@@ -341,7 +351,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
     <!--定义使用函数-->
     <script>
         var path = window.location.pathname;
-
+//        console.log(path);
         var pathArr = path.substring(7,path.indexOf('.html')).split('~');
         var gid = parseInt(pathArr[0]);
         <!--邀请者Id-->
@@ -357,6 +367,14 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
         <!--用户评论分页查询-->
         var pageNo=1;
         var pageSize=10;
+//        console.log(GetQueryString('randStr'));
+        //获取参数
+        function GetQueryString(name)
+        {
+            var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if(r!=null)return  unescape(r[2]); return null;
+        }
 
         <!--初始化banner-->
         function initbanner() {
@@ -422,6 +440,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
             });
         }
 
+        var minPrice = '';
         <!--加载采摘人和地址-->
         function loadpersonaddress(flag) {
             $.ajax({
@@ -462,6 +481,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
                         $('#gname').html(gname);
                         $('#gprice').html('￥'+parseFloat(row.gprice/100).toFixed(2) +'/'+row.gunitname);
                         $('#gdprice').html('￥'+parseFloat(row.minprice/100).toFixed(2)+'/'+row.gunitname);
+                        minPrice = parseFloat(row.minprice/100).toFixed(2);
                     }else{
                         nogoods();
                     }
@@ -1046,7 +1066,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
                         initaddress();
                         $("#J_mark").show();
                     }else{
-                        layer.msg('您还未登录');
+                        layer.msg('暂无收货地址');
                     }
                 }
             });
@@ -1420,7 +1440,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
                 url:'/wxShare/createWxShare',
                 dataType: "json",
                 async :false,
-                data:{path:path},
+                data:{path:path,randStr:GetQueryString('randStr')},
                 success:function(data){
                     if(data!=null){
                         homePath = data.homePath;
@@ -1432,7 +1452,7 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
 
                         wx.config({
 
-                            //debug: true, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+//                            debug: true, // 开启调试模式,调用的所有api的返回值会在客户端//alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
 
                             appId: appId, // 必填，公众号的唯一标识
 
@@ -1551,6 +1571,16 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
         
         <!--调用分享函数-->
         function shareGoods() {
+            var goodsPrice = minPrice;
+            var goodsImgUrl = $('#bannerul').find('img')[0].src;
+            var url = path;
+            var goodsNm = $('#gname').html();
+            goodsNm = goodsNm.substring(0,10);
+            var src = '/wxShare/shareImage?goodsPrice='+goodsPrice+'&goodsImgUrl='+goodsImgUrl+'&url='+url+'&goodsNm='+goodsNm;
+            if($('#shareImg').attr('src')==''){
+                $('#shareImg').attr('src',src);
+            }
+
             $('.bge6').css('overflow', 'hidden');
             $('.guide-share').fadeIn('slow');
         }

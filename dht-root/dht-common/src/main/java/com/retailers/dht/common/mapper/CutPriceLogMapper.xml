@@ -75,7 +75,7 @@
 		SELECT t1.*,
 		t0.remark remark,
 		t2.u_name uname,
-		t3.show_url uimgurl,
+		t3.wau_headimgurl uimgurl,
 		t4.cp_sale cpPrice,
 		t5.cp_mostperson cpMostperson,t5.cp_lestpseson cpLestperson,
 		t6.gd_price gdPrice
@@ -83,7 +83,7 @@
 		 t_cut_price_price t0
 		LEFT JOIN t_cut_price_log t1 ON t1.us_id=t0.us_id and t0.gdcp_id=t1.gdcp_id and t1.is_delete=0
 		LEFT JOIN t_user t2 ON t1.usd_id=t2.u_id and t2.is_delete=0
-		LEFT JOIN t_attachment t3 ON t2.u_imgid=t3.id
+		LEFT JOIN t_wx_auth_user t3 ON t2.u_id=t3.wau_u_id
 		LEFT JOIN t_goods_gdcprel t4 ON t0.gdcp_id=t4.gdcp_id and t4.is_delete=0
 		LEFT JOIN t_cut_price t5 ON t4.cp_id=t5.cp_id and t5.is_delete=0
 		LEFT JOIN t_goods_detail t6 ON t4.gd_id=t6.gd_id and t6.is_delete=0

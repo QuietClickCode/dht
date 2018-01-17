@@ -104,6 +104,9 @@ public class GoodsServiceImpl implements GoodsService {
 		}
 		page.setParams(params);
 		List<GoodsVo> list = goodsMapper.queryGoodsList(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+		}
 		page.setData(list);
 		return page;
 	}

@@ -18,7 +18,17 @@
 
 <body class="bge6">
 <div class="guide-share" style="display: none;position: fixed">
-    <button class="i-know" onclick="ikonw();"></button>
+    <!--<button class="i-know" onclick="ikonw();"></button>-->
+    <div class="heigh-light"></div>
+
+    <img class="guide-share-arrows" src="/img/arrows.png" >
+
+    <div class="dia-wrap">
+        <span id="dia-close" onclick="ikonw();"></span>
+
+        <img id="shareImg" class="show-goods" src="" style="height: 100%;"/>
+
+    </div>
 </div>
 <div class="specialty-title2 borderB">
     <a onclick="returnhistory();" class="icon-return"></a>
@@ -356,6 +366,14 @@
     var pageSize=10;
     var parentId;
 
+    //获取参数
+    function GetQueryString(name)
+    {
+        var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if(r!=null)return  unescape(r[2]); return null;
+    }
+
     <!--初始化banner-->
     function initbanner() {
         TouchSlide({
@@ -405,6 +423,7 @@
     }
 
     var cpId;
+    var minPrice = '';
     <!--加载剩余时间-->
     function loadtimestape() {
         $.ajax({
@@ -414,18 +433,23 @@
             data:{gid:gid},
             success:function(data){
                 if(data.rows!=null&&data.rows.length>0){
-                    cpId=data.rows[0].cpId;
-                    timestape = data.rows[0].timestap*1000;
-                    var cpSale = parseFloat(data.rows[0].cpSale/100).toFixed(2);
-                    var minprice = parseFloat(data.rows[0].minprice/100).toFixed(2);
-                    $('#minprice').html(minprice);
-                    $('#cutdownprice').html(parseFloat(minprice-cpSale).toFixed(2) );
-                    parentId = data.rows[0].parentId;
-                    timegoing();
-                    var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
-                    $($('#rule').find('span')[1]).html(rule);
+                    if(data.rows[0]!=null){
+                        cpId=data.rows[0].cpId;
+                        timestape = data.rows[0].timestap*1000;
+                        var cpSale = parseFloat(data.rows[0].cpSale/100).toFixed(2);
+                        var minprice = parseFloat(data.rows[0].minprice/100).toFixed(2);
+                        $('#minprice').html(minprice);
+                        minPrice = minprice;
+                        $('#cutdownprice').html(parseFloat(minprice-cpSale).toFixed(2) );
+                        parentId = data.rows[0].parentId;
+                        timegoing();
+                        var rule = '至少'+data.rows[0].cpLestpseson+'人砍价后方可购买此商品<br/>参与砍价人数最多为'+data.rows[0].cpMostperson+'人';
+                        $($('#rule').find('span')[1]).html(rule);
+                    }else{
+                        nogoods();
+                    }
                 }else{
-                    nogoods();
+
                 }
 
             }
@@ -995,7 +1019,7 @@
                     initaddress();
                     $("#J_mark").show();
                 }else{
-                    layer.msg('您还未登录');
+                    layer.msg('暂无收货地址');
                 }
             }
         });
