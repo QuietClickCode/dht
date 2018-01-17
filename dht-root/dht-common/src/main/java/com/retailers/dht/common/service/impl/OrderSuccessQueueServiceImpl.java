@@ -44,8 +44,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	@Autowired
 	private OrderDetailMapper orderDetailMapper;
 	@Autowired
-	private AccumulativeAmountMapper accumulativeAmountMapper;
-	@Autowired
 	private WalletCashBackQueueMapper walletCashBackQueueMapper;
 	@Autowired
 	private CurrentPlatformSalesMapper currentPlatformSalesMapper;
@@ -204,8 +202,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		if(isCash){
 			orderCashBack(maps,orderId,ods,buyUid);
 		}else{
-			//不进行返现
-			//取得购买商品例表中可以直接进行返现的商品类型
 			//立退返现列表
 			List<OrderDetail> cash=new ArrayList<OrderDetail>();
 			//自然消费，不返现列表
@@ -270,8 +266,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			hbsp.put(ccbqGoodsType,prices);
 		}
 		List<WalletCashBackQueue> wcbqs=new ArrayList<WalletCashBackQueue>();
-//		//商品类型对应的价格
-//		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
+		//商品类型对应的价格
 		Set<Long> gtyps=new HashSet<Long>();
 		for(Long type:hbsp.keySet()){
 			WalletCashBackQueue wcbq=new WalletCashBackQueue();
@@ -502,22 +497,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		rs.setRsTime(new Date());
 		return rs;
 	}
-
-//	/**
-//	 * 计算金额 相同商品订单金额
-//	 * @param ods
-//	 * @return
-//	 */
-//	private Long buyGoodsIdTotalPrice(List<OrderDetail> ods){
-//		long total=0;
-//		if(ObjectUtils.isNotEmpty(ods)){
-//			for(OrderDetail od:ods){
-//				total+=od.getOdMenberPrice();
-//			}
-//		}
-//		return total;
-//	}
-
 	/**
 	 *
 	 * @param osq
