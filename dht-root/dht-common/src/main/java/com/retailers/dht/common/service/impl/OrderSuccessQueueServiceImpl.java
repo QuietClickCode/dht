@@ -151,7 +151,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 							//取得订单详情 进行商品分类处理
 							goodsType(order,ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
-							order.getOrderMenberPrice();
 						}else{
 							goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 						}
@@ -246,58 +245,53 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	private void orderCashBack(Map<Long,GoodsReturnVo> maps,Long orderId,List<OrderDetail> ods,Long buyUid){
 		logger.info("进入订单返现方法,订单id:[{}],商品关联的类型：[{}],购买人id：[{}]",orderId, JSON.toJSON(maps),buyUid);
 		Date curDate=new Date();
-		//商品合并
-		Map<Long,List<OrderDetail>> hbsp=new HashMap<Long, List<OrderDetail>>();
+		//计算商品类型下的消费总额
+		Map<Long,Long> hbsp=new HashMap<Long, Long>();
+		List<LogWalletCashBackQueue> lwcbqs=new ArrayList<LogWalletCashBackQueue>();
 		for(OrderDetail od:ods){
-			if(hbsp.containsKey(od.getOdGoodsId())){
-				hbsp.get(od.getOdGoodsId()).add(od);
-			}else{
-				List<OrderDetail> ods_=new ArrayList<OrderDetail>();
-				ods_.add(od);
-				hbsp.put(od.getOdGoodsId(),ods_);
+			LogWalletCashBackQueue lwcbq=new LogWalletCashBackQueue();
+			lwcbq.setCcbqType((int)SystemConstant.CASH_BACK_TYPE_WALLET);
+			lwcbq.setCcbqOrderId(od.getOdOrderId());
+			lwcbq.setCcbqOdId(od.getId());
+			//根据商品id取得商品类型
+			long ccbqGoodsType=-1;
+			if(maps.containsKey(od.getOdGoodsId())){
+				ccbqGoodsType=maps.get(od.getOdGoodsId()).getRtId();
 			}
+			lwcbq.setCcbqRtnType(ccbqGoodsType);
+			lwcbq.setCcbqUid(buyUid);
+			lwcbq.setCcbqMoney(od.getOdMenberPrice());
+			lwcbq.setCcbqCreateTime(curDate);
+			lwcbqs.add(lwcbq);
+			long prices=od.getOdMenberPrice();
+			if(hbsp.containsKey(ccbqGoodsType)){
+				prices+=hbsp.get(ccbqGoodsType);
+			}
+			hbsp.put(ccbqGoodsType,prices);
 		}
 		List<WalletCashBackQueue> wcbqs=new ArrayList<WalletCashBackQueue>();
-		//商品类型对应的价格
-		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
+//		//商品类型对应的价格
+//		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
 		Set<Long> gtyps=new HashSet<Long>();
-		//批量汪加商品日志
-//		List<AccumulativeAmount> atas=new ArrayList<AccumulativeAmount>();
-		for(Long key:maps.keySet()){
+		for(Long type:hbsp.keySet()){
 			WalletCashBackQueue wcbq=new WalletCashBackQueue();
 			wcbq.setCcbqUid(buyUid);
+			wcbq.setCcbqType((int)SystemConstant.CASH_BACK_TYPE_WALLET);
 			//设置商品顶层节点
-			wcbq.setCcbqGoodsType(maps.get(key).getRtId());
+			wcbq.setCcbqRtnType(type);
 			wcbq.setCcbqOrderId(orderId);
-			wcbq.setCcbqMoney(buyGoodsIdTotalPrice(hbsp.get(key)));
+			wcbq.setCcbqMoney(hbsp.get(type));
 			wcbq.setCcbqStatus(SystemConstant.PLAT_CASH_BACK_MENOY_STATUS_LINE_UP);
-			wcbq.setCcbqGid(key);
 			wcbq.setCcbqCreateTime(curDate);
 			wcbqs.add(wcbq);
-			//取得该类型下的累计金额
-			if(gtUnPrice.containsKey(wcbq.getCcbqGoodsType())){
-				gtUnPrice.put(wcbq.getCcbqGoodsType(),gtUnPrice.get(wcbq.getCcbqGoodsType())+wcbq.getCcbqMoney());
-			}else{
-				gtUnPrice.put(wcbq.getCcbqGoodsType(),wcbq.getCcbqMoney());
-			}
-			gtyps.add(wcbq.getCcbqGoodsType());
-//			AccumulativeAmount ata=new AccumulativeAmount();
-//			ata.setAaGoodsId(key);
-//			ata.setAaOrderId(orderId);
-//			ata.setAaGoodsParentType(wcbq.getCcbqGoodsType());
-//			ata.setAaConsumePrice(wcbq.getCcbqMoney());
-//			ata.setAaCreateTime(new Date());
-//			ata.setAaType(0);
-//			atas.add(ata);
+			gtyps.add(type);
 		}
 		// 添加用户至返现队列
 		if(ObjectUtils.isNotEmpty(wcbqs)){
 			walletCashBackQueueMapper.saveWalletCashBackQueues(wcbqs);
+			//添加返现日志
+			walletCashBackQueueMapper.saveWalletCashBackQueuesLogs(lwcbqs);
 		}
-//		//添加返现队列日志
-//		if(ObjectUtils.isNotEmpty(atas)){
-//			accumulativeAmountMapper.saveAccumulativeAmounts(atas);
-//		}
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH,gtyps);
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();
@@ -312,12 +306,12 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		for(Long type:gtyps){
 			if(hasCpfs.containsKey(type)){
 				CurrentPlatformSales cpfs=hasCpfs.get(type);
-				cpfs.setCpsTotalPrice(gtUnPrice.get(type));
+				cpfs.setCpsTotalPrice(hbsp.get(type));
 				batchUpdate.add(cpfs);
 			}else{
 				CurrentPlatformSales cpfs=new CurrentPlatformSales();
 				cpfs.setCpsGoodsMainType(type);
-				cpfs.setCpsTotalPrice(gtUnPrice.get(type));
+				cpfs.setCpsTotalPrice(hbsp.get(type));
 				cpfs.setCpsPayType(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH);
 				batchAdd.add(cpfs);
 			}
@@ -343,39 +337,45 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	private void orderUnCashBack(Map<Long,GoodsReturnVo> maps,Long orderId,List<OrderDetail> ods,Long buyUid,Long totalPrice){
 		logger.info("进入普通消费累计方法,订单id:[{}],商品关联的类型：[{}],购买人id：[{}],累计金额：[{}]",orderId, JSON.toJSON(maps),buyUid,totalPrice);
 		Date curDate=new Date();
-		//商品合并
-		Map<Long,List<OrderDetail>> hbsp=new HashMap<Long, List<OrderDetail>>();
+		//计算商品类型下的消费总额
+		Map<Long,Long> hbsp=new HashMap<Long, Long>();
+		List<LogWalletCashBackQueue> lwcbqs=new ArrayList<LogWalletCashBackQueue>();
+		Set<Long> gtyps=new HashSet<Long>();
 		for(OrderDetail od:ods){
-			if(hbsp.containsKey(od.getOdGoodsId())){
-				hbsp.get(od.getOdGoodsId()).add(od);
-			}else{
-				List<OrderDetail> ods_=new ArrayList<OrderDetail>();
-				ods_.add(od);
-				hbsp.put(od.getOdGoodsId(),ods_);
+			LogWalletCashBackQueue lwcbq=new LogWalletCashBackQueue();
+			lwcbq.setCcbqType((int)SystemConstant.CASH_BACK_TYPE_SUM_PRICE);
+			lwcbq.setCcbqOrderId(od.getOdOrderId());
+			lwcbq.setCcbqOdId(od.getId());
+			//根据商品id取得商品类型
+			long ccbqGoodsType=-1;
+			if(maps.containsKey(od.getOdGoodsId())){
+				ccbqGoodsType=maps.get(od.getOdGoodsId()).getRtId();
 			}
+			lwcbq.setCcbqRtnType(ccbqGoodsType);
+			lwcbq.setCcbqUid(buyUid);
+			lwcbq.setCcbqMoney(od.getOdMenberPrice());
+			lwcbq.setCcbqCreateTime(curDate);
+			lwcbqs.add(lwcbq);
+			long prices=od.getOdMenberPrice();
+			if(hbsp.containsKey(ccbqGoodsType)){
+				prices+=hbsp.get(ccbqGoodsType);
+			}
+			hbsp.put(ccbqGoodsType,prices);
+			gtyps.add(ccbqGoodsType);
 		}
 		logger.info("商品id 对应的价格:[{}]",JSON.toJSON(hbsp));
-		//商品类型对应的价格
-		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
-		Set<Long> gtyps=new HashSet<Long>();
-		for(Long key:maps.keySet()){
-			Long gt=maps.get(key).getRtId();
-			long money=buyGoodsIdTotalPrice(hbsp.get(key));
-			//取得该类型下的累计金额
-			if(gtUnPrice.containsKey(gt)){
-				gtUnPrice.put(gt,gtUnPrice.get(gt)+money);
-			}else{
-				gtUnPrice.put(gt,money);
-			}
-			gtyps.add(gt);
-		}
 		logger.info("本次购买的商品类型：[{}]",JSON.toJSON(gtyps));
-		logger.info("本次购买的同类商品下的总计消费：[{}]",JSON.toJSON(gtUnPrice));
+		logger.info("本次购买的同类商品下的总计消费：[{}]",JSON.toJSON(hbsp));
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_GT_SALES_TOTAL,gtyps);
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();
 		for(CurrentPlatformSales cpfs:list){
 			hasCpfs.put(cpfs.getCpsGoodsMainType(),cpfs);
+		}
+		// 添加用户至返现队列
+		if(ObjectUtils.isNotEmpty(lwcbqs)){
+			//添加返现日志
+			walletCashBackQueueMapper.saveWalletCashBackQueuesLogs(lwcbqs);
 		}
 		//批量新增
 		List<CurrentPlatformSales> batchAdd=new ArrayList<CurrentPlatformSales>();
@@ -385,12 +385,12 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		for(Long type:gtyps){
 			if(hasCpfs.containsKey(type)){
 				CurrentPlatformSales cpfs=hasCpfs.get(type);
-				cpfs.setCpsTotalPrice(gtUnPrice.get(type));
+				cpfs.setCpsTotalPrice(hbsp.get(type));
 				batchUpdate.add(cpfs);
 			}else{
 				CurrentPlatformSales cpfs=new CurrentPlatformSales();
 				cpfs.setCpsPayType(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_GT_SALES_TOTAL);
-				cpfs.setCpsTotalPrice(gtUnPrice.get(type));
+				cpfs.setCpsTotalPrice(hbsp.get(type));
 				cpfs.setCpsGoodsMainType(type);
 				batchAdd.add(cpfs);
 			}
@@ -503,20 +503,20 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		return rs;
 	}
 
-	/**
-	 * 计算金额 相同商品订单金额
-	 * @param ods
-	 * @return
-	 */
-	private Long buyGoodsIdTotalPrice(List<OrderDetail> ods){
-		long total=0;
-		if(ObjectUtils.isNotEmpty(ods)){
-			for(OrderDetail od:ods){
-				total+=od.getOdMenberPrice();
-			}
-		}
-		return total;
-	}
+//	/**
+//	 * 计算金额 相同商品订单金额
+//	 * @param ods
+//	 * @return
+//	 */
+//	private Long buyGoodsIdTotalPrice(List<OrderDetail> ods){
+//		long total=0;
+//		if(ObjectUtils.isNotEmpty(ods)){
+//			for(OrderDetail od:ods){
+//				total+=od.getOdMenberPrice();
+//			}
+//		}
+//		return total;
+//	}
 
 	/**
 	 *
@@ -526,11 +526,12 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	public void editorExeStatus(OrderSuccessQueue osq, boolean isSuccess) {
 		if(isSuccess){
 			orderSuccessQueueMapper.deleteOrderSuccessQueueById(osq.getId());
-			orderSuccessQueueMapper.saveOrderSuccessQueueHistory(osq);
 		}else{
 			osq.setExecuteNum(osq.getExecuteNum()+1);
 			orderSuccessQueueMapper.updateOrderSuccessQueue(osq);
 		}
+		osq.setCreateTime(new Date());
+		orderSuccessQueueMapper.saveOrderSuccessQueueHistory(osq);
 	}
 }
 

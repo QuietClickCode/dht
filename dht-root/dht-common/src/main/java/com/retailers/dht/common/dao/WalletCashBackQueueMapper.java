@@ -1,4 +1,5 @@
 package com.retailers.dht.common.dao;
+import com.retailers.dht.common.entity.LogWalletCashBackQueue;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.view.UserCashBackDetailView;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
@@ -33,6 +34,13 @@ public interface WalletCashBackQueueMapper {
 	 * @return
 	 */
 	public int saveWalletCashBackQueues(List<WalletCashBackQueue> walletCashBackQueues);
+
+	/**
+	 * 批量添加日志
+	 * @param logs
+	 * @return
+	 */
+	public int saveWalletCashBackQueuesLogs(List<LogWalletCashBackQueue> logs);
 	/**
 	 * 编辑钱包消费返现(包括指定可返现商品类型）
 	 * @param walletCashBackQueue

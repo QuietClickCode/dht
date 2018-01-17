@@ -111,6 +111,14 @@ public class SystemConstant {
      */
     public static final long CURRENT_PLATFORM_SALES_TYPE_SALES_TOTAL=2;
     /**
+     * 返现类型 会员消费返现
+     */
+    public static final long CASH_BACK_TYPE_WALLET=0;
+    /**
+     * 返现类型 用户累计消费返现
+     */
+    public static final long CASH_BACK_TYPE_SUM_PRICE=1;
+    /**
      * java 队列
      */
     private static Queue<OrderProcessingQueue> queue = new LinkedList<OrderProcessingQueue>();

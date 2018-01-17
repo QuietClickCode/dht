@@ -4,9 +4,9 @@
 
 	<resultMap id="rm_walletCashBackQueue" type="com.retailers.dht.common.entity.WalletCashBackQueue">
 		<result property="ccbqId" column="ccbq_id"/>
+		<result property="ccbqType" column="ccbq_type"/>
 		<result property="ccbqOrderId" column="ccbq_order_id"/>
-		<result property="ccbqGid" column="ccbq_gid"/>
-		<result property="ccbqGoodsType" column="ccbq_goods_type"/>
+		<result property="ccbqRtnType" column="ccbq_rtn_type"/>
 		<result property="ccbqUid" column="ccbq_uid"/>
 		<result property="ccbqMoney" column="ccbq_money"/>
 		<result property="ccbqStatus" column="ccbq_status"/>
@@ -19,7 +19,7 @@
 		<result property="ccbqId" column="ccbq_id"/>
 		<result property="ccbqOrderId" column="ccbq_order_id"/>
 		<result property="ccbqGid" column="ccbq_gid"/>
-		<result property="ccbqGoodsType" column="ccbq_goods_type"/>
+		<result property="ccbqGoodsType" column="ccbq_rtn_type"/>
 		<result property="ccbqUid" column="ccbq_uid"/>
 		<result property="ccbqMoney" column="ccbq_money"/>
 		<result property="ccbqStatus" column="ccbq_status"/>
@@ -40,7 +40,7 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="walletCashBackQueue_columns">
-		ccbq_id,ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+		ccbq_id,ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 	</sql>
 	<!-- 根据钱包消费返现(包括指定可返现商品类型）主键取得数据 -->
 	<select id="queryWalletCashBackQueueByCcbqId" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
@@ -53,14 +53,14 @@
 			<if test="null != params.ccbqId">
 				AND ccbq_id = #{params.ccbqId}
 			</if>
+			<if test="null != params.ccbqType">
+				AND ccbq_type = #{params.ccbqType}
+			</if>
 			<if test="null != params.ccbqOrderId">
 				AND ccbq_order_id = #{params.ccbqOrderId}
 			</if>
-			<if test="null != params.ccbqGid">
-				AND ccbq_gid = #{params.ccbqGid}
-			</if>
-			<if test="null != params.ccbqGoodsType">
-				AND ccbq_goods_type = #{params.ccbqGoodsType}
+			<if test="null != params.ccbqRtnType">
+				AND ccbq_rtn_type = #{params.ccbqRtnType}
 			</if>
 			<if test="null != params.ccbqUid">
 				AND ccbq_uid = #{params.ccbqUid}
@@ -100,44 +100,62 @@
 	<!--添加钱包消费返现(包括指定可返现商品类型） -->
 	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		(
-			#{ccbqOrderId,jdbcType=BIGINT},#{ccbqGid,jdbcType=BIGINT},#{ccbqGoodsType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
+			#{ccbqType,jdbcType=INTEGER},#{ccbqOrderId,jdbcType=BIGINT},#{ccbqRtnType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--批量添加返现队列-->
 	<insert id="saveWalletCashBackQueues" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq_order_id,ccbq_gid,ccbq_goods_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator="," >
 			(
+				#{item.ccbqType,jdbcType=INTEGER},
 				#{item.ccbqOrderId,jdbcType=BIGINT},
-				#{item.ccbqGid,jdbcType=BIGINT},
-				#{item.ccbqGoodsType,jdbcType=BIGINT},
+				#{item.ccbqRtnType,jdbcType=BIGINT},
 				#{item.ccbqUid,jdbcType=BIGINT},
 				#{item.ccbqMoney,jdbcType=BIGINT},
 				#{item.ccbqStatus,jdbcType=BIGINT},
 				#{item.ccbqCreateTime,jdbcType=TIMESTAMP},
 				#{item.ccbqCashBackTime,jdbcType=TIMESTAMP},
-				#{item.ccbqWaitTime,jdbcType=BIGINT},0
+				#{item.ccbqWaitTime,jdbcType=BIGINT},
+				0
 			)
 		</foreach>
+	</insert>
 
+	<!--批量添加日志-->
+	<insert id="saveWalletCashBackQueuesLogs" parameterType="com.retailers.dht.common.entity.LogWalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
+		INSERT INTO t_log_wallet_cash_back_queue (
+			ccbq_type,ccbq_order_id,ccbq_od_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_create_time
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator="," >
+			(
+				#{item.ccbqType,jdbcType=INTEGER},
+				#{item.ccbqOrderId,jdbcType=BIGINT},
+				#{item.ccbqOdId,jdbcType=BIGINT},
+				#{item.ccbqRtnType,jdbcType=BIGINT},
+				#{item.ccbqUid,jdbcType=BIGINT},
+				#{item.ccbqMoney,jdbcType=BIGINT},
+				#{item.ccbqCreateTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
 	</insert>
 	<!--修改钱包消费返现(包括指定可返现商品类型） -->
 	<update id="updateWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue">
 		UPDATE t_wallet_cash_back_queue
 		<set>
+			<if test="null != ccbqType">
+				ccbq_type = #{ccbqType},
+			</if>
 			<if test="null != ccbqOrderId">
 				ccbq_order_id = #{ccbqOrderId},
 			</if>
-			<if test="null != ccbqGid">
-				ccbq_gid = #{ccbqGid},
-			</if>
-			<if test="null != ccbqGoodsType">
-				ccbq_goods_type = #{ccbqGoodsType},
+			<if test="null != ccbqRtnType">
+				ccbq_rtn_type = #{ccbqRtnType},
 			</if>
 			<if test="null != ccbqUid">
 				ccbq_uid = #{ccbqUid},
@@ -174,9 +192,9 @@
 			r.rownum,
 			IFNULL(c.curCashQueue,-1) curCashQueue,
 			wc.ccbq_id,
+			ccbq_type,
 			ccbq_order_id,
-			ccbq_gid,
-			ccbq_goods_type,
+			ccbq_rtn_type,
 			ccbq_uid,
 			ccbq_money,
 			ccbq_status,
@@ -201,7 +219,7 @@
 						t_wallet_cash_back_queue wc
 					WHERE
 						ccbq_status != 2
-						AND ccbq_goods_type = #{gcId}
+						AND ccbq_rtn_type = #{gcId}
 					ORDER BY
 						ccbq_id ASC
 				) d
@@ -218,7 +236,7 @@
 					FROM
 						t_wallet_cash_back_queue wc
 						WHERE
-						 ccbq_goods_type = #{gcId}
+						 ccbq_rtn_type = #{gcId}
 					ORDER BY
 						ccbq_id ASC
 				) d
@@ -229,7 +247,7 @@
 		WHERE
 			wc.ccbq_uid = u.u_id
 		AND wc.ccbq_order_id = o.id
-		AND ccbq_goods_type = #{gcId}
+		AND ccbq_rtn_type = #{gcId}
 		ORDER BY
 			ccbq_id ASC
 	</select>
@@ -239,9 +257,9 @@
 		SELECT
 			r.curCashQueue,
 			wc.ccbq_id,
+			wc.ccbq_type,
 			ccbq_order_id,
-			ccbq_gid,
-			wc.ccbq_goods_type,
+			wc.ccbq_rtn_type,
 			ccbq_uid,
 			ccbq_money,
 			ccbq_status,
@@ -257,13 +275,13 @@
 		LEFT JOIN (
 			SELECT
 				CASE
-			WHEN ccbq_goods_type =@lastType THEN
+			WHEN ccbq_rtn_type =@lastType THEN
 				@curCashRowNum := @curCashRowNum + 1
 			ELSE
 				@curCashRowNum := 1
 			END curCashQueue,
-			@lastType := d.ccbq_goods_type AS lastType,
-			d.ccbq_goods_type,
+			@lastType := d.ccbq_rtn_type AS lastType,
+			d.ccbq_rtn_type,
 			d.ccbq_id
 		FROM
 			(SELECT @curCashRowNum := 0) r,
@@ -271,7 +289,7 @@
 			(
 				SELECT
 					ccbq_id,
-					ccbq_goods_type
+					ccbq_rtn_type
 				FROM
 					t_wallet_cash_back_queue wc
 				WHERE
@@ -279,11 +297,11 @@
 						wc.ccbq_status=#{item}
 					</foreach>
 				ORDER BY
-					ccbq_goods_type DESC,
+					ccbq_rtn_type DESC,
 					ccbq_id ASC
 			) d
 		) r ON wc.ccbq_id = r.ccbq_id
-		AND wc.ccbq_goods_type = r.ccbq_goods_type,
+		AND wc.ccbq_rtn_type = r.ccbq_rtn_type,
 		 t_user u
 		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id,
 		 t_order o,
@@ -291,14 +309,14 @@
 		WHERE
 			wc.ccbq_uid = u.u_id
 		AND wc.ccbq_order_id = o.id
-		AND wc.ccbq_goods_type = rl.rt_id
+		AND wc.ccbq_rtn_type = rl.rt_id
 		AND wc.ccbq_uid=#{sUid}
 		AND
 		<foreach collection="types" item="item" index="index" separator=" or " open="(" close=")">
 			wc.ccbq_status=#{item}
 		</foreach>
 		ORDER BY
-			ccbq_goods_type DESC,
+			ccbq_rtn_type DESC,
 			ccbq_id ASC
 	</select>
 
