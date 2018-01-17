@@ -231,7 +231,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			if(ObjectUtils.isNotEmpty(unCash)){
 				orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 			}
-
 			//添加卡包操作日志
 			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
 		}
@@ -263,7 +262,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		Map<Long,Long> gtUnPrice=new HashMap<Long, Long>();
 		Set<Long> gtyps=new HashSet<Long>();
 		//批量汪加商品日志
-		List<AccumulativeAmount> atas=new ArrayList<AccumulativeAmount>();
+//		List<AccumulativeAmount> atas=new ArrayList<AccumulativeAmount>();
 		for(Long key:maps.keySet()){
 			WalletCashBackQueue wcbq=new WalletCashBackQueue();
 			wcbq.setCcbqUid(buyUid);
@@ -282,23 +281,23 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 				gtUnPrice.put(wcbq.getCcbqGoodsType(),wcbq.getCcbqMoney());
 			}
 			gtyps.add(wcbq.getCcbqGoodsType());
-			AccumulativeAmount ata=new AccumulativeAmount();
-			ata.setAaGoodsId(key);
-			ata.setAaOrderId(orderId);
-			ata.setAaGoodsParentType(wcbq.getCcbqGoodsType());
-			ata.setAaConsumePrice(wcbq.getCcbqMoney());
-			ata.setAaCreateTime(new Date());
-			ata.setAaType(0);
-			atas.add(ata);
+//			AccumulativeAmount ata=new AccumulativeAmount();
+//			ata.setAaGoodsId(key);
+//			ata.setAaOrderId(orderId);
+//			ata.setAaGoodsParentType(wcbq.getCcbqGoodsType());
+//			ata.setAaConsumePrice(wcbq.getCcbqMoney());
+//			ata.setAaCreateTime(new Date());
+//			ata.setAaType(0);
+//			atas.add(ata);
 		}
 		// 添加用户至返现队列
 		if(ObjectUtils.isNotEmpty(wcbqs)){
 			walletCashBackQueueMapper.saveWalletCashBackQueues(wcbqs);
 		}
-		//添加返现队列日志
-		if(ObjectUtils.isNotEmpty(atas)){
-			accumulativeAmountMapper.saveAccumulativeAmounts(atas);
-		}
+//		//添加返现队列日志
+//		if(ObjectUtils.isNotEmpty(atas)){
+//			accumulativeAmountMapper.saveAccumulativeAmounts(atas);
+//		}
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH,gtyps);
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();

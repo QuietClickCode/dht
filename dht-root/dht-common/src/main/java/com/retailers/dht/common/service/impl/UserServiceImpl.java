@@ -314,6 +314,8 @@ public class UserServiceImpl implements UserService {
 		userCardPackage.setUwalletConsumeTotal(0l);
 		userCardPackage.setUtotalConsume(0l);
 		userCardPackage.setuOtherPayTotal(0l);
+		userCardPackage.setUcashCurPrice(0l);
+		userCardPackage.setUcashTotalPrice(0l);
 		userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		wxAuthUser.setWauUid(user.getUid());
 		System.out.println(JSON.toJSON(wxAuthUser));
