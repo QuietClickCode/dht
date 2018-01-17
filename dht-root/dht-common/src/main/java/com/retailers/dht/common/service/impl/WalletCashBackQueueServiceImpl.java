@@ -11,7 +11,6 @@ import com.retailers.dht.common.view.UserCashBackDetailView;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.NumberUtils;
-import jdk.management.resource.internal.TotalResourceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
