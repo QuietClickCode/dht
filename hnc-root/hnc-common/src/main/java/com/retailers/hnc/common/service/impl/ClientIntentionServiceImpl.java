@@ -58,8 +58,10 @@ public class ClientIntentionServiceImpl implements ClientIntentionService {
 		List<HouseTypeManage> houseTypeManages = houseTypeManageService.queryAllHouseType(housetypes);
 		HashMap<Long,HouseTypeManage> map = new HashMap<Long, HouseTypeManage>();
 		for (HouseTypeManage houseTypeManage : houseTypeManages) {
-			if(!map.containsKey(houseTypeManage.getHtId()))
-				map.put(houseTypeManage.getHtId(),houseTypeManage);
+			if(houseTypeManage != null){
+				if(!map.containsKey(houseTypeManage.getHtId()))
+					map.put(houseTypeManage.getHtId(),houseTypeManage);
+			}
 		}
 		houseTypeManages.clear();
 		for (Map.Entry<Long,HouseTypeManage> entry : map.entrySet()) {
