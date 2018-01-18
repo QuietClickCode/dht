@@ -143,10 +143,8 @@ public class SysUserServiceImpl implements SysUserService {
 			throw new AppException("请输入正确的账号");
 		}
 
-//		System.out.println(sysUser.getUcreateTime());
-//		System.out.println(sysUserPwd);
+		System.out.println(sysUser.getUcreateTime());
 		String pwd = Md5Encrypt.md5(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
-//		System.out.println(pwd);
 		if(!pwd.equals(sysUser.getUpassword())) {
 			throw new AppException("密码不正确");
 		}
@@ -162,8 +160,9 @@ public class SysUserServiceImpl implements SysUserService {
 				date = new Date((date.getTime()/1000+1)*1000);
 			}
 			sysUser.setUcreateTime(date);
+			System.out.println(newPwd);
 			String pwd = Md5Encrypt.md5(StringUtils.formate(newPwd, DateUtil.dateToString(date, DateUtil.DATE_LONG_SIMPLE_FORMAT)));
-//			System.out.println("new:"+pwd);
+			System.out.println("new"+pwd);
 			sysUser.setUpassword(pwd);
 			return updateSysUser(sysUser);
 		} catch (AppException e) {

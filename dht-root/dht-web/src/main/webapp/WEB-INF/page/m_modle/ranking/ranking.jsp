@@ -37,8 +37,8 @@
             height: 0.7rem;
             line-height: 0.55rem;
             background: url("/img/right_icon.jpg")no-repeat;
-            background-size: 0.5rem 0.5rem;
-            background-position: 0.05rem 0.07rem;
+            background-size: 0.3rem 0.3rem;
+            background-position: 0.2rem 0.17rem;
         }
     </style>
 </head>
