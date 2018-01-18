@@ -51,6 +51,15 @@
             overflow: scroll;
             padding-bottom: 1.32rem;
         }
+
+        .rannk_tb .td_photo .p1{
+            margin-top: 0;
+            margin-left: 0.3rem;
+        }
+
+        .rannk_tb .td_photo{
+            width: 2.6rem;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -78,7 +87,7 @@
             <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0">
                 <tr>
                     <th class="th1">序号</th>
-                    <th class="th2">会员</th>
+                    <th class="th2">会员ID</th>
                     <th class="th3">返现金额</th>
                     <th class="th4">状态</th>
                 </tr>
@@ -145,7 +154,7 @@
 
             for(var row of rows){
                 buyTotalPrice+=row.ccbqMoney;
-               let html='<tr><td class="td_number">'+row.rownum+'</td><td class="td_photo"><img src="'+row.userHead+'"/><p class="p1">'+row.userName+'</p>';
+               let html='<tr><td class="td_number">'+row.rownum+'</td><td class="td_photo"><p class="p1">'+row.ccbqUid+'</p>';
                html+='</td><td class="td_back_rmb"><p class="p1">'+row.ccbqMoneys+'</p><p class="p2">累计到'+buyTotalPrice*20/100+'可返现</p></td>';
                let ccbqStatus="己返现";
                let ccbqStatusColor="";
