@@ -22,8 +22,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.net.URLDecoder;
-import java.text.DateFormat;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -144,10 +142,9 @@ public class SysUserServiceImpl implements SysUserService {
 		if(sysUser == null){
 			throw new AppException("请输入正确的账号");
 		}
-		System.out.println("old"+sysUser.getUcreateTime());
+
+		System.out.println(sysUser.getUcreateTime());
 		String pwd = Md5Encrypt.md5(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
-		System.out.println(pwd);
-		System.out.println(sysUser.getUpassword());
 		if(!pwd.equals(sysUser.getUpassword())) {
 			throw new AppException("密码不正确");
 		}
@@ -157,12 +154,16 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean editSysUserPassword(String account, String sysUserPwd, String newPwd) throws AppException {
 		try {
 			SysUser sysUser = querySyUserByAccount(account, sysUserPwd);
-			System.out.println(sysUser.getUpassword());
 			Date date = new Date();
+			Long y = date.getTime()%1000;
+			if(y!=0){
+				date = new Date((date.getTime()/1000+1)*1000);
+			}
 			sysUser.setUcreateTime(date);
+			System.out.println(newPwd);
 			String pwd = Md5Encrypt.md5(StringUtils.formate(newPwd, DateUtil.dateToString(date, DateUtil.DATE_LONG_SIMPLE_FORMAT)));
+			System.out.println("new"+pwd);
 			sysUser.setUpassword(pwd);
-			System.out.println(pwd);
 			return updateSysUser(sysUser);
 		} catch (AppException e) {
 			throw new AppException("账户或者密码不正确");
