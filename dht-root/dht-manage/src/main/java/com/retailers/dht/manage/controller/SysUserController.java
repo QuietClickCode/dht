@@ -55,6 +55,24 @@ public class SysUserController extends BaseController {
         }
         return "sys_user/login";
     }
+
+    /**
+     * 修改密码
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping("/editSysUserPwd")
+    public String editSysUserPwd(HttpServletRequest request,HttpServletResponse response){
+        /*logger.debug("LoginAction exitLogin()");
+        // 登陆用户信息
+        SysUser sysUser = (SysUser)request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        // 清空在线列表
+        if (ObjectUtils.isNotEmpty(request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY))) {
+            request.getSession().removeAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        }*/
+        return "sys_user/reset_pwd";
+    }
+
     /**
      * 打开后台人员管理页面
      * @return

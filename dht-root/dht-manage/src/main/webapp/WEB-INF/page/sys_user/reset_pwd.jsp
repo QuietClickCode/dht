@@ -24,7 +24,7 @@
 
         .container_box{
             width: 400px;
-            height: 300px;
+            height: 380px;
             position: absolute;
             top: 50%;
             left: 50%;
@@ -112,52 +112,26 @@
     </style>
 </head>
 <body>
+<script type="text/javascript" src="/js/layer/layer.js"></script>
 <div class="container_box">
     <div class="container_hd">
-        <p>大汇堂后台登录</p>
+        <p>大汇堂修改密码</p>
     </div>
     <div class="container_bd">
         <div class="form">
             <div class="manage_info">
-                <input type="text" name="" class="syUserAccount" placeholder="用户名">
+                <input type="text" name="" class="account" placeholder="用户名">
             </div>
             <div class="manage_info">
-                <input type="password" name="" class="sysUserPwd" placeholder="密码">
+                <input type="password" name="" class="password" placeholder="密码">
             </div>
-            <span href="javascript:void(0)" onclick="test()" class="submit">登录</span>
+            <div class="manage_info">
+                <input type="password" name="" class="password" placeholder="请输入新密码">
+            </div>
+            <span href="javascript:void(0)" class="submit">登录</span>
         </div>
     </div>
 </div>
-<script type="text/javascript" charset="utf-8" src="/js/jquery.min.js"> </script>
-<script type="text/javascript" src="/js/layer/layer.js"></script>
-<script type="text/javascript">
 
-    var isSaves=false;
-    function test() {
-        if(!isSaves){
-            isSaves=true;
-            let name = $(".syUserAccount").val();
-            let pwd = $(".sysUserPwd").val();
-            $.ajax({
-                url:"/sysUser/querySyUserByAccount",
-                type:"post",
-                dataType:"json",
-                data:{
-                    account:name,
-                    sysUserPwd:pwd
-                },
-                success:function (data) {
-                    isSaves=false;
-                    if(data.status == 0){
-                        layer.msg("登录成功",{time:1000});
-                        window.location.href = "/home";
-                    }else{
-                        layer.msg(data.msg,{time:1000});
-                    }
-                }
-            });
-        }
-    }
-</script>
 </body>
 </html>
