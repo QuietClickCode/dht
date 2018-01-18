@@ -38,7 +38,7 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="menu_item" href="form_avatar.html">修改密码</a>
+                            <li><a  href="/sysUser/editSysUserPwd">修改密码</a>
                             </li>
                             <li><a href="/sysUser/exitLogin">安全退出</a>
                             </li>
