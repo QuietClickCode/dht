@@ -40,6 +40,17 @@
             background-size: 0.3rem 0.3rem;
             background-position: 0.2rem 0.17rem;
         }
+
+        body{
+            overflow: hidden;
+        }
+
+        .scroll_area{
+            width: 100%;
+            height: 11rem;
+            overflow: scroll;
+            padding-bottom: 1.32rem;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -53,20 +64,6 @@
         <c:forEach items="${gts}" var="rtnList" varStatus="vs">
             <a href="#gt_${rtnList.rtId}" onclick="selectGts(${rtnList.rtId})" <c:if test="${vs.index==0}">class="active" </c:if> attr="${rtnList.rtId}">${rtnList.rtName}</a>
         </c:forEach>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-        <a>蔬菜</a>
-
         <span class="right_icon"></span>
     </div>
 
@@ -86,8 +83,12 @@
                     <th class="th4">状态</th>
                 </tr>
             </table>
-            <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0" id="tbl_${rtnList.rtId}">
-            </table>
+            <div class="scroll_area">
+                <table class="rannk_tb" border="0" cellspacing="0" cellpadding="0" id="tbl_${rtnList.rtId}">
+
+                </table>
+            </div>
+
         </div>
         <%--<ul class="all-order-list displayN" >--%>
         <%--</ul>--%>
