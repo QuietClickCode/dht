@@ -113,6 +113,7 @@
 </head>
 <body>
 <script type="text/javascript" src="/js/layer/layer.js"></script>
+<script type="text/javascript" src="/js/jquery.min.js"></script>
 <div class="container_box">
     <div class="container_hd">
         <p>大汇堂修改密码</p>
@@ -126,12 +127,40 @@
                 <input type="password" name="" class="password" placeholder="密码">
             </div>
             <div class="manage_info">
-                <input type="password" name="" class="password" placeholder="请输入新密码">
+                <input type="password" name="" class="new_password" placeholder="请输入新密码">
             </div>
-            <span href="javascript:void(0)" class="submit">登录</span>
+            <span href="javascript:void(0)" class="submit">确认修改密码</span>
         </div>
     </div>
 </div>
-
+<script>
+    $(".submit").click(function () {
+        let account = $(".account").val();
+        let password = $(".password").val();
+        let new_password = $(".new_password").val();
+        if(account == '' || password == '' || new_password == ''){
+            layer.msg('账户信息不完整',{time:2000});
+            return;
+        }
+        $.ajax({
+            url:"/sysUser/editSysUserPassword",
+            type:"post",
+            dataType:"json",
+            data:{
+                account:account,
+                sysUserPwd:password,
+                newPwd:new_password
+            },
+            success:function (data) {
+                if(data.data){
+                    layer.msg("修改密码成功",{time:1000});
+                    window.location.href = "/sysUser/exitLogin";
+                }else{
+                    layer.msg(data.msg,{time:1000});
+                }
+            }
+        });
+    });
+</script>
 </body>
 </html>
