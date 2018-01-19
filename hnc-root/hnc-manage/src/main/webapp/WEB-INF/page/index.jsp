@@ -31,12 +31,12 @@
                         <span><img alt="image" class="img-circle" src="main/img/profile_small.jpg" /></span>
                         <a data-toggle="dropdown" class="dropdown-toggle" href="#">
                                 <span class="clear">
-                               <span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>
-                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                               <%--<span class="block m-t-xs"><strong class="font-bold">Beaut-zihan</strong></span>--%>
+                                <span class="text-muted text-xs block">你好<b class="caret"></b></span>
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a class="menu_item" href="form_avatar.html">修改密码</a>
+                            <li><a  href="/setpasswordpage">修改密码</a>
                             </li>
                             <li><a href="/login">安全退出</a>
                             </li>
@@ -88,15 +88,15 @@
                     </li>
                 </ul>
             </div>
-            <a href="login.html" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
+            <a href="/login" class="roll-nav roll-right J_tabExit"><i class="fa fa fa-sign-out"></i> 退出</a>
         </div>
-        <div class="row J_mainContent" id="content-main">
-            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="/statistics" frameborder="0" data-id="index_v1.html" seamless></iframe>
+        <div class="row J_mainContent" id="content-main" style="height: 100%">
+            <iframe class="J_iframe" name="iframe0" width="100%" height="100%" src="/static.jsp" frameborder="0" data-id="index_v1.html" seamless></iframe>
         </div>
-        <div class="footer">
-            <div class="pull-right">&copy; 2017-2020 <a href="http://www.zi-han.net/" target="_blank">大汇堂</a>
-            </div>
-        </div>
+        <%--<div class="footer">--%>
+            <%--<div class="pull-right">&copy; 2017-2020 <a href="http://www.zi-han.net/" target="_blank">大汇堂</a>--%>
+            <%--</div>--%>
+        <%--</div>--%>
     </div>
     <!--右侧部分结束-->
     <!--右侧边栏开始-->

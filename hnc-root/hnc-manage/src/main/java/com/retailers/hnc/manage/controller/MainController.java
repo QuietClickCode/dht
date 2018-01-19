@@ -50,7 +50,13 @@ public class MainController extends BaseController {
 
 	@RequestMapping(value={"/login"})
 	public String login(HttpServletRequest request){
+		request.getSession().invalidate();
 		return "login";
+	}
+
+	@RequestMapping(value={"/setpasswordpage"})
+	public String setpasswordpage(){
+		return "reset_pwd";
 	}
 
 }
