@@ -1030,21 +1030,25 @@ public class OrderServiceImpl implements OrderService {
             }
 			//取得用户折扣 取得用户有充值记录
 			Recharge recharge=rechargeMapper.queryUserBuyRecharge(user.getUrechage());
-			//取得是否返现 0 不返现，1 返现
-			int rcashback =recharge.getRcashback();
-
-			//设置订单是否返现
-			order.setOrderIntegralOrCash(rcashback);
 			//支付方式（钱包支付)
 			order.setOrderPayWay(OrderConstant.ORDER_PAY_WAY_WALLET);
 			//支付时间
 			order.setOrderPayCallbackDate(curDate);
 			//支付单号
 			order.setOrderPayCallbackNo(StringUtils.formate(order.getOrderNo(),"wallet"));
-			long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
+
 			String discountRemark="活动购买，不享受折扣";
-			//判断是否是一般购买
-			if(order.getOrderType().equals(OrderEnum.SHOPPING.getKey())){
+			if(ObjectUtils.isEmpty(recharge)){
+				order.setOrderIntegralOrCash(OrderConstant.ORDER_RETURN_TYPE_INTEGRAL);
+				discountRemark="老用户钱包购买不享受折扣";
+			}
+			long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
+			//判断是否是一般购买 且享受折扣
+			if(order.getOrderType().equals(OrderEnum.SHOPPING.getKey())&&ObjectUtils.isNotEmpty(recharge)){
+				//取得是否返现 0 不返现，1 返现
+				int rcashback =recharge.getRcashback();
+				//设置订单是否返现
+				order.setOrderIntegralOrCash(rcashback);
 				//取得用户的折扣
 				long discount=recharge.getRdiscount();
 				//设置订单折扣

@@ -9,6 +9,7 @@ import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.BuyInfoVo;
 import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.mybatis.pagination.Pagination;
+import com.retailers.tools.exception.AppException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -95,5 +96,16 @@ public class OrderServiceTest extends TestBaseJunit {
         params.put("orderStatus",orderStatus);
         Pagination<OrderVo> pages = orderService.queryOrderLists(params,1,10);
         System.out.println(JSON.toJSON(pages));
+    }
+
+    @Test
+    public void walletPay(){
+        long uid=1683058;
+        String orderNo="GM180119115349116";
+        try{
+            orderService.walletPay(uid,orderNo,"");
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
