@@ -105,9 +105,10 @@ public class SysUserController extends BaseController {
     * */
     @RequestMapping("editSysUserPassword")
     @ResponseBody
-    public BaseResp editSysUserPassword(HttpServletRequest request, String account,String sysUserPwd,String newPwd){
+    public BaseResp editSysUserPassword(HttpServletRequest request,String sysUserPwd,String newPwd){
+        SysUser sysUser = getCurLoginUser(request);
         try {
-            boolean flag=sysUserService.editSysUserPassword(account,sysUserPwd,newPwd);
+            boolean flag=sysUserService.editSysUserPassword(sysUser.getUaccount(),sysUserPwd,newPwd);
         } catch (AppException e) {
             return errorForSystem(e.getMessage());
         }

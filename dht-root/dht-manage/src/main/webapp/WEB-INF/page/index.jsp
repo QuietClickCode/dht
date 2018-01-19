@@ -38,7 +38,7 @@
                                 </span>
                         </a>
                         <ul class="dropdown-menu animated fadeInRight m-t-xs">
-                            <li><a  href="/sysUser/editSysUserPwd">修改密码</a>
+                            <li><a href="javascript:void(0)" class="editSysUserPassword">修改密码</a>
                             </li>
                             <li><a href="/sysUser/exitLogin">安全退出</a>
                             </li>
@@ -509,8 +509,67 @@
 
         </a>
     </div>--%>
+    <%--添加删除楼栋模态框--%>
+    <div class="modal fade" tabindex="-1" id="edit_password" role="dialog" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">修改密码</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label>当前密码</label>
+                            <input type="password" class="form-control password" placeholder="请输入当前密码">
+                        </div>
+                        <div class="form-group">
+                            <label>新密码</label>
+                            <input type="password" class="form-control new_password"  placeholder="请输入新密码">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary resetSysUserPassword">确定</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="main/js/jquery.min.js?v=2.1.4"></script>
+<script>
+    $(".editSysUserPassword").click(function () {
+        $("#edit_password").modal("show");
+    });
+    
+    $(".resetSysUserPassword").click(function () {
+        let password = $(".password").val();
+        let new_password = $(".new_password").val();
+        if(password == '' || new_password == ''){
+            layer.msg('账户信息不完整',{time:2000});
+            return;
+        }
+        $.ajax({
+            url:"/sysUser/editSysUserPassword",
+            type:"post",
+            dataType:"json",
+            data:{
+                sysUserPwd:password,
+                newPwd:new_password
+            },
+            success:function (data) {
+                if(data.data){
+                    layer.msg("修改密码成功",{time:1000});
+                    $("#edit_password").modal("hide");
+                }else{
+                    layer.msg(data.msg,{time:1000});
+                }
+            }
+        });
+    });
+</script>
+
 <script type="text/javascript">
     function onLoadMenu(){
         $.ajax({
