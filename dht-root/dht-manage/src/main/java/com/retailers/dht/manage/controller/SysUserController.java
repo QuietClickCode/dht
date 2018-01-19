@@ -37,8 +37,6 @@ public class SysUserController extends BaseController {
     @Autowired
     private SysUserService sysUserService;
 
-    public String mainMenu;
-
     /**
      * 用户退出
      * @return

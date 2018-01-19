@@ -62,13 +62,17 @@ public class WxPayController extends BaseController{
 
 
     @RequestMapping("payInfo")
-    public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price,String type){
+    public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price,String type,Boolean formate){
         ModelAndView model=new ModelAndView();
         model.addObject("orderNo",orderNo);
         Long price_=0l;
-        if(ObjectUtils.isNotEmpty(price)){
-            price_=Long.parseLong(price);
-            model.addObject("price", NumberUtils.formaterNumberPower(price_));
+        if(ObjectUtils.isNotEmpty(formate)&&formate==true){
+            model.addObject("price", price);
+        }else{
+            if(ObjectUtils.isNotEmpty(price)){
+                price_=Long.parseLong(price);
+                model.addObject("price", NumberUtils.formaterNumberPower(price_));
+            }
         }
         //取得用户钱包余额
         long uid=getCurLoginUserId(request);

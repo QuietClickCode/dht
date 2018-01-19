@@ -385,7 +385,7 @@
                     $("#allOrder").append(ov);
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="cancelOrder('+row.id+')">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderTradePrice+'&type='+row.orderType+'" class="btn2">付款</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="cancelOrder('+row.id+')">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderTradePrice+'&type='+row.orderType+'&formate=true" class="btn2">付款</a></div></div></li>';
                     $("#dfk").append(ov);
                 }else if(num == 3){
                     ov+='<div class="count-infor">';
@@ -418,7 +418,7 @@
             }
         });
     }
-    
+
     function orderConfirm(id) {
         $.ajax({
             url:"/order/orderConfirm",

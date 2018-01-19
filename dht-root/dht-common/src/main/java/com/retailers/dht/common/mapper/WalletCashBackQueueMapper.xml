@@ -240,13 +240,12 @@
 					ORDER BY
 						ccbq_id ASC
 				) d
-		) r ON wc.ccbq_id = r.ccbq_id,
+		) r ON wc.ccbq_id = r.ccbq_id
+		LEFT JOIN t_order o ON wc.ccbq_order_id = o.id,
 		 t_user u
-		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id,
-		 t_order o
+		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id
 		WHERE
 			wc.ccbq_uid = u.u_id
-		AND wc.ccbq_order_id = o.id
 		AND ccbq_rtn_type = #{gcId}
 		ORDER BY
 			ccbq_id ASC
@@ -301,14 +300,13 @@
 					ccbq_id ASC
 			) d
 		) r ON wc.ccbq_id = r.ccbq_id
-		AND wc.ccbq_rtn_type = r.ccbq_rtn_type,
+		AND wc.ccbq_rtn_type = r.ccbq_rtn_type
+		LEFT JOIN t_order o ON wc.ccbq_order_id = o.id,
 		 t_user u
 		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id,
-		 t_order o,
 		 t_return_list rl
 		WHERE
 			wc.ccbq_uid = u.u_id
-		AND wc.ccbq_order_id = o.id
 		AND wc.ccbq_rtn_type = rl.rt_id
 		AND wc.ccbq_uid=#{sUid}
 		AND
