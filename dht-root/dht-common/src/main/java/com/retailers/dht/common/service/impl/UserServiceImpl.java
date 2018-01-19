@@ -237,7 +237,7 @@ public class UserServiceImpl implements UserService {
 		}
 		//输和密码进行加密
 		String inPwd="";
-		if(user.getUisOld().intValue()== SystemConstant.USER_IS_OLD_YES){
+		if(user.getUoldPwd().intValue()== SystemConstant.USER_IS_OLD_YES){
 			//判断密码是否相同
 			inPwd=Md5Encrypt.md5(pwd,SystemConstant.DEFAUT_CHARSET);
 		}else{
