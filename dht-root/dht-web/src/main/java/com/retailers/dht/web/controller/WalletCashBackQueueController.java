@@ -81,6 +81,18 @@ public class WalletCashBackQueueController extends BaseController {
     }
 
     /**
+     * 打开用户提现详情
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("openUserCashDetails")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
+    public String openUserCashDetails(HttpServletRequest request, HttpServletResponse response){
+        return redirectUrl(request,"ranking/user_rankingList");
+    }
+
+    /**
      * 打开用户排名公示列表
      * @param request
      * @param response
