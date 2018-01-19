@@ -45,6 +45,7 @@ import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.PublicKey;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -113,7 +114,12 @@ public class WxShareController extends BaseController{
         setResponseHeaders(response);
 //        goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
         try{
-            String gidStr = url.substring(url.lastIndexOf("/")+1,url.indexOf("~inviter"));
+            String gidStr = "";
+            if(url.indexOf("~inviter")>0){
+                gidStr = url.substring(url.lastIndexOf("/")+1,url.indexOf("~inviter"));
+            }else{
+                gidStr = url.substring(url.lastIndexOf("/")+1,url.indexOf(".html"));
+            }
             System.out.println(gidStr);
             Long gid = Long.parseLong(gidStr);
             goodsNm = goodsService.queryGoodsByGid(gid).getGname();
@@ -133,5 +139,11 @@ public class WxShareController extends BaseController{
         response.setContentType("image/png");
         response.setHeader("Cache-Control", "no-cache, no-store");
         response.setHeader("Pragma", "no-cache");
+    }
+
+    public static void main(String[] a) throws Exception{
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        String pwd = Md5Encrypt.md5(StringUtils.formate("13896194604", DateUtil.dateToString(simpleDateFormat.parse("2017-09-03 18:39:41"), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
+        System.out.println(pwd);
     }
 }

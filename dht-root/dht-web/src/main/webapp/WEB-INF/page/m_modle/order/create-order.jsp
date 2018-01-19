@@ -336,6 +336,7 @@
 <script>
     var goodsData = (${sessionScope.checkOrderData});
     var isActivity = goodsData.isActivity;
+    var outuaId = goodsData.uaId;
     console.log(goodsData);
 
     var inittotalPrice = 0;
@@ -387,34 +388,58 @@
         var uaName;
         var uaAllAddress;
         var uaPhone;
+        console.log(sedata!=null&&sedata!='')
         if(sedata!=null&&sedata!=''){
             uaId = "${sessionScope.checkOrderAddress.uaId}";
             uaName = "${sessionScope.checkOrderAddress.uaName}";
             uaAllAddress = "${sessionScope.checkOrderAddress.uaAllAddress}";
             uaPhone = "${sessionScope.checkOrderAddress.uaPhone}";
+            <%
+                session.removeAttribute("checkOrderAddress");
+             %>
             addAdressData(uaId,uaName,uaPhone,uaAllAddress);
         }else{
-            $.ajax({
-                type:"post",
-                url:"/userAddress/queryUserAddress",
-                dataType: "json",
-                data:{pageNo:1,pageSize:1},
-                success:function(data){
-                    var rows = data.rows;
-                    if(rows!=null&&rows.length>0){
-                        var row = rows[0];
-                        uaId = row.uaId;
-                        uaName = row.uaName;
-                        uaAllAddress = row.uaAllAddress;
-                        uaPhone = row.uaPhone;
-                        addAdressData(uaId,uaName,uaPhone,uaAllAddress);
-                    }else{
-                        $('#ordernoaddressimg').parent().siblings().remove();
-                        $('#ordernoaddressimg').show();
+            if(outuaId!=null&&outuaId!=null){
+                $.ajax({
+                    type:"post",
+                    url:"/userAddress/queryUserAddressById",
+                    dataType: "json",
+                    data:{uaid:outuaId},
+                    success:function(data){
+                        var row = data.address;
+                        if(row!=null){
+                            uaId = row.uaId;
+                            uaName = row.uaName;
+                            uaAllAddress = row.uaAllAddress;
+                            uaPhone = row.uaPhone;
+                            addAdressData(uaId,uaName,uaPhone,uaAllAddress);
+                        }
                     }
-                }
-            });
+                });
+            }else{
+                $.ajax({
+                    type:"post",
+                    url:"/userAddress/queryUserAddress",
+                    dataType: "json",
+                    data:{pageNo:1,pageSize:1},
+                    success:function(data){
+                        var rows = data.rows;
+                        if(rows!=null&&rows.length>0){
+                            var row = rows[0];
+                            uaId = row.uaId;
+                            uaName = row.uaName;
+                            uaAllAddress = row.uaAllAddress;
+                            uaPhone = row.uaPhone;
+                            addAdressData(uaId,uaName,uaPhone,uaAllAddress);
+                        }else{
+                            $('#ordernoaddressimg').parent().siblings().remove();
+                            $('#ordernoaddressimg').show();
+                        }
+                    }
+                });
+            }
         }
+
     }
 
     function addAdressData(uaId,uaName,uaPhone,uaAllAddress) {
@@ -867,6 +892,7 @@
                     var data = sdata.data;
                     var orderNo = data.orderNo;
                     var price = data.totalPrice;
+
                     window.location.href = "/wxPay/payInfo?orderNo="+orderNo+"&price="+price;
                 }else{
                     alert(sdata.msg);
