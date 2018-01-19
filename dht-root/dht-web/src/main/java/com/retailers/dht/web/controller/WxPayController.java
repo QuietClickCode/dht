@@ -77,7 +77,7 @@ public class WxPayController extends BaseController{
         //取得用户钱包余额
         long uid=getCurLoginUserId(request);
         UserInfoVIew uiv=userService.queryUserInfoByUid(uid);
-        boolean isShowWallet=true;
+        boolean isShowWallet=false;
         if(ObjectUtils.isNotEmpty(type)&&type.equals(OrderEnum.RECHARGE.getKey())){
             isShowWallet=false;
         }else if(ObjectUtils.isNotEmpty(uiv)){
@@ -308,7 +308,7 @@ public class WxPayController extends BaseController{
                 retMap2.putAll(retWXMap);// map按key排序，用户验证签名
                 String sign = retMap2.get("sign").toString();
                 retMap2.remove("sign");
-                String mySign = WXPayUtil.generateSignature(retMap2, "CF26762CF05A42899F1681872CE3BC89");
+                String mySign = WXPayUtil.generateSignature(retMap2, WxConfig.WX_API_KEY);
                 logger.info("接受的签名:" + sign);
                 logger.info("我的签名:" + mySign);
                 if (sign.equals(mySign)) {
