@@ -36,12 +36,18 @@
             position: relative;
             text-align: center;
             width: 100%;
-            margin-bottom: 15px;
+            margin-bottom: 30px;
             color: #444342;
+            padding-top: 140px;
+            text-shadow: 0.1em 0.1em 0.2em black;
             letter-spacing: 2px;
-            font-size: 30px;
+            font-size: 27px;
+            color: #fff;
+            font-weight: 500;
+            background: url("/img/hncLogo.png") no-repeat;
+            background-size: 100px 100px;
+            background-position: top center;
         }
-
         .container_bd{
             position: relative;
             width: 320px;

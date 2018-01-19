@@ -164,20 +164,20 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>返现记录</span>
 </div>
 
 <div class="coupon-tab cash_tab" id="J_couponTab">
-    <a href="#wait_cash" class="active">
+    <a href="#wait_cash" class="active wait_cash">
         <p>待提现</p>
     </a>
 
-    <a href="#cash_allaow">
+    <a href="#cash_allaow" class="cash_allaow">
         <p>可提现</p>
     </a>
 
-    <a href="#cash_info">
+    <a href="#cash_info" class="cash_info">
         <p>已提现</p>
     </a>
 

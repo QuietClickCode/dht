@@ -1,22 +1,3 @@
-<%--
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<html>
-<head>
-    <title>用户排名公示</title>
-</head>
-<body>
-{"cashTotal":"0","allowCash":"0","cash":"0","waitCash":"0"}
-
-累计返现金额 ${details.cashTotal}
-待提现　${details.waitCash}
-可提现 ${details.allowCash}
-己提现 ${details.cash}
-
-
-</body>
-</html>
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html>
@@ -140,15 +121,15 @@
             <p class="cash_price"><span class="icon">￥</span>${details.cashTotal}</p>
         </div>
         <div class="cash_bottom">
-            <div class="cash_info">
+            <div class="cash_info waitCash">
                 <p>待提现</p>
                 <p>${details.waitCash}</p>
             </div>
-            <div class="cash_info">
+            <div class="cash_info allowCash">
                 <p>可提现</p>
                 <p>${details.allowCash}</p>
             </div>
-            <div class="cash_info">
+            <div class="cash_info cash">
                 <p>已提现</p>
                 <p>${details.cash}</p>
             </div>
@@ -169,6 +150,14 @@
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/tabs.js"></script>
-</body>
+<script>
+    $(".cash_info").click(function () {
+        $(location).attr('href', '/ranking/openUserCashDetails');
+    });
 
+    $(".cash_rank").click(function () {
+        $(location).attr('href', '/ranking/openUserRankingLists');
+    });
+</script>
+</body>
 </html>

@@ -92,6 +92,7 @@ public class WalletCashBackQueueController extends BaseController {
         return redirectUrl(request,"ranking/user_rankingList");
     }
 
+
     /**
      * 打开用户排名公示列表
      * @param request
