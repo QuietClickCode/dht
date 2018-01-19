@@ -3,6 +3,7 @@ package com.retailers.tools.utils;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
+import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import net.coobird.thumbnailator.Thumbnails;
@@ -172,26 +173,68 @@ public class ShareImageUtils {
         return  bi;
     }
 
+//    /**
+//     * 二维码生成
+//     * @param qrCodeContext 二维码内容
+//     * @return
+//     * @throws Exception
+//     */
+//    private static BufferedImage generateQRcode(String qrCodeContext)throws Exception{
+//        Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
+//        hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
+//        hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
+//        hints.put(EncodeHintType.MARGIN, 1);
+//        BitMatrix bitMatrix = new MultiFormatWriter().encode(qrCodeContext, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, hints);
+//        int width = bitMatrix.getWidth();
+//        int height = bitMatrix.getHeight();
+//        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+//        for (int x = 0; x < width; x++) {
+//            for (int y = 0; y < height; y++) {
+//                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+//            }
+//        }
+//        return image;
+//    }
+
     /**
      * 二维码生成
      * @param qrCodeContext 二维码内容
      * @return
      * @throws Exception
      */
-    private static BufferedImage generateQRcode(String qrCodeContext)throws Exception{
+    private static BufferedImage generateQRcode(String qrCodeContext) throws WriterException {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<EncodeHintType, Object>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         hints.put(EncodeHintType.CHARACTER_SET, CHARSET);
         hints.put(EncodeHintType.MARGIN, 1);
-        BitMatrix bitMatrix = new MultiFormatWriter().encode(qrCodeContext, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, hints);
+        BitMatrix bitMatrix = new MultiFormatWriter().encode(qrCodeContext,
+                BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, hints);
+        //调用去除白边方法
+        bitMatrix = deleteWhite(bitMatrix);
         int width = bitMatrix.getWidth();
         int height = bitMatrix.getHeight();
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        BufferedImage image = new BufferedImage(width, height,
+                BufferedImage.TYPE_INT_RGB);
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
-                image.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+                image.setRGB(x, y, bitMatrix.get(x, y)? 0xFF000000 : 0xFFFFFFFF);
             }
         }
         return image;
+    }
+    private static BitMatrix deleteWhite(BitMatrix matrix) {
+        int[] rec = matrix.getEnclosingRectangle();
+        int resWidth = rec[2] + 1;
+        int resHeight = rec[3] + 1;
+
+        BitMatrix resMatrix = new BitMatrix(resWidth, resHeight);
+        resMatrix.clear();
+        for (int i = 0; i < resWidth; i++) {
+            for (int j = 0; j < resHeight; j++) {
+                if (matrix.get(i + rec[0], j + rec[1]))
+                    resMatrix.set(i, j);
+            }
+        }
+        return resMatrix;
     }
 }

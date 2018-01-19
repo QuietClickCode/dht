@@ -2,6 +2,7 @@ package com.retailers.dht.manage.controller;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.encrypt.DESUtils;
@@ -13,6 +14,7 @@ import com.retailers.tools.utils.ShareImageUtils;
 import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import com.retailers.wx.common.utils.wx.WXPayUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -28,13 +30,21 @@ import java.util.Map;
 @RequestMapping("wxShare")
 public class WxShareController extends BaseController{
 
+    @Autowired
+    private GoodsService goodsService;
+
     @RequestMapping("shareImage")
     public void shareImage(HttpServletRequest request,HttpServletResponse response,String goodsImgUrl,String url,String goodsPrice,String goodsNm){
         setResponseHeaders(response);
 //        goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
         try{
+            String gidStr = url.substring(url.lastIndexOf("/")+1,url.indexOf(".html"));
+            System.out.println(gidStr);
+            Long gid = Long.parseLong(gidStr);
+            goodsNm = goodsService.queryGoodsByGid(gid).getGname();
             url = url.substring(1);
             url = SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL)+url;
+
             OutputStream outputStream=response.getOutputStream();
             ShareImageUtils.generateShareImage(goodsNm,goodsPrice,url,goodsImgUrl,outputStream);
             outputStream.close();

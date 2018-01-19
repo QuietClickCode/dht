@@ -6,6 +6,7 @@ import com.retailers.auth.annotation.CheckSession;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
 import com.retailers.dht.common.entity.PayInfo;
+import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.service.PayCallbackService;
 import com.retailers.dht.common.service.PayInfoService;
 import com.retailers.dht.web.base.BaseController;
@@ -49,6 +50,9 @@ import java.util.*;
 @Controller
 @RequestMapping("wxShare")
 public class WxShareController extends BaseController{
+
+    @Autowired
+    private GoodsService goodsService;
 
     @RequestMapping("createWxShare")
     @ResponseBody
@@ -109,6 +113,10 @@ public class WxShareController extends BaseController{
         setResponseHeaders(response);
 //        goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
         try{
+            String gidStr = url.substring(url.lastIndexOf("/")+1,url.indexOf("~inviter"));
+            System.out.println(gidStr);
+            Long gid = Long.parseLong(gidStr);
+            goodsNm = goodsService.queryGoodsByGid(gid).getGname();
             url = url.substring(1);
             Long uid = getCurLoginUserId(request);
             String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""), DesKey.WEB_KEY);
