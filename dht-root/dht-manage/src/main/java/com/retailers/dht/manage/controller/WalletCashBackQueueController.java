@@ -6,8 +6,11 @@ import com.retailers.dht.common.entity.ReturnList;
 import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
+import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,14 +62,11 @@ public class WalletCashBackQueueController extends BaseController {
     @RequestMapping("queryRankingList")
     @Function(label="取得排名公示列表", description = "取得排名公示列表", resourse = "ranking.queryRankingList",sort=1,parentRes="ranking.openRankingPage")
     @ResponseBody
-    public Map<String,Object> queryRankingList(Long gcId, String userNm, String phone){
+    public Map<String,Object> queryRankingList(Long gcId, Long status,String userNm, String phone,PageUtils pageForm){
         if(ObjectUtils.isEmpty(gcId)){
             return null;
         }
-        List<WalletCashBackQueueView> list = walletCashBackQueueService.queryWalletCashBackQueues(gcId);
-        Map<String,Object> rtn=new HashMap<String, Object>();
-        rtn.put("total",20);
-        rtn.put("rows",list);
-        return rtn;
+        Pagination<WalletCashBackQueueView> pages = walletCashBackQueueService.queryWalletCashBackQueues(gcId,status,phone,userNm,pageForm.getPageNo(),pageForm.getPageSize());
+        return queryPages(pages);
     }
 }

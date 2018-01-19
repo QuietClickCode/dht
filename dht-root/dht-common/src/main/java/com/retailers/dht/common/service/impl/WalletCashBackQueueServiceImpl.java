@@ -56,6 +56,22 @@ public class WalletCashBackQueueServiceImpl implements WalletCashBackQueueServic
 		return lists;
 	}
 
+
+	public Pagination<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId, Long type, String phone, String userNm, int pageNo, int pageSize) {
+		Pagination<WalletCashBackQueueView> page = new Pagination<WalletCashBackQueueView>();
+		Map<String,Object> params=new HashMap<String, Object>();
+		params.put("gcId",gcId);
+		params.put("type",type);
+		params.put("phone",phone);
+		params.put("userNm",userNm);
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<WalletCashBackQueueView> list = walletCashBackQueueMapper.queryWalletCashBackQueuePage(page);
+		page.setData(list);
+		return page;
+	}
+
 	/**
 	 * 取得用户返现详情
 	 * @param uid

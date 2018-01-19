@@ -66,6 +66,16 @@ public interface WalletCashBackQueueService {
 	public List<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId);
 
 	/**
+	 * 分页查询排名公示
+	 * @param gcId
+	 * @param type
+	 * @param phone
+	 * @param userNm
+	 * @return
+	 */
+	public Pagination<WalletCashBackQueueView> queryWalletCashBackQueues(Long gcId,Long type,String phone,String userNm, int pageNo, int pageSize);
+
+	/**
 	 * 取得用户返现详情
 	 * @param uid
 	 * @return
