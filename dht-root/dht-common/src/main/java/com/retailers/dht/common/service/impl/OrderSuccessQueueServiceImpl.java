@@ -512,5 +512,11 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		osq.setCreateTime(new Date());
 		orderSuccessQueueMapper.saveOrderSuccessQueueHistory(osq);
 	}
+
+	//计算当前用户累计金额
+	//计算用户钱包消费累计
+
+
+
 }
 

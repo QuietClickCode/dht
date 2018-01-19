@@ -112,7 +112,6 @@ public class WxShareController extends BaseController{
     @RequestMapping("shareImage")
     public void shareImage(HttpServletRequest request,HttpServletResponse response,String goodsImgUrl,String url,String goodsPrice,String goodsNm){
         setResponseHeaders(response);
-//        goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
         try{
             String gidStr = "";
             if(url.indexOf("~inviter")>0){
