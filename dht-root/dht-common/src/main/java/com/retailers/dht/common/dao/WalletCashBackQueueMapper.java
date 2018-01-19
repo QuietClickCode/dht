@@ -3,12 +3,14 @@ import com.retailers.dht.common.entity.LogWalletCashBackQueue;
 import com.retailers.dht.common.entity.WalletCashBackQueue;
 import com.retailers.dht.common.view.UserCashBackDetailView;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
+import com.retailers.dht.common.vo.RankingInfoVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * 描述：钱包消费返现(包括指定可返现商品类型）DAO
@@ -103,5 +105,20 @@ public interface WalletCashBackQueueMapper {
 	 * @return
 	 */
 	public List<UserCashBackDetailView> queryUserCashBackDetail(@Param("sUid") Long sUid, @Param("data")Date date);
+
+	/**
+	 * 根据条件取得满足条件的排名公示
+	 * @param infos
+	 * @param multiple 倍数
+	 * @return
+	 */
+	public List<WalletCashBackQueue> queryRtnCondtionDatas(@Param("infos") List<RankingInfoVo> infos,@Param("multiple") Long multiple);
+
+	/**
+	 * 设置商品己返现
+	 * @param wcbqIds
+	 * @return
+	 */
+	public int editorWalletCashBack(List<Long> wcbqIds);
 
 }

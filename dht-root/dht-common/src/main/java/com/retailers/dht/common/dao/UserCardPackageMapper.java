@@ -1,9 +1,13 @@
 package com.retailers.dht.common.dao;
+
 import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
 /**
  * 描述：用户钱包，积分DAO
  * @author zhongp
@@ -49,6 +53,12 @@ public interface UserCardPackageMapper {
 	public int userIntegral(@Param("uid")Long uid, @Param("integral")Long integral, @Param("version") Integer version);
 
 	/**
+	 * 添加用户返现金额
+	 * @param maps
+	 * @return
+	 */
+	public int addCashBack(List<Map<String,Long>> maps);
+	/**
 	 * 用户消费统计
 	 * @param uid 用户
 	 * @param type 类型
@@ -92,4 +102,10 @@ public interface UserCardPackageMapper {
 	 */
 	public List<UserCardPackage> queryUserCardPackageList(Pagination<UserCardPackage> pagination);
 
+	/**
+	 * 批量取得用户钱包数据
+	 * @param cbUids
+	 * @return
+	 */
+	public List<UserCardPackage> queryUserCardPackages(@Param("cbUids") Set<Long> cbUids);
 }

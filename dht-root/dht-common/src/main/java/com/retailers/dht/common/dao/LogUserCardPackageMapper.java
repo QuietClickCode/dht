@@ -1,7 +1,11 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.LogUserCardPackage;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
+import java.util.Set;
+
 /**
  * 描述：用户卡包操作日志（钱包，积分）DAO
  * @author zhongp
@@ -19,6 +23,13 @@ public interface LogUserCardPackageMapper {
 	 * @date 2017-11-22 23:16:42
 	 */
 	public int saveLogUserCardPackage(LogUserCardPackage logUserCardPackage);
+
+	/**
+	 * 批量添加日志
+	 * @param logUserCardPackages
+	 * @return
+	 */
+	public int saveLogUserCardPackages(List<LogUserCardPackage> logUserCardPackages);
 	/**
 	 * 编辑用户卡包操作日志（钱包，积分）
 	 * @param logUserCardPackage
@@ -51,5 +62,6 @@ public interface LogUserCardPackageMapper {
 	 * @date 2017-11-22 23:16:42
 	 */
 	public List<LogUserCardPackage> queryLogUserCardPackageList(Pagination<LogUserCardPackage> pagination);
+
 
 }

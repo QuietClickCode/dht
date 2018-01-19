@@ -69,6 +69,24 @@
 			#{uid,jdbcType=BIGINT},#{type,jdbcType=INTEGER},#{relationOrderId,jdbcType=BIGINT},#{val,jdbcType=BIGINT},#{curVal,jdbcType=BIGINT},#{remark,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
+	<!--批量添加日志 -->
+	<insert id="saveLogUserCardPackages" parameterType="com.retailers.dht.common.entity.LogUserCardPackage" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_log_user_card_package (
+		u_id,type,relation_order_id,val,cur_val,remark,create_time
+		) VALUES
+		<foreach collection="list" item="item" index="index" separator=",">
+			(
+				#{item.uid,jdbcType=BIGINT},
+				#{item.type,jdbcType=INTEGER},
+				#{item.relationOrderId,jdbcType=BIGINT},
+				#{item.val,jdbcType=BIGINT},
+				#{item.curVal,jdbcType=BIGINT},
+				#{item.remark,jdbcType=VARCHAR},
+				#{item.createTime,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+
+	</insert>
 	<!--修改用户卡包操作日志（钱包，积分） -->
 	<update id="updateLogUserCardPackage" parameterType="com.retailers.dht.common.entity.LogUserCardPackage">
 		UPDATE t_log_user_card_package

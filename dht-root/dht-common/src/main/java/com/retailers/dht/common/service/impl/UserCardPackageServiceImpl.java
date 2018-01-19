@@ -3,6 +3,7 @@ package com.retailers.dht.common.service.impl;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.dao.LogUserCardPackageMapper;
@@ -85,6 +86,15 @@ public class UserCardPackageServiceImpl implements UserCardPackageService {
 		lucp.setRemark(remark);
 		lucp.setCreateTime(curDate);
 		logUserCardPackageMapper.saveLogUserCardPackage(lucp);
+	}
+
+	/**
+	 * queryUserCardPackages
+	 * @param cbUids
+	 * @return
+	 */
+	public List<UserCardPackage> queryUserCardPackages(Set<Long> cbUids) {
+		return userCardPackageMapper.queryUserCardPackages(cbUids);
 	}
 }
 

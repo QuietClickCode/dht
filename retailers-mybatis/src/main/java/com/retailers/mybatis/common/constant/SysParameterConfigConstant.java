@@ -42,7 +42,8 @@ public class SysParameterConfigConstant {
      * 用户推广提成最大值
      */
     public static final String USER_RECOMMEND_COMMISSION_MAX="USER_RECOMMEND_COMMISSION_MAX";
-
+    //平台返现累计倍数
+    public static final String PLATFORM_CASH_BACK_MULTIPLE="PLATFORM_CASH_BACK_MULTIPLE";
 
 
 
