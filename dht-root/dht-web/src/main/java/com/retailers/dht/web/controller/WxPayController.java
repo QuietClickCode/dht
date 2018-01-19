@@ -68,6 +68,7 @@ public class WxPayController extends BaseController{
         Long price_=0l;
         if(ObjectUtils.isNotEmpty(formate)&&formate==true){
             model.addObject("price", price);
+            price_=NumberUtils.priceChangeFen(Double.parseDouble(price));
         }else{
             if(ObjectUtils.isNotEmpty(price)){
                 price_=Long.parseLong(price);
@@ -77,7 +78,7 @@ public class WxPayController extends BaseController{
         //取得用户钱包余额
         long uid=getCurLoginUserId(request);
         UserInfoVIew uiv=userService.queryUserInfoByUid(uid);
-        boolean isShowWallet=false;
+        boolean isShowWallet=true;
         if(ObjectUtils.isNotEmpty(type)&&type.equals(OrderEnum.RECHARGE.getKey())){
             isShowWallet=false;
         }else if(ObjectUtils.isNotEmpty(uiv)){
