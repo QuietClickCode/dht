@@ -25,7 +25,8 @@
     </select>
     <button class="btn btn-default team" type="button">对团队进行比对</button>
     <button class="btn btn-default employee" type="button">对置业顾问进行比对</button>
-    <button class="btn btn-default test" type="button">展示所有团队</button>
+    <button class="btn btn-default test" type="button" onclick="searchAllData();">展示所有团队</button>
+    <a id="exportExcelA" class="btn btn-primary" type="button" >导出表格</a>
 </div>
 
 <div>
@@ -153,12 +154,17 @@
 </script>
 
 <script>
-    $(".test").click(function () {
+//    $(".test").click(function () {
+//
+//    });
+    function searchAllData() {
+        console.log(111)
         notuseNumTotal = 0;
         useNumTotal = 0;
         countTotal = 0;
-        refreshFloorTableData();
-    });    
+        $("#goodsClassificationTable").bootstrapTable('destroy');
+        createCheckUserTable(oid);
+    }
 </script>
 
 <script type="text/javascript">
@@ -168,6 +174,15 @@
     var useNumTotal = 0;
     var countTotal = 0;
     function createCheckUserTable(id,emids,tids) {
+        if(emids==undefined||emids==null){
+            emids = null;
+        }
+        if(tids==undefined||tids==null){
+            tids = null;
+        }
+        $('#exportExcelA').attr('href','/checkUser/exportExcel?oid='+id+'&empIds='+emids+'&tids='+tids);
+
+
         $('#goodsClassificationTable').bootstrapTable({
             url:"/checkUser/queryAchievement",
             method: 'post',                      //请求方式（*）
