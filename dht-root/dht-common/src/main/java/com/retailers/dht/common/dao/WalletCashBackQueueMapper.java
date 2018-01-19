@@ -75,6 +75,13 @@ public interface WalletCashBackQueueMapper {
 	public List<WalletCashBackQueue> queryWalletCashBackQueueList(Pagination<WalletCashBackQueue> pagination);
 
 	/**
+	 * 分页查询
+	 * @param pagination
+	 * @return
+	 */
+	public List<WalletCashBackQueueView> queryWalletCashBackQueuePage(Pagination<WalletCashBackQueueView> pagination);
+
+	/**
 	 * 取得各个商品种 的返现例表
 	 * @param gcId 商品类型
 	 * @return

@@ -186,7 +186,85 @@
 		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_id = #{ccbqId}
 	</delete>
 
+
 	<!--分页查询 -->
+	<select id="queryWalletCashBackQueuePage" resultMap="rm_walletCashBackQueue_view" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+			r.rownum,
+			IFNULL(c.curCashQueue ,- 1) curCashQueue,
+			wc.ccbq_id,
+			ccbq_type,
+			ccbq_order_id,
+			ccbq_rtn_type,
+			ccbq_uid,
+			ccbq_money,
+			ccbq_status,
+			ccbq_create_time,
+			ccbq_cash_back_time,
+			ccbq_wait_time,
+			u.u_name,
+			wu.wau_headimgurl,
+			o.order_no
+		FROM
+			t_wallet_cash_back_queue wc
+		LEFT JOIN (
+			SELECT
+				@curCashRowNum := @curCashRowNum + 1 AS curCashQueue,
+				d.ccbq_id
+			FROM
+				(SELECT @curCashRowNum := 0) r,
+				(
+					SELECT
+						ccbq_id
+					FROM
+						t_wallet_cash_back_queue wc
+					WHERE
+						ccbq_status != 2
+					AND ccbq_rtn_type =#{params.gcId}
+					ORDER BY
+						ccbq_id ASC
+				) d
+		) c ON wc.ccbq_id = c.ccbq_id
+		LEFT JOIN (
+			SELECT
+				@rownum := @rownum + 1 AS rownum,
+				d.ccbq_id
+			FROM
+				(SELECT @rownum := 0) r,
+				(
+					SELECT
+						ccbq_id
+					FROM
+						t_wallet_cash_back_queue wc
+					WHERE
+						ccbq_rtn_type = #{params.gcId}
+					ORDER BY
+						ccbq_id ASC
+				) d
+		) r ON wc.ccbq_id = r.ccbq_id
+		LEFT JOIN t_order o ON wc.ccbq_order_id = o.id,
+		 t_user u
+		LEFT JOIN t_wx_auth_user wu ON u.u_id = wu.wau_u_id
+		WHERE
+			wc.ccbq_uid = u.u_id
+		AND ccbq_rtn_type = #{params.gcId}
+		<if test="null != params.type">
+			<if test="params.type==0">
+				AND wc.ccbq_status=2
+			</if>
+			<if test="params.type==1">
+				AND wc.ccbq_status!=2
+			</if>
+		</if>
+		<if test="null != params.phone and ''!=params.phone">
+			AND u.u_phone=#{params.phone}
+		</if>
+		<if test="null != params.userNm and ''!=params.userNm">
+			AND u.u_name=#{params.userNm}
+		</if>
+		ORDER BY
+			ccbq_id ASC
+	</select>
 	<select id="queryWalletCashBackQueues" resultMap="rm_walletCashBackQueue_view" parameterType="java.lang.Long">
 		SELECT
 			r.rownum,

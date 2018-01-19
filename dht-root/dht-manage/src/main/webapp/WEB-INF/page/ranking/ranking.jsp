@@ -18,6 +18,14 @@
         </select>
     </div>&nbsp;&nbsp;
     <div class="form-group">
+        <span>排名状态:</span>
+        <select id="search_rtn_status" name="search_rtn_status"  class="form-control" style="width: auto;">
+                <option value="">--全部--</option>
+                <option value="0">己返现</option>
+                <option value="1">未返现</option>
+        </select>
+    </div>&nbsp;&nbsp;
+    <div class="form-group">
         <input type="text" class="form-control" id="search_buy_name" placeholder="请输入购买人名">
     </div>&nbsp;&nbsp;
     <div class="form-group">
@@ -42,8 +50,29 @@
     var treeColumns=[
         {checkbox: true},
         {
+            field: 'rownum',
+            title: '返现排名'
+        },
+        {
+            field: 'curCashQueue',
+            title: '待返现排名',
+            formatter:function(value,row,index){
+               if(value==-1){
+                   return "己返现"
+               }
+                return value;
+            }
+        },
+        {
             field: 'rtName',
-            title: '排名公示名称'
+            title: '排名公示名称',
+            formatter:function(value,row,index){
+                var html=$("#search_rtn_type").find("option:selected").text();
+//                if(value){
+//                    html ='<img src="'+value+'" width="96px;" height="48px;">';
+//                }
+                return html;
+            }
         },
         {
             field: 'userName',
@@ -98,6 +127,7 @@
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
             gcId: $("#search_rtn_type").val(),
+            status: $("#search_rtn_status").val(),
             userNm: $("#search_buy_name").val(),
             phone: $("#search_buy_phone").val()
         };
