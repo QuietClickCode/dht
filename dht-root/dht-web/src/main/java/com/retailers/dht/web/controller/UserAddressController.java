@@ -60,6 +60,21 @@ public class UserAddressController extends BaseController {
     }
 
     /**
+     * 根据收货地址Id取得收货地址详情
+     * @param request
+     * @param uaid
+     * @return
+     */
+    @RequestMapping("queryUserAddressById")
+    @ResponseBody
+    public Map<String,Object> queryUserAddressById(HttpServletRequest request, Long uaid){
+        UserAddress address = userAddressService.queryUserAddressByUaId(uaid);
+        HashMap<String,Object> map = new HashMap<String,Object>();
+        map.put("address",address);
+        return map;
+    }
+
+    /**
      * 添加用户地址
      * @param request
      * @param userAddress 收货地址详情
