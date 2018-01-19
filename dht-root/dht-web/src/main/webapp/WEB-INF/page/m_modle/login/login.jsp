@@ -84,8 +84,8 @@
                 </div>
 
                 <div class="sub_box">
-                    <a href="javascript:void(0)" class="change_password">忘记密码？</a>
-                    <a href="javascript:void(0);" class="sub" style="color: #fff" onclick="userLogin()">登陆</a>
+                    <%--<a href="javascript:void(0)" class="change_password">忘记密码？</a>--%>
+                    <a href="javascript:void(0);" class="sub" style="color: #fff" onclick="userLogin()">登录</a>
                 </div>
             </form>
         </div>
