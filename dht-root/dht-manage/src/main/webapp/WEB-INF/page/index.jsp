@@ -527,6 +527,10 @@
                             <label>新密码</label>
                             <input type="password" class="form-control new_password"  placeholder="请输入新密码">
                         </div>
+                        <div class="form-group">
+                            <label>确认密码</label>
+                            <input type="password" class="form-control verify_password"  placeholder="请输入新密码">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -546,8 +550,15 @@
     $(".resetSysUserPassword").click(function () {
         let password = $(".password").val();
         let new_password = $(".new_password").val();
-        if(password == '' || new_password == ''){
+        let verify_password = $(".verify_password").val();
+
+        if(password == '' || new_password == '' || verify_password == ''){
             layer.msg('账户信息不完整',{time:2000});
+            return;
+        }
+
+        if(verify_password != new_password){
+            layer.msg('两次输入密码不相等',{time:2000});
             return;
         }
         $.ajax({
