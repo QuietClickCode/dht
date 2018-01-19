@@ -7,6 +7,9 @@ import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 @Controller
 @RequestMapping("wallet")
 public class WalletPayController extends BaseController {
+    Logger logger = LoggerFactory.getLogger(WalletPayController.class);
     @Autowired
     private OrderService orderService;
 
@@ -42,6 +46,7 @@ public class WalletPayController extends BaseController {
             e.printStackTrace();
             return errorForSystem(e.getMessage());
         }catch (Exception e){
+            logger.info(StringUtils.getErrorInfoFromException(e));
             e.printStackTrace();
         }
         return success(true);
