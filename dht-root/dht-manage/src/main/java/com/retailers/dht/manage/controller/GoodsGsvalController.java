@@ -7,6 +7,7 @@ import com.retailers.dht.common.service.GoodsGsvalService;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.PageUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,6 +31,16 @@ public class GoodsGsvalController extends BaseController {
     @RequestMapping("editGoodsGsval")
     @ResponseBody
     public BaseResp editGoodsGsval(GoodsGsval goodsGsval){
+        goodsGsval.setGsvVal(goodsGsval.getGsvVal().trim());
+        String gsval = goodsGsval.getGsvVal();
+        Map params = new HashMap();
+        params.put("gsvVal",gsval);
+        params.put("isDelete",0L);
+        params.put("gsId",goodsGsval.getGsId());
+        List<GoodsGsval> goodsGsvalList = goodsGsvalService.queryGoodsGsvalList(params,1,1).getData();
+        if(ObjectUtils.isNotEmpty(goodsGsvalList)){
+            return errorForSystem("已存在相同的规格名称("+goodsGsval.getGsvVal()+")");
+        }
         goodsGsval.setVersion(goodsGsvalService.queryGoodsGsvalByGsvId(goodsGsval.getGsvId()).getVersion());
         boolean flag = goodsGsvalService.updateGoodsGsval(goodsGsval);
         if(flag){
@@ -62,9 +74,22 @@ public class GoodsGsvalController extends BaseController {
     @RequestMapping("/addGoodsGsval")
     @ResponseBody
     public Map addGoodsGsval(GoodsGsval goodsGsval){
+        goodsGsval.setGsvVal(goodsGsval.getGsvVal().trim());
+        Map map = new HashMap();
+        String gsval = goodsGsval.getGsvVal();
+        Map params = new HashMap();
+        params.put("gsvVal",gsval);
+        params.put("isDelete",0L);
+        params.put("gsId",goodsGsval.getGsId());
+        List<GoodsGsval> goodsGsvalList = goodsGsvalService.queryGoodsGsvalList(params,1,1).getData();
+        if(ObjectUtils.isNotEmpty(goodsGsvalList)){
+            map.put("status",-1);
+            map.put("msg","已存在相同的规格名称("+goodsGsval.getGsvVal()+")");
+            return map;
+        }
         goodsGsval.setIsDelete(0L);
         goodsGsval=goodsGsvalService.saveGoodsGsval(goodsGsval);
-        Map map = new HashMap();
+
         map.put("row",goodsGsval);
         return map;
     }

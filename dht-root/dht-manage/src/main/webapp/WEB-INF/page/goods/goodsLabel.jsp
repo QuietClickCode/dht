@@ -643,6 +643,8 @@
             layer.msg('请先保存标签!');
             return;
         }
+//        glId = -glId/100000;
+//        console.log(glId)
         var checkboxs = $('input:checkbox[name="gglcheckbox"]:checked');
         var addggl = "";
         if(checkboxs.length > 0){
@@ -707,6 +709,8 @@
 
     function addgcglrel() {
         var glId = $('#glId').val();
+//        glId = -glId/100000;
+//        console.log(glId);
         var gcglcheckboxs = $('#gcglTbody').find('input[type=checkbox]');
         if(gcglcheckboxs!=null && gcglcheckboxs.length>0){
             var gclassIds = '';

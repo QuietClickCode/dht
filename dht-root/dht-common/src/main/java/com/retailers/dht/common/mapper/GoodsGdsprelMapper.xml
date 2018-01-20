@@ -85,7 +85,7 @@
 		SELECT t0.g_id,t1.sp_id,t1.sp_sale,t1.sp_inventory,t1.sp_discount_rate,t1.sp_bounds,group_concat(t3.gsv_val ORDER BY t3.gsv_val separator ' ') gsname,
 		t0.gd_residueinventory gdResidueinventory,t0.gd_price gdPrice,t0.is_delete,t0.gd_id
 		from  t_goods_detail t0
-		LEFT JOIN t_goods_gdsprel t1 on t0.gd_id=t1.gd_id and t1.sp_id=#{spId}
+		LEFT JOIN t_goods_gdsprel t1 on t0.gd_id=t1.gd_id and t1.sp_id=#{spId} and t1.is_delete=0
 		LEFT JOIN t_goods_ggsval_detail t2 ON t0.gd_id=t2.gd_id
 		LEFT JOIN t_goods_gsval t3 ON t2.gsv_id=t3.gsv_id
 		GROUP BY t0.gd_id,t1.is_delete,t2.is_delete,t3.is_delete

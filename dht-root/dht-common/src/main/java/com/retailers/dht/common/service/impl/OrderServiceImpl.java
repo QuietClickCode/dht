@@ -14,8 +14,11 @@ import com.retailers.dht.common.view.GoodsCouponView;
 import com.retailers.dht.common.vo.*;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
+import com.retailers.mybatis.common.dao.SysParameterConfigMapper;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
+import com.retailers.mybatis.common.service.SysParameterConfigService;
+import com.retailers.mybatis.common.vo.SysParamVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.Md5Encrypt;
@@ -88,6 +91,13 @@ public class OrderServiceImpl implements OrderService {
 	private CouponUserMapper couponUserMapper;
 	@Autowired
 	private UserCardPackageService userCardPackageService;
+	/**
+	 * 系统常量设置
+	 */
+	@Autowired
+	private SysParameterConfigMapper sysParameterConfigMapper;
+	@Autowired
+	private SysParameterConfigService sysParameterConfigService;
 
 	public boolean saveOrder(Order order) {
 		int status = orderMapper.saveOrder(order);
@@ -1310,6 +1320,22 @@ public class OrderServiceImpl implements OrderService {
 			logger.info("商品发货结束,订单ID:[{}],发货人：[{}],快递单号:[{}],执行时间:[{}]",orderId,uid,orderLogisticsCode,(System.currentTimeMillis()-curDate.getTime()));
 		}
 		return true;
+	}
+
+	public boolean orderSetting(String orderExpireDate, String orderConfirmDate, String orderCompleteDate, String defaultLogisPrice) {
+		List<SysParamVo> lists=new ArrayList<SysParamVo>();
+		Long price=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(defaultLogisPrice)));
+		SysParamVo oed=new SysParamVo(SysParameterConfigConstant.ORDER_EXPIRE_DATE,orderExpireDate);
+		SysParamVo ocd=new SysParamVo(SysParameterConfigConstant.ORDER_CONFIRM_DATE,orderConfirmDate);
+		SysParamVo ocds=new SysParamVo(SysParameterConfigConstant.ORDER_COMPLETE_DATE,orderCompleteDate);
+		SysParamVo dlp=new SysParamVo(SysParameterConfigConstant.DEFAULT_LOGISTICS_PRICE,price+"");
+		lists.add(oed);
+		lists.add(ocd);
+		lists.add(ocds);
+		lists.add(dlp);
+		sysParameterConfigMapper.batchUpdateSysParameterConfig(lists);
+		sysParameterConfigService.reloadSysParameterConfig();
+		return false;
 	}
 }
 

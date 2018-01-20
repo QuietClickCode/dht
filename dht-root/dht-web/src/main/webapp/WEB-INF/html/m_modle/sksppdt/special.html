@@ -226,7 +226,7 @@
         }
 
         <!--滑动分页-->
-        var pageNo=1;
+        var pageNo=2;
         var pageSize=10;
 
         <!--加载banner数据-->
@@ -292,16 +292,17 @@
                 element = $('#seckillul');
                 gotopath = '/seckillp/';
             }
-            pageNo = 1;
+            pageNo = 2;
             var date = new Date().pattern('yyyy-MM-dd hh:mm:ss');
             $.ajax({
                 type:"post",
                 url:'/openSalePromotion/querySalePromotionLists',
                 dataType: "json",
                 async:false,
-                data:{spType:spType,spRegion:useModal,pageNo:pageNo,pageSize:10},
+                data:{spType:spType,spRegion:useModal,pageNo:1,pageSize:10},
                 success:function(data){
                     var rows = data.rows;
+//                    pageNo = pageNo+1;
                     if(rows!=null&&rows.length>0){
                         if(spType==1){
                             timestape = data.rows[0].timestap*1000;
@@ -328,7 +329,8 @@
                                 '</li>';
                             element.append(html);
                         }
-                        pageNo++;
+
+//                        console.log(pageNo)
                         flag = true;
                         runloadgoods(spType);
 

@@ -59,7 +59,9 @@ public class GoodsGdsprelServiceImpl implements GoodsGdsprelService {
 		return page;
 	}
 	public boolean deleteGoodsGdsprelByGdspId(Long gdspId) {
-		int status = goodsGdsprelMapper.deleteGoodsGdsprelByGdspId(gdspId);
+		GoodsGdsprel goodsGdsprel = goodsGdsprelMapper.queryGoodsGdsprelByGdspId(gdspId);
+		goodsGdsprel.setIsDelete(1L);
+		int status = goodsGdsprelMapper.updateGoodsGdsprel(goodsGdsprel);
 		return status == 1 ? true : false;
 	}
 

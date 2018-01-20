@@ -1,7 +1,9 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.dao.GoodsLabelMapper;
+import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.entity.GoodsGglrel;
 import com.retailers.dht.common.entity.GoodsLabel;
@@ -130,33 +132,43 @@ public class GoodsLabelServiceImpl implements GoodsLabelService {
 
 	public List<GoodsVo> queryGoodsListsByGoodsLabel(Long glId,int pageNo,int pageSize){
 		GoodsLabel goodsLabel = goodsLabelMapper.queryGoodsLabelByGlId(glId);
+		System.out.println(JSON.toJSONString(goodsLabel));
 		Long isGoodslabel = goodsLabel.getIsGoodslabel();
 		List<GoodsVo> list = new ArrayList<GoodsVo>();
 		if(isGoodslabel==1){
 			list = goodsLabelMapper.queryGoodsListsByGoodsLabelIsGoodsLabel(glId);
 		}else{
 			List<GoodsGglrel> goodsGglrelList = goodsGglrelService.queryGoodsGglrelListsByGlId(glId);
+			System.out.println(JSON.toJSONString(goodsGglrelList));
 			for(GoodsGglrel goodsGglrel:goodsGglrelList){
 				Map params = new HashMap();
 				params.put("isDelete",0L);
 				params.put("isChecked",1L);
 				params.put("gclassification",goodsGglrel.getGclassId());
-				Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,pageNo,pageSize);
+				Pagination<GoodsVo> pagination = goodsService.queryGoodsList(params,1,999999999);
 				if(!ObjectUtils.isEmpty(pagination.getData())){
-					list.addAll(pagination.getData());
+//					list.addAll(pagination.getData());
+					for(GoodsVo goodsVo:pagination.getData()){
+						list.add(goodsVo);
+					}
 				}
 			}
-			HashSet<GoodsVo> set = new HashSet<GoodsVo>(list);
+			Set<GoodsVo> set = new LinkedHashSet<GoodsVo>(list);
 			list = new ArrayList<GoodsVo>(set);
 		}
+		int starti = (pageNo-1)*pageSize;
+		int endi = (pageNo)*pageSize;
 
-
-		if(!ObjectUtils.isEmpty(list)) {
-			for (GoodsVo goodsVo : list) {
-				goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL + goodsVo.getImgUrl());
-			}
+		List<GoodsVo> returnList = new ArrayList<GoodsVo>();
+		for(int i=starti;i<endi;i++){
+			returnList.add(list.get(i));
 		}
-		return list;
+//		if(!ObjectUtils.isEmpty(returnList)) {
+//			for (GoodsVo goodsVo : returnList) {
+//				goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL + goodsVo.getImgUrl());
+//			}
+//		}
+		return returnList;
 	}
 
 }

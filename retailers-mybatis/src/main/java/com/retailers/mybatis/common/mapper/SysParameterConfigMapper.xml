@@ -90,6 +90,22 @@
 		</set>
 		WHERE parameter_key = #{parameterKey} and parameter_version = #{parameterVersion}
 	</update>
+
+	<!--修改系统参数配置表 -->
+	<update id="batchUpdateSysParameterConfig">
+		UPDATE t_sys_parameter_config
+		<set>
+			parameter_value= CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  parameter_key=#{item.key} THEN
+				#{item.value}
+			</foreach> end
+		</set>
+		WHERE
+		<foreach collection="list" item="item" index="index" separator="or" >
+			parameter_key=#{item.key}
+		</foreach>
+	</update>
 	<!--删除系统参数配置表 -->
 	<delete id="deleteSysParameterConfigByParameterKey" parameterType="java.lang.String">
 		DELETE FROM t_sys_parameter_config WHERE parameter_key = #{parameterKey}

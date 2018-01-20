@@ -8,6 +8,7 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.tools.exception.AppException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 /**
@@ -181,6 +182,15 @@ public interface OrderService {
 	 */
 	public boolean sendGoods(Long uid,Long orderId,String logisticsCompany,String orderLogisticsCode,String sendRemark)throws AppException;
 
+	/**
+	 * 订单设置
+	 * @param orderExpireDate
+	 * @param orderConfirmDate
+	 * @param orderCompleteDate
+	 * @param defaultLogisPrice
+	 * @return
+	 */
+	public boolean orderSetting(String orderExpireDate, String orderConfirmDate, String orderCompleteDate, String defaultLogisPrice);
 }
 
 

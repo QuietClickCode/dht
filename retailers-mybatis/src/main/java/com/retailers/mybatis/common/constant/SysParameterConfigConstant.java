@@ -34,10 +34,7 @@ public class SysParameterConfigConstant {
      * 主服务器地址（移动端）
      */
     public static final String MASTER_SERVER_MOBILE_URL="MASTER_SERVER_MOBILE_URL";
-    /**
-     * 平台默认邮费
-     */
-    public static final String DEFAULT_LOGISTICS_PRICE="DEFAULT_LOGISTICS_PRICE";
+
     /**
      * 用户推广提成最大值
      */
@@ -45,6 +42,23 @@ public class SysParameterConfigConstant {
     //平台返现累计倍数
     public static final String PLATFORM_CASH_BACK_MULTIPLE="PLATFORM_CASH_BACK_MULTIPLE";
 
+
+    /**
+     * 平台默认邮费
+     */
+    public static final String DEFAULT_LOGISTICS_PRICE="DEFAULT_LOGISTICS_PRICE";
+    /**
+     * 订单失效时间
+     */
+    public static final String ORDER_EXPIRE_DATE="ORDER_EXPIRE_DATE";
+    /**
+     * 订单自动确认收货时间
+     */
+    public static final String ORDER_CONFIRM_DATE="ORDER_CONFIRM_DATE";
+    /**
+     * 订单完成时间
+     */
+    public static final String ORDER_COMPLETE_DATE="ORDER_COMPLETE_DATE";
 
 
     //系统 参数对应的key值

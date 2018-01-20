@@ -419,7 +419,7 @@
                     var imgUrl = row.imgurl;
                     var pid = row.parentId;
                     if (pid != null) {
-                        goodsType = '砍价商品';
+                        goodsType = '2';
                         url = '/bargainp/'+row.gid+'.html';
 
                         var params = 'goodsImgUrl=' + imgUrl + '&url=' + url + '&goodsPrice='+goodsType+'&goodsNm=' + goodsNm;
