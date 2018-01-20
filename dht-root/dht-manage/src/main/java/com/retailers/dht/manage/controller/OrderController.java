@@ -9,6 +9,7 @@ import com.retailers.dht.common.vo.UserVo;
 import com.retailers.dht.manage.base.BaseController;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.entity.SysParameterConfig;
+import com.retailers.mybatis.common.service.SysParameterConfigService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
@@ -137,17 +138,34 @@ public class OrderController extends BaseController {
         modelAndView.setViewName("order/order_setting");
         return modelAndView;
     }
+
     /**
      * 订单设置
      * @param request
-     * @param overduExpire 订单超时时间
-     * @param autoConfirmation 自动确认收货时间
-     * @param autoEnd 订单退款时间
-     * @param defaultExpressFee 默认快递费
+     * @param orderExpireDate
+     * @param orderConfirmDate
+     * @param orderCompleteDate
+     * @param defaultLogisPrice
      * @return
      */
-    public String orderSetting(HttpServletRequest request,String overduExpire,String autoConfirmation,String autoEnd,String defaultExpressFee){
-        return null;
+    @RequestMapping("orderSetting")
+    @ResponseBody
+    public BaseResp orderSetting(HttpServletRequest request,String orderExpireDate,String orderConfirmDate,String orderCompleteDate,String defaultLogisPrice){
+        if(ObjectUtils.isEmpty(orderExpireDate)){
+            return errorForParam("订单失效时间不能为空");
+        }
+        if(ObjectUtils.isEmpty(orderConfirmDate)){
+            return errorForParam("自动确认收货时间不能为空");
+        }
+        if(ObjectUtils.isEmpty(orderCompleteDate)){
+            return errorForParam("订单完成时间不能为空");
+        }
+        if(ObjectUtils.isEmpty(defaultLogisPrice)){
+            return errorForParam("平台默认快递费不能为空");
+        }
+        orderService.orderSetting(orderExpireDate,orderConfirmDate,orderCompleteDate,orderCompleteDate);
+
+        return success(true);
     }
 
 }

@@ -16,36 +16,39 @@
         <div class="col-md-8">
             <br>
             <br>
-            <form id="wxPayForm" method="POST" enctype="multipart/form-data" class="form-horizontal" data-value="0">
-                <input type="hidden" class="form-control" id="wxCertificateCode" name="wxCertificateCode"/>
+            <form id="orderSettingForm" method="POST" enctype="multipart/form-data" class="form-horizontal" data-value="0">
                 <div class="form-group">
-                    <label for="wxMchId" class="col-sm-3 control-label">订单失效时间：</label>
+                    <label for="orderExpireDate" class="col-sm-3 control-label">订单失效时间：</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="请输入订单失效时间,单位小时" id="wxMchId" name="wxMchId" value="${wxPay.wxMchId}" >
+                        <input type="text" class="form-control" placeholder="请输入订单失效时间,单位小时" id="orderExpireDate" name="orderExpireDate" value="${params.ORDER_EXPIRE_DATE}" >
                     </div>
+                    <label for="orderExpireDate" class="col-sm-3 control-label" style="text-align:left;color:#8a8686;">请输入订单失效时间,单位小时</label>
                 </div>
                 <div class="form-group">
-                    <label for="wxApiKey" class="col-sm-3 control-label">自动确认收货时间：</label>
+                    <label for="orderConfirmDate" class="col-sm-3 control-label">自动确认收货时间：</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="请输入自动确认收货时间,单位天" id="wxApiKey" name="wxApiKey" value="${wxPay.wxApiKey}" >
+                        <input type="text" class="form-control" placeholder="请输入自动确认收货时间,单位天" id="orderConfirmDate" name="orderConfirmDate" value="${params.ORDER_CONFIRM_DATE}" >
                     </div>
+                    <label class="col-sm-3 control-label" style="text-align:left;color:#8a8686;">请输入自动确认收货时间,单位天</label>
                 </div>
                 <div class="form-group">
-                    <label for="wxApiKey" class="col-sm-3 control-label">订单完成时间：</label>
+                    <label for="orderCompleteDate" class="col-sm-3 control-label">订单完成时间：</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="请输入订单完成时间,单位天" id="wxApiKey" name="wxApiKey" value="${wxPay.wxApiKey}" >
+                        <input type="text" class="form-control" placeholder="请输入订单完成时间,单位天" id="orderCompleteDate" name="orderCompleteDate" value="${params.ORDER_COMPLETE_DATE}" >
                     </div>
+                    <label class="col-sm-3 control-label" style="text-align:left;color:#8a8686;">请输入订单完成时间,单位天</label>
                 </div>
                 <div class="form-group">
-                    <label for="wxApiKey" class="col-sm-3 control-label">平台默认快递费：</label>
+                    <label for="defaultLogisPrice" class="col-sm-3 control-label">平台默认快递费：</label>
                     <div class="col-sm-6">
-                        <input type="text" class="form-control" placeholder="请输入平台默认快递费,单位元" id="wxApiKey" name="wxApiKey" value="${wxPay.wxApiKey}" >
+                        <input type="text" class="form-control" placeholder="请输入平台默认快递费,单位元" id="defaultLogisPrice" name="defaultLogisPrice" value="${params.DEFAULT_LOGISTICS_PRICE/100}" >
                     </div>
+                    <label class="col-sm-3 control-label" style="text-align:left;color:#8a8686;">请输入平台默认快递费,单位元</label>
                 </div>
                 <div class="form-group">
-                    <label for="wxApiKey" class="col-sm-3 control-label"></label>
+                    <label class="col-sm-3 control-label"></label>
                     <div class="col-sm-6">
-                        <button class="btn btn-default" onclick="saveWxInfo()" type="button">保存</button>
+                        <button class="btn btn-default" onclick="saveOrderSetting()" type="button">保存</button>
                     </div>
                 </div>
             </form>
@@ -56,76 +59,28 @@
 <script type="text/javascript" src="<%=path%>/js/filestyle/bootstrap-filestyle.min.js"></script>
 <script type="text/javascript" src="<%=path%>/js/common/form.js"></script>
 <script type="text/javascript">
-    $("#showWxCodeImageDiv").hide();
-    $("#wxCodeFileUploadDiv").hide();
-    var wxQcCodeId="${curWx.wxQrCode}";
     $(function () {
-        if(wxQcCodeId){
-            $("#uploadImage").attr("src",'${curWx.wxQrCodeUrl}');
-            $("#wxInfoForm #wxQrCode").val("${curWx.wxQrCode}");
-            $("#showWxCodeImageDiv").show();
-        }else{
-            $("#wxCodeFileUploadDiv").show();
-        }
         formValidater();
     });
-    var wxCodeFileFormSubmitIdx;
-    $('#wxCertificateCodeForm #dht_image_upload').filestyle({
-        badge: true,
-        input : false,
-        btnClass : 'btn-primary',
-        text:"替换文件",
-        /*htmlIcon : '<span class="oi oi-folder"></span> ',*/
-        onChange:function(){
-            wxCodeFileFormSubmitIdx = layer.load(2);
-            wxCodeFileFormSubmit();
-        }
-    });
-
-    let fileUpload="/file/imageUpload?isWatermark=false&isCompress=false&imageUse=goods"
-    function wxCodeFileFormSubmit(){
-        var formData = new FormData($( "#wxCertificateCodeForm" )[0]);
-        $.ajax({
-            url: fileUpload,
-            type: 'POST',
-            data: formData,
-            async: false,
-            cache: false,
-            contentType: false,
-            processData: false,
-            dataType: "json",
-            success: function (returndata) {
-                if(returndata.state=="SUCCESS"){
-                    $("#uploadNm").text(returndata.title);
-                    $("#uploadNm").text(returndata.title);
-                    $("#wxPayForm #wxCertificateCode").val(returndata.original);
-                }
-                layer.close(wxCodeFileFormSubmitIdx);
-            },
-            error: function (returndata) {
-                layer.close(wxCodeFileFormSubmitIdx);
-            }
-        });
-    }
     /**
      * 保存信息
      */
     var submitFlag=false;
-    function saveWxInfo(){
+    function saveOrderSetting(){
         wxCodeFileFormSubmitIdx = layer.load(2);
         if(!submitFlag){
             submitFlag=true;
             //开启校验
-            $('#wxPayForm').data('bootstrapValidator').validate();
+            $('#orderSettingForm').data('bootstrapValidator').validate();
             //判断校验是否通过
-            if(!$('#wxPayForm').data('bootstrapValidator').isValid()){
+            if(!$('#orderSettingForm').data('bootstrapValidator').isValid()){
                 layer.close(wxCodeFileFormSubmitIdx);
                 submitFlag=false;
                 return;
             }
-            var formData=$("#wxPayForm").serializeObject();
+            var formData=$("#orderSettingForm").serializeObject();
             $.ajax({
-                url: "/wx/editorWxPay",
+                url: "/order/orderSetting",
                 type: 'POST',
                 data: formData,
                 dataType: "json",
@@ -153,7 +108,7 @@
      * form 校验
      * */
     function formValidater(){
-        $('#wxPayForm')
+        $('#orderSettingForm')
             .bootstrapValidator({
                 container: 'tooltip',
                 //不能编辑 隐藏 不可见的不做校验
@@ -166,19 +121,51 @@
                     validating: 'glyphicon glyphicon-refresh'
                 },
                 fields: {
-                    wxMchId: {
-                        message: '微信商户号',
+                    orderExpireDate: {
+                        message: '订单失效时间不能为空',
                         validators: {
                             notEmpty: {
-                                message: '商户号不能为空'
+                                message: '订单失效时间不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                                message:'订单失效时间只允许在10位整数和2位小数范围内'
                             }
                         }
                     },
-                    wxApiKey: {
-                        message: '微信商户秘钥',
+                    orderConfirmDate: {
+                        message: '自动确认收货时间不能为空',
                         validators: {
                             notEmpty: {
-                                message: '微信商户秘钥不能为空'
+                                message: '自动确认收货时间不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)?$/,
+                                message:'自动确认收货时间只能为整数'
+                            }
+                        }
+                    },
+                    orderCompleteDate: {
+                        message: '订单完成时间不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '订单完成时间不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)?$/,
+                                message:'订单完成时间只能为整数'
+                            }
+                        }
+                    },
+                    defaultLogisPrice: {
+                        message: '平台默认快递费不能为空',
+                        validators: {
+                            notEmpty: {
+                                message: '平台默认快递费不能为空'
+                            },
+                            regexp:{
+                                regexp:/^([0-9]{1,10}|0)(\.\d{1,2})?$/,
+                                message:'平台默认快递费只允许在10位整数和2位小数范围内'
                             }
                         }
                     }

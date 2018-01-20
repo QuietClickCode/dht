@@ -1,6 +1,7 @@
 package com.retailers.mybatis.common.dao;
 
 import com.retailers.mybatis.common.entity.SysParameterConfig;
+import com.retailers.mybatis.common.vo.SysParamVo;
 import com.retailers.mybatis.pagination.Pagination;
 
 import java.util.List;
@@ -30,6 +31,13 @@ public interface SysParameterConfigMapper {
 	 * @date 2017-10-08 11:21:04
 	 */
 	public int updateSysParameterConfig(SysParameterConfig sysParameterConfig);
+
+	/**
+	 * 批量修改商品信息
+	 * @param sysParamVos
+	 * @return
+	 */
+	public int batchUpdateSysParameterConfig(List<SysParamVo> sysParamVos);
 	/**
 	 * 根据ParameterKey删除系统参数配置表
 	 * @param parameterKey
