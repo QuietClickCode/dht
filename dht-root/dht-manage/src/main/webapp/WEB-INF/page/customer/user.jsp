@@ -131,6 +131,10 @@
     var treeColumns=[
         {checkbox: true},
         {
+            field: 'uid',
+            title: '会员ID'
+        },
+        {
             field: 'uaccount',
             title: '登陆帐号'
         },
