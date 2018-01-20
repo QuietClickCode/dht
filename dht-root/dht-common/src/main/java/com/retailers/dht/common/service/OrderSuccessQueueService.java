@@ -67,6 +67,8 @@ public interface OrderSuccessQueueService {
 	 */
 	public void editorExeStatus(OrderSuccessQueue osq,boolean isSuccess);
 
+	public void test(Map<Long,Long> maps,Long orderId);
+
 }
 
 

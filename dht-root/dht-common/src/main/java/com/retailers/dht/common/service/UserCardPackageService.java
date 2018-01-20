@@ -4,7 +4,10 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.UserCardPackage;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+
 /**
  * 描述：用户钱包，积分Service
  * @author zhongp
@@ -75,6 +78,13 @@ public interface UserCardPackageService {
 	 * @param curDate 当前日期
 	 */
 	public void addUserCardPackageLog(Long uid,int type,Long orderId,Long val,Long curVal,String remark,Date curDate);
+
+	/**
+	 * 根据用户id 批量取得钱包数据
+	 * @param cbUids
+	 * @return
+	 */
+	public List<UserCardPackage> queryUserCardPackages(Set<Long> cbUids);
 
 }
 

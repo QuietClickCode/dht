@@ -10,6 +10,8 @@ import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.service.OrderSuccessQueueService;
 import com.retailers.dht.common.service.UserCardPackageService;
 import com.retailers.dht.common.vo.GoodsReturnVo;
+import com.retailers.dht.common.vo.RankingInfoVo;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
@@ -49,6 +51,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	private CurrentPlatformSalesMapper currentPlatformSalesMapper;
 	@Autowired
 	private UserCardPackageMapper userCardPackageMapper;
+	@Autowired
+	private LogUserCardPackageMapper logUserCardPackageMapper;
 	@Autowired
 	private UserCardPackageService userCardPackageService;
 	@Autowired
@@ -146,7 +150,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
 						orderTradePrice=order.getOrderMenberPrice()+NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),order.getOrderDiscount());
 						//判断是否是返现
-						if(order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
+						if(ObjectUtils.isNotEmpty(order.getOrderIntegralOrCash())&&order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 							//取得订单详情 进行商品分类处理
 							goodsType(order,ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
 						}else{
@@ -281,34 +285,44 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			wcbqs.add(wcbq);
 			gtyps.add(type);
 		}
-		// 添加用户至返现队列
-		if(ObjectUtils.isNotEmpty(wcbqs)){
-			walletCashBackQueueMapper.saveWalletCashBackQueues(wcbqs);
-			//添加返现日志
-			walletCashBackQueueMapper.saveWalletCashBackQueuesLogs(lwcbqs);
-		}
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH,gtyps);
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();
 		for(CurrentPlatformSales cpfs:list){
 			hasCpfs.put(cpfs.getCpsGoodsMainType(),cpfs);
 		}
+		// 添加用户至返现队列
+		if(ObjectUtils.isNotEmpty(wcbqs)){
+			for(WalletCashBackQueue wq:wcbqs){
+				long totalPrice = wq.getCcbqMoney();
+				if(hasCpfs.containsKey(wq.getCcbqRtnType())){
+					totalPrice+=hasCpfs.get(wq.getCcbqRtnType()).getCpsTotalPrice();
+				}
+				wq.setCcbqTotalPrice(totalPrice);
+			}
+			walletCashBackQueueMapper.saveWalletCashBackQueues(wcbqs);
+			//添加返现日志
+			walletCashBackQueueMapper.saveWalletCashBackQueuesLogs(lwcbqs);
+		}
 		//批量新增
 		List<CurrentPlatformSales> batchAdd=new ArrayList<CurrentPlatformSales>();
 		//批量修改
 		List<CurrentPlatformSales> batchUpdate=new ArrayList<CurrentPlatformSales>();
+		Map<Long,Long> rtnTypeTotal=new HashMap<Long, Long>();
 		//根据当次交易类型累计当前交易额
 		for(Long type:gtyps){
 			if(hasCpfs.containsKey(type)){
 				CurrentPlatformSales cpfs=hasCpfs.get(type);
 				cpfs.setCpsTotalPrice(hbsp.get(type));
 				batchUpdate.add(cpfs);
+				rtnTypeTotal.put(type,cpfs.getCpsTotalPrice()+hbsp.get(type));
 			}else{
 				CurrentPlatformSales cpfs=new CurrentPlatformSales();
 				cpfs.setCpsGoodsMainType(type);
 				cpfs.setCpsTotalPrice(hbsp.get(type));
 				cpfs.setCpsPayType(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH);
 				batchAdd.add(cpfs);
+				rtnTypeTotal.put(type,hbsp.get(type));
 			}
 		}
 		//批量添加
@@ -319,8 +333,91 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		if(ObjectUtils.isNotEmpty(batchUpdate)){
 			currentPlatformSalesMapper.batchUpdateCurrentPlatformSales(batchUpdate);
 		}
+		//开始计算是否存在可以返现用户
+		rankkingCalculation(rtnTypeTotal,orderId);
+
 		logger.info("进入订单返现方法结束,订单id:[{}],商品关联的类型：[{}],购买人id：[{}],执行时间:[{}]",orderId, JSON.toJSON(maps),buyUid,(System.currentTimeMillis()-curDate.getTime()));
 	}
+
+	/**
+	 * 计算排名返现
+	 * @param maps 传入参数（当前商品类型下的计算统计）
+	 */
+	private void rankkingCalculation(Map<Long,Long> maps,Long orderId){
+		logger.info("开始计算排名累计金额");
+		Date curDate=new Date();
+		List<RankingInfoVo> lists = new ArrayList<RankingInfoVo>();
+		for(Long key:maps.keySet()){
+			RankingInfoVo infos=new RankingInfoVo();
+			infos.setRtnType(key);
+			infos.setTotalPrice(maps.get(key));
+			lists.add(infos);
+		}
+		if(ObjectUtils.isNotEmpty(lists)){
+			//根据商品类型取得达到返现条件的排名公示
+			List<WalletCashBackQueue> wcbqs=walletCashBackQueueMapper.queryRtnCondtionDatas(lists, SysParameterConfigConstant.getValue(SysParameterConfigConstant.PLATFORM_CASH_BACK_MULTIPLE,Long.class));
+			//判断是否有用户达到返现条件
+			if(ObjectUtils.isNotEmpty(wcbqs)){
+				//返现关联人员
+				Set<Long> cbUid=new HashSet<Long>();
+				//返现id
+				List<Long> wcbqIds=new ArrayList<Long>();
+				for(WalletCashBackQueue wcbq:wcbqs){
+					cbUid.add(wcbq.getCcbqUid());
+					wcbqIds.add(wcbq.getCcbqId());
+				}
+				//批量取得返现人员
+				List<UserCardPackage> ucps=userCardPackageMapper.queryUserCardPackages(cbUid);
+				//用户对应当前返现金额
+				Map<Long,Long> ucpMap=new HashMap<Long, Long>();
+				//本次用户返现累计
+				Map<Long,Long> curCbMap=new HashMap<Long, Long>();
+				for(UserCardPackage ucp:ucps){
+					ucpMap.put(ucp.getId(),ucp.getUcashCurPrice());
+					curCbMap.put(ucp.getId(),0l);
+				}
+
+				List<LogUserCardPackage> lucps=new ArrayList<LogUserCardPackage>();
+				for(WalletCashBackQueue wcbq:wcbqs){
+					String remark="用户消费返现，订单id:"+orderId+",排名公示id:"+wcbq.getCcbqId();
+					//添加用户钱包日志
+					LogUserCardPackage lucp=new LogUserCardPackage();
+					lucp.setUid(wcbq.getCcbqUid());
+					lucp.setType(UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_CASH_BACK);
+					lucp.setRelationOrderId(orderId);
+					lucp.setVal(wcbq.getCcbqMoney());
+					lucp.setCurVal(ucpMap.get(wcbq.getCcbqUid())+curCbMap.get(wcbq.getCcbqUid()));
+					if(curCbMap.containsKey(wcbq.getCcbqUid())){
+						curCbMap.put(wcbq.getCcbqUid(),curCbMap.get(wcbq.getCcbqUid())+wcbq.getCcbqMoney());
+					}else{
+						curCbMap.put(wcbq.getCcbqUid(),wcbq.getCcbqMoney());
+					}
+					lucp.setRemark(remark);
+					lucp.setCreateTime(curDate);
+					lucps.add(lucp);
+				}
+				//批量添加日志
+				logUserCardPackageMapper.saveLogUserCardPackages(lucps);
+				List<Map<String,Long>> batchUCB=new ArrayList<Map<String, Long>>();
+				for(Long key:curCbMap.keySet()){
+					Map<String,Long> map=new HashMap<String, Long>();
+					map.put("id",key);
+					map.put("price",curCbMap.get(key));
+					batchUCB.add(map);
+				}
+				//批量修改用户返现金额
+				userCardPackageMapper.addCashBack(batchUCB);
+				//设置己返现
+				walletCashBackQueueMapper.editorWalletCashBack(wcbqIds);
+			}
+
+		}
+		logger.info("开始计算排名累计金额结束,执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
+
+	}
+
+
+
 	/**
 	 * 设置订单返现 交易返现
 	 * @param maps
@@ -517,6 +614,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	//计算用户钱包消费累计
 
 
-
+	public void test(Map<Long,Long> maps,Long orderId) {
+		rankkingCalculation(maps,orderId);
+	}
 }
 

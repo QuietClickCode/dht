@@ -106,9 +106,31 @@
 			u_total_integral = u_total_integral+#{integral},
 			u_cur_integral = u_cur_integral+#{integral},
 			u_total_consume=u_total_consume+#{integral},
-			version = version+1,
+			version = version+1
 		</set>
 		WHERE id = #{uid} and version = #{version}
+	</update>
+
+	<!--编辑用户积分 -->
+	<update id="addCashBack">
+		UPDATE t_user_card_package
+		<set>
+			u_cash_total_price = CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				u_cash_total_price+#{item.price}
+			</foreach> end,
+			u_cash_cur_price = CASE
+			<foreach collection="list" item="item" index="index" >
+				WHEN  id=#{item.id} THEN
+				u_cash_cur_price+#{item.price}
+			</foreach> end,
+			version = version+1
+		</set>
+		WHERE
+			<foreach collection="list" item="item" index="index" separator="or" >
+				id = #{item.id}
+			</foreach>
 	</update>
 	<!--用户消费统计 -->
 	<update id="statisticsUserSalseConsume">
@@ -145,4 +167,15 @@
 	<delete id="deleteUserCardPackageById" parameterType="java.lang.Long">
 		DELETE FROM t_user_card_package WHERE id = #{id}
 	</delete>
+
+	<!--批量取得用户钱包数据 -->
+	<select id="queryUserCardPackages" resultMap="rm_userCardPackage">
+		SELECT <include refid="userCardPackage_columns" />
+		FROM t_user_card_package
+		WHERE
+		id IN
+		<foreach collection="cbUids" item="item" index="index" separator="," open="(" close=")"  >
+			#{item}
+		</foreach>
+	</select>
 </mapper>

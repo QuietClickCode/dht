@@ -29,6 +29,10 @@ public class WalletCashBackQueue implements java.io.Serializable {
 	/**返现金额（分）*/
 	@NotEmpty
 	private Long ccbqMoney;
+	/**
+	 * 累计金额
+	 */
+	private Long ccbqTotalPrice;
 	/**当前状态（0 排队中，1 正在筹款，2 己返现）*/
 	@NotEmpty
 	private Long ccbqStatus;
@@ -62,6 +66,14 @@ public class WalletCashBackQueue implements java.io.Serializable {
 	}
 	public void setCcbqType(Integer value) {
 		this.ccbqType = value;
+	}
+
+	public Long getCcbqTotalPrice() {
+		return ccbqTotalPrice;
+	}
+
+	public void setCcbqTotalPrice(Long ccbqTotalPrice) {
+		this.ccbqTotalPrice = ccbqTotalPrice;
 	}
 
 	public Integer getCcbqType() {

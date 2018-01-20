@@ -1041,6 +1041,11 @@ public class OrderServiceImpl implements OrderService {
 			if(ObjectUtils.isEmpty(recharge)){
 				order.setOrderIntegralOrCash(OrderConstant.ORDER_RETURN_TYPE_INTEGRAL);
 				discountRemark="老用户钱包购买不享受折扣";
+			}else{
+				//取得是否返现 0 不返现，1 返现
+				int rcashback =recharge.getRcashback();
+				//设置订单是否返现
+				order.setOrderIntegralOrCash(rcashback);
 			}
 			long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
 			//判断是否是一般购买 且享受折扣

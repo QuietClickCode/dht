@@ -9,6 +9,7 @@
 		<result property="ccbqRtnType" column="ccbq_rtn_type"/>
 		<result property="ccbqUid" column="ccbq_uid"/>
 		<result property="ccbqMoney" column="ccbq_money"/>
+		<result property="ccbqTotalPrice" column="ccbq_total_price"/>
 		<result property="ccbqStatus" column="ccbq_status"/>
 		<result property="ccbqCreateTime" column="ccbq_create_time"/>
 		<result property="ccbqCashBackTime" column="ccbq_cash_back_time"/>
@@ -40,7 +41,7 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="walletCashBackQueue_columns">
-		ccbq_id,ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+		ccbq_id,ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_total_price,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 	</sql>
 	<!-- 根据钱包消费返现(包括指定可返现商品类型）主键取得数据 -->
 	<select id="queryWalletCashBackQueueByCcbqId" resultMap="rm_walletCashBackQueue" parameterType="java.lang.Long">
@@ -100,7 +101,7 @@
 	<!--添加钱包消费返现(包括指定可返现商品类型） -->
 	<insert id="saveWalletCashBackQueue" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_total_price,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		(
 			#{ccbqType,jdbcType=INTEGER},#{ccbqOrderId,jdbcType=BIGINT},#{ccbqRtnType,jdbcType=BIGINT},#{ccbqUid,jdbcType=BIGINT},#{ccbqMoney,jdbcType=BIGINT},#{ccbqStatus,jdbcType=BIGINT},#{ccbqCreateTime,jdbcType=TIMESTAMP},#{ccbqCashBackTime,jdbcType=TIMESTAMP},#{ccbqWaitTime,jdbcType=BIGINT},0
@@ -109,7 +110,7 @@
 	<!--批量添加返现队列-->
 	<insert id="saveWalletCashBackQueues" parameterType="com.retailers.dht.common.entity.WalletCashBackQueue" useGeneratedKeys="true" keyProperty="ccbqId">
 		INSERT INTO t_wallet_cash_back_queue (
-			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
+			ccbq_type,ccbq_order_id,ccbq_rtn_type,ccbq_uid,ccbq_money,ccbq_total_price,ccbq_status,ccbq_create_time,ccbq_cash_back_time,ccbq_wait_time,version
 		) VALUES
 		<foreach collection="list" item="item" index="index" separator="," >
 			(
@@ -118,6 +119,7 @@
 				#{item.ccbqRtnType,jdbcType=BIGINT},
 				#{item.ccbqUid,jdbcType=BIGINT},
 				#{item.ccbqMoney,jdbcType=BIGINT},
+				#{item.ccbqTotalPrice,jdbcType=BIGINT},
 				#{item.ccbqStatus,jdbcType=BIGINT},
 				#{item.ccbqCreateTime,jdbcType=TIMESTAMP},
 				#{item.ccbqCashBackTime,jdbcType=TIMESTAMP},
@@ -431,4 +433,38 @@
 			AND ccbq_status=2
 			AND ccbq_cash_back_time>=#{data}
 	</select>
+
+	<select id="queryRtnCondtionDatas" resultMap="rm_walletCashBackQueue">
+		SELECT
+		*
+		FROM
+		t_wallet_cash_back_queue q
+		WHERE
+			<foreach collection="infos" item="item" index="index" separator="or"  >
+				(
+					ccbq_rtn_type = #{item.rtnType}
+					AND ccbq_total_price * #{multiple} &lt;=  #{item.totalPrice}
+					AND q.ccbq_status != 2
+				)
+			</foreach>
+		ORDER BY
+		ccbq_rtn_type ASC,
+		ccbq_id ASC
+	</select>
+
+	<!--修改钱包消费返现(包括指定可返现商品类型） -->
+	<update id="editorWalletCashBack">
+		UPDATE t_wallet_cash_back_queue
+		<set>
+			ccbq_status = 2,
+			ccbq_cash_back_time = sysdate(),
+			ccbq_wait_time=timestampdiff(minute,ccbq_create_time,sysdate()),
+			version=version+1
+		</set>
+		WHERE
+		ccbq_id in
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")"  >
+			#{item}
+		</foreach>
+	</update>
 </mapper>
