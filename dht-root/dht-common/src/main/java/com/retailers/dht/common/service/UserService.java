@@ -146,6 +146,18 @@ public interface UserService {
 	public UserInfoVIew userLogin(String account,String pwd,Boolean isBindWx,Long wxId)throws AppException;
 
 	/**
+	 * 手机号码绑定登陆
+	 * @param phone
+	 * @param validateCode
+	 * @param isBindWx
+	 * @param wxId
+	 * @param urecommendId 推荐用户id
+	 * @return
+	 * @throws AppException
+	 */
+	public UserInfoVIew userPhoneLogin(String phone,String validateCode,Boolean isBindWx,Long wxId,Long urecommendId)throws AppException;
+
+	/**
 	 * 根据用户id取得登陆信息
 	 * @param uid 用户id
 	 * @return

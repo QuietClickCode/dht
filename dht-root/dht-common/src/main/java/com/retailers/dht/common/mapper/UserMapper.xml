@@ -72,6 +72,15 @@
 		<result property="ucurIntegral" column="u_cur_integral"/>
 		<result property="wauOpenid" column="wau_openid"/>
 	</resultMap>
+
+	<resultMap id="rm_user_bind_vo" type="com.retailers.dht.common.vo.UserBindVo">
+		<result property="uid" column="u_id"/>
+		<result property="uAccount" column="u_account"/>
+		<result property="uPhone" column="u_phone"/>
+		<result property="wxId" column="wau_id"/>
+		<result property="wxOpenId" column="wau_openid"/>
+	</resultMap>
+
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="user_columns">
 		u_id,u_recommend_id,u_account,u_phone,u_email,u_name,u_pwd,u_pay_pwd,u_imgid,u_type,u_first_commission,u_recommend_commission,u_rechage,u_status,is_delete,u_create_time,u_is_old,u_old_pwd,u_sex,u_use_module,version
@@ -110,6 +119,19 @@
 		SELECT <include refid="user_columns" />
 		FROM t_user WHERE (u_account = #{account} or u_phone=#{account} or u_email=#{account}) limit 1
 	</select>
+
+	<!--  根据手机号取得相应的用户信息 -->
+	<select id="queryUserByPhone" resultMap="rm_user_bind_vo">
+		SELECT
+			u.u_id,u.u_account,u.u_phone,u.u_account,wx.wau_id,wx.wau_openid
+		FROM
+			t_user u
+		LEFT JOIN t_wx_auth_user wx ON u.u_id = wx.wau_u_id
+		WHERE
+			u.u_account =#{phone}
+		OR u.u_phone =#{phone}
+	</select>
+
 	<!-- 平台会员查询条件组合 -->
 	<sql id="user_where">
 		<where>

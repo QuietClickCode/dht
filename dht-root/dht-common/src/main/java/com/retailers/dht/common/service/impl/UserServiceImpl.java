@@ -18,6 +18,7 @@ import com.retailers.dht.common.entity.UserCardPackage;
 import com.retailers.dht.common.entity.WxAuthUser;
 import com.retailers.dht.common.service.UserService;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserBindVo;
 import com.retailers.dht.common.vo.UserVo;
 import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.common.entity.Attachment;
@@ -282,6 +283,77 @@ public class UserServiceImpl implements UserService {
 		}
 		//根据用户取得相应的登陆信息
 		UserInfoVIew info=userMapper.queryLoginUserInfoView(user.getUid());
+		return info;
+	}
+
+	/**
+	 *
+	 * @param phone 手机号
+	 * @param validateCode 手机验证码
+	 * @param isBindWx 是否维定微信
+	 * @param wxId 绑定微信id
+	 * @return
+	 * @throws AppException
+	 */
+	public UserInfoVIew userPhoneLogin(String phone, String validateCode, Boolean isBindWx, Long wxId,Long urecommendId) throws AppException {
+		//校验短信是否正确
+		Date curDate =new Date();
+		SmsSendRecord smsSendRecord=smsSendRecordMapper.queryCurSmsSendRecordByPhone(phone, SmsSendRecordConstant.SMS_SEND_TYPE_BIND_PHONE,validateCode,curDate);
+		if(ObjectUtils.isEmpty(smsSendRecord)){
+			throw new AppException("验证码己失效");
+		}
+		smsSendRecord.setStatus(SmsSendRecordConstant.SMS_SEND_STAUTS_USE);
+		smsSendRecord.setUseDate(curDate);
+		smsSendRecordMapper.updateSmsSendRecord(smsSendRecord);
+
+		List<UserBindVo> user=userMapper.queryUserByPhone(phone);
+		Long curUid=null;
+		if(ObjectUtils.isNotEmpty(user)){
+			if(user.size()>1){
+				throw new AppException("该手机号己绑定多个帐号，请联系管理员");
+			}
+			curUid = user.get(0).getUid();
+		}else{
+			//帐号为空
+			User saveUser=new User();
+			saveUser.setUaccount(phone);
+			saveUser.setUtype(0);
+			saveUser.setUstatus(0);
+			saveUser.setIsDelete(0);
+			saveUser.setUcreateTime(curDate);
+			saveUser.setUisOld(0);
+			saveUser.setUoldPwd(0);
+			saveUser.setUname(phone);
+			saveUser.setuUseModule(0);
+			saveUser.setUrecommendId(urecommendId);
+			saveUser.setUphone(phone);
+			userMapper.saveUser(saveUser);
+			curUid=saveUser.getUid();
+		}
+		if(ObjectUtils.isNotEmpty(isBindWx)&&ObjectUtils.isNotEmpty(wxId)){
+			//根据微信id 取得当前登陆微信数据
+			WxAuthUser wxAuthUser=wxAuthUserMapper.queryWxAuthUserByWauId(wxId);
+			if(ObjectUtils.isNotEmpty(wxAuthUser)&&ObjectUtils.isEmpty(wxAuthUser.getWauUid())){
+				//设备微信关联用户
+				wxAuthUser.setWauUid(curUid);
+				wxAuthUserMapper.updateWxAuthUser(wxAuthUser);
+			}
+		}
+		//判断是否存在卡包信息
+		UserCardPackage userCardPackage=userCardPackageMapper.queryUserCardPackageById(curUid);
+		if(ObjectUtils.isEmpty(userCardPackage)){
+			userCardPackage = new UserCardPackage();
+			userCardPackage.setUtotalWallet(0l);
+			userCardPackage.setUcurWallet(0l);
+			userCardPackage.setUtotalIntegral(0l);
+			userCardPackage.setUcurIntegral(0l);
+			userCardPackage.setUtotalConsume(0l);
+			userCardPackage.setUwalletConsumeTotal(0l);
+			userCardPackage.setId(curUid);
+			userCardPackageMapper.saveUserCardPackage(userCardPackage);
+		}
+		//根据用户取得相应的登陆信息
+		UserInfoVIew info=userMapper.queryLoginUserInfoView(curUid);
 		return info;
 	}
 

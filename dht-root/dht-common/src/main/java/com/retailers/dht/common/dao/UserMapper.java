@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.User;
 import com.retailers.dht.common.view.UserInfoVIew;
+import com.retailers.dht.common.vo.UserBindVo;
 import com.retailers.dht.common.vo.UserVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
@@ -70,6 +71,13 @@ public interface UserMapper {
 	 * @return
 	 */
 	public User queryUserByAccount(String account);
+
+	/**
+	 * 根据手机号取得相应的用户信息
+	 * @param phone
+	 * @return
+	 */
+	public List<UserBindVo> queryUserByPhone(@Param("phone") String phone);
 	/**
 	 * 查询平台会员列表
 	 * @param pagination 分页对象
