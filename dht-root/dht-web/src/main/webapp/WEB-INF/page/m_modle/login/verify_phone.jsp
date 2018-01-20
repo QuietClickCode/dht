@@ -11,7 +11,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>用户登录</title>
+    <title>绑定手机号</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/login.css">
@@ -65,7 +65,7 @@
 <div class="login_app">
     <div class="form_login">
         <div class="login">
-            <span class="user_register" style="">手机号码验证</span>
+            <span class="user_register" style="">绑定手机号</span>
         </div>
         <!-- 是否绑定微信-->
         <input type="hidden" name="isBindWx" id="isBindWx" value="${isBindWx}">
