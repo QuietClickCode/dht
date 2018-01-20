@@ -84,7 +84,7 @@
             background-position: left center;
         }
 
-        #goodsNameDiv .span_tip{
+        #span_tips .span_tip{
             display: block;
             width: 2rem;
             height: 0.7rem;
@@ -147,7 +147,9 @@
     </div>
 
     <div class="bargain-text box2">
-        <div class="title" id="goodsNameDiv"></div>
+        <div class="title" id="goodsNameDiv">
+            <div id="span_tips"></div>
+        </div>
         <div class="seckill-address" id="personaddressdiv">
             <div class="text" >
                 <span class="seckill-address-title">产自</span>
@@ -516,7 +518,7 @@
                         queryuserisbuygoods();
                         timestape = data.rows[0].timestap*1000;
                         $('#gprice').html('￥'+ parseFloat(data.rows[0].gprice/100).toFixed(2));
-                        $('#goodsNameDiv').append(data.rows[0].goodsName);
+                        $('#goodsNameDiv').prepend(data.rows[0].goodsName);
                         $('#minprice').html('￥'+ parseFloat(data.rows[0].minprice/100).toFixed(2));
                         minPrice = parseFloat(data.rows[0].minprice/100).toFixed(2);
                         parentId = data.rows[0].parentId;
@@ -579,7 +581,7 @@
 
                         if(isMenberdiscount==0){
                             var html = '<span class="span_tip">会员不折扣商品</span>';
-                            $('#goodsNameDiv').append(html);
+                            $('#span_tips').append(html);
                         }
                         if(isPutway==0){
                             $('.bargain-btn2').hide();

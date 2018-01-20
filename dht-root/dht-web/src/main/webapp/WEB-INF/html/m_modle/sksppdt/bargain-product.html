@@ -14,7 +14,7 @@
             width: 100%;
         }
 
-        #goodsNameDiv .span_tip{
+        #span_tips .span_tip{
             display: block;
             width: 2rem;
             height: 0.7rem;
@@ -80,7 +80,9 @@
                 &nbsp;
             </span>
     </div>
-    <div class="title" id="goodsNameDiv"></div>
+    <div class="title" id="goodsNameDiv">
+        <div id="span_tips"></div>
+    </div>
     <div class="norms" id="rule" style="height: 60px">
         <span class="name">规则</span>
         <span class="text overflow" ></span>
@@ -488,7 +490,7 @@
                     }
                     $('#gdescription').html(row.gdescription);
 
-                    $('#goodsNameDiv').append(row.gname);
+                    $('#goodsNameDiv').prepend(row.gname);
 
                 }else{
                     nogoods();
@@ -517,7 +519,7 @@
 
                     if(isMenberdiscount==0){
                         var html = '<span class="span_tip">会员不折扣商品</span>';
-                        $('#goodsNameDiv').append(html);
+                        $('#span_tips').append(html);
                     }
                     if(isPutway==0){
                         $('#cutmyself').hide();
