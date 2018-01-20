@@ -238,7 +238,9 @@
         <div id="footer"></div>
 
     </div>
-
+    <form id="toGoodsListForm" method="post" action="/goods/toGoodsListPage">
+        <input id="condition" name="condition" type="hidden">
+    </form>
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/jquery.lazyload.js?v=1.9.1"></script>
     <script src="/js/footer.js"></script>
@@ -893,8 +895,11 @@
                 return;
             }
             pageNo=1;
-            alert(condition);
-            window.location.href='/goods/goodsList/'+condition+'~-1.html';
+            $('#condition').val(condition);
+            $('#toGoodsListForm').submit();
+//            alert(condition);
+//            condition = encodeURI(condition);
+//            window.location.href='/goods/goodsList/'+condition+'~-1.html';
         }
     </script>
 </body>
