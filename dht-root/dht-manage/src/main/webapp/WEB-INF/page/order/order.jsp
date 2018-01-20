@@ -335,10 +335,10 @@
     }
     function editorDetail(index, row) {
         let html='</br><table style="width:100%;" cellpadding="1" cellspacing="0" border="1"><tbody><tr>';
-        html+='<td>商品图标</td><td>商品名称</td><td>商品价格</td><td>销售价格</td><td>购买数量</td>';
+        html+='<td>商品图标</td><td>商品名称</td><td>商品价格</td><td>销售价格</td><td>商品规格</td><td>购买数量</td>';
         html+='</tr></tbody>'
         for(var info of row.ods){
-            html+='<tr><td><img src="'+info.imgUrl+'" alt="" style="width:64px;height:48px;"></td><td>'+info.gName+'</td><td>'+info.gdPrice+'</td><td>'+info.odMenberPrice+'</td><td>'+info.odBuyNumber+'</td></tr>'
+            html+='<tr><td><img src="'+info.imgUrl+'" alt="" style="width:64px;height:48px;"></td><td>'+info.gName+'</td><td>'+info.gdPrice+'</td><td>'+info.odMenberPrice+'</td><td>'+info.gsName+'</td><td>'+info.odBuyNumber+'</td></tr>'
         }
         html+='</table></br>';
         if(row.orderType!='RECHARGE'){
