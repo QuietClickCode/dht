@@ -436,10 +436,10 @@
                         var prow = rowDatas.get(pid);
                         var type = prow.spType;
                         if (type == 0) {
-                            goodsType = '特价商品';
+                            goodsType = '0';
                             url = '/specialp/' + row.goodsId + '.html';
                         } else {
-                            goodsType = '秒杀商品';
+                            goodsType = '1';
                             url = '/seckillp/' + row.goodsId + '.html';
                         }
 

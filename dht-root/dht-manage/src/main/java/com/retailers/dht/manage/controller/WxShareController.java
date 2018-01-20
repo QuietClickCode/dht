@@ -44,6 +44,13 @@ public class WxShareController extends BaseController{
             goodsNm = goodsService.queryGoodsByGid(gid).getGname();
             url = url.substring(1);
             url = SysParameterConfigConstant.getValue(SysParameterConfigConstant.MASTER_SERVER_MOBILE_URL)+url;
+            if("0".equals(goodsPrice)){
+                goodsPrice = "特价商品";
+            }else if("1".equals(goodsPrice)){
+                goodsPrice = "秒杀商品";
+            }else if("2".equals(goodsPrice)){
+                goodsPrice = "砍价商品";
+            }
 
             OutputStream outputStream=response.getOutputStream();
             ShareImageUtils.generateShareImage(goodsNm,goodsPrice,url,goodsImgUrl,outputStream);

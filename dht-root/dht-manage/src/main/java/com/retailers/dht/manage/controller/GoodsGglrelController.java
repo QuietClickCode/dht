@@ -56,8 +56,10 @@ public class GoodsGglrelController extends BaseController {
         if(!ObjectUtils.isEmpty(glIds)){
             flag = goodsGglrelService.saveGoodsGglrel(glIds,gid,getCurLoginUserId(request));
         }else if(!ObjectUtils.isEmpty(gids)){
+            glId = -glId/100000;
             flag = goodsGglrelService.saveGoodsGglrelByGids(gids,glId,getCurLoginUserId(request));
         }else{
+            glId = -glId/100000;
             flag = goodsGglrelService.saveGclassGoodsGglrel(glId,gclassIds);
         }
         return success(flag);

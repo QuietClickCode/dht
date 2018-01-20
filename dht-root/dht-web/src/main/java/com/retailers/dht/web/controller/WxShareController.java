@@ -142,7 +142,7 @@ public class WxShareController extends BaseController{
 
     public static void main(String[] a) throws Exception{
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        String pwd = Md5Encrypt.md5(StringUtils.formate("13896194604", DateUtil.dateToString(simpleDateFormat.parse("2017-09-03 18:39:41"), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
+        String pwd = Md5Encrypt.md5(StringUtils.formate("123456", DateUtil.dateToString(simpleDateFormat.parse("2018-01-19 23:23:21"), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
         System.out.println(pwd);
     }
 }

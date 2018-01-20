@@ -109,7 +109,7 @@
 			and t1.is_delete=#{params.isDelete}
 		</if>
 		and t3.is_delete=0
-		GROUP BY t1.uf_id,t2.g_id
+		GROUP BY t2.g_id
 		ORDER BY t1.creat_time DESC
 	</select>
 	<!--添加足迹表 -->

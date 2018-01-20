@@ -452,12 +452,13 @@
                 dataType: "json",
                 data:{gsId:gsId,gsvVal:newArr[i].value},
                 success:function(data){
-
+                    var status = data.status;
+                    if(status==-1){
+                        layer.msg(data.msg);
+                    }
                 }
             });
         }
-
-
     }
     function deletegsvs() {
         for(var i=0; i<delArr.length; i++){
@@ -483,7 +484,10 @@
                 dataType: "json",
                 data:{gsvId:hideobj.value,gsvVal:nowobj.val(),gsId:gsId,isDelete:0},
                 success:function(data){
-
+                    var status = data.status;
+                    if(status==-1){
+                        layer.msg(data.msg);
+                    }
                 }
             });
         }

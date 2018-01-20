@@ -113,7 +113,14 @@ public class GoodsController extends BaseController {
      */
     @RequestMapping("/queryGoodsList/queryGoodsList")
     @ResponseBody
-    public BaseResp queryGoodsList( String condition, Long gclass, int pageNo, int pageSize){
+    public BaseResp queryGoodsList( String condition, Long gclass, int pageNo, int pageSize,HttpServletRequest request){
+        String sesscondition = (String)request.getSession().getAttribute("condition");
+//        System.out.println("condition:"+condition);
+        if("/goods/toGoodsLis".equals(condition)){
+            condition = sesscondition;
+        }else{
+            request.getSession().removeAttribute("condition");
+        }
         List<GoodsVo> list = new ArrayList<GoodsVo>();
         try{
             if(!ObjectUtils.isEmpty(condition)){
@@ -178,4 +185,9 @@ public class GoodsController extends BaseController {
 
     }
 
+    @RequestMapping("toGoodsListPage")
+    public String toGoodsListPage(HttpServletRequest request,String condition){
+        request.getSession().setAttribute("condition",condition);
+        return redirectUrl(request,"goods/goods-list");
+    }
 }
