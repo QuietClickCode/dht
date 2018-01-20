@@ -511,5 +511,6 @@
 		<if test="null != params.orderBuyDel">
 			AND order_buy_del=#{params.orderBuyDel}
 		</if>
+		ORDER  BY  id DESC
 	</select>
 </mapper>
