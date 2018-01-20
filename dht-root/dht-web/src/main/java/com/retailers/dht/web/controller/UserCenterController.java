@@ -274,9 +274,9 @@ public class UserCenterController extends BaseController{
      */
     @RequestMapping("sendSmsValidCode")
     @ResponseBody
-    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
+//    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     public BaseResp sendSmsValidCode(HttpServletRequest request,String phone){
-        long uid=getCurLoginUserId(request);
+        Long uid=getCurLoginUserId(request);
         if(ObjectUtils.isEmpty(phone)){
             return errorForParam("手机号不能为空");
         }
@@ -545,7 +545,41 @@ public class UserCenterController extends BaseController{
         }
         return success(null);
     }
-
+    /**
+     * 用户登录
+     * @param request
+     * @param phone  手机号
+     * @param validateCode 密码
+     * @param isBindWx 成功后跳转跳径
+     * @param validateCode 验证码
+     * @return
+     */
+    @RequestMapping("userPhoneLogin")
+    @ResponseBody
+    public BaseResp userPhoneLogin(HttpServletRequest request,String phone,String validateCode,Boolean isBindWx){
+        if(ObjectUtils.isEmpty(phone)){
+            return errorForParam("手机号码不能为空");
+        }
+        if(ObjectUtils.isEmpty(validateCode)){
+            return errorForParam("手机验证码不能为空");
+        }
+        try{
+            Long wxId=null;
+            if(isBindWx){
+                WxAuthUser wxAuthUser=(WxAuthUser)request.getSession().getAttribute(SystemConstant.CUR_LOGIN_WXUSER_INFO);
+                wxId=wxAuthUser.getWauId();
+            }
+            //取得推荐人
+            Long urecommendId=getShareUserId(request);
+            UserInfoVIew userInfoVIew= userService.userPhoneLogin(phone,validateCode,isBindWx,wxId,urecommendId);
+            logger.info("取得用户登陆信息:{}", JSON.toJSON(userInfoVIew));
+            setCurLoginUser(request,userInfoVIew);
+        }catch(AppException e){
+            e.printStackTrace();
+            return errorForSystem(e.getMessage());
+        }
+        return success(null);
+    }
     /**
      *微信登陆未关联用户
      * @return

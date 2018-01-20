@@ -67,21 +67,25 @@
         <div class="login">
             <span class="user_register" style="">手机号码验证</span>
         </div>
+        <!-- 是否绑定微信-->
+        <input type="hidden" name="isBindWx" id="isBindWx" value="${isBindWx}">
+        <!-- 登陆后重定向url -->
+        <input type="hidden" name="redirectUrl" id="redirectUrl" value="${redirectUrl}">
         <div class="register_box" style="display: block;">
             <div class="form">
                 <div class="input-wrp">
-                    <input type="text" name="" class="phone_number" placeholder="输入手机号">
+                    <input type="text" name="phone_number" id="phone_number" class="phone_number"  placeholder="输入手机号">
                 </div>
 
                 <div class="input-wrp" style="width: 60%; display: inline-block; float: left;">
-                    <input type="text" name="" class="verify_code" placeholder="输入验证码">
+                    <input type="text" name="verify_code" id="verify_code" class="verify_code"  placeholder="输入验证码">
                 </div>
 
                 <div style="display: inline-block;margin-top: 0.4rem;float: right;margin-right: 5%;">
-                    <input type="button" class="get_verify_code" value="获取验证码" onclick="settime(this)">
+                    <input type="button" class="get_verify_code" value="获取验证码" onclick="getValidCode(this)">
                 </div>
                 <div class="sub_box" style="float: left;">
-                    <a href="" class="sub" style="color: #fff;">验证</a>
+                    <a href="javascript:void(0);" class="sub" style="color: #fff;" onclick="userLogin()">验证</a>
                 </div>
             </div>
         </div>
@@ -89,9 +93,97 @@
 </div>
 
 <script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
 <script>
+//    var setTime;
+//    var countdown = 60;
+//    function settime(val) {
+//        if (countdown == 0) {
+//            val.removeAttribute("disabled");
+//            val.value="获取验证码";
+//            countdown = 60;
+//            return;
+//        } else {
+//            val.setAttribute("disabled", true);
+//            val.value="重新发送(" + countdown + ")";
+//            countdown--;
+//        }
+//        setTime = setTimeout(function() {
+//            settime(val)
+//        },1000)
+//    }
+    var isLoging=false;
+    /**
+     * 用户登陆
+     */
+    function userLogin(){
+        if(!isLoging&&verifyForm()){
+            isLoging=true;
+            let loginData=new Object();
+            loginData["phone"]=$("#phone_number").val();
+            loginData["validateCode"]=$("#verify_code").val();
+            loginData["isBindWx"]=$("#isBindWx").val();
+            $.ajax({
+                url: "/user/userPhoneLogin",
+                type: "post",
+                dataType: "json",
+                data:loginData,
+                success: function (data) {
+                    isLoging=false;
+                    if(data.status==0){
+                        //提示
+                        layer.open({
+                            content: "手机绑定成功,即将为你跳转页面",
+                            skin: 'msg',
+                            time: 2, //2秒后自动关闭
+                            end:function(){
+                                let redirectUrl=$("#redirectUrl").val();
+                                if(redirectUrl){
+                                    window.location.href=redirectUrl;
+                                }else{
+                                    window.location.href="/";
+                                }
+                            }
+                        });
+                    }
+                    //提示
+                    layer.open({
+                        content: data.msg,
+                        skin: 'msg',
+                        time: 2 //2秒后自动关闭
+                    });
+                }
+            });
+        }
+    }
+
+
+    var countdown=60;
+    var id = "";
+    function getValidCode($this) {
+        if(verifyForm() == false)
+            return;
+        settime($this);
+        phone = $("#phone_number").val();
+        $.ajax({
+            url:"/user/sendSmsValidCode",
+            type:"post",
+            dataType:"json",
+            data:{
+                phone:phone
+            },
+            success:function (data) {
+                id = data.data;
+                layer.open({
+                    content: '短信已发送'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
+            }
+        });
+    }
     var setTime;
-    var countdown = 60;
+    var phone;
     function settime(val) {
         if (countdown == 0) {
             val.removeAttribute("disabled");
@@ -106,6 +198,19 @@
         setTime = setTimeout(function() {
             settime(val)
         },1000)
+    }
+
+
+    function verifyForm() {
+        if($("#phone_number").val() == ""){
+            layer.open({
+                content: '手机号不能为空'
+                ,skin: 'msg'
+                ,time: 1
+            });
+            return false;
+        }
+        return true;
     }
 </script>
 </body>

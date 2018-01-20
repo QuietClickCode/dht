@@ -62,6 +62,8 @@ public class BaseController extends BaseWrite {
         }
         return null;
     }
+
+
     /**
      * 取得分享用户 id
      * @param request

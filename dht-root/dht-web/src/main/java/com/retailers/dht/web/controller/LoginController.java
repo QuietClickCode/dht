@@ -29,7 +29,8 @@ public class LoginController extends BaseController{
      */
     @RequestMapping("loginPage")
     public ModelAndView openLogin(HttpServletRequest request, String wx,String redirectUrl){
-        String url=redirectUrl(request,"login/login");
+//        String url=redirectUrl(request,"login/login");
+        String url=redirectUrl(request,"login/verify_phone");
         ModelAndView model =new ModelAndView(url);
         boolean isBindWx=false;
         if(ObjectUtils.isNotEmpty(wx)){

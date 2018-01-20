@@ -124,14 +124,14 @@
             return false;
         }
 
-        if(!$(".user-phone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
-            layer.open({
-                content: '手机格式不正确'
-                ,skin: 'msg'
-                ,time: 1
-            });
-            return false;
-        }
+//        if(!$(".user-phone").val().match(/^(((13[0-9]{1})|159|153)+\d{8})$/)){
+//            layer.open({
+//                content: '手机格式不正确'
+//                ,skin: 'msg'
+//                ,time: 1
+//            });
+//            return false;
+//        }
         return true;
     }
 
