@@ -78,7 +78,7 @@
                 </div>
 
                 <div style="display: inline-block;margin-top: 0.4rem;float: right;margin-right: 5%;">
-                    <a class="get_verify_code" onclick="settime(this)">获取验证码</a>
+                    <input type="button" class="get_verify_code" value="获取验证码" onclick="settime(this)">
                 </div>
                 <div class="sub_box" style="float: left;">
                     <a href="" class="sub" style="color: #fff;">验证</a>
@@ -91,6 +91,7 @@
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script>
     var setTime;
+    var countdown = 60;
     function settime(val) {
         if (countdown == 0) {
             val.removeAttribute("disabled");
