@@ -29,6 +29,10 @@ public class OrderConstant {
      */
     public static final int ORDER_STATUS_PAY_SEND_CANCEL=7;
     /**
+     * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，7 取消订单（未付款），8 订单未付款超时处理,9 交易完成（收货后15天关闭交易，不能进行退款申请））
+     */
+    public static final int ORDER_STATUS_PAY_EXPIRE_TIME=8;
+    /**
      * 订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，7 取消订单（未付款），9 交易完成（收货后15天关闭交易，不能进行退款申请））
      */
     public static final int ORDER_STATUS_PAY_END=9;

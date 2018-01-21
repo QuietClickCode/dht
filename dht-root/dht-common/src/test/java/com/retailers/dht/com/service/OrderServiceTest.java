@@ -108,4 +108,9 @@ public class OrderServiceTest extends TestBaseJunit {
             e.printStackTrace();
         }
     }
+
+    @Test
+    public void clearExpireOrder(){
+        orderService.clearExpireOrder();
+    }
 }

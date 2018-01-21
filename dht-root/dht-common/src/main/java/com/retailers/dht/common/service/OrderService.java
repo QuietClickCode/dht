@@ -191,6 +191,12 @@ public interface OrderService {
 	 * @return
 	 */
 	public boolean orderSetting(String orderExpireDate, String orderConfirmDate, String orderCompleteDate, String defaultLogisPrice);
+
+	/**
+	 * 清除超时订单
+	 * @return
+	 */
+	public void clearExpireOrder();
 }
 
 

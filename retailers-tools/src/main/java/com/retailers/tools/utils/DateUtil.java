@@ -484,7 +484,23 @@ public class DateUtil {
         c.add(Calendar.HOUR, (int)hour);
         return c.getTime();
     }
-
+	/**
+	 *传入时间添加小时
+	 * @param date
+	 * @param hour
+	 * @return
+	 */
+	public static Date addHour(Date date,Double hour){
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int min=0;
+		if(ObjectUtils.isNotEmpty(hour)){
+			min=(int)(hour*60);
+		}
+//		c.add(Calendar.HOUR, (int)hour);
+		c.add(Calendar.MINUTE,min);
+		return c.getTime();
+	}
 	/**
 	 * 传入的时间加上分钟数
 	 *

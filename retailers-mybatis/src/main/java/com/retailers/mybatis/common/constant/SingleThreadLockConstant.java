@@ -31,6 +31,10 @@ public class SingleThreadLockConstant {
      * 确认交易订单
      */
     public static final String CONFIRM_TRADE_ORDER="confirmOrder";
+    /**
+     * 清除超时订单
+     */
+    public static final String CLEAR_EXPIRE_ORDER="clearExpireOrder";
 
 
 

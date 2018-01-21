@@ -513,4 +513,29 @@
 		</if>
 		ORDER  BY  id DESC
 	</select>
+
+
+	<!--分页查询 -->
+	<select id="queryOrderByStatus" resultMap="rm_order">
+		SELECT
+			<include refid="order_columns" />
+		FROM
+		t_order o
+		WHERE
+		order_status =#{orderStatus}
+		AND ${column} &lt;= #{date}
+	</select>
+
+	<!--订单支付回调 -->
+	<update id="clearExpireOrders">
+		UPDATE t_order
+		<set>
+				order_status = 8,
+				version = version+1
+		</set>
+		WHERE id IN
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")" >
+			#{item}
+		</foreach> AND order_status=0
+	</update>
 </mapper>

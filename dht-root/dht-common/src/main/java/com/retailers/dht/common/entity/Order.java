@@ -25,7 +25,7 @@ public class Order implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 20)
 	private String orderNo;
-	/**订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，9 交易完成（收货后15天关闭交易，不能进行退款申请））*/
+	/**订单状态(0 未支付，1 支付中，2 支付失败，3 支付成功/待发货，4 己发货，5 确认收货，6 起发退款 ，7订单超时，9 交易完成（收货后15天关闭交易，不能进行退款申请））*/
 	@NotEmpty
 	private Integer orderStatus;
 	/**支付通道(0 微信，1 支付宝，2 用户钱包）*/

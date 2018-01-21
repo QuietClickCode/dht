@@ -80,6 +80,7 @@ public class GoodsGsvalController extends BaseController {
         Map params = new HashMap();
         params.put("gsvVal",gsval);
         params.put("isDelete",0L);
+        params.put("gid",goodsGsval.getGid());
         params.put("gsId",goodsGsval.getGsId());
         List<GoodsGsval> goodsGsvalList = goodsGsvalService.queryGoodsGsvalList(params,1,1).getData();
         if(ObjectUtils.isNotEmpty(goodsGsvalList)){
