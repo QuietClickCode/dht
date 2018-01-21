@@ -110,7 +110,7 @@ public class OrderServiceTest extends TestBaseJunit {
     }
 
     @Test
-    public void clearExpireOrder(){
+    public void clearExpireOrder()throws Exception{
         orderService.clearExpireOrder();
     }
 }

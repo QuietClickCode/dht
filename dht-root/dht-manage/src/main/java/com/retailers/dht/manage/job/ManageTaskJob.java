@@ -71,6 +71,8 @@ public class ManageTaskJob {
         }
         try{
             orderser.clearExpireOrder();
+        }catch (Exception e){
+
         }finally {
             procedureToolsService.singleUnLockManager(key);
         }

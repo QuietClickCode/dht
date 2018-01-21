@@ -101,6 +101,8 @@
         <task:scheduled ref="mTaskJob" method="clearSequenceData" cron="0 0 0/1 * * ?"/>
         <task:scheduled ref="mTaskJob" method="clearExpireCoupon" cron="1 * * * * ?"/>
         <task:scheduled ref="mTaskJob" method="executeOrderQueue" cron="0 0/3 * * * ?"/>
+        <!-- 每小时清除一次过期订单 -->
+        <task:scheduled ref="mTaskJob" method="executeOverdueUnPayOrder" cron="0 0 0/1 * * ?"/>
 
     </task:scheduled-tasks>
     <context:component-scan base-package="com.retailers.dht.manage.job" />

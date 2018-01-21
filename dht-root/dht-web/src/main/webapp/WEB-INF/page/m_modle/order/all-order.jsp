@@ -361,7 +361,12 @@
                     osMsg='确认收货';
                 }else if(row.orderStatus==6){
                     osMsg='发起退款';
-                }else if(row.orderStatus==9){
+                }else if(row.orderStatus==7){
+                    osMsg='用户取消';
+                }else if(row.orderStatus==8){
+                    osMsg='订单失效';
+                }
+                else if(row.orderStatus==9){
                     osMsg='交易完成';
                 }
 
