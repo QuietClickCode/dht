@@ -89,6 +89,29 @@
             background-position: left center;
         }
 
+        .care-norms-checkbox .care-checkbox .number{
+            width: auto;
+            background: none;
+        }
+
+        .care-norms-checkbox .care-checkbox .number .reduce{
+            line-height: 0.5rem;
+        }
+
+        .care-norms-checkbox .care-checkbox .number .add{
+            line-height: 0.5rem;
+        }
+
+        .care-norms-checkbox .care-checkbox .number .num{
+            width: 2rem;
+            border-top:1px solid rgba(0,0,0,0.4);
+            border-bottom:1px solid rgba(0,0,0,0.4);
+            word-break: break-all;
+            text-overflow: ellipsis;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp:2;
+            overflow: hidden;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -380,9 +403,9 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
 	        <div id="goodscountdiv" class="care-checkbox" style="margin-top: .2rem;">
 	            <span class="name">数量</span>
 	            <div class="number number-box">
-	                <span class="reduce J_careReduce" onclick="pdmaxinventory('-');">-</span>
-	                <span class="num J_careNum" id="goodsnumber">1</span>
-	                <span class="add J_careAdd" onclick="pdmaxinventory('+');">+</span>
+	                <span class="reduce J_careReduce" style="border: 1px solid rgba(0,0,0,0.4)" onclick="pdmaxinventory('-');">-</span>
+	                <div class="num J_careNum"  contentEditable="true" id="goodsnumber">1</div>
+	                <span class="add J_careAdd" style="border: 1px solid rgba(0,0,0,0.4)" onclick="pdmaxinventory('+');">+</span>
 	            </div>
 	        </div>
 	        
@@ -1705,6 +1728,35 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
 
         laydate.render({
             elem: '#select_time' //指定元素
+        });
+    </script>
+
+    <script>
+        $("#goodsnumber").blur(function () {
+            let text = $("#goodsnumber").text();
+            console.log();
+            if(isNaN(Number(text))){
+                layer.msg('请输入数字');
+                return;
+            }
+            if(text.indexOf(".")>-1){
+                layer.msg('请输入整数');
+                return;
+            }
+
+            if(Number(text) <= 0){
+                if(startbuy == -1){
+                    $("#goodsnumber").text(1);
+                }else{
+                    $("#goodsnumber").text(startbuy);
+                }
+                layer.msg('请输入正确的格式');
+                return;
+            }
+            pdmaxinventory('+');
+            pdmaxinventory('-');
+            pdmaxinventory('-');
+            pdmaxinventory('+');
         });
     </script>
 
