@@ -3,6 +3,9 @@ import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.vo.OrderDetailVo;
 import com.retailers.dht.common.vo.OrderVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 /**
  * 描述：订单DAO
@@ -88,5 +91,16 @@ public interface OrderMapper {
 	 * @return
 	 */
 	public List<OrderVo> queryOrderInfoLists(Pagination<OrderVo> pagination);
+
+	/**
+	 * 根据订单状态和时间取得订单列表
+	 * @param orderStatus 订单状态
+	 * @param column 条件列
+	 * @param date 时间
+	 * @return
+	 */
+	public List<Order> queryOrderByStatus(@Param("orderStatus") Integer orderStatus,@Param("column")String column, @Param("date") Date date);
+	//设置订单超时
+	public int clearExpireOrders(List<Long> orderIds);
 
 }

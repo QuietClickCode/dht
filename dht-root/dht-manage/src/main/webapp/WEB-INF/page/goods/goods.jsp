@@ -2687,7 +2687,7 @@
             success: function (data) {
                 var row = data.row;
                 if(row==null){
-                    toastr.warning('增加失败!');
+                    toastr.warning(data.msg);
                 }else{
                     var gsval = row.gsvVal;
                     var gsvId = row.gsvId;

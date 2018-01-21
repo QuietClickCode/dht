@@ -16,15 +16,13 @@ import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.dao.SysParameterConfigMapper;
 import com.retailers.mybatis.common.enm.OrderEnum;
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.common.service.SysParameterConfigService;
 import com.retailers.mybatis.common.vo.SysParamVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
-import com.retailers.tools.utils.Md5Encrypt;
-import com.retailers.tools.utils.NumberUtils;
-import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.StringUtils;
+import com.retailers.tools.utils.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -1336,6 +1334,37 @@ public class OrderServiceImpl implements OrderService {
 		sysParameterConfigMapper.batchUpdateSysParameterConfig(lists);
 		sysParameterConfigService.reloadSysParameterConfig();
 		return false;
+	}
+
+	/**
+	 * 清除超时订单
+	 */
+	public void clearExpireOrder(){
+		Date curDate=new Date();
+		//取得时时间
+		Double expireTime=SysParameterConfigConstant.getValue(SysParameterConfigConstant.ORDER_EXPIRE_DATE,Double.class);
+		if(ObjectUtils.isEmpty(expireTime)){
+			expireTime=24d;
+		}
+		Date expireDate= DateUtil.addHour(curDate,-expireTime);
+		// 取得超时订单
+		List<Order> expireOrders=orderMapper.queryOrderByStatus(OrderConstant.ORDER_STATUS_CREATE,"order_create_date",expireDate);
+		//取得超进订单
+		List<Long> orderIds=new ArrayList<Long>();
+		//订单id对应的订单类型
+		Map<Long,String> orderTypeMaps=new HashMap<Long, String>();
+		for(Order order:expireOrders){
+			orderIds.add(order.getId());
+			orderTypeMaps.put(order.getId(),order.getOrderType());
+		}
+		//返现库存
+
+
+		//设置订单超时
+		orderMapper.clearExpireOrders(orderIds);
+		//批量设置订单超时
+		System.out.println(JSON.toJSON(expireOrders));
+
 	}
 }
 
