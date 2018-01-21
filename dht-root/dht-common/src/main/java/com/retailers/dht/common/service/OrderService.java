@@ -196,7 +196,7 @@ public interface OrderService {
 	 * 清除超时订单
 	 * @return
 	 */
-	public void clearExpireOrder();
+	public void clearExpireOrder()throws AppException;
 }
 
 

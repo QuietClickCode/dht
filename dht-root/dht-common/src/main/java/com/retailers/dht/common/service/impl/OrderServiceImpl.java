@@ -1339,7 +1339,7 @@ public class OrderServiceImpl implements OrderService {
 	/**
 	 * 清除超时订单
 	 */
-	public void clearExpireOrder(){
+	public void clearExpireOrder()throws AppException{
 		Date curDate=new Date();
 		//取得时时间
 		Double expireTime=SysParameterConfigConstant.getValue(SysParameterConfigConstant.ORDER_EXPIRE_DATE,Double.class);
@@ -1353,13 +1353,39 @@ public class OrderServiceImpl implements OrderService {
 		List<Long> orderIds=new ArrayList<Long>();
 		//订单id对应的订单类型
 		Map<Long,String> orderTypeMaps=new HashMap<Long, String>();
+		Map<String,Map<Long,Long>> typeNum=new HashMap<String, Map<Long, Long>>();
 		for(Order order:expireOrders){
 			orderIds.add(order.getId());
 			orderTypeMaps.put(order.getId(),order.getOrderType());
 		}
-		//返现库存
-
-
+		//取得订单详情
+		List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdIds(orderIds);
+		for(OrderDetail od:ods){
+			String orderType=orderTypeMaps.get(od.getOdOrderId());
+			if(!orderType.equals(OrderEnum.RECHARGE.getKey())){
+				//判断订单类型
+				if(typeNum.containsKey(orderType)){
+					typeNum.get(orderType).put(od.getOdGoodsId(),od.getOdBuyNumber().longValue());
+				}else{
+					Map<Long,Long> gns=new HashMap<Long, Long>();
+					gns.put(od.getOdGdId(),od.getOdBuyNumber().longValue());
+					typeNum.put(orderType,gns);
+				}
+			}
+		}
+		//返还商品库存
+		if(typeNum.containsKey(OrderEnum.SHOPPING.getKey())&&ObjectUtils.isNotEmpty(typeNum.get(OrderEnum.SHOPPING.getKey()))){
+			//商品购买库存返现
+			boolean success =goodsGgsvalDetailService.editGoodsInventorys(typeNum.get(OrderEnum.SHOPPING.getKey()));
+		}else if(typeNum.containsKey(OrderEnum.SPECIAL_OFFER.getKey())&&ObjectUtils.isNotEmpty(typeNum.get(OrderEnum.SPECIAL_OFFER.getKey()))){
+			//特价商品库存返还
+			boolean success=goodsGdsprelService.editGoodsInventorys(typeNum.get(OrderEnum.SHOPPING.getKey()));
+		}else if(typeNum.containsKey(OrderEnum.SECKILL.getKey())&&ObjectUtils.isNotEmpty(typeNum.get(OrderEnum.SECKILL.getKey()))){
+			//钞杀商品库存返还
+			boolean success=goodsGdsprelService.editGoodsInventorys(typeNum.get(OrderEnum.SECKILL.getKey()));
+		}else if(typeNum.containsKey(OrderEnum.CUT_PRICE.getKey())&&ObjectUtils.isNotEmpty(typeNum.get(OrderEnum.CUT_PRICE.getKey()))){
+			boolean success = goodsGdcprelService.editGoodsInventorys(typeNum.get(OrderEnum.CUT_PRICE.getKey()));
+		}
 		//设置订单超时
 		orderMapper.clearExpireOrders(orderIds);
 		//批量设置订单超时
