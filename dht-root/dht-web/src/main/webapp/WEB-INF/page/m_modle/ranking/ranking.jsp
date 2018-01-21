@@ -54,18 +54,22 @@
 
         .rannk_tb .td_photo .p1{
             margin-top: 0;
-            margin-left: 0.3rem;
+        }
+
+        .rannk_tb .td_number{
+            width: 1.2rem;
         }
 
         .rannk_tb .td_photo{
-            width: 2.6rem;
+            width: 1.6rem;
+            font-size: 0.3rem;
         }
     </style>
 </head>
 <body class="bge6">
 <div class="specialty-title2 borderB">
     <a class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
-    <span>排名公式</span>
+    <span>排名公示</span>
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
@@ -155,7 +159,7 @@
             for(var row of rows){
                 buyTotalPrice+=row.ccbqMoney;
                let html='<tr><td class="td_number">'+row.rownum+'</td><td class="td_photo"><p class="p1">'+row.ccbqUid+'</p>';
-               html+='</td><td class="td_back_rmb"><p class="p1">'+row.ccbqMoneys+'</p><p class="p2">累计到'+buyTotalPrice*20/100+'可返现</p></td>';
+               html+='</td><td class="td_back_rmb"><p class="p1">'+row.ccbqMoneys+'</p><p class="p2">累计到'+buyTotalPrice*20/100+'返现</p></td>';
                let ccbqStatus="己返现";
                let ccbqStatusColor="";
                if(row.ccbqStatus==0){
