@@ -96,7 +96,7 @@
                               <span class="input-group-addon">
                                 首单提成:
                               </span>
-                              <input id="ufirstCommission" name="ufirstCommission" class="form-control" type="text" />
+                              <input id="ufirstCommission" name="ufirstCommission" class="form-control" type="text" placeholder="请输入首单提成比例" />
                             </div>
                         </div>
                         <div class="col-lg-6">
@@ -105,7 +105,7 @@
                                     <div class="input-group-addon">
                                         消费提成:
                                     </div>
-                                    <input type="text" class="form-control" name="urecommendCommission" id="urecommendCommission" placeholder="请输入会员等级名称">
+                                    <input type="text" class="form-control" name="urecommendCommission" id="urecommendCommission" placeholder="请输入消费提成比例">
                                 </div>
                             </div>
                         </div>
