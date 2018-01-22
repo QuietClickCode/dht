@@ -153,8 +153,16 @@
             title: '购买人'
         },
         {
+            field: 'orderTradePrice',
+            title: '支付金额'
+        },
+        {
             field: 'orderGoodsTotalPrice',
-            title: '订单金额'
+            title: '商品金额'
+        },
+        {
+            field: 'orderLogisticsPrice',
+            title: '运费'
         },
         {
             field: 'orderCreateDate',
