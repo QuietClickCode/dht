@@ -163,7 +163,7 @@ public class OrderController extends BaseController {
         if(ObjectUtils.isEmpty(defaultLogisPrice)){
             return errorForParam("平台默认快递费不能为空");
         }
-        orderService.orderSetting(orderExpireDate,orderConfirmDate,orderCompleteDate,orderCompleteDate);
+        orderService.orderSetting(orderExpireDate,orderConfirmDate,orderCompleteDate,defaultLogisPrice);
 
         return success(true);
     }
