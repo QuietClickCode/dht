@@ -2,6 +2,7 @@ package com.retailers.dht.manage.controller;
 
 import com.retailers.auth.annotation.Function;
 import com.retailers.auth.annotation.Menu;
+import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.OrderDetailVo;
 import com.retailers.dht.common.vo.OrderVo;
@@ -13,8 +14,14 @@ import com.retailers.mybatis.common.service.SysParameterConfigService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
-import com.retailers.tools.utils.ObjectUtils;
-import com.retailers.tools.utils.PageUtils;
+import com.retailers.tools.utils.*;
+import org.apache.poi.hssf.record.chart.SheetPropertiesRecord;
+import org.apache.poi.hssf.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.streaming.SXSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,10 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.util.*;
 
 /**
  * 订单管理
@@ -168,4 +174,222 @@ public class OrderController extends BaseController {
         return success(true);
     }
 
+    @RequestMapping("exportOrderDatas")
+    @Function(label = "订单导出",description = "订单导出",resourse = "order.exportOrderDatas",parentRes = "order.openOrderPage",sort =3)
+    public void exportOrderDatas(HttpServletResponse response,String orderNo,String orderType,String orderStatus,Long orderPayWay,String orderBuyNm,
+                                 String orderLogisticsCode,String orderUaName,String orderUaPhone) throws Exception{
+        String fileName= StringUtils.formate(DateUtil.dateToString(new Date(),DateUtil.DATE_LONG_SMAIL_FORMAT),".xls");
+        response.setContentType("application/x-msdownload");
+        response.setHeader("Content-Disposition", "attachment; filename="+ fileName);
+        Workbook wb = new SXSSFWorkbook(100); // 关键语句
+        Sheet sheet = wb.createSheet("订单数据列表"); // 工作表对象
+        //序号	订单编号	订单人姓名	会员名	会员ID	推荐	推荐人ID	订单人电话	收件人地址	订单商品总额	备注	下单时间	付款时间	商品名称	商品数量	商品单价	商品总额	快递单号	快递公司	积分抵扣	优惠券抵扣	核销处理人
+
+        List<String> columnKey=Arrays.asList("id","orderNo","orderStatus","orderUaName","orderUaPhone","orderUaAddress","orderBuyNm","orderBuyUid","totalPrice","orderCreateDate","orderPayCallbackDate","gName","gsName","odBuyNumber","gprice","odMenberPrice","orderLogisticsCode","orderLogisticsNm");
+        Map<String,String> title=new HashMap<String, String>();
+        title.put("id","序号");
+        title.put("orderNo","订单编号");
+        title.put("orderStatus","订单状态");
+        title.put("orderUaName","订单人姓名");
+        title.put("orderUaPhone","订单人电话");
+        title.put("orderUaAddress","收件人地址");
+        title.put("orderBuyUid","会员ID");
+        title.put("orderBuyNm","会员名");
+        title.put("totalPrice","订单商品总额");
+//        title.put("","备注");
+        title.put("orderCreateDate","下单时间");
+        title.put("orderPayCallbackDate","付款时间");
+        title.put("gName","商品名称");
+        title.put("gsName","商品规格");
+        title.put("odBuyNumber","商品数量");
+        title.put("gprice","商品单价");
+        title.put("odMenberPrice","商品总额");
+        title.put("orderLogisticsCode","快递单号");
+        title.put("orderLogisticsNm","快递公司");
+        int curRow=0;
+        Row nRow = sheet.createRow(curRow); // 行对象
+        curRow++;
+        generateExcelRow(columnKey,title,nRow);
+        //生成行数据
+        Map<String,Object> params=new HashMap<String,Object>();
+        params.put("orderNo",orderNo);
+        if(ObjectUtils.isNotEmpty(orderType)){
+            List<String> ots=new ArrayList<String>();
+            for(String ot:orderType.split(",")){
+                ots.add(ot);
+            }
+            params.put("orderType",ots);
+        }
+        if(ObjectUtils.isNotEmpty(orderStatus)){
+            List<Long> oss=new ArrayList<Long>();
+            for(String os:orderStatus.split(",")){
+                if(ObjectUtils.isNotEmpty(os)){
+                    oss.add(Long.parseLong(os));
+                }
+            }
+            params.put("orderStatus",oss);
+        }
+        params.put("orderNo",orderNo);
+        params.put("orderPayWay",orderPayWay);
+        params.put("orderBuyNm",orderBuyNm);
+        params.put("orderLogisticsCode",orderLogisticsCode);
+        params.put("orderUaName",orderUaName);
+        params.put("orderUaPhone",orderUaPhone);
+        List<OrderVo> orders = orderService.queryOrderLists(params);
+        List<Map<String,String>> datas=new ArrayList<Map<String, String>>();
+        Map<String,String> logisNm=new HashMap<String, String>();
+        logisNm.put("ZYFH","自营发货");
+        logisNm.put("SF","顺丰速运");
+        logisNm.put("","顺丰速运");
+        logisNm.put("HTKY","百世快递");
+        logisNm.put("ZTO","中通快递");
+        logisNm.put("STO","申通快递");
+        logisNm.put("YTO","圆通速递");
+        logisNm.put("YD","韵达速递");
+        logisNm.put("YZPY","邮政快递包裹");
+        logisNm.put("EMS","EMS");
+        logisNm.put("HHTT","天天快递");
+        for(OrderVo order:orders){
+            int rows=1;
+            String orderStstus="";
+            switch (order.getOrderStatus()){
+                case OrderConstant.ORDER_STATUS_CREATE:
+                    orderStstus="未支付";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_FAILE:
+                    orderStstus="支付失败";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_SUCCESS:
+                    orderStstus="待发货";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_SEND_GOODS:
+                    orderStstus="己发货";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_SEND_GOODS_RECEIPT:
+                    orderStstus="确认收货";
+                    break;
+                case 6:
+                    orderStstus="起发退款";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_SEND_CANCEL:
+                    orderStstus="取消订单";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_EXPIRE_TIME:
+                    orderStstus="订单失效";
+                    break;
+                case OrderConstant.ORDER_STATUS_PAY_END:
+                    orderStstus="交易完成";
+                    break;
+            }
+
+            if(ObjectUtils.isNotEmpty(order.getOds())){
+                rows=order.getOds().size();
+                for(OrderDetailVo odv:order.getOds()){
+                    Map<String,String> row=new HashMap<String, String>();
+                    row.put("id",order.getId()+"");
+                    row.put("orderNo",order.getOrderNo());
+                    row.put("orderStatus",orderStstus);
+                    row.put("orderUaName",order.getOrderUaName());
+                    row.put("orderUaPhone",order.getOrderUaPhone());
+                    row.put("orderUaAddress",order.getOrderUaAddress());
+                    row.put("orderBuyUid",order.getOrderBuyUid()+"");
+                    row.put("orderBuyNm",order.getOrderBuyNm());
+                    long totalPrice= 0l;
+                    if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())){
+                        totalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(order.getOrderLogisticsPrice())));
+                    }
+                    if(ObjectUtils.isNotEmpty(order.getOrderMenberPrice())){
+                        totalPrice+=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(order.getOrderMenberPrice())));
+                    }
+
+                    row.put("totalPrice",NumberUtils.formaterNumberPower(totalPrice));
+                    row.put("","备注");
+                    row.put("orderCreateDate",DateUtil.dateToString(order.getOrderCreateDate()));
+                    row.put("orderPayCallbackDate","");
+                    if(ObjectUtils.isNotEmpty(order.getOrderPayCallbackDate())){
+                        row.put("orderPayCallbackDate",DateUtil.dateToString(order.getOrderPayCallbackDate()));
+                    }
+                    row.put("gName",odv.getgName());
+                    row.put("gsName",odv.getGsName());
+                    row.put("odBuyNumber",odv.getOdBuyNumber()+"");
+                    long gPrice=0l;
+                    //取得商品单价
+                    if(ObjectUtils.isNotEmpty(odv.getOdMenberPrice())){
+                        gPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(odv.getOdMenberPrice())))/odv.getOdBuyNumber();
+                    }
+                    row.put("gprice",NumberUtils.formaterNumberPower(gPrice));
+                    row.put("odMenberPrice",odv.getOdMenberPrice());
+                    row.put("orderLogisticsCode",order.getOrderLogisticsCode());
+                    row.put("orderLogisticsNm",logisNm.get(order.getOrderLogisticsCompany()));
+                    datas.add(row);
+                }
+            }else{
+                Map<String,String> row=new HashMap<String, String>();
+                row.put("id",order.getId()+"");
+                row.put("orderNo",order.getOrderNo());
+                row.put("orderStatus",orderStstus);
+                row.put("orderUaName",order.getOrderUaName());
+                row.put("orderUaPhone",order.getOrderUaPhone());
+                row.put("orderUaAddress",order.getOrderUaAddress());
+                row.put("orderBuyUid",order.getOrderBuyUid()+"");
+                row.put("orderBuyNm",order.getOrderBuyNm());
+                long totalPrice= 0l;
+                if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())){
+                    totalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(order.getOrderLogisticsPrice())));
+                }
+                if(ObjectUtils.isNotEmpty(order.getOrderMenberPrice())){
+                    totalPrice+=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(order.getOrderMenberPrice())));
+                }
+
+                row.put("totalPrice",NumberUtils.formaterNumberPower(totalPrice));
+                row.put("","备注");
+                row.put("orderCreateDate",DateUtil.dateToString(order.getOrderCreateDate()));
+                row.put("orderPayCallbackDate","");
+                if(ObjectUtils.isNotEmpty(order.getOrderPayCallbackDate())){
+                    row.put("orderPayCallbackDate",DateUtil.dateToString(order.getOrderPayCallbackDate()));
+                }
+                row.put("gName","");
+                row.put("gsName","");
+                row.put("odBuyNumber","");
+                row.put("gprice","");
+                row.put("odMenberPrice","");
+                row.put("orderLogisticsCode","");
+                row.put("orderLogisticsNm","");
+                datas.add(row);
+            }
+        }
+
+        for(Map<String,String> maps:datas){
+            nRow = sheet.createRow(curRow); // 行对象
+            curRow++;
+            generateExcelRow(columnKey,maps,nRow);
+        }
+        // 第六步，将文件存到指定位置
+        try
+        {
+            OutputStream out = response.getOutputStream();
+            wb.write(out);
+            out.flush();
+            out.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 生成报表
+     * @param columnKey
+     * @param maps
+     * @param row
+     */
+    private void generateExcelRow(List<String> columnKey,Map<String,String> maps,Row row){
+        Cell nCell = null; // 列对象
+        int curColumn=0;
+        // 生成表头
+        for(String column:columnKey){
+            nCell = row.createCell(curColumn);
+            nCell.setCellValue(maps.get(column));
+            curColumn++;
+        }
+    }
 }

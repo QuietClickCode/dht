@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
 /**
  * 描述：订单DAO
  * @author zhongp
@@ -91,6 +93,13 @@ public interface OrderMapper {
 	 * @return
 	 */
 	public List<OrderVo> queryOrderInfoLists(Pagination<OrderVo> pagination);
+
+	/**
+	 * 取得订单数据
+	 * @param params
+	 * @return
+	 */
+	public List<OrderVo> queryOrderInfos(@Param("params")Map<String,Object> params);
 
 	/**
 	 * 根据订单状态和时间取得订单列表

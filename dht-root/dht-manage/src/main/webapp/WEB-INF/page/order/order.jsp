@@ -55,7 +55,10 @@
         <input type="text" class="form-control" id="search_orderUaPhone" placeholder="请输入收货人电话">
     </div>&nbsp;&nbsp;
     <ex:perm url="order/queryOrderLists">
-        <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>
+        <button class="btn btn-default" type="button" onclick="refreshTableData()">查询</button>&nbsp;&nbsp;
+    </ex:perm>
+    <ex:perm url="order/exportOrderDatas">
+        <button class="btn btn-default" type="button" onclick="exportOrderDatas()">导出</button>
     </ex:perm>
 </div>
 <div>
@@ -80,7 +83,7 @@
                                 <select id="logisticsCompany" name="logisticsCompany"  class="form-control" style="width: auto;">
                                     <option value="">--全部--</option>
                                     <option value="ZYFH">自营发货</option>
-                                    <option value="">顺丰速运</option>
+                                    <option value="SF">顺丰速运</option>
                                     <option value="HTKY">百世快递</option>
                                     <option value="ZTO">中通快递</option>
                                     <option value="STO">申通快递</option>
@@ -348,6 +351,18 @@
             orderUaPhone: $("#search_orderUaPhone").val()
         };
     }
+    var logisNm=new Map();
+    logisNm.set("ZYFH","自营发货");
+    logisNm.set("SF","顺丰速运");
+    logisNm.set("HTKY","百世快递");
+    logisNm.set("ZTO","中通快递");
+    logisNm.set("STO","申通快递");
+    logisNm.set("YTO","圆通速递");
+    logisNm.set("YD","韵达速递");
+    logisNm.set("YZPY","邮政快递包裹");
+    logisNm.set("EMS","EMS");
+    logisNm.set("HHTT","天天快递");
+
     function editorDetail(index, row) {
         let html='</br><table style="width:100%;" cellpadding="1" cellspacing="0" border="1"><tbody><tr>';
         html+='<td>商品图标</td><td>商品名称</td><td>商品价格</td><td>销售价格</td><td>商品规格</td><td>购买数量</td>';
@@ -357,6 +372,10 @@
         }
         html+='</table></br>';
         if(row.orderType!='RECHARGE'){
+            if(row.orderLogisticsCode){
+                html+='<span>物流公司:</span><span>'+logisNm.get(row.orderLogisticsCompany)+'</span>&nbsp;&nbsp;<br>';
+                html+='<span>物流单号:</span><span>'+row.orderLogisticsCode+'</span>&nbsp;&nbsp;<br>';
+            }
             html+='<span>收货人:</span><span>'+row.orderUaName+'</span>&nbsp;&nbsp;<br>';
             html+='<span>收货电话:</span><span>'+row.orderUaPhone+'</span>&nbsp;&nbsp;<br>';
             html+='<span>收货人地址:</span><span>'+row.orderUaAddress+'</span>&nbsp;&nbsp;<br>';
@@ -403,6 +422,19 @@
         if(rowData){
             $("#sendGoodsDialogForm #orderId").val(rowData.id);
         }
+    }
+
+    function exportOrderDatas(){
+        var params="";
+        var selectOrderStatus="";
+        $.each($('input[name="search_orderStatus"]:checked'),function(){
+            selectOrderStatus+=$(this).val()+",";
+        });
+        params="orderNo="+$("#search_orderNo").val()+"&orderType="+ $("#search_orderType").val()+"&";
+        params+="orderStatus="+selectOrderStatus+"&orderPayWay="+$("#search_orderPayWay").val()+"&";
+        params+="orderBuyNm="+$("#search_orderBuyNm").val()+"&orderLogisticsCode="+$("#search_orderLogisticsCode").val()+"&";
+        params+="orderUaName="+$("#search_orderUaName").val()+"&orderUaPhone="+$("#search_orderUaPhone").val();
+        window.location.href="/order/exportOrderDatas?"+params
     }
 </script>
 </body>

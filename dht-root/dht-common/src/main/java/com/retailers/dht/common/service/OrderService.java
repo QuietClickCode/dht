@@ -156,6 +156,13 @@ public interface OrderService {
 	public Pagination<OrderVo> queryOrderLists(Map<String, Object> params, int pageNo, int pageSize);
 
 	/**
+	 * 取得订单列表 用于数据导出
+	 * @param params
+	 * @return
+	 */
+	public List<OrderVo> queryOrderLists(Map<String, Object> params);
+
+	/**
 	 * 订单确认收货
 	 * @param uid 用户id
 	 * @param orderId 订单id

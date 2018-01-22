@@ -64,6 +64,7 @@
 		<result property="orderMenberPrice" column="order_menber_price"/>
 		<result property="orderGoodsCouponPrice" column="order_goods_coupon_price"/>
 		<result property="orderCouponPrice" column="order_coupon_price"/>
+		<result property="orderLogisticsCompany" column="order_logistics_company"/>
 		<result property="orderLogisticsPrice" column="order_logistics_price"/>
 		<result property="orderCreateDate" column="order_create_date"/>
 		<result property="orderPayDate" column="order_pay_date"/>
@@ -462,6 +463,7 @@
 		order_ua_phone,
 		order_ua_address,
 		order_discount,
+		order_logistics_company,
 		order_logistics_code,
 		order_send_date,
 		order_send_remark,
@@ -514,7 +516,88 @@
 		ORDER  BY  id DESC
 	</select>
 
+	<!--取得订单详情 用于页面展示 -->
+	<select id="queryOrderInfos" resultMap="rm_order_vo">
+		SELECT
+		id,
+		parsent_id,
+		order_type,
+		order_no,
+		order_status,
+		order_pay_way,
+		order_pay_use_way,
+		order_pay_callback_no,
+		order_pay_callback_date,
+		order_pay_callback_remark,
+		order_buy_uid,
+		u.u_name,
+		order_trade_price,
+		order_goods_total_price,
+		order_goods_actual_pay_price,
+		order_menber_price,
+		order_goods_coupon_price,
+		order_coupon_price,
+		order_logistics_price,
+		order_create_date,
+		order_pay_date,
+		order_illustrate,
+		order_integral_or_cash,
+		order_ua_name,
+		order_ua_phone,
+		order_ua_address,
+		order_discount,
+		order_logistics_company,
+		order_logistics_code,
+		order_send_date,
+		order_send_remark,
+		order_confirm_date,
+		order_send_address_id,
+		is_real,
+		o.version
+		FROM
+		t_order o,
+		t_user u
+		WHERE
+		o.order_buy_uid = u.u_id
+		<if test="null != params.orderType and params.orderType.size>0">
+			AND order_type in
+			<foreach collection="params.orderType" item="item" index="index" separator="," open="(" close=")">
+				'${item}'
+			</foreach>
+		</if>
+		<if test="null != params.orderStatus and params.orderStatus.size>0">
+			AND order_status in
+			<foreach collection="params.orderStatus" item="item" index="index" separator="," open="(" close=")">
+				${item}
+			</foreach>
+		</if>
 
+		<if test="null != params.orderBuyNm and '' != params.orderBuyNm">
+			AND u_name like  concat('%', #{params.orderBuyNm}, '%')
+		</if>
+		<if test="null != params.orderBuyUid">
+			AND order_buy_uid =#{params.orderBuyUid}
+		</if>
+		<if test="null != params.orderNo and '' != params.orderNo">
+			AND order_no =#{params.orderNo}
+		</if>
+		<if test="null != params.orderPayWay">
+			AND order_pay_way =#{params.orderPayWay}
+		</if>
+		<if test="null != params.orderLogisticsCode and '' != params.orderLogisticsCode">
+			AND order_logistics_code =#{params.orderLogisticsCode}
+		</if>
+		<if test="null != params.orderUaName and '' != params.orderUaName">
+			AND order_ua_name like  concat('%', #{params.orderUaName}, '%')
+		</if>
+		<if test="null != params.orderUaPhone and '' != params.orderUaPhone">
+			AND order_ua_phone=#{params.orderUaPhone}
+		</if>
+		<if test="null != params.orderBuyDel">
+			AND order_buy_del=#{params.orderBuyDel}
+		</if>
+		ORDER  BY  id DESC
+	</select>
 	<!--分页查询 -->
 	<select id="queryOrderByStatus" resultMap="rm_order">
 		SELECT

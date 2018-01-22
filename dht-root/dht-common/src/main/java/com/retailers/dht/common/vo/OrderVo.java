@@ -71,6 +71,10 @@ public class OrderVo {
     private String orderUaAddress;
     /**消费折扣(充值会员享受折后折）*/
     private Long orderDiscount;
+    /**
+     * 物流公司编码
+     */
+    private String orderLogisticsCompany;
     /**物流单号*/
     private String orderLogisticsCode;
     /**
@@ -296,6 +300,14 @@ public class OrderVo {
 
     public void setOrderDiscount(Long orderDiscount) {
         this.orderDiscount = orderDiscount;
+    }
+
+    public String getOrderLogisticsCompany() {
+        return orderLogisticsCompany;
+    }
+
+    public void setOrderLogisticsCompany(String orderLogisticsCompany) {
+        this.orderLogisticsCompany = orderLogisticsCompany;
     }
 
     public String getOrderLogisticsCode() {
