@@ -153,8 +153,15 @@
             title: '购买人'
         },
         {
-            field: 'orderTradePrice',
-            title: '支付金额'
+            field: 'payPrice',
+            title: '支付金额',
+            formatter:function(value,row,index){
+                var price =parseFloat(row.orderMenberPrice);
+                if(row.orderLogisticsPrice){
+                    price+=parseFloat(row.orderLogisticsPrice);
+                }
+                return parseFloat(price,2);
+            }
         },
         {
             field: 'orderGoodsTotalPrice',
