@@ -36,6 +36,9 @@ public class SecspepAdvertisingServiceImpl implements SecspepAdvertisingService 
 	public boolean updateSecspepAdvertising(SecspepAdvertising secspepAdvertising) {
 		secspepAdvertising.setVersion(secspepAdvertisingMapper.querySecspepAdvertisingBySaId(secspepAdvertising.getSaId()).getVersion());
 		int status = secspepAdvertisingMapper.updateSecspepAdvertising(secspepAdvertising);
+		if(status==1&&ObjectUtils.isNotEmpty(secspepAdvertising.getImageId())){
+			attachmentService.editorAttachment(secspepAdvertising.getImageId());
+		}
 		return status == 1 ? true : false;
 	}
 	public SecspepAdvertising querySecspepAdvertisingBySaId(Long saId) {

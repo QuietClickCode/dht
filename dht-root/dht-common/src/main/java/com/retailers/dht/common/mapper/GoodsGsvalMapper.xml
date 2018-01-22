@@ -33,7 +33,7 @@
 				AND gsv_val = #{params.gsvVal}
 			</if>
 			<if test="null != params.gid">
-				AND g_id = #{params.gid}
+				AND (g_id = #{params.gid} or g_id = -1)
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
