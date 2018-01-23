@@ -432,8 +432,8 @@
         });
         params="orderNo="+$("#search_orderNo").val()+"&orderType="+ $("#search_orderType").val()+"&";
         params+="orderStatus="+selectOrderStatus+"&orderPayWay="+$("#search_orderPayWay").val()+"&";
-        params+="orderBuyNm="+$("#search_orderBuyNm").val()+"&orderLogisticsCode="+$("#search_orderLogisticsCode").val()+"&";
-        params+="orderUaName="+$("#search_orderUaName").val()+"&orderUaPhone="+$("#search_orderUaPhone").val();
+        params+="orderBuyNm="+encodeURI($("#search_orderBuyNm").val())+"&orderLogisticsCode="+$("#search_orderLogisticsCode").val()+"&";
+        params+="orderUaName="+encodeURI($("#search_orderUaName").val())+"&orderUaPhone="+$("#search_orderUaPhone").val();
         window.location.href="/order/exportOrderDatas?"+params
     }
 </script>
