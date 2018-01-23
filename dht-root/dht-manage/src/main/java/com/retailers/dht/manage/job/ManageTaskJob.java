@@ -36,7 +36,7 @@ public class ManageTaskJob {
      */
     public void clearUnUsedAttachemnt(){
         logger.info("附件资源清除执行开始");
-        attachmentService.clearUnUsedAttachemnt();
+//        attachmentService.clearUnUsedAttachemnt();
         logger.info("附件资源清除执行完毕");
     }
 
