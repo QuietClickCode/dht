@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -38,9 +39,10 @@ public class EmployeeManageController extends BaseController{
     @RequestMapping("/queryEmployeeManageList")
     @Function(label="员工集合", description = "员工集合", resourse = "employeeManage.queryEmployeeManageList",sort=1,parentRes="employeeManage.employeeManageMapping")
     @ResponseBody
-    public Map<String,Object> queryEmployeeManageList(PageUtils pageForm){
+    public Map<String,Object> queryEmployeeManageList(PageUtils pageForm,String emName){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
+        map.put("emName",emName);
         Pagination<EmployeeManageVo> teamPagination = employeeManageService.queryEmployeeManageList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
         gtm.put("total",teamPagination.getTotalCount());
@@ -51,10 +53,11 @@ public class EmployeeManageController extends BaseController{
     @RequestMapping("/addEmployee")
     @Function(label = "添加员工",description = "添加员工",resourse = "employeeManage.addEmployee",sort = 3,parentRes = "employeeManage.employeeManageMapping")
     @ResponseBody
-    public BaseResp addEmployee(EmployeeManage employeeManage,String emEntryTimes,String emRemoveTimes){
+    public BaseResp addEmployee(HttpServletRequest request,EmployeeManage employeeManage, String emEntryTimes, String emRemoveTimes){
+        Long eid = getCurLoginUserId(request);
         employeeManage.setEmEntryTime(dateFormat(emEntryTimes));
         employeeManage.setEmRemoveTime(dateFormat(emRemoveTimes));
-        boolean flag = employeeManageService.saveEmployeeManage(employeeManage);
+        boolean flag = employeeManageService.saveEmployeeManage(employeeManage,eid);
         if(flag)
             return success("添加员工成功");
         else
@@ -64,10 +67,11 @@ public class EmployeeManageController extends BaseController{
     @RequestMapping("/updateEmployee")
     @Function(label = "修改员工信息",description = "修改员工信息",resourse = "employeeManage.updateEmployee",sort = 3,parentRes = "employeeManage.employeeManageMapping")
     @ResponseBody
-    public BaseResp updateEmployee(EmployeeManage employeeManage,String emEntryTimes,String emRemoveTimes){
+    public BaseResp updateEmployee(EmployeeManage employeeManage,String emEntryTimes,String emRemoveTimes,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
         employeeManage.setEmEntryTime(dateFormat(emEntryTimes));
         employeeManage.setEmRemoveTime(dateFormat(emRemoveTimes));
-        boolean flag = employeeManageService.updateEmployeeManage(employeeManage);
+        boolean flag = employeeManageService.updateEmployeeManage(employeeManage,eid);
         if(flag)
             return success("修改员工[" + employeeManage.getEmName() + "]成功");
         else
@@ -77,8 +81,9 @@ public class EmployeeManageController extends BaseController{
     @RequestMapping("/removeEmployee")
     @Function(label = "删除该员工",description = "删除该员工",resourse = "employeeManage.removeEmployee",sort = 3,parentRes = "employeeManage.employeeManageMapping")
     @ResponseBody
-    public BaseResp removeEmployee(Long emId){
-        boolean flag = employeeManageService.deleteEmployeeManageByEmId(emId);
+    public BaseResp removeEmployee(Long emId,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+        boolean flag = employeeManageService.deleteEmployeeManageByEmId(emId,eid);
         return  success(flag);
     }
 

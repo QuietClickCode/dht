@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,16 +52,18 @@ public class ScanCodeConteoller extends BaseController {
     @RequestMapping("/removeScanCode")
     @Function(label = "删除该扫码员",description = "删除该扫码员",resourse = "scanCode.removeScanCode",sort = 3,parentRes = "scanCode.scanCodeMapping")
     @ResponseBody
-    public BaseResp removeScanCode(Long scId){
-        boolean flag = codeService.deleteScanCodeByScId(scId);
+    public BaseResp removeScanCode(Long scId, HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+        boolean flag = codeService.deleteScanCodeByScId(scId,eid);
         return  success(flag);
     }
 
     @RequestMapping("/addScanCode")
     @Function(label = "添加扫码员",description = "添加扫码员",resourse = "scanCode.addScanCode",sort = 3,parentRes = "scanCode.scanCodeMapping")
     @ResponseBody
-    public BaseResp addScanCode(@RequestBody List<ScanCode> scanCodeList){
-        boolean flag = codeService.saveScanCode(scanCodeList);
+    public BaseResp addScanCode(@RequestBody List<ScanCode> scanCodeList,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+        boolean flag = codeService.saveScanCode(scanCodeList,eid);
         if(flag)
             return success("添加扫码员成功");
         else

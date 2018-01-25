@@ -11,10 +11,12 @@ import com.retailers.hnc.common.service.WxAuthUserService;
 import com.retailers.hnc.common.util.MyHttpUrlConnection;
 import com.retailers.hnc.web.base.BaseController;
 import com.retailers.hnc.web.constant.WebSystemConstant;
+import com.retailers.hnc.web.utils.AES;
 import com.retailers.tools.encrypt.DESUtils;
 import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.wx.common.config.WxConfig;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpGet;
@@ -23,12 +25,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.conn.PoolingClientConnectionManager;
 import org.apache.http.util.EntityUtils;
 import org.apache.ibatis.annotations.Param;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.security.InvalidAlgorithmParameterException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -47,14 +53,26 @@ public class WxUserController extends BaseController {
     ClientManageService clientManageService;
     @Autowired
     EmployeeManageService employeeManageService;
+    Logger logger = LoggerFactory.getLogger(WxUserController.class);
+
 
     @RequestMapping("/login")
     @ResponseBody
-    public Map<String,Object> login(@Param("code") String code, WxAuthUser wxAuthUser, String encryptedData, String iv){
+    public Map<String,Object> login(@Param("code") String code, WxAuthUser wxAuthUser, String encryptedData, String iv,String enunionidData,String unionidiv){
         System.out.println(code);
-        return loginReturnMap(code,wxAuthUser,encryptedData,iv);
+        return loginReturnMap(code,wxAuthUser,encryptedData,iv,enunionidData,unionidiv);
     }
 
+    @RequestMapping("/firstGetOpenid")
+    @ResponseBody
+    public void firstGetOpenid(@Param("code") String code){
+        String url = "https://api.weixin.qq.com/sns/jscode2session?" +
+                "appid=" + WxConfig.APP_ID+
+                "&secret=" + WxConfig.APP_SECRET+
+                "&grant_type=authorization_code" +
+                "&js_code="+code;
+        GetFromServer(url);
+    }
 //    @RequestMapping("/saveUserInfo")
 //    @ResponseBody
 //    public void saveUserInfo(String randStr, WxAuthUser wxAuthUser, String encryptedData, String iv){
@@ -84,7 +102,7 @@ public class WxUserController extends BaseController {
 
 
 
-    public Map<String,Object> loginReturnMap(String code,WxAuthUser wxAuthUser,String encryptedData,String iv) {
+    public Map<String,Object> loginReturnMap(String code,WxAuthUser wxAuthUser,String encryptedData,String iv,String enunionidData,String unionidiv ) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?" +
                 "appid=" + WxConfig.APP_ID+
                 "&secret=" + WxConfig.APP_SECRET+
@@ -100,7 +118,7 @@ public class WxUserController extends BaseController {
                 System.out.println(url);
                 respStr = GetFromServer(url);
                 System.out.println(respStr);
-
+                logger.info(respStr);
                 JSONObject jsonObject = JSON.parseObject(respStr);
                 String openid = jsonObject.getString("openid");
                 String unionid = jsonObject.getString("unionid");
@@ -108,6 +126,9 @@ public class WxUserController extends BaseController {
                 String phone = "";
                 phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
                 if(ObjectUtils.isNotEmpty(openid)){
+                    if(ObjectUtils.isEmpty(unionid)){
+                        unionid = getUnionId(enunionidData,unionidiv,sessionKey);
+                    }
                     Map params = new HashMap();
                     params.put("wauOpenid",openid);
                     params.put("wauUnionid",unionid);
@@ -163,6 +184,8 @@ public class WxUserController extends BaseController {
                     System.out.println(randStr);
                     return returnMap;
                 }else{
+
+
                     returnMap.put("msg","您的信息有误");
                 }
 
@@ -173,11 +196,61 @@ public class WxUserController extends BaseController {
         return returnMap;
     }
 
-public static void main(String[] a){
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=wx53881ce6778c5e1f&secret=356ea90409ec9e34064e1c860f2bf667&grant_type=authorization_code&js_code=013GT1dm0KUDNl1ktH9m0f40dm0GT1dW";
-        String str = GetFromServer(url);
-    System.out.println(str);
-}
+    public static void main(String[] a){
+
+        String encode ="xOD3AmG+sSF9XKLiw0wsw46S0CK5QJCcG+eJjdc+N2s48QSmiI9Ut4DDmZ6S8xi3RgKHBJsU9pZPPmtcZJ+HtSA52s9VW074Hmn3V52IRJGliJ9rKcCAAEup7HrCohSserh0V9Q/lxxZsEzI9OM6i65qkoo1JLbcQ7d0isJWY+0yXBUA1yf8r3pSgMv1lheNBssrtj2YTEKEmNIAiBUIm2Taau5Te9aJaE22/2cJaW8QoCeXZ7l4BO0Q5N+f1g/VtFJH9i/ZyCxgGE8pEgdKiY9MOvs1grHex/E71AHGDABbUgjZXwbadB3MJvpLqWIUrZgIvDOAKq5ONG5YYe55fxDBkdk4UyZijuiSjUIPDhNENExfCOdBjKcIUa9AHZaF7f/wEg93Dt0LlHEDwuqhYzrw/pnoP6tk3SMicqu1yRcL9yVa5/Z3hexvPnoE4MtRNhu0UTLD6b41efgyZyJXZwKzMRUeZRhIBGtKhenEIm0eV0c9yUZeJ4D8PJxnLlx+r9vJMZrrkjBeLTErdQOJ6g==";
+        String iv = "EEHMWcGvWbuZlQpoCwHb/Q==";
+        String session_key = "QJnXlXSxJNxtxCn0P66USg==";
+        Map map = new HashMap();
+//        try {
+//            byte[] resultByte  = AES.decrypt(Base64.decodeBase64(encode),
+//                    Base64.decodeBase64(session_key),
+//                    Base64.decodeBase64(iv));
+//            if(null != resultByte && resultByte.length > 0){
+//                String userInfo = new String(resultByte, "UTF-8");
+//                map.put("status", "1");
+//                map.put("msg", "解密成功");
+//                map.put("userInfo", userInfo);
+//            }else{
+//                map.put("status", "0");
+//                map.put("msg", "解密失败");
+//            }
+//        }catch (InvalidAlgorithmParameterException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e) {
+//            e.printStackTrace();
+//        }
+//        String decodeJSON = JSON.toJSONString(map);
+//        System.out.println(decodeJSON);
+    }
+
+    public String getUnionId(String enData,String iv,String session_key){
+        Map map = new HashMap();
+        try {
+            byte[] resultByte  = AES.decrypt(Base64.decodeBase64(enData),
+                    Base64.decodeBase64(session_key),
+                    Base64.decodeBase64(iv));
+            if(null != resultByte && resultByte.length > 0){
+                String userInfo = new String(resultByte, "UTF-8");
+                map.put("status", "1");
+                map.put("msg", "解密成功");
+                map.put("userInfo", userInfo);
+            }else{
+                map.put("status", "0");
+                map.put("msg", "解密失败");
+            }
+        }catch (InvalidAlgorithmParameterException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String decodeJSON = JSON.toJSONString(map);
+        JSONObject jsonObject = JSON.parseObject(decodeJSON);
+        JSONObject jsonObject1 = jsonObject.getJSONObject("userInfo");
+        String unionid = jsonObject1.getString("unionId");
+        return unionid;
+    }
+
 
 
     public static String GetFromServer(String url) {

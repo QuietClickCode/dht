@@ -23,7 +23,7 @@ public interface ScanCodeService {
 	 * @author wangjue
 	 * @date 2017-12-31 12:47:06
 	 */
-	public boolean saveScanCode(List<ScanCode> scanCodeList);
+	public boolean saveScanCode(List<ScanCode> scanCodeList,Long uploadperson);
 	/**
 	 * 编辑扫码人员关系表
 	 * @param scanCode
@@ -31,7 +31,7 @@ public interface ScanCodeService {
 	 * @author wangjue
 	 * @date
 	 */
-	public boolean updateScanCode(ScanCode scanCode);
+	public boolean updateScanCode(ScanCode scanCode,Long uploadperson);
 	/**
 	 * 根据id查询扫码人员关系表
 	 * @param scId
@@ -57,7 +57,7 @@ public interface ScanCodeService {
 	 * @author wangjue
 	 * @date 2017-12-31 12:47:06
 	 */
-	public boolean deleteScanCodeByScId(Long scId);
+	public boolean deleteScanCodeByScId(Long scId,Long uploadperson);
 
 	public boolean deleteOpeningEmployee(Long oid);
 

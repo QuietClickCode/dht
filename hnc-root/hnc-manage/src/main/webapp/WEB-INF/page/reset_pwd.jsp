@@ -28,7 +28,7 @@
             position: absolute;
             top: 50%;
             left: 50%;
-            margin-top: -300px;
+            margin-top: -350px;
             margin-left: -200px;
         }
 
@@ -38,12 +38,15 @@
             width: 100%;
             padding-top: 100px;
             margin-bottom: 30px;
-            color: #00923f;
+            color: #ffffff;
+            text-shadow: 0.1em 0.1em 0.2em black;
             letter-spacing: 2px;
             font-size: 27px;
+            padding-top: 140px;
+            background: url("/img/hncLogo.png") no-repeat;
+            background-size: 100px 100px;
+            background-position: top;
             line-height: 25px;
-            background-size: 100px 110px;
-            background-position: bottom left 40px;
         }
 
         .container_bd{
@@ -51,7 +54,7 @@
             width: 320px;
             height: 70%;
             margin-left: 40px;
-            background-color: rgba(255,255,255,0.6);
+            background-color: rgba(255,255,255,0.3);
         }
 
         .form{
@@ -113,21 +116,21 @@
 <script type="text/javascript" src="/js/layer/layer.js"></script>
 <div class="container_box">
     <div class="container_hd">
-        <p style="color: black">修改密码</p>
+        <p>修改密码</p>
     </div>
     <div class="container_bd" style="height: 80%">
         <div class="form">
             <div class="manage_info">
-                <input type="text" name="" class="account" id="account" placeholder="用户名">
+                <input type="text" name="" class="account" id="account" placeholder="用户名" style="width: 190px">
             </div>
             <div class="manage_info">
-                <input type="password" name="" class="password" id="oldpwd" placeholder="密码">
+                <input type="password" name="" class="password" id="oldpwd" placeholder="密码" style="width: 190px">
             </div>
             <div class="manage_info">
-                <input type="password" name="" class="password" id="newpwd" placeholder="请输入新密码">
+                <input type="password" name="" class="password" id="newpwd" placeholder="请输入新密码" style="width: 190px">
             </div>
             <div class="manage_info">
-                <input type="password" name="" class="password" id="renewpwd" placeholder="请确认新密码">
+                <input type="password" name="" class="password" id="renewpwd" placeholder="请确认新密码" style="width: 190px">
             </div>
             <span onclick="resetpassword();" class="submit">修改</span>
         </div>

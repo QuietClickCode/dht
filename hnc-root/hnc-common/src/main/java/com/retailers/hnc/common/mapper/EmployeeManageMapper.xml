@@ -61,7 +61,7 @@
 				AND t1.em_id = #{params.emId}
 			</if>
 			<if test="null != params.emName and '' != params.emName">
-				AND t1.em_name = #{params.emName}
+				AND t1.em_name like concat('%', #{params.emName} ,'%')
 			</if>
 			<if test="null != params.emSex">
 				AND t1.em_sex = #{params.emSex}

@@ -10,7 +10,7 @@
 <html>
 <head>
     <title>后台登录</title>
-    <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/layer/layer.js"></script>
     <style type="text/css">
         html{

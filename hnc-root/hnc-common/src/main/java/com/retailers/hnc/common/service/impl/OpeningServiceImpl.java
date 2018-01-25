@@ -1,5 +1,6 @@
 
 package com.retailers.hnc.common.service.impl;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,11 +8,14 @@ import java.util.Map;
 import com.retailers.hnc.common.entity.FloorManage;
 import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.dao.OpeningMapper;
+import com.retailers.hnc.common.entity.OpeningCopy;
 import com.retailers.hnc.common.entity.OpeningFloor;
+import com.retailers.hnc.common.service.OpeningCopyService;
 import com.retailers.hnc.common.service.OpeningFloorService;
 import com.retailers.hnc.common.service.OpeningService;
 import com.retailers.hnc.common.vo.OpeningVo;
 import com.retailers.tools.utils.ObjectUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +33,17 @@ public class OpeningServiceImpl implements OpeningService {
 	private OpeningMapper openingMapper;
 	@Autowired
 	private OpeningFloorService openingFloorService;
-	public boolean saveOpening(Opening opening,String floors) {
+	@Autowired
+	private OpeningCopyService openingCopyService;
+	public boolean saveOpening(Opening opening,String floors,Long uploadperson) {
 		int status = openingMapper.saveOpening(opening);
 		addOFrel(status,opening,floors);
+		if(status==1){
+			copyOpening(opening,uploadperson,0L);
+		}
 		return status == 1 ? true : false;
 	}
-	public boolean updateOpening(Opening opening,String floors) {
+	public boolean updateOpening(Opening opening,String floors,Long uploadperson) {
 		Map params = new HashMap();
 		params.put("isDelete",0L);
 		params.put("oid",opening.getOid());
@@ -47,6 +56,9 @@ public class OpeningServiceImpl implements OpeningService {
 		}
 		int status = openingMapper.updateOpening(opening);
 		addOFrel(status,opening,floors);
+		if(status==1){
+			copyOpening(opening,uploadperson,1L);
+		}
 		return status == 1 ? true : false;
 	}
 	public Opening queryOpeningByOid(Long oid) {
@@ -62,10 +74,13 @@ public class OpeningServiceImpl implements OpeningService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteOpeningByOid(Long oid) {
+	public boolean deleteOpeningByOid(Long oid,Long uploadperson) {
 		Opening opening = queryOpeningByOid(oid);
 		opening.setIsDelete(1L);
 		int status = openingMapper.updateOpening(opening);
+		if(status==1){
+			copyOpening(opening,uploadperson,2L);
+		}
 		return status == 1 ? true : false;
 	}
 	public Pagination<OpeningVo> queryOpeningVoList(Map<String, Object> params, int pageNo, int pageSize){
@@ -109,6 +124,15 @@ public class OpeningServiceImpl implements OpeningService {
 				}
 			}
 		}
+	}
+
+	public void copyOpening(Opening opening,Long uplaodperson,Long type){
+		OpeningCopy openingCopy = new OpeningCopy();
+		BeanUtils.copyProperties(opening,openingCopy);
+		openingCopy.setCreateTime(new Date());
+		openingCopy.setUploadperson(uplaodperson);
+		openingCopy.setUploadtype(type);
+		openingCopyService.saveOpeningCopy(openingCopy);
 	}
 }
 

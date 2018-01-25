@@ -167,6 +167,7 @@
 		LEFT JOIN t_wx_auth_user t3 ON  t1.tm_id=t3.wau_u_id
 			WHERE
 			t1.is_delete=0
+			and t1.tm_employee is not null
 			<if test="null!=params.tmEmployee">
 				and t1.tm_employee=#{params.tmEmployee}
 			</if>

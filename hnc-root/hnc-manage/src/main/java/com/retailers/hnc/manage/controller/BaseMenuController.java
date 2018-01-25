@@ -28,5 +28,7 @@ public class BaseMenuController {
     public String housetypeManange;
     @Resourse(resourse="sys.manager.org",label="部门管理",parentRes = "sys.manager.permissions",sort = 2)
     public String menu2;
+    @Resourse(resourse="sys.manager.log",label="日志管理",sort = 4)
+    public String logManage;
 
 }

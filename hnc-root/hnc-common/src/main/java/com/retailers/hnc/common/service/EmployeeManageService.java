@@ -23,7 +23,7 @@ public interface EmployeeManageService {
 	 * @author wangjue
 	 * @date 2017-12-25 12:01:09
 	 */
-	public boolean saveEmployeeManage(EmployeeManage employeeManage);
+	public boolean saveEmployeeManage(EmployeeManage employeeManage,Long uploadperson);
 	/**
 	 * 编辑员工管理
 	 * @param employeeManage
@@ -31,7 +31,7 @@ public interface EmployeeManageService {
 	 * @author wangjue
 	 * @date
 	 */
-	public boolean updateEmployeeManage(EmployeeManage employeeManage);
+	public boolean updateEmployeeManage(EmployeeManage employeeManage,Long uploadperson);
 	/**
 	 * 根据id查询员工管理
 	 * @param emId
@@ -62,7 +62,7 @@ public interface EmployeeManageService {
 	 * @author wangjue
 	 * @date 2017-12-25 12:01:09
 	 */
-	public boolean deleteEmployeeManageByEmId(Long emId);
+	public boolean deleteEmployeeManageByEmId(Long emId,Long uploadperson);
 
 	/**
 	 * 查询当日登记的客户
