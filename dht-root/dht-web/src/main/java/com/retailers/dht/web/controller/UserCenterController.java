@@ -613,4 +613,21 @@ public class UserCenterController extends BaseController{
         setCurLoginUser(request,uiv);
         return success(true);
     }
+
+    /**
+     * 取得会员级别（充值会员等级)
+     * @param request
+     * @return
+     */
+    @RequestMapping("queryUserDiscount")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
+    @ResponseBody
+    public BaseResp queryMemberLevel(HttpServletRequest request){
+        long uid=getCurLoginUserId(request);
+        UserInfoVIew info = userService.queryMemberLevel(uid);
+        if(ObjectUtils.isNotEmpty(info)&&ObjectUtils.isNotEmpty(info.getDiscount())){
+            return success(info.getDiscount());
+        }
+        return success(10);
+    }
 }
