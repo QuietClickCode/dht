@@ -160,8 +160,12 @@
             title: '支付金额',
             formatter:function(value,row,index){
                 var price =parseFloat(row.orderMenberPrice);
-                if(row.orderLogisticsPrice){
-                    price+=parseFloat(row.orderLogisticsPrice);
+                if(value=='RECHARGE'){
+                    price=row.orderTradePrice;
+                }else{
+                    if(row.orderLogisticsPrice){
+                        price+=parseFloat(row.orderLogisticsPrice);
+                    }
                 }
                 return parseFloat(price,2);
             }
