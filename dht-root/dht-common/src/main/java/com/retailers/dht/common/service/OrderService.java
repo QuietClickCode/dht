@@ -147,6 +147,15 @@ public interface OrderService {
 	public boolean walletPay(Long uid,String orderNo,String payPwd)throws AppException;
 
 	/**
+	 * 取得订单支付金额
+	 * @param uid
+	 * @param orderNo
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,String> queryMenberPrice(Long uid,String orderNo);
+
+	/**
 	 * 取得订单列表
 	 * @param params
 	 * @param pageNo

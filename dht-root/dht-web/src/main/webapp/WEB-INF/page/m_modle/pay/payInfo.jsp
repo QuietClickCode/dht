@@ -150,7 +150,7 @@
     	<div class="pay_mode_input_box active" attr="wallet" style="display: none;" id="walletPayDiv">
     		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="checked">✓</i></label>
     		<img src="/img/icon-logo.png"/>
-    		<span class="span1">余额支付</span>
+    		<span class="span1">余额支付&nbsp;&nbsp;${menberPrice}</span>
     	</div>
     	<div class="pay_mode_input_box" attr="wx">
     		<label class="label_box"><input type="radio" id="radio_input2" name="abc"><i>✓</i></label>
