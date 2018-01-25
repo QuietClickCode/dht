@@ -91,21 +91,21 @@ public class OrderController extends BaseController {
     @RequestMapping("getCheckOrderData")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String getCheckOrderData(HttpServletRequest request,HttpServletResponse response,String data){
-        data += "\'isActivity\':3}";
+        data += "\"isActivity\":3}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySeckill")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String getCheckOrderDataBySeckill(HttpServletRequest request,HttpServletResponse response,String data){
-        data += "\'isActivity\':1}";
+        data += "\"isActivity\":1}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
     @RequestMapping("getCheckOrderDataBySpecial")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String getCheckOrderDataBySpecial(HttpServletRequest request,HttpServletResponse response,String data){
-        data += "\'isActivity\':0}";
+        data += "\"isActivity\":0}";
         request.getSession().setAttribute("checkOrderData",data);
         return "redirect:/order/checkOrder";
     }
@@ -137,7 +137,7 @@ public class OrderController extends BaseController {
 
                 Map data = new HashMap();
                 data.put("data",list);
-                data.put("isActivity",2);
+                data.put("\"isActivity\"",2);
 
                 request.getSession().setAttribute("checkOrderData", JSON.toJSONString(data));
             }

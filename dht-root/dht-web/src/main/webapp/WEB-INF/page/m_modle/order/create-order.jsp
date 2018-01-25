@@ -334,7 +334,8 @@
 
 <!--定义函数-->
 <script>
-    var goodsData = (${sessionScope.checkOrderData});
+    var goodsData = ${sessionScope.checkOrderData};
+    console.log(goodsData)
     var isActivity = goodsData.isActivity;
     var outuaId = goodsData.uaId;
     console.log(goodsData);
@@ -343,7 +344,7 @@
     <!--加载商品信息-->
     function loadgoodsinfo() {
         var rows = goodsData.data;
-//        console.log(rows);
+        console.log(rows);
         var element = $('#goodsList');
         var html = '';
         var index = 0;
