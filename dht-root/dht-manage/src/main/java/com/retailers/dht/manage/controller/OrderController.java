@@ -15,13 +15,13 @@ import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.*;
+import com.retailers.tools.utils.DateUtil;
 import org.apache.poi.hssf.record.chart.SheetPropertiesRecord;
 import org.apache.poi.hssf.usermodel.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.streaming.SXSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -41,6 +41,7 @@ import java.util.*;
 @Controller
 @RequestMapping("order")
 public class OrderController extends BaseController {
+    Logger logger = LoggerFactory.getLogger(OrderController.class);
 
     @Autowired
     private OrderService orderService;
@@ -178,6 +179,14 @@ public class OrderController extends BaseController {
     @Function(label = "订单导出",description = "订单导出",resourse = "order.exportOrderDatas",parentRes = "order.openOrderPage",sort =3)
     public void exportOrderDatas(HttpServletResponse response,String orderNo,String orderType,String orderStatus,Long orderPayWay,String orderBuyNm,
                                  String orderLogisticsCode,String orderUaName,String orderUaPhone) throws Exception{
+        logger.info("传入用户姓名：[{}]，收货人姓名:[{}]",orderBuyNm,orderUaName);
+        if(ObjectUtils.isNotEmpty(orderBuyNm)){
+            orderBuyNm= new String(orderBuyNm.getBytes("iso-8859-1"),"utf-8");
+        }
+        if(ObjectUtils.isNotEmpty(orderUaName)){
+            orderUaName= new String(orderUaName.getBytes("iso-8859-1"),"utf-8");
+        }
+        logger.info("转码后用户姓名：[{}]，收货人姓名:[{}]",orderBuyNm,orderUaName);
         String fileName= StringUtils.formate(DateUtil.dateToString(new Date(),DateUtil.DATE_LONG_SMAIL_FORMAT),".xls");
         response.setContentType("application/x-msdownload");
         response.setHeader("Content-Disposition", "attachment; filename="+ fileName);
@@ -206,10 +215,23 @@ public class OrderController extends BaseController {
         title.put("odMenberPrice","商品总额");
         title.put("orderLogisticsCode","快递单号");
         title.put("orderLogisticsNm","快递公司");
+
+        Map<String,CellStyle> cellStyle=new HashMap<String, CellStyle>();
+
+
+        CellStyle dbStyle = wb.createCellStyle();
+        dbStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0.00"));
+        CellStyle intStyle = wb.createCellStyle();
+        intStyle.setDataFormat(HSSFDataFormat.getBuiltinFormat("0"));
+
+        cellStyle.put("totalPrice",dbStyle);
+        cellStyle.put("odMenberPrice",dbStyle);
+        cellStyle.put("gprice",dbStyle);
+        cellStyle.put("odBuyNumber",intStyle);
         int curRow=0;
         Row nRow = sheet.createRow(curRow); // 行对象
         curRow++;
-        generateExcelRow(columnKey,title,nRow);
+        generateExcelRow(columnKey,title,nRow,false,null);
         //生成行数据
         Map<String,Object> params=new HashMap<String,Object>();
         params.put("orderNo",orderNo);
@@ -362,7 +384,7 @@ public class OrderController extends BaseController {
         for(Map<String,String> maps:datas){
             nRow = sheet.createRow(curRow); // 行对象
             curRow++;
-            generateExcelRow(columnKey,maps,nRow);
+            generateExcelRow(columnKey,maps,nRow,true,cellStyle);
         }
         // 第六步，将文件存到指定位置
         try
@@ -382,14 +404,27 @@ public class OrderController extends BaseController {
      * @param maps
      * @param row
      */
-    private void generateExcelRow(List<String> columnKey,Map<String,String> maps,Row row){
+    private void generateExcelRow(List<String> columnKey,Map<String,String> maps,Row row,boolean isFormate,Map<String,CellStyle> style){
         Cell nCell = null; // 列对象
         int curColumn=0;
+        Object obj =null;
         // 生成表头
         for(String column:columnKey){
             nCell = row.createCell(curColumn);
-            nCell.setCellValue(maps.get(column));
             curColumn++;
+            if(isFormate){
+                if(style.containsKey(column)){
+                    if(ObjectUtils.isNotEmpty(maps.get(column))){
+                        nCell.setCellValue(NumberUtils.formaterNumber(Double.parseDouble(maps.get(column)),2));
+                    }else{
+                        nCell.setCellValue(0);
+                    }
+                    nCell.setCellStyle(style.get(column));
+                    continue;
+                }
+            }
+            nCell.setCellValue(maps.get(column));
+
         }
     }
 }

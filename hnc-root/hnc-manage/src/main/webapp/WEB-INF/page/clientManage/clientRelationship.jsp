@@ -145,7 +145,7 @@
             }
         },
         {
-            field: 'tmChannel',
+            field: 'chennelName',
             title: '来访渠道',
             align : 'center',
             valign : 'middle'
