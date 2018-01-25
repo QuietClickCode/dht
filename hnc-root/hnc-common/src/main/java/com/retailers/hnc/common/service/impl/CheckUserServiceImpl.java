@@ -256,6 +256,8 @@ public class CheckUserServiceImpl implements CheckUserService {
 				if(errorCode!=0){
 					sendErrorMsg(clientManage,nickName,accessToken,employeeManage);
 				}
+			}else{
+				sendErrorMsg(clientManage,nickName,accessToken,employeeManage);
 			}
 		}
 	}
