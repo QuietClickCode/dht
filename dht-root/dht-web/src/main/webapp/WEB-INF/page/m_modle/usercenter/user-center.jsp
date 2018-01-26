@@ -41,7 +41,7 @@
         <div class="user-header" >
             <a href="/user/userDetailInfo" class="icon-change">
                 <div class="user-img">
-                    <img src="${user.headUrl}" alt=""/>
+                    <img src="/img/header.png" alt=""/>
                 </div>
             </a>
             <p class="user-name">${user.uname}</p>
@@ -139,7 +139,7 @@
                 <i class="user-icon-list6"></i>
                 <span>返现</span>
             </div>
-            <a href="">
+            <a href="/ranking/openCashDetails">
                 <%--<span class="prompt"></span>--%>
             </a>
         </div>
