@@ -151,9 +151,9 @@
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/tabs.js"></script>
 <script>
-    $(".cash_info").click(function () {
+  /*  $(".cash_info").click(function () {
         $(location).attr('href', '/ranking/openUserCashDetails');
-    });
+    });*/
 
     $(".cash_rank").click(function () {
         $(location).attr('href', '/ranking/openUserRankingLists');
