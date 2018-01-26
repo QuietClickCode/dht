@@ -337,7 +337,11 @@ public class OrderController extends BaseController {
                     long gPrice=0l;
                     //取得商品单价
                     if(ObjectUtils.isNotEmpty(odv.getOdMenberPrice())){
-                        gPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(odv.getOdMenberPrice())))/odv.getOdBuyNumber();
+                        if(odv.getOdBuyNumber().intValue()>0){
+                            gPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(odv.getOdMenberPrice())))/odv.getOdBuyNumber();
+                        }else{
+                            gPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(odv.getOdMenberPrice())));
+                        }
                     }
                     row.put("gprice",NumberUtils.formaterNumberPower(gPrice));
                     row.put("odMenberPrice",odv.getOdMenberPrice());

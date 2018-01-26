@@ -11,6 +11,8 @@ import com.retailers.hnc.web.constant.WebSystemConstant;
 import com.retailers.tools.utils.HttpClientUtil;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.wx.common.config.WxConfig;
+import com.retailers.wx.common.entity.WxAccessToken;
+import com.retailers.wx.common.service.WxAccessTokenService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,8 @@ public class ManageTaskJob {
 
     @Autowired
     private WxAuthUserMapper wxAuthUserMapper;
+    @Autowired
+    private WxAccessTokenService wxAccessTokenService;
     /**
      * 清除退出用户
      */
@@ -61,6 +65,7 @@ public class ManageTaskJob {
         String str = HttpClientUtil.doGet(url);
         JSONObject jsonObject = JSON.parseObject(str);
         String accessToken = jsonObject.getString("access_token");
+        logger.info("小程序："+str);
         WxConfig.ACCESS_TOKEN = accessToken;
         logger.info("获取小程序Access_Token完毕");
     }
@@ -74,8 +79,19 @@ public class ManageTaskJob {
         String str = HttpClientUtil.doGet(url);
         JSONObject jsonObject = JSON.parseObject(str);
         String accessToken = jsonObject.getString("access_token");
+        if(ObjectUtils.isNotEmpty(accessToken)){
+            WxAccessToken wxAccessToken = new WxAccessToken();
+            Date now = new Date();
+            int expires = 2*60*60*1000;
+            wxAccessToken.setWatTokenExpires(expires);
+            wxAccessToken.setWatToken(accessToken);
+            wxAccessToken.setWatWxAppId(HNCGZHConstant.APP_ID);
+            wxAccessToken.setWatTokenCreateTime(now);
+            wxAccessToken.setWatTokenExpiresTime(new Date(now.getTime()+expires));
+            wxAccessTokenService.saveWxAccessToken(wxAccessToken);
+        }
         HNCGZHConstant.ACCESS_TOKEN = accessToken;
-        System.out.println(str);
+        System.out.println("公众号："+str);
         logger.info("获取公众号Access_Token完毕");
     }
 
@@ -83,14 +99,16 @@ public class ManageTaskJob {
     public void getGZHUserMsg(){
         logger.info("开始获取公众号用户信息");
 
-        String appid = HNCGZHConstant.APP_ID;//"wx53881ce6778c5e1f";
-        String appsecret = HNCGZHConstant.APP_SECRET;//"356ea90409ec9e34064e1c860f2bf667";
-        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appsecret;
-        String str = HttpClientUtil.doGet(url);
-        JSONObject jsonObject = JSON.parseObject(str);
-        String accessToken = jsonObject.getString("access_token");
-        HNCGZHConstant.ACCESS_TOKEN = accessToken;
+//        String appid = HNCGZHConstant.APP_ID;//"wx53881ce6778c5e1f";
+//        String appsecret = HNCGZHConstant.APP_SECRET;//"356ea90409ec9e34064e1c860f2bf667";
+//        String url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appsecret;
+//        String str = HttpClientUtil.doGet(url);
+//        JSONObject jsonObject = JSON.parseObject(str);
+//        String accessToken = jsonObject.getString("access_token");
+//        HNCGZHConstant.ACCESS_TOKEN = accessToken;
 
+
+        String accessToken = HNCGZHConstant.ACCESS_TOKEN;
         if(ObjectUtils.isNotEmpty(accessToken)){
             List<String> openids = WxUtil.getUserOpenids(accessToken);
             List<Map<String,String>> unionids = WxUtil.getUserUnionids(openids,accessToken);

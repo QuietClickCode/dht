@@ -28,7 +28,7 @@
 <div>
     <div id="toolbar" class="form-inline">
         <button class="btn btn-default saveEmployee" type="button">新增员工</button>
-        <input type="text" class="form-control tname"  placeholder="请输入员工姓名">
+        <input type="text" class="form-control tname" id="emName"  placeholder="请输入员工姓名">
         <button class="btn btn-default" onclick="refreshTableData()">查询</button>
     </div>
 </div>
@@ -425,6 +425,7 @@
         return {
             pageSize: that.pageSize,
             pageNo: that.pageNumber,
+            emName:$('#emName').val()
         };
     }
     /**

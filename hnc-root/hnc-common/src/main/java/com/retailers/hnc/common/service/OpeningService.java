@@ -22,7 +22,7 @@ public interface OpeningService {
 	 * @author fanghui
 	 * @date 2017-12-22 16:36:52
 	 */
-	public boolean saveOpening(Opening opening,String floors);
+	public boolean saveOpening(Opening opening,String floors,Long uploadperson);
 	/**
 	 * 编辑开盘表
 	 * @param opening
@@ -30,7 +30,7 @@ public interface OpeningService {
 	 * @author fanghui
 	 * @date
 	 */
-	public boolean updateOpening(Opening opening,String floors);
+	public boolean updateOpening(Opening opening,String floors,Long uploadperson);
 	/**
 	 * 根据id查询开盘表
 	 * @param oid
@@ -56,7 +56,7 @@ public interface OpeningService {
 	 * @author fanghui
 	 * @date 2017-12-22 16:36:52
 	 */
-	public boolean deleteOpeningByOid(Long oid);
+	public boolean deleteOpeningByOid(Long oid,Long uploadperson);
 
 	public Pagination<OpeningVo> queryOpeningVoList(Map<String, Object> params, int pageNo, int pageSize);
 

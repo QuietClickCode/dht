@@ -5,10 +5,7 @@ import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.entity.PayCallback;
 import com.retailers.dht.common.entity.User;
-import com.retailers.dht.common.service.OrderProcessingQueueService;
-import com.retailers.dht.common.service.PayCallbackService;
-import com.retailers.dht.common.service.PayService;
-import com.retailers.dht.common.service.UserService;
+import com.retailers.dht.common.service.*;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
@@ -59,24 +56,22 @@ public class WxPayController extends BaseController{
     private PayService payService;
     @Autowired
     private UserService userService;
-
+    @Autowired
+    private OrderService orderService;
 
     @RequestMapping("payInfo")
     public ModelAndView openPayInfo(HttpServletRequest request, String orderNo,String price,String type,Boolean formate){
         ModelAndView model=new ModelAndView();
         model.addObject("orderNo",orderNo);
-        Long price_=0l;
-        if(ObjectUtils.isNotEmpty(formate)&&formate==true){
-            model.addObject("price", price);
-            price_=NumberUtils.priceChangeFen(Double.parseDouble(price));
-        }else{
-            if(ObjectUtils.isNotEmpty(price)){
-                price_=Long.parseLong(price);
-                model.addObject("price", NumberUtils.formaterNumberPower(price_));
-            }
-        }
-        //取得用户钱包余额
+        //取得当前登陆人
         long uid=getCurLoginUserId(request);
+        Map<String,String> prices=orderService.queryMenberPrice(uid,orderNo);
+        long price_=0;
+        if(ObjectUtils.isNotEmpty(prices)){
+            model.addObject("price", prices.get("price"));
+            model.addObject("menberPrice",prices.get("menberPrice"));
+            price_=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(Double.parseDouble(prices.get("menberPrice"))));
+        }
         UserInfoVIew uiv=userService.queryUserInfoByUid(uid);
         boolean isShowWallet=true;
         if(ObjectUtils.isNotEmpty(type)&&type.equals(OrderEnum.RECHARGE.getKey())){

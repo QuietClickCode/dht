@@ -1121,6 +1121,56 @@ public class OrderServiceImpl implements OrderService {
     }
 
 	/**
+	 * 钱包支付
+	 * @param uid 用户id
+	 * @param orderNo 订单号
+	 * @return
+	 * @throws AppException
+	 */
+	public Map<String,String> queryMenberPrice(Long uid, String orderNo){
+		logger.info("开始执行会员价取得用户id:[{}],订单号:[{}]",uid,orderNo);
+		Map<String,String> rtn=new HashMap<String, String>();
+		Order order=orderMapper.queryOrderByOrderNo(orderNo);
+		if(ObjectUtils.isEmpty(order)){
+			return null;
+		}
+		User user=userMapper.queryUserByUid(uid);
+		//取得用户折扣 取得用户有充值记录
+		Recharge recharge=rechargeMapper.queryUserBuyRecharge(user.getUrechage());
+		long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
+		rtn.put("price",NumberUtils.formaterNumberPower(payPrice));
+		if(ObjectUtils.isEmpty(recharge)){
+			rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
+		}else{
+			//取得用户的折扣
+			long discount=recharge.getRdiscount();
+			//钱包支付实际支付金额
+			Long total =0l;
+			//取得用户享受折扣
+			List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdId(order.getId());
+			for(OrderDetail od:ods){
+				long actualPrice=od.getOdActualPrice();
+				//判断该件商品是否支持折扣
+				if(od.getOdIsDiscount().intValue()== OrderConstant.BUY_GOODS_MENBER_DISCOUNT_YES){
+					actualPrice = NumberUtils.calculationDiscountPrice(actualPrice,discount);
+				}
+				total+=actualPrice;
+				//判断购买是否产生邮费
+				if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())&&order.getOrderLogisticsPrice().intValue()>0){
+					order.setOrderLogisticsPrice(NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),discount));
+				}else{
+					order.setOrderLogisticsPrice(0l);
+				}
+				//用户支付金额
+				payPrice=total+order.getOrderLogisticsPrice();
+				rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
+			}
+		}
+		return rtn;
+	}
+
+
+	/**
 	 * 生成订单成功队列(处理返现和推广佣金）
 	 * @param orderId
 	 */

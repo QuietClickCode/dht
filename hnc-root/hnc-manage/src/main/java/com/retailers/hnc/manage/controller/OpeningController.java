@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,17 +38,19 @@ public class OpeningController extends BaseController {
 
     @RequestMapping("saveOpening")
     @ResponseBody
-    public BaseResp editOpening(Opening opening,String ostartTimes,String oendTimes,String floors){
+    public BaseResp editOpening(Opening opening, String ostartTimes, String oendTimes, String floors, HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
         opening.setIsDelete(0L);
         addDate(opening,ostartTimes,oendTimes);
-        boolean flag = OpeningService.saveOpening(opening,floors);
+        boolean flag = OpeningService.saveOpening(opening,floors,eid);
         return success(flag);
     }
     @RequestMapping("updateOpening")
     @ResponseBody
-    public BaseResp updateOpening(Opening opening,String ostartTimes,String oendTimes,String floors){
+    public BaseResp updateOpening(Opening opening,String ostartTimes,String oendTimes,String floors,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
         addDate(opening,ostartTimes,oendTimes);
-        boolean flag = OpeningService.updateOpening(opening,floors);
+        boolean flag = OpeningService.updateOpening(opening,floors,eid);
         return success(flag);
     }
     @RequestMapping("queryOpeningList")
@@ -62,8 +65,9 @@ public class OpeningController extends BaseController {
 
     @RequestMapping("removeOpening")
     @ResponseBody
-    public BaseResp removeOpening(Long oid){
-        boolean flag = OpeningService.deleteOpeningByOid(oid);
+    public BaseResp removeOpening(Long oid,HttpServletRequest request){
+        Long eid = getCurLoginUserId(request);
+        boolean flag = OpeningService.deleteOpeningByOid(oid,eid);
         return success(flag);
     }
 

@@ -98,8 +98,8 @@
 
     <task:scheduled-tasks>
         <!--<task:scheduled ref="webTaskJob" method="init" cron="0/30 * * * * ?"/>-->
-        <task:scheduled ref="wxJob" method="getGZHAccessToken" cron="0 0/10 * * * ?"/>
-        <task:scheduled ref="wxJob" method="getGZHAccessToken" cron="0 0/10 * * * ?"/>
+        <!--<task:scheduled ref="wxJob" method="getGZHAccessToken" cron="0 0/10 * * * ?"/>-->
+        <task:scheduled ref="wxJob" method="getGZHAccessToken" cron="0 1 0/1 * * ?"/>
     </task:scheduled-tasks>
     <context:component-scan base-package="com.retailers.hnc.manage.job" />
 

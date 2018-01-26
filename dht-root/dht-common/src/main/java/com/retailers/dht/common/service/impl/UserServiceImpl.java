@@ -435,7 +435,17 @@ public class UserServiceImpl implements UserService {
 		User user=userMapper.queryUserByUid(uid);
 		userMapper.editorUserUseModule(uid,module,user.getVersion());
 		UserInfoVIew userInfoVIew=userMapper.queryLoginUserInfoView(uid);
-		return null;
+		return userInfoVIew;
+	}
+
+	/**
+	 * 取得会员信息
+	 * @param uid
+	 * @return
+	 */
+	public UserInfoVIew queryMemberLevel(Long uid) {
+		UserInfoVIew userInfoVIew=userMapper.queryLoginUserInfoView(uid);
+		return userInfoVIew;
 	}
 }
 

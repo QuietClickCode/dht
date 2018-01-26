@@ -113,7 +113,7 @@
 </head>
 <body>
 <script type="text/javascript" src="/js/layer/layer.js"></script>
-<span style="position: absolute;top: 20px;right: 20px"><a href="http://sm.cqhuanancheng.com/">扫码员登录</a></span>
+<span style="position: absolute;top: 20px;right: 20px"><a href="https://www.iyoubang.com/login.jsp">扫码员登录</a></span>
 <div class="container_box">
     <div class="container_hd">
         <p>华南城巴南华府后台登录</p>
@@ -158,7 +158,7 @@
             success:function (data) {
                 if(data.flag){
                     layer.msg("登陆成功",{time:1000});
-                    window.location.href = "/index";
+                    window.location.href = "<%= basePath %>/index";
                 }else{
                     layer.msg("账号或密码错误",{time:1000});
                 }

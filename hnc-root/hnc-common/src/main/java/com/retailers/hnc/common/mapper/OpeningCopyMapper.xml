@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.hnc.common.dao.OpeningCopyMapper">
+
+	<resultMap id="rm_openingCopy" type="com.retailers.hnc.common.vo.OpeningCopyVo">
+			<result property="ocId" column="oc_id"/>
+			<result property="oid" column="o_id"/>
+			<result property="oname" column="o_name"/>
+			<result property="ostartTime" column="o_start_time"/>
+			<result property="oendTime" column="o_end_time"/>
+			<result property="onum" column="o_num"/>
+			<result property="omenberNum" column="o_menber_num"/>
+			<result property="oremark" column="o_remark"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+			<result property="createTime" column="create_time"/>
+			<result property="uploadperson" column="uploadperson"/>
+			<result property="uploadtype" column="uploadtype"/>
+			<result property="uploadpersonName" column="uploadpersonName"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="openingCopy_columns">
+		oc_id,o_id,o_name,o_start_time,o_end_time,o_num,o_menber_num,o_remark,is_delete,version,create_time,uploadperson,uploadtype
+	</sql>
+	<!-- 根据开盘副本表主键取得数据 -->
+	<select id="queryOpeningCopyByOcId" resultMap="rm_openingCopy" parameterType="java.lang.Long">
+		SELECT <include refid="openingCopy_columns" />
+		FROM t_opening_copy WHERE oc_id = #{ocId}
+	</select>
+	<!-- 开盘副本表查询条件组合 -->
+	<sql id="openingCopy_where">
+		<where>
+			<if test="null != params.ocId">
+				AND oc_id = #{params.ocId}
+			</if>
+			<if test="null != params.oid">
+				AND o_id = #{params.oid}
+			</if>
+			<if test="null != params.oname and '' != params.oname">
+				AND o_name = #{params.oname}
+			</if>
+			<if test="null != params.ostartTimeBegin">
+				AND o_start_time &gt;= #{params.ostartTime}
+			</if>
+			<if test="null != params.ostartTimeEnd">
+				AND o_start_time &lt;= #{params.ostartTime}
+			</if>
+			<if test="null != params.oendTimeBegin">
+				AND o_end_time &gt;= #{params.oendTime}
+			</if>
+			<if test="null != params.oendTimeEnd">
+				AND o_end_time &lt;= #{params.oendTime}
+			</if>
+			<if test="null != params.onum">
+				AND o_num = #{params.onum}
+			</if>
+			<if test="null != params.omenberNum">
+				AND o_menber_num = #{params.omenberNum}
+			</if>
+			<if test="null != params.oremark and '' != params.oremark">
+				AND o_remark = #{params.oremark}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND create_time &gt;= #{params.createTime}
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND create_time &lt;= #{params.createTime}
+			</if>
+			<if test="null != params.uploadperson">
+				AND uploadperson = #{params.uploadperson}
+			</if>
+			<if test="null != params.uploadtype">
+				AND uploadtype = #{params.uploadtype}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryOpeningCopyList" resultMap="rm_openingCopy" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.em_name uploadpersonName
+		FROM t_opening_copy t1
+		LEFT JOIN t_employee_manage t2 ON t1.uploadperson=t2.em_id
+		<include refid="openingCopy_where"/>
+		ORDER BY t1.oc_id DESC
+	</select>
+	<!--添加开盘副本表 -->
+	<insert id="saveOpeningCopy" parameterType="com.retailers.hnc.common.entity.OpeningCopy" useGeneratedKeys="true" keyProperty="ocId">
+		INSERT INTO t_opening_copy (
+			o_id,o_name,o_start_time,o_end_time,o_num,o_menber_num,o_remark,is_delete,version,create_time,uploadperson,uploadtype
+		) VALUES
+		(
+			#{oid,jdbcType=BIGINT},#{oname,jdbcType=VARCHAR},#{ostartTime,jdbcType=DATE},#{oendTime,jdbcType=DATE},#{onum,jdbcType=BIGINT},#{omenberNum,jdbcType=BIGINT},#{oremark,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0,#{createTime,jdbcType=TIMESTAMP},#{uploadperson,jdbcType=BIGINT},#{uploadtype,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改开盘副本表 -->
+	<update id="updateOpeningCopy" parameterType="com.retailers.hnc.common.entity.OpeningCopy">
+		UPDATE t_opening_copy
+		<set>
+            <if test="null != oid">
+                o_id = #{oid},
+            </if>
+            <if test="null != oname and '' != oname">
+                o_name = #{oname},
+            </if>
+            <if test="null != ostartTime">
+                o_start_time = #{ostartTime},
+            </if>
+            <if test="null != oendTime">
+                o_end_time = #{oendTime},
+            </if>
+            <if test="null != onum">
+                o_num = #{onum},
+            </if>
+            <if test="null != omenberNum">
+                o_menber_num = #{omenberNum},
+            </if>
+            <if test="null != oremark and '' != oremark">
+                o_remark = #{oremark},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != uploadperson">
+                uploadperson = #{uploadperson},
+            </if>
+            <if test="null != uploadtype">
+                uploadtype = #{uploadtype},
+            </if>
+		</set>
+		WHERE oc_id = #{ocId} and version = #{version}
+	</update>
+	<!--删除开盘副本表 -->
+	<delete id="deleteOpeningCopyByOcId" parameterType="java.lang.Long">
+		DELETE FROM t_opening_copy WHERE oc_id = #{ocId}
+	</delete>
+</mapper>

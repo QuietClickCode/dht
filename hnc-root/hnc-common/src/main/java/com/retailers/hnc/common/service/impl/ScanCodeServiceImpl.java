@@ -4,13 +4,16 @@ package com.retailers.hnc.common.service.impl;
 import com.retailers.hnc.common.dao.ScanCodeMapper;
 import com.retailers.hnc.common.entity.*;
 import com.retailers.hnc.common.service.EmployeeManageService;
+import com.retailers.hnc.common.service.ScanCodeCopyService;
 import com.retailers.hnc.common.service.ScanCodeService;
 import com.retailers.hnc.common.service.TeamService;
 import com.retailers.hnc.common.vo.ScanCodeVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -32,8 +35,11 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 	@Autowired
 	private TeamService teamService;
 
-	public boolean saveScanCode(List<ScanCode> scanCodeList) {
-		int status = 1;
+	@Autowired
+	private ScanCodeCopyService scanCodeCopyService;
+
+	public boolean saveScanCode(List<ScanCode> scanCodeList,Long uploadperson) {
+		int status = 0;
 		if(scanCodeList.size() != 0){
 			ScanCode code = scanCodeList.get(0);
 			Long oid = code.getOid();
@@ -45,7 +51,7 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 			List<ScanCode> scanCodes = scanCodeMapper.queryOpeningEmployee(oid);
 			for (ScanCode scanCode : scanCodes) {
 				if(map.get(scanCode.getEmId()) == null){
-					deleteScanCodeByScId(scanCode.getScId());
+					deleteScanCodeByScId(scanCode.getScId(),uploadperson);
 				}else if(map.get(scanCode.getEmId()) != null){
 					map.remove(scanCode.getEmId());
 				}
@@ -61,14 +67,24 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 
 			if(scanCodes.size() != 0)
 				status = scanCodeMapper.saveScanCode(scanCodes);
+
+			if(status>0){
+				for(ScanCode scanCode:scanCodes){
+					copyScan(scanCode,uploadperson,0L);
+				}
+			}
 		}
-		return status == 1 ? true : false;
+
+		return status > 0 ? true : false;
 
 	}
-	public boolean updateScanCode(ScanCode scanCode) {
+	public boolean updateScanCode(ScanCode scanCode,Long uploadperson) {
 		ScanCode code = queryScanCodeByScId(scanCode.getScId());
 		scanCode.setVersion(code.getVersion());
 		int status = scanCodeMapper.updateScanCode(scanCode);
+		if(status==1){
+			copyScan(scanCode,uploadperson,1L);
+		}
 		return status == 1 ? true : false;
 	}
 	public ScanCode queryScanCodeByScId(Long scId) {
@@ -98,9 +114,21 @@ public class ScanCodeServiceImpl implements ScanCodeService {
 		page.setData(list);
 		return page;
 	}
-	public boolean deleteScanCodeByScId(Long scId) {
+	public boolean deleteScanCodeByScId(Long scId,Long uploadperson) {
 		ScanCode scanCode = queryScanCodeByScId(scId);
 		scanCode.setIsDelete(1l);
-		return updateScanCode(scanCode);
+		int status = scanCodeMapper.updateScanCode(scanCode);
+		if(status==1){
+			copyScan(scanCode,uploadperson,2L);
+		}
+		return status==1?true:false;
+	}
+	public void copyScan(ScanCode scanCode,Long uplaodperson,Long type){
+		ScanCodeCopy scanCodeCopy = new ScanCodeCopy();
+		BeanUtils.copyProperties(scanCode,scanCodeCopy);
+		scanCodeCopy.setCreateTime(new Date());
+		scanCodeCopy.setUploadperson(uplaodperson);
+		scanCodeCopy.setUploadtype(type);
+		scanCodeCopyService.saveScanCodeCopy(scanCodeCopy);
 	}
 }

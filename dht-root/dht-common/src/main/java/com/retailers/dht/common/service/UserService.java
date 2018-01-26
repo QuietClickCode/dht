@@ -190,6 +190,13 @@ public interface UserService {
 	 * @return
 	 */
 	public UserInfoVIew editorUserUseModule(Long uid,Integer module);
+
+	/**
+	 * 取得会员等级
+	 * @param uid
+	 * @return
+	 */
+	public UserInfoVIew queryMemberLevel(Long uid);
 }
 
 

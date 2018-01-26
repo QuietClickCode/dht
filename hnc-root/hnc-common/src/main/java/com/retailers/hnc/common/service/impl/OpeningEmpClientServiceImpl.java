@@ -225,6 +225,19 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 					map.put("notpassNum",num);
 				}
 			}
+			Long checkingNum = (Long) map.get("checkingNum");
+			Long passNum = (Long) map.get("passNum");
+			Long notpassNum = (Long) map.get("notpassNum");
+
+			if(ObjectUtils.isEmpty(checkingNum)){
+				map.put("checkingNum",0);
+			}
+			if(ObjectUtils.isEmpty(passNum)){
+				map.put("passNum",0);
+			}
+			if(ObjectUtils.isEmpty(notpassNum)){
+				map.put("notpassNum",0);
+			}
 		}else{
 			map.put("checkingNum",0);
 			map.put("passNum",0);
