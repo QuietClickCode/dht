@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.OrderRefundVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.OrderRefund;
 import com.retailers.tools.exception.AppException;
@@ -47,7 +48,7 @@ public interface OrderRefundService {
 	 * @author zhongp
 	 * @date 2018-01-29 22:30:33
 	 */
-	public Pagination<OrderRefund> queryOrderRefundList(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<OrderRefundVo> queryOrderRefundList(Map<String, Object> params, int pageNo, int pageSize);
 	/**
 	 * 根据rdId删除退款订单列表
 	 * @param rdId

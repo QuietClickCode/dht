@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.OrderRefund;
+import com.retailers.dht.common.vo.OrderRefundVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -50,6 +51,6 @@ public interface OrderRefundMapper {
 	 * @author zhongp
 	 * @date 2018-01-29 22:30:33
 	 */
-	public List<OrderRefund> queryOrderRefundList(Pagination<OrderRefund> pagination);
+	public List<OrderRefundVo> queryOrderRefundList(Pagination<OrderRefundVo> pagination);
 
 }

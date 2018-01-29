@@ -7,6 +7,7 @@ import com.retailers.dht.common.dao.OrderRefundMapper;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.entity.OrderRefund;
 import com.retailers.dht.common.service.OrderRefundService;
+import com.retailers.dht.common.vo.OrderRefundVo;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
@@ -49,12 +50,12 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 		return orderRefundMapper.queryOrderRefundByRdId(rdId);
 	}
 
-	public Pagination<OrderRefund> queryOrderRefundList(Map<String, Object> params,int pageNo,int pageSize) {
-		Pagination<OrderRefund> page = new Pagination<OrderRefund>();
+	public Pagination<OrderRefundVo> queryOrderRefundList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<OrderRefundVo> page = new Pagination<OrderRefundVo>();
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		page.setParams(params);
-		List<OrderRefund> list = orderRefundMapper.queryOrderRefundList(page);
+		List<OrderRefundVo> list = orderRefundMapper.queryOrderRefundList(page);
 		page.setData(list);
 		return page;
 	}
