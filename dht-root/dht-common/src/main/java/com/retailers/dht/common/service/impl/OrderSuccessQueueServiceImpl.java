@@ -344,7 +344,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	 * @param maps 传入参数（当前商品类型下的计算统计）
 	 */
 	private void rankkingCalculation(Map<Long,Long> maps,Long orderId){
-		logger.info("开始计算排名累计金额");
+		logger.info("开始计算排名累计金额,订单号：[{}],累计数据:[{}]",orderId,JSON.toJSONString(maps));
 		Date curDate=new Date();
 		List<RankingInfoVo> lists = new ArrayList<RankingInfoVo>();
 		for(Long key:maps.keySet()){
@@ -356,6 +356,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		if(ObjectUtils.isNotEmpty(lists)){
 			//根据商品类型取得达到返现条件的排名公示
 			List<WalletCashBackQueue> wcbqs=walletCashBackQueueMapper.queryRtnCondtionDatas(lists, SysParameterConfigConstant.getValue(SysParameterConfigConstant.PLATFORM_CASH_BACK_MULTIPLE,Long.class));
+			logger.info("取得倍率：[{}]",SysParameterConfigConstant.getValue(SysParameterConfigConstant.PLATFORM_CASH_BACK_MULTIPLE,Long.class));
+			logger.info("取得待返现的数据列表,传入参数:[{}],取得结果:[{}]",JSON.toJSON(lists),JSON.toJSON(wcbqs));
 			//判断是否有用户达到返现条件
 			if(ObjectUtils.isNotEmpty(wcbqs)){
 				//返现关联人员
