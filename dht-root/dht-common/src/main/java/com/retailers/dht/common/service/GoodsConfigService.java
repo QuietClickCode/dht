@@ -2,6 +2,8 @@
 package com.retailers.dht.common.service;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsConfig;
+
+import java.util.List;
 import java.util.Map;
 /**
  * 描述：商品配置表Service
@@ -54,6 +56,8 @@ public interface GoodsConfigService {
 	 * @date 2017-10-12 10:37:31
 	 */
 	public boolean deleteGoodsConfigByGcId(Long gcId);
+
+	public List<GoodsConfig> queryGoodsConfigBygids(List<Long> gids);
 
 }
 

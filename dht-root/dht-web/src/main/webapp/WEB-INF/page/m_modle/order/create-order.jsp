@@ -190,6 +190,10 @@
             <span class="name">已为你节省</span>
             <span class="number" id="cutdownprice"><span class="mr_4">￥</span>0.00</span>
         </div>
+        <div class="price3" style="display: none">
+            <span class="name">会员最终价(钱包支付)</span>
+            <span class="number" id="menberFinalPrice"><span class="mr_4">￥</span>0.00</span>
+        </div>
     </div>
 
     <!-- 占位盒子 -->
@@ -206,43 +210,10 @@
         <a onclick="jiesuan();" class="order-payment-btn" >去支付</a>
     </div>
 
-    <!-- 支付方式选择 -->
-    <div class="order-payment-method" id="J_orderPaymentMethod">
-        <div class="title">
-            请选择支付方式
-            <i class="icon-close" id="J_paymentClose"></i>
-        </div>
-        <div class="prompt">
-            请在2小时内完成支付金额
-            <span>16.22</span> 元
-        </div>
-        <div class="payment-choice box2">
-            <div class="payment-method">
-                <i class="icon-logo"></i>
-                <span>余额支付</span>
-                <i class="icon-checkbox J_checkbox active"></i>
-            </div>
-            <div class="payment-method">
-                <i class="icon-wx"></i>
-                <span>微信支付</span>
-                <i class="icon-checkbox J_checkbox"></i>
-            </div>
-        </div>
-        <button onclick="jiesuan();" type="submit" class="payment-btn">确认支付</button>
-    </div>
-
 
 </div>
 
-<!-- 遮罩层 -->
-<div class="mark" id="J_mark"></div>
-<div class="footprint-prompt" id="J_footprintPrompt">
-    <p>确定清空所有浏览记录？</p>
-    <div class="footprint-confirm">
-        <span class="cancel" id="J_cancel">取消</span>
-        <span class="confirm" id="J_confirm">确定</span>
-    </div>
-</div>
+
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/layer/layer.js"></script>
 <!--页面交互-->
@@ -335,10 +306,10 @@
 <!--定义函数-->
 <script>
     var goodsData = ${sessionScope.checkOrderData};
-    console.log(goodsData)
+//    console.log(goodsData)
     var isActivity = goodsData.isActivity;
     var outuaId = goodsData.uaId;
-    console.log(goodsData);
+//    console.log(goodsData);
 
     var inittotalPrice = 0;
     <!--加载商品信息-->
@@ -380,6 +351,7 @@
         $('#goodsprice').html('<span class="mr_4">￥</span>'+parseFloat(index).toFixed(2));
         inittotalPrice = index;
         outprice();
+        loadGoodsIsMenberDiscount();
     }
 
     function loadAddress() {
@@ -721,7 +693,7 @@
                             freeFreightArr.push(gcps[j]);
                         }
                     }
-                    var ingdPrice = Number(gdprice);
+                    var ingdPrice = Number(gdprice)*num;
                     for(var j=0;j<gcpRateArr.length;j++){
                         var val =  Number($(gcpRateArr[j]).attr('val'));
                         ingdPrice = ingdPrice * val / 10;
@@ -734,8 +706,8 @@
                         isFreeFreight = isFreeFreight&&false;
                     }
                     ingdPrice = ingdPrice.toFixed(2);
-                    var nowoneprice = (gdprice - ingdPrice).toFixed(2);
-
+                    var nowoneprice = (gdprice*num - ingdPrice).toFixed(2);
+                    console.log(nowoneprice);
                     gcpdowncutprice += Number(nowoneprice);
                     downprice += nowoneprice;
                 }
@@ -800,12 +772,141 @@
         if(isFreeFreight){
             cutdownprice += gfPrice;
             lastPrice = lastPrice - gfPrice;
+            gfPrice = 0;
             $('#goodsFreight').html('<span class="mr_4">￥</span>0');
         }
 
         $('#cutdownprice').html('<span class="mr_4">￥</span>'+Number(cutdownprice).toFixed(2));
         $('#finalPrice').html('<span class="mr_4">￥</span>'+ Number(lastPrice).toFixed(2));
         $('#shouldPay').html('<span class="mr_4">￥</span>'+Number(lastPrice).toFixed(2));
+        outnotdiscountprice(lastPrice)
+    }
+
+    var menberdiscount = 10;
+    function outnotdiscountprice(price) {
+        price = price - gfPrice;
+        var downprice = 0;
+        var modalgoodsdivs = $('.order-product');
+        var goodsdivs = new Array();
+        for(var i=0;i<modalgoodsdivs.length;i++){
+            var isMenberdiscount = $(modalgoodsdivs[i]).find('span[name=isMenberdiscount]').attr('value');
+            if(isMenberdiscount==0){
+                goodsdivs.push(modalgoodsdivs[i]);
+            }
+        }
+
+        var gcpdowncutprice = 0;
+        var isFreeFreight = false;
+        var freeFreightIndex = 0;
+        if(goodsdivs!=null && goodsdivs.length>0){
+            var allprice = 0;
+            for(var i=0;i<goodsdivs.length;i++){
+                var goods = $(goodsdivs[i]);
+                var gdprice = goods.find('input[name=gdprice]')[0].value;
+                var num = goods.find('input[name=num]')[0].value;
+                allprice += gdprice*num;
+                var gcps = goods.find('.coupon-info-box').find('input[type=checkbox]:checked');
+                var index = 0;
+                if(gcps!=null&&gcps.length>0){
+                    var gcpRateArr = new Array();
+                    var gcpCashArr = new Array();
+                    var freeFreightArr = new Array();
+                    for(var j=0;j<gcps.length;j++){
+                        var gcpType = $(gcps[j]).attr('gcptype');
+                        if(gcpType==1){
+                            gcpRateArr.push(gcps[j]);
+                        }else if(gcpType==0){
+                            gcpCashArr.push(gcps[j]);
+                        }else if (gcpType==2){
+                            if(freeFreightIndex==0){
+                                isFreeFreight = true;
+                            }
+                            freeFreightArr.push(gcps[j]);
+                        }
+                    }
+                    var ingdPrice = Number(gdprice);
+                    for(var j=0;j<gcpRateArr.length;j++){
+                        var val =  Number($(gcpRateArr[j]).attr('val'));
+                        ingdPrice = ingdPrice * val / 10;
+                    }
+                    for(var j=0;j<gcpCashArr.length;j++){
+                        var val =  Number($(gcpCashArr[j]).attr('val'));
+                        ingdPrice = ingdPrice - val;
+                    }
+                    if(freeFreightArr.length==0){
+                        isFreeFreight = isFreeFreight&&false;
+                    }
+                    ingdPrice = ingdPrice.toFixed(2);
+                    var nowoneprice = (gdprice - ingdPrice).toFixed(2);
+
+                    gcpdowncutprice += Number(nowoneprice);
+                    downprice += nowoneprice;
+                }
+            }
+        }
+
+        var lastPrice = inittotalPrice - gcpdowncutprice;
+        var secondPrice = lastPrice;
+
+        var coupons = $('.coupon-list').find('input[type=checkbox]:checked');
+        var coupondowncutprice = 0;
+
+        if(coupons!=null&&coupons.length>0){
+            var firstRateArr = new Array();
+            var firstCashArr = new Array();
+            var lastRateArr = new Array();
+            var lastCashArr = new Array();
+//            console.log(coupons.length);
+            for(var i=0;i<coupons.length;i++){
+                console.log(i);
+                var coupon = $(coupons[i]);
+                var cpisfirst = Number(coupon.attr('cpisfirst'))==0;
+                var cptype = Number(coupon.attr('cptype'))==1;
+
+                if(cpisfirst&&cptype){
+                    firstRateArr.push(coupons[i]);
+                }
+                if(cpisfirst&&!cptype){
+                    firstCashArr.push(coupons[i]);
+                }
+                if(!cpisfirst&&cptype){
+                    lastRateArr.push(coupons[i]);
+                }
+                if(!cpisfirst&&!cptype){
+                    lastCashArr.push(coupons[i]);
+                }
+            }
+            for(var i=0;i<firstRateArr.length;i++){
+                secondPrice = secondPrice * Number($(firstRateArr[i]).attr('val'))/10;
+            }
+            for(var i=0;i<firstCashArr.length;i++){
+                secondPrice = secondPrice - Number($(firstCashArr[i]).attr('val'));
+            }
+            for(var i=0;i<lastRateArr.length;i++){
+                secondPrice = secondPrice * Number($(lastRateArr[i]).attr('val'))/10;
+            }
+            for(var i=0;i<lastCashArr.length;i++){
+                secondPrice = secondPrice - Number($(lastCashArr[i]).attr('val'));
+            }
+            coupondowncutprice = lastPrice - secondPrice;
+        }
+
+        lastPrice = lastPrice - coupondowncutprice +gfPrice;
+        var cutdownprice = gcpdowncutprice+coupondowncutprice;
+
+        if(isFreeFreight){
+            cutdownprice += gfPrice;
+            lastPrice = lastPrice - gfPrice;
+        }
+
+//        console.log(cutdownprice.toFixed(2));
+//        console.log((allprice-cutdownprice).toFixed(2));
+        var menberpricebefor = (allprice-cutdownprice).toFixed(2);
+//        console.log(menberpricebefor);
+//        console.log(price);
+        var menberprice = parseFloat((price-menberpricebefor)*menberdiscount/10)+parseFloat(menberpricebefor)+gfPrice;
+//        console.log(menberprice);
+        $('#menberFinalPrice').html('<span class="mr_4">￥</span>'+menberprice.toFixed(2));
     }
 
     function jiesuan(){
@@ -934,6 +1035,66 @@
         return str;
     }
 
+    <!--获取会员享受折扣-->
+    function queryUserDiscount() {
+        $.ajax({
+            type:"post",
+            url:"/user/queryUserDiscount",
+            dataType: "json",
+            data:{},
+            success:function(data){
+                var discount = data.msg;
+                if(discount!='SUCCESS'){
+                    $('#menberFinalPrice').parent().show();
+                    menberdiscount = discount;
+                }
+            }
+        });
+    }
+
+    <!--加载会员是否打折商品-->
+    function loadGoodsIsMenberDiscount() {
+
+        var goodsdiv = $('.order-product');
+        var gids = '';
+        for(var i=0;i<goodsdiv.length;i++){
+            var gid = $(goodsdiv[i]).find('input[name=goodsId]').val();
+            gids += ','+gid;
+        }
+        if(gids!=''){
+            gids = gids.substring(1);
+        }
+        $.ajax({
+            type:"post",
+            url:"/goodsConfig/queryGoodsConfigBygids",
+            dataType: "json",
+            data:{gids:gids},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    for(var i=0;i<rows.length;i++){
+                        var netgid = rows[i].gid;
+                        var isMenberdiscount = rows[i].isMenberdiscount;
+                        for(var j=0;j<goodsdiv.length;j++){
+                            var pgid = $(goodsdiv[j]).find('input[name=goodsId]').val();
+                            if(pgid==netgid){
+                                var html = '';
+                                if(isMenberdiscount==1){
+                                    html = '<span class="" name="isMenberdiscount" value="1" style="margin-left:20px;color:red">会员折扣商品</span>';
+                                }else{
+                                    html = '<span class="" name="isMenberdiscount" value="0" style="margin-left:20px;color:red">会员不折扣商品</span>';
+                                }
+                                $(goodsdiv[j]).find('.number-box').before(html);
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            }
+        });
+    }
+
     <!--返回上一页-->
     function returnhistory() {
         if(document.referrer===''){
@@ -954,6 +1115,10 @@
 
     <!--加载优惠与优惠券-->
     loadgcpandcp();
+
+    <!--查询会员享受折扣-->
+    queryUserDiscount();
+
 
 </script>
 </body>

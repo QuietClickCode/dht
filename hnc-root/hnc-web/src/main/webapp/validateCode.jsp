@@ -66,7 +66,7 @@
             border-radius: 3px;
             margin-bottom: 20px;
             position: absolute;
-            bottom: 80px;
+            bottom: 70px;
         }
 
         .manage_info input{
@@ -92,7 +92,7 @@
             margin-left: 60px;
             margin-bottom: 20px;
             position: absolute;
-            bottom: 30px;
+            bottom: 20px;
             text-align: center;
         }
 
@@ -106,7 +106,7 @@
 
         .info p{
             text-align: center;
-
+            font-size: 20px;
         }
 
         .danger{
@@ -145,16 +145,17 @@
                 <p id="msg">1111</p>
             </div>
             <div class="manage_info">
-                <input type="text" name="" id="validateCode" placeholder="验证码">
+                <input type="text" name="" id="validateCode" placeholder="验证码" onchange="validateCode()">
             </div>
 
-            <a href="javascript:void(0)" onclick="validateCode();" class="submit">验证</a>
+            <a href="javascript:void(0)" onclick="returnback();" class="submit">退出扫码</a>
         </div>
     </div>
 </div>
 
 
 <script>
+    var a = ${sessionScope.user.uid};
     function validateCode() {
         var validateCode = $('#validateCode').val();
         if(validateCode==''){
@@ -184,11 +185,15 @@
                     $('#msg').hide();
                     $('#validateCode').val('');
                 }
+                $('#validateCode').val('');
             }
         });
     }
 
+    function returnback() {
 
+        window.location.href='/login.jsp';
+    }
 
 
 </script>

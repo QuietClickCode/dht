@@ -69,6 +69,10 @@ public class GoodsConfigServiceImpl implements GoodsConfigService {
 		int status = goodsConfigMapper.updateGoodsConfig(goodsConfig);
 		return status == 1 ? true : false;
 	}
+	public List<GoodsConfig> queryGoodsConfigBygids(List<Long> gids){
+		List<GoodsConfig> goodsConfigs = goodsConfigMapper.queryGoodsConfigBygids(gids);
+		return goodsConfigs;
+	}
 
 	private void copyGoodsConfig(GoodsConfig goodsConfig,Long uploadpersonId){
 		GoodsConfigCopy goodsConfigCopy = new GoodsConfigCopy();

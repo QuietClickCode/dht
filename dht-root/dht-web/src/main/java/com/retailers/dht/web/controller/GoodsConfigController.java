@@ -11,7 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,5 +39,23 @@ public class GoodsConfigController extends BaseController {
         return gtm;
     }
 
+    @RequestMapping("/queryGoodsConfigBygids")
+    @ResponseBody
+    public  Map<String,Object> queryGoodsConfigBygids(String gids){
+        Map<String,Object> map = new HashMap<String,Object>();
+        if(ObjectUtils.isNotEmpty(gids)){
+            List<Long> gidList = new ArrayList<Long>();
+            String[] gidsStrArr = gids.split(",");
+            for(String gidStr:gidsStrArr){
+                Long gidLong = Long.parseLong(gidStr);
+                gidList.add(gidLong);
+            }
+            List<GoodsConfig> goodsConfigs = goodsConfigService.queryGoodsConfigBygids(gidList);
+            if(ObjectUtils.isNotEmpty(goodsConfigs)){
+                map.put("rows",goodsConfigs);
+            }
+        }
+        return map;
+    }
 
 }

@@ -53,7 +53,7 @@ public class CheckUserController extends BaseController {
     @ResponseBody
     public Map validateCheckUser(String validataCode,HttpServletRequest request){
         Long eid = getCurLoginUserId(request);
-//        System.out.println("eid:"+eid);
+        System.out.println("eid:"+eid);
         if(ObjectUtils.isEmpty(eid)){
             Map rm= new HashMap();
             rm.put("status","3");

@@ -874,27 +874,30 @@
                         $('#goodsSpecificatiodiv').html('');
                         var gsvalArr = new Array();
                         for(var i=0;i<rows.length;i++){
-                            var gsvids = rows[i].gsvidstr.split(' ');
-                            var gsvvals = rows[i].gsvvalstr.split(' ');
-                            var selectedgsvids = null;
-                            if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
-                                selectedgsvids = rows[i].selectedgsvidstr.split(' ');
-                                var str = '';
-                                var index = 0;
-                                for(var j=0;j<selectedgsvids.length;j++){
-                                    for(var k=0;k<gsvids.length;k++){
-                                        if(selectedgsvids[j]==gsvids[k]){
-                                            str += ','+gsvids[k]+':'+gsvvals[k];
-                                            index++;
+                            if(rows[i].gsvidstr!=null&&rows[i].gsvidstr!=''){
+                                var gsvids = rows[i].gsvidstr.split(' ');
+                                var gsvvals = rows[i].gsvvalstr.split(' ');
+                                var selectedgsvids = null;
+                                if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
+                                    selectedgsvids = rows[i].selectedgsvidstr.split(' ');
+                                    var str = '';
+                                    var index = 0;
+                                    for(var j=0;j<selectedgsvids.length;j++){
+                                        for(var k=0;k<gsvids.length;k++){
+                                            if(selectedgsvids[j]==gsvids[k]){
+                                                str += ','+gsvids[k]+':'+gsvvals[k];
+                                                index++;
+                                            }
                                         }
                                     }
-                                }
-                                if(index != 0){
-                                    str = str.substr(1);
-                                    str = rows[i].gsname+'_'+str;
-                                    gsvalArr.push(str);
+                                    if(index != 0){
+                                        str = str.substr(1);
+                                        str = rows[i].gsname+'_'+str;
+                                        gsvalArr.push(str);
+                                    }
                                 }
                             }
+
                         }
 
                         if(gsvalArr!=null && gsvalArr.length>0){

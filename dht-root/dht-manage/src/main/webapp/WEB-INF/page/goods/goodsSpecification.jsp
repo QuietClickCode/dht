@@ -450,7 +450,7 @@
                 type:"post",
                 url:'/goods/addGoodsGsval',
                 dataType: "json",
-                data:{gsId:gsId,gsvVal:newArr[i].value},
+                data:{gsId:gsId,gsvVal:newArr[i].value,gid:-1},
                 success:function(data){
                     var status = data.status;
                     if(status==-1){

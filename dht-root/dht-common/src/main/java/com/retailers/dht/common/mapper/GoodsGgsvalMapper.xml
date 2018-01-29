@@ -58,32 +58,29 @@
 	</select>
 
 	<select id="queryGgsrelListsOnce" resultMap="rm_goodsGgsvalOnce_vo">
-		select t4.gs_id,t4.gs_name,GROUP_CONCAT(DISTINCT t5.gsv_id separator ' ') gsvidstr, GROUP_CONCAT(DISTINCT t5.gsv_val separator ' ') gsvvalstr
-		 ,GROUP_CONCAT(DISTINCT t7.gsv_id separator ' ') selectedgsvidstr
+		select
+		t4.gs_id,t4.gs_name,
+		GROUP_CONCAT(DISTINCT t5.gsv_id separator ' ') gsvidstr,
+		GROUP_CONCAT(DISTINCT t5.gsv_val separator ' ') gsvvalstr ,
+		GROUP_CONCAT(DISTINCT t7.gsv_id separator ' ') selectedgsvidstr
 		from
-		t_goods t1 LEFT JOIN t_goods_ggsval_detail t7 ON t7.g_id=t1.g_id and t7.is_delete=0 ,
+		t_goods t1
+		LEFT JOIN t_goods_ggsval_detail t7 ON t7.g_id=t1.g_id and t7.is_delete=0 ,
 		t_goods_classification t2,
-		t_goods_type t3,
-		t_goods_specification t4,
-		t_goods_gsval t5,
-		t_goods_gtgsrel t6
+		t_goods_type t3
+		LEFT JOIN t_goods_gtgsrel t6 ON  t6.is_delete=0 and t3.gt_id=t6.gt_id
 
+		LEFT JOIN t_goods_specification t4 ON t4.is_delete=0 and t4.gs_id=t6.gs_id
+
+		LEFT JOIN t_goods_gsval t5 ON t6.gs_id=t5.gs_id and t5.is_delete=0 and (t5.g_id=-1 or t5.g_id=#{gid})
 		WHERE
 		t1.g_id=#{gid}
-		and (t5.g_id=-1 or t5.g_id=#{gid})
 		and t1.g_classification=t2.gg_id
 		and t2.gg_home=t3.gt_id
-		and t3.gt_id=t6.gt_id
-		and t4.gs_id=t6.gs_id
-		and t4.gs_id=t5.gs_id
 		and t1.is_delete=0
 		and t2.is_delete=0
 		and t3.is_delete=0
-		and t4.is_delete=0
-		and t5.is_delete=0
-		and t6.is_delete=0
-
-		GROUP BY t4.gs_id
+		GROUP BY t6.gs_id
 	</select>
 
 	<!--添加商品与规格值关系表 -->

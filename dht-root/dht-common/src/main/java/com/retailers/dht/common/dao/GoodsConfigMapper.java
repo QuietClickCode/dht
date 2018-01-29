@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsConfig;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品配置表DAO
@@ -52,4 +54,5 @@ public interface GoodsConfigMapper {
 	 */
 	public List<GoodsConfig> queryGoodsConfigList(Pagination<GoodsConfig> pagination);
 
+	public List<GoodsConfig> queryGoodsConfigBygids(@Param("gids") List<Long> gids);
 }

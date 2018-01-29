@@ -112,6 +112,15 @@
 		FROM t_goods_config
 		<include refid="goodsConfig_where"/>
 	</select>
+	<select id="queryGoodsConfigBygids" resultMap="rm_goodsConfig">
+		SELECT *
+		FROM t_goods_config
+		WHERE
+		g_id IN
+		<foreach collection="gids" item="gid" open="(" close=")" separator=",">
+			#{gid}
+		</foreach>
+	</select>
 	<!--添加商品配置表 -->
 	<insert id="saveGoodsConfig" parameterType="com.retailers.dht.common.entity.GoodsConfig" useGeneratedKeys="true" keyProperty="gcId">
 		INSERT INTO t_goods_config (

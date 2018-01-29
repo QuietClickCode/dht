@@ -85,6 +85,12 @@ public class Goods implements java.io.Serializable {
 	/**是否通过审核 0未审核 1已审核 2未通过审核*/
 	@NotEmpty
 	private Long isChecked;
+	/**商品来源名称*/
+	@NotEmpty
+	private String gsourcename;
+	/**商品来源地址*/
+	@NotEmpty
+	private String gsourceurl;
 	/**是否被删除 0没有删除 1已删除*/
 	@NotEmpty
 	private Long isDelete;
@@ -94,6 +100,22 @@ public class Goods implements java.io.Serializable {
 	//columns END
 
 	public Goods(){
+	}
+
+	public String getGsourcename() {
+		return gsourcename;
+	}
+
+	public void setGsourcename(String gsourcename) {
+		this.gsourcename = gsourcename;
+	}
+
+	public String getGsourceurl() {
+		return gsourceurl;
+	}
+
+	public void setGsourceurl(String gsourceurl) {
+		this.gsourceurl = gsourceurl;
 	}
 
 	public Long getRtId() {

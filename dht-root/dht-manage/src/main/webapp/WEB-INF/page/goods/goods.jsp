@@ -403,6 +403,21 @@
                                                             </div>
                                                         </div>
 
+                                                        <div class="col-lg-6" style="height:49px;">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">来源名称:
+                                                          </span>
+                                                                <input id="gsourcename" name="gsourcename" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-6" style="height:49px;">
+                                                            <div class="input-group form-group">
+                                                          <span class="input-group-addon">
+                                                              来源地址:
+                                                          </span>
+                                                                <input id="gsourceurl" name="gsourceurl" type="text" class="form-control"/>
+                                                            </div>
+                                                        </div>
 
                                                     <!--定金 详情描述-->
 
@@ -626,6 +641,20 @@
                                             <div class="modal-body" >
                                                 <div id="goodsSpecificatiodiv">
 
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-2" >
+                                                        批量设置
+                                                    </div>
+                                                    <div class="col-sm-2" id="psale" >
+                                                         <span onclick="setDataAll(this,6)">售价</span>
+                                                    </div>
+                                                    <div class="col-sm-2" id="pcost" >
+                                                        <span onclick="setDataAll(this,5)">成本</span>
+                                                    </div>
+                                                    <div class="col-sm-2" id="prest" >
+                                                        <span onclick="setDataAll(this,4)">库存/剩余库存</span>
+                                                    </div>
                                                 </div>
                                                 <div id="gstabeldiv" class="row clearfix" style="margin-top: 5px">
                                                     <div class="col-md-12 column">
@@ -1344,6 +1373,8 @@
         $("#gproductioninperson").val('');
         $("#gpickaddress").val('');
         $("#gpickperson").val('');
+        $("#gsourcename").val('');
+        $("#gsourceurl").val('');
         $("#gmaindirection").val('0');
         $('#maincityandcom').get(0).checked=true;
         UE.getEditor('editor').setContent('', false);
@@ -1414,6 +1445,8 @@
             $("#gproductioninperson").val(rowData.gproductioninperson);
             $("#gpickaddress").val(rowData.gpickaddress);
             $("#gpickperson").val(rowData.gpickperson);
+            $("#gsourcename").val(rowData.gsourcename);
+            $("#gsourceurl").val(rowData.gsourceurl);
             $('#gmaindirection').val(rowData.gmaindirection);
             if(rowData.gmaindirection==0){
                 $('#maincomtrayside').get(0).checked=true;
@@ -2111,52 +2144,76 @@
                     var html = '';
                     $('#goodsSpecificatiodiv').html('');
                     for(var i=0;i<rows.length;i++){
-                        var gsvids = rows[i].gsvidstr.split(' ');
-                        var gsvvals = rows[i].gsvvalstr.split(' ');
-                        var selectedgsvids = null;
-                        if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
-                            selectedgsvids = rows[i].selectedgsvidstr.split(' ');
-                        }
-                        html = '<div class="row">'+
-                            '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
-                            '<input name="specificationId" value="'+rows[i].gsid+'" type="hidden" />'+
-                            '<span>'+rows[i].gsname+'</span>'+
-                            '</div>'+
-                            '<div class="col-lg-11">'+
-                            '<div class="row">';
+                        if(rows[i].gsvidstr!=null){
+                            var gsvids = rows[i].gsvidstr.split(' ');
+                            var gsvvals = rows[i].gsvvalstr.split(' ');
+                            var selectedgsvids = null;
+                            if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
+                                selectedgsvids = rows[i].selectedgsvidstr.split(' ');
+                            }
+                            html = '<div class="row">'+
+                                '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
+                                '<input name="specificationId" value="'+rows[i].gsid+'" type="hidden" />'+
+                                '<span>'+rows[i].gsname+'</span>'+
+                                '</div>'+
+                                '<div class="col-lg-11">'+
+                                '<div class="row">';
 
-                        if(gsvids!=null&&gsvids.length>0){
-                            for(var j=0;j<gsvids.length;j++){
-                                html += '<div class="col-lg-2">'+
-                                    '<div class="checkbox checkbox-info" style="display: block">';
-                                var flag = false;
-                                if(selectedgsvids!=null&&selectedgsvids.length>0){
-                                    for(var k=0;k<selectedgsvids.length;k++){
-                                        if(selectedgsvids[k]==gsvids[j]){
-                                            flag = true;
-                                            break;
+                            if(gsvids!=null&&gsvids.length>0){
+                                for(var j=0;j<gsvids.length;j++){
+                                    html += '<div class="col-lg-2">'+
+                                        '<div class="checkbox checkbox-info" style="display: block">';
+                                    var flag = false;
+                                    if(selectedgsvids!=null&&selectedgsvids.length>0){
+                                        for(var k=0;k<selectedgsvids.length;k++){
+                                            if(selectedgsvids[k]==gsvids[j]){
+                                                flag = true;
+                                                break;
+                                            }
                                         }
                                     }
+                                    if(flag){
+                                        html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" checked="checked"/>';
+                                    }else{
+                                        html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" />';
+                                    }
+                                    html += '<label for="gsvalId'+i+gsvvals[j]+'">'+gsvvals[j]+'</label>'+
+                                        '</div>'+
+                                        '</div>';
                                 }
-                                if(flag){
-                                    html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" checked="checked"/>';
-                                }else{
-                                    html += '<input onclick="createtabel();" id="gsvalId'+i+gsvvals[j]+'" class="styled" name="gsvalId" value="'+gsvids[j]+'" type="checkbox" />';
-                                }
-                                html += '<label for="gsvalId'+i+gsvvals[j]+'">'+gsvvals[j]+'</label>'+
-                                    '</div>'+
-                                    '</div>';
                             }
-                        }
                             html += '<div class="col-lg-2">'+
                                 '<div class="checkbox checkbox-info" style="display: block">' +
                                 '<button class="btn btn-default" onclick="addgsval(this);">+</button>'+
                                 '</div>'+
                                 '</div>'+
                                 '</div>'+
-                            '</div>'+
-                            '</div>';
-                        $('#goodsSpecificatiodiv').append(html);
+                                '</div>'+
+                                '</div>';
+                            $('#goodsSpecificatiodiv').append(html);
+                        }else{
+                            if(rows[i].selectedgsvidstr!=null&&rows[i].selectedgsvidstr.length>0){
+                                selectedgsvids = rows[i].selectedgsvidstr.split(' ');
+                            }
+                            html = '<div class="row">'+
+                                '<div class="col-lg-1" style="text-align: right;margin-top: 10px">'+
+                                '<input name="specificationId" value="'+rows[i].gsid+'" type="hidden" />'+
+                                '<span>'+rows[i].gsname+'</span>'+
+                                '</div>'+
+                                '<div class="col-lg-11">'+
+                                '<div class="row">';
+
+                            html += '<div class="col-lg-2">'+
+                                '<div class="checkbox checkbox-info" style="display: block">' +
+                                '<button class="btn btn-default" onclick="addgsval(this);">+</button>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>'+
+                                '</div>';
+                            $('#goodsSpecificatiodiv').append(html);
+                        }
+
                     }
                 }
             }
@@ -2206,6 +2263,7 @@
                     }
                     html += '</tbody>';
                     $('#gstabel').append(html);
+                    $('#prest').hide();
                 }
             }
         });
@@ -2213,6 +2271,7 @@
 
     <!--创建表格-->
     function createtabel() {
+        $('#prest').show();
         var gsIds = new Array();
         var gsNames = new Array();
         var gsvalId = $('input[name="gsvalId"]:checked');
@@ -2441,7 +2500,7 @@
     }
     <!--清除所有关系-->
     function clearggsdata(gid) {
-
+                var imgsfileinput = $('#gstabel').find('input[type="file"]').prev().prev();
                 var imgs = $('#gstabel').find('input[type="file"]');
                 imglength = imgs.length;
                 uploadimgindex = 0;
@@ -2462,7 +2521,36 @@
                         submitggsvaldetaildata();
                     }
                 }else{
-                    toastr.warning("请将图片上传完整！");
+                    var flag = true;
+                    if(imgsfileinput!=null&&imgsfileinput.length>0){
+                        for(var i=0;i<imgsfileinput.length;i++){
+                            if(imgsfileinput[i].value==-1){
+                                flag = false;
+                                break;
+                            }
+                        }
+                        if(flag){
+                            uploadimgindex = 0;
+                            imglength = 0;
+                            for(var i=0;i<imgsfileinput.length;i++){
+                                var imgname = $(imgsfileinput[i]).next().next().val();
+                                if(imgname!=null&&imgname!=''){
+                                    imglength++;
+                                }
+                            }
+                            for(var i=0;i<imgsfileinput.length;i++){
+                                var imgname = $(imgsfileinput[i]).next().next().val();
+                                if(imgname!=null&&imgname!=''){
+                                    uploadimgfunction(imgsfileinput[i]);
+                                }
+                            }
+
+
+                        }else{
+                            toastr.warning("请将图片上传完整！");
+                        }
+                    }
+
                 }
 
     }
@@ -2692,9 +2780,10 @@
                     var gsval = row.gsvVal;
                     var gsvId = row.gsvId;
                     var html = '';
-                    html = '<input onclick="createtabel();" id="gsvalId1"'+gsval+' class="styled" name="gsvalId" value="'+gsvId+'" type="checkbox">' +
+                    html = '<input onclick="createtabel();" id="gsvalId1"'+gsval+' class="styled" name="gsvalId" value="'+gsvId+'" type="checkbox" checked="checked">' +
                         '<label for="gsvalId1'+gsval+'">'+gsval+'</label>';
                     $(obj).parent().html(html);
+                    createtabel();
                 }
             }
         });
@@ -2703,6 +2792,42 @@
 
     function cansol(obj) {
         $(obj).parent().parent().remove();
+    }
+
+    function setDataAll(obj,num){
+        var trs = $('#ggsvaldetailTbody').find('tr');
+        if(trs==null||trs.length==0){
+            toastr.warning('暂无商品规格!');
+            return;
+        }
+        var oldtext = $(obj).html();
+        var html = '<input type="text" style="width:60px"/> <span onclick="suresetp(\''+oldtext+'\',this,'+num+')" style="cursor: pointer">确定</span><span onclick="cancelsetp(\''+oldtext+'\',this,'+num+')" style="cursor: pointer;margin-left: 10px">取消</span>';
+        $(obj).parent().html(html);
+    }
+    function suresetp(text,obj,num) {
+        var val = $(obj).prev().val();
+        if(isNaN(val)&&val!=''){
+            toastr.warning('您输入的不是数字!');
+            return;
+        }
+//        console.log(val);
+        val = parseFloat(val).toFixed(2);
+//        console.log(val);
+        var trs = $('#ggsvaldetailTbody').find('tr');
+        for(var i=0;i<trs.length;i++){
+            var tr = trs[i];
+            var tds = $(tr).find('td');
+            $(tds[tds.length-num]).find('input').val(val);
+            if(num==4){
+                $(tds[tds.length-3]).find('input').val(val);
+            }
+        }
+        var html = '<span onclick="setDataAll(this,'+num+')">'+text+'</span>';
+        $(obj).parent().html(html);
+    }
+    function cancelsetp(text,obj,num) {
+        var html = '<span onclick="setDataAll(this,'+num+')">'+text+'</span>';
+        $(obj).parent().html(html);
     }
 </script>
 

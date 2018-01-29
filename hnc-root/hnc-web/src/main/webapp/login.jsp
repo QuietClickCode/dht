@@ -114,6 +114,7 @@
 </div>
 
 <script>
+    <% session.invalidate(); %>
     $(".submit").click(function () {
         let phone = $(".account").val();
         let pwd = $(".password").val();

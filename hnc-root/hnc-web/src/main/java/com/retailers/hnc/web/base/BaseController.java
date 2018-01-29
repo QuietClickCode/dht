@@ -1,6 +1,7 @@
 package com.retailers.hnc.web.base;
 
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.auth.entity.SysUser;
 import com.retailers.hnc.common.entity.EmployeeManage;
@@ -67,6 +68,7 @@ public class BaseController extends BaseWrite {
 
     protected Long getCurLoginUserId(HttpServletRequest request){
         Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        System.out.println(JSON.toJSONString(obj));
         SysUser sysUser=null;
         if(ObjectUtils.isNotEmpty(obj)){
             sysUser=(SysUser)obj;
