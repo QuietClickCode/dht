@@ -6,6 +6,7 @@ import com.retailers.dht.common.service.OrderSuccessQueueService;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.service.AttachmentService;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
+import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +73,7 @@ public class ManageTaskJob {
         try{
             orderser.clearExpireOrder();
         }catch (Exception e){
-
+            logger.info("清除失效订单异常:\r\n"+StringUtils.getErrorInfoFromException(e));
         }finally {
             procedureToolsService.singleUnLockManager(key);
         }
