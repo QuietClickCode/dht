@@ -18,6 +18,7 @@
 
 	.wrap{
 		display: none;
+		background-color: rgba(0,0,0,0.5);
 	}
 
 	.div_pay_mode{
@@ -32,6 +33,15 @@
 		font-size: .3rem;
 		color: #333;
 	}
+
+	.wrap_title{
+		border-bottom:1px solid rgba(0,0,0,0.1);
+	}
+
+	.inputBoxContainer{
+		margin-top: 1rem;
+	}
+
 	.div_pay_mode>.pay_mode_title>.p1{
 		float: right;
 		text-align: right;
@@ -50,6 +60,11 @@
 	.pay_mode_input_box.active{
 		border-color: #f85039;
 	}
+
+	.pay_mode_input_box.active .label_box i{
+		background-color: red;
+	}
+
 	.pay_mode_input_box>img{
 		display: inline-block;
 		width: .62rem;
@@ -110,6 +125,35 @@
 		margin:-2px 2px 1px 0px;
 		border:#999 1px solid;
 	}
+
+	.wrap_box{
+		width: 100%;
+		height:55%;
+		position: absolute;
+		bottom: 0;
+		background-color: #fafafa;
+	}
+
+	#confirmButton{
+		background-color: #178fe6;
+		border:1px solid #178fe6;
+	}
+
+	.wrap_title i{
+		width: 0.4rem;
+		height: 0.4rem;
+		float: left;
+		display: inline-block;
+		margin-left: 0.2rem;
+		margin-top: 0.3rem;
+		background: url("/img/remove_icon.png") no-repeat;
+		background-size: 0.4rem 0.4rem;
+	}
+
+	.inputBoxContainer .bogusInput input{
+		font-size: 0.8rem;
+	}
+
 	input[type="checkbox"],input[type="radio"] {display:none;}
 	input[type="radio"] + i {border-radius:16px;}
 	input[type="checkbox"] + i {border-radius:16px;}
@@ -118,22 +162,24 @@
 	input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
 <body class="bge6">
-	<div class="wrap" style="display: none" id="sysInPayPwdDiv">
-		<div class="wrap_title">输入支付密码</div>
-		<div class="inputBoxContainer" id="inputBoxContainer">
-			<input type="text" class="realInput"/>
-			<div class="bogusInput">
-				<input type="password" maxlength="6" disabled/>
-				<input type="password" maxlength="6" disabled/>
-				<input type="password" maxlength="6" disabled/>
-				<input type="password" maxlength="6" disabled/>
-				<input type="password" maxlength="6" disabled/>
-				<input type="password" maxlength="6" disabled/>
+	<div class="wrap" style="" id="sysInPayPwdDiv">
+		<div class="wrap_box">
+			<div class="wrap_title"><i class="close_wrap"></i>输入支付密码</div>
+			<div class="inputBoxContainer" id="inputBoxContainer">
+				<input type="text" class="realInput"/>
+				<div class="bogusInput">
+					<input type="password" maxlength="6" disabled/>
+					<input type="password" maxlength="6" disabled/>
+					<input type="password" maxlength="6" disabled/>
+					<input type="password" maxlength="6" disabled/>
+					<input type="password" maxlength="6" disabled/>
+					<input type="password" maxlength="6" disabled/>
+				</div>
 			</div>
-		</div>
-		<div class="wrap_tip_box">注:此密码仅用于大汇堂余额支付使用</div>
-		<div class="wrap_btn_box">
-			<button id="confirmButton" class="confirmButton" type="button" onclick="walletPay()">完成</button>
+			<div class="wrap_tip_box">注:此密码仅用于大汇堂余额支付使用</div>
+			<div class="wrap_btn_box">
+				<button id="confirmButton" class="confirmButton" type="button" onclick="walletPay()">完成</button>
+			</div>
 		</div>
 	</div>
 
@@ -148,11 +194,11 @@
     		<p class="p1">金额&emsp;<span>${price}</span>元</p>
     	</div>
     	<div class="pay_mode_input_box active" attr="wallet" style="display: none;" id="walletPayDiv">
-    		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="checked">✓</i></label>
+    		<label class="label_box"><input type="radio" id="radio_input1" name="abc" checked="checked"><i class="">✓</i></label>
     		<img src="/img/icon-logo.png"/>
     		<span class="span1">余额支付&nbsp;&nbsp;${menberPrice}</span>
     	</div>
-    	<div class="pay_mode_input_box" attr="wx">
+    	<div class="pay_mode_input_box" attr="wx" id="wxPay">
     		<label class="label_box"><input type="radio" id="radio_input2" name="abc"><i>✓</i></label>
     		<img src="/img/wx-logo.png"/>
     		<span class="span1">微信支付</span>
@@ -174,6 +220,7 @@
 		if(!isSubmit){
 			isSubmit=true;
 			let payWay=$(".active").attr("attr");
+            console.log(payWay);
 			if(payWay=="wallet"){
 				$("#sysInPayPwdDiv").show();
 			}else if(payWay=="wx"){
@@ -344,6 +391,8 @@
 		    $("#walletPayDiv").show();
 		}else{
             $("#walletPayDiv").hide();
+            $("#walletPayDiv").removeClass("active");
+            $("#wxPay").addClass("active");
 		}
 	});
 	function walletPay() {
@@ -378,5 +427,12 @@
 		}
 	}
 
+</script>
+
+<script>
+	$(".close_wrap").click(function () {
+        $(".wrap").hide();
+        isSubmit = false;
+    });
 </script>
 </html>
