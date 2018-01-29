@@ -25,8 +25,7 @@ public class OrderSuccessQueueServiceTest extends TestBaseJunit {
     @Test
     public void test(){
         Map<Long,Long> maps=new HashMap<Long, Long>();
-        maps.put(4l,6076501l);
-        maps.put(5l,9673181l);
+        maps.put(8l,49177386l);
         long orderId=990012;
         orderSuccessQueueService.test(maps,orderId);
     }

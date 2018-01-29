@@ -18,11 +18,12 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 <style>
+    input,button,select,textarea{outline:none;}
     .wrap{
-         width: 100%;
-         height: 100%;
-         padding-top: 2.4rem;
-     }
+        width: 100%;
+        height: 100%;
+        padding-top: 0.7rem;
+    }
     .wrap_title{
         width: 100%;
         height: 1rem;
@@ -50,7 +51,7 @@
     .inputBoxContainer .bogusInput{
         width: 100%;
         height: 100%;
-        border: #0e75dc 1px solid;
+        border: rgba(0,0,0,0.1) 1px solid;
         overflow: hidden;
         position: absolute;
         z-index: 0;
@@ -73,7 +74,7 @@
         float:left;
         background: #ffffff;
         text-align: center;
-        font-size: .2rem;
+        font-size: .8rem;
         border: none;
         border-right: #e6e6e6 1px solid;
         box-sizing: border-box;
@@ -87,18 +88,25 @@
         padding: 0 .2rem;
     }
     .confirmButton{
-        width: 100%;
-        height: .8rem;
+        width: 6.5rem;
+        margin: 0 auto;
+        height: 1rem;
         text-align: center;
-        line-height: .8rem;
-        background: #da3836;
+        line-height: 1rem;
+        background: #108ee9;
         color: #fff;
-        border: #da3836 1px solid;
+        border: #108ee9 1px solid;
         border-radius: 4px;
         display: block;
         font-size: .3rem;
         margin-bottom: .2rem;
+        outline：none;
     }
+
+    .confirmButton:hover,.confirmButton:link,.confirmButton:visited,.confirmButton:active{
+        border: #108ee9 1px solid;
+    }
+
     .showValue{
         width: 2.4rem;
         height: .22rem;
@@ -107,14 +115,42 @@
         text-align: center;
         margin: 0 auto;
     }
+
+    .wrap_tips{
+        width: 100%;
+        height:1.5rem;
+        background-color: #fff;
+        text-align: center;
+        line-height: 1.5rem;
+        font-size: 0.35rem;
+        color: #373737;
+        font-family: sans-serif;
+    }
+
+    .tips{
+        font-family: sans-serif;
+    }
+
+    .tips span{
+        font-weight: 550;
+        color: #323232;
+        font-family: sans-serif;
+    }
+
+    .bge6{
+        background-color: #f5f4f9;
+    }
 </style>
 <body class="bge6">
 <div class="specialty-title2 borderB">
     <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>设置支付密码</span>
 </div>
+
+<div class="wrap_tips">
+    <span class="tips">请输入<span>支付密码</span></span>
+</div>
 <div class="wrap">
-    <div class="wrap_title">设置6位数字支付密码</div>
     <div class="inputBoxContainer" id="inputBoxContainer">
         <input type="text" class="realInput"/>
         <div class="bogusInput">
@@ -127,7 +163,7 @@
         </div>
     </div>
     <div class="wrap_tip_box">注:此密码仅用于大汇堂余额支付使用</div>
-    <div class="wrap_btn_box">
+    <div class="wrap_btn_box" style="display: none;">
         <button id="confirmButton" class="confirmButton">完成</button>
     </div>
 </div>
@@ -168,6 +204,21 @@
                     this.realInput.value = real_str.substring(0,6);
                     this.callback();
                 }
+                if(payPwd == "" && this.realInput.value.length == 6){
+                    $(".tips").text("请确认支付密码");
+                    payPwd = this.realInput.value;
+                    $(".bogusInput input").val("");
+                    $(".realInput").val("");
+                }
+
+                if(payPwd != "" && this.realInput.value.length == 6){
+                    verifyPwd = this.realInput.value;
+                    $(".wrap_btn_box").show();
+                }
+
+                if(payPwd != "" && this.realInput.value.length != 6){
+                    $(".wrap_btn_box").hide();
+                }
             },
             getBoxInputValue:function(){
                 var realValue = "";
@@ -189,11 +240,12 @@
         return boxInput.getBoxInputValue();
     }
 
+    var payPwd = "";
+    var verifyPwd = "";
     $("#confirmButton").click(function () {
-        let value = getValue();
-        if(value == ""){
+        if(payPwd != verifyPwd){
             layer.open({
-                content: '支付密码不能为空'
+                content: '两次输入的密码不一致'
                 ,skin: 'msg'
                 ,time: 1
             });
@@ -205,7 +257,7 @@
             type:"post",
             dataType:"json",
             data:{
-                payPwd:value
+                payPwd:payPwd
             },
             success:function(data){
                 layer.open({

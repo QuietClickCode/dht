@@ -41,7 +41,7 @@
         <div class="user-header" >
             <a href="/user/userDetailInfo" class="icon-change">
                 <div class="user-img">
-                    <img src="/img/header.png" alt=""/>
+                    <img src="/img/user_header.png" alt=""/>
                 </div>
             </a>
             <p class="user-name">${user.uname}</p>
@@ -203,7 +203,9 @@
                     }
                     if(data.user != undefined){
                         $(".user-name").text(data.user.uname);
-                        $(".user-img img").attr("src",data.user.headUrl);
+                        if(data.user.headUrl != null){
+                            $(".user-img img").attr("src",data.user.headUrl);
+                        }
                     }
                 }
             });

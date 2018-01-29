@@ -12,6 +12,12 @@
         .price{
             float: right;
         }
+
+        .order_tips{
+            text-align: center;
+            color: #808080;
+            display: none;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -279,9 +285,9 @@
             </div>
         </li>
     </ul>
-
 </div>
 
+<div class="order_tips"><span>暂无订单信息~</span></div>
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/tabs.js"></script>
 
@@ -347,6 +353,12 @@
      */
     function orderView(rows,num){
         if(rows){
+            if(rows.length == 0){
+                console.log("111");
+                $(".order_tips").show();
+            }else{
+                $(".order_tips").hide();
+            }
             for(var row of rows){
                 let osMsg = '未支付';
                 if(row.orderStatus==1){

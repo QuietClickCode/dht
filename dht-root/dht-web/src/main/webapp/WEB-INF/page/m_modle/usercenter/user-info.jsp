@@ -23,14 +23,14 @@
         <a href="javascript:void(0);" class="displayB">
             <span class="name">头像</span>
             <i class="icon-data-right"></i>
-            <img class="user-head" src="" alt="..">
+            <img class="user-head" src="/img/user_header.png" alt="..">
         </a>
     </div>
     <div class="my-data-list marginB2">
         <a href="javascript:void(0)" class="displayB">
             <span class="name">会员等级</span>
             <i class="icon-data-right"></i>
-            <span class="text1"></span>
+            <span class="text1 rechageNm"></span>
         </a>
     </div>
     <div class="my-data-list">
@@ -130,6 +130,7 @@
                     let name = data.nickName;
                     data_sex = data.sex;
                     let userPhone = data.userPhone;
+                    $(".rechageNm").text(data.user.rechageNm);
                     $(".nickName").text(name);
                     if(data_sex == 0){
                         $("#sex_name_box").text("男");
@@ -157,15 +158,12 @@
                             $(".user-address").text(userAddress);
                         }
                     }
-
-                    if(userHeadSrc == ""){
-                        $(".user-head").remove();
+                    console.log(userHeadSrc);
+                    if(userHeadSrc == null){
+//                        $(".user-head").remove();
                     }else{
                         $(".user-head").attr("src",userHeadSrc);
                     }
-
-                    if($(".user-head").attr("src") == "")
-                        $(".user-head").remove();
                 }
             });
         });
