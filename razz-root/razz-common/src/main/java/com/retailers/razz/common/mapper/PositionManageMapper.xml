@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.razz.common.dao.PositionManageMapper">
+
+	<resultMap id="rm_positionManage" type="com.retailers.razz.common.entity.PositionManage">
+			<result property="id" column="id"/>
+			<result property="positionName" column="position_name"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="positionManage_columns">
+		id,position_name,is_delete,version
+	</sql>
+	<!-- 根据职位表主键取得数据 -->
+	<select id="queryPositionManageById" resultMap="rm_positionManage" parameterType="java.lang.Long">
+		SELECT <include refid="positionManage_columns" />
+		FROM t_position_manage WHERE id = #{id}
+	</select>
+	<!-- 职位表查询条件组合 -->
+	<sql id="positionManage_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.positionName and '' != params.positionName">
+				AND position_name = #{params.positionName}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryPositionManageList" resultMap="rm_positionManage" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="positionManage_columns" />
+		FROM t_position_manage
+		<include refid="positionManage_where"/>
+	</select>
+	<!--添加职位表 -->
+	<insert id="savePositionManage" parameterType="com.retailers.razz.common.entity.PositionManage" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_position_manage (
+			position_name,is_delete,version
+		) VALUES
+		(
+			#{positionName,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改职位表 -->
+	<update id="updatePositionManage" parameterType="com.retailers.razz.common.entity.PositionManage">
+		UPDATE t_position_manage
+		<set>
+            <if test="null != positionName and '' != positionName">
+                position_name = #{positionName},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE id = #{id} and version = #{version}
+	</update>
+	<!--删除职位表 -->
+	<delete id="deletePositionManageById" parameterType="java.lang.Long">
+		DELETE FROM t_position_manage WHERE id = #{id}
+	</delete>
+</mapper>
