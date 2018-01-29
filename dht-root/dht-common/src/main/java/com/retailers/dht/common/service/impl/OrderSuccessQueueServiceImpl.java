@@ -353,6 +353,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			infos.setTotalPrice(maps.get(key));
 			lists.add(infos);
 		}
+		logger.info("取得返现类型Ids:[{}]",JSON.toJSON(lists));
 		if(ObjectUtils.isNotEmpty(lists)){
 			//根据商品类型取得达到返现条件的排名公示
 			List<WalletCashBackQueue> wcbqs=walletCashBackQueueMapper.queryRtnCondtionDatas(lists, SysParameterConfigConstant.getValue(SysParameterConfigConstant.PLATFORM_CASH_BACK_MULTIPLE,Long.class));
@@ -415,7 +416,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 
 		}
 		logger.info("开始计算排名累计金额结束,执行时间：[{}]",(System.currentTimeMillis()-curDate.getTime()));
-
 	}
 
 
