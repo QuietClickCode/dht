@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.OrderRefundMapper">
+
+	<resultMap id="rm_orderRefund" type="com.retailers.dht.common.entity.OrderRefund">
+		<result property="rdId" column="rd_id"/>
+		<result property="rdOrderNo" column="rd_order_no"/>
+		<result property="rdOrder" column="rd_order"/>
+		<result property="rdPrice" column="rd_price"/>
+		<result property="rdIntegral" column="rd_integral"/>
+		<result property="rdCallbackNo" column="rd_callback_no"/>
+		<result property="rdSendDate" column="rd_send_date"/>
+		<result property="rdDate" column="rd_date"/>
+		<result property="rdRemark" column="rd_remark"/>
+		<result property="rdCreateDate" column="rd_create_date"/>
+		<result property="rdStatus" column="rd_status"/>
+		<result property="rdSuid" column="rd_suid"/>
+		<result property="rdAuditingRemark" column="rd_auditing_remark"/>
+		<result property="rdAuditingDate" column="rd_auditing_date"/>
+	</resultMap>
+	<resultMap id="rm_orderRefund_vo" type="com.retailers.dht.common.vo.OrderRefundVo">
+		<result property="rdId" column="rd_id"/>
+		<result property="rdOrderNo" column="rd_order_no"/>
+		<result property="rdStatus" column="rd_status"/>
+		<result property="rdPrice" column="rd_price"/>
+		<result property="rdCreateDate" column="rd_create_date"/>
+		<result property="rdRemark" column="rd_remark"/>
+		<result property="rdSuid" column="rd_suid"/>
+		<result property="uName" column="u_name"/>
+		<result property="rdAuditingDate" column="rd_auditing_date"/>
+		<result property="rdAuditingRemark" column="rd_auditing_remark"/>
+		<result property="rdSendDate" column="rd_send_date"/>
+		<result property="rdCallbackNo" column="rd_callback_no"/>
+		<result property="orderBuyUid" column="order_buy_uid"/>
+		<result property="buyName" column="buyNm"/>
+		<result property="orderPayWay" column="order_pay_way"/>
+		<result property="orderPayUseWay" column="order_pay_use_way"/>
+		<result property="orderUaName" column="order_ua_name"/>
+		<result property="orderUaPhone" column="order_ua_phone"/>
+		<result property="orderUaAddress" column="order_ua_address"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="orderRefund_columns">
+		rd_id,rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date
+	</sql>
+	<!-- 根据退款订单列表主键取得数据 -->
+	<select id="queryOrderRefundByRdId" resultMap="rm_orderRefund" parameterType="java.lang.Long">
+		SELECT <include refid="orderRefund_columns" />
+		FROM t_order_refund WHERE rd_id = #{rdId}
+	</select>
+	<!--添加退款订单列表 -->
+	<insert id="saveOrderRefund" parameterType="com.retailers.dht.common.entity.OrderRefund" useGeneratedKeys="true" keyProperty="rdId">
+		INSERT INTO t_order_refund (
+			rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date
+		) VALUES
+		(
+			#{rdOrderNo,jdbcType=VARCHAR},#{rdOrder,jdbcType=BIGINT},#{rdPrice,jdbcType=BIGINT},#{rdIntegral,jdbcType=BIGINT},#{rdCallbackNo,jdbcType=VARCHAR},#{rdSendDate,jdbcType=TIMESTAMP},#{rdDate,jdbcType=TIMESTAMP},#{rdRemark,jdbcType=VARCHAR},#{rdCreateDate,jdbcType=TIMESTAMP},#{rdStatus,jdbcType=BIGINT},#{rdSuid,jdbcType=BIGINT},#{rdAuditingRemark,jdbcType=VARCHAR},#{rdAuditingDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+	<!--修改退款订单列表 -->
+	<update id="updateOrderRefund" parameterType="com.retailers.dht.common.entity.OrderRefund">
+		UPDATE t_order_refund
+		<set>
+            <if test="null != rdOrderNo and '' != rdOrderNo">
+                rd_order_no = #{rdOrderNo},
+            </if>
+            <if test="null != rdOrder">
+                rd_order = #{rdOrder},
+            </if>
+            <if test="null != rdPrice">
+                rd_price = #{rdPrice},
+            </if>
+            <if test="null != rdIntegral">
+                rd_integral = #{rdIntegral},
+            </if>
+            <if test="null != rdCallbackNo and '' != rdCallbackNo">
+                rd_callback_no = #{rdCallbackNo},
+            </if>
+            <if test="null != rdSendDate">
+                rd_send_date = #{rdSendDate},
+            </if>
+            <if test="null != rdDate">
+                rd_date = #{rdDate},
+            </if>
+            <if test="null != rdRemark and '' != rdRemark">
+                rd_remark = #{rdRemark},
+            </if>
+            <if test="null != rdCreateDate">
+                rd_create_date = #{rdCreateDate},
+            </if>
+            <if test="null != rdStatus">
+                rd_status = #{rdStatus},
+            </if>
+            <if test="null != rdSuid">
+                rd_suid = #{rdSuid},
+            </if>
+            <if test="null != rdAuditingRemark and '' != rdAuditingRemark">
+                rd_auditing_remark = #{rdAuditingRemark},
+            </if>
+            <if test="null != rdAuditingDate">
+                rd_auditing_date = #{rdAuditingDate},
+            </if>
+		</set>
+		WHERE rd_id = #{rdId}
+	</update>
+	<!--删除退款订单列表 -->
+	<delete id="deleteOrderRefundByRdId" parameterType="java.lang.Long">
+		DELETE FROM t_order_refund WHERE rd_id = #{rdId}
+	</delete>
+
+
+	<!--分页查询 -->
+	<select id="queryOrderRefundList" resultMap="rm_orderRefund_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+			r.rd_id,
+			r.rd_order_no,
+			r.rd_status,
+			r.rd_price,
+			r.rd_create_date,
+			r.rd_remark,
+			r.rd_suid,
+			su.u_name,
+			r.rd_auditing_date,
+			r.rd_auditing_remark,
+			r.rd_send_date,
+			r.rd_callback_no,
+			o.order_buy_uid,
+			u.u_name buyNm,
+			o.order_pay_way,
+			o.order_pay_use_way,
+			o.order_ua_name,
+			o.order_ua_phone,
+			o.order_ua_address
+		FROM
+			t_order_refund r
+		LEFT JOIN t_sys_user su ON r.rd_suid = su.u_id, t_order o,
+		 t_user u
+		WHERE
+			r.rd_order = o.id
+		AND o.order_buy_uid = u.u_id
+	</select>
+</mapper>

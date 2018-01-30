@@ -1426,6 +1426,7 @@ public class OrderServiceImpl implements OrderService {
 	 * 清除超时订单
 	 */
 	public void clearExpireOrder()throws AppException{
+		logger.info("开始执行失效订单处理");
 		Date curDate=new Date();
 		//取得时时间
 		Double expireTime=SysParameterConfigConstant.getValue(SysParameterConfigConstant.ORDER_EXPIRE_DATE,Double.class);
@@ -1476,7 +1477,7 @@ public class OrderServiceImpl implements OrderService {
 		orderMapper.clearExpireOrders(orderIds);
 		//批量设置订单超时
 		System.out.println(JSON.toJSON(expireOrders));
-
+		logger.info("失效订单处理完毕");
 	}
 }
 
