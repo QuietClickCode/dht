@@ -428,7 +428,6 @@ public class OrderController extends BaseController {
                 }
             }
             nCell.setCellValue(maps.get(column));
-
         }
     }
 }
