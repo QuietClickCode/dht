@@ -213,6 +213,15 @@ public interface OrderService {
 	 * @return
 	 */
 	public void clearExpireOrder()throws AppException;
+
+
+	/**
+	 * 取得订单详情
+	 * @param buyUid
+	 * @param orderId
+	 * @return
+	 */
+	public OrderVo queryOrderInfos(Long buyUid,Long orderId) throws AppException;
 }
 
 

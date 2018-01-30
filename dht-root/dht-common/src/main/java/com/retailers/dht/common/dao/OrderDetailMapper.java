@@ -88,4 +88,11 @@ public interface OrderDetailMapper {
 	 * @return
 	 */
 	public List<OrderDetailVo> buyOrderDetailInfos(List<Long> orderId);
+
+	/**
+	 * 根据订单id取得订单
+	 * @param orderId
+	 * @return
+	 */
+	public List<OrderDetailVo> buyOrderDetailInfosById(Long orderId);
 }
