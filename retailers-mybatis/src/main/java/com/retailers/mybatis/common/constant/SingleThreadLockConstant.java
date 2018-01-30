@@ -35,6 +35,10 @@ public class SingleThreadLockConstant {
      * 清除超时订单
      */
     public static final String CLEAR_EXPIRE_ORDER="clearExpireOrder";
+    /**
+     * 审核退款订单
+     */
+    public static final String AUDITING_REFUND_ORDER="auditingRefund";
 
 
 

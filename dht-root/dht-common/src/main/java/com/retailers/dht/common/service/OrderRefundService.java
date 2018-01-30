@@ -67,6 +67,17 @@ public interface OrderRefundService {
 	 */
 	public String createRefund(Long uid,Long orderId,String remark)throws AppException;
 
+	/**
+	 * 退款审核
+	 * @param uid
+	 * @param orId
+	 * @param status
+	 * @param remark
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean auditingOrderRefund(Long uid,Long orId,Long status,String remark)throws AppException;
+
 }
 
 
