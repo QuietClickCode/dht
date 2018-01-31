@@ -30,7 +30,7 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
     <span>订单详情</span>
 </div>
 
@@ -60,14 +60,14 @@
                 <span class="text">乐事多力多滋薯片多口味零食大礼盒400克</span>
                 <span class="price">￥29.9</span>
             </a>
-            <p>规格:400g
+            <p class="gsName">规格:400g
                 <span class="number">×1</span>
             </p>
         </div>
     </div>
-    <div class="after-sales">
+    <%--<div class="after-sales">
         <a href="">申请退款</a>
-    </div>
+    </div>--%>
 </div>
 
 <div class="obligations-total box2">
@@ -81,43 +81,126 @@
     </p>
     <p class="total-number2">
         运费
-        <span class="number2">￥150.22</span>
+        <span class="number2 number3">￥150.22</span>
     </p>
     <p class="total-number2">
         会员折扣
-        <span class="number2">￥150.22</span>
+        <span class="number2 number4">￥150.22</span>
     </p>
     <p class="total-number2">
         优惠卷
-        <span class="number2">￥150.22</span>
+        <span class="number2 number5">￥150.22</span>
     </p>
     <p class="total-number2">
         以为您节省
-        <span class="number2">￥150.22</span>
+        <span class="number2 number6">￥150.22</span>
     </p>
 </div>
 
 <div class="obligations-order-number">
-    <p>订单编号：2017234974325446840</p>
-    <p>下单时间：2017-10-17 17：35：22</p>
+    <p class="order_num">订单编号：2017234974325446840</p>
+    <p class="order_time">下单时间：2017-10-17 17：35：22</p>
 </div>
 
 <div class="obligations-payment">
-    <p>
+    <p style="line-height: 1rem;">
         支付方式
-        <span>余额支付</span>
+        <span class="orderPayUseWay">余额支付</span>
     </p>
-    <p>
-        发票信息
-        <span>个人</span>
-    </p>
+
 </div>
 
 <div class="placeholder-footer2"></div>
 <div class="obligations-footer">
-    <a href="">查看物流</a>
-    <a href="">确认收货</a>
+    <%--<a href="">查看物流</a>
+    <a href="">确认收货</a>--%>
 </div>
+
+<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script>
+    var order;
+    var goods;
+    $(function () {
+        $.ajax({
+            url:"/order/queryOrderInfos",
+            dataType:"json",
+            type: "post",
+            data:{
+                orderId:getUrlParam("orderId")
+            },
+            success:function (data) {
+                order = data.data;
+                goods = order.ods[0];
+                orderStatus();
+            }
+        });
+    });
+
+</script>
+
+<%--订单状态--%>
+<script>
+    function orderStatus() {
+        console.log(order);
+        if(order.orderStatus == 0){
+            orderStatus_0();
+        }else if(order.orderStatus == 3){
+            orderStatus_3();
+        }
+    }
+
+    <%--未支付--%>
+    function orderStatus_0() {
+        $(".start-text").text("等待用户付款");
+        setOrderInfo();
+        $(".orderPayUseWay").text("未支付");
+        $(".orderPayWay").text("无");
+        $(".obligations-footer").append('<a href="/wxPay/payInfo?orderNo='+order.orderNo+'&price='+order.orderTradePrice+'&type='+order.orderType+'&formate=true">去付款</a>');
+    }
+
+    <%--待发货--%>
+    function orderStatus_3(){
+        setOrderInfo();
+    }
+    
+    function setOrderInfo() {
+        $(".time").text("下单时间："+order.orderCreateDate.substring(0,10));
+        $(".time").append("<i></i>");
+        $(".user-name").text("收货人："+order.orderBuyNm);
+        $(".user-name").append('<span class="phone">'+order.orderUaPhone+'</span>');
+        $(".obligations-address").text(order.orderUaAddress);
+        $(".img img").attr("src",goods.gImgUrl);
+        $(".text").text(goods.gName);
+        $(".price").text("￥"+goods.gdPrice);
+        $(".gsName").text("规格:"+goods.gsName);
+        $(".gsName").append('<span class="number">'+'x'+goods.odBuyNumber+'</span>');
+        $(".number1").text("￥"+Number(order.orderTradePrice).toFixed(2));
+        $(".number2").text("￥"+Number(order.orderGoodsTotalPrice).toFixed(2));
+        $(".number3").text("￥"+Number(order.orderLogisticsPrice).toFixed(2));
+        $(".number4").text("￥-"+Number(order.orderDiscount).toFixed(2));
+        $(".number5").text("￥-"+Number(order.orderCouponPrice).toFixed(2));
+        let num = Number(order.orderDiscount) + Number(order.orderCouponPrice);
+        $(".number6").text("￥"+num)
+        $(".order_num").text("订单编号："+order.orderNo);
+        $(".order_time").text("下单时间："+order.orderCreateDate);
+        if(order.orderPayWay == 0){
+            $(".orderPayUseWay").text("微信");
+        }else if(order.orderPayWay == 1){
+            $(".orderPayUseWay").text("支付宝");
+        }else if(order.orderPayWay == 2){
+            $(".orderPayUseWay").text("用户钱包");
+        }
+    }
+</script>
+
+<%--获取订单ID--%>
+<script>
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+</script>
 </body>
 
 </html>

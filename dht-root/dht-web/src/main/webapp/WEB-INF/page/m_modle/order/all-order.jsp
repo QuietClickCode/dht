@@ -28,7 +28,7 @@
 
 <div class="all-order-tab" id="J_allOrderTab">
     <a href="#allOrder" id="allOrders" class="active">全部订单</a>
-    <a id="obligation" href="#dfk">待付款</a>
+    <a id="obligation" href="#dfk">未付款</a>
     <a id="unsent" href="#dfh">待发货</a>
     <a id="receive" href="#dsh">待收货</a>
     <a id="appraise" href="#dpj">待评价</a>
@@ -172,7 +172,7 @@
     <!-- 待付款 -->
     <ul class="all-order-list displayN" id="dfk">
         <li class="box2">
-            <p class="start">待付款</p>
+            <p class="start">未付款</p>
             <div class="order-infor">
                 <a href="" class="img">
                     <img src="/img/list2.jpg" alt="">
@@ -397,7 +397,7 @@
 
                 if(num == 100){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo">查看订单</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
                     $("#allOrder").append(ov);
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
@@ -405,15 +405,15 @@
                     $("#dfk").append(ov);
                 }else if(num == 3){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
                     $("#dfh").append(ov);
                 }else if(num == 4){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
                     $("#dsh").append(ov);
                 }else if(num == 9){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
                     $("#dpj").append(ov);
                 }
             }
