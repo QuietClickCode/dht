@@ -78,6 +78,15 @@ public interface OrderRefundService {
 	 */
 	public boolean auditingOrderRefund(Long uid,Long orId,Long status,String remark)throws AppException;
 
+	/**
+	 * 退款
+	 * @param suid 操作用户
+	 * @param orId 退款单id
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean orderRefund(Long suid,Long orId)throws AppException;
+
 }
 
 
