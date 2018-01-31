@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.razz.common.dao.ArticleTypeMapper">
+
+	<resultMap id="rm_articleType" type="com.retailers.razz.common.entity.ArticleType">
+			<result property="tid" column="t_id"/>
+			<result property="tname" column="t_name"/>
+			<result property="parentId" column="parent_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_articleTypeVo" type="com.retailers.razz.common.vo.ArticleTypeVo">
+		<result property="tid" column="t_id"/>
+		<result property="tname" column="t_name"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="articleType_columns">
+		t_id,t_name,parent_id,is_delete,version
+	</sql>
+	<!-- 根据文章类别主键取得数据 -->
+	<select id="queryArticleTypeByTid" resultMap="rm_articleType" parameterType="java.lang.Long">
+		SELECT <include refid="articleType_columns" />
+		FROM t_article_type WHERE t_id = #{tid}
+	</select>
+	<!-- 文章类别查询条件组合 -->
+	<sql id="articleType_where">
+		<where>
+			<if test="null != params.tid">
+				AND t_id = #{params.tid}
+			</if>
+			<if test="null != params.tname and '' != params.tname">
+				AND t_name = #{params.tname}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryArticleTypeList" resultMap="rm_articleType" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="articleType_columns" />
+		FROM t_article_type
+		<include refid="articleType_where"/>
+	</select>
+	<!--添加文章类别 -->
+	<insert id="saveArticleType" parameterType="com.retailers.razz.common.entity.ArticleType" useGeneratedKeys="true" keyProperty="tid">
+		INSERT INTO t_article_type (
+			t_name,parent_id,is_delete,version
+		) VALUES
+		(
+			#{tname,jdbcType=VARCHAR},#{parentId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改文章类别 -->
+	<update id="updateArticleType" parameterType="com.retailers.razz.common.entity.ArticleType">
+		UPDATE t_article_type
+		<set>
+            <if test="null != tname and '' != tname">
+                t_name = #{tname},
+            </if>
+            <if test="null != parentId">
+                parent_id = #{parentId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE t_id = #{tid} and version = #{version}
+	</update>
+	<!--删除文章类别 -->
+	<delete id="deleteArticleTypeByTid" parameterType="java.lang.Long">
+		DELETE FROM t_article_type WHERE t_id = #{tid}
+	</delete>
+
+	<!--查询所有类别-->
+	<select id="queryAllArticleType" resultMap="rm_articleTypeVo">
+		SELECT <include refid="articleType_columns" />
+		FROM t_article_type
+		WHERE is_delete = 0
+	</select>
+</mapper>

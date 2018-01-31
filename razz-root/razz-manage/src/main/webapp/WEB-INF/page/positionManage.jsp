@@ -27,6 +27,8 @@
 
         <button class="btn btn-default" type="button" onclick="deleteOpeningList()">删除</button>
 
+        <button class="btn btn-default" type="button" onclick="uploadImg()">上传图片</button>
+
 
     <br>
     <div class="form-group" style="margin-top: 5px">
@@ -121,6 +123,26 @@
     </div>
 </div>
 
+
+<div class="modal fade" tabindex="-1" id="upload_" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <form id="test">
+                    <input type="file" id="demo"  name="dht_image_upload"  style="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary sub_upload">上传</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 
 <!-- 公用下拉择树 -->
 <div id="menuContent1" class="menuContent1" style="display:none; position: absolute;z-index:1059">
@@ -439,41 +461,34 @@
 <!--timer时间选择器-->
 <script type="text/javascript"  src="/js/daterangepicker/moment.js"></script>
 <script type="text/javascript"  src="/js/daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript">
-    $(document).ready(function (){
-        //时间插件
+<script>
+    function uploadImg() {
+        $("#upload_").modal("show");
+    }
 
-        $('#reportrange').daterangepicker(
-            {
-                startDate: moment(),
-                minDate : moment(),
-                showDropdowns : true,
-                timePicker:true,
-                timePickerIncrement:5,
-                timePicker24Hour:true,//24 小时制
-                opens : 'right', //日期选择框的弹出位置
-                buttonClasses : [ 'btn btn-default' ],
-                applyClass : 'btn-small btn-primary blue',
-                cancelClass : 'btn-small',
-                format: 'YYYY-MM-DD',
-                locale : {
-                    format: 'YYYY-MM-DD',
-                    applyLabel : '确定',
-                    cancelLabel : '取消',
-                    fromLabel : '起始时间',
-                    toLabel : '结束时间',
-                    daysOfWeek : [ '日', '一', '二', '三', '四', '五', '六' ],
-                    monthNames : [ '一月', '二月', '三月', '四月', '五月', '六月',
-                        '七月', '八月', '九月', '十月', '十一月', '十二月' ],
-                    firstDay : 1
-                }
-            }, function(start, end, label) {
-                $("#editorGoodsCouponForm #gcpStartTime").val(start.format('YYYY-MM-DD'));
-                $("#editorGoodsCouponForm #gcpEndTime").val(end.format('YYYY-MM-DD'));
-                $("#editorGoodsCouponForm #gcpValidTime").val(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
-            });
-        //设置日期菜单被选项  --结束--
-    })
+    $(".sub_upload").click(function () {
+        var files = $("#demo").get(0).files;
+        var fd = new FormData($( "#test" )[0]);
+        if(files[0] == undefined)
+            return;
+        fd.append("imageUse","image/jpeg");
+        fd.append("isWatermark","false");
+        fd.append("isCompress", "false");
+        fd.append("dht_image_upload",files[0]);
+        $.ajax({
+            url:"/file/imageUpload",
+            type:"post",
+            dataType:"json",
+            data: fd,
+            processData : false,
+            contentType : false,
+            success:function (data) {
+                console.log(data);
+            }
+        })
+    });
+
+
 </script>
 </body>
 </html>

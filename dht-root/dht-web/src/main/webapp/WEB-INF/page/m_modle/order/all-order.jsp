@@ -354,7 +354,6 @@
     function orderView(rows,num){
         if(rows){
             if(rows.length == 0){
-                console.log("111");
                 $(".order_tips").show();
             }else{
                 $(".order_tips").hide();
@@ -398,7 +397,7 @@
 
                 if(num == 100){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">查看订单</a></div></div></li>';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo">查看订单</a></div></div></li>';
                     $("#allOrder").append(ov);
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
