@@ -57,6 +57,8 @@ public class OrderRefund implements java.io.Serializable {
 	/**审核时间*/
 	@NotEmpty
 	private Date rdAuditingDate;
+	//数据版本
+	private Integer version;
 	//columns END
 
 	public OrderRefund(){
@@ -165,5 +167,11 @@ public class OrderRefund implements java.io.Serializable {
 		return this.rdAuditingDate;
 	}
 
+	public Integer getVersion() {
+		return version;
+	}
 
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
 }

@@ -95,6 +95,13 @@ public interface OrderMapper {
 	public List<OrderVo> queryOrderInfoLists(Pagination<OrderVo> pagination);
 
 	/**
+	 * 根据谭id 取得订单
+	 * @param orderId
+	 * @return
+	 */
+	public OrderVo queryOrderInfoById(Long orderId);
+
+	/**
 	 * 取得订单数据
 	 * @param params
 	 * @return

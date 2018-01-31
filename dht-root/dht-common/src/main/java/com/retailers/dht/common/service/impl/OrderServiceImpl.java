@@ -1212,32 +1212,6 @@ public class OrderServiceImpl implements OrderService {
 		page.setParams(params);
 		//取得详查详情列表
 		List<OrderVo> lists = orderMapper.queryOrderInfoLists(page);
-
-//		Map<Long,String> oderTypes=new HashMap<Long, String>();
-//		if(ObjectUtils.isNotEmpty(lists)){
-//			List<Long> orderIds=new ArrayList<Long>();
-//			//取得订单详情
-//			for(OrderVo ov:lists){
-//				orderIds.add(ov.getId());
-//				oderTypes.put(ov.getId(),ov.getOrderType());
-//			}
-//			//取得所有购买详情
-//			List<OrderDetailVo> ods=orderDetailMapper.buyOrderDetailInfos(orderIds);
-//			Map<Long,List<OrderDetailVo>> maps=new HashMap<Long, List<OrderDetailVo>	>();
-//			for(OrderDetailVo od:ods){
-//				if(maps.containsKey(od.getOdOrderId())){
-//					maps.get(od.getOdOrderId()).add(od);
-//				}else{
-//					List<OrderDetailVo> odvs=new ArrayList<OrderDetailVo>();
-//					odvs.add(od);
-//					maps.put(od.getOdOrderId(),odvs);
-//				}
-//			}
-//			//设置订单关联商品详情
-//			for(OrderVo o:lists){
-//				o.setOds(maps.get(o.getId()));
-//			}
-//		}
 		queryOrderDtails(lists);
 		page.setData(lists);
 		return page;
@@ -1478,6 +1452,26 @@ public class OrderServiceImpl implements OrderService {
 		//批量设置订单超时
 		System.out.println(JSON.toJSON(expireOrders));
 		logger.info("失效订单处理完毕");
+	}
+
+	/**
+	 * 根据订单id取得订单信息
+	 * @param buyUid
+	 * @param orderId
+	 * @return
+	 */
+	public OrderVo queryOrderInfos(Long buyUid, Long orderId) throws AppException{
+		//取得详查详情列表
+		OrderVo ov = orderMapper.queryOrderInfoById(orderId);
+		if(ObjectUtils.isNotEmpty(ov)){
+			if(ov.getOrderBuyUid().intValue()!=buyUid.intValue()){
+				throw new AppException("不能查询非本人订单");
+			}
+			//取得所有购买详情
+			List<OrderDetailVo> ods=orderDetailMapper.buyOrderDetailInfosById(orderId);
+			ov.setOds(ods);
+		}
+		return ov;
 	}
 }
 

@@ -17,6 +17,7 @@
 		<result property="rdSuid" column="rd_suid"/>
 		<result property="rdAuditingRemark" column="rd_auditing_remark"/>
 		<result property="rdAuditingDate" column="rd_auditing_date"/>
+		<result property="version" column="version"/>
 	</resultMap>
 	<resultMap id="rm_orderRefund_vo" type="com.retailers.dht.common.vo.OrderRefundVo">
 		<result property="rdId" column="rd_id"/>
@@ -41,7 +42,7 @@
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="orderRefund_columns">
-		rd_id,rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date
+		rd_id,rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date,version
 	</sql>
 	<!-- 根据退款订单列表主键取得数据 -->
 	<select id="queryOrderRefundByRdId" resultMap="rm_orderRefund" parameterType="java.lang.Long">
@@ -51,10 +52,23 @@
 	<!--添加退款订单列表 -->
 	<insert id="saveOrderRefund" parameterType="com.retailers.dht.common.entity.OrderRefund" useGeneratedKeys="true" keyProperty="rdId">
 		INSERT INTO t_order_refund (
-			rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date
+			rd_order_no,rd_order,rd_price,rd_integral,rd_callback_no,rd_send_date,rd_date,rd_remark,rd_create_date,rd_status,rd_suid,rd_auditing_remark,rd_auditing_date,version
 		) VALUES
 		(
-			#{rdOrderNo,jdbcType=VARCHAR},#{rdOrder,jdbcType=BIGINT},#{rdPrice,jdbcType=BIGINT},#{rdIntegral,jdbcType=BIGINT},#{rdCallbackNo,jdbcType=VARCHAR},#{rdSendDate,jdbcType=TIMESTAMP},#{rdDate,jdbcType=TIMESTAMP},#{rdRemark,jdbcType=VARCHAR},#{rdCreateDate,jdbcType=TIMESTAMP},#{rdStatus,jdbcType=BIGINT},#{rdSuid,jdbcType=BIGINT},#{rdAuditingRemark,jdbcType=VARCHAR},#{rdAuditingDate,jdbcType=TIMESTAMP}
+			#{rdOrderNo,jdbcType=VARCHAR},
+			#{rdOrder,jdbcType=BIGINT},
+			#{rdPrice,jdbcType=BIGINT},
+			#{rdIntegral,jdbcType=BIGINT},
+			#{rdCallbackNo,jdbcType=VARCHAR},
+			#{rdSendDate,jdbcType=TIMESTAMP},
+			#{rdDate,jdbcType=TIMESTAMP},
+			#{rdRemark,jdbcType=VARCHAR},
+			#{rdCreateDate,jdbcType=TIMESTAMP},
+			#{rdStatus,jdbcType=BIGINT},
+			#{rdSuid,jdbcType=BIGINT},
+			#{rdAuditingRemark,jdbcType=VARCHAR},
+			#{rdAuditingDate,jdbcType=TIMESTAMP},
+			0
 		)
 	</insert>
 	<!--修改退款订单列表 -->
@@ -100,14 +114,14 @@
             <if test="null != rdAuditingDate">
                 rd_auditing_date = #{rdAuditingDate},
             </if>
+			version=version+1,
 		</set>
-		WHERE rd_id = #{rdId}
+		WHERE rd_id = #{rdId} AND version=#{version}
 	</update>
 	<!--删除退款订单列表 -->
 	<delete id="deleteOrderRefundByRdId" parameterType="java.lang.Long">
 		DELETE FROM t_order_refund WHERE rd_id = #{rdId}
 	</delete>
-
 
 	<!--分页查询 -->
 	<select id="queryOrderRefundList" resultMap="rm_orderRefund_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
