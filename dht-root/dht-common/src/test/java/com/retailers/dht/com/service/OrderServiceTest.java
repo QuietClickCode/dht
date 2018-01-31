@@ -113,4 +113,12 @@ public class OrderServiceTest extends TestBaseJunit {
     public void clearExpireOrder()throws Exception{
         orderService.clearExpireOrder();
     }
+
+    @Test
+    public void queryOrderInfos()throws Exception{
+        long uid=15599231;
+        long orderId=272;
+        OrderVo ov= orderService.queryOrderInfos(uid,orderId);
+        System.out.println(JSON.toJSON(ov));
+    }
 }

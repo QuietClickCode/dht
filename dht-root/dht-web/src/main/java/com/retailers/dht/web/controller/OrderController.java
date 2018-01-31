@@ -408,5 +408,24 @@ public class OrderController extends BaseController {
         }
         return success(true);
     }
+    /**
+     * 取得用户订单
+     * @param request
+     * @param orderId  订单id
+     * @return
+     */
+    @RequestMapping("queryOrderInfos")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
+    @ResponseBody
+    public BaseResp queryOrderInfos(HttpServletRequest request,Long orderId){
+        long uid=getCurLoginUserId(request);
+        try{
+            OrderVo ov =  orderService.queryOrderInfos(uid,orderId);
+            return success(ov);
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
+    }
+
 }
 

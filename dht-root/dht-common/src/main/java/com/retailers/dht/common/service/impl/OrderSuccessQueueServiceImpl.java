@@ -145,19 +145,23 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 				//交易总金额
 				long orderTradePrice=order.getOrderTradePrice();
 				//取得详查类型
-				if(!order.getOrderType().equals(OrderEnum.RECHARGE)){
+				if(!order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+					boolean isShop=false;
+					if(order.getOrderType().equals(OrderEnum.SHOPPING.getKey())){
+						isShop=true;
+					}
 					//判断用户支付类型 是否马上返现 判断是否是钱包支付 是否返现
 					if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
 						orderTradePrice=order.getOrderMenberPrice()+NumberUtils.calculationDiscountPrice(order.getOrderLogisticsPrice(),order.getOrderDiscount());
 						//判断是否是返现
 						if(ObjectUtils.isNotEmpty(order.getOrderIntegralOrCash())&&order.getOrderIntegralOrCash().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
 							//取得订单详情 进行商品分类处理
-							goodsType(order,ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+							goodsType(order,ods,true,order.getId(),order.getOrderBuyUid(),orderTradePrice,isShop);
 						}else{
-							goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+							goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice,isShop);
 						}
 					}else{
-						goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice);
+						goodsType(order,ods,false,order.getId(),order.getOrderBuyUid(),orderTradePrice,isShop);
 					}
 					//计算推广提成
 					popularize(order,ods);
@@ -194,39 +198,54 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 	 * @param buyUid 购买用户id
 	 * @return
 	 */
-	private void goodsType(Order order,List<OrderDetail> ods,Boolean isCash,Long orderId,Long buyUid,Long tradePrice){
-		Date curDate=new Date();
+	private void goodsType(Order order,List<OrderDetail> ods,Boolean isCash,Long orderId,Long buyUid,Long tradePrice,boolean isShop){
+		//根据商品类型取得商品是否直接添加至返现队例
 		List<Long> goodsIds=new ArrayList<Long>();
 		for(OrderDetail od:ods){
 			goodsIds.add(od.getOdGoodsId());
 		}
 		//根据商品id取得商品类型
 		Map<Long,GoodsReturnVo> maps=goodsService.queryGoodsReturn(goodsIds);
-		//是否返现
-		if(isCash){
-			orderCashBack(maps,orderId,ods,buyUid);
-		}else{
-			//立退返现列表
-			List<OrderDetail> cash=new ArrayList<OrderDetail>();
-			//自然消费，不返现列表
-			List<OrderDetail> unCash=new ArrayList<OrderDetail>();
-			long cashPrice=0l;
-			long unCashPrice=0l;
-			for(OrderDetail od:ods){
-				if(ObjectUtils.isNotEmpty(maps)&& maps.containsKey(od.getOdGoodsId())){
-					if(maps.get(od.getOdGoodsId()).getRtType().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
-						cash.add(od);
-						cashPrice+=od.getOdMenberPrice();
-					}else{
-						unCash.add(od);
+		if(isShop){
+			//是否返现
+			if(isCash){
+				orderCashBack(maps,orderId,ods,buyUid);
+			}else{
+				//立退返现列表
+				List<OrderDetail> cash=new ArrayList<OrderDetail>();
+				//自然消费，不返现列表
+				List<OrderDetail> unCash=new ArrayList<OrderDetail>();
+				long cashPrice=0l;
+				long unCashPrice=0l;
+				for(OrderDetail od:ods){
+					if(ObjectUtils.isNotEmpty(maps)&& maps.containsKey(od.getOdGoodsId())){
+						if(maps.get(od.getOdGoodsId()).getRtType().intValue()==OrderConstant.ORDER_RETURN_TYPE_CASH){
+							cash.add(od);
+							cashPrice+=od.getOdMenberPrice();
+						}else{
+							unCash.add(od);
+						}
 					}
 				}
+				unCashPrice=tradePrice-cashPrice;
+				//判断是否存在立即返现列表
+				if(ObjectUtils.isNotEmpty(cash)){
+					orderCashBack(maps,orderId,cash,buyUid);
+				}
+				if(ObjectUtils.isNotEmpty(unCash)){
+					orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
+				}
+				//添加卡包操作日志
+				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
 			}
-			unCashPrice=tradePrice-cashPrice;
-			//判断是否存在立即返现列表
-			if(ObjectUtils.isNotEmpty(cash)){
-				orderCashBack(maps,orderId,cash,buyUid);
+		}else{
+			//自然消费，不返现列表
+			List<OrderDetail> unCash=new ArrayList<OrderDetail>();
+			long unCashPrice=0l;
+			for(OrderDetail od:ods){
+				unCash.add(od);
 			}
+			unCashPrice=tradePrice;
 			if(ObjectUtils.isNotEmpty(unCash)){
 				orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 			}
@@ -234,7 +253,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
 		}
 	}
-
 	/**
 	 * 设置订单返现 交易返现
 	 * @param maps

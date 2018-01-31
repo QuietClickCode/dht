@@ -2,18 +2,22 @@
 package com.retailers.dht.common.service.impl;
 
 import com.retailers.dht.common.constant.OrderConstant;
+import com.retailers.dht.common.constant.OrderRefundConstant;
 import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.dao.OrderRefundMapper;
 import com.retailers.dht.common.entity.Order;
 import com.retailers.dht.common.entity.OrderRefund;
 import com.retailers.dht.common.service.OrderRefundService;
 import com.retailers.dht.common.vo.OrderRefundVo;
+import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,6 +34,8 @@ import java.util.Map;
  */
 @Service("orderrefundService")
 public class OrderRefundServiceImpl implements OrderRefundService {
+	private Logger logger = LoggerFactory.getLogger(OrderRefundServiceImpl.class);
+
 	@Autowired
 	private OrderRefundMapper orderRefundMapper;
 	@Autowired
@@ -148,8 +154,44 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 		or.setRdOrder(orderId);
 		or.setRdPrice(refundPrice);
 		or.setRdRemark(remark);
+		or.setRdStatus((long)OrderRefundConstant.REFUND_AUDITING_STATUS_CREATE);
 		or.setRdCreateDate(new Date());
 		return or;
+	}
+
+	/**
+	 * 审核退款申请
+	 * @param uid 后台系统用户
+	 * @param orId 退款申请id
+	 * @param status 审核状态
+	 * @param remark 备注（不通过时说明原因）
+	 * @return
+	 * @throws AppException
+	 */
+	@Transactional(rollbackFor = Exception.class)
+	public boolean auditingOrderRefund(Long uid, Long orId, Long status, String remark) throws AppException {
+		logger.info("开始进入退款审核操作,审核退款id:[{}]，操作人:[{}],审核状态:[{}]",orId,uid,status);
+		//添加同步锁
+		String key=StringUtils.formate(SingleThreadLockConstant.AUDITING_REFUND_ORDER,orId+"");
+		procedureToolsService.singleLockManager(key);
+		try{
+			OrderRefund or = orderRefundMapper.queryOrderRefundByRdId(orId);
+			if(ObjectUtils.isEmpty(or)){
+				throw new AppException("退款数据不存在");
+			}
+			//判断退款状态（只能处理创建状态）
+			if(or.getRdStatus().intValue()!= OrderRefundConstant.REFUND_AUDITING_STATUS_CREATE){
+				throw new AppException("退款申请状态异常");
+			}
+			or.setRdStatus(status);
+			or.setRdAuditingDate(new Date());
+			or.setRdAuditingRemark(remark);
+			or.setRdSuid(uid);
+			orderRefundMapper.updateOrderRefund(or);
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
+		}
+		return true;
 	}
 }
 
