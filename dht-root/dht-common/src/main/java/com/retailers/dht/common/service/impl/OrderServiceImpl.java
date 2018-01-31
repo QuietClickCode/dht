@@ -1098,7 +1098,7 @@ public class OrderServiceImpl implements OrderService {
 				throw new AppException("钱包余额不足，请换其他支付");
 			}
 			//修改用户钱包
-			long updateSize=userCardPackageMapper.userWalletPay(ucp.getId(),order.getOrderTradePrice(),ucp.getVersion());
+			long updateSize=userCardPackageMapper.userWalletPay(ucp.getId(),payPrice,ucp.getVersion());
 			if(updateSize==0){
 				logger.info("钱包支付失败，余额不足");
 				throw new AppException("钱包余额不足，请换其他支付");
