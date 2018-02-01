@@ -126,8 +126,12 @@ public class OrderRefundController extends BaseController{
     @Function(label = "退款",description = "退款",resourse = "refund.orderRefund",parentRes = "refund.openRefundPage",sort =3)
     @ResponseBody
     public BaseResp orderRefund(HttpServletRequest request,Long orId){
-
-
-        return null;
+        long sysUid=getCurLoginUserId(request);
+        try{
+            orderRefundService.orderRefund(sysUid,orId);
+        }catch (AppException e){
+            return errorForSystem(e.getMessage());
+        }
+        return success(true);
     }
 }

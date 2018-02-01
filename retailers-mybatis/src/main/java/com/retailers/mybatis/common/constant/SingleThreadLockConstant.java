@@ -39,6 +39,10 @@ public class SingleThreadLockConstant {
      * 审核退款订单
      */
     public static final String AUDITING_REFUND_ORDER="auditingRefund";
+    /**
+     * 退款
+     */
+    public static final String REFUND="refund";
 
 
 

@@ -193,5 +193,38 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 		}
 		return true;
 	}
+
+	/**
+	 * 退款处理
+	 * @param suid 操作用户
+	 * @param orId 退款单id
+	 * @return
+	 * @throws AppException
+	 */
+	public boolean orderRefund(Long suid, Long orId) throws AppException {
+		String key=StringUtils.formate(SingleThreadLockConstant.REFUND,orId+"");
+		procedureToolsService.singleLockManager(key);
+		try{
+			OrderRefund orderRefund=orderRefundMapper.queryOrderRefundByRdId(orId);
+			if(ObjectUtils.isEmpty(orderRefund)){
+				throw new AppException("退款申请不存在");
+			}
+			Order order = orderMapper.queryOrderByRefundId(orId);
+			if(ObjectUtils.isEmpty(order)){
+				throw new AppException("退款申请不存在");
+			}
+			//判断支付方式 微信
+			if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WX){
+
+			}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
+
+			}else{
+				throw new AppException("未知支付方式");
+			}
+		}finally {
+			procedureToolsService.singleUnLockManager(key);
+		}
+		return false;
+	}
 }
 
