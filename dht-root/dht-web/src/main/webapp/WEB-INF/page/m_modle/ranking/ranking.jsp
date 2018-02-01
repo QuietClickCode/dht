@@ -64,6 +64,21 @@
             width: 1.6rem;
             font-size: 0.3rem;
         }
+
+        .rannk_tb .td_number{
+            font-size: 0.3rem;
+        }
+
+        .rannk_tb .td_back_rmb .p1{
+            height:0.5rem;
+            line-height: 0.5rem;
+        }
+
+        .rannk_tb .td_back_rmb .p2{
+            height:1rem;
+            line-height: 0.54rem;
+            margin-top: 0rem;
+        }
     </style>
 </head>
 <body class="bge6">
