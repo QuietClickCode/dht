@@ -161,7 +161,7 @@ public class PayServiceImpl implements PayService {
      * @return
      * @throws AppException
      */
-    public Map<String,String> refundOrder(String refundNo,String orderNo,String tradeNo,Long orderPrice,Long refundPrice)throws AppException {
+    public Map<String,String> refundOrder(String refundNo,String orderNo,String tradeNo,Long orderPrice,Long refundPrice)throws AppException,Exception {
         logger.info("用户发起退款请求。退款交易id:{}",tradeNo);
         TreeMap<String, String> params = new TreeMap<String, String>();
         Date curDate=new Date();
@@ -171,33 +171,34 @@ public class PayServiceImpl implements PayService {
         String refundTradeNo="";
         Map<String,String> rtnMap=new HashMap<String, String>();
         try{
+//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
+//            String appId="wxfd2628cfc7f6defb";
             String apiKey= WxConfig.WX_API_KEY;
             String appId=WxConfig.APP_ID;
-                params.put("appid", appId);
-                params.put("mch_id", WxConfig.WX_MCH_ID);
-                params.put("device_info", "");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
-                params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
-                params.put("transaction_id", tradeNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
-                params.put("out_trade_no", orderNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
-                params.put("out_refund_no", refundNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
-                params.put("total_fee", orderPrice+"");//订单总金额，单位为分，详见支付金额
-                params.put("refund_fee", refundPrice+"");//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
-                params.put("op_user_id", WxConfig.WX_MCH_ID);//异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数。
-                String sign = null;
-                try {
-                    sign = WXPayUtil.generateSignature(params,apiKey);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                params.put("sign", sign);//通过签名算法计算得出的签名值，详见签名生成算法
-                logger.info("发送的报文:" + JSON.toJSONString(params));
-                String retXml = WxHttpClientUtils.reqPost(WXPayConstants.WX_PAY_REFUND, WXPayUtil.map2Xml(params));
-                logger.info("微信退款返回报文:" + retXml);
-                try{
-                    rtnMap= WXPayUtil.xmlToMap(retXml);
-                }catch (Exception e){
-                    throw new AppException(e.getMessage());
-                }
+            params.put("appid", appId);
+            params.put("mch_id", WxConfig.WX_MCH_ID);
+            params.put("device_info", "");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"
+            params.put("nonce_str", WXPayUtil.getStringRandom(30));//随机字符串，长度要求在32位以内。推荐随机数生成算法
+            params.put("transaction_id", tradeNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
+            params.put("out_trade_no", orderNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
+            params.put("out_refund_no", refundNo);// 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@ ，且在同一个商户号下唯一。详见商户订单号
+            params.put("total_fee", orderPrice+"");//订单总金额，单位为分，详见支付金额
+            params.put("refund_fee", refundPrice+"");//APP和网页支付提交用户端ip，Native支付填调用微信支付API的机器IP。
+            String sign = null;
+            try {
+                sign = WXPayUtil.generateSignature(params,apiKey);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            params.put("sign", sign);//通过签名算法计算得出的签名值，详见签名生成算法
+            logger.info("发送的报文:" + JSON.toJSONString(params));
+            String retXml = WxHttpClientUtils.doSendMoney(WXPayConstants.WX_PAY_REFUND, WXPayUtil.map2Xml(params));
+            logger.info("微信退款返回报文:" + retXml);
+            try{
+                rtnMap= WXPayUtil.xmlToMap(retXml);
+            }catch (Exception e){
+                throw new AppException(e.getMessage());
+            }
         }finally {
             procedureToolsService.singleUnLockManager(key);
             logger.info("微信公众号支付执行完成，耗时：{}",(System.currentTimeMillis()-curDate.getTime()));

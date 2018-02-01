@@ -30,7 +30,7 @@ public interface PayService {
      * @return
      * @throws AppException
      */
-    public Map<String,String> refundOrder(String refundNo,String orderNo,String tradeNo,Long orderPrice,Long refundPrice)throws AppException;
+    public Map<String,String> refundOrder(String refundNo,String orderNo,String tradeNo,Long orderPrice,Long refundPrice)throws AppException,Exception;
 
     /**
      * 微信h5 支付

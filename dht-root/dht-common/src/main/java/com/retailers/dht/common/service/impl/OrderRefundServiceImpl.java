@@ -248,9 +248,14 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			String rtnTradeNo="";
 			//判断支付方式 微信
 			if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WX){
-				Map<String,String> refundMap=payService.refundOrder(orderRefund.getRdOrderNo(),order.getOrderNo(),order.getOrderPayCallbackNo(),order.getOrderTradePrice(),orderRefund.getRdPrice());
-				if(ObjectUtils.isNotEmpty(refundMap)){
-					rtnTradeNo=refundMap.get("result_code");
+				try{
+					Map<String,String> refundMap=payService.refundOrder(orderRefund.getRdOrderNo(),order.getOrderNo(),order.getOrderPayCallbackNo(),order.getOrderTradePrice(),orderRefund.getRdPrice());
+					if(ObjectUtils.isNotEmpty(refundMap)){
+						rtnTradeNo=refundMap.get("result_code");
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+					logger.info(StringUtils.getErrorInfoFromException(e));
 				}
 			// 钱包支付
 			}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
