@@ -125,7 +125,7 @@
 		FROM
 		t_opening t1
 		WHERE
-		 CURRENT_DATE()>=t1.o_start_time
+		 CURRENT_DATE()>=t1.o_start_time and t1.is_delete=0
 		ORDER BY t1.o_start_time DESC
 		LIMIT 1
 	</select>

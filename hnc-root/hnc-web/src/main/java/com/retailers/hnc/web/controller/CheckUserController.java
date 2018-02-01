@@ -22,10 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Administrator on 2017/9/28.
@@ -86,6 +88,31 @@ public class CheckUserController extends BaseController {
         Map map = new HashMap();
         if(ObjectUtils.isNotEmpty(checkUserVo)){
             map.put("row",checkUserVo);
+        }
+        return map;
+    }
+
+    @RequestMapping("queryCheckUserValidateCodeByLongConnection")
+    @ResponseBody
+    public Map queryCheckUserValidateCodeByLongConnection(String randStr,HttpServletResponse response){
+        Long cid = getClientIdByOpenId(randStr);
+        boolean flag = true;
+        Map map = new HashMap();
+        while(true){
+            CheckUserVo checkUserVo = checkUserService.queryCheckUserValidateCode(cid);
+//            flag = sendData(checkUserVo.getUseTime().toString(),response);
+//            if(!flag){
+//                break;
+//            }
+            if(ObjectUtils.isNotEmpty(checkUserVo.getUseTime())){
+                map.put("useTime",""+checkUserVo.getUseTime());
+                break;
+            }
+            try {// 每2秒发送一次
+                TimeUnit.SECONDS.sleep(2);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
         return map;
     }
@@ -230,5 +257,24 @@ public class CheckUserController extends BaseController {
             return list;
         }
         return null;
+    }
+
+    private boolean sendData( String data,
+                             HttpServletResponse response) {
+        try {
+            response.setContentType("text/html;charset=utf-8");
+            /* 这句话比较重要，我们通过response给页面返回一个js脚本，让js执行父页面的对应的jsFun，参数就是我们的data */
+            response.getWriter().write("<script type=\"text/javascript\">parent.longConnectionMsg(\""
+                    + data + "\")</script>");
+            response.flushBuffer();
+            if(ObjectUtils.isNotEmpty(data)){
+                return false;
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("long connection was broken!");
+            return false;
+        }
+
     }
 }

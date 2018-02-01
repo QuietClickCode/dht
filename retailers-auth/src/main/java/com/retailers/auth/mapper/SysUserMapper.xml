@@ -33,11 +33,11 @@
 		SELECT <include refid="sysUser_columns" />
 		FROM t_sys_user WHERE u_id = #{uid}
 	</select>
-	
+
 	<select id="querySyUserByAccount" resultMap="rm_sysUser" parameterType="java.lang.String">
 		SELECT <include refid="sysUser_columns" /> FROM t_sys_user WHERE u_account = #{account}
 	</select>
-	
+
 	<!-- 公司员工表查询条件组合 -->
 	<sql id="sysUser_where">
 		<where>
@@ -116,6 +116,7 @@
 		LEFT JOIN t_org_user o ON u.u_id = o.ou_s_id LEFT JOIN t_organization org on o.ou_org_id = org.org_id
 		WHERE
 		u_account !='admin'
+		AND u.is_delete=0
 		<if test="null != params.uname and '' != params.uname">
 			AND u_name like '%${params.uname}%'
 		</if>
@@ -128,9 +129,7 @@
 	<update id="delSysUser" parameterType="java.lang.Long">
 		UPDATE t_sys_user
 		<set>
-			<if test="null != isDelete">
-				is_delete =1,
-			</if>
+			is_delete =1,
 		</set>
 		WHERE u_id = #{uid}
 	</update>

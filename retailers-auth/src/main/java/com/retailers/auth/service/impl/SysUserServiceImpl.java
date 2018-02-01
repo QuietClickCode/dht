@@ -78,6 +78,8 @@ public class SysUserServiceImpl implements SysUserService {
 		sysUserVo.setUcreateTime(curDate);
 		//初始化用户密码
 		sysUserVo.setUpassword(Md5Encrypt.md5(StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(curDate, DateUtil.DATE_LONG_SIMPLE_FORMAT))));
+		sysUserVo.setIsDelete((long)SystemConstant.SYS_IS_DELETE_NO);
+		sysUserVo.setIsValid((long)SystemConstant.SYS_IS_VALID_YES);
 		//添加职工
 		sysUserMapper.saveSysUser(sysUserVo);
 		saveUserOrg(sysUserVo.getOrgIds(),sysUserVo.getUid());
@@ -154,15 +156,7 @@ public class SysUserServiceImpl implements SysUserService {
 	public boolean editSysUserPassword(String account, String sysUserPwd, String newPwd) throws AppException {
 		try {
 			SysUser sysUser = querySyUserByAccount(account, sysUserPwd);
-			Date date = new Date();
-			Long y = date.getTime()%1000;
-			if(y!=0){
-				date = new Date((date.getTime()/1000+1)*1000);
-			}
-			sysUser.setUcreateTime(date);
-			System.out.println(newPwd);
-			String pwd = Md5Encrypt.md5(StringUtils.formate(newPwd, DateUtil.dateToString(date, DateUtil.DATE_LONG_SIMPLE_FORMAT)));
-			System.out.println("new"+pwd);
+			String pwd = Md5Encrypt.md5(StringUtils.formate(newPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 			sysUser.setUpassword(pwd);
 			return updateSysUser(sysUser);
 		} catch (AppException e) {
