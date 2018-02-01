@@ -116,6 +116,7 @@
 		LEFT JOIN t_org_user o ON u.u_id = o.ou_s_id LEFT JOIN t_organization org on o.ou_org_id = org.org_id
 		WHERE
 		u_account !='admin'
+		AND u.is_delete=0
 		<if test="null != params.uname and '' != params.uname">
 			AND u_name like '%${params.uname}%'
 		</if>
