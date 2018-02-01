@@ -74,6 +74,7 @@
     <span>提交</span>
 </div>
 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="/js/layer_mobile/layer.js"></script>
 <script type="text/javascript">
     $("._choose_goods_status").click(function(){
         $(".shade").show();
@@ -116,6 +117,14 @@
 
 <script>
     $("._sub").click(function () {
+        if($("._cause_text").val() == ''){
+            layer.open({
+                content: '退款原因不能为空'
+                ,skin: 'msg'
+                ,time: 1
+            });
+            return;
+        }
         $.ajax({
             url:"/refund/createRefund",
             type:"post",
@@ -125,7 +134,21 @@
                 remark:$("._cause_text").val()
             },
             success:function(data){
-                console.log(data);
+                if(data.status == 0){
+                    layer.open({
+                        content: "申请退款成功"
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
+
+                    window.location.href = "/order/orderList?id=#refund";
+                }else{
+                    layer.open({
+                        content: "申请退款失败"
+                        ,skin: 'msg'
+                        ,time: 1
+                    });
+                }
             }
         });
     });

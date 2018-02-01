@@ -427,7 +427,7 @@
                     let orderInfo=row.ods;
                     for(var info of orderInfo){
                         ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
-                        ov+='<img src="'+info.imgUrl+'" alt=""></a><div class="text-box">';
+                        ov+='<img src="'+info.gImgUrl+'" alt=""></a><div class="text-box">';
                         ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
                         ov+='</a><p>规格:'+info.gsName+'<span class="number">×'+info.odBuyNumber+'</span></p></div></div>';
                         buyTotalNm+=info.odBuyNumber;
@@ -449,7 +449,7 @@
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="cancelOrder('+row.id+')">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderTradePrice+'&type='+row.orderType+'&formate=true" class="btn2">付款</a></div></div></li>';
                     $("#dfk").append(ov);
                 }else if(num == 3){
-                    if(row.orderPayWay == 2){
+                    /*if(row.orderPayWay == 2){
                         ov+='<div class="count-infor">';
                         ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="" class="btn2">提醒发货</a></div></div></li>';
                         $("#dfh").append(ov);
@@ -457,7 +457,11 @@
                         ov+='<div class="count-infor">';
                         ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
                         $("#dfh").append(ov);
-                    }
+                    }*/
+
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
+                    $("#dfh").append(ov);
                 }else if(num == 4){
                     if(row.orderPayWay == 2){
                         ov+='<div class="count-infor">';
