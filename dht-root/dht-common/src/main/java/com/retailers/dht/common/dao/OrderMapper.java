@@ -119,4 +119,11 @@ public interface OrderMapper {
 	//设置订单超时
 	public int clearExpireOrders(List<Long> orderIds);
 
+	/**
+	 * 根据退款申请id 取得订单
+	 * @param orgId
+	 * @return
+	 */
+	public Order queryOrderByRefundId(Long orgId);
+
 }

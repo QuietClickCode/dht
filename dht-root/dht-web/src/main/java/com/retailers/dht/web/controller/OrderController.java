@@ -88,6 +88,27 @@ public class OrderController extends BaseController {
         return redirectUrl(request,"order/deal-succeed");
     }
 
+    /*查看订单详情*/
+    @RequestMapping("orderInfo")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String orderInfo(HttpServletRequest request,HttpServletResponse response){
+        return redirectUrl(request,"order/order_info");
+    }
+
+    /*查看订单详情*/
+    @RequestMapping("refundType")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String refundType(HttpServletRequest request,HttpServletResponse response){
+        return redirectUrl(request,"order/refund_type");
+    }
+
+    /*查看订单详情*/
+    @RequestMapping("refundStatus")
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
+    public String refundStatus(HttpServletRequest request,HttpServletResponse response){
+        return redirectUrl(request,"order/refund_status");
+    }
+
     @RequestMapping("getCheckOrderData")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String getCheckOrderData(HttpServletRequest request,HttpServletResponse response,String data){

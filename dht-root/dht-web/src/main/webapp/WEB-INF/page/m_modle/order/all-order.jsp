@@ -18,6 +18,10 @@
             color: #808080;
             display: none;
         }
+
+        #J_allOrderTab a{
+            width: 16.66%;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -27,11 +31,12 @@
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
-    <a href="#allOrder" id="allOrders" class="active">全部订单</a>
-    <a id="obligation" href="#dfk">待付款</a>
-    <a id="unsent" href="#dfh">待发货</a>
-    <a id="receive" href="#dsh">待收货</a>
-    <a id="appraise" href="#dpj">待评价</a>
+        <a href="#allOrder" id="allOrders" class="active">全部订单</a>
+        <a id="obligation" href="#dfk">未付款</a>
+        <a id="unsent" href="#dfh">待发货</a>
+        <a id="refund" href="#tkz">退款中</a>
+        <a id="receive" href="#dsh">待收货</a>
+        <a id="appraise" href="#dpj">待评价</a>
 </div>
 
 <div class="box2">
@@ -172,7 +177,7 @@
     <!-- 待付款 -->
     <ul class="all-order-list displayN" id="dfk">
         <li class="box2">
-            <p class="start">待付款</p>
+            <p class="start">未付款</p>
             <div class="order-infor">
                 <a href="" class="img">
                     <img src="/img/list2.jpg" alt="">
@@ -285,6 +290,35 @@
             </div>
         </li>
     </ul>
+
+    <!-- 待退款 -->
+    <ul class="all-order-list displayN" id="tkz">
+        <li class="box2">
+            <p class="start">交易完成</p>
+            <div class="order-infor">
+                <a href="" class="img">
+                    <img src="/img/list2.jpg" alt="">
+                </a>
+                <div class="text-box">
+                    <a href="">
+                        <span class="text">乐事多力多滋薯片多口味零食大礼盒400克</span>
+                        <span class="price">￥29.9</span>
+                    </a>
+                    <p>规格:400g
+                        <span class="number">×1</span>
+                    </p>
+                </div>
+            </div>
+            <div class="count-infor">
+                <span class="number">共1件</span>
+                合计：￥155(含运费:10.0)
+                <div class="btn-box">
+                    <a href="">查看订单</a>
+                    <a href="/order/checkAppraise" class="btn2">评价</a>
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
 
 <div class="order_tips"><span>暂无订单信息~</span></div>
@@ -322,6 +356,11 @@
         queryOrderByStatus(4,4);
     });
 
+    $("#refund").click(function () {
+        $("#tkz").html("");
+        queryOrderByStatus(6,6);
+    });
+
     $("#appraise").click(function () {
         $("#dpj").html("");
         queryOrderByStatus(9,9);
@@ -332,7 +371,7 @@
      */
     function queryOrderByStatus(orderStatus,num){
         var queryParams={
-            pageSize: 15,
+            pageSize: 30,
             pageNo: curPage,
             orderStatus:orderStatus
         }
@@ -396,25 +435,54 @@
                 }
 
                 if(num == 100){
-                    ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo">查看订单</a></div></div></li>';
-                    $("#allOrder").append(ov);
+                    if(row.orderPayWay == 2){
+                        ov+='<div class="count-infor" style="line-height: 1rem">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
+                        $("#allOrder").append(ov);
+                    }else{
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
+                        $("#allOrder").append(ov);
+                    }
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="cancelOrder('+row.id+')">取消订单</a><a href="/wxPay/payInfo?orderNo='+row.orderNo+'&price='+row.orderTradePrice+'&type='+row.orderType+'&formate=true" class="btn2">付款</a></div></div></li>';
                     $("#dfk").append(ov);
                 }else if(num == 3){
-                    ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
-                    $("#dfh").append(ov);
+                    if(row.orderPayWay == 2){
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="" class="btn2">提醒发货</a></div></div></li>';
+                        $("#dfh").append(ov);
+                    }else{
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
+                        $("#dfh").append(ov);
+                    }
                 }else if(num == 4){
+                    if(row.orderPayWay == 2){
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
+                        $("#dsh").append(ov);
+                    }else{
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
+                        $("#dsh").append(ov);
+                    }
+                }else if(num == 6){
                     ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
-                    $("#dsh").append(ov);
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
+                    $("#tkz").append(ov);
                 }else if(num == 9){
-                    ov+='<div class="count-infor">';
-                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
-                    $("#dpj").append(ov);
+                    if(row.orderPayWay == 2){
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
+                        $("#dpj").append(ov);
+                    }else{
+                        ov+='<div class="count-infor">';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
+                        $("#dpj").append(ov);
+                    }
+
                 }
             }
         }

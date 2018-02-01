@@ -70,6 +70,7 @@ public class UserCenterController extends BaseController{
     @RequestMapping("userMember")
     @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String openUserMember(HttpServletRequest request,HttpServletResponse response){
+        request.setAttribute("uid",getCurLoginUser(request).getUid());
         return redirectUrl(request,"usercenter/user-member");
     }
     /**
