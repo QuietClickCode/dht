@@ -21,6 +21,18 @@ public interface PayService {
     public Map<String,String> createWxPay(String orderNo,String openId,String ip)throws AppException;
 
     /**
+     * 退款处理
+     * @param refundNo 退款单号
+     * @param orderNo 订单号
+     * @param tradeNo 微信支付单号
+     * @param orderPrice 订单金额
+     * @param refundPrice 退款金额
+     * @return
+     * @throws AppException
+     */
+    public Map<String,String> refundOrder(String refundNo,String orderNo,String tradeNo,Long orderPrice,Long refundPrice)throws AppException;
+
+    /**
      * 微信h5 支付
      * @param orderNo 订单号
      * @param ip ip 地址

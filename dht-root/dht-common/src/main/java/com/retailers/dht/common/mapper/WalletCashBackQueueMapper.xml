@@ -467,4 +467,19 @@
 			#{item}
 		</foreach>
 	</update>
+
+	<!--分页查询 -->
+	<select id="queryWalletCashBackQueueByOid" resultMap="rm_walletCashBackQueue">
+		SELECT <include refid="walletCashBackQueue_columns" />
+		FROM t_wallet_cash_back_queue
+		WHERE  ccbq_order_id = #{orderId}
+	</select>
+
+	<!--删除钱包消费返现(包括指定可返现商品类型） -->
+	<delete id="clearWalletCashBackQueueByIds">
+		DELETE FROM t_wallet_cash_back_queue WHERE ccbq_id IN
+		<foreach collection="list" item="item" index="index" separator="," open="(" close=")"  >
+			#{item}
+		</foreach>
+	</delete>
 </mapper>

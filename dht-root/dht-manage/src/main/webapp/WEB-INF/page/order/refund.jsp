@@ -227,19 +227,11 @@
         $('#orderRefundDialog').on('hide.bs.modal', function () {
             //清除数据
             clearFormData();
-            clearFormValidation("orderRefundDialogForm",formValidater)
         });
 
         //编辑按钮提交操作
         $("#editSubmit").click("click",function(e){
-            //开启校验
-            $('#orderRefundDialogForm').data('bootstrapValidator').validate();
-            //判断校验是否通过
-            if(!$('#orderRefundDialogForm').data('bootstrapValidator').isValid()){
-                return;
-            }
             var editSubmitIndex = layer.load(2);
-            var sendData=new Array();
             var formData=$("#orderRefundDialogForm").serializeObject();
             //取得form表单数据
             $.ajax({
@@ -262,46 +254,8 @@
                 }
             });
         });
-        formValidater();
     });
-    /**
-     * form 校验
-     * */
-    function formValidater(){
-        $('#orderRefundDialogForm')
-            .bootstrapValidator({
-                message: 'This value is not valid',
-                //live: 'submitted',
-                feedbackIcons: {
-                    valid: 'glyphicon glyphicon-ok',
-                    invalid: 'glyphicon glyphicon-remove',
-                    validating: 'glyphicon glyphicon-refresh'
-                },
-                fields: {
-                    logisticsCompany: {
-                        message: '快递公司',
-                        validators: {
-                            notEmpty: {
-                                message: '快递公司不能为空'
-                            }
-                        }
-                    },
-                    orderLogisticsCode: {
-                        message: '快递单号不能为空',
-                        validators: {
-                            notEmpty: {
-                                message: '快递单号不能为空'
-                            },
-                            stringLength: {
-                                min: 5,
-                                max: 30,
-                                message: '快递单号长度在5-30之间'
-                            }
-                        }
-                    }
-                }
-            });
-    }
+
     /**
      * 查询条件
      **/
@@ -386,6 +340,7 @@
         $("#orderRefundDialogForm #orderNo").val("");
         $("#orderRefundDialogForm #buyName").val("");
         $("#orderRefundDialogForm #refundPrice").val("");
+        $("#orderRefundDialogForm #rdRemark").val("");
     }
     /**
      * 初始化表单数据
@@ -398,6 +353,30 @@
             $("#orderRefundDialogForm #buyName").val(rowData.buyName);
             $("#orderRefundDialogForm #refundPrice").val(rowData.rdPrice);
         }
+    }
+
+    /**
+     * 退款操作
+     * @param rdId
+     */
+    function orderRefund(rdId){
+        var orderRefundIndex = layer.load(2);
+        //取得form表单数据
+        $.ajax({
+            type:"post",
+            url:"/refund/orderRefund",
+            dataType: "json",
+            data:{"orId":rdId},
+            success:function(data){
+                layer.close(orderRefundIndex);
+                if(data.status==0){
+                    layer.msg(data.msg);
+                    refreshTableData();
+                }else{
+                    layer.msg(data.msg);
+                }
+            }
+        });
     }
 </script>
 </body>

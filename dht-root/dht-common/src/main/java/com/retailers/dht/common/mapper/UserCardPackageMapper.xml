@@ -178,4 +178,25 @@
 			#{item}
 		</foreach>
 	</select>
+
+	<!--用户退款 消费返还 -->
+	<update id="userRefundOrder">
+		UPDATE t_user_card_package
+		<set>
+			<!-- 钱包支付 -->
+			<if test="type==2">
+				u_wallet_consume_total=u_wallet_consume_total-#{refundPrice},
+				u_cur_wallet=u_cur_wallet+#{refundPrice},
+			</if>
+			<!-- 自然消费统计 -->
+			<if test="type!=2">
+				u_other_pay_total=u_other_pay_total-#{refundPrice},
+			</if>
+			u_total_integral=u_total_integral-#{consumePrice},
+			u_cur_integral=u_cur_integral-#{consumePrice},
+			u_total_consume=u_total_consume-#{refundPrice},
+			version = version+1,
+		</set>
+		WHERE id = #{uid}
+	</update>
 </mapper>

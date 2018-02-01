@@ -125,4 +125,28 @@
 		WHERE  cps_pay_type=#{type}
 		limit 1
 	</select>
+	<!--批量修改当前平台销售资金 -->
+	<update id="initCountPlatformSales">
+		UPDATE t_current_platform_sales c,
+		(
+		SELECT
+		ccbq_rtn_type,
+		sum(ccbq_money) totalPrice
+		FROM
+		t_wallet_cash_back_queue q
+		GROUP BY
+		ccbq_rtn_type
+		) t
+		SET c.cps_total_price = t.totalPrice
+		WHERE
+		c.cps_pay_type = 0
+		AND c.cps_goods_main_type = t.ccbq_rtn_type
+	</update>
+	<!--减少消费累计数据 -->
+	<update id="xfljCountPlatformSales">
+		UPDATE t_current_platform_sales
+		SET cps_total_price = cps_total_price-#{price}
+		WHERE
+		cps_pay_type = 2
+	</update>
 </mapper>
