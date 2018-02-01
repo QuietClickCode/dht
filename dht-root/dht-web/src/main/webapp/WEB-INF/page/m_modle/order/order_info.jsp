@@ -146,6 +146,12 @@
             orderStatus_0();
         }else if(order.orderStatus == 3){
             orderStatus_3();
+        }else if(order.orderStatus == 4){
+            orderStatus_4();
+        }else if(order.orderStatus == 9){
+            orderStatus_9();
+        }else if(order.orderStatus == 6){
+            orderStatus_6();
         }
     }
 
@@ -156,11 +162,35 @@
         $(".orderPayUseWay").text("未支付");
         $(".orderPayWay").text("无");
         $(".obligations-footer").append('<a href="/wxPay/payInfo?orderNo='+order.orderNo+'&price='+order.orderTradePrice+'&type='+order.orderType+'&formate=true">去付款</a>');
+
     }
 
     <%--待发货--%>
     function orderStatus_3(){
         setOrderInfo();
+        $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
+    }
+
+    <%--待收货--%>
+    function orderStatus_4(){
+        $(".start-text").text("等待用户收货");
+        setOrderInfo();
+        $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
+    }
+
+    <%--退款中--%>
+    function orderStatus_6(){
+        $(".start-text").text("退款中");
+        setOrderInfo();
+//        $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
+        $(".obligations-footer").hide();
+    }
+
+    <%--待收货--%>
+    function orderStatus_9(){
+        $(".start-text").text("交易已完成");
+        setOrderInfo();
+        $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
     }
     
     function setOrderInfo() {
