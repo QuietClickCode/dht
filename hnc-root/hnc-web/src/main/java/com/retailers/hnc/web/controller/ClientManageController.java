@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -79,6 +80,7 @@ public class ClientManageController extends BaseController {
             return errorForParam("已经绑定过置业顾问");
         }else{
             clientManage.setTmEmployee(emId);
+            clientManage.setTmRegisterTime(new Date());
             clientManageService.updateClientManage(clientManage);
             return success("绑定成功");
         }
