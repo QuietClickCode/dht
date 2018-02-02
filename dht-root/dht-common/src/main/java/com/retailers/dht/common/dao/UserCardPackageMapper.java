@@ -108,4 +108,14 @@ public interface UserCardPackageMapper {
 	 * @return
 	 */
 	public List<UserCardPackage> queryUserCardPackages(@Param("cbUids") Set<Long> cbUids);
+
+	/**
+	 * 用户退款 消费返还
+	 * @param uid 用户id
+	 * @param type 支付类型
+	 * @param refundPrice 退款金额
+	 * @param consumePrice 第三方消费金额
+	 * @return
+	 */
+	public int userRefundOrder(@Param("uid")Long uid,@Param("type")Long type,@Param("refundPrice")Long refundPrice,@Param("consumePrice")Long consumePrice);
 }

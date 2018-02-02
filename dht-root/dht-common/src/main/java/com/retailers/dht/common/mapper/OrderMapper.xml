@@ -666,15 +666,4 @@
 			#{item}
 		</foreach> AND order_status=0
 	</update>
-	<!--根据退款申请id 取得订单 -->
-	<select id="queryOrderByRefundId" resultMap="rm_order">
-		SELECT
-		o.*
-		FROM
-		t_order o,
-		t_order_refund r
-		WHERE
-		o.id = r.rd_order
-		AND r.rd_id = 1
-	</select>
 </mapper>

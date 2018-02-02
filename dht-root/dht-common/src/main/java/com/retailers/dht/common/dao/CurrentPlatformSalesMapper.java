@@ -85,4 +85,16 @@ public interface CurrentPlatformSalesMapper {
 	 */
 	public CurrentPlatformSales queryCurrentPlatformSalesByGt(@Param("type") Long type);
 
+	/**
+	 * 重新计算平台消费累计
+	 * @return
+	 */
+	public int initCountPlatformSales();
+
+	/**
+	 * 减少消费累计数据
+	 * @return
+	 */
+	public int xfljCountPlatformSales(@Param("price") Long price);
+
 }

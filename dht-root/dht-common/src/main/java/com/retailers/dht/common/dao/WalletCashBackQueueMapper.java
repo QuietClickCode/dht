@@ -121,4 +121,18 @@ public interface WalletCashBackQueueMapper {
 	 */
 	public int editorWalletCashBack(List<Long> wcbqIds);
 
+	/**
+	 * 根据订单id 取得返现列个
+	 * @param orderId
+	 * @return
+	 */
+	public List<WalletCashBackQueue> queryWalletCashBackQueueByOid(Long orderId);
+
+	/**
+	 * 清除消费排名
+	 * @param ccbqId
+	 * @return
+	 */
+	public int clearWalletCashBackQueueByIds(List<Long> ccbqId);
+
 }

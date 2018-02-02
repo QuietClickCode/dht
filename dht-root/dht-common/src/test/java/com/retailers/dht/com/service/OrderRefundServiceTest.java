@@ -19,8 +19,8 @@ public class OrderRefundServiceTest extends TestBaseJunit {
 
     @Test
     public void createRefund()throws Exception{
-        long uid=1559923;
-        long orderId=272;
+        long uid=1559994;
+        long orderId=319;
         String remark="退款测试";
         orderRefundService.createRefund(uid,orderId,remark);
         Thread.sleep(10000);

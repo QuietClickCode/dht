@@ -114,6 +114,9 @@
             <if test="null != rdAuditingDate">
                 rd_auditing_date = #{rdAuditingDate},
             </if>
+			<if test="null != rdRSid">
+				rd_r_sid = #{rdRSid},
+			</if>
 			version=version+1,
 		</set>
 		WHERE rd_id = #{rdId} AND version=#{version}

@@ -3,11 +3,11 @@ package com.retailers.dht.common.service.impl;
 
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.constant.OrderRefundConstant;
-import com.retailers.dht.common.dao.OrderMapper;
-import com.retailers.dht.common.dao.OrderRefundMapper;
-import com.retailers.dht.common.entity.Order;
-import com.retailers.dht.common.entity.OrderRefund;
+import com.retailers.dht.common.constant.UserCardPackageConstant;
+import com.retailers.dht.common.dao.*;
+import com.retailers.dht.common.entity.*;
 import com.retailers.dht.common.service.OrderRefundService;
+import com.retailers.dht.common.service.PayService;
 import com.retailers.dht.common.vo.OrderRefundVo;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
@@ -22,6 +22,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.naming.ldap.Rdn;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,16 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 	private OrderMapper orderMapper;
 	@Autowired
 	private ProcedureToolsService procedureToolsService;
+	@Autowired
+	private UserCardPackageMapper userCardPackageMapper;
+	@Autowired
+	private WalletCashBackQueueMapper walletCashBackQueueMapper;
+	@Autowired
+	private CurrentPlatformSalesMapper currentPlatformSalesMapper;
+	@Autowired
+	private LogUserCardPackageMapper logUserCardPackageMapper;
+	@Autowired
+	private PayService payService;
 
 
 	public boolean saveOrderRefund(OrderRefund orderRefund) {
@@ -201,7 +213,10 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 	 * @return
 	 * @throws AppException
 	 */
+	@Transactional(rollbackFor = Exception.class)
 	public boolean orderRefund(Long suid, Long orId) throws AppException {
+		logger.info("用户退款处理开始");
+		Date curDate=new Date();
 		String key=StringUtils.formate(SingleThreadLockConstant.REFUND,orId+"");
 		procedureToolsService.singleLockManager(key);
 		try{
@@ -209,20 +224,76 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			if(ObjectUtils.isEmpty(orderRefund)){
 				throw new AppException("退款申请不存在");
 			}
-			Order order = orderMapper.queryOrderByRefundId(orId);
+			Order order = orderMapper.queryOrderById(orderRefund.getRdOrder());
 			if(ObjectUtils.isEmpty(order)){
 				throw new AppException("退款申请不存在");
 			}
+			List<WalletCashBackQueue> list = walletCashBackQueueMapper.queryWalletCashBackQueueByOid(order.getId());
+			long walletCashBackTotalPrice=0l;
+			List<Long> wcbqsIds=new ArrayList<Long>();
+			if(ObjectUtils.isNotEmpty(list)){
+				for(WalletCashBackQueue wcbq:list){
+					walletCashBackTotalPrice+=wcbq.getCcbqMoney();
+					wcbqsIds.add(wcbq.getCcbqId());
+				}
+			}
+			//取得消费累计金额
+			long xflj=orderRefund.getRdPrice()-walletCashBackTotalPrice;
+			if(xflj<0){
+				xflj=0;
+			}
+			UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+			//取得支付类型
+			long payType=order.getOrderPayWay();
+			String rtnTradeNo="";
 			//判断支付方式 微信
 			if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WX){
-
+				try{
+					Map<String,String> refundMap=payService.refundOrder(orderRefund.getRdOrderNo(),order.getOrderNo(),order.getOrderPayCallbackNo(),order.getOrderTradePrice(),orderRefund.getRdPrice());
+					if(ObjectUtils.isNotEmpty(refundMap)){
+						rtnTradeNo=refundMap.get("result_code");
+					}
+				}catch(Exception e){
+					e.printStackTrace();
+					logger.info(StringUtils.getErrorInfoFromException(e));
+				}
+			// 钱包支付
 			}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
-
+				//添加钱包日志
+				LogUserCardPackage lucp= new LogUserCardPackage();
+				lucp.setUid(order.getOrderBuyUid());
+				lucp.setType(UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_REFUND);
+				lucp.setRelationOrderId(order.getId());
+				lucp.setVal(orderRefund.getRdPrice());
+				lucp.setCurVal(ucp.getUcurWallet());
+				lucp.setRemark("用户退款，订单号："+order.getId()+",退款金额："+orderRefund.getRdPrice());
+				lucp.setCreateTime(new Date());
+				logUserCardPackageMapper.saveLogUserCardPackage(lucp);
+				rtnTradeNo=order.getOrderNo();
 			}else{
 				throw new AppException("未知支付方式");
 			}
+			//退还累计金额
+			userCardPackageMapper.userRefundOrder(order.getOrderBuyUid(),payType,orderRefund.getRdPrice(),xflj);
+			//清除消费返现
+			walletCashBackQueueMapper.clearWalletCashBackQueueByIds(wcbqsIds);
+			//累计消费总额
+			currentPlatformSalesMapper.initCountPlatformSales();
+			//判断是否有第三方消费累计数据
+			if(xflj>0){
+				logger.info("第三方消费累计减少金额：{}",xflj);
+				currentPlatformSalesMapper.xfljCountPlatformSales(xflj);
+			}
+			//设置退款状态
+			orderRefund.setRdRSid(suid);
+			orderRefund.setRdSendDate(curDate);
+			orderRefund.setRdDate(curDate);
+			orderRefund.setRdCallbackNo(rtnTradeNo);
+			orderRefund.setRdStatus((long)OrderRefundConstant.REFUND_AUDITING_STATUS_REFUND_SUCCESS);
+			orderRefundMapper.updateOrderRefund(orderRefund);
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
+			logger.info("用户退款处理完毕，执行时间{}",(System.currentTimeMillis()-curDate.getTime()));
 		}
 		return false;
 	}

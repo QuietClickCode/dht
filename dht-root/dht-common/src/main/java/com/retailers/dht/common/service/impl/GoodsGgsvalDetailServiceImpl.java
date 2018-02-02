@@ -114,20 +114,22 @@ public class GoodsGgsvalDetailServiceImpl implements GoodsGgsvalDetailService {
             }
             gdIds = gdIds.substring(1);
             List<GoodsDetailVo> list = goodsDetailService.queryGoodsDetailByGdIds(gdIds);
-            for(GoodsDetail goodsDetail1:list){
-                for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
-                    Long gdId1 = goodsDetail1.getGdId();
-                    Long gdId2 = entry.getKey();
-                    Long reduceInventory = entry.getValue();
-                    if(gdId1.equals(gdId2)){
-                        goodsDetail1.setGdResidueinventory(reduceInventory);
-                        break;
+            if(ObjectUtils.isNotEmpty(list)){
+                for(GoodsDetail goodsDetail1:list){
+                    for (Map.Entry<Long, Long> entry : goodsDetailMap.entrySet()) {
+                        Long gdId1 = goodsDetail1.getGdId();
+                        Long gdId2 = entry.getKey();
+                        Long reduceInventory = entry.getValue();
+                        if(gdId1.equals(gdId2)){
+                            goodsDetail1.setGdResidueinventory(reduceInventory);
+                            break;
+                        }
                     }
                 }
-            }
-            status = goodsGgsvalDetailMapper.editGoodsInventorys(list);
-            if(list.size()!=status){
-                throw new AppException("数据有误");
+                status = goodsGgsvalDetailMapper.editGoodsInventorys(list);
+                if(list.size()!=status){
+                    throw new AppException("数据有误");
+                }
             }
         }
         return status==goodsDetailMap.size()?true:false;

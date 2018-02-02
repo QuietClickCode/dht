@@ -118,12 +118,4 @@ public interface OrderMapper {
 	public List<Order> queryOrderByStatus(@Param("orderStatus") Integer orderStatus,@Param("column")String column, @Param("date") Date date);
 	//设置订单超时
 	public int clearExpireOrders(List<Long> orderIds);
-
-	/**
-	 * 根据退款申请id 取得订单
-	 * @param orgId
-	 * @return
-	 */
-	public Order queryOrderByRefundId(Long orgId);
-
 }
