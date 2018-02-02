@@ -19,24 +19,83 @@
             display: none;
         }
 
-        #J_allOrderTab a{
-            width: 16.66%;
+        .all-order-tab{
+            overflow: hidden;
+            position: relative;
         }
+
+        #J_allOrderTab a{
+            width: 1.4rem;
+            outline: none;
+        }
+
+        .scoll_view{
+            width: 14rem;
+            overflow-x: scroll;
+        }
+
+        ._right_icon{
+            position: absolute;
+            right:0;
+            width: 0.5rem;
+            height: 0.7rem;
+            bottom: 0;
+            background-color: #fff;
+            line-height: 0.3rem;
+        }
+
+        ._right_icon span{
+            width: 0.3rem;
+            height: 0.5rem;
+            display: block;
+            margin-top: 0.17rem;
+            margin-left: 0.1rem;
+            background: url("/img/right_icon.png") no-repeat;
+            background-size: 0.3rem 0.3rem;
+        }
+
+        ._left_icon{
+            position: absolute;
+            left:0;
+            width: 0.5rem;
+            height: 0.7rem;
+            display: none;
+            bottom: 0;
+            background-color: #fff;
+            line-height: 0.3rem;
+        }
+
+        ._left_icon span{
+            width: 0.3rem;
+            height: 0.5rem;
+            display: block;
+            margin-top: 0.17rem;
+            margin-left: 0.1rem;
+            background: url("/img/left_icon.png") no-repeat;
+            background-size: 0.3rem 0.3rem;
+        }
+
+
     </style>
 </head>
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a class="icon-return" href="javascript:void(0);" onclick="window.history.back(); return false;"></a>
+    <a class="icon-return" href="javascript:void(0);" onclick="comeBack()"></a>
     <span>全部订单</span>
 </div>
 
 <div class="all-order-tab" id="J_allOrderTab">
+    <div class="scoll_view">
         <a href="#allOrder" id="allOrders" class="active">全部订单</a>
         <a id="obligation" href="#dfk">未付款</a>
         <a id="unsent" href="#dfh">待发货</a>
         <a id="refund" href="#tkz">退款中</a>
         <a id="receive" href="#dsh">待收货</a>
-        <a id="appraise" href="#dpj">待评价</a>
+        <a id="ch_goods" href="#csh">确认收货</a>
+        <a id="appraise" href="#dpj">交易完成</a>
+    </div>
+    <div class="_left_icon"><span></span></div>
+    <div class="_right_icon"><span></span></div>
 </div>
 
 <div class="box2">
@@ -319,6 +378,35 @@
             </div>
         </li>
     </ul>
+
+    <!-- 确认收货 -->
+    <ul class="all-order-list displayN" id="csh">
+        <li class="box2">
+            <p class="start">交易完成</p>
+            <div class="order-infor">
+                <a href="" class="img">
+                    <img src="/img/list2.jpg" alt="">
+                </a>
+                <div class="text-box">
+                    <a href="">
+                        <span class="text">乐事多力多滋薯片多口味零食大礼盒400克</span>
+                        <span class="price">￥29.9</span>
+                    </a>
+                    <p>规格:400g
+                        <span class="number">×1</span>
+                    </p>
+                </div>
+            </div>
+            <div class="count-infor">
+                <span class="number">共1件</span>
+                合计：￥155(含运费:10.0)
+                <div class="btn-box">
+                    <a href="">查看订单</a>
+                    <a href="/order/checkAppraise" class="btn2">评价</a>
+                </div>
+            </div>
+        </li>
+    </ul>
 </div>
 
 <div class="order_tips"><span>暂无订单信息~</span></div>
@@ -331,8 +419,14 @@
     $(function(){
         var href = window.location.hash;
         console.log(href)
-        if (href != "")
+        if (href != ""){
             $(href).click();
+            $(".order_tips").show();
+        }
+
+        if(href == '#appraise'){
+            $("._right_icon").click();
+        }
         queryOrderByStatus("",100);
     });
 
@@ -364,6 +458,11 @@
     $("#appraise").click(function () {
         $("#dpj").html("");
         queryOrderByStatus(9,9);
+    });
+
+    $("#ch_goods").click(function () {
+        $("#csh").html("");
+        queryOrderByStatus(5,5);
     });
     /**
      * 根据订单类型取得订单列表数据
@@ -436,13 +535,26 @@
 
                 if(num == 100){
                     if(row.orderType == 'RECHARGE'){
-                        ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
-                        $("#allOrder").append(ov);
+                        if(row.orderStatus == 8){
+                            ov+='<div class="count-infor" style="line-height: 1rem">';
+                            ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
+                            $("#allOrder").append(ov);
+                        }else{
+                            ov+='<div class="count-infor">';
+                            ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
+                            $("#allOrder").append(ov);
+                        }
+
                     }else{
-                        ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
-                        $("#allOrder").append(ov);
+                        if(row.orderStatus == 8){
+                            ov+='<div class="count-infor" style="line-height: 1rem">';
+                            ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
+                            $("#allOrder").append(ov);
+                        }else{
+                            ov+='<div class="count-infor">';
+                            ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
+                            $("#allOrder").append(ov);
+                        }
                     }
                 }else if(num == 0){
                     ov+='<div class="count-infor">';
@@ -455,17 +567,17 @@
                         $("#dfh").append(ov);
                     }else{
                         ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="" class="btn2">提醒发货</a></div></div></li>';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
                         $("#dfh").append(ov);
                     }
                 }else if(num == 4){
                     if(row.orderType == 'RECHARGE'){
                         ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
                         $("#dsh").append(ov);
                     }else{
                         ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkLogistics">物流详情</a><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a onclick="orderConfirm('+row.id+')">确认收货</a></div></div></li>';
                         $("#dsh").append(ov);
                     }
                 }else if(num == 6){
@@ -473,16 +585,19 @@
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
                     $("#tkz").append(ov);
                 }else if(num == 9){
+                    ov+='<div class="count-infor">';
+                    ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
+                    $("#dpj").append(ov);
+                }else if(num == 5){
                     if(row.orderType == 'RECHARGE'){
                         ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
-                        $("#dpj").append(ov);
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
+                        $("#csh").append(ov);
                     }else{
                         ov+='<div class="count-infor">';
-                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a><a href="/order/checkAppraise" class="btn2">评价</a></div></div></li>';
-                        $("#dpj").append(ov);
+                        ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
+                        $("#csh").append(ov);
                     }
-
                 }
             }
         }
@@ -498,7 +613,7 @@
                 orderId:id
             },
             success:function (data) {
-                window.location.reload();
+//                window.location.reload();
             }
         });
     }
@@ -515,6 +630,24 @@
                 window.location.reload();
             }
         });
+    }
+</script>
+
+<script>
+    $("._right_icon").click(function () {
+        $("._right_icon").hide();
+        $("._left_icon").show();
+        $(".scoll_view").animate({marginLeft:'-6.5rem'});
+    });
+
+    $("._left_icon").click(function () {
+        $("._left_icon").hide();
+        $("._right_icon").show();
+        $(".scoll_view").animate({marginLeft:'0rem'});
+    });
+
+    function comeBack() {
+        window.location.href = '/user/userCenter';
     }
 </script>
 </body>

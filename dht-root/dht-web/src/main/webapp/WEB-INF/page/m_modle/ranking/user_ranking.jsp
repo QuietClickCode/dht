@@ -128,11 +128,13 @@
 
             </div>
         </div>
+
     </div>
 
     <div class="coupon-box displayN" id="wait_cash">
         <div class="wait_cash_list user_cashList">
             <div class="wait_cash_item ">
+                <span>暂无返现商品信息~</span>
                 <div class="wait_cash_info">
                     <span style="display: block;">返现金额：<span>789.00</span></span>
                     <span class="wait_cash_time">订单编号：7824569941200</span>
@@ -173,6 +175,9 @@
                     html += '<div class="wait_cash_price"><span>'+cash.curCashQueue+'人排队</span></div></div>';
                     $(".wait_user_cashList").append(html);
                 }
+                if(data.data.length == 0){
+                    $(".wait_user_cashList").append('<p style="text-align: center;">暂无返现商品信息~</p>');
+                }
             }
         });
     }
@@ -195,6 +200,10 @@
                     html += '<span class="wait_cash_time">订单编号：'+cash.orderNo+'</span></div>';
                     html += '<div class="wait_cash_price"></div></div>';
                     $(".user_cashList").append(html);
+                }
+
+                if(data.data.length == 0){
+                    $(".user_cashList").append('<p style="text-align: center;">暂无返现商品信息~</p>');
                 }
             }
         });

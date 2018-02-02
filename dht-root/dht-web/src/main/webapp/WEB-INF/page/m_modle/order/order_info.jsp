@@ -142,7 +142,7 @@
 <script>
     function orderStatus() {
         console.log(order);
-        if(order.orderStatus == 0){
+        if(order.orderStatus == 0 || order.orderStatus == 2){
             orderStatus_0();
         }else if(order.orderStatus == 3){
             orderStatus_3();
@@ -152,6 +152,8 @@
             orderStatus_9();
         }else if(order.orderStatus == 6){
             orderStatus_6();
+        }else if(order.orderStatus == 5){
+            orderStatus_5();
         }
     }
 
@@ -189,6 +191,14 @@
     <%--待收货--%>
     function orderStatus_9(){
         $(".start-text").text("交易已完成");
+        setOrderInfo();
+//        $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
+        $(".obligations-footer").hide();
+    }
+
+    <%--确认收货--%>
+    function orderStatus_5(){
+        $(".start-text").text("确认收货");
         setOrderInfo();
         $(".obligations-footer").append('<a href="/order/refundType?orderId='+order.id+'">申请售后</a>');
     }
