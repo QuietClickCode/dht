@@ -93,7 +93,7 @@ public class CheckSessionAdvisor {
                     }else{
                         HttpServletResponse response= ((ServletRequestAttributes) RequestContextHolder
                                 .getRequestAttributes()).getResponse();
-                        WriteData.writeObject(WriteData.SC_UNAUTHORIZED,msg,redirect,response);
+                        WriteData.writeObject(WriteData.SESSION_TIME_OUT,msg,redirect,response);
                     }
 
 //                    if(ObjectUtils.isNotEmpty(redirect)&&!isLoca){
