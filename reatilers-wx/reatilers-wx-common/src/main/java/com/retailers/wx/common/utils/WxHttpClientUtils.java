@@ -70,7 +70,6 @@ public class WxHttpClientUtils {
         } finally {
             instream.close();
         }
-        // Trust own CA and all self-signed certs
         SSLContext sslcontext = SSLContexts.custom()
                 .loadKeyMaterial(keyStore, WxConfig.WX_MCH_ID.toCharArray())// 这里也是写密码的
                 .build();

@@ -273,6 +273,14 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			}else{
 				throw new AppException("未知支付方式");
 			}
+
+			//设置退款状态
+			orderRefund.setRdRSid(suid);
+			orderRefund.setRdSendDate(curDate);
+			orderRefund.setRdDate(curDate);
+			orderRefund.setRdCallbackNo(rtnTradeNo);
+			orderRefund.setRdStatus((long)OrderRefundConstant.REFUND_AUDITING_STATUS_REFUND_SUCCESS);
+			orderRefundMapper.updateOrderRefund(orderRefund);
 			//退还累计金额
 			userCardPackageMapper.userRefundOrder(order.getOrderBuyUid(),payType,orderRefund.getRdPrice(),xflj);
 			//清除消费返现
@@ -284,13 +292,8 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 				logger.info("第三方消费累计减少金额：{}",xflj);
 				currentPlatformSalesMapper.xfljCountPlatformSales(xflj);
 			}
-			//设置退款状态
-			orderRefund.setRdRSid(suid);
-			orderRefund.setRdSendDate(curDate);
-			orderRefund.setRdDate(curDate);
-			orderRefund.setRdCallbackNo(rtnTradeNo);
-			orderRefund.setRdStatus((long)OrderRefundConstant.REFUND_AUDITING_STATUS_REFUND_SUCCESS);
-			orderRefundMapper.updateOrderRefund(orderRefund);
+			//重新计算排名值
+			walletCashBackQueueMapper.initWalletCashBackQueuePrice();
 		}finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("用户退款处理完毕，执行时间{}",(System.currentTimeMillis()-curDate.getTime()));
