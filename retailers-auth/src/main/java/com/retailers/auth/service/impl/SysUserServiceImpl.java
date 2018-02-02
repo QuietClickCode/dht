@@ -146,7 +146,9 @@ public class SysUserServiceImpl implements SysUserService {
 		}
 
 		System.out.println(sysUser.getUcreateTime());
+		System.out.println(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 		String pwd = Md5Encrypt.md5(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
+		System.out.println(pwd);
 		if(!pwd.equals(sysUser.getUpassword())) {
 			throw new AppException("密码不正确");
 		}

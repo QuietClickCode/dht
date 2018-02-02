@@ -25,6 +25,11 @@ public class WriteData {
 	 * 权限认证未通过
 	 */
 	public static final int SC_UNAUTHORIZED=401;
+	/**
+	 * session超时
+	 */
+	public static final int SESSION_TIME_OUT=101;
+
 	public static final String MSG_SUCCESS = "SUCCESS";
 
 	public static void write(String data,HttpServletResponse response) {
