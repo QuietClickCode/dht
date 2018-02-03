@@ -252,12 +252,14 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WX){
 				try{
 					Map<String,String> refundMap=payService.refundOrder(orderRefund.getRdOrderNo(),order.getOrderNo(),order.getOrderPayCallbackNo(),order.getOrderTradePrice(),orderRefund.getRdPrice());
-					if(ObjectUtils.isNotEmpty(refundMap)){
-						rtnTradeNo=refundMap.get("result_code");
+					if(refundMap.get("return_code").equals("SUCCESS")&&refundMap.get("result_code").equals("SUCCESS")){
+						rtnTradeNo=refundMap.get("refund_id");
+					}else{
+						throw new AppException(refundMap.get("err_code_des"));
 					}
 				}catch(Exception e){
-					e.printStackTrace();
 					logger.info(StringUtils.getErrorInfoFromException(e));
+					throw new AppException(e.getMessage());
 				}
 			// 钱包支付
 			}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
