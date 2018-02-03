@@ -1,5 +1,7 @@
 package com.retailers.dht.common.vo;
 
+import com.retailers.tools.utils.NumberUtils;
+
 import java.util.Date;
 
 /**
@@ -112,7 +114,9 @@ public class OrderRefundVo {
     public Long getRdPrice() {
         return rdPrice;
     }
-
+    public String getRdPriceStr() {
+        return NumberUtils.formaterNumberPower(rdPrice);
+    }
     public void setRdPrice(Long rdPrice) {
         this.rdPrice = rdPrice;
     }
@@ -236,4 +240,6 @@ public class OrderRefundVo {
     public void setOrderUaAddress(String orderUaAddress) {
         this.orderUaAddress = orderUaAddress;
     }
+
+
 }
