@@ -641,8 +641,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 
 	//计算当前用户累计金额
 	//计算用户钱包消费累计
-
-
 	public void test(Map<Long,Long> maps,Long orderId) {
 		rankkingCalculation(maps,orderId);
 	}

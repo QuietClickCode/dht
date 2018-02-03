@@ -59,6 +59,10 @@ public class SysParameterConfigConstant {
      * 订单完成时间
      */
     public static final String ORDER_COMPLETE_DATE="ORDER_COMPLETE_DATE";
+    /**
+     * 微信支付签名本地缓存地址
+     */
+    public static final String WX_PAY_CERT_LOCAL_ADDRESS="WX_PAY_CERT_LOCAL_ADDRESS";
 
 
     //系统 参数对应的key值

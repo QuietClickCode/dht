@@ -1,8 +1,12 @@
 package com.retailers.wx.common.utils;
 
+import com.retailers.mybatis.common.constant.AttachmentConstant;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.http.HttpClientManager;
 import com.retailers.tools.utils.ObjectUtils;
+import com.retailers.tools.utils.StringUtils;
 import com.retailers.wx.common.config.WxConfig;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
@@ -21,6 +25,7 @@ import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import java.io.*;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.security.KeyStore;
 
@@ -60,11 +65,15 @@ public class WxHttpClientUtils {
     }
 
     public static String doSendMoney(String url, String data) throws Exception {
-        System.out.println("退款订单生成的格式："+data);
+        System.out.println("退款订单生成的格式："+data+",微信mathId"+WxConfig.WX_MCH_ID);
         KeyStore keyStore  = KeyStore.getInstance("PKCS12");
-        String path = "";//request.getSession().getServletContext().getRealPath("/apiclient_cert.p12");//获取证书文件
+        String path = SysParameterConfigConstant.getValue(SysParameterConfigConstant.WX_PAY_CERT_LOCAL_ADDRESS)+WxConfig.WX_CRET_FILE;//request.getSession().getServletContext().getRealPath("/apiclient_cert.p12");//获取证书文件
         System.out.println("证书路径："+path);
-        InputStream instream=WxHttpClientUtils.class.getResourceAsStream("/apiclient_cert.p12");
+        File file=new File(path);
+        if(!file.exists()){
+            throw new Exception("未上传微信支会密钥");
+        }
+        FileInputStream instream = new FileInputStream(new File(path));
         try {
             keyStore.load(instream, WxConfig.WX_MCH_ID.toCharArray());
         } finally {
@@ -73,7 +82,6 @@ public class WxHttpClientUtils {
         SSLContext sslcontext = SSLContexts.custom()
                 .loadKeyMaterial(keyStore, WxConfig.WX_MCH_ID.toCharArray())// 这里也是写密码的
                 .build();
-        // Allow TLSv1 protocol only
         SSLConnectionSocketFactory sslsf = new SSLConnectionSocketFactory(
                 sslcontext, new String[] { "TLSv1" }, null,
                 SSLConnectionSocketFactory.BROWSER_COMPATIBLE_HOSTNAME_VERIFIER);
@@ -135,5 +143,78 @@ public class WxHttpClientUtils {
         } finally {
             instream.close();
         }
+    }
+
+    /**
+     * 微信支付文件下载
+     * @param savePath 保存文件路径
+     * @param fileNm 保存文件名
+     * @param remoteFile 远程服务器地址
+     */
+    public static  void downWxCretFile(String savePath,String fileNm,String remoteFile){
+        String path = StringUtils.concat(savePath,fileNm);
+        File file = new File(path);
+        if(file.exists()){
+            return;
+        }
+        if(ObjectUtils.isNotEmpty(remoteFile)){
+            download(StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,remoteFile), savePath,fileNm);
+        }
+        System.out.println("证书路径："+path);
+    }
+
+    /**
+     * 下载文件
+     * @param savePath
+     * @param fileNm
+     */
+    private static void downWxCretFile(String savePath,String fileNm){
+        downWxCretFile(savePath,fileNm,WxConfig.WX_REMOTE_FILE_URL);
+    }
+
+
+    /**
+     * 使用传统io stream 下载文件
+     * @param url
+     * @param saveDir
+     * @param fileName
+     */
+    private static void download(String url, String saveDir, String fileName) {
+        System.out.println(url);
+        BufferedOutputStream bos = null;
+        InputStream is = null;
+        try {
+            byte[] buff = new byte[8192];
+            is = new URL(url).openStream();
+            File file = new File(saveDir, fileName);
+            file.getParentFile().mkdirs();
+            bos = new BufferedOutputStream(new FileOutputStream(file));
+            int count = 0;
+            while ( (count = is.read(buff)) != -1) {
+                bos.write(buff, 0, count);
+            }
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            if (is != null) {
+                try {
+                    is.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (bos != null) {
+                try {
+                    bos.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+
     }
 }

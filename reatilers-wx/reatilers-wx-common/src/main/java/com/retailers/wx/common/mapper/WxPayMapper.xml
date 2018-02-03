@@ -25,6 +25,7 @@
 		<result property="createUid" column="create_uid"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
+		<result property="romoteFile" column="romoteFile"/>
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="wxPay_columns">
@@ -142,11 +143,10 @@
 	<!-- 根据公众号管理主键取得数据 -->
 	<select id="queryCurUsedPay" resultMap="rm_wxPay_vo">
 		SELECT
-			p.*
+			p.*, a.show_url romoteFile
 		FROM
 			t_wx_pay p
 		LEFT JOIN t_attachment a ON p.wx_certificate_code = a.id
-
 		WHERE
 			p.is_delete = 0
 		ORDER BY

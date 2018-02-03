@@ -172,11 +172,10 @@ public class PayServiceImpl implements PayService {
         Map<String,String> rtnMap=new HashMap<String, String>();
         try{
 //            String apiKey="CF26762CF05A42899F1681872CE3BC89";
-            String apiKey="zhanganquanYOUBANG2017zhongping2";
-            String appId="wxfd2628cfc7f6defb";
-//            String apiKey= WxConfig.WX_API_KEY;
-//            String appId=WxConfig.APP_ID;
-            WxConfig.WX_MCH_ID="1450860802";
+//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
+//            String appId="wxfd2628cfc7f6defb";
+            String apiKey= WxConfig.WX_API_KEY;
+            String appId=WxConfig.APP_ID;
             params.put("appid", appId);
             params.put("mch_id", WxConfig.WX_MCH_ID);
             params.put("device_info", "");//自定义参数，可以为终端设备号(门店号或收银设备ID)，PC网页或公众号内支付可以传"WEB"

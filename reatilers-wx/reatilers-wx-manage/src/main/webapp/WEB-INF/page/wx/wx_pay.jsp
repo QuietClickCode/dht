@@ -17,7 +17,8 @@
             <br>
             <br>
                 <form id="wxPayForm" method="POST" enctype="multipart/form-data" class="form-horizontal" data-value="0">
-                    <input type="hidden" class="form-control" id="wxCertificateCode" name="wxCertificateCode"/>
+                    <input type="hidden" class="form-control" id="wxCertificateCode" name="wxCertificateCode" value="${wxPay.wxCertificateCode}"/>
+                    <input type="hidden" class="form-control" id="wxLocalCertificateCodeAddr" name="wxLocalCertificateCodeAddr" value="${wxPay.wxLocalCertificateCodeAddr}"/>
                     <div class="form-group">
                         <label for="wxMchId" class="col-sm-3 control-label">微信商户号：</label>
                         <div class="col-sm-6">
@@ -53,7 +54,7 @@
                     <div class="form-group">
                         <label class="col-sm-3 control-label">证书编码：</label>
                         <div class="col-sm-4">
-                            <em id="uploadNm">2128e732-32c9-4f64-8acd-8cfe35959413.p12 </em>
+                            <em id="uploadNm">${wxPay.wxLocalCertificateCodeAddr}</em>
                         </div>
                         <div class="col-sm-3">
                             <input type="file" id="dht_image_upload" class="filestyle" name="dht_image_upload"/>
@@ -120,8 +121,8 @@
             success: function (returndata) {
                 if(returndata.state=="SUCCESS"){
                     $("#uploadNm").text(returndata.title);
-                    $("#uploadNm").text(returndata.title);
                     $("#wxPayForm #wxCertificateCode").val(returndata.original);
+                    $("#wxPayForm #wxLocalCertificateCodeAddr").val(returndata.title);
                 }
                 layer.close(wxCodeFileFormSubmitIdx);
             },
