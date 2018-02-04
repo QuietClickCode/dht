@@ -260,7 +260,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 				}
 				//添加卡包操作日志
-				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
+				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),tradePrice,unCashPrice);
 			}
 		}else{
 			//自然消费，不返现列表
@@ -274,7 +274,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 				orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 			}
 			//添加卡包操作日志
-			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
+			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),tradePrice,unCashPrice);
 		}
 	}
 	/**
