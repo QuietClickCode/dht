@@ -351,7 +351,7 @@
             $("#orderRefundDialogForm #rdId").val(rowData.rdId);
             $("#orderRefundDialogForm #orderNo").val(rowData.rdOrderNo);
             $("#orderRefundDialogForm #buyName").val(rowData.buyName);
-            $("#orderRefundDialogForm #refundPrice").val(rowData.rdPrice);
+            $("#orderRefundDialogForm #refundPrice").val(rowData.rdPriceStr);
         }
     }
 
