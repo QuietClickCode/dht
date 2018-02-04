@@ -482,4 +482,38 @@
 			#{item}
 		</foreach>
 	</delete>
+	<!--初始化提成中累计达成条件 -->
+	<update id="initWalletCashBackQueuePrice">
+		UPDATE t_wallet_cash_back_queue q,
+			(
+			SELECT
+			d.ccbq_id,
+			CASE
+			WHEN ccbq_rtn_type =@lastType THEN
+			@curCashRowNum := @curCashRowNum + d.ccbq_money
+			ELSE
+			@curCashRowNum := d.ccbq_money
+			END curCashQueue,
+			@lastType := d.ccbq_rtn_type AS lastType,
+			d.ccbq_rtn_type,
+			d.ccbq_money
+			FROM
+			(SELECT @curCashRowNum := 0) r,
+			(SELECT @lastType := NULL) t,
+			(
+			SELECT
+			ccbq_id,
+			ccbq_rtn_type,
+			ccbq_money
+			FROM
+			t_wallet_cash_back_queue wc
+			ORDER BY
+			ccbq_rtn_type DESC,
+			ccbq_id ASC
+			) d
+			) t
+			SET q.ccbq_total_price = t.curCashQueue
+			WHERE
+			q.ccbq_id = t.ccbq_id
+	</update>
 </mapper>

@@ -172,6 +172,7 @@ public class PayServiceImpl implements PayService {
         Map<String,String> rtnMap=new HashMap<String, String>();
         try{
 //            String apiKey="CF26762CF05A42899F1681872CE3BC89";
+//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
 //            String appId="wxfd2628cfc7f6defb";
             String apiKey= WxConfig.WX_API_KEY;
             String appId=WxConfig.APP_ID;

@@ -18,7 +18,13 @@ public class PayServiceTest extends TestBaseJunit {
 
     @Test
     public void refundOrder()throws Exception{
-        payService.refundOrder("zpaman123","MS180112163149109","4200000095201801122765925112",2l,1l);
+        try{
+            payService.refundOrder("zpaman12322","CZ171231211502015","4200000047201712315442968727",1l,1l);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        Thread.sleep(10000);
+
     }
 
 

@@ -135,4 +135,10 @@ public interface WalletCashBackQueueMapper {
 	 */
 	public int clearWalletCashBackQueueByIds(List<Long> ccbqId);
 
+	/**
+	 * 初始化提成中累计达成条件
+ 	 * @return
+	 */
+	public int initWalletCashBackQueuePrice();
+
 }

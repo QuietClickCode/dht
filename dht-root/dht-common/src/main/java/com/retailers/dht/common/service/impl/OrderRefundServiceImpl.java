@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.naming.ldap.Rdn;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -147,6 +148,7 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 		//创建退款单
 		OrderRefund orf= createRefund(rdOrderNo,order.getId(),refundPrice,remark);
 		orderRefundMapper.saveOrderRefund(orf);
+		logger.info("订单所处状态：{}，订单号：{}",order.getOrderNo(),order.getOrderStatus());
 		order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_REFUND);
 		//修改订单状态为退款中
 		orderMapper.updateOrder(order);
@@ -250,12 +252,14 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WX){
 				try{
 					Map<String,String> refundMap=payService.refundOrder(orderRefund.getRdOrderNo(),order.getOrderNo(),order.getOrderPayCallbackNo(),order.getOrderTradePrice(),orderRefund.getRdPrice());
-					if(ObjectUtils.isNotEmpty(refundMap)){
-						rtnTradeNo=refundMap.get("result_code");
+					if(refundMap.get("return_code").equals("SUCCESS")&&refundMap.get("result_code").equals("SUCCESS")){
+						rtnTradeNo=refundMap.get("refund_id");
+					}else{
+						throw new AppException(refundMap.get("err_code_des"));
 					}
 				}catch(Exception e){
-					e.printStackTrace();
 					logger.info(StringUtils.getErrorInfoFromException(e));
+					throw new AppException(e.getMessage());
 				}
 			// 钱包支付
 			}else if(order.getOrderPayWay().intValue()==OrderConstant.ORDER_PAY_WAY_WALLET){
@@ -273,17 +277,7 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			}else{
 				throw new AppException("未知支付方式");
 			}
-			//退还累计金额
-			userCardPackageMapper.userRefundOrder(order.getOrderBuyUid(),payType,orderRefund.getRdPrice(),xflj);
-			//清除消费返现
-			walletCashBackQueueMapper.clearWalletCashBackQueueByIds(wcbqsIds);
-			//累计消费总额
-			currentPlatformSalesMapper.initCountPlatformSales();
-			//判断是否有第三方消费累计数据
-			if(xflj>0){
-				logger.info("第三方消费累计减少金额：{}",xflj);
-				currentPlatformSalesMapper.xfljCountPlatformSales(xflj);
-			}
+
 			//设置退款状态
 			orderRefund.setRdRSid(suid);
 			orderRefund.setRdSendDate(curDate);
@@ -291,7 +285,26 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 			orderRefund.setRdCallbackNo(rtnTradeNo);
 			orderRefund.setRdStatus((long)OrderRefundConstant.REFUND_AUDITING_STATUS_REFUND_SUCCESS);
 			orderRefundMapper.updateOrderRefund(orderRefund);
-		}finally {
+			//退还累计金额
+			userCardPackageMapper.userRefundOrder(order.getOrderBuyUid(),payType,orderRefund.getRdPrice(),xflj);
+			if(ObjectUtils.isNotEmpty(wcbqsIds)){
+				//清除消费返现
+				walletCashBackQueueMapper.clearWalletCashBackQueueByIds(wcbqsIds);
+				//累计消费总额
+				currentPlatformSalesMapper.initCountPlatformSales();
+				//重新计算排名值
+				walletCashBackQueueMapper.initWalletCashBackQueuePrice();
+			}
+			//判断是否有第三方消费累计数据
+			if(xflj>0){
+				logger.info("第三方消费累计减少金额：{}",xflj);
+				currentPlatformSalesMapper.xfljCountPlatformSales(xflj);
+			}
+		}catch (Exception e){
+			logger.info("退款sql 异常：\r\n{}",StringUtils.getErrorInfoFromException(e));
+			throw new AppException("系统异常，请联系管理员");
+		}
+		finally {
 			procedureToolsService.singleUnLockManager(key);
 			logger.info("用户退款处理完毕，执行时间{}",(System.currentTimeMillis()-curDate.getTime()));
 		}

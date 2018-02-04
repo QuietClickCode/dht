@@ -65,7 +65,7 @@ public class Md5Encrypt {
 //		System.out.println(md5("http://www.zgrmdht.com_zpaman","UTF-8"));  20171221101452
 //		System.out.println(md5("123456","UTF-8"));
         //123456_20180202094347
-		System.out.println(md5(StringUtils.formate("123456","20180202094347"),"UTF-8"));
+		System.out.println(md5(StringUtils.formate("123456","20180203014349"),"UTF-8"));
 	}
 
 }

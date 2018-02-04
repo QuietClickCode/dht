@@ -351,6 +351,15 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		if(ObjectUtils.isNotEmpty(batchUpdate)){
 			currentPlatformSalesMapper.batchUpdateCurrentPlatformSales(batchUpdate);
 		}
+		logger.info("变更前的商品类型对应消费累计情况：{}",JSON.toJSON(rtnTypeTotal));
+		for(Long type:rtnTypeTotal.keySet()){
+			if(hasCpfs.containsKey(type)){
+				long curTotalPrice=rtnTypeTotal.get(type);
+				curTotalPrice+=hasCpfs.get(type).getCpsTotalPrice();
+				rtnTypeTotal.put(type,curTotalPrice);
+			}
+		}
+		logger.info("变更后的商品类型对应消费累计情况：{}",JSON.toJSON(rtnTypeTotal));
 		//开始计算是否存在可以返现用户
 		rankkingCalculation(rtnTypeTotal,orderId);
 
@@ -632,8 +641,6 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 
 	//计算当前用户累计金额
 	//计算用户钱包消费累计
-
-
 	public void test(Map<Long,Long> maps,Long orderId) {
 		rankkingCalculation(maps,orderId);
 	}

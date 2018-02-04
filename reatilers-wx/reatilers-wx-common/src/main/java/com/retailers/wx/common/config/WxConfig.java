@@ -25,6 +25,18 @@ public class WxConfig {
      * 微信apiKey 用于支付
      */
     public static String WX_API_KEY="";
+    /**
+     * 微信支付密钥文件名
+     */
+    public static String WX_CRET_FILE="";
+    /**
+     * 远程文件地址
+     */
+    public static String WX_REMOTE_FILE_URL="";
+    /**
+     * 远程 文件id
+     */
+    public static String WX_REMOTE_FILE_ID="";
 
 
     /** 请求消息类型：图片 */

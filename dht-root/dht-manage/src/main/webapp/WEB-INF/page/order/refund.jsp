@@ -143,7 +143,7 @@
             }
         },
         {
-            field: 'rdPrice',
+            field: 'rdPriceStr',
             title: '退款金额'
         },
         {

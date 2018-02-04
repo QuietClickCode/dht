@@ -5,6 +5,7 @@ import com.alibaba.druid.sql.dialect.postgresql.ast.stmt.PGSelectQueryBlock;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
@@ -19,6 +20,7 @@ import com.retailers.wx.common.enm.WXAccountEnum;
 import com.retailers.wx.common.entity.WxAccessToken;
 import com.retailers.wx.common.entity.WxManager;
 import com.retailers.wx.common.service.WxAccessTokenService;
+import com.retailers.wx.common.utils.WxHttpClientUtils;
 import com.retailers.wx.common.utils.WxReqUtils;
 import com.retailers.wx.common.vo.WxPayVo;
 import org.slf4j.Logger;
@@ -157,6 +159,13 @@ public class WxAccessTokenServiceImpl implements WxAccessTokenService {
 			if(ObjectUtils.isNotEmpty(wxPayVo)){
 				WxConfig.WX_MCH_ID=wxPayVo.getWxMchId();
 				WxConfig.WX_API_KEY=wxPayVo.getWxApiKey();
+				if(ObjectUtils.isNotEmpty(wxPayVo.getWxCertificateCode())){
+					WxConfig.WX_CRET_FILE=StringUtils.formate(wxPayVo.getWxCertificateCode()+"",wxPayVo.getWxLocalCertificateCodeAddr());
+					WxConfig.WX_REMOTE_FILE_URL=wxPayVo.getRomoteFile();
+					WxConfig.WX_REMOTE_FILE_ID=wxPayVo.getWxCertificateCode()+"";
+					WxHttpClientUtils.downWxCretFile(SysParameterConfigConstant.getValue(SysParameterConfigConstant.WX_PAY_CERT_LOCAL_ADDRESS),WxConfig.WX_CRET_FILE,wxPayVo.getRomoteFile());
+
+				}
 			}
 		}
 		logger.info("初始化微信配置结束");
