@@ -32,6 +32,10 @@
 			margin-left: -1.5rem;
 			font-size: 0.3rem;
 		}
+
+		.vip_nav1_list li{
+			width: 50%;
+		}
 	</style>
 </head>
 
@@ -46,12 +50,12 @@
 	</div>
 	
 	<ul class="vip_nav1_list clearfix">
-		<li class="vip_nav1_item1">
+		<%--<li class="vip_nav1_item1">
 			<a href="/integral.html">
 				<img src="/img/icon-vip1.png"/>
 				<p class="p1">积分</p>
 			</a>			
-		</li>
+		</li>--%>
 		<li class="vip_nav1_item2">
 			<a href="/user/userWallet">
 				<img src="/img/icon-vip2.png"/>
