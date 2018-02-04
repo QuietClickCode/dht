@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.constant.OrderConstant;
 import com.retailers.dht.common.constant.OrderRefundConstant;
 import com.retailers.dht.common.constant.UserCardPackageConstant;
@@ -239,12 +240,26 @@ public class OrderRefundServiceImpl implements OrderRefundService {
 					wcbqsIds.add(wcbq.getCcbqId());
 				}
 			}
+			UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
+			logger.info("用户退款数据日志：{}", JSON.toJSON(ucp));
+
 			//取得消费累计金额
 			long xflj=orderRefund.getRdPrice()-walletCashBackTotalPrice;
 			if(xflj<0){
 				xflj=0;
+			}else{
+				//添加消费累计退款日志
+				//添加钱包日志
+				LogUserCardPackage lucp= new LogUserCardPackage();
+				lucp.setUid(order.getOrderBuyUid());
+				lucp.setType(UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_REFUND_INTEGRAL);
+				lucp.setRelationOrderId(order.getId());
+				lucp.setVal(xflj);
+				lucp.setCurVal(ucp.getUcurIntegral());
+				lucp.setRemark("用户退款，消费累计返还，订单号："+order.getId()+",还返累计消费："+xflj);
+				lucp.setCreateTime(new Date());
+				logUserCardPackageMapper.saveLogUserCardPackage(lucp);
 			}
-			UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(order.getOrderBuyUid());
 			//取得支付类型
 			long payType=order.getOrderPayWay();
 			String rtnTradeNo="";
