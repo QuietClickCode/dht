@@ -119,7 +119,7 @@ public class CheckUserController extends BaseController {
 
     @RequestMapping("queryCheckUserVoList")
     @ResponseBody
-    public Map queryCheckUserVoList(String phone,Long isUse,String isManage,Long oid,int pageNo,int pageSize){
+    public Map queryCheckUserVoList(String phone,Long isUse,String tids,String empIds,Long oid,int pageNo,int pageSize){
         Map map = new HashMap();
         if(ObjectUtils.isEmpty(oid)){
             Opening opening = openingService.queryLastOpening();
@@ -129,10 +129,14 @@ public class CheckUserController extends BaseController {
                 oid = opening.getOid();
             }
         }
+        List<Long> tidsList = StringToList(tids);
+        List<Long> empIdsList = StringToList(empIds);
         Map params = new HashMap();
         params.put("isDelete",0L);
         params.put("isUse",isUse);
         params.put("oid",oid);
+        params.put("tids",tidsList);
+        params.put("empIds",empIdsList);
         if(ObjectUtils.isNotEmpty(phone)){
             Long eid = getEmpIdByWxPhone(phone);
             params.put("eid",eid);
@@ -259,8 +263,7 @@ public class CheckUserController extends BaseController {
         return null;
     }
 
-    private boolean sendData( String data,
-                             HttpServletResponse response) {
+    private boolean sendData( String data, HttpServletResponse response) {
         try {
             response.setContentType("text/html;charset=utf-8");
             /* 这句话比较重要，我们通过response给页面返回一个js脚本，让js执行父页面的对应的jsFun，参数就是我们的data */

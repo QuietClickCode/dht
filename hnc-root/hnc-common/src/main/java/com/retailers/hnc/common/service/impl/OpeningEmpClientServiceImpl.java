@@ -44,6 +44,8 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	private WxAuthUserService wxAuthUserService;
 	@Autowired
 	private ClientManageService clientManageService;
+	@Autowired
+	private ClientIntentionService clientIntentionService;
 
 	public boolean saveOpeningEmpClient(OpeningEmpClient openingEmpClient) {
 		int status = openingEmpClientMapper.saveOpeningEmpClient(openingEmpClient);
@@ -129,6 +131,45 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	}
 
 	public boolean addCheckClient(Long oid,Long eid,String cmIds,String accessToken){
+		boolean flag = true;
+		Map params = new HashMap();
+		List<Long> cmIdsList = StringtoList(cmIds);
+		params.put("cmIds",cmIdsList);
+		List<ClientManage> clientManages = clientManageService.queryClientManageVoList(params,1,1000).getData();
+		for(ClientManage clientManage1:clientManages){
+			Integer status = clientManage1.getTmStatus();
+			Long channel = clientManage1.getTmChannel();
+			if(ObjectUtils.isEmpty(status)||ObjectUtils.isEmpty(channel)){
+				return false;
+			}
+		}
+		List<ClientIntention> clientIntentions = clientIntentionService.queryClientIntentionByCmIds(cmIdsList);
+
+			for(Long cmId:cmIdsList){
+				boolean inFlag = true;
+				for(ClientIntention clientIntention:clientIntentions){
+					if(cmId==clientIntention.getCmId()){
+						inFlag = false;
+						break;
+					}
+				}
+				System.out.println("inFlag:"+inFlag);
+				if(inFlag){
+					for(ClientManage clientManage1:clientManages){
+						System.out.println(clientManage1.getTmId());
+						System.out.println(cmId);
+						if(clientManage1.getTmId().equals(cmId)){
+							String remark = clientManage1.getTmInfo();
+							System.out.println("boolean:"+"null".equals(remark));
+							if(ObjectUtils.isEmpty(remark)||"null".equals(remark)){
+								return false;
+							}
+						}
+					}
+				}
+			}
+
+
 		OpeningEmpClient openingEmpClient = new OpeningEmpClient();
 		openingEmpClient.setIsDelete(0L);
 		openingEmpClient.setOid(oid);
@@ -163,8 +204,27 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 
 		}
 		int index = 0;
-		index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status,msg);
-		System.out.println(status);
+		//判断数据库之前是否有客户已被拒绝，已有则不被插入数据库
+		if(status==3){
+			for(Long oecId:oecIdList){
+				OpeningEmpClient openingEmpClient = openingEmpClientMapper.queryOpeningEmpClientByOecId(oecId);
+				Map params = new HashMap();
+				params.put("isDelete",0L);
+				params.put("oid",openingEmpClient.getOid());
+				params.put("eid",openingEmpClient.getEid());
+				params.put("cid",openingEmpClient.getCid());
+				params.put("oecStatus",3);
+				List<OpeningEmpClient> openingEmpClients = queryOpeningEmpClientList(params,1,1).getData();
+				if(ObjectUtils.isNotEmpty(openingEmpClients)){
+					openingEmpClientMapper.deleteOpeningEmpClientByOecId(openingEmpClients.get(0).getOecId());
+				}
+			}
+
+		}
+		if(ObjectUtils.isNotEmpty(oecIdList)){
+			index = openingEmpClientMapper.updateOpeningEmpClientByOecIds(oecIdList,status,msg);
+		}
+//		System.out.println(status);
 		if(status==2){
 			if(index==oecIdList.size()){
 				for(Long oecIdLong:oecIdList){

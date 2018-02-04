@@ -1,11 +1,14 @@
 package com.retailers.hnc.manage.controller;
 
 import com.retailers.auth.annotation.Menu;
+import com.retailers.hnc.common.entity.Opening;
 import com.retailers.hnc.common.entity.Team;
 import com.retailers.hnc.common.service.CheckUserService;
+import com.retailers.hnc.common.service.OpeningService;
 import com.retailers.hnc.common.service.TeamService;
 import com.retailers.hnc.common.vo.CheckUserVo;
 import com.retailers.hnc.manage.base.BaseController;
+import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.utils.ObjectUtils;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
@@ -32,6 +35,8 @@ public class CheckUserController extends BaseController {
 
     @Autowired
     TeamService teamService;
+    @Autowired
+    OpeningService openingService;
 
     @RequestMapping("/employeeManageMapping")
     @Menu(parentRes = "sys.manager.employee",resourse = "checkUser.checkUserMapping",description = "业绩查询",label = "业绩查询")
@@ -110,6 +115,113 @@ public class CheckUserController extends BaseController {
         System.out.println(list.size());
         map.put("rows",list);
         return map;
+    }
+
+    @RequestMapping("queryCheckUserVoList")
+    @ResponseBody
+    public Map queryCheckUserVoList(String phone,Long isUse,String tids,String empIds,Long oid,int pageNo,int pageSize){
+        Map map = new HashMap();
+        if(ObjectUtils.isEmpty(oid)){
+            Opening opening = openingService.queryLastOpening();
+            if(ObjectUtils.isEmpty(opening)){
+                return map;
+            }else{
+                oid = opening.getOid();
+            }
+        }
+        List<Long> tidsList = StringToList(tids);
+        List<Long> empIdsList = StringToList(empIds);
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("isUse",isUse);
+        params.put("oid",oid);
+        params.put("tids",tidsList);
+        params.put("empIds",empIdsList);
+
+        Pagination<CheckUserVo> checkUserVos = checkUserService.queryCheckUserVoList(params,pageNo,pageSize);
+
+        map.put("rows",checkUserVos.getData());
+        map.put("total",checkUserVos.getTotalCount());
+        return map;
+    }
+
+    @RequestMapping("outExcel")
+    public void outExcel(Long oid, String empIds, String tids, HttpServletResponse response) throws Exception{
+        String fileName = "PerformanceTable.xls";// 文件名
+        response.setContentType("application/x-msdownload");
+        response.setHeader("Content-Disposition", "attachment; filename="
+                + fileName);
+        List<Long> emIdList = null;
+        List<Long> tidsList = null;
+        if(!ObjectUtils.isEmpty(empIds))
+            emIdList = StringToList(empIds);
+        if(!ObjectUtils.isEmpty(tids))
+            tidsList = StringToList(tids);
+        Map params = new HashMap();
+        if(ObjectUtils.isNotEmpty(tids)){
+            params.put("tidList",tidsList);
+        }else if(ObjectUtils.isNotEmpty(empIds)){
+            params.put("emIdList",emIdList);
+        }
+        params.put("oid",oid);
+        Map map = new HashMap();
+        List<CheckUserVo> list = checkUserService.queryAchievement(params);
+
+
+        // 第一步，创建一个webbook，对应一个Excel文件
+        HSSFWorkbook wb = new HSSFWorkbook();
+        // 第二步，在webbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet("学生表一");
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制short
+        HSSFRow row = sheet.createRow((int) 0);
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER); // 创建一个居中格式
+
+        HSSFCell cell = row.createCell((short) 0);
+        cell.setCellValue("团队名称");
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 1);
+        cell.setCellValue("姓名");
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 2);
+        cell.setCellValue("未到场人数");
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 3);
+        cell.setCellValue("已到场人数");
+        cell.setCellStyle(style);
+        cell = row.createCell((short) 4);
+        cell.setCellValue("总和");
+        cell.setCellStyle(style);
+
+        // 第五步，写入实体数据 实际应用中这些数据从数据库得到，
+
+        for (int i = 0; i < list.size(); i++)
+        {
+            row = sheet.createRow((int) i + 1);
+            CheckUserVo checkUserVo = (CheckUserVo) list.get(i);
+            // 第四步，创建单元格，并设置值
+            row.createCell((short) 0).setCellValue(checkUserVo.getTname());
+            row.createCell((short) 1).setCellValue(checkUserVo.getEmpName());
+            row.createCell((short) 2).setCellValue( checkUserVo.getNotuseNum());
+            row.createCell((short) 3).setCellValue( checkUserVo.getUseNum());
+            row.createCell((short) 4).setCellValue( checkUserVo.getUseNum()+checkUserVo.getNotuseNum());
+        }
+        // 第六步，将文件存到指定位置
+        try
+        {
+//            FileOutputStream fout = new FileOutputStream("E:/students.xls");
+            OutputStream out = response.getOutputStream();
+            wb.write(out);
+            out.flush();
+//            fout.close();
+            out.close();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
     }
 
     @RequestMapping("exportExcel")

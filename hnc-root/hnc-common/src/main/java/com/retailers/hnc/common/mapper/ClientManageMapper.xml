@@ -154,6 +154,12 @@
 		on t1.tm_employee = t2.em_id and t2.is_delete = 0
 		LEFT JOIN t_channel t3 on t1.tm_channel = t3.c_id and t3.is_delete = 0
 		where t1.is_delete = 0
+		<if test="null!=params.cmIds">
+			and t1.tm_id in
+			<foreach collection="params.cmIds" open="(" close=")" item="cmId" separator="," index="index">
+				#{params.cmIds[${index}]}
+			</foreach>
+		</if>
 	</select>
 
 

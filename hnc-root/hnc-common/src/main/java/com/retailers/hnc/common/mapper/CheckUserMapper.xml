@@ -105,15 +105,30 @@
 		FROM
 		t_check_user t1,
 		t_client_manage t2
-		LEFT JOIN t_wx_auth_user t3 ON t2.tm_id=t3.wau_u_id
-		LEFT JOIN t_employee_manage t4 ON t2.tm_employee=t4.em_id and t4.is_delete=0
+		LEFT JOIN t_wx_auth_user t3 ON t2.tm_id=t3.wau_u_id,
+		t_employee_manage t4
+
 		WHERE
 		t1.is_delete=0
 		and t2.is_delete=0
+		and t4.is_delete=0
 		and t1.c_id=t2.tm_id
 		and t1.o_id=#{params.oid}
+		and t2.tm_employee=t4.em_id
 		<if test="null!=params.isUse">
 			and t1.is_use=#{params.isUse}
+		</if>
+		<if test="null!=params.empIds">
+			and t2.tm_employee in
+			<foreach collection="params.empIds" item="empId" open="(" close=")" separator="," index="index">
+				#{params.empIds[${index}]}
+			</foreach>
+		</if>
+		<if test="null!=params.tids">
+			and t4.em_team in
+			<foreach collection="params.tids" item="tid" open="(" close=")" separator="," index="index">
+				#{params.tids[${index}]}
+			</foreach>
 		</if>
 
 		<if test="null!=params.eid">

@@ -64,6 +64,7 @@ public interface ClientIntentionService {
 
 	public List<HouseTypeManage> queryAllHouseType(String fmIds);
 
+	public List<ClientIntention> queryClientIntentionByCmIds(List<Long> cmIds);
 }
 
 
