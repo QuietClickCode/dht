@@ -2,6 +2,8 @@ package com.retailers.hnc.common.dao;
 import com.retailers.hnc.common.entity.ClientIntention;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：客户意向表DAO
@@ -55,4 +57,5 @@ public interface ClientIntentionMapper {
 
 	public List<ClientIntentionVo> queryClientIntentionVoList(Pagination<ClientIntentionVo> pagination);
 
+	public List<ClientIntention> queryClientIntentionByCmIds(@Param("cmIds") List<Long> cmIds);
 }

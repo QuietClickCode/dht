@@ -73,6 +73,17 @@
 		LEFT JOIN t_channel t3 ON t2.tm_channel=t3.c_id and t3.is_delete=0
 		<include refid="clientIntention_where"/>
 	</select>
+	<select id="queryClientIntentionByCmIds" resultMap="rm_clientIntention">
+		SELECT * from
+		t_client_intention t1
+		WHERE
+		t1.is_delete=0
+		and t1.cm_id in
+		<foreach collection="cmIds" open="(" close=")" separator="," item="cmId">
+			#{cmId}
+		</foreach>
+		GROUP BY  t1.cm_id
+	</select>
 	<!--添加客户意向表 -->
 	<insert id="saveClientIntention" parameterType="com.retailers.hnc.common.entity.ClientIntention" useGeneratedKeys="true" keyProperty="iid">
 		INSERT INTO t_client_intention (

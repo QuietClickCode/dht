@@ -43,6 +43,7 @@
 		<result property="emOrder" column="em_order"/>
 		<result property="version" column="version"/>
 		<result property="headImgUrl" column="headImgUrl"/>
+		<result property="tname" column="tname"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
@@ -115,8 +116,9 @@
 	</sql>
 	<!--分页查询 -->
 	<select id="queryEmployeeManageList" resultMap="rm_employeeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
-		SELECT <include refid="employeeManage_columns" />
+		SELECT t1.*,t2.t_name tname
 		FROM t_employee_manage t1
+		LEFT JOIN t_team t2 ON t1.em_team=t2.t_id and t2.is_delete=0
 		<include refid="employeeManage_where"/>
 	</select>
 

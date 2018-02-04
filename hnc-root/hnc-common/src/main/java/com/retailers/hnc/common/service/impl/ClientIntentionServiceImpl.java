@@ -70,6 +70,10 @@ public class ClientIntentionServiceImpl implements ClientIntentionService {
 		return houseTypeManages;
 	}
 
+	public List<ClientIntention> queryClientIntentionByCmIds(List<Long> cmIds){
+		return clientIntentionMapper.queryClientIntentionByCmIds(cmIds);
+	}
+
 	public Pagination<ClientIntention> queryClientIntentionList(Map<String, Object> params,int pageNo,int pageSize) {
 		Pagination<ClientIntention> page = new Pagination<ClientIntention>();
 		page.setPageNo(pageNo);

@@ -129,7 +129,12 @@ public class OpeningEmpClientController extends BaseController{
         Long oid = opening.getOid();
         Long eid = getEmpIdByWxPhone(phone);
         boolean flag = openingEmpClientService.addCheckClient(oid,eid,cmIds,HNCGZHConstant.ACCESS_TOKEN);
-        return success(flag);
+        if(flag){
+            return success(flag);
+        }else{
+            return errorForSystem("失败");
+        }
+
     }
 
     @RequestMapping("updateOpeningEmpClient")
