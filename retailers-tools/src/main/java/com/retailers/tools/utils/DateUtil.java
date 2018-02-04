@@ -869,18 +869,21 @@ public class DateUtil {
 //		List<String> lists = dateList("2016-12-01","2016-12-23");
 //		System.out.println(lists);
 
-		Date curDate=new Date();
-//		Date lastDate = DateUtil.addDays(curDate,1,DateUtil.DATE_SHORT_FORMAT);
-//		System.out.println(lastDate);
-//		System.out.println(dateToString(lastDate));
-//		System.out.println(getWeekOfDate(curDate));
+//		Date curDate=new Date();
+////		Date lastDate = DateUtil.addDays(curDate,1,DateUtil.DATE_SHORT_FORMAT);
+////		System.out.println(lastDate);
+////		System.out.println(dateToString(lastDate));
+////		System.out.println(getWeekOfDate(curDate));
+//
+//
+//
+//		Calendar cal = Calendar.getInstance();
+//		cal.setTime(curDate);
+//		int w = cal.get(Calendar.SECOND);
+//		System.out.println(dateToString(curDate,DATE_WITHSECOND_FORMAT));
+//		System.out.println(w);
+		Date curDate =new Date();
+		System.out.println(StringUtils.formate("123456", DateUtil.dateToString(curDate, DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 
-
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(curDate);
-		int w = cal.get(Calendar.SECOND);
-		System.out.println(dateToString(curDate,DATE_WITHSECOND_FORMAT));
-		System.out.println(w);
 	}
 }
