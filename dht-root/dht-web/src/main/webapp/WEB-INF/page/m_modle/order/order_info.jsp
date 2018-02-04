@@ -142,7 +142,7 @@
 <script>
     function orderStatus() {
         console.log(order);
-        if(order.orderStatus == 0 || order.orderStatus == 2){
+        if(order.orderStatus == 0 || order.orderStatus == 2 || order.orderStatus == 1){
             orderStatus_0();
         }else if(order.orderStatus == 3){
             orderStatus_3();
