@@ -272,6 +272,9 @@ public class UserServiceImpl implements UserService {
 			userCardPackage.setUtotalConsume(0l);
 			userCardPackage.setUwalletConsumeTotal(0l);
 			userCardPackage.setId(user.getUid());
+			userCardPackage.setuOtherPayTotal(0l);
+			userCardPackage.setUcashCurPrice(0l);
+			userCardPackage.setUcashTotalPrice(0l);
 			userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		}
 		//判断是老用户登陆 重新设置老用户密码加密方式
@@ -350,6 +353,9 @@ public class UserServiceImpl implements UserService {
 			userCardPackage.setUtotalConsume(0l);
 			userCardPackage.setUwalletConsumeTotal(0l);
 			userCardPackage.setId(curUid);
+			userCardPackage.setuOtherPayTotal(0l);
+			userCardPackage.setUcashCurPrice(0l);
+			userCardPackage.setUcashTotalPrice(0l);
 			userCardPackageMapper.saveUserCardPackage(userCardPackage);
 		}
 		//根据用户取得相应的登陆信息

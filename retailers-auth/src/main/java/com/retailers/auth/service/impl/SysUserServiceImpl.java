@@ -9,8 +9,6 @@ import com.retailers.auth.entity.SysUser;
 import com.retailers.auth.service.SysUserService;
 import com.retailers.auth.vo.SysUserVo;
 import com.retailers.mybatis.pagination.Pagination;
-import com.retailers.tools.encrypt.DESUtils;
-import com.retailers.tools.encrypt.DesKey;
 import com.retailers.tools.exception.AppException;
 import com.retailers.tools.utils.DateUtil;
 import com.retailers.tools.utils.Md5Encrypt;
@@ -23,7 +21,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -77,9 +74,12 @@ public class SysUserServiceImpl implements SysUserService {
 	@Transactional(rollbackFor = Exception.class)
 	public boolean addSysUser(SysUserVo sysUserVo) {
 		Date curDate = new Date();
+		logger.info("当前时间：{}",DateUtil.dateToString(curDate,DateUtil.DATE_WITHMILLISECOND_FORMAT));
+		curDate=DateUtil.stringToDate(DateUtil.dateToString(curDate,DateUtil.DATE_LONG_SIMPLE_FORMAT),DateUtil.DATE_LONG_SIMPLE_FORMAT);
+		logger.info("当前时间：{}",DateUtil.dateToString(curDate,DateUtil.DATE_WITHMILLISECOND_FORMAT));
 		//添加默认密码
 		sysUserVo.setUcreateTime(curDate);
-		logger.info("生成密码码为：{}",Md5Encrypt.md5(StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(curDate, DateUtil.DATE_LONG_SIMPLE_FORMAT))));
+		logger.info("添加用户生成密码码为：{}",StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(curDate, DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 		//初始化用户密码
 		sysUserVo.setUpassword(Md5Encrypt.md5(StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(curDate, DateUtil.DATE_LONG_SIMPLE_FORMAT))));
 		logger.info("生成密码为：{}",sysUserVo.getUpassword());
@@ -149,7 +149,7 @@ public class SysUserServiceImpl implements SysUserService {
 		if(sysUser == null){
 			throw new AppException("请输入正确的账号");
 		}
-		logger.info("生成密码码为：{}",Md5Encrypt.md5(StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT))));
+		logger.info("登陆用户密码为：{}",StringUtils.formate(SystemConstant.SYS_USER_DEFAULT_PASSWORD, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 		String pwd = Md5Encrypt.md5(StringUtils.formate(sysUserPwd, DateUtil.dateToString(sysUser.getUcreateTime(), DateUtil.DATE_LONG_SIMPLE_FORMAT)));
 		logger.info("密码：{}",pwd);
 		if(!pwd.equals(sysUser.getUpassword())) {

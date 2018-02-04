@@ -183,7 +183,33 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(uid);
 		if(ObjectUtils.isNotEmpty(ucp)){
 			userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,unCasPrice,ucp.getVersion());
-			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
+			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral())+",消费类型："+type;
+			logger.info(remark);
+			//添加用户累计返现日志
+			if(ObjectUtils.isNotEmpty(unCasPrice)&&unCasPrice>0){
+				userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,unCasPrice,ucp.getUcurIntegral(),remark,new Date());
+			}
+		}else{
+			ucp = new UserCardPackage();
+			ucp.setUtotalWallet(0l);
+			ucp.setUcurWallet(0l);
+			ucp.setUtotalIntegral(0l);
+			ucp.setUcurIntegral(0l);
+			ucp.setUtotalConsume(0l);
+			ucp.setUwalletConsumeTotal(0l);
+			ucp.setId(uid);
+			ucp.setuOtherPayTotal(0l);
+			if(type.intValue()==2){
+				ucp.setUwalletConsumeTotal(tradePrice);
+			}else{
+				ucp.setuOtherPayTotal(tradePrice);
+			}
+			ucp.setUcashCurPrice(unCasPrice);
+			ucp.setUcashTotalPrice(unCasPrice);
+			ucp.setUtotalConsume(tradePrice);
+			userCardPackageMapper.saveUserCardPackage(ucp);
+			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral())+",消费类型："+type;
+			logger.info(remark);
 			//添加用户累计返现日志
 			if(ObjectUtils.isNotEmpty(unCasPrice)&&unCasPrice>0){
 				userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,unCasPrice,ucp.getUcurIntegral(),remark,new Date());
@@ -236,7 +262,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 				}
 				//添加卡包操作日志
-				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
+				statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),tradePrice,unCashPrice);
 			}
 		}else{
 			//自然消费，不返现列表
@@ -250,7 +276,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 				orderUnCashBack(maps,orderId,unCash,buyUid,unCashPrice);
 			}
 			//添加卡包操作日志
-			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),order.getOrderMenberPrice(),unCashPrice);
+			statisticsUserSalseConsume(order.getOrderBuyUid(),order.getId(),order.getOrderPayWay(),tradePrice,unCashPrice);
 		}
 	}
 	/**
