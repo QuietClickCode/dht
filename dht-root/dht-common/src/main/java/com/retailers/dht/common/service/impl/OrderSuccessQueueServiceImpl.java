@@ -183,7 +183,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		UserCardPackage ucp=userCardPackageMapper.queryUserCardPackageById(uid);
 		if(ObjectUtils.isNotEmpty(ucp)){
 			userCardPackageMapper.statisticsUserSalseConsume(uid,type,tradePrice,unCasPrice,ucp.getVersion());
-			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
+			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral())+",消费类型："+type;
+			logger.info(remark);
 			//添加用户累计返现日志
 			if(ObjectUtils.isNotEmpty(unCasPrice)&&unCasPrice>0){
 				userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,unCasPrice,ucp.getUcurIntegral(),remark,new Date());
@@ -207,7 +208,8 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 			ucp.setUcashTotalPrice(unCasPrice);
 			ucp.setUtotalConsume(tradePrice);
 			userCardPackageMapper.saveUserCardPackage(ucp);
-			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral());
+			String remark="用户购买商品，累计消费，消费金额："+ NumberUtils.formaterNumberPower(tradePrice)+",当前累计："+NumberUtils.formaterNumberPower(ucp.getUcurIntegral())+",消费类型："+type;
+			logger.info(remark);
 			//添加用户累计返现日志
 			if(ObjectUtils.isNotEmpty(unCasPrice)&&unCasPrice>0){
 				userCardPackageService.addUserCardPackageLog(uid, UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_INTEGRAL_IN,orderId,unCasPrice,ucp.getUcurIntegral(),remark,new Date());
