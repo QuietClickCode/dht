@@ -22,7 +22,7 @@
     <div id="toolbar" class="form-inline">
         <%--<input type="text" class="form-control" id="registerTimes" placeholder="请输入团队名称">--%>
         <%--<button class="btn btn-default" onclick="refreshTableData()">查询</button>--%>
-            <button onclick="outExcel();" class="btn btn-primary">导出</button>
+            <a id="exportExcelA"><button onclick="outExcel();" class="btn btn-primary">导出</button></a>
     </div>
 </div>
 <div>
@@ -176,6 +176,15 @@
      * 查询条件
      **/
     function queryParams(that){
+        var emId = $("#emId").val();
+        var time = $("#registerTimes").val();
+        if(emId==null||emId==undefined){
+            emId = '';
+        }
+        if(time==null||time==undefined){
+            time = ''
+        }
+        $('#exportExcelA').attr('href','/clientInfo/outExcel?emId='+emId+'&registerTimes='+time+'&pageNo='+that.pageNumber+'&pageSize='+that.pageSize);
         return {
             emId:$("#emId").val(),
             registerTimes:$("#registerTimes").val(),
