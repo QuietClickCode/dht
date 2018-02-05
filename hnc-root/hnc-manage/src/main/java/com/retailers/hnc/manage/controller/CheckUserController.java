@@ -42,7 +42,7 @@ public class CheckUserController extends BaseController {
     }
 
     @RequestMapping("/checkUserTotalMapping")
-    @Menu(parentRes = "sys.manager.employee",resourse = "checkUser.checkUserTotalMapping",description = "预约统计",label = "预约统计")
+    @Menu(parentRes = "sys.manager.appointment",resourse = "checkUser.checkUserTotalMapping",description = "预约统计",label = "预约统计")
     public String checkUserTotalMapping(){
         return "checkUserTotal";
     }
