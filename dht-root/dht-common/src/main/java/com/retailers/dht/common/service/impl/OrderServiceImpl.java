@@ -1028,6 +1028,9 @@ public class OrderServiceImpl implements OrderService {
 		Date curDate=new Date();
         try{
             Order order=orderMapper.queryOrderByOrderNo(orderNo);
+            if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_CREATE&&order.getOrderStatus().intValue()==OrderConstant.ORDER_STATUS_PAY_FAILE){
+				throw new AppException("订单己支付或过期。");
+			}
             if(ObjectUtils.isEmpty(order)){
                 throw new AppException("支付订单不存在");
             }
