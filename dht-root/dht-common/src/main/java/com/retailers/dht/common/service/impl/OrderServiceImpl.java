@@ -1343,7 +1343,13 @@ public class OrderServiceImpl implements OrderService {
 			if(order.getOrderBuyUid().intValue()!=uid.intValue()){
 				throw new AppException("不能取消他人订单");
 			}
-			order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_YES);
+			//order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_YES);
+			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SEND_CANCEL);
+			//
+			List<Long> orderIds=new ArrayList<Long>();
+			orderIds.add(order.getId());
+			//退还使用的优惠卷
+			couponUserMapper.unUseCouponBuyOids(orderIds);
 			orderMapper.updateOrder(order);
 		}finally {
 			procedureToolsService.singleUnLockManager(lockKey);
@@ -1460,6 +1466,8 @@ public class OrderServiceImpl implements OrderService {
 		orderMapper.clearExpireOrders(orderIds);
 		//批量设置订单超时
 		System.out.println(JSON.toJSON(expireOrders));
+		//清除优惠卷
+		couponUserMapper.unUseCouponBuyOids(orderIds);
 		logger.info("失效订单处理完毕");
 	}
 
