@@ -292,6 +292,13 @@ public class OrderServiceImpl implements OrderService {
 				totalPrice+=od.getOdGoodsPrice();
 				actualPrice+=od.getOdActualPrice();
 			}
+			if(totalPrice<0){
+				totalPrice=0;
+			}
+			if(actualPrice<0){
+				actualPrice=0;
+			}
+
 			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,cpPrice,gcPrice,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
