@@ -78,4 +78,11 @@ public interface CouponUserMapper {
 	 */
 	public long useCouponByOIds(@Param("uid") Long uid, @Param("oid") Long oid, @Param("cpuIds")List<Long> cpuIds, @Param("curDate")Date curDate);
 
+	/**
+	 * 退还用户使用的优惠卷
+	 * @param orderIds 订单id
+	 * @return
+	 */
+	public int unUseCouponBuyOids(@Param("orderIds")List<Long> orderIds);
+
 }

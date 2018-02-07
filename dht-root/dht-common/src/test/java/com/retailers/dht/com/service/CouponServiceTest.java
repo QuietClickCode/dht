@@ -2,6 +2,7 @@ package com.retailers.dht.com.service;
 
 import com.alibaba.fastjson.JSON;
 import com.retailers.dht.com.base.TestBaseJunit;
+import com.retailers.dht.common.dao.CouponUserMapper;
 import com.retailers.dht.common.service.CouponService;
 import com.retailers.dht.common.service.GoodsCouponService;
 import com.retailers.dht.common.vo.CouponWebVo;
@@ -11,10 +12,7 @@ import com.retailers.tools.exception.AppException;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author zhongp
@@ -27,6 +25,8 @@ public class CouponServiceTest extends TestBaseJunit {
     private GoodsCouponService goodsCouponService;
     @Autowired
     private CouponService couponService;
+    @Autowired
+    private CouponUserMapper couponUserMapper;
 
     @Test
     public void test()throws Exception{
@@ -83,6 +83,13 @@ public class CouponServiceTest extends TestBaseJunit {
         int pageSize=10;
         Pagination<CouponWebVo> lists=couponService.queryUserCoupon(uid,type,pageNo,pageSize);
         System.out.println(JSON.toJSON(lists));
+    }
+
+    @Test
+    public void unUseCouponBuyOids(){
+        List<Long> orderIds = Arrays.asList(587l);
+        //清除优惠卷
+        couponUserMapper.unUseCouponBuyOids(orderIds);
     }
 
 }

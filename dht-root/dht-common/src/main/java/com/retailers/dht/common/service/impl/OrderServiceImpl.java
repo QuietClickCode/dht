@@ -276,6 +276,7 @@ public class OrderServiceImpl implements OrderService {
             	if(ObjectUtils.isNotEmpty(couponInfos.get("userCoupons"))){
 					//用户拥有的优惠卷
 					List<CouponWebVo> cwvs=(List<CouponWebVo>)couponInfos.get("userCoupons");
+					logger.info("取得用户优惠卷数据：{}",JSON.toJSON(cwvs));
 					Map<Long,Long> maps=editorUserCoupon(ods,cids,gidUnGtid,cwvs);
 					List<Long> used=new ArrayList<Long>();
 					for(Long cid:maps.keySet()){
@@ -883,6 +884,7 @@ public class OrderServiceImpl implements OrderService {
 		//根据使用的优惠卷重新计算商品价格
 		for(Long uc:useCoupon){
 			CouponWebVo cwv=userCouponMaps.get(uc);
+			//商品优惠金额
 			long jmje=0l;
 			if(cwv.getCpIsRestricted()==CouponConstant.COUPON_USED_RANGE_ALL&&
 					ObjectUtils.isEmpty(cwv.getgIds())&&
@@ -905,6 +907,7 @@ public class OrderServiceImpl implements OrderService {
 	 * return 返回优惠金额
 	 */
     private Long goodsCoupon(List<OrderDetail> ods,CouponWebVo cwv,boolean isXz,Map<Long,Long> gidUnGt){
+		logger.info("购买商品详情数据：{}",JSON.toJSON(ods));
 		//返回优惠金额
 		long rtnWallet=0l;
 		//商品种类
@@ -934,14 +937,16 @@ public class OrderServiceImpl implements OrderService {
 		if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
 			couponTotalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
 			syCouponTotalPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(cwv.getCouponVal()));
+			long curRow=0;
 			for(OrderDetail od:ods){
 				//根据商品id取得商品类型id
 				Long gtid=gidUnGt.get(od.getOdGoodsId());
 				if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
-					buyGoodsPrice=od.getOdActualPrice();
-					oidPrice.put(od.getId(),od.getOdActualPrice());
-					allowPrice.add(od.getId());
+					buyGoodsPrice+=od.getOdActualPrice();
+					oidPrice.put(curRow,od.getOdActualPrice());
+					allowPrice.add(curRow);
 				}
+				curRow++;
 			}
 			//循环取得减免金额
 			for(int i=0;i<allowPrice.size();i++){
@@ -963,23 +968,27 @@ public class OrderServiceImpl implements OrderService {
 				}
 			}
 		}
-
+		long curRow=0;
 		//设置商品价格
 		for(OrderDetail od:ods){
 			long goodsCurPrice=od.getOdActualPrice();
 			//根据商品id取得商品类型id
 			Long gtid=gidUnGt.get(od.getOdGoodsId());
 			if(!isXz||(spzl.contains(gtid)||spid.contains(od.getOdGoodsId()))){
-				if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
-					goodsCurPrice=goodsCurPrice-oidPrice.get(od.getId());
-				}else{
-					goodsCurPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(goodsCurPrice*NumberUtils.formaterNumberr(cwv.getCouponVal())));
+				if(oidPrice.containsKey(curRow)){
+					if(cwv.getCpType().intValue()==CouponConstant.GCP_TYPE_MONEY){
+						goodsCurPrice=goodsCurPrice-oidPrice.get(curRow);
+					}else{
+						goodsCurPrice=NumberUtils.priceChangeFen(NumberUtils.formaterNumberr(goodsCurPrice*NumberUtils.formaterNumberr(cwv.getCouponVal())));
+					}
 				}
 			}
 			rtnWallet+=od.getOdActualPrice()-goodsCurPrice;
 			od.setOdActualPrice(goodsCurPrice);
 			od.setOdMenberPrice(goodsCurPrice);
+			curRow++;
 		}
+		logger.info("购买商品详情数据后：{}",JSON.toJSON(ods));
 		return rtnWallet;
 	}
 
@@ -1001,7 +1010,7 @@ public class OrderServiceImpl implements OrderService {
 		//取得购买比例
 		double bl=((double)buyPrice/(double)totalPrice);
 		//取得减免金额
-		jmje=(long) bl*couponPrice;
+		jmje=(long)(bl*couponPrice);
 		return jmje;
 	}
     /**
@@ -1019,6 +1028,9 @@ public class OrderServiceImpl implements OrderService {
 		Date curDate=new Date();
         try{
             Order order=orderMapper.queryOrderByOrderNo(orderNo);
+            if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_CREATE&&order.getOrderStatus().intValue()==OrderConstant.ORDER_STATUS_PAY_FAILE){
+				throw new AppException("订单己支付或过期。");
+			}
             if(ObjectUtils.isEmpty(order)){
                 throw new AppException("支付订单不存在");
             }
@@ -1334,7 +1346,13 @@ public class OrderServiceImpl implements OrderService {
 			if(order.getOrderBuyUid().intValue()!=uid.intValue()){
 				throw new AppException("不能取消他人订单");
 			}
-			order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_YES);
+			//order.setOrderBuyDel(SystemConstant.SYS_IS_DELETE_YES);
+			order.setOrderStatus(OrderConstant.ORDER_STATUS_PAY_SEND_CANCEL);
+			//
+			List<Long> orderIds=new ArrayList<Long>();
+			orderIds.add(order.getId());
+			//退还使用的优惠卷
+			couponUserMapper.unUseCouponBuyOids(orderIds);
 			orderMapper.updateOrder(order);
 		}finally {
 			procedureToolsService.singleUnLockManager(lockKey);
@@ -1451,6 +1469,8 @@ public class OrderServiceImpl implements OrderService {
 		orderMapper.clearExpireOrders(orderIds);
 		//批量设置订单超时
 		System.out.println(JSON.toJSON(expireOrders));
+		//清除优惠卷
+		couponUserMapper.unUseCouponBuyOids(orderIds);
 		logger.info("失效订单处理完毕");
 	}
 

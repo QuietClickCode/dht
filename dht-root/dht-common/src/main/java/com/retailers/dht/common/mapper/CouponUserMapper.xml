@@ -138,4 +138,17 @@
 			#{item}
 		</foreach>
 	</update>
+
+	<!--退还用户使用的优惠卷-->
+	<update id="unUseCouponBuyOids">
+		UPDATE t_coupon_user
+		SET  cpu_status =0,
+		cpu_use_oid=null,
+		cpu_use_time=null,
+		version = version+1
+		WHERE cpu_status=1 AND cpu_use_oid in
+		<foreach collection="orderIds" item="item" index="index" separator="," open="(" close=")">
+			#{item}
+		</foreach>
+	</update>
 </mapper>
