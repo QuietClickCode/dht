@@ -68,9 +68,10 @@ public class PayServiceImpl implements PayService {
         procedureToolsService.singleLockManager(key);
         try{
             Order order=queryOrderNo(orderNo);
+            if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_CREATE&&order.getOrderStatus().intValue()==OrderConstant.ORDER_STATUS_PAY_FAILE){
+                throw new AppException("订单己支付或过期。");
+            }
             PayInfo pi=queryPayInfo(OrderConstant.ORDER_PAY_WAY_WX,SystemConstant.WX_PAY_WAY_GZH,orderNo);
-//            String apiKey="CF26762CF05A42899F1681872CE3BC89";
-//            String appId="wxfd2628cfc7f6defb";
             String apiKey= WxConfig.WX_API_KEY;
             String appId=WxConfig.APP_ID;
             if(ObjectUtils.isEmpty(pi)){
@@ -230,6 +231,9 @@ public class PayServiceImpl implements PayService {
         String rtnUrl="";
         Date curDate=new Date();
         Order order=orderService.queryOrderByOrderNo(orderNo);
+        if(order.getOrderStatus().intValue()!=OrderConstant.ORDER_STATUS_CREATE&&order.getOrderStatus().intValue()==OrderConstant.ORDER_STATUS_PAY_FAILE){
+            throw new AppException("订单己支付或过期。");
+        }
         if(ObjectUtils.isEmpty(order)||order.getOrderStatus().intValue()!=0){
             throw new AppException("未知订单");
         }
