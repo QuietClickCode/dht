@@ -1,9 +1,11 @@
 package com.retailers.dht.com.service;
 
 import com.alibaba.fastjson.JSON;
+import com.retailers.dht.common.dao.CurrentPlatformSalesMapper;
 import com.retailers.dht.common.dao.OrderMapper;
 import com.retailers.dht.common.dao.UserCardPackageMapper;
 import com.retailers.dht.com.base.TestBaseJunit;
+import com.retailers.dht.common.entity.CurrentPlatformSales;
 import com.retailers.dht.common.service.OrderService;
 import com.retailers.dht.common.vo.BuyGoodsDetailVo;
 import com.retailers.dht.common.vo.BuyInfoVo;
@@ -28,7 +30,8 @@ public class OrderServiceTest extends TestBaseJunit {
     private UserCardPackageMapper userCardPackageMapper;
     @Autowired
     private OrderMapper orderMapper;
-
+    @Autowired
+    private CurrentPlatformSalesMapper currentPlatformSalesMapper;
     @Test
     public void shoppingOrder(){
         long uid=11;
@@ -120,5 +123,16 @@ public class OrderServiceTest extends TestBaseJunit {
         long orderId=272;
         OrderVo ov= orderService.queryOrderInfos(uid,orderId);
         System.out.println(JSON.toJSON(ov));
+    }
+    @Test
+    public void queryCurrentPlatformSalesByGtype(){
+        long type=0;
+        List<Long> types=Arrays.asList(4l,5l,7l,8l);
+        Set<Long> ts=new HashSet<Long>();
+        for(Long t:types){
+            ts.add(t);
+        }
+        List<CurrentPlatformSales> list=currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(type,ts);
+        System.out.println(JSON.toJSON(list));
     }
 }

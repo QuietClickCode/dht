@@ -331,9 +331,13 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		}
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_CASH,gtyps);
+		//类型对应的总金额
+		Map<Long,Long> typeTotalPrice=new HashMap<Long, Long>();
+		logger.info("取得平台当前累计销售：{}",JSON.toJSON(list));
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();
 		for(CurrentPlatformSales cpfs:list){
 			hasCpfs.put(cpfs.getCpsGoodsMainType(),cpfs);
+			typeTotalPrice.put(cpfs.getCpsGoodsMainType(),cpfs.getCpsTotalPrice());
 		}
 		// 添加用户至返现队列
 		if(ObjectUtils.isNotEmpty(wcbqs)){
@@ -379,16 +383,15 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		}
 		logger.info("变更前的商品类型对应消费累计情况：{}",JSON.toJSON(rtnTypeTotal));
 		for(Long type:rtnTypeTotal.keySet()){
-			if(hasCpfs.containsKey(type)){
+			if(typeTotalPrice.containsKey(type)){
 				long curTotalPrice=rtnTypeTotal.get(type);
-				curTotalPrice+=hasCpfs.get(type).getCpsTotalPrice();
+				curTotalPrice+=typeTotalPrice.get(type);
 				rtnTypeTotal.put(type,curTotalPrice);
 			}
 		}
 		logger.info("变更后的商品类型对应消费累计情况：{}",JSON.toJSON(rtnTypeTotal));
 		//开始计算是否存在可以返现用户
 		rankkingCalculation(rtnTypeTotal,orderId);
-
 		logger.info("进入订单返现方法结束,订单id:[{}],商品关联的类型：[{}],购买人id：[{}],执行时间:[{}]",orderId, JSON.toJSON(maps),buyUid,(System.currentTimeMillis()-curDate.getTime()));
 	}
 
@@ -515,6 +518,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 		logger.info("本次购买的同类商品下的总计消费：[{}]",JSON.toJSON(hbsp));
 		//修改各个商品大类下的累计消费金额
 		List<CurrentPlatformSales> list = currentPlatformSalesMapper.queryCurrentPlatformSalesByGtype(SystemConstant.CURRENT_PLATFORM_SALES_TYPE_GT_SALES_TOTAL,gtyps);
+		logger.info("取得平台当前累计销售：{}",JSON.toJSON(list));
 		Map<Long,CurrentPlatformSales> hasCpfs=new HashMap<Long, CurrentPlatformSales>();
 		for(CurrentPlatformSales cpfs:list){
 			hasCpfs.put(cpfs.getCpsGoodsMainType(),cpfs);
