@@ -3,7 +3,13 @@ package com.retailers.hnc.web.job;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.hnc.common.dao.WxAuthUserMapper;
+import com.retailers.hnc.common.entity.ClientManage;
+import com.retailers.hnc.common.entity.EmployeeManage;
+import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.entity.WxAuthUser;
+import com.retailers.hnc.common.service.ClientManageService;
+import com.retailers.hnc.common.service.EmployeeManageService;
+import com.retailers.hnc.common.service.OpeningEmpClientService;
 import com.retailers.hnc.common.util.HttpUtils;
 import com.retailers.hnc.common.util.WxUtil;
 import com.retailers.hnc.web.constant.HNCGZHConstant;
@@ -34,6 +40,12 @@ public class ManageTaskJob {
     private WxAuthUserMapper wxAuthUserMapper;
     @Autowired
     private WxAccessTokenService wxAccessTokenService;
+    @Autowired
+    private EmployeeManageService employeeManageService;
+    @Autowired
+    private ClientManageService clientManageService;
+    @Autowired
+    private OpeningEmpClientService openingEmpClientService;
     /**
      * 清除退出用户
      */
@@ -137,5 +149,49 @@ public class ManageTaskJob {
         logger.info("结束测试");
     }
 
+    //提醒置业顾问有哪些客户没有完善信息
+    public void msgEmpAboutClient(){
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("emType",1L);
+        List<EmployeeManage> employeeManages = employeeManageService.queryFirstEmployeeManageList(params,1,999).getData();
+        if(ObjectUtils.isNotEmpty(employeeManages)){
+            for(EmployeeManage employeeManage:employeeManages){
+                Map params1 = new HashMap();
+                params1.put("isDelete",0L);
+                params1.put("tmEmployee",employeeManage.getEmId());
+                List<ClientManage> clientManages = clientManageService.queryClientManageList(params1,1,99999).getData();
+                if(ObjectUtils.isEmpty(clientManages)){
+                    continue;
+                }
+                int index = 0;
+                if(ObjectUtils.isNotEmpty(clientManages)){
+                    for(ClientManage clientManage:clientManages){
+                        String name = clientManage.getTmName();
+                        if(ObjectUtils.isEmpty(name)){
+                            index++;
+                        }
+                    }
+                }
+                if(index==0){
+                    continue;
+                }
+                ClientManage clientManage1 = openingEmpClientService.queryClientManageByEmpId(employeeManage.getEmId());
+                String openid = openingEmpClientService.queryGZHopenidByClientId(clientManage1.getTmId());
+                List<String> kenote = new ArrayList<String>();
+                kenote.add("客户信息审核");
+                kenote.add("您还有"+index+"位客户还没有完善信息");
+                //发送模板消息
+                Map modalparams = new HashMap();
+                modalparams.put("first","尊敬的置业顾问，您好");
+                modalparams.put("remark","请在小程序中查看客户信息");
+                modalparams.put("openid",openid);
+                modalparams.put("keynote",kenote);
+                modalparams.put("modalId","yhYNymG4jIeQ8FpzCM8iTFbaYFfUyXvb1cZU-aLu_aQ");
+                modalparams.put("accessToken",HNCGZHConstant.ACCESS_TOKEN);
+                WxUtil.sendModalMsg(modalparams);
+            }
+        }
+    }
 
 }

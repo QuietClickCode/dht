@@ -3,6 +3,7 @@ package com.retailers.hnc.common.util;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.retailers.tools.utils.ObjectUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -87,12 +88,63 @@ public class WxUtil {
 
     //发送模板消息
     /**
-     *
-     * @param params 保存发送模板消息所需要的参数 包括AccessToken
+     * @param params 传递发送模板消息所需的参数
+     *  first 消息头
+     *  remark 备注
+     *  keynote 发送的信息
+     *  accesstoken 公众号的accesstoken
+     *  link 可以跳转的地址
+     *  modalId 模板消息的id
+     *  openid 需要发送用户的openid
+     *  appid小程序appid
+     *  path小程序路径页面
      */
-    public void sendModalMsg(Map params,String accessToken){
-        String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+accessToken;
-        String res = HttpUtils.reqPost(url,JSON.toJSONString(params));
+    public static void sendModalMsg(Map params){
+        String first = (String) params.get("first");
+        String remark = (String)params.get("remark");
+        List<String> keynote = (List<String>)params.get("keynote");
+        String accesstoken = (String)params.get("accessToken");
+        String link = (String)params.get("link");
+        String appid = (String)params.get("appid");
+        String path =(String)params.get("path");
+        String modalId =(String) params.get("modalId");
+        String openid =(String) params.get("openid");
+
+        JSONObject dataJsonObject = new JSONObject();
+        System.out.println("accessToken:"+accesstoken);
+        JSONObject valJsonObjFirst = new JSONObject();
+        valJsonObjFirst.put("value",first);
+        dataJsonObject.put("first",valJsonObjFirst);
+
+        for(int i=1;i<=keynote.size();i++){
+            JSONObject valJsonObjkeyword = new JSONObject();
+            valJsonObjkeyword.put("value",keynote.get(i-1));
+            dataJsonObject.put("keyword"+i,valJsonObjkeyword);
+        }
+
+        JSONObject valJsonObjremark = new JSONObject();
+        valJsonObjremark.put("value",remark);
+        dataJsonObject.put("remark",valJsonObjremark);
+
+
+
+        JSONObject allJsonData = new JSONObject();
+        allJsonData.put("data",dataJsonObject);
+        allJsonData.put("touser",openid);
+        allJsonData.put("template_id",modalId);
+
+        if(ObjectUtils.isNotEmpty(appid)){
+            JSONObject minJsonObj = new JSONObject();
+            minJsonObj.put("appid",appid);
+            minJsonObj.put("pagepath",path);
+            allJsonData.put("miniprogram",minJsonObj);
+        }
+        if(ObjectUtils.isNotEmpty(link)){
+            allJsonData.put("url",link);
+        }
+
+        String url = "https://api.weixin.qq.com/cgi-bin/message/template/send?access_token="+accesstoken;
+        String res = HttpUtils.reqPost(url, JSON.toJSONString(allJsonData));
         System.out.println(res);
     }
 

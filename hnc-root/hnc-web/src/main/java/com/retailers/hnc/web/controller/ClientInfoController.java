@@ -95,6 +95,10 @@ public class ClientInfoController extends BaseController {
     @RequestMapping("/updateClient")
     @ResponseBody
     public BaseResp updateClient(ClientManage clientManage){
+        String info = clientManage.getTmInfo();
+        if("".equals(info)||"null".equals(info)){
+            clientManage.setTmInfo(" ");
+        }
         boolean flag = clientManageService.updateClientManage(clientManage);
         if(flag)
             return success("修改客户[" + clientManage.getTmName() + "]成功");

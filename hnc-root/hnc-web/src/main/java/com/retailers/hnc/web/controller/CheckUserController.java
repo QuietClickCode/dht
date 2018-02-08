@@ -251,14 +251,16 @@ public class CheckUserController extends BaseController {
     }
 
     public List<Long> StringToList(String str){
-        String[] strArr = str.split(",");
-        if(ObjectUtils.isNotEmpty(strArr)){
-            List<Long> list = new ArrayList<Long>();
-            for(String strStr:strArr){
-                Long l = Long.parseLong(strStr);
-                list.add(l);
+        if(ObjectUtils.isNotEmpty(str)){
+            String[] strArr = str.split(",");
+            if(ObjectUtils.isNotEmpty(strArr)){
+                List<Long> list = new ArrayList<Long>();
+                for(String strStr:strArr){
+                    Long l = Long.parseLong(strStr);
+                    list.add(l);
+                }
+                return list;
             }
-            return list;
         }
         return null;
     }
