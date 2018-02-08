@@ -161,6 +161,7 @@
 		and t1.o_id=#{params.oid}
 		and t2.is_delete=0
 		and t3.is_delete=0
+		and t3.em_type=1
 		and t4.is_delete=0
 		and t4.t_id=t3.em_team
 		and t1.c_id=t2.tm_id

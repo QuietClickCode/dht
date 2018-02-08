@@ -7,6 +7,7 @@ import com.retailers.hnc.common.dao.OpeningEmpClientMapper;
 import com.retailers.hnc.common.entity.*;
 import com.retailers.hnc.common.service.*;
 import com.retailers.hnc.common.util.HttpUtils;
+import com.retailers.hnc.common.util.WxUtil;
 import com.retailers.hnc.common.vo.ClientIntentionVo;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.hnc.common.vo.OpeningEmpClientVo;
@@ -16,6 +17,7 @@ import com.retailers.wx.common.utils.wx.WXPayUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.security.PublicKey;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -137,37 +139,38 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		params.put("cmIds",cmIdsList);
 		List<ClientManage> clientManages = clientManageService.queryClientManageVoList(params,1,1000).getData();
 		for(ClientManage clientManage1:clientManages){
+			String name = clientManage1.getTmName();
 			Integer status = clientManage1.getTmStatus();
 			Long channel = clientManage1.getTmChannel();
-			if(ObjectUtils.isEmpty(status)||ObjectUtils.isEmpty(channel)){
+			if(ObjectUtils.isEmpty(status)||ObjectUtils.isEmpty(channel)||ObjectUtils.isEmpty(name)){
 				return false;
 			}
 		}
 		List<ClientIntention> clientIntentions = clientIntentionService.queryClientIntentionByCmIds(cmIdsList);
 
-			for(Long cmId:cmIdsList){
-				boolean inFlag = true;
-				for(ClientIntention clientIntention:clientIntentions){
-					if(cmId==clientIntention.getCmId()){
-						inFlag = false;
-						break;
-					}
+		for(Long cmId:cmIdsList){
+			boolean inFlag = true;
+			for(ClientIntention clientIntention:clientIntentions){
+				if(cmId.equals(clientIntention.getCmId())){
+					inFlag = false;
+					break;
 				}
-				System.out.println("inFlag:"+inFlag);
-				if(inFlag){
-					for(ClientManage clientManage1:clientManages){
-						System.out.println(clientManage1.getTmId());
-						System.out.println(cmId);
-						if(clientManage1.getTmId().equals(cmId)){
-							String remark = clientManage1.getTmInfo();
-							System.out.println("boolean:"+"null".equals(remark));
-							if(ObjectUtils.isEmpty(remark)||"null".equals(remark)){
-								return false;
-							}
+			}
+			System.out.println("inFlag:"+inFlag);
+			if(inFlag){
+				for(ClientManage clientManage1:clientManages){
+					System.out.println(clientManage1.getTmId());
+					System.out.println(cmId);
+					if(clientManage1.getTmId().equals(cmId)){
+						String remark = clientManage1.getTmInfo();
+						System.out.println("boolean:"+"null".equals(remark));
+						if(ObjectUtils.isEmpty(remark)||"null".equals(remark)){
+							return false;
 						}
 					}
 				}
 			}
+		}
 
 
 		OpeningEmpClient openingEmpClient = new OpeningEmpClient();
@@ -206,8 +209,10 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 		int index = 0;
 		//判断数据库之前是否有客户已被拒绝，已有则不被插入数据库
 		if(status==3){
+			Set<Long> hasSet = new HashSet<Long>();
 			for(Long oecId:oecIdList){
 				OpeningEmpClient openingEmpClient = openingEmpClientMapper.queryOpeningEmpClientByOecId(oecId);
+				hasSet.add(openingEmpClient.getEid());
 				Map params = new HashMap();
 				params.put("isDelete",0L);
 				params.put("oid",openingEmpClient.getOid());
@@ -217,6 +222,34 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 				List<OpeningEmpClient> openingEmpClients = queryOpeningEmpClientList(params,1,1).getData();
 				if(ObjectUtils.isNotEmpty(openingEmpClients)){
 					openingEmpClientMapper.deleteOpeningEmpClientByOecId(openingEmpClients.get(0).getOecId());
+				}
+			}
+			List<Long> empIds = new ArrayList<Long>(hasSet);
+			if(ObjectUtils.isNotEmpty(empIds)){
+				for(Long empid:empIds){
+					ClientManage clientManage1 = queryClientManageByEmpId(empid);
+					System.out.println(clientManage1.getTmId());
+					String GZHopenid = queryGZHopenidByClientId(clientManage1.getTmId());
+					if(ObjectUtils.isNotEmpty(GZHopenid)){
+						List<String> list = new ArrayList<String>();
+						list.add("您的客户审核未通过");
+						list.add(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date()));
+
+						String first = "尊敬的置业顾问，您好";
+						String remark = "请打开小程序查看详情";
+						String temid = "iITiWjUwcZyBB8CsMN8p5ZhdV87FMVbNN6bHbcswXM8";
+						String openid = GZHopenid;
+						System.out.println("accessToken:"+accessToken);
+						Map modalparams = new HashMap();
+						modalparams.put("first",first);
+						modalparams.put("remark",remark);
+						modalparams.put("temid",temid);
+						modalparams.put("openid",openid);
+						modalparams.put("keynote",list);
+						modalparams.put("modalId",temid);
+						modalparams.put("accessToken",accessToken);
+						WxUtil.sendModalMsg(modalparams);
+					}
 				}
 			}
 
@@ -307,13 +340,16 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 	}
 
 	public List<Long> StringtoList(String str){
-		String[] strArr = str.split(",");
-		List<Long> returnList = new ArrayList<Long>();
-		for(String strStr:strArr){
-			Long l = Long.parseLong(strStr);
-			returnList.add(l);
+		if(ObjectUtils.isNotEmpty(str)){
+			String[] strArr = str.split(",");
+			List<Long> returnList = new ArrayList<Long>();
+			for(String strStr:strArr){
+				Long l = Long.parseLong(strStr);
+				returnList.add(l);
+			}
+			return returnList;
 		}
-		return returnList;
+		return null;
 	}
 
 	public void addFloorsAndHourses(String hids,String fids,ClientManageVo clientManageVo){
@@ -408,5 +444,39 @@ public class OpeningEmpClientServiceImpl implements OpeningEmpClientService {
 			System.out.println(res);
 		}
 	}
+
+	//通过置业顾问的id获取对应的客户表中的信息
+	public ClientManage queryClientManageByEmpId(Long empId){
+		EmployeeManage employeeManage = employeeManageService.queryEmployeeManageByEmId(empId);
+		String phone = employeeManage.getWxPhone();
+		Map params = new HashMap();
+		params.put("isDelete",0L);
+		params.put("tmPhone",phone);
+		List<ClientManage> clientManages = clientManageService.queryClientManageVoList(params,1,1).getData();
+		if(ObjectUtils.isNotEmpty(clientManages)){
+			return clientManages.get(0);
+		}
+		return null;
+	}
+
+	public String queryGZHopenidByClientId(Long cmId){
+		Map params = new HashMap();
+		params.put("wauUid",cmId);
+		params.put("wauWxId",0L);
+		List<WxAuthUser> wxAuthUserList = wxAuthUserService.queryWxAuthUserList(params,1,1).getData();
+		if(ObjectUtils.isNotEmpty(wxAuthUserList)){
+			WxAuthUser wxAuthUser = wxAuthUserList.get(0);
+			Map params1 = new HashMap();
+			params1.put("wauUnionid",wxAuthUser.getWauUnionid());
+			params1.put("wauWxId",1L);
+			List<WxAuthUser> wxAuthUserList1 = wxAuthUserService.queryWxAuthUserList(params1,1,1).getData();
+			if(ObjectUtils.isNotEmpty(wxAuthUserList1)){
+				WxAuthUser wxAuthUser1 = wxAuthUserList1.get(0);
+				return wxAuthUser1.getWauOpenid();
+			}
+		}
+		return null;
+	}
+
 }
 

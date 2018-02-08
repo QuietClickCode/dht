@@ -154,6 +154,9 @@
 		on t1.tm_employee = t2.em_id and t2.is_delete = 0
 		LEFT JOIN t_channel t3 on t1.tm_channel = t3.c_id and t3.is_delete = 0
 		where t1.is_delete = 0
+		<if test="null != params.tmPhone and '' != params.tmPhone">
+			AND t1.tm_phone = #{params.tmPhone}
+		</if>
 		<if test="null!=params.cmIds">
 			and t1.tm_id in
 			<foreach collection="params.cmIds" open="(" close=")" item="cmId" separator="," index="index">
@@ -178,7 +181,7 @@
 				and t1.tm_employee=#{params.tmEmployee}
 			</if>
 			<if test="null!=params.tmRegisterTime">
-				and t1.tm_register_time=CURRENT_DATE()
+				and TO_DAYS(t1.tm_register_time)=TO_DAYS(CURRENT_DATE())
 			</if>
 
 			GROUP BY t1.tm_id
@@ -276,7 +279,7 @@
 
 	<!--查询当天登记的所有客户-->
 	<select id="queryCurClientCount" resultType="java.lang.Integer">
-		select COUNT(*) FROM t_client_manage where tm_register_time = CURDATE()
+		select COUNT(*) FROM t_client_manage where TO_DAYS(tm_register_time)=TO_DAYS(CURRENT_DATE())
 	</select>
 
 	<!--查询所有登记过的客户-->

@@ -1,5 +1,6 @@
 
 package com.retailers.hnc.common.service;
+import com.retailers.hnc.common.entity.ClientManage;
 import com.retailers.hnc.common.entity.OpeningEmpClient;
 import com.retailers.hnc.common.vo.ClientManageVo;
 import com.retailers.mybatis.pagination.Pagination;
@@ -74,6 +75,10 @@ public interface OpeningEmpClientService {
 	public Map queryCheckingandpassandnotpassNumWeb(Map params);
 
 	public void addFloorsAndHourses(String hids,String fids,ClientManageVo clientManageVo);
+
+	public ClientManage queryClientManageByEmpId(Long empId);
+
+	public String queryGZHopenidByClientId(Long cmId);
 }
 
 
