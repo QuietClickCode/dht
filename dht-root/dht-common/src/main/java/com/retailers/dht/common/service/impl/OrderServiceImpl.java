@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.druid.sql.ast.SQLOrderingSpecification;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.retailers.auth.constant.SystemConstant;
@@ -298,7 +299,6 @@ public class OrderServiceImpl implements OrderService {
 			if(actualPrice<0){
 				actualPrice=0;
 			}
-
 			Order order =createOrder(OrderEnum.SHOPPING,userAddress,totalPrice,cpPrice,gcPrice,actualPrice,logisticsPrice,ods,ogcs);
 			//批量添加优惠卷
 			orderNo=order.getOrderNo();
@@ -1435,6 +1435,10 @@ public class OrderServiceImpl implements OrderService {
 		Date expireDate= DateUtil.addHour(curDate,-expireTime);
 		// 取得超时订单
 		List<Order> expireOrders=orderMapper.queryOrderByStatus(OrderConstant.ORDER_STATUS_CREATE,"order_create_date",expireDate);
+		//判断是否有可清除的订单，无时不做处理
+		if(ObjectUtils.isEmpty(expireOrders)){
+			return;
+		}
 		//取得超进订单
 		List<Long> orderIds=new ArrayList<Long>();
 		//订单id对应的订单类型
@@ -1444,6 +1448,7 @@ public class OrderServiceImpl implements OrderService {
 			orderIds.add(order.getId());
 			orderTypeMaps.put(order.getId(),order.getOrderType());
 		}
+
 		//取得订单详情
 		List<OrderDetail> ods=orderDetailMapper.queryOrderDetailByOdIds(orderIds);
 		for(OrderDetail od:ods){
@@ -1476,6 +1481,7 @@ public class OrderServiceImpl implements OrderService {
 		orderMapper.clearExpireOrders(orderIds);
 		//批量设置订单超时
 		System.out.println(JSON.toJSON(expireOrders));
+		logger.info("返还优惠卷，订单ids：{}",orderIds);
 		//清除优惠卷
 		couponUserMapper.unUseCouponBuyOids(orderIds);
 		logger.info("失效订单处理完毕");
