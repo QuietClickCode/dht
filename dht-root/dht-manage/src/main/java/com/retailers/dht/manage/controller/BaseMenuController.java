@@ -31,4 +31,7 @@ public class BaseMenuController {
 
     @Resourse(resourse = "sys.manager.orderManage",label = "订单管理",sort = 6)
     public String orderPage;
+
+    @Resourse(resourse = "sys.manager.ysjq",label = "远山接亲",sort = 7)
+    public String ysjqPage;
 }

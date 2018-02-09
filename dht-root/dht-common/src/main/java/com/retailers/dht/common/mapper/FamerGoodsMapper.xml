@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.FamerGoodsMapper">
+
+	<resultMap id="rm_famerGoods" type="com.retailers.dht.common.entity.FamerGoods">
+			<result property="fgId" column="fg_id"/>
+			<result property="fid" column="f_id"/>
+			<result property="gid" column="g_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_famerGoods_vo" type="com.retailers.dht.common.vo.FamerGoodsVo">
+		<result property="fgId" column="fg_id"/>
+		<result property="fid" column="f_id"/>
+		<result property="gid" column="g_id"/>
+		<result property="goodsName" column="g_name"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="famerGoods_columns">
+		fg_id,f_id,g_id,is_delete,version
+	</sql>
+	<!-- 根据农户商品关联表表主键取得数据 -->
+	<select id="queryFamerGoodsByFgId" resultMap="rm_famerGoods" parameterType="java.lang.Long">
+		SELECT <include refid="famerGoods_columns" />
+		FROM t_famer_goods WHERE fg_id = #{fgId}
+	</select>
+	<!-- 农户商品关联表表查询条件组合 -->
+	<sql id="famerGoods_where">
+		<where>
+			<if test="null != params.fgId">
+				AND fg_id = #{params.fgId}
+			</if>
+			<if test="null != params.fid">
+				AND f_id = #{params.fid}
+			</if>
+			<if test="null != params.gid">
+				AND g_id = #{params.gid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<sql id="famerGoods_where_vo">
+		<where>
+			<if test="null != params.fgId">
+				AND fg.fg_id = #{params.fgId}
+			</if>
+			<if test="null != params.fid">
+				AND fg.f_id = #{params.fid}
+			</if>
+			<if test="null != params.gid">
+				AND fg.g_id = #{params.gid}
+			</if>
+			<if test="null != params.isDelete">
+				AND fg.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND fg.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<sql id="Goods_where_vo">
+			<if test="null != params.goodsName">
+				AND g.g_name like concat('%', #{params.goodsName} ,'%')
+			</if>
+		       and g.is_checked=0 and g.is_delete=0
+	</sql>
+
+	<!--分页查询 -->
+	<select id="queryFamerGoodsList" resultMap="rm_famerGoods" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="famerGoods_columns" />
+		FROM t_famer_goods
+		<include refid="famerGoods_where"/>
+	</select>
+	<select id="queryHaveGoodsListByFid" resultMap="rm_famerGoods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT fg.*,g.g_name
+		FROM t_famer_goods fg
+		LEFT JOIN t_goods g ON fg.g_id = g.g_id
+		<include refid="famerGoods_where_vo"/>
+	</select>
+	<select id="queryNotHaveGoodsListByFid" resultMap="rm_famerGoods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT g.g_id,g.g_name
+		FROM t_goods g
+		WHERE g.g_id NOT IN (
+			SELECT fg.g_id FROM t_famer_goods fg <include refid="famerGoods_where_vo"/>
+		) <include refid="Goods_where_vo"/>
+	</select>
+	<!--添加农户商品关联表表 -->
+	<insert id="saveFamerGoods" parameterType="com.retailers.dht.common.entity.FamerGoods" useGeneratedKeys="true" keyProperty="fgId">
+		INSERT INTO t_famer_goods (
+			f_id,g_id,is_delete,version
+		) VALUES
+		(
+			#{fid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改农户商品关联表表 -->
+	<update id="updateFamerGoods" parameterType="com.retailers.dht.common.entity.FamerGoods">
+		UPDATE t_famer_goods
+		<set>
+            <if test="null != fid">
+                f_id = #{fid},
+            </if>
+            <if test="null != gid">
+                g_id = #{gid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE fg_id = #{fgId} and version = #{version}
+	</update>
+	<!--删除农户商品关联表表 -->
+	<delete id="deleteFamerGoodsByFgId" parameterType="java.lang.Long">
+		DELETE FROM t_famer_goods WHERE fg_id = #{fgId}
+	</delete>
+</mapper>

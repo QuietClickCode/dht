@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.FamerUserMapper">
+
+	<resultMap id="rm_famerUser" type="com.retailers.dht.common.entity.FamerUser">
+			<result property="fuId" column="fu_id"/>
+			<result property="fid" column="f_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="famerUser_columns">
+		fu_id,f_id,u_id,is_delete,version
+	</sql>
+	<!-- 根据农夫用户关系表主键取得数据 -->
+	<select id="queryFamerUserByFuId" resultMap="rm_famerUser" parameterType="java.lang.Long">
+		SELECT <include refid="famerUser_columns" />
+		FROM t_famer_user WHERE fu_id = #{fuId}
+	</select>
+	<!-- 农夫用户关系表查询条件组合 -->
+	<sql id="famerUser_where">
+		<where>
+			<if test="null != params.fuId">
+				AND fu_id = #{params.fuId}
+			</if>
+			<if test="null != params.fid">
+				AND f_id = #{params.fid}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryFamerUserList" resultMap="rm_famerUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="famerUser_columns" />
+		FROM t_famer_user
+		<include refid="famerUser_where"/>
+	</select>
+	<select id="queryFamerUserImgUrlList" resultType="java.lang.String" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t2.wau_headimgurl
+		FROM t_famer_user t1
+		LEFT JOIN t_wx_auth_user t2 ON t1.u_id=t2.wau_u_id
+		WHERE
+		t1.is_delete=0
+		and t1.f_id=#{params.fid}
+	</select>
+	<!--添加农夫用户关系表 -->
+	<insert id="saveFamerUser" parameterType="com.retailers.dht.common.entity.FamerUser" useGeneratedKeys="true" keyProperty="fuId">
+		INSERT INTO t_famer_user (
+			f_id,u_id,is_delete,version
+		) VALUES
+		(
+			#{fid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改农夫用户关系表 -->
+	<update id="updateFamerUser" parameterType="com.retailers.dht.common.entity.FamerUser">
+		UPDATE t_famer_user
+		<set>
+            <if test="null != fid">
+                f_id = #{fid},
+            </if>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE fu_id = #{fuId} and version = #{version}
+	</update>
+	<!--删除农夫用户关系表 -->
+	<delete id="deleteFamerUserByFuId" parameterType="java.lang.Long">
+		DELETE FROM t_famer_user WHERE fu_id = #{fuId}
+	</delete>
+</mapper>

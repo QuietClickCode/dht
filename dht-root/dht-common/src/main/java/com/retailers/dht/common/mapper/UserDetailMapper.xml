@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.UserDetailMapper">
+
+	<resultMap id="rm_userDetail" type="com.retailers.dht.common.entity.UserDetail">
+			<result property="udId" column="ud_id"/>
+			<result property="uid" column="u_id"/>
+			<result property="udName" column="ud_name"/>
+			<result property="udSex" column="ud_sex"/>
+			<result property="udPhone" column="ud_phone"/>
+			<result property="udIdCard" column="ud_id_card"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="userDetail_columns">
+		ud_id,u_id,ud_name,ud_sex,ud_phone,ud_id_card,is_delete,version
+	</sql>
+	<!-- 根据用户信息详情表主键取得数据 -->
+	<select id="queryUserDetailByUdId" resultMap="rm_userDetail" parameterType="java.lang.Long">
+		SELECT <include refid="userDetail_columns" />
+		FROM t_user_detail WHERE ud_id = #{udId}
+	</select>
+	<!-- 用户信息详情表查询条件组合 -->
+	<sql id="userDetail_where">
+		<where>
+			<if test="null != params.udId">
+				AND ud_id = #{params.udId}
+			</if>
+			<if test="null != params.uid">
+				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.udName and '' != params.udName">
+				AND ud_name = #{params.udName}
+			</if>
+			<if test="null != params.udSex">
+				AND ud_sex = #{params.udSex}
+			</if>
+			<if test="null != params.udPhone and '' != params.udPhone">
+				AND ud_phone = #{params.udPhone}
+			</if>
+			<if test="null != params.udIdCard and '' != params.udIdCard">
+				AND ud_id_card = #{params.udIdCard}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryUserDetailList" resultMap="rm_userDetail" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="userDetail_columns" />
+		FROM t_user_detail
+		<include refid="userDetail_where"/>
+	</select>
+	<!--添加用户信息详情表 -->
+	<insert id="saveUserDetail" parameterType="com.retailers.dht.common.entity.UserDetail" useGeneratedKeys="true" keyProperty="udId">
+		INSERT INTO t_user_detail (
+			u_id,ud_name,ud_sex,ud_phone,ud_id_card,is_delete,version
+		) VALUES
+		(
+			#{uid,jdbcType=BIGINT},#{udName,jdbcType=VARCHAR},#{udSex,jdbcType=BIGINT},#{udPhone,jdbcType=VARCHAR},#{udIdCard,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改用户信息详情表 -->
+	<update id="updateUserDetail" parameterType="com.retailers.dht.common.entity.UserDetail">
+		UPDATE t_user_detail
+		<set>
+            <if test="null != uid">
+                u_id = #{uid},
+            </if>
+            <if test="null != udName and '' != udName">
+                ud_name = #{udName},
+            </if>
+            <if test="null != udSex">
+                ud_sex = #{udSex},
+            </if>
+            <if test="null != udPhone and '' != udPhone">
+                ud_phone = #{udPhone},
+            </if>
+            <if test="null != udIdCard and '' != udIdCard">
+                ud_id_card = #{udIdCard},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ud_id = #{udId} and version = #{version}
+	</update>
+	<!--删除用户信息详情表 -->
+	<delete id="deleteUserDetailByUdId" parameterType="java.lang.Long">
+		DELETE FROM t_user_detail WHERE ud_id = #{udId}
+	</delete>
+</mapper>

@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.FamerMapper">
+
+	<resultMap id="rm_famer" type="com.retailers.dht.common.vo.FamerVo">
+			<result property="fid" column="f_id"/>
+			<result property="fname" column="f_name"/>
+			<result property="fsex" column="f_sex"/>
+			<result property="fbirth" column="f_birth"/>
+			<result property="feducation" column="f_education"/>
+			<result property="fethnic" column="f_ethnic"/>
+			<result property="fpolitical" column="f_political"/>
+			<result property="fphone" column="f_phone"/>
+			<result property="fcardNumber" column="f_card_number"/>
+			<result property="fimg" column="f_img"/>
+			<result property="fcensus" column="f_census"/>
+			<result property="faddress" column="f_address"/>
+			<result property="fcollector" column="f_collector"/>
+			<result property="fcollectorPosition" column="f_collector_position"/>
+			<result property="fcollectorPhone" column="f_collector_phone"/>
+			<result property="fpopulation" column="f_population"/>
+			<result property="fleavechildnum" column="f_leavechildnum"/>
+			<result property="ffamilytype" column="f_familytype"/>
+			<result property="fpoornum" column="f_poornum"/>
+			<result property="fpost" column="f_post"/>
+			<result property="fremark" column="f_remark"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+			<result property="imgUrl" column="imgUrl"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="famer_columns">
+		f_id,f_name,f_sex,f_birth,f_education,f_ethnic,f_political,f_phone,f_card_number,f_img,f_census,f_address,f_population,f_leavechildnum,f_familytype,f_poornum,f_post,f_remark,is_delete,version
+	</sql>
+	<!-- 根据农夫信息表主键取得数据 -->
+	<select id="queryFamerByFid" resultMap="rm_famer" parameterType="java.lang.Long">
+		SELECT <include refid="famer_columns" />
+		FROM t_famer WHERE f_id = #{fid}
+	</select>
+	<!-- 农夫信息表查询条件组合 -->
+	<sql id="famer_where">
+		<where>
+			<if test="null != params.fid">
+				AND t1.f_id = #{params.fid}
+			</if>
+			<if test="null != params.fname and '' != params.fname">
+				AND t1.f_name like concat('%',  #{params.fname} ,'%')
+			</if>
+			<if test="null != params.fsex">
+				AND t1.f_sex = #{params.fsex}
+			</if>
+			<if test="null != params.fbirthBegin">
+				AND t1.f_birth &gt;= #{params.fbirth}
+			</if>
+			<if test="null != params.fbirthEnd">
+				AND t1.f_birth &lt;= #{params.fbirth}
+			</if>
+			<if test="null != params.feducation and '' != params.feducation">
+				AND t1.f_education = #{params.feducation}
+			</if>
+			<if test="null != params.fethnic and '' != params.fethnic">
+				AND t1.f_ethnic = #{params.fethnic}
+			</if>
+			<if test="null != params.fpolitical and '' != params.fpolitical">
+				AND t1.f_political = #{params.fpolitical}
+			</if>
+			<if test="null != params.fphone and '' != params.fphone">
+				AND t1.f_phone = #{params.fphone}
+			</if>
+			<if test="null != params.fcardNumber and '' != params.fcardNumber">
+				AND t1.f_card_number = #{params.fcardNumber}
+			</if>
+			<if test="null != params.fimg">
+				AND t1.f_img = #{params.fimg}
+			</if>
+			<if test="null != params.fcensus and '' != params.fcensus">
+				AND t1.f_census = #{params.fcensus}
+			</if>
+			<if test="null != params.faddress and '' != params.faddress">
+				AND t1.f_address = #{params.faddress}
+			</if>
+			<if test="null != params.fpopulation">
+				AND t1.f_population = #{params.fpopulation}
+			</if>
+			<if test="null != params.fleavechildnum">
+				AND t1.f_leavechildnum = #{params.fleavechildnum}
+			</if>
+			<if test="null != params.ffamilytype and '' != params.ffamilytype">
+				AND t1.f_familytype = #{params.ffamilytype}
+			</if>
+			<if test="null != params.fpoornum and '' != params.fpoornum">
+				AND t1.f_poornum = #{params.fpoornum}
+			</if>
+			<if test="null != params.fpost and '' != params.fpost">
+				AND t1.f_post = #{params.fpost}
+			</if>
+			<if test="null != params.fremark and '' != params.fremark">
+				AND t1.f_remark = #{params.fremark}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryFamerList" resultMap="rm_famer" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.show_url imgUrl
+		FROM t_famer t1
+		LEFT JOIN t_attachment t2 ON t1.f_img=t2.id
+		<include refid="famer_where"/>
+	</select>
+	<!--添加农夫信息表 -->
+	<insert id="saveFamer" parameterType="com.retailers.dht.common.entity.Famer" useGeneratedKeys="true" keyProperty="fid">
+		INSERT INTO t_famer (
+			f_name,f_sex,f_birth,f_education,f_ethnic,f_political,f_phone,f_card_number,f_img,f_census,f_address,f_population,f_leavechildnum,f_familytype,f_poornum,f_post,f_remark,is_delete,version,f_collector,f_collector_position,f_collector_phone
+		) VALUES
+		(
+			#{fname,jdbcType=VARCHAR},#{fsex,jdbcType=BIGINT},#{fbirth,jdbcType=DATE},#{feducation,jdbcType=VARCHAR},#{fethnic,jdbcType=VARCHAR},#{fpolitical,jdbcType=VARCHAR},#{fphone,jdbcType=VARCHAR},#{fcardNumber,jdbcType=VARCHAR},#{fimg,jdbcType=BIGINT},#{fcensus,jdbcType=VARCHAR},#{faddress,jdbcType=VARCHAR},#{fpopulation,jdbcType=BIGINT},#{fleavechildnum,jdbcType=BIGINT},#{ffamilytype,jdbcType=VARCHAR},#{fpoornum,jdbcType=VARCHAR},#{fpost,jdbcType=VARCHAR},#{fremark,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0,#{fcollector,jdbcType=VARCHAR},#{fcollectorPosition,jdbcType=VARCHAR},#{fcollectorPhone,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改农夫信息表 -->
+	<update id="updateFamer" parameterType="com.retailers.dht.common.entity.Famer">
+		UPDATE t_famer
+		<set>
+            <if test="null != fname and '' != fname">
+                f_name = #{fname},
+            </if>
+            <if test="null != fsex">
+                f_sex = #{fsex},
+            </if>
+            <if test="null != fbirth">
+                f_birth = #{fbirth},
+            </if>
+            <if test="null != feducation and '' != feducation">
+                f_education = #{feducation},
+            </if>
+            <if test="null != fethnic and '' != fethnic">
+                f_ethnic = #{fethnic},
+            </if>
+            <if test="null != fpolitical and '' != fpolitical">
+                f_political = #{fpolitical},
+            </if>
+            <if test="null != fphone and '' != fphone">
+                f_phone = #{fphone},
+            </if>
+            <if test="null != fcardNumber and '' != fcardNumber">
+                f_card_number = #{fcardNumber},
+            </if>
+            <if test="null != fimg">
+                f_img = #{fimg},
+            </if>
+            <if test="null != fcensus and '' != fcensus">
+                f_census = #{fcensus},
+            </if>
+            <if test="null != faddress and '' != faddress">
+                f_address = #{faddress},
+            </if>
+            <if test="null != fpopulation">
+                f_population = #{fpopulation},
+            </if>
+            <if test="null != fleavechildnum">
+                f_leavechildnum = #{fleavechildnum},
+            </if>
+            <if test="null != ffamilytype and '' != ffamilytype">
+                f_familytype = #{ffamilytype},
+            </if>
+            <if test="null != fpoornum and '' != fpoornum">
+                f_poornum = #{fpoornum},
+            </if>
+            <if test="null != fpost and '' != fpost">
+                f_post = #{fpost},
+            </if>
+            <if test="null != fremark and '' != fremark">
+                f_remark = #{fremark},
+            </if>
+
+			<if test="null != fcollector and '' != fcollector">
+				f_collector = #{fcollector},
+			</if>
+			<if test="null != fcollectorPosition and '' != fcollectorPosition">
+				f_collector_position = #{fcollectorPosition},
+			</if>
+			<if test="null != fcollectorPhone and '' != fcollectorPhone">
+				f_collector_phone = #{fcollectorPhone},
+			</if>
+
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE f_id = #{fid} and version = #{version}
+	</update>
+	<!--删除农夫信息表 -->
+	<delete id="deleteFamerByFid" parameterType="java.lang.Long">
+		DELETE FROM t_famer WHERE f_id = #{fid}
+	</delete>
+</mapper>

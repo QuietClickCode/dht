@@ -73,7 +73,7 @@
 				AND ha_client = #{params.haClient}
 			</if>
 			<if test="null != params.haCountry">
-				AND ha_country = #{params.haCountry}
+				AND (ha_country = #{params.haCountry} OR ha_country=2)
 			</if>
 			<if test="null != params.haRegion">
 				AND ha_region = #{params.haRegion}

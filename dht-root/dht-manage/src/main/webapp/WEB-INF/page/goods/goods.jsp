@@ -2104,6 +2104,20 @@
                     }
                 }
             }
+            var trs = $('#ggsvaldetailTbody').find('tr');
+            if(trs!=null&&trs.length>0){
+                for(var i=0;i<trs.length;i++){
+                    var length = $(trs[i]).find('td').length;
+                    var sale =  $($(trs[i]).find('td')[length-6]).find('input').val();
+                    var cost =  $($(trs[i]).find('td')[length-5]).find('input').val();
+                    sale = Number(sale);
+                    cost = Number(cost);
+                    if(sale<cost){
+                        toastr.warning("售价必须大于成本");
+                        return;
+                    }
+                }
+            }
 
             var gid = $('#gid').val();
             clearggsdata(gid);
