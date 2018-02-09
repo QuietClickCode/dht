@@ -766,6 +766,9 @@
         }
 
         $('#couponspan').html('<span class="mr_4">￥</span>-'+coupondowncutprice.toFixed(2));
+        if(lastPrice - coupondowncutprice<0){
+            lastPrice = coupondowncutprice;
+        }
         lastPrice = lastPrice - coupondowncutprice +gfPrice;
         var cutdownprice = gcpdowncutprice+coupondowncutprice;
 
