@@ -95,7 +95,7 @@
                 </div>
                 <div class="bd">
                     <ul id="imgs">
-                        <li><a href="#"><img _src="/img/fa_bg.png"  src="/img/fa_bg.png" /></a></li>
+                        <%--<li><a href="#"><img _src="/img/fa_bg.png"  src="/img/fa_bg.png" /></a></li>--%>
                     </ul>
                 </div>
             </div>

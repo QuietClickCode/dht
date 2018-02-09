@@ -30,6 +30,11 @@ public class FamerController extends BaseController {
         return  redirectUrl(request,"ysjq/famerDetail");
     }
 
+    @RequestMapping("gotoFamerList")
+    public String gotoFamerList(HttpServletRequest request){
+        return  redirectUrl(request,"ysjq/famerList");
+    }
+
     @RequestMapping("queryFamerList")
     @ResponseBody
     public Map queryFamerList(Long fid,int pageNo,int pageSize){
