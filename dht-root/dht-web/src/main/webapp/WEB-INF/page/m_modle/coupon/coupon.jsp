@@ -54,12 +54,13 @@
     <script src="/js/jquery-1.9.1.min.js"></script>
     <script src="/js/layer_mobile/layer.js"></script>
     <script>
+        $("#couponLists").html("");
         function queryCoupon(pageNo,pageSize){
-            $("#couponLists").html("");
             $.ajax({
                 type:"post",
                 url:'/coupon/couponList',
                 dataType: "json",
+                async:false,
                 data:{pageNo:pageNo,pageSize:pageSize},
                 success:function(data){
                     if(data.status==0){
@@ -69,13 +70,36 @@
                                 showCoupon("#couponLists",row);
                             }
                         }
+                        outpageNo++;
+                        flag = true;
                     }
                 }
             });
         }
         $(function () {
             queryCoupon(1,10);
-        })
+            scrollloadCoupon();
+        });
+        var outpageNo=1;
+        var outpageSize=10;
+        var flag = true;
+        <!--滚动加载商品-->
+        function scrollloadCoupon() {
+            $(document).ready(function(){
+                var range = 50;             //距下边界长度/单位px
+                var totalheight = 0;
+                $(window).scroll(function(){
+                    var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                    totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                    if(($(document).height()-range) <= totalheight && flag) {
+                        flag = false;
+                        queryCoupon(outpageNo,outpageSize);
+                    }
+                });
+            });
+        }
 
         /**
          * 展示优惠卷
@@ -138,12 +162,16 @@
                 type:"post",
                 url:'/coupon/userGrabCoupon',
                 dataType: "json",
+                async:false,
                 data:{cpId:id},
                 success:function(data){
                     layer.close(curIndex);
                     let msg = data.msg;
                    if(data.status==0){
-                        queryCoupon(1,10);
+                       $("#couponLists").html("");
+                       outpageNo=1;
+                       outpageSize=10;
+                       queryCoupon(1,10);
                        msg='领取成功';
                     }
                     //提示
