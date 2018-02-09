@@ -17,7 +17,7 @@ public class LogUserCardPackage implements java.io.Serializable {
 	/**用户id*/
 	@NotEmpty
 	private Long uid;
-	/**操作类型（0 钱包入帐，1 钱包出帐，2 积分入帐，3积分出帐,4消费返现现,5 提现,6退款,7 退消费累计）*/
+	/**操作类型（0 钱包入帐，1 钱包出帐，2 积分入帐，3积分出帐,4消费返现,5 提现,6退款,7 退消费累计）*/
 	@NotEmpty
 	private Integer type;
 	/**关联订单id*/

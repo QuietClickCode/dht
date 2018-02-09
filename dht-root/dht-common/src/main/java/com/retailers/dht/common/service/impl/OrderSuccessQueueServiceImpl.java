@@ -443,7 +443,7 @@ public class OrderSuccessQueueServiceImpl implements OrderSuccessQueueService {
 					LogUserCardPackage lucp=new LogUserCardPackage();
 					lucp.setUid(wcbq.getCcbqUid());
 					lucp.setType(UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_CASH_BACK);
-					lucp.setRelationOrderId(orderId);
+					lucp.setRelationOrderId(wcbq.getCcbqId());
 					lucp.setVal(wcbq.getCcbqMoney());
 					lucp.setCurVal(ucpMap.get(wcbq.getCcbqUid())+curCbMap.get(wcbq.getCcbqUid()));
 					if(curCbMap.containsKey(wcbq.getCcbqUid())){
