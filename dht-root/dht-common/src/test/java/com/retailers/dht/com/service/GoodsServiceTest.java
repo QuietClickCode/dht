@@ -1,6 +1,7 @@
 package com.retailers.dht.com.service;
 
 import com.retailers.dht.com.base.TestBaseJunit;
+import com.retailers.dht.common.dao.GoodsMapper;
 import com.retailers.dht.common.entity.Goods;
 import com.retailers.dht.common.entity.GoodsClassification;
 import com.retailers.dht.common.service.GoodsClassificationService;
@@ -21,6 +22,7 @@ public class GoodsServiceTest extends TestBaseJunit {
     @Autowired
     private GoodsClassificationService goodsClassificationService;
 
+
     @Test
     public void updateGoods(){
         Goods goods = goodsService.queryGoodsByGid(34L);
@@ -35,6 +37,11 @@ public class GoodsServiceTest extends TestBaseJunit {
         map1.put("isDelete",0L);
         Pagination<GoodsClassification> pagination1 = goodsClassificationService.queryGoodsClassificationList(map1,1,1000);
         System.out.println(pagination1.getData().get(0).getGgId());
+    }
+
+    @Test
+    public void returnGoodsDescriptionTest(){
+        goodsService.returnGoodsDescription();
     }
 
 

@@ -97,4 +97,8 @@ public interface GoodsMapper {
 	 */
 	public List<GoodsReturnVo> queryGoodsReturn(@Param("gids")List<Long> gids);
 
+
+	public List<Goods> queryOldDataGoods();
+
+	public List<Goods> updateOldGoodsData(@Param("goodsList") List<Goods> goodsList);
 }

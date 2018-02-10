@@ -105,8 +105,8 @@
 		t1.is_checked=1
 		and t1.is_delete=0
 		and t1.g_id in
-		<foreach collection="params.gids" item="gid" open="(" close=")" separator=",">
-			#{gid}
+		<foreach collection="params.gids" item="gid" open="(" close=")" separator="," index="index">
+			#{params.gids[${index}]}
 		</foreach>
 		GROUP BY t1.g_id
 	</select>
@@ -416,4 +416,17 @@
 				#{item}
 			</foreach>
 	</select>
+
+	<select id="queryOldDataGoods" resultMap="rm_goods">
+		SELECT * from t_goods_copy t1 where t1.g_id BETWEEN 536 and 735 GROUP BY t1.g_id
+	</select>
+
+	<update id="updateOldGoodsData">
+		insert into t_goods (g_id,g_description)
+		values
+		<foreach collection="goodsList" separator="," item="goods">
+			(#{goods.gid},#{goods.gdescription})
+		</foreach>
+		on duplicate key update g_description=values(g_description)
+	</update>
 </mapper>

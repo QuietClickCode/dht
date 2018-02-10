@@ -74,6 +74,7 @@
         <option value="">主推方向</option>
         <option value="0">乡村</option>
         <option value="1">城市</option>
+        <option value="2">城市和乡村</option>
     </select>
 
     <div class="window">

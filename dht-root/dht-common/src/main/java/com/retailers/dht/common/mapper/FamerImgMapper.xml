@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.FamerImgMapper">
+
+	<resultMap id="rm_famerImg" type="com.retailers.dht.common.entity.FamerImg">
+			<result property="fimgId" column="f_img_id"/>
+			<result property="fid" column="f_id"/>
+			<result property="imgId" column="img_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_famerImg_vo" type="com.retailers.dht.common.vo.FamerImgVo">
+		<result property="fimgId" column="f_img_id"/>
+		<result property="fid" column="f_id"/>
+		<result property="imgId" column="img_id"/>
+		<result property="imgUrl" column="show_url"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="famerImg_columns">
+		f_img_id,f_id,img_id,is_delete,version
+	</sql>
+	<!-- 根据农户背景图片关联表表主键取得数据 -->
+	<select id="queryFamerImgByFimgId" resultMap="rm_famerImg" parameterType="java.lang.Long">
+		SELECT <include refid="famerImg_columns" />
+		FROM t_famer_img WHERE f_img_id = #{fimgId}
+	</select>
+	<!-- 农户背景图片关联表表查询条件组合 -->
+	<sql id="famerImg_where">
+		<where>
+			<if test="null != params.fimgId">
+				AND f_img_id = #{params.fimgId}
+			</if>
+			<if test="null != params.fid">
+				AND f_id = #{params.fid}
+			</if>
+			<if test="null != params.imgId">
+				AND img_id = #{params.imgId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+
+	<!--分页查询 -->
+	<select id="queryFamerImgList" resultMap="rm_famerImg" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="famerImg_columns" />
+		FROM t_famer_img
+		<include refid="famerImg_where"/>
+	</select>
+	<select id="queryFamerImgVoList" resultMap="rm_famerImg_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT fi.*,att.show_url
+		FROM t_famer_img fi
+		LEFT JOIN t_attachment att ON fi.img_id=att.id
+		<include refid="famerImg_where"/>
+	</select>
+	<!--添加农户背景图片关联表表 -->
+	<insert id="saveFamerImg" parameterType="com.retailers.dht.common.entity.FamerImg" useGeneratedKeys="true" keyProperty="fimgId">
+		INSERT INTO t_famer_img (
+			f_id,img_id,is_delete,version
+		) VALUES
+		(
+			#{fid,jdbcType=BIGINT},#{imgId,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改农户背景图片关联表表 -->
+	<update id="updateFamerImg" parameterType="com.retailers.dht.common.entity.FamerImg">
+		UPDATE t_famer_img
+		<set>
+            <if test="null != fid">
+                f_id = #{fid},
+            </if>
+            <if test="null != imgId">
+                img_id = #{imgId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE f_img_id = #{fimgId} and version = #{version}
+	</update>
+	<!--删除农户背景图片关联表表 -->
+	<delete id="deleteFamerImgByFimgId" parameterType="java.lang.Long">
+		DELETE FROM t_famer_img WHERE f_img_id = #{fimgId}
+	</delete>
+</mapper>

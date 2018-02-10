@@ -206,7 +206,7 @@
     function setOrderInfo() {
         $(".time").text("下单时间："+order.orderCreateDate.substring(0,10));
         $(".time").append("<i></i>");
-        $(".user-name").text("收货人："+order.orderBuyNm);
+        $(".user-name").text("收货人："+order.orderUaName);
         $(".user-name").append('<span class="phone">'+order.orderUaPhone+'</span>');
         $(".obligations-address").text(order.orderUaAddress);
         $(".img img").attr("src",goods.gImgUrl);

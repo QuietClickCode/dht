@@ -100,12 +100,12 @@
 
         var shopLeft, shopRight;
         function loaded() {
-            shopLeft = new IScroll('#J_wrapperLeft', {
-                preventDefault: false
-            });
-            shopRight = new IScroll('#J_wrapperRight', {
-                preventDefault: false
-            });
+//            shopLeft = new IScroll('#J_wrapperLeft', {
+//                preventDefault: false
+//            });
+//            shopRight = new IScroll('#J_wrapperRight', {
+//                preventDefault: false
+//            });
         };
 
         function configbanner() {
@@ -195,7 +195,7 @@
                 for(var i=0;i<gclass.length;i++){
                     html +='<li>'+
                         '<a href="/goods/goodsList/'+null+'~'+gclass[i].ggId+'.html" class="img">'+
-                        '<img data-original="'+gclass[i].imgUrl+'">'+
+                        '<img src="'+gclass[i].imgUrl+'">'+
                         '</a>'+
                         '<p>'+
                         '<a href="/goods/goodsList/'+null+'~'+gclass[i].ggId+'.html">'+gclass[i].ggName+'</a>'+

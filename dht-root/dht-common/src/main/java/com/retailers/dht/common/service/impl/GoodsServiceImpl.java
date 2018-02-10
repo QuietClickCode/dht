@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.vo.ZTreeVo;
 import com.retailers.dht.common.dao.GoodsCopyMapper;
 import com.retailers.dht.common.dao.GoodsMapper;
@@ -186,6 +187,9 @@ public class GoodsServiceImpl implements GoodsService {
 		page.setPageNo(pageNo);
 		page.setPageSize(pageSize);
 		List<GoodsVo> list = goodsMapper.queryGoodsVoByIds(page);
+		for(GoodsVo goodsVo:list){
+			goodsVo.setImgUrl(AttachmentConstant.IMAGE_SHOW_URL+goodsVo.getImgUrl());
+		}
 		return list;
 	}
 
@@ -250,6 +254,15 @@ public class GoodsServiceImpl implements GoodsService {
 			}
 		}
 		return rtn;
+	}
+
+	public void returnGoodsDescription(){
+		List<Goods> goodss = goodsMapper.queryOldDataGoods();
+		for(Goods goods:goodss){
+			Goods goods1 = goodsMapper.queryGoodsByGid(goods.getGid());
+			goods1.setGdescription(goods.getGdescription());
+			goodsMapper.updateGoods(goods1);
+		}
 	}
 }
 

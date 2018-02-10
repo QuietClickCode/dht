@@ -5,6 +5,7 @@ import com.retailers.dht.common.vo.GoodsReturnVo;
 import com.retailers.dht.common.vo.GoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.Goods;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 import java.util.Map;
@@ -96,6 +97,7 @@ public interface GoodsService {
 	 */
 	public Map<Long,GoodsReturnVo> queryGoodsReturn(List<Long> gids);
 
+	public void returnGoodsDescription();
 }
 
 
