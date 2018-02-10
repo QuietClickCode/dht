@@ -7,7 +7,6 @@
             height: 100%;
             z-index: 9999;
             display: none;
-            top:0.76rem;
         }
     	._wrap_hd img{
             width: 100%;
@@ -47,8 +46,6 @@
 
         ._user_info_item input{
             font-size: 0.3rem;
-            background-color: #fff;
-            color: #808080;
         }
 
         ._user_info_item span{
@@ -60,33 +57,21 @@
             width: 0.4rem;
             height: 0.4rem;
             float: right;
-            background:url(/img/_right_icon.png) no-repeat;
+            background:url(../img/_right_icon.png) no-repeat;
             background-position: center right;
             background-size: 0.5rem 0.5rem;
         }
 
         ._fixd_sub{
-            position: fixed;
-            bottom: 0;
             width: 100%;
-        }
-
-        ._fixd_sub span{
-            width: 50%;
-            display: inline-block;
             height: 1rem;
-            line-height: 1rem;
             background-color: #f3773b;
             text-align: center;
-            float: left;
+            line-height: 1rem;
             color: #fff;
             font-size: 0.35rem;
-        }
-
-        ._fixd_sub span:first-child{
-            border-right: 1px solid rgba(0,0,0,0.1);
-            background-color: #fff;
-            color: #1b1b1b;
+            position: fixed;
+            bottom: 0;
         }
 
         ._sex_item ._sex_icon{
@@ -118,7 +103,7 @@
         }
 
         ._choose_sex .active ._sex_icon{
-            background: url(/img/_true.png) no-repeat;
+            background: url(../img/_true.png) no-repeat;
             background-size: 0.4rem 0.4rem;
             background-position: top center;
             border: none;
@@ -127,11 +112,8 @@
         ._container{
             width: 100%;
             height: 20rem;
-            background-color: rgba(0,0,0,0.5);
-            position: absolute;
-            z-index: 9999;
-            top: 0.76rem;
-            display: none;
+            background-color: rgba(0,0,0,0.1);
+            position: relative;
         }
 
         ._wrap_box{
@@ -141,8 +123,7 @@
             border-radius: 5px;
             overflow: hidden;
             position: absolute;
-            top: 4.5rem;
-            z-index: 9999;
+            top: 3rem;
         }
 
 ._wrap_box_hd{
@@ -150,7 +131,6 @@
     font-size: 0.3rem;
     word-break: break-all;
     word-wrap: break-word;
-    line-height: 0.4rem;
     color: #2e2e2e;
     border-bottom: 0.02rem solid rgba(0,0,0,0.1);
 } 
@@ -162,7 +142,6 @@
     text-align: center;
     height: 0.8rem;
     line-height: 0.8rem;
-    font-size: 0.3rem;
 } 
 
 ._wrap_box_b span:first-child{

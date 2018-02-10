@@ -34,6 +34,12 @@
             color: #fff;
             font-size: 0.2rem;
         }
+
+        #ysjq_icon{
+            background: url("/img/ysjq_icon.png") .02rem 0 no-repeat;
+            background-size: auto auto;
+            background-size: .34rem .36rem;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -86,6 +92,16 @@
                     <p>可评价</p>
                 </a>
             </div>
+        </div>
+
+        <div class="user-order">
+            <div class="title">
+                <i class="icon-care" id="ysjq_icon"></i>
+                <span>远山结亲</span>
+            </div>
+            <a href="/famer/gotoFarmerPage" id="gotoFarmerPage">
+                <%--<span class="prompt" style="display: none"></span>--%>
+            </a>
         </div>
 
         <div class="user-order">

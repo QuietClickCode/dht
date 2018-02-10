@@ -46,6 +46,7 @@
 
         ._goods_info span{
             display: inline-block;
+            font-size: 0.2rem;
         }
 
         ._goods_name{
@@ -82,7 +83,7 @@
 </div>
 
 <div class="specialty-title2 borderB">
-    <a href="" class="icon-return"></a>
+    <a href="javascript:void(0)" onclick="window.history.back();return false;" class="icon-return"></a>
     <span>远山结亲</span>
 </div>
 
@@ -195,7 +196,7 @@
                     $('#fcollectorPhone').html(fcollectorPhone);
                     $('#fname').html(fname);
                     var age = GetDateDiff(new Date(row.fbirth),new Date());
-                    $('#age').html(age);
+                    $('#age').html(age+'岁');
 
                 }
             }
