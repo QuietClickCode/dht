@@ -130,7 +130,7 @@
             },
             success:function (data) {
                 order = data.data;
-                goods = order.ods[0];
+                goods = order.ods;
                 orderStatus();
             }
         });
@@ -142,7 +142,7 @@
 <script>
     function orderStatus() {
         console.log(order);
-        if(order.orderStatus == 0 || order.orderStatus == 2 || order.orderStatus == 1){
+        if(order.orderStatus == 0 || order.orderStatus == 2 || order.orderStatus == 1 || order.orderStatus == 8){
             orderStatus_0();
         }else if(order.orderStatus == 3){
             orderStatus_3();
@@ -206,14 +206,19 @@
     function setOrderInfo() {
         $(".time").text("下单时间："+order.orderCreateDate.substring(0,10));
         $(".time").append("<i></i>");
+        $(".obligations-order").html('');
+        for(let i = 0; i < goods.length; i++){
+
+            let imgUrl = goods[i].gImgUrl == '' ? goods[i].imgUrl : goods[i].gImgUrl;
+            let html = '<div class="order-box"><a href="" class="img"><img src="'+imgUrl+'" alt="">';
+            html += '</a><div class="text-box"><a href=""><span class="text">'+goods[i].gName+'</span>';
+            html += '<span class="price">￥'+goods[i].gdPrice+'</span></a><p class="gsName">规格:'+goods[i].gsName+'';
+            html += '<span class="number">×'+goods[i].odBuyNumber+'</span></p></div></div>';
+            $(".obligations-order").append(html);
+        }
         $(".user-name").text("收货人："+order.orderUaName);
         $(".user-name").append('<span class="phone">'+order.orderUaPhone+'</span>');
         $(".obligations-address").text(order.orderUaAddress);
-        $(".img img").attr("src",goods.gImgUrl);
-        $(".text").text(goods.gName);
-        $(".price").text("￥"+goods.gdPrice);
-        $(".gsName").text("规格:"+goods.gsName);
-        $(".gsName").append('<span class="number">'+'x'+goods.odBuyNumber+'</span>');
         $(".number1").text("￥"+Number(order.orderTradePrice).toFixed(2));
         $(".number2").text("￥"+Number(order.orderGoodsTotalPrice).toFixed(2));
         $(".number3").text("￥"+Number(order.orderLogisticsPrice).toFixed(2));

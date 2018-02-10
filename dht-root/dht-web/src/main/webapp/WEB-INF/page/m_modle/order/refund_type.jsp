@@ -11,6 +11,11 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" type="text/css" href="/css/refund.css">
+    <style>
+        .refund{
+            padding-bottom: 2rem;
+        }
+    </style>
 </head>
 
 <body class="bge6">
@@ -19,15 +24,8 @@
     <span>申请退款</span>
 </div>
 <div class="refund">
-    <div class="refund_goods_info">
-        <div class="refund_goods_img">
-            <img src="img/goods_img.png">
-        </div>
+    <div class="_goods_list">
 
-        <div class="_goods_info">
-            <span class="_goods_details">乐事多力多紫薯片多口味零食大礼盒400克</span>
-            <span class="goods_spci">规格:<span class="_goods_weight">400g</span></span>
-        </div>
     </div>
 
     <div class="_refund_info">
@@ -59,11 +57,14 @@
             },
             success:function (data) {
                 order = data.data;
-                goods = order.ods[0];
-                console.log(order);
-                $(".refund_goods_img img").attr("src",goods.gImgUrl);
-                $("._goods_details").text(goods.gName);
-                $("._goods_weight").text(goods.gsName);
+                goods = order.ods;
+                for(let i = 0;i<goods.length;i++){
+                    let imgUrl = goods[i].gImgUrl == '' ? goods[i].imgUrl : goods[i].gImgUrl;
+                    let html = '<div class="refund_goods_info"><div class="refund_goods_img"><img src="'+imgUrl+'">';
+                    html += '</div><div class="_goods_info"><span class="_goods_details">'+goods[i].gName+'</span>';
+                    html += '<span class="goods_spci">规格:<span class="_goods_weight">'+goods[i].gsName+'</span></span></div></div>';
+                    $("._goods_list").append(html);
+                }
             }
         });
     });
