@@ -8,17 +8,23 @@
     <title>商品列表</title>
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .icon-search{
+            right: 1rem;
+            left: inherit;
+        }
+    </style>
 </head>
 
 <body class="bge6">
 <div class="box position-r">
     <div class="classify-search">
         <a onclick="returnhistory()" class="icon-return" style="float: left;background: url('/img/return3.png');width:0.5rem;height:0.5rem;margin-top:0.05rem;background-size: 100% 100%;margin-right: 0rem"></a>
-        <input type="text" name="" style="width: 6.1rem;padding-left: .6rem" id="searchgoods" placeholder="现摘 水果"onkeydown="if(event.keyCode==13) {getKey()}">
+        <input type="text" name="" style="width: 6.1rem;padding-left: .3rem" id="searchgoods" placeholder="现摘 水果"onkeydown="if(event.keyCode==13) {getKey()}">
         <!--<a href="" >-->
             <!--<span>9+</span>-->
         <!--</a>-->
-        <span class="icon-search" onclick="getKey()" style="float: left;margin-left: .6rem"></span>
+        <span class="icon-search" onclick="getKey()" style="float: right;left: inherit;margin-left: .6rem"></span>
     </div>
 
 </div>
