@@ -72,6 +72,10 @@ public class CouponWebVo {
      * 用户领取的优惠对应id
      */
     private Long cpuId;
+    /**
+     * 订单id(优惠卷使用于什么订单）
+     */
+    private Long orderId;
 
     public Long getCpId() {
         return cpId;
@@ -271,5 +275,13 @@ public class CouponWebVo {
 
     public void setCpuId(Long cpuId) {
         this.cpuId = cpuId;
+    }
+
+    public Long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Long orderId) {
+        this.orderId = orderId;
     }
 }

@@ -375,6 +375,24 @@
             html+='<tr><td><img src="'+info.imgUrl+'" alt="" style="width:64px;height:48px;"></td><td>'+info.gName+'</td><td>'+info.gdPrice+'</td><td>'+info.odMenberPrice+'</td><td>'+info.gsName+'</td><td>'+info.odBuyNumber+'</td></tr>'
         }
         html+='</table></br>';
+        console.log(row.coupons.length)
+        if(row.coupons.length>0){
+            console.log("========================>>>:")
+            html+="</br><p>使用优惠卷</p>"
+            html+='<table style="width:100%;" cellpadding="1" cellspacing="0" border="1"><tbody><tr>';
+            html+='<td>优惠卷图片</td><td>优惠卷名称</td><td>优惠卷类型</td><td>有效期</td><td>使用条件</td><td>金额</td>';
+            html+='</tr></tbody>'
+            for(var couponInfos of row.coupons){
+                let couponType='现金卷';
+                if(couponInfos.cpCoinType==1){
+                    couponType='折扣卷';
+                }
+                html+='<tr><td><img src="'+couponInfos.cpLogoUrl+'" alt="" style="width:64px;height:48px;"></td>';
+                html+='<td>'+couponInfos.cpName+'</td><td>'+couponType+'</td><td>'+couponInfos.cpStartDate+'</td><td>'+couponInfos.useCondition+'</td>';
+                html+='<td>'+couponInfos.couponVal+'</td></tr>'
+            }
+            html+='</table></br>';
+        }
         if(row.orderType!='RECHARGE'){
             if(row.orderLogisticsCode){
                 html+='<span>物流公司:</span><span>'+logisNm.get(row.orderLogisticsCompany)+'</span>&nbsp;&nbsp;<br>';

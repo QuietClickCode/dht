@@ -1,21 +1,10 @@
 package com.retailers.tools.encrypt;
 
 
-import com.retailers.tools.utils.Base64;
-import com.retailers.tools.utils.StringUtils;
-
 import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.GeneralSecurityException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 
 /**
@@ -197,7 +186,11 @@ public class DESUtils{
 //        return str;
 //    }
     public static void main(String args[]) throws Exception {
-        System.out.println(encryptDES("我是中国人，我爱中国",DesKey.WEB_KEY));
+        System.out.println(encryptDES("desutils",DesKey.WEB_KEY));
+        byte[] q=encrypt("desutils".getBytes(),DesKey.WEB_KEY.getBytes());
+        System.out.println(q.toString());
+        String srt2=new String(q,"iso-8859-1");
+        System.out.println(srt2);
 //
 //        System.out.println(encryptDES("35",DesKey.WEB_KEY));
 //        System.out.println(decryptDES(URLDecoder.decode("uUODsnCRYTk%3D"),DesKey.WEB_KEY));

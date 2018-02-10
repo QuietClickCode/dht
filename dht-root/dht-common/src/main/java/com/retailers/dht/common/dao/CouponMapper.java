@@ -98,4 +98,11 @@ public interface CouponMapper {
      * @return
      */
     public List<Coupon> expireCoupn(Long cpId);
+
+	/**
+	 * 根据订单取得使用优惠卷详情
+	 * @param orderIds
+	 * @return
+	 */
+	public List<CouponWebVo> queryCouponByOid(@Param("orderIds")List<Long> orderIds);
 }

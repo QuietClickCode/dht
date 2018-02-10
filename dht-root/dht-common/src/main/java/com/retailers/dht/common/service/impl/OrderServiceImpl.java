@@ -90,6 +90,8 @@ public class OrderServiceImpl implements OrderService {
 	private CouponUserMapper couponUserMapper;
 	@Autowired
 	private UserCardPackageService userCardPackageService;
+	@Autowired
+	private CouponMapper couponMapper;
 	/**
 	 * 系统常量设置
 	 */
@@ -1231,7 +1233,14 @@ public class OrderServiceImpl implements OrderService {
 		page.setParams(params);
 		//取得详查详情列表
 		List<OrderVo> lists = orderMapper.queryOrderInfoLists(page);
+		List<Long> orderIds=new ArrayList<Long>();
+		for(OrderVo ov:lists){
+			orderIds.add(ov.getId());
+		}
+		//取得订单详情
 		queryOrderDtails(lists);
+		//取得订单使用的优惠卷
+		queryOrderUseCoupon(lists,orderIds);
 		page.setData(lists);
 		return page;
 	}
@@ -1262,6 +1271,31 @@ public class OrderServiceImpl implements OrderService {
 				o.setOds(maps.get(o.getId()));
 			}
 		}
+	}
+
+	/**
+	 * 取得订单使用的优惠卷
+	 * @param lists
+	 */
+	private void queryOrderUseCoupon(List<OrderVo> lists,List<Long> orderIds){
+		List<CouponWebVo> cpwvs=couponMapper.queryCouponByOid(orderIds);
+		Map<Long,List<CouponWebVo>> oidMaps=new HashMap<Long, List<CouponWebVo>>();
+		for(CouponWebVo vo:cpwvs){
+			if(oidMaps.containsKey(vo.getOrderId())){
+				oidMaps.get(vo.getOrderId()).add(vo);
+			}else{
+				List<CouponWebVo> vos=new ArrayList<CouponWebVo>();
+				vos.add(vo);
+				oidMaps.put(vo.getOrderId(),vos);
+			}
+		}
+		//循环设置优惠卷情况
+		for(OrderVo vo:lists){
+			if(oidMaps.containsKey(vo.getId())){
+				vo.setCoupons(oidMaps.get(vo.getId()));
+			}
+		}
+
 	}
 
 	public List<OrderVo> queryOrderLists(Map<String, Object> params) {

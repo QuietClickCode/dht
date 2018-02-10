@@ -40,7 +40,7 @@ public class CouponServiceTest extends TestBaseJunit {
 
     @Test
     public void queryCurCoupon()throws Exception{
-        Long uid=-1l;
+        Long uid=1559923l;
         int pageNo=1;
         int pageSize=10;
         List<CouponWebVo> lists=couponService.queryCouponList(uid,pageNo,pageSize);

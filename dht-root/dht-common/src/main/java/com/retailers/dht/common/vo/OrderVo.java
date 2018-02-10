@@ -100,6 +100,10 @@ public class OrderVo {
      */
     List<OrderDetailVo> ods=new ArrayList<OrderDetailVo>();
 
+    /**
+     * 优惠卷使用详情
+     */
+    List<CouponWebVo> coupons=new ArrayList<CouponWebVo>();
     public Long getId() {
         return id;
     }
@@ -388,5 +392,13 @@ public class OrderVo {
 
     public void setOrderSendAddressId(Long orderSendAddressId) {
         this.orderSendAddressId = orderSendAddressId;
+    }
+
+    public List<CouponWebVo> getCoupons() {
+        return coupons;
+    }
+
+    public void setCoupons(List<CouponWebVo> coupons) {
+        this.coupons = coupons;
     }
 }
