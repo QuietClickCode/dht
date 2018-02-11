@@ -124,7 +124,7 @@
             overflow: hidden;
         }*/
     </style>
-    <style>
+    <style  >
         ._container{
             position: absolute;
             top: 0.76rem;
@@ -1156,6 +1156,12 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
 
         <!--加入购物车-->
         function addtobuycar() {
+            if(isysjq){
+                flag = canbuyysjqgoods();
+                if(!flag){
+                    return;
+                }
+            }
             var flag = validatedate();
             if(!flag){
                 return;
@@ -2038,12 +2044,6 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
             }
         }
 
-
-
-
-
-
-
         <!--再看看-->
         function cancelModal() {
             $('._container').hide();
@@ -2061,8 +2061,6 @@ margin-right: .1rem;margin-left: 0;">会员不折扣商品</span>
         function gotoFamerDetail() {
             window.location.href='/famer/gotoFamerDetail?fid='+famerid;
         }
-
-
 
         loadIsYsjqGoods();
     </script>
