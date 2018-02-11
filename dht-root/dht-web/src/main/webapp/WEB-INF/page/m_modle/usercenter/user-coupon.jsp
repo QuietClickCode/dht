@@ -122,7 +122,7 @@
             dataType:"json",
             data:{
                 type:type,
-                pageSize:10,
+                pageSize:20,
                 pageNo:1
             },
             success:function (data) {
@@ -140,7 +140,7 @@
                     html+='<strong class="condition">'+data.rows[i].couponVal+'</strong></div>';
                     html += '<div id="item_box_right" class="item_box_right"><p class="term">'+data.rows[i].useCondition+'</p>';
                     html += '<p class="time" id="time">'+cpStartDate+'  -  '+cpEndDate+'</p></div></div>';
-                    html += '<p class="coupon_list1_bg"></p><span class="btn_span" data-cpId="'+data.rows[i].cpId+'">立即使用</span>';
+                    html += '<p class="coupon_list1_bg"></p>';
                     html += '<p class="coupon_list1_info">'+data.rows[i].useRange+'<img class="img_open" src="/img/icon_up.png" />';
                     html += '</p></a></li>';
                     $(couponList).append(html);
