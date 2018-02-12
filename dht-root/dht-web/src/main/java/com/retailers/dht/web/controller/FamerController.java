@@ -58,4 +58,16 @@ public class FamerController extends BaseController {
         }
         return  map;
     }
+
+    @RequestMapping("queryUserList")
+    @ResponseBody
+    public Map queryUserList(HttpServletRequest request){
+        Map map = new HashMap();
+        Map params = new HashMap();
+        params.put("isDelete",0L);
+        params.put("fid",getCurLoginUserId(request));
+        List<FamerVo> famerVoList = famerService.queryFamerList(params,1,900).getData();
+        map.put("rows",famerVoList);
+        return  map;
+    }
 }
