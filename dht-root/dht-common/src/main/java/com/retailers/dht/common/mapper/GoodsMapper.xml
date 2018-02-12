@@ -287,7 +287,7 @@
 		t_goods_config t2
 		WHERE
 		t1.g_id=t2.g_id
-		and t1.g_create_time=CURRENT_DATE()
+		and t1.g_create_time BETWEEN DATE_SUB(CURDATE(),interval 4 day) and CURRENT_DATE()
 		and t2.is_putway=1
 		and t1.is_checked=1
 		and t1.is_delete=0
