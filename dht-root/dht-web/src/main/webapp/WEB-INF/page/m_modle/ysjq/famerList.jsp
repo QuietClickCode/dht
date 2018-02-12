@@ -27,6 +27,10 @@
             top:0.2rem;
             background-color: #f84a4c;
         }
+
+        ._fa_name{
+            color: #000;
+        }
     </style>
 </head>
 
@@ -156,7 +160,7 @@
                             '                <span class="_type">'+element.ffamilytype+'</span>'+jq+'\n' +
                             '            </div>\n' +
                             '            <div class="_user_address_details">\n' +
-                            '                <p><span>'+element.fname+'</span><span class="_user_s">'+sex+'</span><span>'+jsGetAge(element.fbirth)+'岁</span></p>\n' +
+                            '                <p><span class="_fa_name">'+element.fname+'</span><span class="_user_s">'+sex+'</span><span>'+jsGetAge(element.fbirth)+'岁</span></p>\n' +
                             '                <p><span>家庭人口:</span><span>'+element.fpopulation+'人</span></p>\n' +
                             '                <p class="_home_address"><span>家庭住址:</span><span>'+element.faddress+'</span></p>\n' +
                             '            </div>\n' +

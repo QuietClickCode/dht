@@ -27,6 +27,10 @@
             text-align: center;
             margin-top: 0.5rem;
         }
+
+        ._fa_name{
+            color: #000;
+        }
     </style>
 </head>
 
@@ -72,7 +76,7 @@
                     let birth = farmer.fbirth.substr(0,4);
                     let html = '<div class="_user_item" onclick="gotoFarmerDetail(this)" data-src="/famer/gotoFamerDetail?fid='+farmer.fid+'"><div class="_user_item_info"><img src="'+farmer.imgUrl+'">';
                     html += '<span class="_type">'+farmer.ffamilytype+'</span></div><div class="_user_address_details">';
-                    html += '<p><span>'+farmer.fname+'</span><span class="_user_s">'+sex+'</span><span>'+age+'岁</span></p>';
+                    html += '<p><span class="_fa_name">'+farmer.fname+'</span><span class="_user_s">'+sex+'</span><span>'+age+'岁</span></p>';
                     html += '<p><span>家庭人口:</span><span>'+farmer.fpopulation+'口人</span></p>';
                     html += '<p class="_home_address"><span>家庭住址:</span><span>'+farmer.faddress+'</span></p></div></div>';
                     $("._user_list").append(html);
