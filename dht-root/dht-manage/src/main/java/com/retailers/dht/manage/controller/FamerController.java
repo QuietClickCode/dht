@@ -51,12 +51,12 @@ public class FamerController extends BaseController {
     @RequestMapping("editFamer")
     @Function(label = "编辑农户",parentRes = "famer.openFamer",resourse = "Famer.editFamer",description = "编辑农户",sort = 2)
     @ResponseBody
-    public BaseResp editFamer(Famer Famer,Long oldImg, HttpServletRequest request){
-        boolean flag = famerService.updateFamer(Famer, oldImg);
+    public BaseResp editFamer(Famer famer,Long oldImg, HttpServletRequest request){
+        boolean flag = famerService.updateFamer(famer, oldImg);
         if(flag){
-            return success("修改农户["+Famer.getFname()+"]成功");
+            return success("修改农户["+famer.getFname()+"]成功");
         }else{
-            return errorForSystem("修改农户["+Famer.getFname()+"]失败");
+            return errorForSystem("修改农户["+famer.getFname()+"]失败");
         }
     }
 
@@ -73,12 +73,9 @@ public class FamerController extends BaseController {
     @RequestMapping("/queryFamerLists")
     @Function(label="农户列表", description = "所有农户列表", resourse = "Famer.queryFamerLists",sort=1,parentRes="famer.openFamer")
     @ResponseBody
-    public  Map<String,Object> queryFamerLists(String fname,Long gclassification,Long gmaindirection,Long isChecked,PageUtils pageForm){
+    public  Map<String,Object> queryFamerLists(String fname,PageUtils pageForm){
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("fname",fname);
-        map.put("gclassification",gclassification);
-        map.put("gmaindirection",gmaindirection);
-        map.put("isChecked",isChecked);
         map.put("isDelete",0);
         Pagination<FamerVo> FamerPagination = famerService.queryFamerList(map,pageForm.getPageNo(),pageForm.getPageSize());
         Map<String,Object> gtm = new HashMap<String,Object>();
@@ -90,9 +87,9 @@ public class FamerController extends BaseController {
     @RequestMapping("/addFamer")
     @Function(label="增加农户", description = "增加农户", resourse = "Famer.addFamer",parentRes="famer.openFamer")
     @ResponseBody
-    public BaseResp addFamer(Famer Famer, HttpServletRequest request){
-        Famer.setIsDelete(0L);
-        boolean falg=famerService.saveFamer(Famer);
+    public BaseResp addFamer(Famer famer, HttpServletRequest request){
+        famer.setIsDelete(0L);
+        boolean falg=famerService.saveFamer(famer);
         if (falg){
             return success("新增成功");
         }else {
