@@ -9,19 +9,22 @@
     <script src="/js/Adaptive.js"></script>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/new.css">
+    <link rel="stylesheet" href="/css/y-style.css">
     <style>
         #gdescription img {
             width: 100%;
         }
 
         #span_tips .span_tip{
-            display: block;
-            width: 2rem;
-            height: 0.7rem;
+            display: inline-block;
+            height: auto;
+            padding: 0.1rem;
+            width: auto;
             margin-top: 0.1rem;
             margin-left: 0;
         }
     </style>
+
 </head>
 
 <body class="bge6">
@@ -44,6 +47,7 @@
 </div>
 
 <div id="banner" class="focus">
+    <img id="ysjq1" src="/img/ysjq1.png" style="position: absolute;z-index: 100;width: 50px;height: 50px;top: 10px;left: 10px;display: none">
     <div class="hd bargain">
         <ul></ul>
     </div>
@@ -80,9 +84,8 @@
                 &nbsp;
             </span>
     </div>
-    <div class="title" id="goodsNameDiv">
-        <div id="span_tips"></div>
-    </div>
+    <div class="title" id="goodsNameDiv" style="line-height: 0.5rem;font-size: 0.4rem"></div>
+    <div id="span_tips" class="title" style="display: none;"></div>
     <div class="norms" id="rule" style="height: 60px">
         <span class="name">规则</span>
         <span class="text overflow" ></span>
@@ -307,7 +310,61 @@
         <a onclick="setaddress(this)" class="care-norms-checkbox-btn">确定</a>
     </div>
 </div>
+<div class="_wrap">
+    <div class="_wrap_hd">
+        <img src="/img/_wrap_bg.png">
+        <span>完善个人信息,可优先购买结亲农户的绿色弄产品,特色土货,请如实填写。大汇堂郑重承诺,你的个人信息我们会严格保密!</span>
+    </div>
+    <div class="_wrap_bd">
+        <div class="_user_info_item">
+            <span>姓名</span>
+            <input type="" placeholder="请输入真实姓名" name="" id="udName">
+        </div>
 
+        <div class="_user_info_item">
+            <span>性别</span>
+            <input type="" disabled="disabled" placeholder="性别" name="" id="udSex">
+            <span class="_right_icon"></span>
+            <div class="_choose_sex">
+                <div class="_sex_item active">
+                    <span>男</span>
+                    <span class="_sex_icon"></span>
+                </div>
+
+                <div class="_sex_item">
+                    <span>女</span>
+                    <span class="_sex_icon"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="_user_info_item">
+            <span>手机号</span>
+            <input type="" placeholder="请输入手机号码" name="" id="udPhone">
+        </div>
+
+        <div class="_user_info_item">
+            <span>身份证号</span>
+            <input type="" placeholder="请输入身份证号" name="" id="udIdCard">
+        </div>
+    </div>
+    <div class="_fixd_sub">
+        <span onclick="canceluploadpersonMsg()">取消</span>
+        <span id="uploadpersonMsgBtn">提交</span>
+    </div>
+</div>
+
+<div class="_container">
+    <div class="_wrap_box">
+        <div class="_wrap_box_hd">
+            <span id="msgspan">此商品是远山结亲农户商品,需要根TA结亲才能购买</span>
+        </div>
+        <div class="_wrap_box_b">
+            <span id="cancel" onclick="cancelModal()">再看看</span>
+            <span id="goAhead">去结亲</span>
+        </div>
+    </div>
+</div>
 
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/public.js"></script>
@@ -421,7 +478,7 @@
                     $('#goodsImagesul').html(html);
                     for(var i=0;i<goodsImages.length;i++){
                         html = '<li>'+
-                            '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" style="height: 200px" />'+
+                            '<img _src="'+goodsImages[i].imgUrl+'" src="'+goodsImages[i].imgUrl+'" style="height: 7rem" />'+
                             '</li>';
                         $('#goodsImagesul').append(html);
                     }
@@ -803,6 +860,9 @@
                     $('#goodsSpecificatiodiv').html('');
                     var gsvalArr = new Array();
                     for(var i=0;i<rows.length;i++){
+                        if(rows[i].gsvidstr==null){
+                            continue;
+                        }
                         var gsvids = rows[i].gsvidstr.split(' ');
                         var gsvvals = rows[i].gsvvalstr.split(' ');
                         var selectedgsvids = null;
@@ -963,6 +1023,7 @@
     function validatedate() {
         var nowhasgsvalspan = $('#nowhasgsvalspan').html().toString().trim();
         if(nowhasgsvalspan=='请选择规格'){
+            document.getElementById('open_car').click();
             layer.msg('请选择规格值');
             return false;
         }
@@ -1218,6 +1279,12 @@
         if(!flag){
             return;
         }
+        if(isysjq){
+            flag = canbuyysjqgoods();
+            if(!flag){
+                return;
+            }
+        }
         createcpp(shareresult);
     }
 
@@ -1239,6 +1306,12 @@
         var flag = validatedate();
         if(!flag){
             return;
+        }
+        if(isysjq){
+            flag = canbuyysjqgoods();
+            if(!flag){
+                return;
+            }
         }
         createcpp(savecutmyselflog);
     }
@@ -1298,6 +1371,176 @@
 
 
 
+</script>
+
+<!--远山接亲-->
+<script>
+    var isysjq=false;
+    var famerid;
+    var buyysjqstatus;
+    var twiceflag = true;
+    $(function () {
+        //提交个人信息
+        $('#uploadpersonMsgBtn').click(function () {
+
+            var udName = $('#udName').val();
+            var udSex = $('#udSex').val();
+            var udPhone = $('#udPhone').val();
+            var udIdCard = $('#udIdCard').val();
+            if(udName==''){
+                layer.msg('姓名不能为空');
+                return;
+            }
+            if(udSex==''){
+                layer.msg('性别不能为空');
+                return;
+            }
+            if(udPhone==''||udPhone.length!=11){
+                layer.msg('电话有误');
+                return;
+            }
+            if(udIdCard==''||udIdCard.length!=18){
+                layer.msg('身份证有误');
+                return;
+            }
+            if(!twiceflag){
+                layer.msg('请勿重复提交');
+                return;
+            }
+            twiceflag = false;
+            if(udSex=='男'){
+                udSex = 1;
+            }else{
+                udSex = 0;
+            }
+            $.ajax({
+                type:"post",
+                url:'/userDetail/savaUserDetail',
+                dataType: "json",
+                async :false,
+                data:{
+                    udName:udName,
+                    udSex:udSex,
+                    udPhone:udPhone,
+                    udIdCard:udIdCard,
+
+                },
+                success:function(data){
+                    var status = data.status;
+                    layer.msg(data.msg);
+                    if(status==0){
+                        setTimeout(function () {
+                            canceluploadpersonMsg();
+                        },1000);
+                    }
+                    twiceflag = true;
+                }
+            });
+        });
+        //性别选择
+        $('._right_icon').click(function () {
+            $('._choose_sex').show();
+        });
+        $('._sex_item').click(function () {
+            $(this).siblings().removeClass('active');
+            $(this).addClass('active');
+            $('#udSex').val( $($(this).children()[0]).html());
+            $('._choose_sex').hide();
+        });
+    });
+
+    //加载是否是远山结亲商品
+    function loadIsYsjqGoods() {
+        $.ajax({
+            type:"post",
+            url:'/famerGoods/queryIsysjq',
+            dataType: "json",
+            async :false,
+            data:{gid:gid},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    isysjq = true;
+                    famerid = rows[0].fid;
+                    //展示图表
+                    $('#ysjq1').show();
+                    $('#ysjq2').show();
+
+                    $('#gproductioninperson').prev().html('农户');
+                    $('#gproductioninperson').html(goodsData.gproductioninperson);
+                    $('#gproductioninaddress').html(goodsData.gproductioninaddress);
+
+                    $('#gpickperson').prev().html('收集');
+                    $('#gpickperson').html(goodsData.gpickperson);
+                    $('#gpickaddress').html(goodsData.gpickaddress);
+
+                    $('#personaddressdiv').show();
+                }
+            }
+        });
+    }
+
+    <!--判断是否能够购买此结亲商品-->
+    function canbuyysjqgoods() {
+        var index = 0;
+        var flag = false;
+        $.ajax({
+            type:"post",
+            url:'/famerUser/queryCanBuyYsjqGoods',
+            dataType: "json",
+            async :false,
+            data:{famerid:famerid},
+            success:function(data){
+                var status = data.status;
+                buyysjqstatus = status;
+                if(status==0){
+                    flag = true;
+                }else{
+                    //状态为4则为信息未完善 5为还未结亲
+                    if(status==4){
+
+                        $('#msgspan').html('此商品是结亲商品，需要您完善信息并与TA结亲之后才能购买');
+                        $('#goAhead').html('完善信息');
+                        $('#goAhead').attr("onclick","uploadpersonMsg()");
+                        $("._container").show();
+                    }else if(status==5){
+                        $('#msgspan').html('此商品是结亲商品，需要您与TA结亲之后才能购买');
+                        $('#goAhead').html('与他结亲');
+                        $('#goAhead').attr("onclick","gotoFamerDetail()");
+                        $("._container").show();
+                    }else if(status==101){
+                        layer.msg('请登录');
+                    }
+                }
+                index++;
+            }
+        });
+        while (true){
+            if(index!=0){
+                return  flag;
+            }
+        }
+    }
+
+    <!--再看看-->
+    function cancelModal() {
+        $('._container').hide();
+    }
+    <!--去完善信息-->
+    function uploadpersonMsg() {
+        $("._container").hide();
+        $('._wrap').show();
+    }
+    <!--填写信息时取消-->
+    function canceluploadpersonMsg() {
+        $('._wrap').hide();
+    }
+    <!--去结亲-->
+    function gotoFamerDetail() {
+        window.location.href='/famer/gotoFamerDetail?fid='+famerid;
+    }
+
+    loadIsYsjqGoods();
 </script>
 </body>
 

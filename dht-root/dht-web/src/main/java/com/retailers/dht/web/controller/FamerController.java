@@ -28,7 +28,6 @@ public class FamerController extends BaseController {
     FamerService famerService;
 
     @RequestMapping("gotoFamerDetail")
-//    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public String queryIsysjq(Long fid,HttpServletRequest request){
         request.setAttribute("fid",fid);
         return  redirectUrl(request,"ysjq/famerDetail");
@@ -47,10 +46,11 @@ public class FamerController extends BaseController {
 
     @RequestMapping("queryFamerList")
     @ResponseBody
-    public Map queryFamerList(Long fid,int pageNo,int pageSize){
+    public Map queryFamerList(Long fid,String fcensus,int pageNo,int pageSize){
         Map map = new HashMap();
         Map params = new HashMap();
         params.put("isDelete",0L);
+        params.put("fcensus",fcensus);
         params.put("fid",fid);
         List<FamerVo> famerVoList = famerService.queryFamerList(params,pageNo,pageSize).getData();
         if(ObjectUtils.isNotEmpty(famerVoList)){

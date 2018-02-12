@@ -100,22 +100,21 @@
                     </ul>
                 </div>
             </div>
-            <a class="_all_fa">全部结亲对象</a>
+            <a class="_all_fa" href="/famer/gotoFamerList" style="z-index: 999;color: #fff;">全部结亲对象</a>
         </div>
         <div class="_fa_info_box">
             <div class="_fa_info">
-                <img id="imgUrl" src="/img/_fa_header.png">
-                <span id="fname">高大山</span>
-                <span id="fsex" class="_fa_info_s">男</span>
-                <span id="age" class="_fa_info_s">78岁</span>
+                <img id="imgUrl" src="">
+                <span id="fname"></span>
+                <span id="fsex" class="_fa_info_s"></span>
+                <span id="age" class="_fa_info_s"></span>
             </div>
             <div class="_fa_details_info">
-                <p>家庭人口:<span id="population">5口人</span></p>
-                <p>家庭住址:<span id="faddress">重庆市黔江县史家镇</span></p>
-                <p>家庭状况:<span id="ffamilytype">特困户</span></p>
+                <p>家庭人口:<span id="population"></span></p>
+                <p>家庭住址:<span id="faddress"></span></p>
+                <p>家庭状况:<span id="ffamilytype"></span></p>
                 <p class="_fa_details_s" id="fremark">
-                    由于旧伤在身,一直没得痊愈,每年医药费开支都在三四千以上,凭一己之力根本不能负担,加之现在已基本丧失劳动力,
-                    只能靠日常捡些破烂来维持基本生活需要,没有固定的生活来源,常常是有这顿,没下顿,生活特别艰难。幸好大汇堂这个平台给了我这个机会。
+
                 </p>
             </div>
         </div>
@@ -130,7 +129,7 @@
                 <div class="_recommend_item">
                     <%--<img src="/img/_recommend.png">--%>
                 </div>
-                <span>3人</span>
+                <span>0人</span>
             </div>
         </div>
 
@@ -311,13 +310,15 @@
 
 <!--调用函数-->
 <script>
+    loadimgs();
+
     loadfamerDetail();
 
     loadjqcgperson();
 
     loadGoods();
 
-    loadimgs();
+
 </script>
 <script type="text/javascript">
     TouchSlide({
