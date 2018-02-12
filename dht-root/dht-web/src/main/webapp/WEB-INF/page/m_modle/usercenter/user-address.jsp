@@ -31,6 +31,8 @@ input[type="checkbox"] + i {border-radius:16px;}
 input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {
     background: url("/img/true_icon.png");
     background-size: 16px 16px;
+    background-position: center;
+    border: none;
 }
 input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}

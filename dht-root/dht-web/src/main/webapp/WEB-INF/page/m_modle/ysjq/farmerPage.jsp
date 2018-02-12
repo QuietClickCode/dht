@@ -22,6 +22,11 @@
         ._user_address_details{
             font-size: 0.22rem;
         }
+        ._tips{
+            display: block;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
     </style>
 </head>
 
@@ -55,13 +60,9 @@
 
     function queryFarmer(pageNo,pageSize) {
         $.ajax({
-            url:'/famer/queryFamerList',
+            url:'/famer/queryUserList',
             dataType:"json",
             type:"post",
-            data:{
-                pageNo:pageNo,
-                pageSize:pageSize
-            },
             success:function(data){
                 for(let i = 0;i<data.rows.length;i++){
                     let farmer = data.rows[i];
@@ -75,6 +76,9 @@
                     html += '<p><span>家庭人口:</span><span>'+farmer.fpopulation+'口人</span></p>';
                     html += '<p class="_home_address"><span>家庭住址:</span><span>'+farmer.faddress+'</span></p></div></div>';
                     $("._user_list").append(html);
+                }
+                if(data.rows.length == 0){
+                    $("._user_list").append("<span class='_tips'>暂无结亲对象~</span>");
                 }
                 outpageNo++;
                 flag = true;

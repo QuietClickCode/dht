@@ -28,7 +28,12 @@
 input[type="checkbox"],input[type="radio"] {display:none;}
 input[type="radio"] + i {border-radius:16px;}
 input[type="checkbox"] + i {border-radius:16px;}
-input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {background:#e93d3d;border:#e93d3d 1px solid;}
+input[type="checkbox"]:checked + i,input[type="radio"]:checked + i {
+    background: url("/img/true_icon.png");
+    background-size: 16px 16px;
+    background-position: center;
+    border: none;
+}
 input[type="checkbox"]:disabled + i,input[type="radio"]:disabled + i {border-color:#ccc;}
 input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled + i {background:#ccc;}
 </style>
@@ -142,7 +147,7 @@ input[type="checkbox"]:checked:disabled + i,input[type="radio"]:checked:disabled
                                 defaultAddress = '<p href="javascript:void(0)" class="defaultAddress">默认地址</p>';
                             }
                             var html='<li><div class="my_address_item_top"><div class="my_address_L">';
-                            html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i onclick="chosethisaddress(this);">✓</i><input type="hidden" value="'+row.uaId+'"></label>';
+                            html+='<label class="label_box"><input type="radio" name="abc" '+checked+'><i onclick="chosethisaddress(this);"></i><input type="hidden" value="'+row.uaId+'"></label>';
                             html+='</div><div class="my_address_R"><p class="p1"><span class="span1">'+row.uaName+'</span>&emsp;';
                             html+='<span class="span2">'+row.uaPhone+'</span></p><p class="p2">'+row.uaAllAddress+'</p>'+defaultAddress+'';
                             html+='</div></div><div class="my_address_item_bottom"><a href="/userAddress/openAddUserAddress?uaId='+row.uaId+'" class="mr_3">编辑</a><a class="del_user_address" href="javascript:void(0)" onclick="delAddress('+row.uaId+',this)">删除</a></div></li>';

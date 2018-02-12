@@ -546,7 +546,7 @@
                         }
 
                     }else{
-                        if(row.orderStatus == 8){
+                        if(row.orderStatus == 8 || row.orderStatus == 7){
                             ov+='<div class="count-infor" style="line-height: 1rem">';
                             ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
                             $("#allOrder").append(ov);
