@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,6 +77,7 @@ public class FamerUserController extends BaseController {
         famerUser.setIsDelete(0L);
         famerUser.setUid(uid);
         famerUser.setFid(famerid);
+        famerUser.setFuTime(new Date());
         boolean flag = famerUserService.saveFamerUser(famerUser);
         if(flag){
             return success("结亲成功");

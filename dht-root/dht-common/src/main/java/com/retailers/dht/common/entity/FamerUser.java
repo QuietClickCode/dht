@@ -20,6 +20,9 @@ public class FamerUser implements java.io.Serializable {
 	/**用户id*/
 	@NotEmpty
 	private Long uid;
+	/**结亲时间*/
+	@NotEmpty
+	private Date fuTime;
 	/**是否删除 0不删除 1珊瑚*/
 	@NotEmpty
 	private Long isDelete;
@@ -31,7 +34,15 @@ public class FamerUser implements java.io.Serializable {
 	public FamerUser(){
 	}
 
-	public FamerUser( Long fuId){
+	public Date getFuTime() {
+		return fuTime;
+	}
+
+	public void setFuTime(Date fuTime) {
+		this.fuTime = fuTime;
+	}
+
+	public FamerUser(Long fuId){
 		this.fuId = fuId;
 	}
 

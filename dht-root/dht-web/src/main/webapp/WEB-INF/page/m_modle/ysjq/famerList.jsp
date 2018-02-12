@@ -12,59 +12,20 @@
     <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="/css/f-style.css">
     <style>
-        .citys .city-select{
-            color: black;
-            cursor: default;
-            margin: 0 5px;
-            width: 2rem;
-            height: 0.5rem;
-            font-size: 0.25rem;
-            color: #555;
-            background-color: #fff;
-            background-image: none;
-            border: 1px solid #ccc;
-            vertical-align: top;
-            border-radius: 4px;
-            overflow: hidden;
-            text-overflow:ellipsis;
-            white-space: nowrap;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
-            -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s;
-            -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-            transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-        }
-        .citys .city-select:focus{
-            border-color: #66afe9;
-            outline: 0;
-            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
-            box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102, 175, 233, .6);
+        ._user_item{
+            position: relative;
         }
 
-        ._user_address{
-            text-align: center;
-            padding-top: 0.5rem;
-        }
-
-        ._user_address span{
-            display: inline-block;
-            width: 1.8rem;
+        ._f_item_tips{
+            position: absolute;
+            display: block;
+            width: 1.3rem;
             height: 0.5rem;
-            border-radius: 3px;
-            font-size: 0.22rem;
-            background-color: #333333;
             line-height: 0.5rem;
-            vertical-align: top;
-            text-align: center;
             color: #fff;
-        }
-
-        ._user_address .main{
-            display: inline-block;
-        }
-
-        ._user_address_details{
-            font-size: 0.22rem;
+            right: 0.2rem;
+            top:0.2rem;
+            background-color: #f84a4c;
         }
     </style>
 </head>
@@ -184,10 +145,15 @@
                         }else{
                             sex = "女"
                         }
+                        var uid = element.uid;
+                        var jq = '';
+                        if(uid!=null&&uid!=''){
+                            jq = '<span class="_f_item_tips">已结亲</span>';
+                        }
                         var html = '<div class="_user_item" onclick="intoDetil('+element.fid+')">\n' +
                             '            <div class="_user_item_info">\n' +
                             '                <img src="'+element.imgUrl+'">\n' +
-                            '                <span class="_type">'+element.ffamilytype+'</span>\n' +
+                            '                <span class="_type">'+element.ffamilytype+'</span>'+jq+'\n' +
                             '            </div>\n' +
                             '            <div class="_user_address_details">\n' +
                             '                <p><span>'+element.fname+'</span><span class="_user_s">'+sex+'</span><span>'+jsGetAge(element.fbirth)+'岁</span></p>\n' +

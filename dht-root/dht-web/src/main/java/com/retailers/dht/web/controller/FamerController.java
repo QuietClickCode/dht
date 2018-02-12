@@ -2,7 +2,10 @@ package com.retailers.dht.web.controller;
 
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
+import com.retailers.dht.common.entity.Famer;
+import com.retailers.dht.common.entity.FamerUser;
 import com.retailers.dht.common.service.FamerService;
+import com.retailers.dht.common.service.FamerUserService;
 import com.retailers.dht.common.vo.FamerVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.utils.ObjectUtils;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +30,9 @@ public class FamerController extends BaseController {
 
     @Autowired
     FamerService famerService;
+
+    @Autowired
+    FamerUserService famerUserService;
 
     @RequestMapping("gotoFamerDetail")
     public String queryIsysjq(Long fid,HttpServletRequest request){
@@ -65,9 +72,15 @@ public class FamerController extends BaseController {
         Map map = new HashMap();
         Map params = new HashMap();
         params.put("isDelete",0L);
-        params.put("fid",getCurLoginUserId(request));
-        List<FamerVo> famerVoList = famerService.queryFamerList(params,1,900).getData();
-        map.put("rows",famerVoList);
+        params.put("uid",getCurLoginUserId(request));
+        List<FamerUser> famerUsers = famerUserService.queryFamerUserList(params,1,900).getData();
+        List<Long> fids = new ArrayList<Long>();
+        for(FamerUser famerUser:famerUsers){
+            fids.add(famerUser.getFid());
+        }
+        params.put("fids",fids);
+        List<FamerVo> famerVos = famerService.queryFamerList(params,1,900).getData();
+        map.put("rows",famerVos);
         return  map;
     }
 }

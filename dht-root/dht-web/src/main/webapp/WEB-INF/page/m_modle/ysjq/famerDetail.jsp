@@ -9,65 +9,6 @@
     <link rel="stylesheet" href="/css/new.css">
     <link rel="stylesheet" href="/css/y-style.css">
     <link rel="stylesheet" href="/css/f-style.css">
-    <style>
-        body{
-            font-size: 0.25rem;
-        }
-
-        ._fa_details_info ._fa_details_s{
-            font-size: 0.2rem;
-        }
-
-        ._goods_item ._goods_info{
-            font-size: 0.25rem;
-        }
-
-        ._all_fa{
-            width: 2rem;
-            height: 0.5rem;
-            display: block;
-            text-align: center;
-            line-height: 0.5rem;
-            background-color: #f3773b;
-            color: #fff;
-            border-radius: 2px;
-            margin-top: -0.25rem;
-            position: absolute;
-            right: 0.1rem;
-            outline: none;
-        }
-
-        ._all_fa:hover{
-            color: #fff;
-        }
-        ._fa_info{
-            position: relative;
-        }
-
-        ._goods_info span{
-            display: inline-block;
-            font-size: 0.2rem;
-        }
-
-        ._goods_name{
-            width: 60%;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        ._goods_item img{
-            height:2rem;
-        }
-
-        ._goods_price{
-            vertical-align: top;
-        }
-
-        .focus .bd li img{
-            height: 4rem;
-        }
-    </style>
     <title>农户详情</title>
 </head>
 
@@ -96,15 +37,16 @@
                 </div>
                 <div class="bd">
                     <ul id="imgs">
-                        <%--<li><a href="#"><img _src="/img/fa_bg.png"  src="/img/fa_bg.png" /></a></li>--%>
+                        <li><a href="#"><img _src="/img/famerback.jpg"  src="/img/famerback.jpg" /></a></li>
                     </ul>
                 </div>
             </div>
-            <a class="_all_fa" href="/famer/gotoFamerList" style="z-index: 999;color: #fff;">全部结亲对象</a>
+            <a class="_all_fa" href="/famer/gotoFamerList" style="z-index: 9;color: #fff;">全部结亲对象</a>
         </div>
         <div class="_fa_info_box">
             <div class="_fa_info">
                 <img id="imgUrl" src="">
+                <p class="_tips"><span style="display: none;" id="jq">已结亲</span></p>
                 <span id="fname"></span>
                 <span id="fsex" class="_fa_info_s"></span>
                 <span id="age" class="_fa_info_s"></span>
@@ -127,7 +69,8 @@
             <div class="_recommend_box">
                 <span class="_recommend_tips">成功结亲</span>
                 <div class="_recommend_item">
-                    <%--<img src="/img/_recommend.png">--%>
+                    <img src="/img/_recommend.png">
+                    <img src="/img/_recommend.png">
                 </div>
                 <span>0人</span>
             </div>
@@ -157,6 +100,20 @@
 <script src="/js/layer_mobile/layer.js"></script>
 <script src="/js/TouchSlide.1.1.js"></script>
 <script src="/js/layer/layer.js"></script>
+<script type="text/javascript">
+    function initbanner() {
+        TouchSlide({
+            slideCell: "#banner",
+            titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
+            mainCell: ".bd ul",
+            effect: "left",
+            autoPlay: true, //自动播放
+            autoPage: true, //自动分页
+            switchLoad: "_src" //切换加载，真实图片路径为"_src"
+        });
+    }
+    initbanner();
+</script>
 <script>
     var fid = ${requestScope.fid};
     <!--加载农户详情-->
@@ -202,8 +159,7 @@
         });
     }
 
-    function GetDateDiff(startDate,endDate)
-    {
+    function GetDateDiff(startDate,endDate) {
         var startTime = new Date(startDate).getTime();
         var endTime = new Date(endDate).getTime();
         var dates = Math.abs((startTime - endTime))/(1000*60*60*24*365);
@@ -221,12 +177,14 @@
             success:function(data){
                 var rows = data.rows;
                 if(rows!=null&&rows.length>0){
+                    $('#imgs').html('');
                     var rows = data.rows;
                     if(rows!=null&&rows.length>0){
                         for(var i=0;i<rows.length;i++){
                             var html = '<li><a><img _src="'+rows[i].imgUrl+'"  src="'+rows[i].imgUrl+'" /></a></li>';
                             $('#imgs').append(html);
                         }
+                        initbanner();
                     }
                 }
             }
@@ -245,6 +203,7 @@
                 if(rows!=null&&rows.length>0){
                     $('._recommend_item').html('');
                     $('._recommend_item').next().html(data.total+'人');
+                    $('#jq').show();
                     for(var i=0;i<rows.length&&i<4;i++){
                         var html = '<img src="'+rows[i]+'" style="width: 0.8rem;height: 0.8rem;border-radius: 50%;display: inline-block">';
                         $('._recommend_item').append(html);
@@ -320,16 +279,6 @@
 
 
 </script>
-<script type="text/javascript">
-    TouchSlide({
-        slideCell: "#banner",
-        titCell: ".hd ul", //开启自动分页 autoPage:true ，此时设置 titCell 为导航元素包裹层
-        mainCell: ".bd ul",
-        effect: "left",
-        autoPlay: true, //自动播放
-        autoPage: true, //自动分页
-        switchLoad: "_src" //切换加载，真实图片路径为"_src"
-    });
-</script>
+
 </body>
 </html>

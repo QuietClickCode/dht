@@ -1959,13 +1959,41 @@
                     $('#ysjq1').show();
                     $('#ysjq2').show();
 
+//                    $('#gproductioninperson').prev().html('农户');
+//                    $('#gproductioninperson').html(goodsData.gproductioninperson);
+//                    $('#gproductioninaddress').html(goodsData.gproductioninaddress);
+//
+//                    $('#gpickperson').prev().html('收集');
+//                    $('#gpickperson').html(goodsData.gpickperson);
+//                    $('#gpickaddress').html(goodsData.gpickaddress);
+
+//                    $('#personaddressdiv').show();
+                    loadFamerMsg(famerid);
+                }
+            }
+        });
+    }
+
+    //加载是否是远山结亲商品
+    function loadFamerMsg(fid) {
+        $.ajax({
+            type:"post",
+            url:'/famer/queryFamerList',
+            dataType: "json",
+            async :false,
+            data:{fid:fid,pageNo:1,pageSize:1},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    var row = rows[0];
+
                     $('#gproductioninperson').prev().html('农户');
-                    $('#gproductioninperson').html(goodsData.gproductioninperson);
-                    $('#gproductioninaddress').html(goodsData.gproductioninaddress);
+                    $('#gproductioninperson').html(row.fname);
+                    $('#gproductioninaddress').html(row.faddress);
 
                     $('#gpickperson').prev().html('收集');
-                    $('#gpickperson').html(goodsData.gpickperson);
-                    $('#gpickaddress').html(goodsData.gpickaddress);
+                    $('#gpickperson').html(row.fcollector);
+                    $('#gpickaddress').html(row.fcollectorPosition+'        '+row.fcollectorPhone);
 
                     $('#personaddressdiv').show();
                 }

@@ -9,6 +9,7 @@ import com.retailers.dht.common.vo.FamerVo;
 import com.retailers.mybatis.common.constant.AttachmentConstant;
 import com.retailers.mybatis.common.dao.AttachmentMapper;
 import com.retailers.mybatis.common.entity.Attachment;
+import com.retailers.mybatis.common.service.AttachmentService;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -25,6 +26,8 @@ public class FamerServiceImpl implements FamerService {
 	private FamerMapper famerMapper;
 	@Autowired
 	private AttachmentMapper attachmentMapper;
+	@Autowired
+	private AttachmentService attachmentService;
 
 	public boolean saveFamer(Famer famer) {
 		int status = famerMapper.saveFamer(famer);
@@ -45,10 +48,9 @@ public class FamerServiceImpl implements FamerService {
 			attachment.setStatus(1L);
 			attachmentMapper.updateAttachment(attachment);
 		}
-		attachment = attachmentMapper.queryAttachmentById(oldImg);
-		if (attachment != null) {
-			attachment.setStatus(0L);
-			attachmentMapper.updateAttachment(attachment);
+
+		if (!oldImg.equals(famer.getFimg())) {
+			attachmentService.editorAttachment(oldImg,0L);
 		}
 		return status == 1 ? true : false;
 	}

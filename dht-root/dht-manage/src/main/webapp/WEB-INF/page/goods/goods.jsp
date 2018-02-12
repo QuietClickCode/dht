@@ -13,7 +13,9 @@
     <link rel="stylesheet" type="text/css" href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="http://cdn.bootcss.com/font-awesome/4.6.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="<%=path%>/js/toast/css/toastr.css">
-
+    <link rel="stylesheet" href="/css/animate.css">
+    <link rel="stylesheet" href="/css/global.css">
+    <link rel="stylesheet" href="/css/loading.css">
 
     <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.config.js"></script>
     <script type="text/javascript" charset="utf-8" src="<%=path%>/ueditor/ueditor.all.min.js"> </script>
@@ -994,6 +996,7 @@
 <script src="<%=path%>/js/toast/js/toastr.js"></script>
 <script type="text/javascript" src="<%=path%>/js/laydate/laydate.js"></script>
 <script type="text/javascript" src="/common/popover.js"></script>
+<script src="/js/loading.js"></script>
 <!--商品基本信息-->
 <script type="text/javascript">
     //用于缓存资源表格数据
@@ -2077,6 +2080,7 @@
 <script>
     var uploadimgindex = 0;
     var imglength = 0;
+    var upimgloading;
     $(function () {
         $('#editGoodsSpecificatioSubmit').click(function () {
             if($('#gid').val()=='' || $('#gclassification').val()==''){
@@ -2120,12 +2124,31 @@
             }
 
             var gid = $('#gid').val();
+            loading();
             clearggsdata(gid);
 
         });
 
 
     });
+
+    function loading() {
+        $('body').loading({
+            loadingWidth:240,
+            title:'图片上传中!',
+            name:'upimg',
+            discription:'',
+            direction:'column',
+            type:'origin',
+            // originBg:'#71EA71',
+            originDivWidth:40,
+            originDivHeight:40,
+            originWidth:6,
+            originHeight:6,
+            smallLoading:false,
+            loadingMaskBg:'rgba(0,0,0,0.2)'
+        });
+    }
 
     <!--初始化规格-->
     function initGoodsSpecification() {
@@ -2643,6 +2666,7 @@
                        data:{uploaddata:uploaddata,gid:gid},
                        success:function(data){
                            if(data.status==0){
+                               removeLoading('upimg');
                                toastr.success("操作成功！");
                                document.getElementById('nava5').click();
                            }else{

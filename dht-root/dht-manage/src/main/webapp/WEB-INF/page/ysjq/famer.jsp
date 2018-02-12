@@ -774,7 +774,6 @@ UE.Editor.prototype.getActionUrl = function(action) {
                     }else{
                         layer.msg(data.msg);
                     }
-
                 }
             });
         });

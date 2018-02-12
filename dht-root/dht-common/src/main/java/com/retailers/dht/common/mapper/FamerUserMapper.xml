@@ -6,13 +6,14 @@
 			<result property="fuId" column="fu_id"/>
 			<result property="fid" column="f_id"/>
 			<result property="uid" column="u_id"/>
+			<result property="fu_time" column="fuTime"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="famerUser_columns">
-		fu_id,f_id,u_id,is_delete,version
+		fu_id,f_id,u_id,fu_time,is_delete,version
 	</sql>
 	<!-- 根据农夫用户关系表主键取得数据 -->
 	<select id="queryFamerUserByFuId" resultMap="rm_famerUser" parameterType="java.lang.Long">
@@ -30,6 +31,9 @@
 			</if>
 			<if test="null != params.uid">
 				AND u_id = #{params.uid}
+			</if>
+			<if test="null != params.fuTime">
+				AND fu_time = #{params.fuTime}
 			</if>
 			<if test="null != params.isDelete">
 				AND is_delete = #{params.isDelete}
@@ -56,10 +60,10 @@
 	<!--添加农夫用户关系表 -->
 	<insert id="saveFamerUser" parameterType="com.retailers.dht.common.entity.FamerUser" useGeneratedKeys="true" keyProperty="fuId">
 		INSERT INTO t_famer_user (
-			f_id,u_id,is_delete,version
+			f_id,u_id,fu_time,is_delete,version
 		) VALUES
 		(
-			#{fid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+			#{fid,jdbcType=BIGINT},#{uid,jdbcType=BIGINT},#{fuTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改农夫用户关系表 -->
@@ -72,6 +76,9 @@
             <if test="null != uid">
                 u_id = #{uid},
             </if>
+			<if test="null != fuTime">
+				fu_time = #{fuTime},
+			</if>
             <if test="null != isDelete">
                 is_delete = #{isDelete},
             </if>
