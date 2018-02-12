@@ -76,7 +76,7 @@
 				AND t1.f_img = #{params.fimg}
 			</if>
 			<if test="null != params.fcensus and '' != params.fcensus">
-				AND t1.f_census = #{params.fcensus}
+				AND t1.f_census like concat('%', #{params.fcensus}  ,'%')
 			</if>
 			<if test="null != params.faddress and '' != params.faddress">
 				AND t1.f_address = #{params.faddress}
