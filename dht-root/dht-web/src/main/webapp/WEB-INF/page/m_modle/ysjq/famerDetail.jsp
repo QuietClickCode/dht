@@ -69,8 +69,8 @@
             <div class="_recommend_box">
                 <span class="_recommend_tips">成功结亲</span>
                 <div class="_recommend_item">
-                    <img src="/img/_recommend.png">
-                    <img src="/img/_recommend.png">
+                    <%--<img src="/img/_recommend.png">--%>
+                    <%--<img src="/img/_recommend.png">--%>
                 </div>
                 <span>0人</span>
             </div>
