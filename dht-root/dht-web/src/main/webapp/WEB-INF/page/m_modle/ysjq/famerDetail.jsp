@@ -258,6 +258,9 @@
                         var html = '<img src="'+rows[i]+'" style="width: 0.8rem;height: 0.8rem;border-radius: 50%;display: inline-block">';
                         $('._recommend_item').append(html);
                     }
+                }else{
+                    $('._recommend_item').html('暂无接亲对象');
+                    $('._recommend_item').next().html('');
                 }
             }
         });
