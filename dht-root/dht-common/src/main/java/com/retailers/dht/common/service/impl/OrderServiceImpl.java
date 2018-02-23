@@ -1158,7 +1158,10 @@ public class OrderServiceImpl implements OrderService {
 		User user=userMapper.queryUserByUid(uid);
 		//取得用户折扣 取得用户有充值记录
 		Recharge recharge=rechargeMapper.queryUserBuyRecharge(user.getUrechage());
-		long payPrice=order.getOrderGoodsActualPayPrice()+order.getOrderLogisticsPrice();
+		long payPrice=order.getOrderGoodsActualPayPrice();
+		if(ObjectUtils.isNotEmpty(order.getOrderLogisticsPrice())){
+			payPrice+=order.getOrderLogisticsPrice();
+		}
 		rtn.put("price",NumberUtils.formaterNumberPower(payPrice));
 		if(ObjectUtils.isEmpty(recharge)){
 			rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
