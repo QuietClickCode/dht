@@ -127,7 +127,9 @@
 
         var fcensus = province+'-'+city;
 //        alert(pageNo);
-        if (province == ' - 请选择 - '|| province == '' ||  city == ''||  city == ' - 请选择 - ') {
+//        console.log(province+'___'+city);
+        var pflag = province.indexOf('请选择')>=0 || city.indexOf('请选择')>=0;
+        if (pflag) {
             fcensus = '';
         }
 //        alert(pageNo);

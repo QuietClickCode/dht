@@ -1,6 +1,8 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGgclrel;
 import com.retailers.mybatis.pagination.Pagination;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.List;
 /**
  * 描述：商品与评论关系表DAO
@@ -52,6 +54,6 @@ public interface GoodsGgclrelMapper {
 	 */
 	public List<GoodsGgclrel> queryGoodsGgclrelList(Pagination<GoodsGgclrel> pagination);
 
-	public List<GoodsGgclrel> queryGclassGoodsGgclrelLists(String gclassIds);
+	public List<GoodsGgclrel> queryGclassGoodsGgclrelLists(@Param("gclassIds") List<Long> gclassIds);
 
 }

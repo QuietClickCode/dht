@@ -72,5 +72,15 @@ public class FamerGoodsServiceImpl implements FamerGoodsService {
 		int status = famerGoodsMapper.updateFamerGoods(famerGoods);
 		return status == 1 ? true : false;
 	}
+	public Pagination<FamerGoodsVo> queryFamerGoodsVoList(Map<String, Object> params, int pageNo, int pageSize){
+		Pagination<FamerGoodsVo> page = new Pagination<FamerGoodsVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<FamerGoodsVo> list = famerGoodsMapper.queryFamerGoodsVoList(page);
+		page.setData(list);
+		return page;
+	}
+
 }
 

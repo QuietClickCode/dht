@@ -60,7 +60,7 @@
 <script>
     var outpageNo=1;
     var outpageSize=10;
-    var flag = true;
+    var flag = false;
 
     function queryFarmer(pageNo,pageSize) {
         $.ajax({
@@ -92,7 +92,7 @@
 
     $(function () {
         queryFarmer(1,10);
-        scrollloadCoupon();
+//        scrollloadCoupon();
     });
 
     function scrollloadCoupon() {

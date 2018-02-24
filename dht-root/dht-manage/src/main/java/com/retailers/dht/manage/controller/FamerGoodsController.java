@@ -31,6 +31,14 @@ public class FamerGoodsController extends BaseController {
 	@Autowired
 	private FamerGoodsService famerGoodsService;
 
+	@RequestMapping("gotoFamerGoodsPage")
+	@Menu(parentRes = "sys.manager.ysjq",resourse = "famerGoods.openFamerGoods",description = "远山结亲商品列表",sort = 1,label = "远山结亲商品列表")
+	public ModelAndView gotoFamerGoodsPage() {
+		ModelAndView modelAndView = new ModelAndView();
+		modelAndView.setViewName("ysjq/famerGoods");
+		return modelAndView;
+	}
+
 	/**
 	 * 根据农户ID查询已有商品
 	 */
@@ -42,6 +50,18 @@ public class FamerGoodsController extends BaseController {
 		Pagination<FamerGoodsVo> pagination = famerGoodsService.queryHaveGoodsListByFid(params,1,999);
 		List<FamerGoodsVo> list = pagination.getData();
 		return list;
+	}
+
+	@RequestMapping("queryFamerGoodsVoList")
+	public Map queryFamerGoodsVoList(int pageNo,int pageSize) {
+		Map params = new HashMap();
+		params.put("isDelete","0L");
+		Pagination<FamerGoodsVo> pagination = famerGoodsService.queryFamerGoodsVoList(params,pageNo,pageSize);
+		List<FamerGoodsVo> list = pagination.getData();
+		Map map = new HashMap();
+		map.put("total",pagination.getTotalCount());
+		map.put("rows",list);
+		return map;
 	}
 
 	/**

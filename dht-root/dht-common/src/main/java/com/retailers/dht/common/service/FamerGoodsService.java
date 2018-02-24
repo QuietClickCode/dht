@@ -58,6 +58,8 @@ public interface FamerGoodsService {
 	 */
 	public boolean deleteFamerGoodsByFgId(Long fgId);
 
+	public Pagination<FamerGoodsVo> queryFamerGoodsVoList(Map<String, Object> params, int pageNo, int pageSize);
+
 }
 
 

@@ -55,4 +55,6 @@ public interface FamerGoodsMapper {
 	public List<FamerGoodsVo> queryHaveGoodsListByFid(Pagination<FamerGoodsVo> pagination);
 	public List<FamerGoodsVo> queryNotHaveGoodsListByFid(Pagination<FamerGoodsVo> pagination);
 
+	public List<FamerGoodsVo> queryFamerGoodsVoList(Pagination<FamerGoodsVo> pagination);
+
 }
