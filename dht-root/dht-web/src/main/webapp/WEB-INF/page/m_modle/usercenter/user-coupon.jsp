@@ -122,7 +122,7 @@
             dataType:"json",
             data:{
                 type:type,
-                pageSize:20,
+                pageSize:200,
                 pageNo:1
             },
             success:function (data) {

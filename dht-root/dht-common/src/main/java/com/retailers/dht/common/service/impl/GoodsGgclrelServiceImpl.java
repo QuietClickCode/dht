@@ -147,7 +147,7 @@ public class GoodsGgclrelServiceImpl implements GoodsGgclrelService {
 
 	public List<GoodsGgclrelVo> queryGclassGoodsGgclrelLists(Long gid){
 		Goods goods = goodsService.queryGoodsByGid(gid);
-		String gclassIds = "";
+		List<Long> gclassIds = new ArrayList<Long>();
 		GoodsClassification goodsClassification1 = null;
 		GoodsClassification goodsClassification2 = null;
 		GoodsClassification goodsClassification3 = null;
@@ -160,15 +160,15 @@ public class GoodsGgclrelServiceImpl implements GoodsGgclrelService {
 		}
 
 		if(!ObjectUtils.isEmpty(goodsClassification1)){
-			gclassIds += "," + goodsClassification1.getGgId();
+			gclassIds.add(goodsClassification1.getGgId());
 		}
 		if(!ObjectUtils.isEmpty(goodsClassification2)){
-			gclassIds += "," + goodsClassification2.getGgId();
+			gclassIds.add(goodsClassification2.getGgId());
 		}
 		if(!ObjectUtils.isEmpty(goodsClassification3)){
-			gclassIds += "," + goodsClassification3.getGgId();
+			gclassIds.add(goodsClassification3.getGgId());
 		}
-		gclassIds = gclassIds.substring(1);
+
 		List<GoodsGgclrel> list = goodsGgclrelMapper.queryGclassGoodsGgclrelLists(gclassIds);
 		List<GoodsGgclrel> removeList = deletegoodsclass(gid);
 		List<GoodsGgclrel> index = new ArrayList<GoodsGgclrel>();

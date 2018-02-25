@@ -14,6 +14,7 @@
 		<result property="fid" column="f_id"/>
 		<result property="gid" column="g_id"/>
 		<result property="goodsName" column="g_name"/>
+		<result property="fname" column="f_name"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 	</resultMap>
@@ -91,6 +92,16 @@
 		WHERE g.g_id NOT IN (
 			SELECT fg.g_id FROM t_famer_goods fg <include refid="famerGoods_where_vo"/>
 		) <include refid="Goods_where_vo"/>
+	</select>
+	<select id="queryFamerGoodsVoList" resultMap="rm_famerGoods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.g_name,t3.f_name from t_famer_goods t1
+		LEFT JOIN t_famer t3 ON t1.f_id=t3.f_id  and t3.is_delete=0,
+		t_goods t2
+		where
+		t1.is_delete=0
+		and t1.g_id=t2.g_id
+		and t2.is_delete=0
+		and t2.is_checked=1
 	</select>
 	<!--添加农户商品关联表表 -->
 	<insert id="saveFamerGoods" parameterType="com.retailers.dht.common.entity.FamerGoods" useGeneratedKeys="true" keyProperty="fgId">

@@ -62,7 +62,10 @@
 	</select>
 	<select id="queryGclassGoodsGgclrelLists" resultMap="rm_goodsGgclrel">
 		SELECT t1.* from t_goods_ggclrel t1
-		where t1.is_delete!=1 and t1.gclass_id in (#{gclassIds})
+		where t1.is_delete!=1 and t1.gclass_id in
+		<foreach collection="gclassIds" item="gclassId" open="(" close=")" separator=",">
+			#{gclassId}
+		</foreach>
 	</select>
 	<!--添加商品与评论关系表 -->
 	<insert id="saveGoodsGgclrel" parameterType="com.retailers.dht.common.entity.GoodsGgclrel" useGeneratedKeys="true" keyProperty="ggclId">

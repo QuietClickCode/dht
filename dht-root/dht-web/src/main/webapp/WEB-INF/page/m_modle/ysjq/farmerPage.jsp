@@ -60,7 +60,7 @@
 <script>
     var outpageNo=1;
     var outpageSize=10;
-    var flag = true;
+    var flag = false;
 
     function queryFarmer(pageNo,pageSize) {
         $.ajax({
@@ -70,7 +70,7 @@
             success:function(data){
                 for(let i = 0;i<data.rows.length;i++){
                     let farmer = data.rows[i];
-                    let age = GetDateDiff(new Date(farmer.fbirth),new Date());
+                    let age = jsGetAge(farmer.fbirth);
                     var sex = farmer.fsex==0?'女':'男';
                     let dataTime = new Date();
                     let birth = farmer.fbirth.substr(0,4);
@@ -112,12 +112,61 @@
         });
     }
 
-    function GetDateDiff(startDate,endDate)
+    // 得到岁数
+    function jsGetAge(strBirthday)
     {
-        var startTime = new Date(startDate).getTime();
-        var endTime = new Date(endDate).getTime();
-        var dates = Math.abs((startTime - endTime))/(1000*60*60*24*365);
-        return   Math.floor(dates);
+        var returnAge;
+        var strBirthdayArr=strBirthday.split("-");
+        var birthYear = strBirthdayArr[0];
+        var birthMonth = strBirthdayArr[1];
+        var birthDay = strBirthdayArr[2].split(" ")[0];
+
+        d = new Date();
+        var nowYear = d.getFullYear();
+        var nowMonth = d.getMonth() + 1;
+        var nowDay = d.getDate();
+
+        if(nowYear == birthYear)
+        {
+            returnAge = 0;//同年 则为0岁
+        }
+        else
+        {
+            var ageDiff = nowYear - birthYear ; //年之差
+            if(ageDiff > 0)
+            {
+                if(nowMonth == birthMonth)
+                {
+                    var dayDiff = nowDay - birthDay;//日之差
+                    if(dayDiff < 0)
+                    {
+                        returnAge = ageDiff - 1;
+                    }
+                    else
+                    {
+                        returnAge = ageDiff ;
+                    }
+                }
+                else
+                {
+                    var monthDiff = nowMonth - birthMonth;//月之差
+                    if(monthDiff < 0)
+                    {
+                        returnAge = ageDiff - 1;
+                    }
+                    else
+                    {
+                        returnAge = ageDiff ;
+                    }
+                }
+            }
+            else
+            {
+                returnAge = -1;//返回-1 表示出生日期输入错误 晚于今天
+            }
+        }
+
+        return returnAge;//返回周岁年龄
     }
     
     function gotoFarmerDetail($this) {
