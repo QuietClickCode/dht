@@ -92,7 +92,7 @@
 
     $(function () {
         queryFarmer(1,10);
-        scrollloadCoupon();
+//        scrollloadCoupon();
     });
 
     function scrollloadCoupon() {

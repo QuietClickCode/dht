@@ -751,6 +751,7 @@
 
     function initgcglrel() {
         var glId = $('#glId').val();
+        glId = -Number(glId)/100000;
         $('#gclassNum').val('');
         $.ajax({
             type:"post",
@@ -923,6 +924,7 @@
         $('#editorGoodsLabel').modal("show");
     });
     $('#classBtn').click(function () {
+        console.log(111)
         initgcglrel();
         $('#editorgcglrel').modal("show");
     });

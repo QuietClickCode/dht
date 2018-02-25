@@ -91,6 +91,13 @@
         pageNo = 1;
         refreshItem(pageNo,pageSize);
     });
+    $("#province").change(function(){
+//            if (city == '-请选择-') {
+//                return;
+//            }
+        pageNo = 1;
+        refreshItem(pageNo,pageSize);
+    });
 
     var flag = true;
     var pageNo = 1;
@@ -113,6 +120,7 @@
     function intoDetil(fid) {
         window.location.href="/famer/gotoFamerDetail?fid="+fid;
     }
+     var city2;
     // 刷新列表
     function refreshItem(pageNo,pageSize) {
 
@@ -125,9 +133,21 @@
         };
         type = 1;
 
+        if (province == '' ||  province.indexOf('请选择') != -1) {
+            province = '';
+        }
+        console.log(province);
+        if (city == ''||  city.indexOf('请选择') != -1) {
+            city = '';
+        }
+        if (city2 == city) {
+            city = '';
+        }
+        city2 = city;
+
+        console.log(city);
         var fcensus = province+'-'+city;
-//        alert(pageNo);
-        if (province == ' - 请选择 - '|| province == '' ||  city == ''||  city == ' - 请选择 - ') {
+        if (province == '' && city == '') {
             fcensus = '';
         }
 //        alert(pageNo);

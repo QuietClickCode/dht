@@ -230,9 +230,9 @@
                                 '<p class="title2">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
                                 '<div class="price">';
                             if(maxprice==minprice){
-                                html += '<span class="mr_4">￥</span>'+rows[i].maxprice;
+                                html += '<span class="mr_4">￥</span>'+(rows[i].maxprice/100).toFixed(2);
                             }else{
-                                html += '<span class="mr_4">￥</span>'+rows[i].minprice+'-'+rows[i].maxprice;
+                                html += '<span class="mr_4">￥</span>'+(rows[i].minprice/100).toFixed(2)+'-'+(rows[i].maxprice/100).toFixed(2);
                             }
 
                             html += '</div>'+

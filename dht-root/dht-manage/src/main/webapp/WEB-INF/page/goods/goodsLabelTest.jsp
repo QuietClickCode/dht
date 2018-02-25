@@ -982,6 +982,7 @@
 
     function initgcglrel() {
         var glId = $('#glId').val();
+        glId = glId/-100000;
         $('#gclassNum').val('');
         $.ajax({
             type:"post",

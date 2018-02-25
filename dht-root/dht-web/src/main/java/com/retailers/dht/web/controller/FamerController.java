@@ -1,5 +1,6 @@
 package com.retailers.dht.web.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.auth.annotation.CheckSession;
 import com.retailers.auth.constant.SystemConstant;
 import com.retailers.dht.common.entity.Famer;
@@ -9,6 +10,7 @@ import com.retailers.dht.common.service.FamerUserService;
 import com.retailers.dht.common.vo.FamerVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.tools.utils.ObjectUtils;
+import com.sun.tools.internal.xjc.reader.gbind.ElementSets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,7 +80,11 @@ public class FamerController extends BaseController {
         for(FamerUser famerUser:famerUsers){
             fids.add(famerUser.getFid());
         }
+        if(ObjectUtils.isEmpty(fids)){
+            fids.add(-1L);
+        }
         params.put("fids",fids);
+        System.out.println(JSON.toJSONString(fids));
         List<FamerVo> famerVos = famerService.queryFamerList(params,1,900).getData();
         map.put("rows",famerVos);
         return  map;
