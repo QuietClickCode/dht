@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.dht.common.dao.CashOrderMapper">
+
+	<resultMap id="rm_cashOrder" type="com.retailers.dht.common.entity.CashOrder">
+			<result property="coId" column="co_id"/>
+			<result property="coNo" column="co_no"/>
+			<result property="coStatus" column="co_status"/>
+			<result property="coUid" column="co_uid"/>
+			<result property="coMoney" column="co_money"/>
+			<result property="coCreateTime" column="co_create_time"/>
+			<result property="coAuditingSid" column="co_auditing_sid"/>
+			<result property="coAuditingTime" column="co_auditing_time"/>
+			<result property="coAuditingRemark" column="co_auditing_remark"/>
+			<result property="coRemark" column="co_remark"/>
+			<result property="coCashSid" column="co_cash_sid"/>
+			<result property="coReturnNo" column="co_return_no"/>
+			<result property="coReturnData" column="co_return_data"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="cashOrder_columns">
+		co_id,co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data
+	</sql>
+	<!-- 根据用户提现订单主键取得数据 -->
+	<select id="queryCashOrderByCoId" resultMap="rm_cashOrder" parameterType="java.lang.Long">
+		SELECT <include refid="cashOrder_columns" />
+		FROM t_cash_order WHERE co_id = #{coId}
+	</select>
+	<!-- 用户提现订单查询条件组合 -->
+	<sql id="cashOrder_where">
+		<where>
+			<if test="null != params.coId">
+				AND co_id = #{params.coId}
+			</if>
+			<if test="null != params.coNo and '' != params.coNo">
+				AND co_no = #{params.coNo}
+			</if>
+			<if test="null != params.coStatus">
+				AND co_status = #{params.coStatus}
+			</if>
+			<if test="null != params.coUid">
+				AND co_uid = #{params.coUid}
+			</if>
+			<if test="null != params.coMoney">
+				AND co_money = #{params.coMoney}
+			</if>
+			<if test="null != params.coCreateTimeBegin">
+				AND co_create_time &gt;= TO_DATE('${params.coCreateTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.coCreateTimeEnd">
+				AND co_create_time &lt;= TO_DATE('${params.coCreateTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.coAuditingSid">
+				AND co_auditing_sid = #{params.coAuditingSid}
+			</if>
+			<if test="null != params.coAuditingTimeBegin">
+				AND co_auditing_time &gt;= TO_DATE('${params.coAuditingTimeBegin}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.coAuditingTimeEnd">
+				AND co_auditing_time &lt;= TO_DATE('${params.coAuditingTimeEnd}','yyyy-mm-dd hh24:mi:ss')
+			</if>
+			<if test="null != params.coAuditingRemark and '' != params.coAuditingRemark">
+				AND co_auditing_remark = #{params.coAuditingRemark}
+			</if>
+			<if test="null != params.coRemark and '' != params.coRemark">
+				AND co_remark = #{params.coRemark}
+			</if>
+			<if test="null != params.coCashSid">
+				AND co_cash_sid = #{params.coCashSid}
+			</if>
+			<if test="null != params.coReturnNo and '' != params.coReturnNo">
+				AND co_return_no = #{params.coReturnNo}
+			</if>
+			<if test="null != params.coReturnData and '' != params.coReturnData">
+				AND co_return_data = #{params.coReturnData}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCashOrderList" resultMap="rm_cashOrder" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="cashOrder_columns" />
+		FROM t_cash_order
+		<include refid="cashOrder_where"/>
+	</select>
+	<!--添加用户提现订单 -->
+	<insert id="saveCashOrder" parameterType="com.retailers.dht.common.entity.CashOrder" useGeneratedKeys="true" keyProperty="coId">
+		INSERT INTO t_cash_order (
+			co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data
+		) VALUES
+		(
+			#{coNo,jdbcType=VARCHAR},#{coStatus,jdbcType=BIGINT},#{coUid,jdbcType=BIGINT},#{coMoney,jdbcType=BIGINT},#{coCreateTime,jdbcType=TIMESTAMP},#{coAuditingSid,jdbcType=BIGINT},#{coAuditingTime,jdbcType=TIMESTAMP},#{coAuditingRemark,jdbcType=VARCHAR},#{coRemark,jdbcType=VARCHAR},#{coCashSid,jdbcType=BIGINT},#{coReturnNo,jdbcType=VARCHAR},#{coReturnData,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改用户提现订单 -->
+	<update id="updateCashOrder" parameterType="com.retailers.dht.common.entity.CashOrder">
+		UPDATE t_cash_order
+		<set>
+            <if test="null != coNo and '' != coNo">
+                co_no = #{coNo},
+            </if>
+            <if test="null != coStatus">
+                co_status = #{coStatus},
+            </if>
+            <if test="null != coUid">
+                co_uid = #{coUid},
+            </if>
+            <if test="null != coMoney">
+                co_money = #{coMoney},
+            </if>
+            <if test="null != coCreateTime">
+                co_create_time = #{coCreateTime},
+            </if>
+            <if test="null != coAuditingSid">
+                co_auditing_sid = #{coAuditingSid},
+            </if>
+            <if test="null != coAuditingTime">
+                co_auditing_time = #{coAuditingTime},
+            </if>
+            <if test="null != coAuditingRemark and '' != coAuditingRemark">
+                co_auditing_remark = #{coAuditingRemark},
+            </if>
+            <if test="null != coRemark and '' != coRemark">
+                co_remark = #{coRemark},
+            </if>
+            <if test="null != coCashSid">
+                co_cash_sid = #{coCashSid},
+            </if>
+            <if test="null != coReturnNo and '' != coReturnNo">
+                co_return_no = #{coReturnNo},
+            </if>
+            <if test="null != coReturnData and '' != coReturnData">
+                co_return_data = #{coReturnData},
+            </if>
+		</set>
+		WHERE co_id = #{coId}
+	</update>
+	<!--删除用户提现订单 -->
+	<delete id="deleteCashOrderByCoId" parameterType="java.lang.Long">
+		DELETE FROM t_cash_order WHERE co_id = #{coId}
+	</delete>
+</mapper>
