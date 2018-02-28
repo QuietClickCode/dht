@@ -29,6 +29,12 @@ public class WXPayConstants {
      * 微信支付退回接口
      */
     public static final String WX_PAY_REFUND = "https://api.mch.weixin.qq.com/secapi/pay/refund";
+
+    /**
+     * 企业付款接口
+     */
+    public static final String WX_PAY_MONEY = "https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers";
+
     public static final String ORDERQUERY_URL_SUFFIX   = "/pay/orderquery";
     public static final String REVERSE_URL_SUFFIX      = "/secapi/pay/reverse";
     public static final String CLOSEORDER_URL_SUFFIX   = "/pay/closeorder";

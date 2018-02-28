@@ -199,4 +199,16 @@
 		</set>
 		WHERE id = #{uid}
 	</update>
+
+	<!--用户退款 消费返还 -->
+	<update id="userCashMoney">
+		UPDATE t_user_card_package
+		<set>
+			u_cash_cur_price=u_cash_cur_price-#{money},
+			version = version+1,
+		</set>
+		WHERE id = #{uid} AND u_cash_cur_price-#{money}>=0
+	</update>
+
+
 </mapper>

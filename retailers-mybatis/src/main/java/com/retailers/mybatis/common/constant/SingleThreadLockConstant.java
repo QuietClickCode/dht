@@ -43,6 +43,18 @@ public class SingleThreadLockConstant {
      * 退款
      */
     public static final String REFUND="refund";
+    /**
+     * 用户提现锁
+     */
+    public static final String USER_CASH_MONEY="cashMoney";
+    /**
+     * 用户提现审核
+     */
+    public static final String AUDITING_CASH_MONEY="auditingCashMoney";
+    /**
+     * 用户提现 打款
+     */
+    public static final String CASH_PLAY_MONEY="playMoney";
 
 
 

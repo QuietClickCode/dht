@@ -223,6 +223,51 @@ public class PayServiceImpl implements PayService {
         com.retailers.dht.common.constant.SystemConstant.addOrderQueue(opq);
     }
 
+    public Map<String, String> wxPlayMoney(String coNo, Long money, String openId,String userName,String ip) throws AppException,Exception {
+        Map<String, String> map = new HashMap<String, String>();
+        String apiKey= WxConfig.WX_API_KEY;
+        map.put("mch_appid", WxConfig.APP_ID);// 公众账号appid
+        map.put("mchid", WxConfig.WX_MCH_ID);// 商户号
+        map.put("device_info", "");// 设备号
+        map.put("nonce_str", WXPayUtil.getStringRandom(30));// 随机字符串
+        map.put("partner_trade_no", coNo);// 商户订单号
+        map.put("openid", openId);// 用户openid
+        map.put("check_name", "NO_CHECK");// 校验用户姓名选项
+        map.put("re_user_name", userName);// 收款用户姓名
+        map.put("amount", money+"");// 金额（单位分）
+        map.put("desc", "用户提现申请");// 企业付款描述信息
+        map.put("spbill_create_ip", ip );// Ip地址
+        String sign = null;
+        try {
+            sign = WXPayUtil.generateSignature(map,apiKey);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        map.put("sign", sign);// 签名
+        logger.info("发送的报文:" + JSON.toJSONString(map));
+        String retXml = WxHttpClientUtils.doSendMoney(WXPayConstants.WX_PAY_MONEY, WXPayUtil.map2Xml(map));
+        logger.info("微信退款返回报文:" + retXml);
+        Map<String,String> rtnMap=new HashMap<String, String>();
+        try{
+            rtnMap= WXPayUtil.xmlToMap(retXml);
+        }catch (Exception e){
+            throw new AppException(e.getMessage());
+        }
+//
+//
+//
+//        String result = PayUtil.doSendMoney(request, WeixinCfg.TRANSFERS, PayUtil.createXML(map));
+//        log.info(result);//打印日志
+//        Map<String, String> data = XMLUtil.doXMLParse(result);
+//        String return_code = data.get("return_code");//通信标识（ SUCCESS/FAIL）
+//        String return_msg = data.get("return_msg");//返回信息
+//        String result_code = data.get("result_code");//交易标识（ SUCCESS/FAIL）
+
+
+
+        return rtnMap;
+    }
+
     public String createWxH5Pay(String orderNo, String ip) throws AppException {
         logger.info("开始执行h5扫描支付，支付单号:[{}],ip地址：[{}]",orderNo,ip);
         //添加同步锁

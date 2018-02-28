@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.CashOrder;
+import com.retailers.dht.common.vo.CashOrderVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -51,5 +52,14 @@ public interface CashOrderMapper {
 	 * @date 2018-02-27 23:04:40
 	 */
 	public List<CashOrder> queryCashOrderList(Pagination<CashOrder> pagination);
+
+	/**
+	 * 查询用户提现订单列表
+	 * @param pagination 分页对象
+	 * @return  用户提现订单列表
+	 * @author zhongp
+	 * @date 2018-02-27 23:04:40
+	 */
+	public List<CashOrderVo> queryCashOrderLists(Pagination<CashOrderVo> pagination);
 
 }

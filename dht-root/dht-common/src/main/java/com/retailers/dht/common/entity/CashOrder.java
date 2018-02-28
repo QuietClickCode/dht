@@ -26,7 +26,7 @@ public class CashOrder implements java.io.Serializable {
 	private Long coUid;
 	/**提现金额*/
 	@NotEmpty
-	private Long coMoney;
+	protected Long coMoney;
 	/**创建时间*/
 	@NotEmpty
 	private Date coCreateTime;
@@ -55,6 +55,10 @@ public class CashOrder implements java.io.Serializable {
 	@NotEmpty
 	@Length(min = 1, max = 128)
 	private String coReturnData;
+
+	/**提现下划时间*/
+	@NotEmpty
+	private Date coReturnTime;
 	//columns END
 
 	public CashOrder(){
@@ -156,5 +160,11 @@ public class CashOrder implements java.io.Serializable {
 		return this.coReturnData;
 	}
 
+	public Date getCoReturnTime() {
+		return coReturnTime;
+	}
 
+	public void setCoReturnTime(Date coReturnTime) {
+		this.coReturnTime = coReturnTime;
+	}
 }

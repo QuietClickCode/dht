@@ -95,6 +95,20 @@ public class WalletCashBackQueueServiceImpl implements WalletCashBackQueueServic
 		return rtn;
 	}
 
+	public Map<String, Long> queryUserCashBackDetailMoney(Long uid) {
+		Map<String,Long> map=new HashMap<String, Long>();
+		Date curDate=new Date();
+		List<UserCashBackDetailView> list = walletCashBackQueueMapper.queryUserCashBackDetail(uid, DateUtil.addDays(curDate,-7));
+		for(UserCashBackDetailView ucbd:list){
+			map.put(ucbd.getType(),ucbd.getPrice());
+		}
+		//计算页面显示详情 待提现-不可提现 =可提现
+		long allowCash=map.get("waitCash")-map.get("unCash");
+		map.remove("unCash");
+		map.put("allowCash",allowCash);
+		return map;
+	}
+
 	/**
 	 *
 	 * @param sUid 用户id

@@ -118,4 +118,12 @@ public interface UserCardPackageMapper {
 	 * @return
 	 */
 	public int userRefundOrder(@Param("uid")Long uid,@Param("type")Long type,@Param("refundPrice")Long refundPrice,@Param("consumePrice")Long consumePrice);
+
+	/**
+	 * 用户提现
+	 * @param uid
+	 * @param money
+	 * @return
+	 */
+	public int userCashMoney(@Param("uid")Long uid,@Param("money")Long money);
 }

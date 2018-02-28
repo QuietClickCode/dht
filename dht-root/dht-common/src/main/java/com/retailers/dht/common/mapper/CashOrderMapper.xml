@@ -3,24 +3,43 @@
 <mapper namespace="com.retailers.dht.common.dao.CashOrderMapper">
 
 	<resultMap id="rm_cashOrder" type="com.retailers.dht.common.entity.CashOrder">
-			<result property="coId" column="co_id"/>
-			<result property="coNo" column="co_no"/>
-			<result property="coStatus" column="co_status"/>
-			<result property="coUid" column="co_uid"/>
-			<result property="coMoney" column="co_money"/>
-			<result property="coCreateTime" column="co_create_time"/>
-			<result property="coAuditingSid" column="co_auditing_sid"/>
-			<result property="coAuditingTime" column="co_auditing_time"/>
-			<result property="coAuditingRemark" column="co_auditing_remark"/>
-			<result property="coRemark" column="co_remark"/>
-			<result property="coCashSid" column="co_cash_sid"/>
-			<result property="coReturnNo" column="co_return_no"/>
-			<result property="coReturnData" column="co_return_data"/>
+		<result property="coId" column="co_id"/>
+		<result property="coNo" column="co_no"/>
+		<result property="coStatus" column="co_status"/>
+		<result property="coUid" column="co_uid"/>
+		<result property="coMoney" column="co_money"/>
+		<result property="coCreateTime" column="co_create_time"/>
+		<result property="coAuditingSid" column="co_auditing_sid"/>
+		<result property="coAuditingTime" column="co_auditing_time"/>
+		<result property="coAuditingRemark" column="co_auditing_remark"/>
+		<result property="coRemark" column="co_remark"/>
+		<result property="coCashSid" column="co_cash_sid"/>
+		<result property="coReturnNo" column="co_return_no"/>
+		<result property="coReturnData" column="co_return_data"/>
+		<result property="coReturnTime" column="co_return_time"/>
 	</resultMap>
-
+	<resultMap id="rm_cashOrder_vo" type="com.retailers.dht.common.vo.CashOrderVo">
+		<result property="coId" column="co_id"/>
+		<result property="coNo" column="co_no"/>
+		<result property="coStatus" column="co_status"/>
+		<result property="coUid" column="co_uid"/>
+		<result property="coMoney" column="co_money"/>
+		<result property="coCreateTime" column="co_create_time"/>
+		<result property="coAuditingSid" column="co_auditing_sid"/>
+		<result property="coAuditingTime" column="co_auditing_time"/>
+		<result property="coAuditingRemark" column="co_auditing_remark"/>
+		<result property="coRemark" column="co_remark"/>
+		<result property="coCashSid" column="co_cash_sid"/>
+		<result property="coReturnNo" column="co_return_no"/>
+		<result property="coReturnData" column="co_return_data"/>
+		<result property="coReturnTime" column="co_return_time"/>
+		<result property="userName" column="userName"/>
+		<result property="auditingNm" column="auditingNm"/>
+		<result property="cashNm" column="cashNm"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="cashOrder_columns">
-		co_id,co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data
+		co_id,co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time
 	</sql>
 	<!-- 根据用户提现订单主键取得数据 -->
 	<select id="queryCashOrderByCoId" resultMap="rm_cashOrder" parameterType="java.lang.Long">
@@ -86,52 +105,55 @@
 	<!--添加用户提现订单 -->
 	<insert id="saveCashOrder" parameterType="com.retailers.dht.common.entity.CashOrder" useGeneratedKeys="true" keyProperty="coId">
 		INSERT INTO t_cash_order (
-			co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data
+			co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time
 		) VALUES
 		(
-			#{coNo,jdbcType=VARCHAR},#{coStatus,jdbcType=BIGINT},#{coUid,jdbcType=BIGINT},#{coMoney,jdbcType=BIGINT},#{coCreateTime,jdbcType=TIMESTAMP},#{coAuditingSid,jdbcType=BIGINT},#{coAuditingTime,jdbcType=TIMESTAMP},#{coAuditingRemark,jdbcType=VARCHAR},#{coRemark,jdbcType=VARCHAR},#{coCashSid,jdbcType=BIGINT},#{coReturnNo,jdbcType=VARCHAR},#{coReturnData,jdbcType=VARCHAR}
+			#{coNo,jdbcType=VARCHAR},#{coStatus,jdbcType=BIGINT},#{coUid,jdbcType=BIGINT},#{coMoney,jdbcType=BIGINT},#{coCreateTime,jdbcType=TIMESTAMP},#{coAuditingSid,jdbcType=BIGINT},#{coAuditingTime,jdbcType=TIMESTAMP},#{coAuditingRemark,jdbcType=VARCHAR},#{coRemark,jdbcType=VARCHAR},#{coCashSid,jdbcType=BIGINT},#{coReturnNo,jdbcType=VARCHAR},#{coReturnData,jdbcType=VARCHAR},#{coReturnTime,jdbcType=TIMESTAMP}
 		)
 	</insert>
 	<!--修改用户提现订单 -->
 	<update id="updateCashOrder" parameterType="com.retailers.dht.common.entity.CashOrder">
 		UPDATE t_cash_order
 		<set>
-            <if test="null != coNo and '' != coNo">
-                co_no = #{coNo},
-            </if>
-            <if test="null != coStatus">
-                co_status = #{coStatus},
-            </if>
-            <if test="null != coUid">
-                co_uid = #{coUid},
-            </if>
-            <if test="null != coMoney">
-                co_money = #{coMoney},
-            </if>
-            <if test="null != coCreateTime">
-                co_create_time = #{coCreateTime},
-            </if>
-            <if test="null != coAuditingSid">
-                co_auditing_sid = #{coAuditingSid},
-            </if>
-            <if test="null != coAuditingTime">
-                co_auditing_time = #{coAuditingTime},
-            </if>
-            <if test="null != coAuditingRemark and '' != coAuditingRemark">
-                co_auditing_remark = #{coAuditingRemark},
-            </if>
-            <if test="null != coRemark and '' != coRemark">
-                co_remark = #{coRemark},
-            </if>
-            <if test="null != coCashSid">
-                co_cash_sid = #{coCashSid},
-            </if>
-            <if test="null != coReturnNo and '' != coReturnNo">
-                co_return_no = #{coReturnNo},
-            </if>
-            <if test="null != coReturnData and '' != coReturnData">
-                co_return_data = #{coReturnData},
-            </if>
+			<if test="null != coNo and '' != coNo">
+				co_no = #{coNo},
+			</if>
+			<if test="null != coStatus">
+				co_status = #{coStatus},
+			</if>
+			<if test="null != coUid">
+				co_uid = #{coUid},
+			</if>
+			<if test="null != coMoney">
+				co_money = #{coMoney},
+			</if>
+			<if test="null != coCreateTime">
+				co_create_time = #{coCreateTime},
+			</if>
+			<if test="null != coAuditingSid">
+				co_auditing_sid = #{coAuditingSid},
+			</if>
+			<if test="null != coAuditingTime">
+				co_auditing_time = #{coAuditingTime},
+			</if>
+			<if test="null != coAuditingRemark and '' != coAuditingRemark">
+				co_auditing_remark = #{coAuditingRemark},
+			</if>
+			<if test="null != coRemark and '' != coRemark">
+				co_remark = #{coRemark},
+			</if>
+			<if test="null != coCashSid">
+				co_cash_sid = #{coCashSid},
+			</if>
+			<if test="null != coReturnNo and '' != coReturnNo">
+				co_return_no = #{coReturnNo},
+			</if>
+			<if test="null != coReturnData and '' != coReturnData">
+				co_return_data = #{coReturnData},
+			</if>
+			<if test="null != coReturnTime">
+				co_return_time = #{coReturnTime},
+			</if>
 		</set>
 		WHERE co_id = #{coId}
 	</update>
@@ -139,4 +161,34 @@
 	<delete id="deleteCashOrderByCoId" parameterType="java.lang.Long">
 		DELETE FROM t_cash_order WHERE co_id = #{coId}
 	</delete>
+
+	<!--取得用户提现列表 -->
+	<select id="queryCashOrderLists" resultMap="rm_cashOrder_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+			o.*, sh.u_name auditingNm,
+			xf.u_name cashNm,
+			u.u_name userName
+		FROM
+			t_cash_order o
+			LEFT JOIN t_sys_user sh ON o.co_auditing_sid = sh.u_id
+			LEFT JOIN t_sys_user xf ON o.co_cash_sid = xf.u_id,
+			t_user u
+		WHERE
+			o.co_uid = u.u_id
+		<if test="null != params.cashUid and '' != params.cashNm">
+			AND u.u_id = #{params.cashUid}
+		</if>
+		<if test="null != params.cashNm and '' != params.cashNm">
+			AND u.u_name like concat('%', #{params.cashNm} ,'%')
+		</if>
+		<if test="null != params.cashNo and '' != params.cashNo">
+			AND o.co_no =#{params.cashNo}
+		</if>
+		<if test="null != params.cashStatus and params.cashStatus.size>0">
+			and co_status in
+			<foreach collection="params.cashStatus" item="item" index="index"  open="(" close=")" separator=",">
+				#{item}
+			</foreach>
+		</if>
+	</select>
 </mapper>

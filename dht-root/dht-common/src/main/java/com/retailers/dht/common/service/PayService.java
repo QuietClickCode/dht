@@ -41,4 +41,14 @@ public interface PayService {
      */
     public String createWxH5Pay(String orderNo,String ip)throws AppException;
 
+    /**
+     * 微信打款
+     * @param coNo 提现订单号
+     * @param money 提现金额
+     * @param openId 提现用户openid
+     * @return
+     * @throws AppException
+     */
+    public Map<String,String> wxPlayMoney(String coNo,Long money,String openId,String userName,String ip)throws AppException,Exception;
+
 }

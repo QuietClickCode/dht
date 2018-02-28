@@ -14,7 +14,8 @@ public enum OrderEnum {
     SPECIAL_OFFER("SPECIAL_OFFER", "特价", "TJ"),
     CUT_PRICE("CUT_PRICE", "砍价", "KJ"),
     PRE_ORDER("PRE_ORDER", "预购", "YG"),
-    REFUND("refund","退款","TK");
+    REFUND("refund","退款","TK"),
+    CASH_MONEY("cashMoney","提现","TX");
     //SHOPPING("SHOPPING","购买商品","GM"), recharge
     //SHOPPING("SHOPPING","购买商品","GM");
     String key, value, shorNm;
