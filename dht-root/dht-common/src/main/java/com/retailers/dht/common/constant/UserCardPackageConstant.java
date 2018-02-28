@@ -31,6 +31,10 @@ public class UserCardPackageConstant {
      */
     public static final int USER_CARD_PACKAGE_TYPE_WITHDRAWALS=5;
     /**
+     * 操作类型（0 钱包入帐，1 钱包出帐，2 积分入帐，3积分出帐,4消费返现现,5 提现,6退款，8 返还提现金额）
+     */
+    public static final int USER_CARD_PACKAGE_TYPE_WITHDRAWALS_RETURN=8;
+    /**
      *操作类型（0 钱包入帐，1 钱包出帐，2 积分入帐，3积分出帐,4消费返现现,5 提现,6退款）
      */
     public static final int USER_CARD_PACKAGE_TYPE_REFUND=6;
@@ -38,5 +42,6 @@ public class UserCardPackageConstant {
      *操作类型（0 钱包入帐，1 钱包出帐，2 积分入帐，3积分出帐,4消费返现现,5 提现,6退款,7 退消费累计）
      */
     public static final int USER_CARD_PACKAGE_TYPE_REFUND_INTEGRAL=7;
+
 
 }

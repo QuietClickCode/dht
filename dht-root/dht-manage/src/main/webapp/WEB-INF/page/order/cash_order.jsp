@@ -185,7 +185,7 @@
                 }
                 </ex:perm>
                 <ex:perm url="cashOrder/cashOrder">
-                if(row.coStatus==2){
+                if(row.coStatus==2||row.coStatus==4){
                     html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();cashOrder(\''+row.coId+'\')"">提现下划</button>&nbsp;';
                 }
                 </ex:perm>

@@ -193,6 +193,27 @@ public class CashOrderServiceImpl implements CashOrderService {
 			co.setCoAuditingSid(sysUid);
 			co.setCoAuditingTime(curDate);
 			cashOrderMapper.updateCashOrder(co);
+			//如果拒绝 返还金额
+			if(status.intValue()==CashMoneyConstant.CASH_AUDITING_STATUS_FAILE){
+				//减少用户提现金额
+				int total = userCardPackageMapper.userCashMoney(co.getCoUid(),-co.getCoMoney());
+				if(total==0){
+					throw new AppException("可提现金额不足");
+				}
+				//取得用户钱包
+				UserCardPackage ucp= userCardPackageMapper.queryUserCardPackageById(co.getCoUid());
+				//添加提现日志
+				LogUserCardPackage lucp= new LogUserCardPackage();
+				lucp.setUid(co.getCoUid());
+				lucp.setVal(co.getCoMoney());
+				lucp.setCurVal(ucp.getUcashCurPrice());
+				lucp.setRemark("提现审核拒绝，金额返还，返还金额:"+co.getCoMoney());
+				lucp.setCreateTime(curDate);
+				lucp.setRelationOrderId(co.getCoId());
+				lucp.setType(UserCardPackageConstant.USER_CARD_PACKAGE_TYPE_WITHDRAWALS_RETURN);
+				logUserCardPackageMapper.saveLogUserCardPackage(lucp);
+			}
+
 		}finally {
 			logger.info("提现申请审核，审核用户:{},提现订单id:{},审核状态:{},审核备注:{},执行时间:{},",sysUid,orId,status,remark,(System.currentTimeMillis()-curDate.getTime()));
 			procedureToolsService.singleUnLockManager(lockKey);
@@ -238,8 +259,9 @@ public class CashOrderServiceImpl implements CashOrderService {
 					co.setCoReturnData("下划成功");
 				}else{
 					co.setCoStatus(CashMoneyConstant.CASH_STATUS_FAILE);
-					co.setCoReturnData(return_msg);
 					rtnMsg=rtnMap.get("err_code_des");
+					co.setCoReturnData(StringUtils.formates(return_msg,rtnMsg));
+
 				}
 			}catch (Exception e){
 				logger.info(StringUtils.getErrorInfoFromException(e));
