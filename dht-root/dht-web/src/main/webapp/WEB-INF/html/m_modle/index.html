@@ -198,8 +198,17 @@
             <!--</li>-->
 
         </ul>
+
         <img id="nospecialpimg" style="width: 100%;display: none" src="/img/noseckillgoods.jpg">
 
+        <!-- 结亲商品 -->
+        <div class="index-title" onclick="gotoMarriedGoods()">
+            <span>结亲商品</span>
+            <a  class="more">全部<i class="icon-more"></i></a>
+        </div>
+
+        <ul class="seckill box2" id="newgood">
+        </ul>
         <!-- 全民砍价 -->
         <div class="index-title" onclick="gotosecspepage(2)">
             <span>全民砍价</span>
@@ -834,12 +843,55 @@
             });
         }
 
+        <!--加载结亲商品-->
+        loadMarriedGoods();
+        function loadMarriedGoods() {
+            $.ajax({
+                type:"post",
+                url:'/famerGoods/marriedGoods',
+                dataType: "json",
+                data:{pageNo:1,pageSize:2},
+                success:function(data){
+                    var html = '';
+                    var rows = data.rows;
+                    if(rows!=null&&rows.length>0){
+                        for(var i=0;i<rows.length;i++){
+                            html = '<li>'+
+                                '<a href="/goods/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].showUrl+'" alt=""></a>'+
+                                '<div class="text-box">'+
+                                '<a href="/goods/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                // '<p class="overflow">'+removeHTMLTag(rows[i].gdescription)+'</p>'+
+                                '<div class="price">';
+                            html += '<span>￥'+parseFloat(rows[i].minPrice/100).toFixed(2)+'/'+rows[i].unitName+'</span>';
+                            html += '</div>'+
+                                '<div class="purchase">'+
+                                '<a href="/goods/'+rows[i].goodsId+'.html">马上抢购</a>'+
+                                '<span>剩余'+rows[i].goodsNumber+rows[i].unitName+'</span>'+
+
+                                '</div>'+
+                                '</div>'+
+                                '</li>';
+                            $('#newgood').append(html);
+                        }
+                        $("img").lazyload({effect: "fadeIn"});
+                    }else{
+                        $('#newgood').hide();
+                        $('#newgood').prev().hide();
+                    }
+                }
+            });
+        }
+
         function gotosecspepage(num) {
             window.location.href='/secspep/'+num+'.special';
         }
 
         function gotonewgoodspage() {
             window.location.href='/goods/gotonewgoodspage';
+        }
+
+        function gotoMarriedGoods() {
+            window.location.href='/famerGoods/marriedGoodsList';
         }
     </script>
 

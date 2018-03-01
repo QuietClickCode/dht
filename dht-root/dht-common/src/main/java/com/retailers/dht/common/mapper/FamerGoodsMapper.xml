@@ -18,6 +18,14 @@
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 	</resultMap>
+	<resultMap id="rm_marriedGoods_vo" type="com.retailers.dht.common.vo.MarriedGoodsVo">
+		<result property="goodsId" column="g_id"/>
+		<result property="goodsName" column="g_name"/>
+		<result property="minPrice" column="min_price"/>
+		<result property="showUrl" column="show_url"/>
+		<result property="goodsNumber" column="gd_residueinventory"/>
+		<result property="unitName" column="g_unitname"/>
+	</resultMap>
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="famerGoods_columns">
@@ -79,6 +87,16 @@
 		SELECT <include refid="famerGoods_columns" />
 		FROM t_famer_goods
 		<include refid="famerGoods_where"/>
+	</select>
+	<!--查询已结亲商品-->
+	<select id="queryMarriedGoodsList" resultMap="rm_marriedGoods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT goods.g_id,goods.g_unitname,goods.g_name,min_price,show_url,gd_residueinventory FROM t_goods goods
+		RIGHT JOIN (select g_id from t_famer_goods where is_delete = 0) gid ON gid.g_id = goods.g_id
+		LEFT JOIN (select g_id,MIN(gd_price) min_price from t_goods_detail where g_id in (select g_id from t_famer_goods where is_delete = 0) and is_delete = 0 GROUP BY g_id) detail ON detail.g_id = goods.g_id
+		LEFT JOIN (select MIN(gi_id) giid,g_id from t_goods_image where g_id in (select g_id from t_famer_goods where is_delete = 0) and is_delete = 0 GROUP BY g_id) tgi ON tgi.g_id = goods.g_id
+		LEFT JOIN t_attachment att ON att.id = tgi.giid
+		LEFT JOIN t_goods_detail det ON det.g_id = goods.g_id AND det.is_delete = 0
+		WHERE goods.is_delete = 0 AND goods.is_checked=1
 	</select>
 	<select id="queryHaveGoodsListByFid" resultMap="rm_famerGoods_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
 		SELECT fg.*,g.g_name

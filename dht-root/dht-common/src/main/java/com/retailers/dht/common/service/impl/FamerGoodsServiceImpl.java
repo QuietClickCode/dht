@@ -6,6 +6,8 @@ import com.retailers.dht.common.entity.FamerGoods;
 import com.retailers.dht.common.dao.FamerGoodsMapper;
 import com.retailers.dht.common.service.FamerGoodsService;
 import com.retailers.dht.common.vo.FamerGoodsVo;
+import com.retailers.dht.common.vo.MarriedGoodsVo;
+import com.retailers.mybatis.common.constant.AttachmentConstant;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.retailers.mybatis.pagination.Pagination;
@@ -62,6 +64,25 @@ public class FamerGoodsServiceImpl implements FamerGoodsService {
 		page.setPageSize(pageSize);
 		page.setParams(params);
 		List<FamerGoodsVo> list = famerGoodsMapper.queryNotHaveGoodsListByFid(page);
+		page.setData(list);
+		return page;
+	}
+	/**
+	 * 查询已结亲商品
+	 * @param params
+	 * @param pageNo
+	 * @param pageSize
+	 * @return
+	 */
+	public Pagination<MarriedGoodsVo> queryMarriedGoodsList(Map<String, Object> params, int pageNo, int pageSize) {
+		Pagination<MarriedGoodsVo> page = new Pagination<MarriedGoodsVo>();
+		page.setPageNo(pageNo);
+		page.setPageSize(pageSize);
+		page.setParams(params);
+		List<MarriedGoodsVo> list = famerGoodsMapper.queryMarriedGoodsList(page);
+		for (MarriedGoodsVo vo : list) {
+			vo.setShowUrl(AttachmentConstant.IMAGE_SHOW_URL + vo.getShowUrl());
+		}
 		page.setData(list);
 		return page;
 	}

@@ -1,6 +1,7 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.FamerGoods;
 import com.retailers.dht.common.vo.FamerGoodsVo;
+import com.retailers.dht.common.vo.MarriedGoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import java.util.List;
 /**
@@ -56,5 +57,6 @@ public interface FamerGoodsMapper {
 	public List<FamerGoodsVo> queryNotHaveGoodsListByFid(Pagination<FamerGoodsVo> pagination);
 
 	public List<FamerGoodsVo> queryFamerGoodsVoList(Pagination<FamerGoodsVo> pagination);
+	public List<MarriedGoodsVo> queryMarriedGoodsList(Pagination<MarriedGoodsVo> pagination);
 
 }

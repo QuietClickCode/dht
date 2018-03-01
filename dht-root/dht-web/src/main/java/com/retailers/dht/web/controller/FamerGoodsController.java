@@ -6,6 +6,7 @@ import com.retailers.dht.common.service.FamerGoodsService;
 import com.retailers.dht.common.service.GoodsService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.GoodsVo;
+import com.retailers.dht.common.vo.MarriedGoodsVo;
 import com.retailers.dht.web.base.BaseController;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.base.BaseResp;
@@ -72,5 +73,25 @@ public class FamerGoodsController extends BaseController {
             map.put("rows",goodsVos);
         }
         return map;
+    }
+
+    @RequestMapping("/marriedGoods")
+    @ResponseBody
+    public Map<String,Object> queryMarriedGoodsList(int pageNo, int pageSize){
+        Map<String,Object> map = new HashMap<String,Object>();
+        Pagination<MarriedGoodsVo> pagination = famerGoodsService.queryMarriedGoodsList(map,pageNo,pageSize);
+        Map<String,Object> gtm = new HashMap<String,Object>();
+        gtm.put("total",pagination.getTotalCount());
+        gtm.put("rows",pagination.getData());
+        return gtm;
+    }
+
+    /**
+     * 已结亲商品
+     * @return
+     */
+    @RequestMapping("/marriedGoodsList")
+    public String marriedGoods(HttpServletRequest request){
+        return redirectUrl(request,"goods/married-goods-list");
     }
 }

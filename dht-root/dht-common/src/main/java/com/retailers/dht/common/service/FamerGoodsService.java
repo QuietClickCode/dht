@@ -1,6 +1,7 @@
 
 package com.retailers.dht.common.service;
 import com.retailers.dht.common.vo.FamerGoodsVo;
+import com.retailers.dht.common.vo.MarriedGoodsVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.FamerGoods;
 import java.util.Map;
@@ -49,6 +50,8 @@ public interface FamerGoodsService {
 	public Pagination<FamerGoods> queryFamerGoodsList(Map<String, Object> params, int pageNo, int pageSize);
 	public Pagination<FamerGoodsVo> queryHaveGoodsListByFid(Map<String, Object> params, int pageNo, int pageSize);
 	public Pagination<FamerGoodsVo> queryNotHaveGoodsListByFid(Map<String, Object> params, int pageNo, int pageSize);
+	public Pagination<MarriedGoodsVo> queryMarriedGoodsList(Map<String, Object> params, int pageNo, int pageSize);
+
 	/**
 	 * 根据fgId删除农户商品关联表表
 	 * @param fgId

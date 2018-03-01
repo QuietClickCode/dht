@@ -1,0 +1,137 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>已结亲商品</title>
+    <script src="/js/Adaptive.js"></script>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body class="bge6">
+<div class="specialty-title2 borderB">
+    <a onclick="returnhistory()" class="icon-return"></a>
+    <span>已结亲商品</span>
+</div>
+<ul class="like-list box2" style="margin-top: 5px" id="goodsul">
+    <!--<li>-->
+    <!--<a href="" class="img"><img src="/img/list2.jpg" alt=""></a>-->
+    <!--<a href="" class="title overflow">汪氏天然滋补纯正蜂蜜农家自产槐花洋槐枣百花蜂蜜...</a>-->
+    <!--<p>￥189</p>-->
+    <!--</li>-->
+</ul>
+<div class="more" id="nogoodscldiv" style="margin-top:5px;display: none">
+    <center>
+        <a style="color: #999;font-size: .3rem;margin-top: 10px">已全部加载</a>
+    </center>
+</div>
+<script src="/js/jquery-1.9.1.min.js"></script>
+<script src="/js/public.js"></script>
+<script src="/js/iscroll.js"></script>
+<script src="/js/jquery.lazyload.js?v=1.9.1"></script>
+<script>
+    var pageNo=1;
+    var pageSize=10;
+    <!--加载商品-->
+    var flag = false;
+    function loadgoods() {
+        $.ajax({
+            type:"post",
+            url:'/famerGoods/marriedGoods',
+            dataType: "json",
+            async:false,
+            data:{pageNo:pageNo,pageSize:pageSize},
+            success:function(data){
+                var rows = data.rows;
+                if(rows!=null&&rows.length>0){
+                    var html = '';
+                    $('#goodsul').html(html);
+                    for(var i=0;i<rows.length;i++){
+                        html = '<li>'+
+                            '<a href="/goods/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].showUrl+'" alt=""></a>'+
+                            '<a href="/goods/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                            '<p>￥'+parseFloat(rows[i].minPrice/100).toFixed(2) +'</p>'+
+                            '</li>';
+                        $('#goodsul').append(html);
+                    }
+                    pageNo++;
+                    flag=true;
+                    imglazyload();
+                    //滚动加载
+                    scrollloadgoods();
+                    if(rows.length<pageSize){
+                        $('#nogoodscldiv').show();
+                    }
+                }
+            }
+        });
+    }
+
+    <!--滚动加载商品-->
+    function scrollloadgoods() {
+        $(document).ready(function(){
+            var range = 50;             //距下边界长度/单位px
+            var totalheight = 0;
+            var main = $("#goodsul");                     //主体元素
+            $(window).scroll(function(){
+                var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
+
+                totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
+
+                if(($(document).height()-range) <= totalheight && flag) {
+                    flag = false;
+                    $.ajax({
+                        type:"post",
+                        url:'/famerGoods/marriedGoods',
+                        dataType: "json",
+                        async:false,
+                        data:{pageNo:pageNo,pageSize:pageSize},
+                        success:function(data){
+                            var rows = data.data;
+                            if(rows!=null&&rows.length>0){
+                                var html = '';
+                                $('#goodsul').html(html);
+                                for(var i=0;i<rows.length;i++){
+                                    html = '<li>'+
+                                        '<a href="/goods/'+rows[i].goodsId+'.html" class="img"><img data-original="'+rows[i].showUrl+'" alt=""></a>'+
+                                        '<a href="/goods/'+rows[i].goodsId+'.html" class="title overflow">'+rows[i].goodsName+'</a>'+
+                                        '<p>￥'+parseFloat(rows[i].minPrice/100).toFixed(2) +'</p>'+
+                                        '</li>';
+                                    $('#goodsul').append(html);
+                                }
+                                pageNo++;
+                                flag=true;
+                                imglazyload();
+                            }else{
+                                $('#nogoodscldiv').show();
+                            }
+                        }
+                    });
+
+                }
+            });
+        });
+    }
+
+    function imglazyload() {
+        <!--图片懒加载-->
+        $("img").lazyload({effect: "fadeIn"});
+    }
+
+    <!--返回上一页-->
+    function returnhistory() {
+        if(document.referrer===''){
+            window.location.href='/';
+        }else{
+            window.history.go(-1);
+        }
+    }
+</script>
+<script>
+    loadgoods();
+</script>
+</body>
+
+</html>
