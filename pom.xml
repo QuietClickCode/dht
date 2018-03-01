@@ -15,6 +15,7 @@
         <module>reatilers-wx</module>
         <module>aliyun-sms</module>
         <module>hnc-root</module>
+        <module>sbj-root</module>
         <module>razz-root</module>
     </modules>
     <packaging>pom</packaging>
