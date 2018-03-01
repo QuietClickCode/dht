@@ -121,18 +121,18 @@
             <p class="cash_price"><span class="icon">￥</span>${details.cashTotal}</p>
         </div>
         <div class="cash_bottom">
-            <div class="cash_info waitCash">
+            <a href="/ranking/openUserCashPage?tab=wait_cash" class="cash_info waitCash">
                 <p>待提现</p>
                 <p>${details.waitCash}</p>
-            </div>
-            <div class="cash_info allowCash">
+            </a>
+            <a href="/ranking/openUserCashPage?tab=cash_allaow" class="cash_info allowCash">
                 <p>可提现</p>
                 <p>${details.allowCash}</p>
-            </div>
-            <div class="cash_info cash">
+            </a>
+            <a href="/ranking/openUserCashPage?tab=cash_info" class="cash_info cash">
                 <p>已提现</p>
                 <p>${details.cash}</p>
-            </div>
+            </a>
         </div>
     </div>
     <div class="cash_ft">

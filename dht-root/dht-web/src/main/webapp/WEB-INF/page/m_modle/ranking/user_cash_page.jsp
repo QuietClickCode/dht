@@ -159,6 +159,11 @@
             border-radius: 0.05rem;
             background-color: #e77036;
         }
+
+        .input_price{
+            width: 3rem;
+            margin-left: 1rem;
+        }
     </style>
 </head>
 
@@ -189,11 +194,11 @@
     <div class="coupon-box" id="wait_cash">
         <div class="wait_cash_hd">
             <span class="price_info">总金额</span>
-            <span class="price"><span class="icon">￥</span>300</span>
+            <span class="price"><span class="icon">￥</span>${details.waitCash}</span>
         </div>
 
         <div class="wait_cash_list">
-            <div class="wait_cash_item">
+            <%--<div class="wait_cash_item">
                 <div class="wait_cash_info">
                     <span style="display: block;">圣诞复古红V领显瘦毛衣圣诞复古红V领显瘦毛衣</span>
                     <span class="wait_cash_time">返现时间<span >2017-08-09 10:53</span></span>
@@ -202,7 +207,7 @@
                 <div class="wait_cash_price">
                     <span>798.00</span>
                 </div>
-            </div>
+            </div>--%>
 
         </div>
     </div>
@@ -211,12 +216,12 @@
         <div class="container_box">
             <div class="hd">
                 <span>输入提现金额</span>
-                <input type="text" name="">
+                <input type="text" class="input_price" name="">
                 <span style="float: right;">元</span>
             </div>
             <div class="bd">
-                <span class="info">可提现余额<span>100</span><span>,全部提现</span></span>
-                <a href="" class="cash" style="color: #fff">提现</a>
+                <span class="info">可提现余额<span class="_price">${details.allowCash}</span>元<span>。</span></span>
+                <a href="javascript:void(0)" class="cash" style="color: #fff">提现</a>
             </div>
         </div>
     </div>
@@ -225,11 +230,11 @@
         <div class="cash_info">
             <div class="cash_info_hd">
                 <span class="price_info">总金额</span>
-                <span class="price"><span class="icon">￥</span>200</span>
+                <span class="price"><span class="icon">￥</span>${details.cash}</span>
             </div>
 
             <div class="cash_list">
-                <div class="cash_item">
+                <%--<div class="cash_item">
                     <span class="item_price">200.25</span>
                     <span class="time">2017-10-23 10:16:30</span>
                 </div>
@@ -242,7 +247,7 @@
                 <div class="cash_item">
                     <span class="item_price">200.25</span>
                     <span class="time">2017-10-23 10:16:30</span>
-                </div>
+                </div>--%>
             </div>
         </div>
     </div>
@@ -250,6 +255,66 @@
 
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/tabs.js"></script>
+<script src="/js/layer_mobile/layer.js"></script>
+<script>
+    $(function () {
+        let tab = getUrlParam('tab');
+        $("."+tab).click();
+    });
+    
+    function getUrlParam(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        var r = window.location.search.substr(1).match(reg); //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+    }
+
+    var isSave = false;
+    $(".cash").click(function () {
+        let input_price = $(".input_price").val();
+        let price = ${details.allowCash};
+        console.log(input_price);
+        if(input_price == ''){
+            layer.open({
+                content: '请输入提现金额'
+                ,skin: 'msg'
+                ,time: 1
+            });
+            return;
+        }
+        if(input_price > price){
+            layer.open({
+                content: '大于可提现金额'
+                ,skin: 'msg'
+                ,time: 1
+            });
+            return;
+        }
+        if(!isSave){
+            isSave = true;
+            $.ajax({
+                url:'/cashMoney/userCashMoney',
+                type:'post',
+                dataType:'json',
+                data:{
+                    money:input_price
+                },
+                success:function (data) {
+                    isSave = false;
+                    layer.open({
+                        content: data.msg
+                        ,skin: 'msg'
+                        ,time: 2
+                    });
+                    if(data.msg == 'SUCCESS'){
+                        setTimeout(function(){
+                            window.location.reload();
+                        },2000);
+                    }
+                }
+            });
+        }
+    });
+</script>
 </body>
 
 </html>

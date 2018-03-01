@@ -94,6 +94,25 @@ public class WalletCashBackQueueController extends BaseController {
 
 
     /**
+     * 打开用户提现页面
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("openUserCashPage")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY,isOpenPage = true)
+    public ModelAndView openUserCashPage(HttpServletRequest request, HttpServletResponse response){
+        long uid=getCurLoginUserId(request);
+        //取得用户返现详情
+        Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
+        ModelAndView modelAndView=new ModelAndView();
+        modelAndView.addObject("details",details);
+        modelAndView.setViewName(redirectUrl(request,"ranking/user_cash_page"));
+        return modelAndView;
+    }
+
+
+    /**
      * 打开用户排名公示列表
      * @param request
      * @param response

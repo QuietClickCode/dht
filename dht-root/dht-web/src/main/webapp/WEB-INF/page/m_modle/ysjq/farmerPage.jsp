@@ -58,11 +58,8 @@
 </div>
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script>
-    var outpageNo=1;
-    var outpageSize=10;
-    var flag = false;
 
-    function queryFarmer(pageNo,pageSize) {
+    function queryFarmer() {
         $.ajax({
             url:'/famer/queryUserList',
             dataType:"json",
@@ -84,33 +81,13 @@
                 if(data.rows.length == 0){
                     $("._user_list").append("<span class='_tips'>暂无结亲对象~</span>");
                 }
-                outpageNo++;
-                flag = true;
             }
         });
     }
 
     $(function () {
-        queryFarmer(1,10);
-//        scrollloadCoupon();
+        queryFarmer();
     });
-
-    function scrollloadCoupon() {
-        $(document).ready(function(){
-            var range = 50;             //距下边界长度/单位px
-            var totalheight = 0;
-            $(window).scroll(function(){
-                var srollPos = $(window).scrollTop();    //滚动条距顶部距离(页面超出窗口的高度)
-
-                totalheight = parseFloat($(window).height()) + parseFloat(srollPos);
-
-                if(($(document).height()-range) <= totalheight && flag) {
-                    flag = false;
-                    queryFarmer(outpageNo,outpageSize);
-                }
-            });
-        });
-    }
 
     // 得到岁数
     function jsGetAge(strBirthday)
