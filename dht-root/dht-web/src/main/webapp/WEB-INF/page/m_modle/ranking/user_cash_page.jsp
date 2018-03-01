@@ -169,7 +169,7 @@
 
 <body class="bge6">
 <div class="specialty-title2 borderB">
-    <a href="javascript:void(0);" onclick="window.history.back(); return false;" class="icon-return"></a>
+    <a href="javascript:void(0);" class="icon-return"></a>
     <span>返现记录</span>
 </div>
 
@@ -216,7 +216,7 @@
         <div class="container_box">
             <div class="hd">
                 <span>输入提现金额</span>
-                <input type="text" class="input_price" name="">
+                <input type="text" class="input_price" value="0" name="">
                 <span style="float: right;">元</span>
             </div>
             <div class="bd">
@@ -300,19 +300,30 @@
                 },
                 success:function (data) {
                     isSave = false;
-                    layer.open({
-                        content: data.msg
-                        ,skin: 'msg'
-                        ,time: 2
-                    });
                     if(data.msg == 'SUCCESS'){
-                        setTimeout(function(){
-                            window.location.reload();
-                        },2000);
+                        layer.open({
+                            content: '提现成功'
+                            ,skin: 'msg'
+                            ,time: 2
+                        });
+                        let text = $("._price").text();
+                        $("._price").text(text - input_price);
+                        $(".input_price").val(0);
+                    }else{
+                        layer.open({
+                            content: data.msg
+                            ,skin: 'msg'
+                            ,time: 2
+                        });
+                        $(".input_price").val(0);
                     }
                 }
             });
         }
+    });
+
+    $(".icon-return").click(function () {
+        window.location.href = document.referrer;//返回上一页并刷新
     });
 </script>
 </body>
