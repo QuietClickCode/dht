@@ -115,7 +115,10 @@ public class CashOrderServiceImpl implements CashOrderService {
 	public Map<String, Object> userCashMoney(Long uid, Long money, String remark)throws AppException {
 		logger.info("用户发起提现请求，提现用户:{},提现金额:{}",uid,money);
 		if(money.intValue()<100){
-			throw new AppException("最新提现金额1元");
+			throw new AppException("提现金额最小值为:1.00元");
+		}
+		if(money.intValue()>2000000){
+			throw new AppException("提现金额最大值为:20000.00元");
 		}
 		Date curDate=new Date();
 		Map<String,Object> rtn=new HashMap<String,Object>();
