@@ -538,7 +538,7 @@
                         if(row.orderStatus == 8){
                             ov+='<div class="count-infor" style="line-height: 1rem">';
                             ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
-                            $("#allOrder").append(ov);
+//                            $("#allOrder").append(ov);
                         }else{
                             ov+='<div class="count-infor">';
                             ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
@@ -549,7 +549,7 @@
                         if(row.orderStatus == 8 || row.orderStatus == 7){
                             ov+='<div class="count-infor" style="line-height: 1rem">';
                             ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"></div></div></li>';
-                            $("#allOrder").append(ov);
+//                            $("#allOrder").append(ov);
                         }else{
                             ov+='<div class="count-infor">';
                             ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';

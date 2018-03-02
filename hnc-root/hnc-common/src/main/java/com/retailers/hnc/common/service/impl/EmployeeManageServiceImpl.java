@@ -45,6 +45,7 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 		String password = idcard.substring(idcard.length()-6);
 		sysUser.setUaccount(employeeManage.getWxPhone());
 		sysUser.setUpassword(password);
+		sysUser.setIsDelete(0L);
 		sysUserMapper.saveSysUser(sysUser);
 		Long uid = sysUser.getUid();
 		employeeManage.setEmId(uid);
@@ -133,7 +134,8 @@ public class EmployeeManageServiceImpl implements EmployeeManageService {
 	public boolean deleteEmployeeManageByEmId(Long emId,Long uploadperson) {
 		EmployeeManage employeeManage = queryEmployeeManageByEmId(emId);
 		employeeManage.setIsDelete(1);
-
+		SysUser sysUser = sysUserMapper.querySyUserByAccount(employeeManage.getEmPhone());
+		sysUserMapper.deleteSysUserByUid(sysUser.getUid());
 		Pagination<OrgUser> page = new Pagination<OrgUser>();
 		page.setPageNo(1);
 		page.setPageSize(1);
