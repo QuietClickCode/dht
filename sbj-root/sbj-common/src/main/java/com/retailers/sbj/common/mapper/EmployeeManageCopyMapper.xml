@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.EmployeeManageCopyMapper">
+
+	<resultMap id="rm_employeeManageCopy" type="com.retailers.sbj.common.vo.EmployeeManageCopyVo">
+			<result property="emcId" column="emc_id"/>
+			<result property="emId" column="em_id"/>
+			<result property="emName" column="em_name"/>
+			<result property="emSex" column="em_sex"/>
+			<result property="emEntryTime" column="em_entry_time"/>
+			<result property="emType" column="em_type"/>
+			<result property="emTeam" column="em_team"/>
+			<result property="emPosition" column="em_position"/>
+			<result property="emPhone" column="em_phone"/>
+			<result property="wxPhone" column="wx_phone"/>
+			<result property="emIdCard" column="em_id_card"/>
+			<result property="emRemoveTime" column="em_remove_time"/>
+			<result property="emInfo" column="em_info"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="emOrder" column="em_order"/>
+			<result property="version" column="version"/>
+			<result property="createTime" column="create_time"/>
+			<result property="uploadperson" column="uploadperson"/>
+			<result property="uploadtype" column="uploadtype"/>
+			<result property="tname" column="tname"/>
+			<result property="uploadpersonName" column="uploadpersonName"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="employeeManageCopy_columns">
+		emc_id,em_id,em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version,create_time,uploadperson,uploadtype
+	</sql>
+	<!-- 根据员工副本表主键取得数据 -->
+	<select id="queryEmployeeManageCopyByEmcId" resultMap="rm_employeeManageCopy" parameterType="java.lang.Long">
+		SELECT <include refid="employeeManageCopy_columns" />
+		FROM t_employee_manage_copy WHERE emc_id = #{emcId}
+	</select>
+	<!-- 员工副本表查询条件组合 -->
+	<sql id="employeeManageCopy_where">
+		<where>
+			<if test="null != params.emcId">
+				AND t1.emc_id = #{params.emcId}
+			</if>
+			<if test="null != params.emId">
+				AND t1.em_id = #{params.emId}
+			</if>
+			<if test="null != params.emName and '' != params.emName">
+				AND t1.em_name = #{params.emName}
+			</if>
+			<if test="null != params.emSex">
+				AND t1.em_sex = #{params.emSex}
+			</if>
+			<if test="null != params.emEntryTimeBegin">
+				AND t1.em_entry_time &gt;= #{params.emEntryTime}
+			</if>
+			<if test="null != params.emEntryTimeEnd">
+				AND t1.em_entry_time &lt;= #{params.emEntryTime}
+			</if>
+			<if test="null != params.emType">
+				AND t1.em_type = #{params.emType}
+			</if>
+			<if test="null != params.emTeam">
+				AND t1.em_team = #{params.emTeam}
+			</if>
+			<if test="null != params.emPosition and '' != params.emPosition">
+				AND t1.em_position = #{params.emPosition}
+			</if>
+			<if test="null != params.emPhone and '' != params.emPhone">
+				AND t1.em_phone = #{params.emPhone}
+			</if>
+			<if test="null != params.wxPhone and '' != params.wxPhone">
+				AND t1.wx_phone = #{params.wxPhone}
+			</if>
+			<if test="null != params.emIdCard and '' != params.emIdCard">
+				AND t1.em_id_card = #{params.emIdCard}
+			</if>
+			<if test="null != params.emRemoveTimeBegin">
+				AND t1.em_remove_time &gt;= #{params.emRemoveTime}
+			</if>
+			<if test="null != params.emRemoveTimeEnd">
+				AND t1.em_remove_time &lt;= #{params.emRemoveTime}
+			</if>
+			<if test="null != params.emInfo and '' != params.emInfo">
+				AND t1.em_info = #{params.emInfo}
+			</if>
+			<if test="null != params.isShow">
+				AND t1.is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.emOrder">
+				AND t1.em_order = #{params.emOrder}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+			<if test="null != params.createTimeBegin">
+				AND t1.create_time &gt;= #{params.createTime}
+			</if>
+			<if test="null != params.createTimeEnd">
+				AND t1.create_time &lt;= #{params.createTime}
+			</if>
+			<if test="null != params.uploadperson">
+				AND t1.uploadperson = #{params.uploadperson}
+			</if>
+			<if test="null != params.uploadtype">
+				AND t1.uploadtype = #{params.uploadtype}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryEmployeeManageCopyList" resultMap="rm_employeeManageCopy" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT t1.*,t2.t_name tname,t3.em_name uploadpersonName
+		FROM t_employee_manage_copy t1
+		LEFT JOIN t_team t2 ON t1.em_team=t2.t_id and t2.is_delete=0
+		LEFT JOIN t_employee_manage t3 ON t1.uploadperson=t3.em_id
+		<include refid="employeeManageCopy_where"/>
+		ORDER BY t1.emc_id DESC
+	</select>
+	<!--添加员工副本表 -->
+	<insert id="saveEmployeeManageCopy" parameterType="com.retailers.sbj.common.entity.EmployeeManageCopy" useGeneratedKeys="true" keyProperty="emcId">
+		INSERT INTO t_employee_manage_copy (
+			em_id,em_name,em_sex,em_entry_time,em_type,em_team,em_position,em_phone,wx_phone,em_id_card,em_remove_time,em_info,is_show,is_delete,em_order,version,create_time,uploadperson,uploadtype
+		) VALUES
+		(
+			#{emId,jdbcType=BIGINT},#{emName,jdbcType=VARCHAR},#{emSex,jdbcType=INTEGER},#{emEntryTime,jdbcType=TIMESTAMP},#{emType,jdbcType=INTEGER},#{emTeam,jdbcType=BIGINT},#{emPosition,jdbcType=VARCHAR},#{emPhone,jdbcType=VARCHAR},#{wxPhone,jdbcType=VARCHAR},#{emIdCard,jdbcType=VARCHAR},#{emRemoveTime,jdbcType=TIMESTAMP},#{emInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},#{emOrder,jdbcType=BIGINT},0,#{createTime,jdbcType=TIMESTAMP},#{uploadperson,jdbcType=BIGINT},#{uploadtype,jdbcType=BIGINT}
+		)
+	</insert>
+	<!--修改员工副本表 -->
+	<update id="updateEmployeeManageCopy" parameterType="com.retailers.sbj.common.entity.EmployeeManageCopy">
+		UPDATE t_employee_manage_copy
+		<set>
+            <if test="null != emId">
+                em_id = #{emId},
+            </if>
+            <if test="null != emName and '' != emName">
+                em_name = #{emName},
+            </if>
+            <if test="null != emSex">
+                em_sex = #{emSex},
+            </if>
+            <if test="null != emEntryTime">
+                em_entry_time = #{emEntryTime},
+            </if>
+            <if test="null != emType">
+                em_type = #{emType},
+            </if>
+            <if test="null != emTeam">
+                em_team = #{emTeam},
+            </if>
+            <if test="null != emPosition and '' != emPosition">
+                em_position = #{emPosition},
+            </if>
+            <if test="null != emPhone and '' != emPhone">
+                em_phone = #{emPhone},
+            </if>
+            <if test="null != wxPhone and '' != wxPhone">
+                wx_phone = #{wxPhone},
+            </if>
+            <if test="null != emIdCard and '' != emIdCard">
+                em_id_card = #{emIdCard},
+            </if>
+            <if test="null != emRemoveTime">
+                em_remove_time = #{emRemoveTime},
+            </if>
+            <if test="null != emInfo and '' != emInfo">
+                em_info = #{emInfo},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != emOrder">
+                em_order = #{emOrder},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+            <if test="null != createTime">
+                create_time = #{createTime},
+            </if>
+            <if test="null != uploadperson">
+                uploadperson = #{uploadperson},
+            </if>
+            <if test="null != uploadtype">
+                uploadtype = #{uploadtype},
+            </if>
+		</set>
+		WHERE emc_id = #{emcId} and version = #{version}
+	</update>
+	<!--删除员工副本表 -->
+	<delete id="deleteEmployeeManageCopyByEmcId" parameterType="java.lang.Long">
+		DELETE FROM t_employee_manage_copy WHERE emc_id = #{emcId}
+	</delete>
+</mapper>

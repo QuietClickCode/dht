@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.ClientIntentionMapper">
+
+	<resultMap id="rm_clientIntention" type="com.retailers.sbj.common.entity.ClientIntention">
+			<result property="iid" column="i_id"/>
+			<result property="cmId" column="cm_id"/>
+			<result property="fids" column="f_ids"/>
+			<result property="hids" column="h_ids"/>
+			<result property="iremark" column="i_remark"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_clientIntention_vo" type="com.retailers.sbj.common.vo.ClientIntentionVo">
+		<result property="iid" column="i_id"/>
+		<result property="cmId" column="cm_id"/>
+		<result property="fids" column="f_ids"/>
+		<result property="hids" column="h_ids"/>
+		<result property="iremark" column="i_remark"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="channelName" column="channelName"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="clientIntention_columns">
+		i_id,cm_id,f_ids,h_ids,i_remark,is_delete,version
+	</sql>
+	<!-- 根据客户意向表主键取得数据 -->
+	<select id="queryClientIntentionByIid" resultMap="rm_clientIntention" parameterType="java.lang.Long">
+		SELECT <include refid="clientIntention_columns" />
+		FROM t_client_intention WHERE i_id = #{iid}
+	</select>
+	<!-- 客户意向表查询条件组合 -->
+	<sql id="clientIntention_where">
+		<where>
+			<if test="null != params.iid">
+				AND t1.i_id = #{params.iid}
+			</if>
+			<if test="null != params.cmId">
+				AND t1.cm_id = #{params.cmId}
+			</if>
+			<if test="null != params.fids and '' != params.fids">
+				AND t1.f_ids = #{params.fids}
+			</if>
+			<if test="null != params.hids and '' != params.hids">
+				AND t1.h_ids = #{params.hids}
+			</if>
+			<if test="null != params.iremark and '' != params.iremark">
+				AND t1.i_remark = #{params.iremark}
+			</if>
+			<if test="null != params.isDelete">
+				AND t1.is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND t1.version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryClientIntentionList" resultMap="rm_clientIntention" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="clientIntention_columns" />
+		FROM t_client_intention t1
+		<include refid="clientIntention_where"/>
+	</select>
+
+	<select id="queryClientIntentionVoList" resultMap="rm_clientIntention_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,t3.c_channel channelName
+		FROM
+		t_client_intention t1
+		LEFT JOIN t_client_manage t2 ON t1.cm_id=t2.tm_id and t2.is_delete=0
+		LEFT JOIN t_channel t3 ON t2.tm_channel=t3.c_id and t3.is_delete=0
+		<include refid="clientIntention_where"/>
+	</select>
+	<select id="queryClientIntentionByCmIds" resultMap="rm_clientIntention">
+		SELECT * from
+		t_client_intention t1
+		WHERE
+		t1.is_delete=0
+		and t1.cm_id in
+		<foreach collection="cmIds" open="(" close=")" separator="," item="cmId">
+			#{cmId}
+		</foreach>
+		GROUP BY  t1.cm_id
+	</select>
+	<!--添加客户意向表 -->
+	<insert id="saveClientIntention" parameterType="com.retailers.sbj.common.entity.ClientIntention" useGeneratedKeys="true" keyProperty="iid">
+		INSERT INTO t_client_intention (
+			cm_id,f_ids,h_ids,i_remark,is_delete,version
+		) VALUES
+		(
+			#{cmId,jdbcType=BIGINT},#{fids,jdbcType=VARCHAR},#{hids,jdbcType=VARCHAR},#{iremark,jdbcType=VARCHAR},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改客户意向表 -->
+	<update id="updateClientIntention" parameterType="com.retailers.sbj.common.entity.ClientIntention">
+		UPDATE t_client_intention
+		<set>
+            <if test="null != cmId">
+                cm_id = #{cmId},
+            </if>
+            <if test="null != fids and '' != fids">
+                f_ids = #{fids},
+            </if>
+            <if test="null != hids and '' != hids">
+                h_ids = #{hids},
+            </if>
+            <if test="null != iremark and '' != iremark">
+                i_remark = #{iremark},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE i_id = #{iid} and version = #{version}
+	</update>
+	<!--删除客户意向表 -->
+	<delete id="deleteClientIntentionByIid" parameterType="java.lang.Long">
+		DELETE FROM t_client_intention WHERE i_id = #{iid}
+	</delete>
+</mapper>

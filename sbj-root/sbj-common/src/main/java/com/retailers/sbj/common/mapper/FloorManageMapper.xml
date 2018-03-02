@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.FloorManageMapper">
+
+	<resultMap id="rm_floorManage" type="com.retailers.sbj.common.entity.FloorManage">
+			<result property="fmId" column="fm_id"/>
+			<result property="fmName" column="fm_name"/>
+			<result property="fmType" column="fm_type"/>
+			<result property="fmQuantity" column="fm_quantity"/>
+			<result property="fmInfo" column="fm_info"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_floorManageVo" type="com.retailers.sbj.common.vo.FloorManageVo">
+		<result property="fmId" column="fm_id"/>
+		<result property="fmName" column="fm_name"/>
+		<result property="fmType" column="fm_type"/>
+		<result property="fmQuantity" column="fm_quantity"/>
+		<result property="fmInfo" column="fm_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="floorManage_columns">
+		fm_id,fm_name,fm_type,fm_quantity,fm_info,is_show,is_delete,version
+	</sql>
+	<!-- 根据楼栋管理主键取得数据 -->
+	<select id="queryFloorManageByFmId" resultMap="rm_floorManageVo" parameterType="java.lang.Long">
+		SELECT <include refid="floorManage_columns" />
+		FROM t_floor_manage WHERE fm_id = #{fmId}
+	</select>
+	<!-- 楼栋管理查询条件组合 -->
+	<sql id="floorManage_where">
+		<where>
+			<if test="null != params.fmId">
+				AND fm_id = #{params.fmId}
+			</if>
+			<if test="null != params.fmName and '' != params.fmName">
+				AND fm_name = #{params.fmName}
+			</if>
+			<if test="null != params.fmType and '' != params.fmType">
+				AND fm_type = #{params.fmType}
+			</if>
+			<if test="null != params.fmQuantity">
+				AND fm_quantity = #{params.fmQuantity}
+			</if>
+			<if test="null != params.fmInfo and '' != params.fmInfo">
+				AND fm_info = #{params.fmInfo}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryFloorManageList" resultMap="rm_floorManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="floorManage_columns" />
+		FROM t_floor_manage
+		<include refid="floorManage_where"/>
+	</select>
+
+	<select id="queryFloorManageByFmIds" resultMap="rm_floorManage">
+		SELECT *
+		FROM t_floor_manage t1
+		WHERE
+		t1.is_delete=0
+		and t1.fm_id in
+		<foreach item="fid" collection="fids" open="(" close=")" separator=",">
+			#{fid}
+		</foreach>
+	</select>
+	<!--添加楼栋管理 -->
+	<insert id="saveFloorManage" parameterType="com.retailers.sbj.common.entity.FloorManage" useGeneratedKeys="true" keyProperty="fmId">
+		INSERT INTO t_floor_manage (
+			fm_name,fm_type,fm_quantity,fm_info,is_show,is_delete,version
+		) VALUES
+		(
+			#{fmName,jdbcType=VARCHAR},#{fmType,jdbcType=VARCHAR},#{fmQuantity,jdbcType=BIGINT},#{fmInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改楼栋管理 -->
+	<update id="updateFloorManage" parameterType="com.retailers.sbj.common.entity.FloorManage">
+		UPDATE t_floor_manage
+		<set>
+            <if test="null != fmName and '' != fmName">
+                fm_name = #{fmName},
+            </if>
+            <if test="null != fmType and '' != fmType">
+                fm_type = #{fmType},
+            </if>
+            <if test="null != fmQuantity">
+                fm_quantity = #{fmQuantity},
+            </if>
+            <if test="null != fmInfo and '' != fmInfo">
+                fm_info = #{fmInfo},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE fm_id = #{fmId} and version = #{version}
+	</update>
+	<!--删除楼栋管理 -->
+	<delete id="deleteFloorManageByFmId" parameterType="java.lang.Long">
+		DELETE FROM t_floor_manage WHERE fm_id = #{fmId}
+	</delete>
+</mapper>
