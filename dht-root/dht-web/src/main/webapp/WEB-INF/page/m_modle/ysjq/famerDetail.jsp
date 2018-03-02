@@ -10,6 +10,11 @@
     <link rel="stylesheet" href="/css/y-style.css">
     <link rel="stylesheet" href="/css/f-style.css">
     <title>农户详情</title>
+    <style>
+        ._fa_box{
+            padding-bottom: 1rem;
+        }
+    </style>
 </head>
 
 <body class="bge6">
