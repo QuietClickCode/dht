@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.EmRelationshipMapper">
+
+	<resultMap id="rm_emRelationship" type="com.retailers.sbj.common.entity.EmRelationship">
+			<result property="erId" column="er_id"/>
+			<result property="pid" column="p_id"/>
+			<result property="emId" column="em_id"/>
+			<result property="parentId" column="parent_id"/>
+			<result property="emReservation" column="em_reservation"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_emRelationshipVo" type="com.retailers.sbj.common.vo.EmRelationshipVo">
+		<result property="erId" column="er_id"/>
+		<result property="pid" column="p_id"/>
+		<result property="emId" column="em_id"/>
+		<result property="parentId" column="parent_id"/>
+		<result property="emReservation" column="em_reservation"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_EmployeeRelationshipVo" type="com.retailers.sbj.common.vo.EmployeeRelationshipVo">
+		<result property="erid" column="er_id"/>
+		<result property="pid" column="p_id"/>
+		<result property="emReservation" column="em_reservation"/>
+		<result property="count" column="count"/>
+		<result property="emid" column="em_id"/>
+		<result property="emName" column="em_name"/>
+		<result property="emTeam" column="em_team"/>
+	</resultMap>
+
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="emRelationship_columns">
+		er_id,p_id,em_id,parent_id,em_reservation,is_delete,version
+	</sql>
+	<!-- 根据分配预约名额关系表主键取得数据 -->
+	<select id="queryEmRelationshipByErId" resultMap="rm_emRelationship" parameterType="java.lang.Long">
+		SELECT <include refid="emRelationship_columns" />
+		FROM t_em_relationship WHERE er_id = #{erId}
+	</select>
+	<!-- 分配预约名额关系表查询条件组合 -->
+	<sql id="emRelationship_where">
+		<where>
+			<if test="null != params.erId">
+				AND er_id = #{params.erId}
+			</if>
+			<if test="null != params.pid">
+				AND p_id = #{params.pid}
+			</if>
+			<if test="null != params.emId">
+				AND em_id = #{params.emId}
+			</if>
+			<if test="null != params.parentId">
+				AND parent_id = #{params.parentId}
+			</if>
+			<if test="null != params.emReservation">
+				AND em_reservation = #{params.emReservation}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryEmRelationshipList" resultMap="rm_emRelationship" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="emRelationship_columns" />
+		FROM t_em_relationship
+		<include refid="emRelationship_where"/>
+	</select>
+	<!--添加分配预约名额关系表 -->
+	<insert id="saveEmRelationship" parameterType="com.retailers.sbj.common.entity.EmRelationship" useGeneratedKeys="true" keyProperty="erId">
+		INSERT INTO t_em_relationship (
+			p_id,em_id,parent_id,em_reservation,is_delete,version
+		) VALUES
+		(
+			#{pid,jdbcType=BIGINT},#{emId,jdbcType=BIGINT},#{parentId,jdbcType=BIGINT},#{emReservation,jdbcType=BIGINT},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改分配预约名额关系表 -->
+	<update id="updateEmRelationship" parameterType="com.retailers.sbj.common.entity.EmRelationship">
+		UPDATE t_em_relationship
+		<set>
+            <if test="null != pid">
+                p_id = #{pid},
+            </if>
+            <if test="null != emId">
+                em_id = #{emId},
+            </if>
+            <if test="null != parentId">
+                parent_id = #{parentId},
+            </if>
+            <if test="null != emReservation">
+                em_reservation = #{emReservation},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE er_id = #{erId} and version = #{version}
+	</update>
+	<!--删除分配预约名额关系表 -->
+	<delete id="deleteEmRelationshipByErId" parameterType="java.lang.Long">
+		DELETE FROM t_em_relationship WHERE er_id = #{erId}
+	</delete>
+
+	<!--根据开盘期数查询给置业顾问所分配的预约名额-->
+	<select id="queryOpeningEmployees" resultMap="rm_emRelationshipVo" parameterType="java.lang.Long">
+		select * from t_em_relationship where p_id = #{pId}
+	</select>
+
+	<!--根据开盘期数查询有那些团队有预约名额-->
+	<select id="queryOpeningTeam" resultMap="rm_emRelationship" parameterType="java.lang.Long">
+		select distinct  parent_id FROM t_em_relationship where p_id = #{pId}
+	</select>
+
+	<!--查询该开盘是否分配过预约人员-->
+	<select id="queryOpeningStatus" resultType="java.lang.Integer" parameterType="java.lang.Long">
+		select count(*) from t_em_relationship where p_id = #{pId}
+	</select>
+
+	<!--查询该置业顾问是否分配过预约人数-->
+	<select id="queryEmployeeNum" resultMap="rm_emRelationship" parameterType="com.retailers.sbj.common.entity.EmRelationship">
+		select * from t_em_relationship where p_id = #{pid} and em_id = #{emId} and is_delete = 0
+	</select>
+
+	<!--批量添加置业顾问 -->
+	<insert id="saveEmRelationshipList" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="erId">
+		INSERT INTO t_em_relationship (p_id,em_id,parent_id,em_reservation,is_delete,version) VALUES
+		<foreach collection ="list" item="em" index= "index" separator =",">
+			(
+			#{em.pid},#{em.emId},#{em.parentId},#{em.emReservation},#{em.isDelete},#{em.version}
+			)
+		</foreach>
+	</insert>
+
+	<select id="queryReservationInfo" resultMap="rm_EmployeeRelationshipVo" parameterType="com.retailers.sbj.common.entity.EmRelationship">
+		select t2.er_id,t2.p_id,t2.em_reservation,COUNT(t3.tm_employee) as count,t1.em_id,t1.em_name,t1.em_team
+		from t_employee_manage t1
+		LEFT JOIN t_em_relationship t2 on t1.em_id = t2.em_id  and t2.is_delete = 0 and t2.p_id = #{pid}
+		LEFT JOIN t_client_manage t3 ON t1.em_id=t3.tm_employee and t3.is_delete=0 and t3.tm_login_status=0
+		 where
+		t1.em_type = 1
+		and t1.is_delete = 0 and t1.em_team = #{parentId}
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryAllEmRelationshipVoList" resultMap="rm_EmployeeRelationshipVo" parameterType="java.lang.Long">
+		select t2.er_id,t2.p_id,t2.em_reservation,COUNT(t3.tm_employee) as count,t1.em_id,t1.em_name,t1.em_team
+		from t_employee_manage t1
+		LEFT JOIN t_em_relationship t2 on t1.em_id = t2.em_id  and t2.is_delete = 0 and t2.p_id = #{pid}
+		LEFT JOIN t_client_manage t3 ON t1.em_id=t3.tm_employee and t3.is_delete=0 and t3.tm_login_status=0
+		where
+		t1.em_type = 1
+		and t1.is_delete = 0
+		GROUP BY t1.em_id
+	</select>
+</mapper>

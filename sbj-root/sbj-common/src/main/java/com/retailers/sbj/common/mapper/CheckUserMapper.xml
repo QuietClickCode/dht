@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.CheckUserMapper">
+
+	<resultMap id="rm_checkUser" type="com.retailers.sbj.common.entity.CheckUser">
+			<result property="cuId" column="cu_id"/>
+			<result property="oid" column="o_id"/>
+			<result property="cid" column="c_id"/>
+			<result property="cuValidateCode" column="cu_validate_code"/>
+			<result property="isUse" column="is_use"/>
+			<result property="useTime" column="use_time"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+	<resultMap id="rm_checkUser_vo" type="com.retailers.sbj.common.vo.CheckUserVo">
+		<result property="cuId" column="cu_id"/>
+		<result property="oid" column="o_id"/>
+		<result property="cid" column="c_id"/>
+		<result property="cuValidateCode" column="cu_validate_code"/>
+		<result property="isUse" column="is_use"/>
+		<result property="useTime" column="use_time"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="openingDate" column="openingDate"/>
+		<result property="clientName" column="clientName"/>
+		<result property="clientPhone" column="clientPhone"/>
+		<result property="headImgUrl" column="headImgUrl"/>
+		<result property="count" column="count"/>
+		<result property="empName" column="empName"/>
+		<result property="empId" column="empId"/>
+		<result property="tname" column="tname"/>
+		<result property="tid" column="tid"/>
+	</resultMap>
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="checkUser_columns">
+		cu_id,o_id,c_id,cu_validate_code,is_use,use_time,is_delete,version
+	</sql>
+	<!-- 根据客户通过审核记录表主键取得数据 -->
+	<select id="queryCheckUserByCuId" resultMap="rm_checkUser" parameterType="java.lang.Long">
+		SELECT <include refid="checkUser_columns" />
+		FROM t_check_user WHERE cu_id = #{cuId}
+	</select>
+	<!-- 客户通过审核记录表查询条件组合 -->
+	<sql id="checkUser_where">
+		<where>
+			<if test="null != params.cuId">
+				AND cu_id = #{params.cuId}
+			</if>
+			<if test="null != params.oid">
+				AND o_id = #{params.oid}
+			</if>
+			<if test="null != params.cid">
+				AND c_id = #{params.cid}
+			</if>
+			<if test="null != params.cuValidateCode and '' != params.cuValidateCode">
+				AND cu_validate_code = #{params.cuValidateCode}
+			</if>
+			<if test="null != params.isUse">
+				AND is_use = #{params.isUse}
+			</if>
+			<if test="null != params.useTimeBegin">
+				AND use_time &gt;= #{params.useTime}
+			</if>
+			<if test="null != params.useTimeEnd">
+				AND use_time &lt;= #{params.useTime}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryCheckUserList" resultMap="rm_checkUser" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="checkUser_columns" />
+		FROM t_check_user
+		<include refid="checkUser_where"/>
+	</select>
+
+	<select id="queryCheckUserValidateCode" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.*,
+		t3.o_start_time openingDate
+		FROM
+		t_check_user t1
+		LEFT JOIN t_opening t3 ON t1.o_id=t3.o_id and t3.is_delete=0
+		WHERE
+		t1.is_delete=0
+		and t1.c_id=#{cid}
+		and t1.o_id=
+		(SELECT t2.o_id
+		from t_opening t2
+		WHERE
+		t2.o_end_time>=CURRENT_DATE() and t2.is_delete=0 ORDER BY t2.o_end_time ASC limit 1)
+	</select>
+
+	<select id="queryCheckUserVoList" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t2.tm_name clientName,t2.tm_phone clientPhone,
+		t3.wau_headimgurl headImgUrl,
+		t4.em_name empName
+		FROM
+		t_check_user t1,
+		t_client_manage t2
+		LEFT JOIN t_wx_auth_user t3 ON t2.tm_id=t3.wau_u_id,
+		t_employee_manage t4
+
+		WHERE
+		t1.is_delete=0
+		and t2.is_delete=0
+		and t4.is_delete=0
+		and t1.c_id=t2.tm_id
+		and t1.o_id=#{params.oid}
+		and t2.tm_employee=t4.em_id
+		<if test="null!=params.isUse">
+			and t1.is_use=#{params.isUse}
+		</if>
+		<if test="null!=params.empIds">
+			and t2.tm_employee in
+			<foreach collection="params.empIds" item="empId" open="(" close=")" separator="," index="index">
+				#{params.empIds[${index}]}
+			</foreach>
+		</if>
+		<if test="null!=params.tids">
+			and t4.em_team in
+			<foreach collection="params.tids" item="tid" open="(" close=")" separator="," index="index">
+				#{params.tids[${index}]}
+			</foreach>
+		</if>
+
+		<if test="null!=params.eid">
+			and t2.tm_employee=#{params.eid}
+		</if>
+	</select>
+
+	<select id="queryCheckUserNum">
+		SELECT
+		t1.*,COUNT(*) count
+		FROM
+		t_check_user t1
+		WHERE
+		t1.is_delete=0
+		GROUP BY t1.is_use
+	</select>
+
+	<select id="queryAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t4.t_id tid,t4.t_name tname,
+		t3.em_name empName,t3.em_id empId,
+		count(*) count
+		FROM
+		t_check_user t1,
+		t_client_manage t2,
+		t_employee_manage t3,
+		t_team t4
+		WHERE
+		t1.is_delete=0
+		and t1.o_id=#{params.oid}
+		and t2.is_delete=0
+		and t3.is_delete=0
+		and t3.em_type=1
+		and t4.is_delete=0
+		and t4.t_id=t3.em_team
+		and t1.c_id=t2.tm_id
+		and t2.tm_employee=t3.em_id
+		<if test="null!=params.tidList">
+			and t4.t_id in
+			<foreach collection="params.tidList" item="tid" open="(" close=")" separator=",">
+				#{tid}
+			</foreach>
+		</if>
+		<if test="null!=params.emIdList">
+			and t3.em_id IN
+			<foreach collection="params.emIdList" item="emId" open="(" close=")" separator=",">
+				#{emId}
+			</foreach>
+		</if>
+		and t1.is_use=#{params.isUse}
+	</select>
+
+	<select id="queryAllAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse}
+		LEFT JOIN t_team t3 ON t3.t_id=t1.em_team
+		where
+		 t1.is_delete=0
+
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryTeamAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse},
+		t_team t3
+		WHERE
+		t3.t_id=t1.em_team
+		and t1.is_delete=0
+		and t3.t_id IN
+		<foreach collection="params.tidList" item="tid" open="(" close=")" separator=",">
+			#{tid}
+		</foreach>
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryEmpAchievement" resultMap="rm_checkUser_vo">
+		SELECT
+		t1.em_name empName,t1.em_id empId,
+		t3.t_id tid,t3.t_name tname,
+		COUNT(t4.c_id) count
+		FROM
+		t_employee_manage t1
+		LEFT JOIN t_client_manage t2 ON t1.em_id=t2.tm_employee and t2.is_delete=0 and t2.tm_login_status=0
+		LEFT JOIN t_check_user t4 ON t2.tm_id=t4.c_id and t4.is_delete=0 and t4.o_id=#{params.oid}  and t4.is_use=#{params.isUse},
+		t_team t3
+		WHERE
+		t3.t_id=t1.em_team
+		and t1.is_delete=0
+		and t1.em_id IN
+		<foreach collection="params.emIdList" item="emId" open="(" close=")" separator=",">
+			#{emId}
+		</foreach>
+		GROUP BY t1.em_id
+	</select>
+
+	<select id="queryUsedOrNotUse" resultMap="rm_checkUser_vo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t1.*,
+		t2.o_start_time openingDate
+		FROM
+		t_check_user t1,
+		t_opening t2
+		WHERE
+		t1.o_id=t2.o_id
+		and t1.is_delete=0
+		and t2.is_delete=0
+		and CURRENT_DATE()>t2.o_end_time
+		and t1.is_use=#{params.isUse}
+		and t1.c_id=#{params.cid}
+	</select>
+	<!--添加客户通过审核记录表 -->
+	<insert id="saveCheckUser" parameterType="com.retailers.sbj.common.entity.CheckUser" useGeneratedKeys="true" keyProperty="cuId">
+		INSERT INTO t_check_user (
+			o_id,c_id,cu_validate_code,is_use,use_time,is_delete,version
+		) VALUES
+		(
+			#{oid,jdbcType=BIGINT},#{cid,jdbcType=BIGINT},#{cuValidateCode,jdbcType=VARCHAR},#{isUse,jdbcType=BIGINT},#{useTime,jdbcType=DATE},#{isDelete,jdbcType=BIGINT},0
+		)
+	</insert>
+	<!--修改客户通过审核记录表 -->
+	<update id="updateCheckUser" parameterType="com.retailers.sbj.common.entity.CheckUser">
+		UPDATE t_check_user
+		<set>
+            <if test="null != oid">
+                o_id = #{oid},
+            </if>
+            <if test="null != cid">
+                c_id = #{cid},
+            </if>
+            <if test="null != cuValidateCode and '' != cuValidateCode">
+                cu_validate_code = #{cuValidateCode},
+            </if>
+            <if test="null != isUse">
+                is_use = #{isUse},
+            </if>
+            <if test="null != useTime">
+                use_time = #{useTime},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE cu_id = #{cuId} and version = #{version}
+	</update>
+	<!--删除客户通过审核记录表 -->
+	<delete id="deleteCheckUserByCuId" parameterType="java.lang.Long">
+		DELETE FROM t_check_user WHERE cu_id = #{cuId}
+	</delete>
+</mapper>

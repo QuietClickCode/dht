@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.ScanCodeMapper">
+
+	<resultMap id="rm_scanCode" type="com.retailers.sbj.common.entity.ScanCode">
+			<result property="scId" column="sc_id"/>
+			<result property="oid" column="oid"/>
+			<result property="emId" column="em_id"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_scanCodeVo" type="com.retailers.sbj.common.vo.ScanCodeVo">
+		<result property="scId" column="sc_id"/>
+		<result property="oid" column="oid"/>
+		<result property="emId" column="em_id"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="scanCode_columns">
+		sc_id,oid,em_id,is_delete,version
+	</sql>
+	<!-- 根据扫码人员关系表主键取得数据 -->
+	<select id="queryScanCodeByScId" resultMap="rm_scanCode" parameterType="java.lang.Long">
+		SELECT <include refid="scanCode_columns" />
+		FROM t_scan_code WHERE sc_id = #{scId}
+	</select>
+	<!-- 扫码人员关系表查询条件组合 -->
+	<sql id="scanCode_where">
+		<where>
+			<if test="null != params.scId">
+				AND sc_id = #{params.scId}
+			</if>
+			<if test="null != params.oid">
+				AND oid = #{params.oid}
+			</if>
+			<if test="null != params.emId">
+				AND em_id = #{params.emId}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryScanCodeList" resultMap="rm_scanCodeVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="scanCode_columns" />
+		FROM t_scan_code
+		<include refid="scanCode_where"/>
+	</select>
+	<!--添加扫码人员关系表 -->
+	<insert id="saveScanCode" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="scId">
+		INSERT INTO t_scan_code (oid,em_id,is_delete,version) VALUES
+		<foreach collection ="list" item="code" index= "index" separator =",">
+			(
+				#{code.oid},#{code.emId},#{code.isDelete},#{code.version}
+			)
+		</foreach>
+	</insert>
+	<!--修改扫码人员关系表 -->
+	<update id="updateScanCode" parameterType="com.retailers.sbj.common.entity.ScanCode">
+		UPDATE t_scan_code
+		<set>
+            <if test="null != oid">
+                oid = #{oid},
+            </if>
+            <if test="null != emId">
+                em_id = #{emId},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE sc_id = #{scId} and version = #{version}
+	</update>
+	<!--删除扫码人员关系表 -->
+	<delete id="deleteScanCodeByScId" parameterType="java.lang.Long">
+		DELETE FROM t_scan_code WHERE sc_id = #{scId}
+	</delete>
+
+	<select id="queryOpeningEmployee" resultMap="rm_scanCode" parameterType="java.lang.Long">
+		select * from t_scan_code where oid = #{oid} and is_delete = 0
+	</select>
+
+	<update id="deleteOpeningEmployee" parameterType="java.lang.Long">
+		update t_scan_code set is_delete = 1 where oid = #{oid} and is_delete = 0
+	</update>
+</mapper>

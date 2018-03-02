@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.HouseTypeManageMapper">
+
+	<resultMap id="rm_houseTypeManage" type="com.retailers.sbj.common.entity.HouseTypeManage">
+			<result property="htId" column="ht_id"/>
+			<result property="htTypeName" column="ht_type_name"/>
+			<result property="htType" column="ht_type"/>
+			<result property="htArea" column="ht_area"/>
+			<result property="htRecommend" column="ht_recommend"/>
+			<result property="htShowImg" column="ht_showImg"/>
+			<result property="htImage" column="ht_image"/>
+			<result property="htInfo" column="ht_info"/>
+			<result property="isShow" column="is_show"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<resultMap id="rm_houseTypeManageVo" type="com.retailers.sbj.common.vo.HouseTypeManageVo">
+		<result property="htId" column="ht_id"/>
+		<result property="htTypeName" column="ht_type_name"/>
+		<result property="htType" column="ht_type"/>
+		<result property="htArea" column="ht_area"/>
+		<result property="htShowImg" column="ht_showImg"/>
+		<result property="htRecommend" column="ht_recommend"/>
+		<result property="htImage" column="ht_image"/>
+		<result property="htInfo" column="ht_info"/>
+		<result property="isShow" column="is_show"/>
+		<result property="isDelete" column="is_delete"/>
+		<result property="version" column="version"/>
+		<result property="imagePath" column="imagePath"/>
+		<result property="showImgPath" column="showImgPath"/>
+		<result property="isLike" column="is_like"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="houseTypeManage_columns">
+		ht_id,ht_type_name,ht_type,ht_area,ht_showImg,ht_recommend,ht_image,ht_info,is_show,is_delete,version
+	</sql>
+	<!-- 根据户型表主键取得数据 -->
+	<select id="queryHouseTypeManageByHtId" resultMap="rm_houseTypeManage" parameterType="java.lang.Long">
+		SELECT <include refid="houseTypeManage_columns" />
+		FROM t_house_type_manage WHERE ht_id = #{htId}
+	</select>
+
+	<select id="queryHouseTypeManageByHtIds" resultMap="rm_houseTypeManage">
+		SELECT *
+		FROM t_house_type_manage t1
+		WHERE
+		t1.is_delete=0
+		and t1.ht_id in
+		<foreach item="htId" collection="htIds" open="(" close=")" separator=",">
+			#{htId}
+		</foreach>
+	</select>
+	<!-- 户型表查询条件组合 -->
+	<sql id="houseTypeManage_where">
+		<where>
+			<if test="null != params.htId">
+				AND ht_id = #{params.htId}
+			</if>
+			<if test="null != params.htTypeName and '' != params.htTypeName">
+				AND ht_type_name = #{params.htTypeName}
+			</if>
+			<if test="null != params.htType and '' != params.htType">
+				AND ht_type = #{params.htType}
+			</if>
+			<if test="null != params.htArea">
+				AND ht_area = #{params.htArea}
+			</if>
+			<if test="null != params.htRecommend">
+				AND ht_recommend = #{params.htRecommend}
+			</if>
+			<if test="null != params.htImage">
+				AND ht_image = #{params.htImage}
+			</if>
+			<if test="null != params.htShowImg">
+				AND ht_showImg = #{params.htShowImg}
+			</if>
+			<if test="null != params.htInfo and '' != params.htInfo">
+				AND ht_info = #{params.htInfo}
+			</if>
+			<if test="null != params.isShow">
+				AND is_show = #{params.isShow}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryHouseTypeManageList" resultMap="rm_houseTypeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="houseTypeManage_columns" />
+		FROM t_house_type_manage
+		<include refid="houseTypeManage_where"/>
+		ORDER BY ht_recommend DESC,ht_id ASC
+	</select>
+	<select id="queryHourseTypeManageVoWithUid" resultMap="rm_houseTypeManageVo" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT
+		t2.is_like,
+		t3.show_url imagePath,
+		t4.show_url showImgPath,
+		t1.*
+		FROM
+		t_house_type_manage t1
+		LEFT JOIN t_user_like_hourse t2 ON t1.ht_id=t2.h_id and t2.is_delete=0 and t2.u_id=#{params.uid}
+		LEFT JOIN t_attachment t3 ON t3.id=t1.ht_image
+		LEFT JOIN t_attachment t4 ON t4.id=t1.ht_showImg
+		WHERE
+		t1.is_delete=0
+		ORDER BY t1.ht_recommend DESC,ht_id ASC
+	</select>
+	<!--添加户型表 -->
+	<insert id="saveHouseTypeManage" parameterType="com.retailers.sbj.common.entity.HouseTypeManage" useGeneratedKeys="true" keyProperty="htId">
+		INSERT INTO t_house_type_manage (
+			ht_type_name,ht_type,ht_area,ht_recommend,ht_image,ht_showImg,ht_info,is_show,is_delete,version
+		) VALUES
+		(
+			#{htTypeName,jdbcType=VARCHAR},#{htType,jdbcType=VARCHAR},#{htArea,jdbcType=DOUBLE},#{htRecommend,jdbcType=INTEGER},#{htImage,jdbcType=BIGINT},#{htShowImg,jdbcType=BIGINT},#{htInfo,jdbcType=VARCHAR},#{isShow,jdbcType=INTEGER},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改户型表 -->
+	<update id="updateHouseTypeManage" parameterType="com.retailers.sbj.common.entity.HouseTypeManage">
+		UPDATE t_house_type_manage
+		<set>
+            <if test="null != htTypeName and '' != htTypeName">
+                ht_type_name = #{htTypeName},
+            </if>
+            <if test="null != htType and '' != htType">
+                ht_type = #{htType},
+            </if>
+            <if test="null != htArea">
+                ht_area = #{htArea},
+            </if>
+            <if test="null != htRecommend">
+                ht_recommend = #{htRecommend},
+            </if>
+            <if test="null != htImage">
+                ht_image = #{htImage},
+            </if>
+			<if test="null != htShowImg">
+				ht_showImg = #{htShowImg},
+			</if>
+            <if test="null != htInfo and '' != htInfo">
+                ht_info = #{htInfo},
+            </if>
+            <if test="null != isShow">
+                is_show = #{isShow},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE ht_id = #{htId} and version = #{version}
+	</update>
+	<!--删除户型表 -->
+	<delete id="deleteHouseTypeManageByHtId" parameterType="java.lang.Long">
+		DELETE FROM t_house_type_manage WHERE ht_id = #{htId}
+	</delete>
+
+	<!--根据楼栋查询所有绑定的户型-->
+	<select id="queryAllHouseType" parameterType="java.util.List" resultMap="rm_houseTypeManage">
+		select t3.* FROM t_floor_relationship t1 LEFT JOIN t_house_type_manage t3
+		  ON t1.fr_id=t3.ht_id and t3.is_delete=0 WHERE t1.is_delete=0
+			and fm_id in
+			<foreach collection="list" item="type" open="(" close=")" separator=",">
+				#{type}
+			</foreach>
+	</select>
+</mapper>

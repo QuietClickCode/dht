@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.TeamMapper">
+
+	<resultMap id="rm_team" type="com.retailers.sbj.common.entity.Team">
+			<result property="tid" column="t_id"/>
+			<result property="tname" column="t_name"/>
+			<result property="tcompany" column="t_company"/>
+			<result property="torder" column="t_order"/>
+			<result property="isDelete" column="is_delete"/>
+			<result property="version" column="version"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="team_columns">
+		t_id,t_name,t_company,t_order,is_delete,version
+	</sql>
+	<!-- 根据团队表主键取得数据 -->
+	<select id="queryTeamByTid" resultMap="rm_team" parameterType="java.lang.Long">
+		SELECT <include refid="team_columns" />
+		FROM t_team WHERE t_id = #{tid}
+	</select>
+	<!-- 团队表查询条件组合 -->
+	<sql id="team_where">
+		<where>
+			<if test="null != params.tid">
+				AND t_id = #{params.tid}
+			</if>
+			<if test="null != params.tname and '' != params.tname">
+				AND t_name like concat('%', #{params.tname} ,'%')
+			</if>
+			<if test="null != params.tcompany and '' != params.tcompany">
+				AND t_company = #{params.tcompany}
+			</if>
+			<if test="null != params.torder">
+				AND t_order = #{params.torder}
+			</if>
+			<if test="null != params.isDelete">
+				AND is_delete = #{params.isDelete}
+			</if>
+			<if test="null != params.version">
+				AND version = #{params.version}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="queryTeamList" resultMap="rm_team" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="team_columns" />
+		FROM t_team
+		<include refid="team_where"/>ORDER BY t_order
+	</select>
+
+	<select id="queryAllTeam" resultMap="rm_team">
+		SELECT * FROM t_team WHERE is_delete = 0
+	</select>
+	<!--添加团队表 -->
+	<insert id="saveTeam" parameterType="com.retailers.sbj.common.entity.Team" useGeneratedKeys="true" keyProperty="tid">
+		INSERT INTO t_team (
+			t_name,t_company,t_order,is_delete,version
+		) VALUES
+		(
+			#{tname,jdbcType=VARCHAR},#{tcompany,jdbcType=VARCHAR},#{torder,jdbcType=BIGINT},#{isDelete,jdbcType=INTEGER},0
+		)
+	</insert>
+	<!--修改团队表 -->
+	<update id="updateTeam" parameterType="com.retailers.sbj.common.entity.Team">
+		UPDATE t_team
+		<set>
+            <if test="null != tname and '' != tname">
+                t_name = #{tname},
+            </if>
+            <if test="null != tcompany and '' != tcompany">
+                t_company = #{tcompany},
+            </if>
+            <if test="null != torder">
+                t_order = #{torder},
+            </if>
+            <if test="null != isDelete">
+                is_delete = #{isDelete},
+            </if>
+            <if test="null != version">
+                version = version+1,
+            </if>
+		</set>
+		WHERE t_id = #{tid} and version = #{version}
+	</update>
+	<!--删除团队表 -->
+	<delete id="deleteTeamByTid" parameterType="java.lang.Long">
+		DELETE FROM t_team WHERE t_id = #{tid}
+	</delete>
+</mapper>
