@@ -56,13 +56,27 @@ public class WxUserController extends BaseController {
     Logger logger = LoggerFactory.getLogger(WxUserController.class);
 
 
+    /**
+     * 获取前端传递的微信用户信息，获取tel，openid，type字段
+     * @param code
+     * @param wxAuthUser
+     * @param encryptedData
+     * @param iv
+     * @param enunionidData
+     * @param unionidiv
+     * @return
+     */
     @RequestMapping("/login")
     @ResponseBody
     public Map<String,Object> login(@Param("code") String code, WxAuthUser wxAuthUser, String encryptedData, String iv,String enunionidData,String unionidiv){
-        System.out.println(code);
+        //System.out.println("------授权登录-----"+code);
         return loginReturnMap(code,wxAuthUser,encryptedData,iv,enunionidData,unionidiv);
     }
 
+    /**
+     * 根据code第一次获取openid并授权登录
+     * @param code
+     */
     @RequestMapping("/firstGetOpenid")
     @ResponseBody
     public void firstGetOpenid(@Param("code") String code){
@@ -71,6 +85,7 @@ public class WxUserController extends BaseController {
                 "&secret=" + WxConfig.APP_SECRET+
                 "&grant_type=authorization_code" +
                 "&js_code="+code;
+        //System.out.println("-----第一次获取openid并授权登录---------");
         GetFromServer(url);
     }
 //    @RequestMapping("/saveUserInfo")
@@ -93,14 +108,68 @@ public class WxUserController extends BaseController {
         return null;
     }
 
+    /**
+     * 获取前端传递的微信用户信息，获取用户绑定的手机号
+     * @param encryptedData
+     * @param iv
+     * @return
+     */
+    @RequestMapping("/getTelRequest")
+    @ResponseBody
+    public Map<String,Object> getTelRequest(@Param("code") String code,String encryptedData, String iv){
+        System.out.println("------获取用户手机号-----"+code);
+        return getTel(code,encryptedData,iv);
+    }
 
+    /**
+     * 后台请求微信获取微信用户手机号
+     * @param code
+     * @param encryptedData
+     * @param iv
+     * @return
+     */
+    public Map<String,Object> getTel(String code,String encryptedData,String iv) {
+        String url = "https://api.weixin.qq.com/sns/jscode2session?" +
+                "appid=" + WxConfig.APP_ID+
+                "&secret=" + WxConfig.APP_SECRET+
+                "&grant_type=authorization_code" +
+                "&js_code="+code;
+        Long curTime = System.currentTimeMillis();
+        Long loginouttime = 24*60*60*1000L;//有效时间24个小时
+        Date endTime = new Date(curTime+loginouttime);
+        Map returnMap = new HashMap();
+        try {
+            String respStr = "";
+            if(ObjectUtils.isNotEmpty(url)){
+                System.out.println(url);
+                respStr = GetFromServer(url);
+                System.out.println(respStr);
+                logger.info(respStr);
+                JSONObject jsonObject = JSON.parseObject(respStr);
+                String openid = jsonObject.getString("openid");
+                String unionid = jsonObject.getString("unionid");
+                String sessionKey = jsonObject.getString("session_key");
+                String phone = "";
+                phone = MyHttpUrlConnection.decryptPhoneData(encryptedData,iv,sessionKey);
+                if(ObjectUtils.isNotEmpty(openid)){
+                    String randStr = DESUtils.encryptDES(openid, DesKey.WEB_KEY);
+                    randStr = URLEncoder.encode(randStr,"utf-8");
+                    WebSystemConstant.putValue(randStr,endTime);
+                    returnMap.put("randStr",randStr);
+                    returnMap.put("phone",phone);
+                    System.out.println("----获取微信用户手机号----"+randStr.toString());
+                    return returnMap;
+                }else{
 
+                    returnMap.put("msg","您的信息有误");
+                }
 
-
-
-
-
-
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return returnMap;
+    }
 
     public Map<String,Object> loginReturnMap(String code,WxAuthUser wxAuthUser,String encryptedData,String iv,String enunionidData,String unionidiv ) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?" +
@@ -268,6 +337,7 @@ public class WxUserController extends BaseController {
             System.out.println(url);
             return "";
         }
+        System.out.println("--retStr--"+retStr);
         return retStr;
 
     }

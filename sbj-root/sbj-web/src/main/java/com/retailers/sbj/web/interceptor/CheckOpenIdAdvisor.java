@@ -25,7 +25,7 @@ import java.util.Map;
 public class CheckOpenIdAdvisor {
 
     // Service层切点
-    @Pointcut("@annotation(com.retailers.hnc.web.annotation.CheckOpenId)")
+    @Pointcut("@annotation(com.retailers.sbj.web.annotation.CheckOpenId)")
     public void CheckOpenId() {
         System.out.println("CheckOpenId==============================================================>>>>");
     }

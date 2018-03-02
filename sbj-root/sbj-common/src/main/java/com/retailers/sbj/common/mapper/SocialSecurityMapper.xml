@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.retailers.sbj.common.dao.SocialSecurityMapper">
+
+	<resultMap id="rm_socialSecurity" type="com.retailers.sbj.common.entity.SocialSecurity">
+		<result property="id" column="id"/>
+		<result property="name" column="name"/>
+		<result property="idCard" column="id_card"/>
+		<result property="ssCard" column="ss_card"/>
+		<result property="tel" column="tel"/>
+	</resultMap>
+
+	<!-- 用于select查询公用抽取的列 -->
+	<sql id="socialSecurity_columns">
+		id,name,id_card,ss_card,tel
+	</sql>
+	<!-- 根据模拟社保卡信息绑定数据表主键取得数据 -->
+	<select id="querySocialSecurityById" resultMap="rm_socialSecurity" parameterType="java.lang.Long">
+		SELECT <include refid="socialSecurity_columns" />
+		FROM t_social_security WHERE id = #{id}
+	</select>
+	<!-- 模拟社保卡信息绑定数据表查询条件组合 -->
+	<sql id="socialSecurity_where">
+		<where>
+			<if test="null != params.id">
+				AND id = #{params.id}
+			</if>
+			<if test="null != params.name and '' != params.name">
+				AND name = #{params.name}
+			</if>
+			<if test="null != params.idCard and '' != params.idCard">
+				AND id_card = #{params.idCard}
+			</if>
+			<if test="null != params.ssCard and '' != params.ssCard">
+				AND ss_card = #{params.ssCard}
+			</if>
+			<if test="null != params.tel and '' != params.tel">
+				AND tel = #{params.tel}
+			</if>
+		</where>
+	</sql>
+	<!--分页查询 -->
+	<select id="querySocialSecurityList" resultMap="rm_socialSecurity" parameterType="com.retailers.mybatis.pagination.Pagination">
+		SELECT <include refid="socialSecurity_columns" />
+		FROM t_social_security
+		<include refid="socialSecurity_where"/>
+	</select>
+	<!--添加模拟社保卡信息绑定数据表 -->
+	<insert id="saveSocialSecurity" parameterType="com.retailers.sbj.common.entity.SocialSecurity" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO t_social_security (
+		name,id_card,ss_card,tel
+		) VALUES
+		(
+		#{name,jdbcType=VARCHAR},#{idCard,jdbcType=VARCHAR},#{ssCard,jdbcType=VARCHAR},#{tel,jdbcType=VARCHAR}
+		)
+	</insert>
+	<!--修改模拟社保卡信息绑定数据表 -->
+	<update id="updateSocialSecurity" parameterType="com.retailers.sbj.common.entity.SocialSecurity">
+		UPDATE t_social_security
+		<set>
+			<if test="null != name and '' != name">
+				name = #{name},
+			</if>
+			<if test="null != idCard and '' != idCard">
+				id_card = #{idCard},
+			</if>
+			<if test="null != ssCard and '' != ssCard">
+				ss_card = #{ssCard},
+			</if>
+			<if test="null != tel and '' != tel">
+				tel = #{tel},
+			</if>
+		</set>
+		WHERE id = #{id}
+	</update>
+	<!--删除模拟社保卡信息绑定数据表 -->
+	<delete id="deleteSocialSecurityById" parameterType="java.lang.Long">
+		DELETE FROM t_social_security WHERE id = #{id}
+	</delete>
+
+	<!-- 根据模拟社保卡信息绑定数据表身份证号，社保卡，姓名 取得数据 -->
+	<select id="querySocialSecurity" resultMap="rm_socialSecurity" parameterType="com.retailers.sbj.common.entity.SocialSecurity">
+		SELECT <include refid="socialSecurity_columns" />
+		FROM t_social_security WHERE name = #{name} AND id_card = #{idCard} AND ss_card = #{ssCard}
+	</select>
+</mapper>
