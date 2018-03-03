@@ -112,6 +112,17 @@ public class OrderServiceTest extends TestBaseJunit {
         }
     }
 
+
+    /**
+     * 取得订单支付金额
+     */
+    @Test
+    public void queryMenberPrice()throws Exception{
+        long uid=1545352;
+        String orderNo="CZ180303145455024";
+        orderService.queryMenberPrice(uid,orderNo);
+    }
+
     @Test
     public void clearExpireOrder()throws Exception{
         orderService.clearExpireOrder();

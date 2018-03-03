@@ -1166,6 +1166,10 @@ public class OrderServiceImpl implements OrderService {
 		if(ObjectUtils.isEmpty(recharge)){
 			rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
 		}else{
+			//判断订单是否为充值
+			if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+				return rtn;
+			}
 			//取得用户的折扣
 			long discount=recharge.getRdiscount();
 			//钱包支付实际支付金额
