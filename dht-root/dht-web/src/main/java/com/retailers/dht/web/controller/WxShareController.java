@@ -52,6 +52,8 @@ import java.util.*;
 @RequestMapping("wxShare")
 public class WxShareController extends BaseController{
 
+    Logger logger= LoggerFactory.getLogger(WxShareController.class);
+
     @Autowired
     private GoodsService goodsService;
 
@@ -61,6 +63,7 @@ public class WxShareController extends BaseController{
         path = path.substring(1);
         String noncestr = createRandomString();
         String jsapi_ticket = WxConfig.ACCESS_TICKET;
+        logger.info("我的ACCESS_TICKET："+jsapi_ticket);
         System.out.println("jsapi_ticket:"+jsapi_ticket);
         Long timestamp = new Date().getTime()/1000;
         String signature = "";
@@ -71,6 +74,9 @@ public class WxShareController extends BaseController{
         }
         System.out.println(homePath);
         try {
+            logger.info("我的homePath："+homePath);
+            logger.info("我的noncestr："+noncestr);
+            logger.info("我的timestamp："+timestamp);
             signature = Sha1DESUtils.SHA1(noncestr,jsapi_ticket, timestamp, homePath);
         }catch (Exception e){
             e.printStackTrace();
@@ -81,7 +87,7 @@ public class WxShareController extends BaseController{
 
         map.put("nonceStr",noncestr);
         map.put("timestamp",timestamp);
-        map.put("appid","wxfd2628cfc7f6defb");
+        map.put("appid",WxConfig.APP_ID);
         map.put("signature",signature);
         return map;
     }

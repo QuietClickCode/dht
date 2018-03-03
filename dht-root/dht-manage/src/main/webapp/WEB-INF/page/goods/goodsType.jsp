@@ -260,15 +260,9 @@
                     </ex:perm>
 
                 </center>
-                <ex:perm url="/goods/addGoodsGtgsrel">
                     <button class="btn btn-default" type="button" onclick="addgtgclrel()" id="addgtgclrelbtn">新增</button>
-                </ex:perm>
-                <ex:perm url="/goods/removeGoodsGtgsrel">
                     <button class="btn btn-default" type="button" onclick="deletegtgclrel()" id="deletegtgclrelbtn">删除</button>
-                </ex:perm>
-                <ex:perm url="/goods/queryGoodsGtgsrelLists">
                     <button class="btn btn-primary" type="button" onclick="refreshmygtgclTbody()" style="float: right">刷新</button>
-                </ex:perm>
                 <div class="row clearfix" style="margin-top: 5px">
                     <div class="col-md-12 column">
                         <table class="table table-bordered">
@@ -370,9 +364,7 @@
                     return "无";
                 }else if(value==1){
                     let html='';
-                    <ex:perm url="goods/queryGoodsGtgbrelLists">
                     html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editGtGb(\''+row.gtId+'\')"">编辑</button>&nbsp;';
-                    </ex:perm>
                     return html;
                 }
             }
@@ -387,9 +379,7 @@
                     return "无";
                 }else if(value==1){
                     let html='';
-                    <ex:perm url="goods/queryGoodsGtgsrelLists">
                     html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editGtGs(\''+row.gtId+'\')"">编辑</button>&nbsp;';
-                    </ex:perm>
                     return html;
                 }
             }
@@ -404,9 +394,7 @@
                     return "无";
                 }else if(value==1){
                     let html='';
-                    <ex:perm url="goods/queryGoodsGtgclrelLists">
                     html+='<button type="button" data-loading-text="Loading..." class="btn btn-primary" autocomplete="off" onclick="event.stopPropagation();editGtGcl(\''+row.gtId+'\')"">编辑</button>&nbsp;';
-                    </ex:perm>
                     return html;
                 }
             }

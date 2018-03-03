@@ -738,15 +738,9 @@
                                                     </ex:perm>
 
                                                 </center>
-                                                <ex:perm url="/goods/addGoodsGgclrel">
                                                     <button class="btn btn-default" style="float: left" type="button" onclick="addggclrel()" id="addggclrelbtn">新增</button>
-                                                </ex:perm>
-                                                <ex:perm url="/goods/removeGoodsGgclrel">
                                                     <button class="btn btn-default" style="float: left" type="button" onclick="deleteggclrel()" id="deleteggclrelbtn">删除</button>
-                                                </ex:perm>
-                                                <ex:perm url="/goods/queryGoodsGgclrelLists">
                                                     <button class="btn btn-primary" type="button" onclick="refreshmygclTbody()" style="float: right">刷新</button>
-                                                </ex:perm>
                                                 <div class="row clearfix" style="margin-top: 5px">
                                                     <div class="col-md-12 column">
                                                         <table class="table table-bordered">
