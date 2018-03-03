@@ -156,6 +156,7 @@ public class WxPayController extends BaseController{
             Map<String,String> rtn = payService.createWxPay(orderNo,uiv.getWauOpenid(),ip);
             return success(rtn);
         }catch(Exception e){
+            logger.info("创建支付订单失败:\r\n{}",StringUtils.getErrorInfoFromException(e));
             return errorForSystem(e.getMessage());
         }
     }

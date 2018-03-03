@@ -568,6 +568,7 @@ public class OrderServiceImpl implements OrderService {
 			orderDetail.setRemark("用户购买充值卡");
 			orderDetail.setOdActualPrice(recharge.getRprice());
 			orderDetail.setOdGoodsPrice(recharge.getRprice());
+			orderDetail.setOdIsDiscount((long)OrderConstant.BUY_GOODS_MENBER_DISCOUNT_NO);
 			orderDetail.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
 			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
@@ -1166,6 +1167,11 @@ public class OrderServiceImpl implements OrderService {
 		if(ObjectUtils.isEmpty(recharge)){
 			rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
 		}else{
+			//判断订单是否为充值
+			if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+				rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
+				return rtn;
+			}
 			//取得用户的折扣
 			long discount=recharge.getRdiscount();
 			//钱包支付实际支付金额
