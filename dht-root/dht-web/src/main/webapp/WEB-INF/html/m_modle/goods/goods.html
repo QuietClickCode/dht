@@ -1725,6 +1725,9 @@
         var title = $('#gname').html();
         var link = homePath;
         var desc = removeHTMLTag($('#gdescription').html());
+        if(desc==''){
+            desc = '点击查看商品详情';
+        }
         //share to timeline
         // 获取“分享到朋友圈”按钮点击状态及自定义分享内容接口
         wx.onMenuShareTimeline({
