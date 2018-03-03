@@ -72,8 +72,8 @@ public class ShareImageUtils {
     private static final int FONT_TOP_HEIGHT=20;
 
     public static void main(String[] args)throws Exception {
-        String goodsImgUrl="http://dht.kuaiyis.com/attachment/goods/2018/01/02/0a017bf6583676949a70662f164bd25d_originalfile.jpg";
-        generateShareImage("测试商品","￥12.36","www.baidu.com",goodsImgUrl,null);
+        String goodsImgUrl="https://img.alicdn.com/imgextra/i1/127939148/TB2wqoToShlpuFjSspkXXa1ApXa_!!127939148.jpg";
+        generateShareImage("测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品测试商品","￥12.36","www.baidu.com",goodsImgUrl,null);
     }
     /**
      * 生成分享图片
@@ -83,6 +83,11 @@ public class ShareImageUtils {
      * @param firstImg 商品首张图片
      */
     public static void generateShareImage(String goodsNm, String goodsPrice, String url, String firstImg, OutputStream out)throws Exception{
+        if(ObjectUtils.isNotEmpty(goodsNm)){
+            if(goodsNm.length()>=11){
+                goodsNm=goodsNm.substring(0,11)+"……";
+            }
+        }
         BufferedImage textImg=addText(goodsNm,goodsPrice);
         //取得商品首张图片
         BufferedImage goodsImg=generateGoodsImg(firstImg);
