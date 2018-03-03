@@ -568,6 +568,7 @@ public class OrderServiceImpl implements OrderService {
 			orderDetail.setRemark("用户购买充值卡");
 			orderDetail.setOdActualPrice(recharge.getRprice());
 			orderDetail.setOdGoodsPrice(recharge.getRprice());
+			orderDetail.setOdIsDiscount((long)OrderConstant.BUY_GOODS_MENBER_DISCOUNT_NO);
 			orderDetail.setOdIsRefund(OrderConstant.ORDER_REFUND_STATUS_UN);
 			orderDetailMapper.saveOrderDetail(orderDetail);
 			rtn.put("orderNo",orderNo);
