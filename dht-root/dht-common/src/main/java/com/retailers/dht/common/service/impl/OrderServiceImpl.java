@@ -1169,6 +1169,7 @@ public class OrderServiceImpl implements OrderService {
 		}else{
 			//判断订单是否为充值
 			if(order.getOrderType().equals(OrderEnum.RECHARGE.getKey())){
+				rtn.put("menberPrice",NumberUtils.formaterNumberPower(payPrice));
 				return rtn;
 			}
 			//取得用户的折扣
