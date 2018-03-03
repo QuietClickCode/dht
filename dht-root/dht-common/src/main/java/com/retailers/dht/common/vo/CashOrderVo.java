@@ -50,4 +50,8 @@ public class CashOrderVo extends CashOrder {
     public String getCashMoney() {
         return NumberUtils.formaterNumberPower(coMoney);
     }
+
+    public String getCashActualMoney(){return NumberUtils.formaterNumberPower(coActualMoney);}
+
+    public String getCashRate(){return NumberUtils.formaterNumber(coRate*100,2)+"%";}
 }

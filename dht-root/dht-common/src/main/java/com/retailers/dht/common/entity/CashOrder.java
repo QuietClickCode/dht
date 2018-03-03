@@ -59,6 +59,12 @@ public class CashOrder implements java.io.Serializable {
 	/**提现下划时间*/
 	@NotEmpty
 	private Date coReturnTime;
+	/**提现实际到帐金额*/
+	@NotEmpty
+	protected java.lang.Long coActualMoney;
+	/**用户提现费率*/
+	@NotEmpty
+	protected Double coRate;
 	//columns END
 
 	public CashOrder(){
@@ -166,5 +172,21 @@ public class CashOrder implements java.io.Serializable {
 
 	public void setCoReturnTime(Date coReturnTime) {
 		this.coReturnTime = coReturnTime;
+	}
+
+	public Long getCoActualMoney() {
+		return coActualMoney;
+	}
+
+	public void setCoActualMoney(Long coActualMoney) {
+		this.coActualMoney = coActualMoney;
+	}
+
+	public Double getCoRate() {
+		return coRate;
+	}
+
+	public void setCoRate(Double coRate) {
+		this.coRate = coRate;
 	}
 }

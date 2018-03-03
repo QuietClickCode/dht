@@ -215,6 +215,9 @@
     <div class="coupon-box displayN" id="cash_allaow">
         <div class="container_box">
             <div class="hd">
+                <p class="tip_item" style="color: red">提现平台收取${rate}%手续费</p>
+            </div>
+            <div class="hd">
                 <span>输入提现金额</span>
                 <input type="text" class="input_price" value="0" name="">
                 <span style="float: right;">元</span>
@@ -257,6 +260,8 @@
 <script src="/js/tabs.js"></script>
 <script src="/js/layer_mobile/layer.js"></script>
 <script>
+    //取得提现手续费
+    let cashMoneyRate=${rates};
     $(function () {
         let tab = getUrlParam('tab');
         $("."+tab).click();
@@ -270,53 +275,67 @@
 
     var isSave = false;
     $(".cash").click(function () {
-        let input_price = $(".input_price").val();
-        let price = ${details.allowCash};
-        console.log(input_price);
-        if(input_price == ''){
-            layer.open({
-                content: '请输入提现金额'
-                ,skin: 'msg'
-                ,time: 1
-            });
-            return;
-        }
-        if(input_price > price){
-            layer.open({
-                content: '大于可提现金额'
-                ,skin: 'msg'
-                ,time: 1
-            });
-            return;
-        }
         if(!isSave){
-            isSave = true;
-            $.ajax({
-                url:'/cashMoney/userCashMoney',
-                type:'post',
-                dataType:'json',
-                data:{
-                    money:input_price
-                },
-                success:function (data) {
-                    isSave = false;
-                    if(data.msg == 'SUCCESS'){
-                        layer.open({
-                            content: '提现成功'
-                            ,skin: 'msg'
-                            ,time: 2
-                        });
-                        let text = $("._price").text();
-                        $("._price").text(text - input_price);
-                        $(".input_price").val(0);
-                    }else{
-                        layer.open({
-                            content: data.msg
-                            ,skin: 'msg'
-                            ,time: 2
-                        });
-                        $(".input_price").val(0);
-                    }
+            isSave=true;
+            let input_price = $(".input_price").val();
+            let price = ${details.allowCash};
+            console.log(input_price);
+            if(input_price == ''){
+                layer.open({
+                    content: '请输入提现金额'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
+                isSave=false;
+                return;
+            }
+            if(input_price > price){
+                layer.open({
+                    content: '大于可提现金额'
+                    ,skin: 'msg'
+                    ,time: 1
+                });
+                isSave=false;
+                return;
+            }
+            //取得实际到帐金额
+            let sjje=input_price-(input_price*cashMoneyRate);
+            sjje=sjje.toFixed(2);
+            //询问框
+            layer.open({
+                content: '本次提现平台将收取您提现手费费:'+(input_price-sjje).toFixed(2)+'，实际到帐金额：'+sjje+',确认继续吗？'
+                ,btn: ['继续提现', '放弃提现']
+                ,yes: function(index){
+                    $.ajax({
+                        url:'/cashMoney/userCashMoney',
+                        type:'post',
+                        dataType:'json',
+                        data:{
+                            money:input_price
+                        },
+                        success:function (data) {
+                            isSave = false;
+                            if(data.msg == 'SUCCESS'){
+                                layer.open({
+                                    content: '提现成功'
+                                    ,skin: 'msg'
+                                    ,time: 2
+                                });
+                                let text = $("._price").text();
+                                $("._price").text(text - input_price);
+                                $(".input_price").val(0);
+                            }else{
+                                layer.open({
+                                    content: data.msg
+                                    ,skin: 'msg'
+                                    ,time: 2
+                                });
+                                $(".input_price").val(0);
+                            }
+                        }
+                    });
+                },no:function(){
+                    isSave=false;
                 }
             });
         }

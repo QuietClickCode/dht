@@ -144,6 +144,7 @@
             <p class="tip_item">1. 待提现金额需要在七个工作日之后才能提现</p>
             <p class="tip_item">2. 可提现金额可以立即提现</p>
             <p class="tip_item">3. 已提现是历史提现金额</p>
+            <p class="tip_item">4. 提现平台收取${rate}%手续费</p>
         </div>
 
     </div>
