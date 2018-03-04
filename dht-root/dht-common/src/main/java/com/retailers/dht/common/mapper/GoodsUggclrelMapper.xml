@@ -95,6 +95,7 @@
 		LEFT JOIN t_attachment t4 ON t2.u_imgid=t4.id
 		<include refid="goodsUggclrel_where"/>
 		GROUP BY t1.u_id,t1.gcl_time
+		order by t1.uggcl_id DESC
 	</select>
 	<!--添加商品用户评论关系表 -->
 	<insert id="saveGoodsUggclrel" parameterType="com.retailers.dht.common.entity.GoodsUggclrel" useGeneratedKeys="true" keyProperty="uggclId">
