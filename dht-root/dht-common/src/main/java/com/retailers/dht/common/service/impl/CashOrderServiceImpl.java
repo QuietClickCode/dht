@@ -2,6 +2,7 @@
 package com.retailers.dht.common.service.impl;
 
 import com.retailers.dht.common.constant.CashMoneyConstant;
+import com.retailers.dht.common.constant.SystemConstant;
 import com.retailers.dht.common.constant.UserCardPackageConstant;
 import com.retailers.dht.common.dao.CashOrderMapper;
 import com.retailers.dht.common.dao.LogUserCardPackageMapper;
@@ -16,10 +17,13 @@ import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.UserInfoVIew;
 import com.retailers.dht.common.vo.CashOrderVo;
 import com.retailers.mybatis.common.constant.SingleThreadLockConstant;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.mybatis.common.enm.OrderEnum;
+import com.retailers.mybatis.common.entity.SysParameterConfig;
 import com.retailers.mybatis.common.service.ProcedureToolsService;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.tools.exception.AppException;
+import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import com.retailers.tools.utils.StringUtils;
 import org.slf4j.Logger;
@@ -114,11 +118,14 @@ public class CashOrderServiceImpl implements CashOrderService {
 	@Transactional(rollbackFor = Exception.class)
 	public Map<String, Object> userCashMoney(Long uid, Long money, String remark)throws AppException {
 		logger.info("用户发起提现请求，提现用户:{},提现金额:{}",uid,money);
-		if(money.intValue()<100){
-			throw new AppException("提现金额最小值为:1.00元");
+		//取得平台提现费率
+		double rate = SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_CASH_MONEY_RATE,Double.class);
+		long sjje=money- NumberUtils.priceChangeFen(NumberUtils.formaterNumber(NumberUtils.priceChangeYuan(money)*rate,2));
+		if(sjje<100){
+			throw new AppException("提现实际到帐金额最小值为:1.00元");
 		}
-		if(money.intValue()>2000000){
-			throw new AppException("提现金额最大值为:20000.00元");
+		if(sjje>2000000){
+			throw new AppException("提现实际到帐金额最大值为:20000.00元");
 		}
 		Date curDate=new Date();
 		Map<String,Object> rtn=new HashMap<String,Object>();
@@ -145,6 +152,8 @@ public class CashOrderServiceImpl implements CashOrderService {
 			co.setCoMoney(money);
 			co.setCoCreateTime(curDate);
 			co.setCoStatus(CashMoneyConstant.CASH_STATUS_CREATE);
+			co.setCoRate(rate);
+			co.setCoActualMoney(sjje);
 			cashOrderMapper.saveCashOrder(co);
 			//减少用户提现金额
 			int total = userCardPackageMapper.userCashMoney(uid,money);
@@ -252,7 +261,7 @@ public class CashOrderServiceImpl implements CashOrderService {
 			co.setCoReturnTime(curDate);
 			try{
 				//微信打款
-				Map<String,String> rtnMap = payService.wxPlayMoney(co.getCoNo(),co.getCoMoney(),uiv.getWauOpenid(),uiv.getUname(),ip);
+				Map<String,String> rtnMap = payService.wxPlayMoney(co.getCoNo(),co.getCoActualMoney(),uiv.getWauOpenid(),uiv.getUname(),ip);
 				String return_code = rtnMap.get("return_code");//通信标识（ SUCCESS/FAIL）
 				String return_msg = rtnMap.get("return_msg");//返回信息
 				String result_code = rtnMap.get("result_code");//交易标识（ SUCCESS/FAIL）

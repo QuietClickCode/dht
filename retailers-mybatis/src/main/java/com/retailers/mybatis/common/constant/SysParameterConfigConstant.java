@@ -64,6 +64,11 @@ public class SysParameterConfigConstant {
      */
     public static final String WX_PAY_CERT_LOCAL_ADDRESS="WX_PAY_CERT_LOCAL_ADDRESS";
 
+    /**
+     * 用户提现手续费
+     */
+    public static final String USER_CASH_MONEY_RATE="USER_CASH_MONEY_RATE";
+
 
     //系统 参数对应的key值
     public static Map<String,Object> params=new HashMap<String, Object>();

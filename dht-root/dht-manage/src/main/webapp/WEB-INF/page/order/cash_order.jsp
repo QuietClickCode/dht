@@ -143,6 +143,14 @@
             title: '提现金额'
         },
         {
+            field: 'cashActualMoney',
+            title: '实际到帐金额'
+        },
+        {
+            field: 'cashRate',
+            title: '提现费率'
+        },
+        {
             field: 'coCreateTime',
             title: '创建时间'
         },

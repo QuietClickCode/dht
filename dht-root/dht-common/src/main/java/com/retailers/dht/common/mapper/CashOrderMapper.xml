@@ -17,6 +17,8 @@
 		<result property="coReturnNo" column="co_return_no"/>
 		<result property="coReturnData" column="co_return_data"/>
 		<result property="coReturnTime" column="co_return_time"/>
+		<result property="coActualMoney" column="co_actual_money"/>
+		<result property="coRate" column="co_rate"/>
 	</resultMap>
 	<resultMap id="rm_cashOrder_vo" type="com.retailers.dht.common.vo.CashOrderVo">
 		<result property="coId" column="co_id"/>
@@ -33,13 +35,16 @@
 		<result property="coReturnNo" column="co_return_no"/>
 		<result property="coReturnData" column="co_return_data"/>
 		<result property="coReturnTime" column="co_return_time"/>
+		<result property="coActualMoney" column="co_actual_money"/>
+		<result property="coRate" column="co_rate"/>
 		<result property="userName" column="userName"/>
 		<result property="auditingNm" column="auditingNm"/>
+
 		<result property="cashNm" column="cashNm"/>
 	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="cashOrder_columns">
-		co_id,co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time
+		co_id,co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time,co_actual_money,co_rate
 	</sql>
 	<!-- 根据用户提现订单主键取得数据 -->
 	<select id="queryCashOrderByCoId" resultMap="rm_cashOrder" parameterType="java.lang.Long">
@@ -105,10 +110,10 @@
 	<!--添加用户提现订单 -->
 	<insert id="saveCashOrder" parameterType="com.retailers.dht.common.entity.CashOrder" useGeneratedKeys="true" keyProperty="coId">
 		INSERT INTO t_cash_order (
-			co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time
+			co_no,co_status,co_uid,co_money,co_create_time,co_auditing_sid,co_auditing_time,co_auditing_remark,co_remark,co_cash_sid,co_return_no,co_return_data,co_return_time,co_actual_money,co_rate
 		) VALUES
 		(
-			#{coNo,jdbcType=VARCHAR},#{coStatus,jdbcType=BIGINT},#{coUid,jdbcType=BIGINT},#{coMoney,jdbcType=BIGINT},#{coCreateTime,jdbcType=TIMESTAMP},#{coAuditingSid,jdbcType=BIGINT},#{coAuditingTime,jdbcType=TIMESTAMP},#{coAuditingRemark,jdbcType=VARCHAR},#{coRemark,jdbcType=VARCHAR},#{coCashSid,jdbcType=BIGINT},#{coReturnNo,jdbcType=VARCHAR},#{coReturnData,jdbcType=VARCHAR},#{coReturnTime,jdbcType=TIMESTAMP}
+			#{coNo,jdbcType=VARCHAR},#{coStatus,jdbcType=BIGINT},#{coUid,jdbcType=BIGINT},#{coMoney,jdbcType=BIGINT},#{coCreateTime,jdbcType=TIMESTAMP},#{coAuditingSid,jdbcType=BIGINT},#{coAuditingTime,jdbcType=TIMESTAMP},#{coAuditingRemark,jdbcType=VARCHAR},#{coRemark,jdbcType=VARCHAR},#{coCashSid,jdbcType=BIGINT},#{coReturnNo,jdbcType=VARCHAR},#{coReturnData,jdbcType=VARCHAR},#{coReturnTime,jdbcType=TIMESTAMP},#{coActualMoney,jdbcType=BIGINT},#{coRate,jdbcType=DECIMAL}
 		)
 	</insert>
 	<!--修改用户提现订单 -->

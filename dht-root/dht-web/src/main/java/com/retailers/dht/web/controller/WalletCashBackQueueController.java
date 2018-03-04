@@ -7,7 +7,9 @@ import com.retailers.dht.common.service.ReturnListService;
 import com.retailers.dht.common.service.WalletCashBackQueueService;
 import com.retailers.dht.common.view.WalletCashBackQueueView;
 import com.retailers.dht.web.base.BaseController;
+import com.retailers.mybatis.common.constant.SysParameterConfigConstant;
 import com.retailers.tools.base.BaseResp;
+import com.retailers.tools.utils.NumberUtils;
 import com.retailers.tools.utils.ObjectUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,6 +78,9 @@ public class WalletCashBackQueueController extends BaseController {
         Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("details",details);
+        //取得平台提现费率
+        double rate = SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_CASH_MONEY_RATE,Double.class);
+        modelAndView.addObject("rate", NumberUtils.formaterNumber(rate*100,2));
         modelAndView.setViewName(redirectUrl(request,"ranking/user_cash_detail"));
         return modelAndView;
     }
@@ -107,6 +112,10 @@ public class WalletCashBackQueueController extends BaseController {
         Map<String,String> details= walletCashBackQueueService.queryUserCashBackDetail(uid);
         ModelAndView modelAndView=new ModelAndView();
         modelAndView.addObject("details",details);
+        //取得平台提现费率
+        double rate = SysParameterConfigConstant.getValue(SysParameterConfigConstant.USER_CASH_MONEY_RATE,Double.class);
+        modelAndView.addObject("rates", rate);
+        modelAndView.addObject("rate", NumberUtils.formaterNumber(rate*100,2));
         modelAndView.setViewName(redirectUrl(request,"ranking/user_cash_page"));
         return modelAndView;
     }
