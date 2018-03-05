@@ -89,6 +89,21 @@
             float: right;
         }
 
+        .all-order-list li .order-infor .text-box p{
+            display: inline-block;
+        }
+
+        #pinjia{
+            display: inline-block;
+            width: 1.3rem;
+            height: 0.4rem;
+            line-height: .38rem;
+            border: 1px solid #b3b3b3;
+            border-radius: 3px;
+            margin-bottom: 0;
+            color: #333;
+            float: right;
+        }
     </style>
 </head>
 <body class="bge6">
@@ -547,7 +562,7 @@
                         ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
                         ov+='<img src="'+info.gImgUrl+'" alt=""></a><div class="text-box">';
                         ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
-                        ov+='</a><p>规格:'+info.gsName+'<span class="number" style="float: none">×'+info.odBuyNumber+'</span><a href="" onclink="appraise('+info.gId+','+info.odOrderId+');" class="btn2 pinjia">评价商品</a></p></div></div>';
+                        ov+='</a><p>规格:'+info.gsName+'<span class="number" style="float: none">×'+info.odBuyNumber+'</span></p><a href="" onclink="appraise('+info.gId+','+info.odOrderId+');" id="pinjia" class="btn2 pinjia">评价商品</a></div></div>';
                         buyTotalNm+=info.odBuyNumber;
                     }
                 }
