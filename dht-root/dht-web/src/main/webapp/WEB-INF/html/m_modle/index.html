@@ -625,7 +625,9 @@
                         $("img").lazyload({effect: "fadeIn"});
                     }else{
                         //展示图片
-                        $('#noseckillpimg').show();
+                        // $('#noseckillpimg').show();
+                        $('#seckillul').prev().hide();
+                        $('#seckillul').prev().prev().hide();
                     }
                 }
             });
@@ -713,7 +715,8 @@
                         $("img").lazyload({effect: "fadeIn"});
                     }else{
                         //展示图片
-                        $('#nospecialpimg').show();
+                        // $('#nospecialpimg').show();
+                        $('#barginul').prev().hide();
                     }
                 }
             });
@@ -795,7 +798,8 @@
                         pageNo++;
                         cpflag = true;
                     }else{
-                        $('#nocpimg').show();
+                        // $('#nocpimg').show();
+                        $('#cpul').prev().hide();
                     }
                 }
             });

@@ -8,6 +8,7 @@
 			<result property="gid" column="g_id"/>
 			<result property="gclId" column="gcl_id"/>
 			<result property="gclTime" column="gcl_time"/>
+			<result property="orderNo" column="order_no"/>
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
@@ -17,6 +18,7 @@
 		<result property="gid" column="g_id"/>
 		<result property="gclId" column="gcl_id"/>
 		<result property="gclTime" column="gcl_time"/>
+		<result property="orderNo" column="order_no"/>
 		<result property="isDelete" column="is_delete"/>
 		<result property="version" column="version"/>
 		<result property="uname" column="uname"/>
@@ -30,7 +32,7 @@
 
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsUggclrel_columns">
-		uggcl_id,u_id,g_id,gcl_id,gcl_time,is_delete,version
+		uggcl_id,u_id,g_id,gcl_id,order_no,gcl_time,is_delete,version
 	</sql>
 	<!-- 根据商品用户评论关系表主键取得数据 -->
 	<select id="queryGoodsUggclrelByUggclId" resultMap="rm_goodsUggclrel" parameterType="java.lang.Long">
@@ -64,6 +66,9 @@
 			</if>
 			<if test="null != params.gclId">
 				AND t1.gcl_id = #{params.gclId}
+			</if>
+			<if test="null != params.orderNo">
+				AND t1.order_no = #{params.orderNo}
 			</if>
 			<if test="null != params.gclTimeBegin">
 				AND t1.gcl_time &gt;= #{params.gclTime}

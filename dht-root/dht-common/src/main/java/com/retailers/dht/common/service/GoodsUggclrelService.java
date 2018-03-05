@@ -23,6 +23,7 @@ public interface GoodsUggclrelService {
 	 * @date 2017-11-16 13:54:57
 	 */
 	public boolean saveGoodsUggclrel(GoodsUggclrel goodsUggclrel);
+	public boolean saveGoodsUggclrel(Long gid,Long uid,Long orderNo, String gclIdStr);
 	/**
 	 * 编辑商品用户评论关系表
 	 * @param goodsUggclrel
@@ -63,6 +64,8 @@ public interface GoodsUggclrelService {
 	public GoodsUggclrelVo queryGoodsclsumandavg(Long gid);
 
 	public List<GoodsUggclrelVo> queryHasGoodscls(Long gid);
+
+
 }
 
 

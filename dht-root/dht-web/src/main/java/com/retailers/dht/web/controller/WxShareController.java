@@ -128,6 +128,11 @@ public class WxShareController extends BaseController{
             System.out.println(gidStr);
             Long gid = Long.parseLong(gidStr);
             goodsNm = goodsService.queryGoodsByGid(gid).getGname();
+            if (goodsNm.length()>11) {
+                goodsNm = goodsNm.substring(0,11); // 截取字符串
+                goodsNm = goodsNm+"..";
+            }
+
             url = url.substring(1);
             Long uid = getCurLoginUserId(request);
             String randStr = DESUtils.encryptDES(StringUtils.formate(""+uid,System.currentTimeMillis()+""), DesKey.WEB_KEY);

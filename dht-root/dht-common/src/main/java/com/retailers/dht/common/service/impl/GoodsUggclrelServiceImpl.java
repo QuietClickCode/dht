@@ -1,8 +1,8 @@
 
 package com.retailers.dht.common.service.impl;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import com.alibaba.fastjson.JSON;
 import com.retailers.dht.common.entity.GoodsUggclrel;
 import com.retailers.dht.common.dao.GoodsUggclrelMapper;
 import com.retailers.dht.common.service.GoodsUggclrelService;
@@ -26,6 +26,26 @@ public class GoodsUggclrelServiceImpl implements GoodsUggclrelService {
 		int status = goodsUggclrelMapper.saveGoodsUggclrel(goodsUggclrel);
 		return status == 1 ? true : false;
 	}
+
+	public boolean saveGoodsUggclrel(Long gid, Long uid,Long orderNo, String gclIdStr) {
+		List<Long> gclIds = JSON.parseArray(gclIdStr,Long.class);
+		int b = 0;
+		Set set = new HashSet();
+		for (Long gclId : gclIds) {
+			GoodsUggclrel goodsUggclrel = new GoodsUggclrel();
+			goodsUggclrel.setGclId(gclId);
+			goodsUggclrel.setGclTime(new Date());
+			goodsUggclrel.setGid(gid);
+			goodsUggclrel.setUid(uid);
+			goodsUggclrel.setUid(orderNo);
+			goodsUggclrel.setIsDelete(0L);
+			goodsUggclrel.setVersion(0L);
+			b = goodsUggclrelMapper.saveGoodsUggclrel(goodsUggclrel);
+			set.add(b);
+		}
+		return set.size()==1?true:false;
+	}
+
 	public boolean updateGoodsUggclrel(GoodsUggclrel goodsUggclrel) {
 		int status = goodsUggclrelMapper.updateGoodsUggclrel(goodsUggclrel);
 		return status == 1 ? true : false;

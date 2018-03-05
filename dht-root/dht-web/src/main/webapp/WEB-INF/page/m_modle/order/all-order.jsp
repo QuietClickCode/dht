@@ -75,6 +75,19 @@
             background-size: 0.3rem 0.3rem;
         }
 
+        .btn2 pinjia{
+            width: 1.3rem;
+            height: .4rem;
+            color: #333;
+            border-radius: 3px;
+            border: 1px solid #b3b3b3;
+            display: inline-block;
+            text-align: center;
+            line-height: .38rem;
+            /*margin-left: 4rem;*/
+            font-size: .26rem;
+            float: right;
+        }
 
     </style>
 </head>
@@ -468,6 +481,7 @@
      * 根据订单类型取得订单列表数据
      * @param orderStatus
      */
+    var flg = true;
     function queryOrderByStatus(orderStatus,num){
         var queryParams={
             pageSize: 30,
@@ -481,6 +495,10 @@
             data:queryParams,
             success: function (data) {
                 orderView(data.rows,num);
+                if (flg) {
+                    // setTimeout(function(){$("#pinjia").hide()}, 3000);
+                    $(".pinjia").hide();
+                }
             }
         });
     }
@@ -490,6 +508,7 @@
      * @param row
      */
     function orderView(rows,num){
+        flg = true;
         if(rows){
             if(rows.length == 0){
                 $(".order_tips").show();
@@ -528,11 +547,10 @@
                         ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
                         ov+='<img src="'+info.gImgUrl+'" alt=""></a><div class="text-box">';
                         ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
-                        ov+='</a><p>规格:'+info.gsName+'<span class="number">×'+info.odBuyNumber+'</span></p></div></div>';
+                        ov+='</a><p>规格:'+info.gsName+'<span class="number" style="float: none">×'+info.odBuyNumber+'</span><a href="" onclink="appraise('+info.gId+','+info.odOrderId+');" class="btn2 pinjia">评价商品</a></p></div></div>';
                         buyTotalNm+=info.odBuyNumber;
                     }
                 }
-
                 if(num == 100){
                     if(row.orderType == 'RECHARGE'){
                         if(row.orderStatus == 8){
@@ -588,6 +606,7 @@
                     ov+='<div class="count-infor">';
                     ov+='<span class="number">共'+buyTotalNm+'件</span>合计：￥'+row.orderTradePrice+'(含运费:'+row.orderLogisticsPrice+')<div class="btn-box"><a href="/order/orderInfo?orderId='+row.id+'">查看订单</a></div></div></li>';
                     $("#dpj").append(ov);
+                    flg = false;
                 }else if(num == 5){
                     if(row.orderType == 'RECHARGE'){
                         ov+='<div class="count-infor">';
@@ -628,6 +647,24 @@
             },
             success:function (data) {
                 window.location.reload();
+            }
+        });
+    }
+
+    function appraise(gid,orderid) {
+        $.ajax({
+            url:"/comment/toComment",
+            type:"post",
+            dataType: "json",
+            data:{
+                orderNo:orderid,
+                gid:gid
+            },
+            success:function (data) {
+                if (data == 'Have been evaluated') {
+                    // 已经评价过
+
+                }
             }
         });
     }

@@ -9,6 +9,7 @@ import com.retailers.dht.common.service.GoodsClassificationService;
 import com.retailers.dht.common.service.GoodsCommentlabelService;
 import com.retailers.dht.common.service.GoodsGgclrelService;
 import com.retailers.dht.common.service.GoodsService;
+import com.retailers.dht.common.vo.CommentVo;
 import com.retailers.dht.common.vo.GoodsCommentlabelVo;
 import com.retailers.dht.common.vo.GoodsGgclrelVo;
 import com.retailers.mybatis.pagination.Pagination;
@@ -225,6 +226,11 @@ public class GoodsGgclrelServiceImpl implements GoodsGgclrelService {
 			status += goodsGgclrelMapper.saveGoodsGgclrel(goodsGgclrel);
 		}
 		return status == gclIdsArr.length ? true : false;
+	}
+
+	public List<CommentVo> queryComment(Long gid) {
+		List<CommentVo> commentVos = goodsGgclrelMapper.queryComment(gid);
+		return commentVos;
 	}
 }
 

@@ -1,5 +1,6 @@
 package com.retailers.dht.common.dao;
 import com.retailers.dht.common.entity.GoodsGgclrel;
+import com.retailers.dht.common.vo.CommentVo;
 import com.retailers.mybatis.pagination.Pagination;
 import org.apache.ibatis.annotations.Param;
 
@@ -56,4 +57,5 @@ public interface GoodsGgclrelMapper {
 
 	public List<GoodsGgclrel> queryGclassGoodsGgclrelLists(@Param("gclassIds") List<Long> gclassIds);
 
+	public List<CommentVo> queryComment(Long gid);
 }

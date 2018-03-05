@@ -1,5 +1,6 @@
 
 package com.retailers.dht.common.service;
+import com.retailers.dht.common.vo.CommentVo;
 import com.retailers.dht.common.vo.GoodsGgclrelVo;
 import com.retailers.mybatis.pagination.Pagination;
 import com.retailers.dht.common.entity.GoodsGgclrel;
@@ -67,6 +68,8 @@ public interface GoodsGgclrelService {
 	public List<GoodsGgclrelVo> queryGclassGoodsGgclrelLists(Long gid);
 
 	public boolean saveDeleteGt(String gclIds,Long gid);
+
+	public List<CommentVo> queryComment(Long gid);
 }
 
 

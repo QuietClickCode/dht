@@ -12,7 +12,10 @@
 			<result property="isDelete" column="is_delete"/>
 			<result property="version" column="version"/>
 	</resultMap>
-
+	<resultMap id="commentVo" type="com.retailers.dht.common.vo.CommentVo">
+		<result property="tagName" column="gcl_name"/>
+		<result property="count" column="gcl_count"/>
+	</resultMap>
 	<!-- 用于select查询公用抽取的列 -->
 	<sql id="goodsGgclrel_columns">
 		ggcl_id,g_id,gcl_id,gclass_id,gcl_count,is_use,is_delete,version
@@ -59,6 +62,13 @@
 		SELECT t1.* from t_goods_ggclrel t1
 		LEFT JOIN t_goods_commentlabel t2 ON  t1.gcl_id=t2.gcl_id
 		<include refid="goodsGgclrel_where"/>
+	</select>
+
+	<!--查询品论-->
+	<select id="queryComment" resultMap="commentVo" parameterType="java.lang.Long">
+		select gcl_name,gcl_count FROM t_goods_ggclrel ggc
+		LEFT JOIN t_goods_commentlabel comm ON comm.gcl_id=ggc.gcl_id
+		where ggc.g_id = #{gid}
 	</select>
 	<select id="queryGclassGoodsGgclrelLists" resultMap="rm_goodsGgclrel">
 		SELECT t1.* from t_goods_ggclrel t1

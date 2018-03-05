@@ -27,6 +27,11 @@ public class GoodsUggclrel implements java.io.Serializable {
 	/**创建时间*/
 	@NotEmpty
 	private Date gclTime;
+	/**
+	 * 订单号
+	 */
+	@NotEmpty
+	private Long orderNo;
 	/**isDelete*/
 	@NotEmpty
 	private Long isDelete;
@@ -92,5 +97,11 @@ public class GoodsUggclrel implements java.io.Serializable {
 		return this.version;
 	}
 
+	public Long getOrderNo() {
+		return orderNo;
+	}
 
+	public void setOrderNo(Long orderNo) {
+		this.orderNo = orderNo;
+	}
 }
