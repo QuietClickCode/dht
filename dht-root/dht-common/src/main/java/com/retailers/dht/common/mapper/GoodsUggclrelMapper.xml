@@ -105,10 +105,10 @@
 	<!--添加商品用户评论关系表 -->
 	<insert id="saveGoodsUggclrel" parameterType="com.retailers.dht.common.entity.GoodsUggclrel" useGeneratedKeys="true" keyProperty="uggclId">
 		INSERT INTO t_goods_uggclrel (
-			u_id,g_id,gcl_id,gcl_time,is_delete,version
+			u_id,g_id,gcl_id,order_no,gcl_time,is_delete,version
 		) VALUES
 		(
-			#{uid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{gclId,jdbcType=BIGINT},#{gclTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
+			#{uid,jdbcType=BIGINT},#{gid,jdbcType=BIGINT},#{gclId,jdbcType=BIGINT},#{orderNo,jdbcType=BIGINT},#{gclTime,jdbcType=TIMESTAMP},#{isDelete,jdbcType=BIGINT},0
 		)
 	</insert>
 	<!--修改商品用户评论关系表 -->

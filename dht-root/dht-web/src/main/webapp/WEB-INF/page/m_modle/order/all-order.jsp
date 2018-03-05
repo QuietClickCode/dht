@@ -96,6 +96,7 @@
         #pinjia{
             display: inline-block;
             width: 1.3rem;
+            text-align: center;
             height: 0.4rem;
             line-height: .38rem;
             border: 1px solid #b3b3b3;
@@ -562,7 +563,7 @@
                         ov+='<div class="order-infor"><a href="javascript:void(0)" class="img">';
                         ov+='<img src="'+info.gImgUrl+'" alt=""></a><div class="text-box">';
                         ov+='<a href=""> <span class="text">'+info.gName+'</span><span class="price">￥'+info.gdPrice+'</span>';
-                        ov+='</a><p>规格:'+info.gsName+'<span class="number" style="float: none">×'+info.odBuyNumber+'</span></p><a href="" onclink="appraise('+info.gId+','+info.odOrderId+');" id="pinjia" class="btn2 pinjia">评价商品</a></div></div>';
+                        ov+='</a><p>规格:'+info.gsName+'<span class="number" style="float: none">×'+info.odBuyNumber+'</span></p><a href="/comment/toComment?orderNo='+info.odOrderId+'&gid='+info.gId+'" id="pinjia" class="btn2 pinjia">评价商品</a></div></div>';
                         buyTotalNm+=info.odBuyNumber;
                     }
                 }
@@ -666,23 +667,7 @@
         });
     }
 
-    function appraise(gid,orderid) {
-        $.ajax({
-            url:"/comment/toComment",
-            type:"post",
-            dataType: "json",
-            data:{
-                orderNo:orderid,
-                gid:gid
-            },
-            success:function (data) {
-                if (data == 'Have been evaluated') {
-                    // 已经评价过
 
-                }
-            }
-        });
-    }
 </script>
 
 <script>

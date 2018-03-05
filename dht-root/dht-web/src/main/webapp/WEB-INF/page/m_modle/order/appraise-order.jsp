@@ -56,23 +56,29 @@
 </div>
 
 <div class="pay_footer_box">
-    <a href="" class="pay_footer_btn" onclick="submit();" style="color: #fff;">发表评论</a>
+    <a href="javascript:void(0);" class="pay_footer_btn" onclick="submit();" style="color: #fff;">发表评论</a>
 </div>
 
 <script src="/js/jquery-1.9.1.min.js"></script>
 <script src="/js/TouchSlide.1.1.js"></script>
 <script src="/js/tabs.js"></script>
+<script src="/js/layer/layer.js"></script>
 <script src="/js/public.js"></script>
 <script>
 
+    <%--var flag1 = <%=session.getAttribute("flag")%>;--%>
     var gid = <%=session.getAttribute("gid")%>;
     var uid = <%=session.getAttribute("uid")%>;
+    var orderNo = <%=session.getAttribute("orderNo")%>;
 
     var map1 = new Map();
     var map2 = new Map();
     var map3 = new Map();
     var map4 = new Map();
     var map5 = new Map();
+
+
+
 
     // 加载评论标签
     $.ajax({
@@ -147,12 +153,16 @@
             data:{
                 gid:gid,
                 uid:uid,
+                orderNo:orderNo,
                 gclIdStr:json
             },
             success:function (data) {
                 // var datass = data.rows;
                 // alert("添加评论成功");
-                window.history.back();
+                layer.msg('评价商品成功');
+                // window.location.href="/order/orderList?id=#appraise";
+                // window.redirect("/order/orderList?id=#appraise");
+                window.history.back(-1);
             }
         });
     }
@@ -204,7 +214,29 @@
         $(".pay_mode_list li").click(function(){
             $(".pay_mode_list li").removeClass("active")
             $(this).addClass("active")
-        })
+        });
+        // 已评价返回页面
+        // if (flag1=="yes") {
+        //     alert("11");layer.msg('已评价过商品');
+        // }
+        $.ajax({
+            url:"/comment/haveComment",
+            type:"post",
+            dataType: "json",
+            success:function (data) {
+                // var datass = data.rows;
+                // alert("添加评论成功");
+                // alert(data.toString());
+                if (data.toString() == 'have') {
+                    layer.msg('已评价过商品');
+                    setTimeout(function(){
+                        // window.redirect("/order/orderList?id=#appraise");
+                        // window.location.href="/order/orderList?id=#appraise";
+                        window.history.back(-1);
+                    }, 1000);
+                }
+            }
+        });
     })
 
     function clinkTag(obj){

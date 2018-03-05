@@ -83,6 +83,7 @@ public class GoodsGgclrelController extends BaseController {
      */
     @RequestMapping("/addComment")
     @ResponseBody
+    @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,redirectUrl = "/loginPage",msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG,isOpenPage =true)
     public BaseResp addComment(Long gid,Long uid,Long orderNo, String gclIdStr) {
         boolean b = goodsUggclrelService.saveGoodsUggclrel(gid, uid,orderNo, gclIdStr);
         return b?success("添加成功"):errorForSystem("添加失败");
@@ -98,15 +99,28 @@ public class GoodsGgclrelController extends BaseController {
         request.getSession().setAttribute("uid",uid);
         request.getSession().setAttribute("gid",gid);
         request.getSession().setAttribute("orderNo",orderNo);
+
+        return redirectUrl(request,"/order/appraise-order");
+    }
+
+    /**
+     * 查询是否评价过
+     */
+    @RequestMapping("/haveComment")
+    @ResponseBody
+    public String haveComment(HttpServletRequest request) {
+        Object uid = request.getSession().getAttribute("uid");
+        Object gid = request.getSession().getAttribute("gid");
+        Object orderNo = request.getSession().getAttribute("orderNo");
         Map map = new HashMap();
         map.put("uid",uid);
         map.put("gid",gid);
         map.put("orderNo",orderNo);
         Pagination pagination = goodsUggclrelService.queryGoodsUggclrelList(map, 1, 1);
-        if (pagination.getData() == null) {
-            return redirectUrl(request,"/order/appraise-order");
+        if (pagination.getData().size() == 0) {
+            return "not have";
         } else {
-            return "Have been evaluated";
+            return "have";
         }
     }
 

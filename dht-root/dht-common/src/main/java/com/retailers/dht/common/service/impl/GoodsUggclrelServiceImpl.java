@@ -31,13 +31,14 @@ public class GoodsUggclrelServiceImpl implements GoodsUggclrelService {
 		List<Long> gclIds = JSON.parseArray(gclIdStr,Long.class);
 		int b = 0;
 		Set set = new HashSet();
+		System.out.println("xxxx"+uid+"--"+gid+"--"+orderNo);
 		for (Long gclId : gclIds) {
 			GoodsUggclrel goodsUggclrel = new GoodsUggclrel();
 			goodsUggclrel.setGclId(gclId);
 			goodsUggclrel.setGclTime(new Date());
 			goodsUggclrel.setGid(gid);
 			goodsUggclrel.setUid(uid);
-			goodsUggclrel.setUid(orderNo);
+			goodsUggclrel.setOrderNo(orderNo);
 			goodsUggclrel.setIsDelete(0L);
 			goodsUggclrel.setVersion(0L);
 			b = goodsUggclrelMapper.saveGoodsUggclrel(goodsUggclrel);
