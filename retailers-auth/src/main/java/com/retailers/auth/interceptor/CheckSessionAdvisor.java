@@ -27,13 +27,13 @@ import java.util.Map;
 /**
  * Created by admin on 2017/5/3.
  */
-@Aspect
+@Aspect//这是一个切面=切点+通知
 @Component
 public class CheckSessionAdvisor {
     Logger logger = LoggerFactory.getLogger(CheckSessionAdvisor.class);
 
     // Service层切点
-    @Pointcut("@annotation(com.retailers.auth.annotation.CheckSession)")
+    @Pointcut("@annotation(com.retailers.auth.annotation.CheckSession)")//这是切点,切点为注解
     public void checkSession() {
     }
 
@@ -49,14 +49,14 @@ public class CheckSessionAdvisor {
         logger.info("进入session校验aop 开始");
         Object result = null;
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder
-                .getRequestAttributes()).getRequest();
-        HttpSession session = request.getSession();
+                .getRequestAttributes()).getRequest();//springmvc获取request的api
+        HttpSession session = request.getSession();//取得session
         if(ObjectUtils.isNotEmpty(session)){
-            Object obj = JoinPointUtils.getMethod(joinPoint,CheckSession.class);
+            Object obj = JoinPointUtils.getMethod(joinPoint,CheckSession.class);//得到注解
             if(ObjectUtils.isNotEmpty(obj)&&obj instanceof CheckSession){
                 CheckSession cs = (CheckSession)obj;
                 if(ObjectUtils.isNotEmpty(session.getAttribute(cs.key()))){
-                    result = joinPoint.proceed();
+                    result = joinPoint.proceed();//注解key不为空,执行目标方法
                 }else{
                     String msg = cs.msg();
                     if(ObjectUtils.isEmpty(msg)){

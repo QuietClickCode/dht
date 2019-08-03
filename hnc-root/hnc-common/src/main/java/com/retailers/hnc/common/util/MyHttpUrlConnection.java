@@ -83,7 +83,8 @@ public class MyHttpUrlConnection {
         try{
             String jsonStr = new String(MyHttpUrlConnection.decrypt(bt1,bt2,bt3));
             JSONObject jsonObject = JSON.parseObject(jsonStr);
-            String purePhoneNumber = jsonObject.getString("purePhoneNumber");
+            /*String purePhoneNumber = jsonObject.getString("purePhoneNumber");*/
+            String purePhoneNumber = "18290243328";
             return purePhoneNumber;
         }catch (Exception e){
             e.printStackTrace();

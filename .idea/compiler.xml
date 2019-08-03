@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <module name="aliyun-sms" />
+        <module name="dht-attachment" />
+        <module name="dht-common" />
+        <module name="dht-manage" />
+        <module name="dht-web" />
+        <module name="hnc-common" />
+        <module name="hnc-manage" />
+        <module name="hnc-web" />
+        <module name="razz-common" />
+        <module name="razz-manage" />
+        <module name="reatilers-wx-common" />
+        <module name="reatilers-wx-manage" />
+        <module name="retailers-auth" />
+        <module name="retailers-mybatis" />
+        <module name="retailers-static" />
+        <module name="retailers-tools" />
+        <module name="sbj-common" />
+        <module name="sbj-manage" />
+        <module name="sbj-web" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="aliyun-sms" target="1.5" />
+      <module name="dht-attachment" target="1.5" />
+      <module name="dht-common" target="1.5" />
+      <module name="dht-manage" target="1.5" />
+      <module name="dht-root" target="1.5" />
+      <module name="dht-web" target="1.5" />
+      <module name="hnc-common" target="1.5" />
+      <module name="hnc-manage" target="1.5" />
+      <module name="hnc-root" target="1.5" />
+      <module name="hnc-web" target="1.5" />
+      <module name="razz-common" target="1.5" />
+      <module name="razz-manage" target="1.5" />
+      <module name="razz-root" target="1.5" />
+      <module name="reatilers-wx" target="1.5" />
+      <module name="reatilers-wx-common" target="1.5" />
+      <module name="reatilers-wx-manage" target="1.5" />
+      <module name="retailers-auth" target="1.5" />
+      <module name="retailers-mybatis" target="1.5" />
+      <module name="retailers-root" target="1.5" />
+      <module name="retailers-static" target="1.5" />
+      <module name="retailers-tools" target="1.5" />
+      <module name="sbj-common" target="1.5" />
+      <module name="sbj-manage" target="1.5" />
+      <module name="sbj-root" target="1.5" />
+      <module name="sbj-web" target="1.5" />
+    </bytecodeTargetLevel>
+  </component>
+</project>

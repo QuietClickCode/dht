@@ -54,29 +54,35 @@ public class GoodsFreightServiceImpl implements GoodsFreightService {
 	}
 	public GoodsFreight queryFreightByAddress(String address){
 		if(!ObjectUtils.isEmpty(address)){
-			String pro = address.substring(0,2);
+			String pro = address.substring(0,2);//截取0-2,含头不含尾
 			Map params = new HashMap();
-			params.put("cityname",pro);
-			List<City> cityList = cityService.queryCityList(params,1,1).getData();
-			if(!ObjectUtils.isEmpty(cityList)){
-				City c = cityList.get(0);
-				List<GoodsFreight> list = goodsFreightMapper.queryFreightByAddress(c.getCityid());
+			params.put("cityname",pro);//存入城市名字
+			List<City> cityList = cityService.queryCityList(params,1,1).getData();//得到城市列表
+			if(!ObjectUtils.isEmpty(cityList)){//城市数据不为空
+				City c = cityList.get(0);//取得第一个城市
+				List<GoodsFreight> list = goodsFreightMapper.queryFreightByAddress(c.getCityid());//查询运费对象list通过地址
 				GoodsFreight goodsFreight = new GoodsFreight();
-				for(GoodsFreight goodsFreight1:list){
-					if(goodsFreight1.getGfId()==0){
-						String freeArea = goodsFreight1.getGfFreeArea();
-						String[] freeAreaArr = freeArea.split(",");
-						for(String freeAreaStr:freeAreaArr){
-							int index = address.indexOf(freeAreaStr);
+				for(GoodsFreight goodsFreight1:list){//遍历运费对象list
+					if(goodsFreight1.getGfId()==0){//id==0的对象?
+						String freeArea = goodsFreight1.getGfFreeArea();//得到包邮地区
+						String[] freeAreaArr = freeArea.split(",");//数组中有多个地区
+						for(String freeAreaStr:freeAreaArr){//遍历数组
+							int index = address.indexOf(freeAreaStr);//address是否包含包邮地区
 							System.out.println("index:"+index);
 							if(index>=0){
-								goodsFreight.setGfName(goodsFreight1.getGfName());
-								goodsFreight.setGfPrice(goodsFreight1.getGfPrice());
+								goodsFreight.setGfName(goodsFreight1.getGfName());//设置运费名称
+								goodsFreight.setGfPrice(goodsFreight1.getGfPrice());//设置价格
 								return goodsFreight;
 							}
 						}
 					}else{
 						BeanUtils.copyProperties( goodsFreight1,goodsFreight);
+						/**
+						 *
+						 * 1、 通过反射将一个对象的值赋值个另外一个对象（前提是对象中属性的名字相同）。
+
+						 2、 BeanUtils.copyProperties(obj1,obj2); 经常闹混不知道是谁给谁赋值，无意中先到"后付前"这个词来帮助自己记忆这个功能。即将obj2的值赋值给obj1。
+						 */
 						return goodsFreight;
 					}
 				}

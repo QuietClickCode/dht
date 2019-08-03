@@ -19,17 +19,24 @@ import java.util.Map;
 /**
  * 公用controller
  */
-public class BaseController extends BaseWrite {
-    protected void validateForm(Object obj)throws AppException {
-        ValidationUtils.validate(obj);
+public class BaseController extends BaseWrite {//基本控制器,用于被继承,子类自动具有相应的通用方法
+    protected void validateForm(Object obj)throws AppException {//校验表单方法
+        ValidationUtils.validate(obj);//这儿利用hibernate提供的的注解式validator工具写了一个工具类和自定义异常来进行对实体类的字段进行校验
     }
     /**
-     * 取得当前登陆用户
+     * 取得当前登陆用户相关的信息
      * @param request
      * @return
      */
+    /**UserInfo
+     * 用户信息（详情）
+     * @author zhongp
+     * @version 1.0.1
+     * @data 2017/11/22
+     */
+    //从session中获取登录用户的对象
     protected UserInfoVIew getCurLoginUser(HttpServletRequest request){
-        Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
+        Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);//从session中获取登录用户的对象user
         UserInfoVIew userInfo=null;
         if(ObjectUtils.isNotEmpty(obj)){
             userInfo=(UserInfoVIew)obj;
@@ -41,7 +48,7 @@ public class BaseController extends BaseWrite {
      * @param request
      * @return
      */
-    protected Long getCurLoginUserId(HttpServletRequest request){
+    protected Long getCurLoginUserId(HttpServletRequest request){//
         Object obj =request.getSession().getAttribute(SystemConstant.LOG_USER_SESSION_KEY);
         UserInfoVIew sysUser=null;
         if(ObjectUtils.isNotEmpty(obj)){
@@ -56,7 +63,7 @@ public class BaseController extends BaseWrite {
      * @return
      */
     protected Long getShareUserId(HttpServletRequest request){
-        Object obj =request.getSession().getAttribute(SystemConstant.SHARE_USER_SESSION_KEY);
+        Object obj =request.getSession().getAttribute(SystemConstant.SHARE_USER_SESSION_KEY);//shareUser
         if(ObjectUtils.isNotEmpty(obj)){
             return (Long) obj;
         }
@@ -69,7 +76,7 @@ public class BaseController extends BaseWrite {
      * @param request
      * @return
      */
-    protected void setShareUserId(HttpServletRequest request,Long uid){
+    protected void setShareUserId(HttpServletRequest request,Long uid){//设置分享用户id
         request.getSession().setAttribute(SystemConstant.SHARE_USER_SESSION_KEY,uid);
     }
     /**

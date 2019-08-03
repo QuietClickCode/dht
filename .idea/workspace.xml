@@ -1,0 +1,2269 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ArtifactsWorkspaceSettings">
+    <artifacts-to-build>
+      <artifact name="hnc-web:war" />
+    </artifacts-to-build>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c02a895a-3d58-48be-89bc-414fa44cc820" name="Default" comment="添加评论模块">
+      <change beforePath="" afterPath="$PROJECT_DIR$/dht-root/dht-common/src/test/java/com/retailers/dht/com/test.java" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/sbj-root/sbj-common/sbj-common.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/sbj-root/sbj-manage/sbj-manage.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/sbj-root/sbj-root.iml" />
+      <change beforePath="" afterPath="$PROJECT_DIR$/sbj-root/sbj-web/sbj-web.iml" />
+      <change beforePath="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/GoodsFreightServiceImpl.java" afterPath="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/GoodsFreightServiceImpl.java" />
+      <change beforePath="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/view/UserInfoVIew.java" afterPath="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/view/UserInfoVIew.java" />
+      <change beforePath="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/base/BaseController.java" afterPath="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/base/BaseController.java" />
+      <change beforePath="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/BuyCarController.java" afterPath="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/BuyCarController.java" />
+      <change beforePath="$PROJECT_DIR$/filters/filter-local-env.properties" afterPath="$PROJECT_DIR$/filters/filter-local-env.properties" />
+      <change beforePath="$PROJECT_DIR$/hnc-root/hnc-common/src/main/java/com/retailers/hnc/common/util/MyHttpUrlConnection.java" afterPath="$PROJECT_DIR$/hnc-root/hnc-common/src/main/java/com/retailers/hnc/common/util/MyHttpUrlConnection.java" />
+      <change beforePath="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/BarCode1DServlet.java" afterPath="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/BarCode1DServlet.java" />
+      <change beforePath="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/ChannelController.java" afterPath="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/ChannelController.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/interceptor/CheckSessionAdvisor.java" afterPath="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/interceptor/CheckSessionAdvisor.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/JoinPointUtils.java" afterPath="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/JoinPointUtils.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/BaseWrite.java" afterPath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/BaseWrite.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/WriteData.java" afterPath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/WriteData.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/exception/AppException.java" afterPath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/exception/AppException.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ObjectUtils.java" afterPath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ObjectUtils.java" />
+      <change beforePath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ValidationUtils.java" afterPath="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ValidationUtils.java" />
+      <change beforePath="$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/EmployeeManageController.java" afterPath="$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/EmployeeManageController.java" />
+    </list>
+    <ignored path="$PROJECT_DIR$/razz-root/razz-common/target/" />
+    <ignored path="$PROJECT_DIR$/hnc-root/target/" />
+    <ignored path="$PROJECT_DIR$/retailers-static/target/" />
+    <ignored path="$PROJECT_DIR$/dht-root/dht-common/target/" />
+    <ignored path="$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/target/" />
+    <ignored path="$PROJECT_DIR$/retailers-auth/target/" />
+    <ignored path="$PROJECT_DIR$/razz-root/target/" />
+    <ignored path="$PROJECT_DIR$/reatilers-wx/reatilers-wx-common/target/" />
+    <ignored path="$PROJECT_DIR$/razz-root/razz-manage/target/" />
+    <ignored path="$PROJECT_DIR$/hnc-root/hnc-web/target/" />
+    <ignored path="$PROJECT_DIR$/dht-root/dht-manage/target/" />
+    <ignored path="$PROJECT_DIR$/dht-root/dht-attachment/target/" />
+    <ignored path="$PROJECT_DIR$/reatilers-wx/target/" />
+    <ignored path="$PROJECT_DIR$/retailers-tools/target/" />
+    <ignored path="$PROJECT_DIR$/aliyun-sms/target/" />
+    <ignored path="$PROJECT_DIR$/retailers-mybatis/target/" />
+    <ignored path="$PROJECT_DIR$/dht-root/target/" />
+    <ignored path="$PROJECT_DIR$/target/" />
+    <ignored path="$PROJECT_DIR$/hnc-root/hnc-common/target/" />
+    <ignored path="$PROJECT_DIR$/hnc-root/hnc-manage/target/" />
+    <ignored path="$PROJECT_DIR$/dht-root/dht-web/target/" />
+    <ignored path=".idea/" />
+    <ignored path="$PROJECT_DIR$/sbj-root/sbj-common/target/" />
+    <ignored path="$PROJECT_DIR$/sbj-root/sbj-manage/target/" />
+    <ignored path="$PROJECT_DIR$/sbj-root/sbj-web/target/" />
+    <ignored path="$PROJECT_DIR$/sbj-root/target/" />
+    <ignored mask="*.iml" />
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" show_ignored="true" />
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/$hnc_web.coverage" NAME="hnc_web Coverage Results" MODIFIED="1520570336570" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_TABLE_DETAILS" value="true" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <expand />
+    <select />
+  </component>
+  <component name="FavoritesManager">
+    <favorites_list name="大汇堂" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="famer.jsp" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/webapp/WEB-INF/page/ysjq/famer.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1125">
+              <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+              <folding>
+                <marker date="1519886552438" expanded="true" signature="1882:1987" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="2046:2071" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="2158:2292" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="2639:2744" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="2803:2828" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="2913:3041" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="26858:26870" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="27657:27663" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="28186:28192" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="28764:28770" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="29498:29508" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="46253:46259" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="46259:46265" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="46265:46271" ph="&amp;nbsp;" />
+                <marker date="1519886552438" expanded="true" signature="46285:46296" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="46321:46352" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="46949:46965" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="50646:50751" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="50822:50847" ph="..." />
+                <marker date="1519886552438" expanded="true" signature="50945:51079" ph="..." />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ClientIntentionController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/ClientIntentionController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="550">
+              <caret line="35" column="9" lean-forward="false" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArticleClassificationController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/java/com/retailers/dht/manage/controller/ArticleClassificationController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="575">
+              <caret line="39" column="19" lean-forward="false" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CityController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/java/com/retailers/dht/manage/controller/CityController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="422">
+              <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ArticleClassificationMapper.xml" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/ArticleClassificationMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="275">
+              <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+              <folding>
+                <marker date="1519886548217" expanded="true" signature="897:1005" ph="SELECT FROM t_article_classification" />
+                <marker date="1519886548217" expanded="true" signature="1793:1947" ph="SELECT FROM t_article_classification" />
+                <marker date="1519886548217" expanded="true" signature="2130:2342" ph="INSERT INTO t_article_classification... " />
+                <marker date="1519886548217" expanded="true" signature="2485:3070" ph="UPDATE t_article_classification... " />
+                <marker date="1519886548217" expanded="true" signature="3179:3235" ph="DELETE FROM t_article_classification... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="CashOrderMapper.xml" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/CashOrderMapper.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="4350">
+              <caret line="174" column="29" lean-forward="true" selection-start-line="174" selection-start-column="29" selection-end-line="174" selection-end-column="29" />
+              <folding>
+                <marker date="1520212214092" expanded="true" signature="2686:2772" ph="SELECT FROM t_cash_order" />
+                <marker date="1520212214092" expanded="true" signature="4725:4789" ph="SELECT FROM t_cash_order" />
+                <marker date="1520212214092" expanded="true" signature="4988:5691" ph="INSERT INTO t_cash_order... " />
+                <marker date="1520212214092" expanded="true" signature="5812:6973" ph="UPDATE t_cash_order... " />
+                <marker date="1520212214092" expanded="true" signature="7073:7119" ph="DELETE FROM t_cash_order... " />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Pagination.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/retailers-mybatis/src/main/java/com/retailers/mybatis/pagination/Pagination.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="200">
+              <caret line="12" column="28" lean-forward="false" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="37" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>评论</find>
+      <find>setAttribute</find>
+      <find>登录</find>
+      <find>queryLoginUser</find>
+      <find>queryLoginUserInfoView</find>
+      <find>redirectUrl</find>
+      <find>user-img</find>
+      <find>userLogin</find>
+      <find>/**</find>
+      <find>hibernate</find>
+      <find>validator</find>
+      <find>headUrl</find>
+      <find>WEB_REQ_TYPE</find>
+      <find>channelVal</find>
+      <find>channel</find>
+      <find>checkuser</find>
+      <find>checkUser</find>
+      <find>env</find>
+      <find>resources</find>
+      <find>packaging</find>
+      <find>impor</find>
+      <find>myba</find>
+      <find>commono</find>
+      <find>mybatis</find>
+      <find>D://localhost//haha//1.jpg&quot;</find>
+      <find>aop</find>
+      <find>WebSystemConstant.WEB_REQ_TYPE</find>
+      <find>save</find>
+      <find>default</find>
+      <find>targetName</find>
+    </findStrings>
+    <replaceStrings>
+      <replace>4</replace>
+      <replace>5</replace>
+    </replaceStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GradleLocalSettings">
+    <option name="externalProjectsViewState">
+      <projects_view />
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="CHANGED_PATHS">
+      <list>
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/dao/FamerGoodsMapper.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/FamerGoodsService.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/FamerGoodsServiceImpl.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/FamerGoodsController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/vo/MarriedGoodsVo.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/FamerGoodsMapper.xml" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/webapp/WEB-INF/page/m_modle/ysjq/famerList.jsp" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/webapp/WEB-INF/html/m_modle/index.html" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/webapp/WEB-INF/html/m_modle/goods/goods.html" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/GoodsGgcrelController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/vo/CommentVo.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/GoodsGgclrelService.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/dao/GoodsGgclrelMapper.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/GoodsGgclrelMapper.xml" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/GoodsGgclrelServiceImpl.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/entity/GoodsUggclrel.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/GoodsUggclrelService.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/WxShareController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/GoodsUggclrelServiceImpl.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/GoodsUggclrelMapper.xml" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/webapp/WEB-INF/page/m_modle/order/all-order.jsp" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/GoodsGgclrelController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/webapp/WEB-INF/page/m_modle/order/appraise-order.jsp" />
+        <option value="$PROJECT_DIR$/dht-root/dht-manage/src/main/webapp/WEB-INF/page/goods/goodsType.jsp" />
+        <option value="$PROJECT_DIR$/dht-root/dht-manage/src/main/java/com/retailers/dht/manage/controller/CityController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/UserMapper.xml" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/HomeController.java" />
+        <option value="$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/EmployeeManageController.java" />
+        <option value="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/exception/AppException.java" />
+        <option value="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ValidationUtils.java" />
+        <option value="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ObjectUtils.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/view/UserInfoVIew.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/base/BaseController.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/BuyCarController.java" />
+        <option value="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/BaseWrite.java" />
+        <option value="$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/WriteData.java" />
+        <option value="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/BarCode1DServlet.java" />
+        <option value="$PROJECT_DIR$/hnc-root/hnc-web/src/main/java/com/retailers/hnc/web/controller/ChannelController.java" />
+        <option value="$PROJECT_DIR$/hnc-root/hnc-common/src/main/java/com/retailers/hnc/common/service/impl/CheckUserServiceImpl.java" />
+        <option value="$PROJECT_DIR$/hnc-root/hnc-common/src/main/java/com/retailers/hnc/common/util/MyHttpUrlConnection.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/service/impl/GoodsFreightServiceImpl.java" />
+        <option value="$PROJECT_DIR$/filters/filter-local-env.properties" />
+        <option value="$PROJECT_DIR$/aliyun-sms/src/main/java/com/retailers/aliyun/sms/config/AppConfig.java" />
+        <option value="$PROJECT_DIR$/dht-root/pom.xml" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/test/java/com/retailers/dht/com/test.java" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/constant/CashMoneyConstant.java" />
+        <option value="$PROJECT_DIR$/razz-root/razz-manage/src/main/webapp/WEB-INF/web.xml" />
+        <option value="$PROJECT_DIR$/retailers-static/src/main/webapp/js/jquery.min.js" />
+        <option value="$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/filter/SystemStartFilter.java" />
+        <option value="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/interceptor/CheckSessionAdvisor.java" />
+        <option value="$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/JoinPointUtils.java" />
+      </list>
+    </option>
+  </component>
+  <component name="JsBuildToolGruntFileManager" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsBuildToolPackageJson" detection-done="true" sorting="DEFINITION_ORDER" />
+  <component name="JsGulpfileManager">
+    <detection-done>true</detection-done>
+    <sorting>DEFINITION_ORDER</sorting>
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="true" />
+    <option name="FILTER_DEBUG" value="true" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="generalSettings">
+      <MavenGeneralSettings>
+        <option name="localRepository" value="D:\repository" />
+        <option name="mavenHome" value="D:/apache-maven-3.3.9" />
+        <option name="userSettingsFile" value="D:\Program Files\apache-maven-3.5.2\conf\settings.xml" />
+      </MavenGeneralSettings>
+    </option>
+  </component>
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
+  </component>
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1359" />
+    <option name="y" value="467" />
+    <option name="width" value="1304" />
+    <option name="height" value="397" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+      <manualOrder />
+      <foldersAlwaysOnTop value="true" />
+    </navigator>
+    <panes>
+      <pane id="Scope" />
+      <pane id="AndroidView" />
+      <pane id="PackagesPane" />
+      <pane id="Scratches" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+              <item name="mapper" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="manage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="manage" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="json" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+              <item name="customer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-root" type="462c0819:PsiDirectoryNode" />
+              <item name="dht-web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="css" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-root" type="462c0819:PsiDirectoryNode" />
+              <item name="hnc-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+              <item name="org" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-common" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+              <item name="article" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-root" type="462c0819:PsiDirectoryNode" />
+              <item name="razz-manage" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+              <item name="page" type="462c0819:PsiDirectoryNode" />
+              <item name="menu" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="retailers-tools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="retailers-tools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="retailers-tools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="retailers-tools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="retailers-tools" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="tools" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-common" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="java" type="462c0819:PsiDirectoryNode" />
+              <item name="web" type="462c0819:PsiDirectoryNode" />
+              <item name="controller" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="layer" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="大汇堂" type="b2602c69:ProjectViewProjectNode" />
+              <item name="大汇堂" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-root" type="462c0819:PsiDirectoryNode" />
+              <item name="sbj-web" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="webapp" type="462c0819:PsiDirectoryNode" />
+              <item name="WEB-INF" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="aspect.path.notification.shown" value="true" />
+    <property name="settings.editor.selected.configurable" value="reference.settings.project.maven.importing" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="ChangesBrowser.SHOW_FLATTEN" value="false" />
+    <property name="SearchEverywhereHistoryKey" value="targetName&#9;PSI&#9;JAVA://org.bouncycastle.x509.X509AttributeCertStoreSelector#targetNames&#10;CheckSession&#9;FILE&#9;file://D:/Document And Settings2/Administrator/Desktop/大汇堂/retailers-auth/src/main/java/com/retailers/auth/interceptor/CheckSessionAdvisor.java&#10;jquery.min.js&#9;FILE&#9;file://D:/Document And Settings2/Administrator/Desktop/大汇堂/retailers-static/src/main/webapp/js/jquery.min.js&#10;@check&#9;PSI&#9;JAVA://com.retailers.hnc.web.annotation.CheckOpenId&#10;isAnnotationPresent&#9;PSI&#9;JAVA://org.springframework.core.annotation.AnnotationUtils#isAnnotationMetaPresent&#10;saveBuyCar&#9;PSI&#9;JAVA://com.retailers.dht.common.dao.BuyCarMapper#saveBuyCar&#10;gradle&#9;ACTION&#9;Gradle.ShowDaemons&#10;@Configuration&#9;PSI&#9;JAVA://org.springframework.context.annotation.Configuration&#10;springboot&#9;PSI&#9;JAVA://com.sun.org.glassfish.external.amx.AMXGlassfish.BootAMXCallback&#10;validataCode&#9;null&#9;null&#10;checks&#9;PSI&#9;JAVA://com.retailers.auth.interceptor.CheckSessionAdvisor&#10;checkSe&#9;PSI&#9;JAVA://com.retailers.auth.interceptor.CheckSessionAdvisor&#10;buycar&#9;PSI&#9;JAVA://com.retailers.dht.common.entity.BuyCar&#10;ATTACHMENT_SERVER_ADDRESS&#9;PSI&#9;JAVA://com.retailers.mybatis.common.constant.SysParameterConfigConstant#ATTACHMENT_SERVER_ADDRESS&#10;CheckOpenId&#9;null&#9;null&#10;Resourse&#9;FILE&#9;file://D:/Document And Settings2/Administrator/Desktop/大汇堂/retailers-auth/src/main/java/com/retailers/auth/bean/ResourseBean.java" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="com.retailers.dht.web.controller" />
+      <recent name="com.retailers.dht.common.vo" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Administrator\Desktop\retailers-root\dht-root\dht-web\src\main\webapp\WEB-INF\html\m_modle\goods" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager" selected="JUnit.test.test3">
+    <configuration name="test.test1" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.retailers.dht.com.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="dht-common" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.retailers.dht.com" />
+      <option name="MAIN_CLASS_NAME" value="com.retailers.dht.com.test" />
+      <option name="METHOD_NAME" value="test1" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="test.test2" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.retailers.dht.com.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="dht-common" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.retailers.dht.com" />
+      <option name="MAIN_CLASS_NAME" value="com.retailers.dht.com.test" />
+      <option name="METHOD_NAME" value="test2" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="test.test3" type="AndroidJUnit" factoryName="Android JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.retailers.dht.com.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="dht-common" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.retailers.dht.com" />
+      <option name="MAIN_CLASS_NAME" value="com.retailers.dht.com.test" />
+      <option name="METHOD_NAME" value="test3" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="Applet" factoryName="Applet">
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <module />
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="ENABLE_SWING_INSPECTOR" value="false" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="" />
+      <envs />
+    </configuration>
+    <configuration default="true" type="JUnit" factoryName="JUnit">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="test.test2" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.retailers.dht.com.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="dht-common" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.retailers.dht.com" />
+      <option name="MAIN_CLASS_NAME" value="com.retailers.dht.com.test" />
+      <option name="METHOD_NAME" value="test2" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration name="test.test3" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
+        <pattern>
+          <option name="PATTERN" value="com.retailers.dht.com.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <module name="dht-common" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="com.retailers.dht.com" />
+      <option name="MAIN_CLASS_NAME" value="com.retailers.dht.com.test" />
+      <option name="METHOD_NAME" value="test3" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+    </configuration>
+    <configuration default="true" type="Remote" factoryName="Remote">
+      <option name="USE_SOCKET_TRANSPORT" value="true" />
+      <option name="SERVER_MODE" value="false" />
+      <option name="SHMEM_ADDRESS" value="javadebug" />
+      <option name="HOST" value="localhost" />
+      <option name="PORT" value="5005" />
+    </configuration>
+    <configuration default="true" type="TestNG" factoryName="TestNG">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="SUITE_NAME" />
+      <option name="PACKAGE_NAME" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="METHOD_NAME" />
+      <option name="GROUP_NAME" />
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <option name="OUTPUT_DIRECTORY" />
+      <option name="ANNOTATION_TYPE" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <option name="USE_DEFAULT_REPORTERS" value="false" />
+      <option name="PROPERTIES_FILE" />
+      <envs />
+      <properties />
+      <listeners />
+    </configuration>
+    <configuration name="hnc_manage" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.43" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="hnc-manage:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_大汇堂_3" />
+      </server-settings>
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="4879" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method>
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="hnc-manage:war exploded" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="hnc_manager_tomcat" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.43" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATING_POLICY" value="restart-server" />
+      <deployment>
+        <artifact name="hnc-manage:war">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_大汇堂" />
+      </server-settings>
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="1751" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method>
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="hnc-manage:war" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="hnc_web" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.43" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="OPEN_IN_BROWSER_URL" value="http://localhost:80/" />
+      <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
+      <option name="HOT_SWAP_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
+      <option name="UPDATING_POLICY" value="hot-swap-classes" />
+      <deployment>
+        <artifact name="hnc-web:war">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_大汇堂_2" />
+      </server-settings>
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="4036" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method>
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="hnc-web:war" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="manage" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.43" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
+      <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
+      <deployment>
+        <artifact name="dht-manage:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_(1)_大汇堂" />
+        <option name="HTTP_PORT" value="8081" />
+        <option name="JNDI_PORT" value="1098" />
+      </server-settings>
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="57276" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="JRebel Debug">
+        <option name="DEBUG_PORT" value="57277" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="JRebel Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="JRebel Executor">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method>
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="dht-manage:war exploded" />
+        </option>
+      </method>
+    </configuration>
+    <configuration name="tomcat_dht_web" type="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory" factoryName="Local" APPLICATION_SERVER_NAME="Tomcat 8.0.43" ALTERNATIVE_JRE_ENABLED="false">
+      <option name="UPDATE_ON_FRAME_DEACTIVATION" value="true" />
+      <option name="UPDATE_CLASSES_ON_FRAME_DEACTIVATION" value="true" />
+      <deployment>
+        <artifact name="dht-web:war exploded">
+          <settings>
+            <option name="CONTEXT_PATH" value="/" />
+          </settings>
+        </artifact>
+      </deployment>
+      <server-settings>
+        <option name="BASE_DIRECTORY_NAME" value="Unnamed_retailers-root_3" />
+      </server-settings>
+      <predefined_log_file id="Tomcat" enabled="true" />
+      <predefined_log_file id="Tomcat Catalina" enabled="true" />
+      <predefined_log_file id="Tomcat Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Host Manager" enabled="false" />
+      <predefined_log_file id="Tomcat Localhost Access" enabled="false" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <RunnerSettings RunnerId="Debug">
+        <option name="DEBUG_PORT" value="61419" />
+      </RunnerSettings>
+      <RunnerSettings RunnerId="JRebel Debug">
+        <option name="DEBUG_PORT" value="61420" />
+      </RunnerSettings>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Cover">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="JRebel Debug">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="JRebel Executor">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <ConfigurationWrapper VM_VAR="JAVA_OPTS" RunnerId="Run">
+        <option name="USE_ENV_VARIABLES" value="true" />
+        <STARTUP>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </STARTUP>
+        <SHUTDOWN>
+          <option name="USE_DEFAULT" value="true" />
+          <option name="SCRIPT" value="" />
+          <option name="VM_PARAMETERS" value="" />
+          <option name="PROGRAM_PARAMETERS" value="" />
+        </SHUTDOWN>
+      </ConfigurationWrapper>
+      <method>
+        <option name="BuildArtifacts" enabled="true">
+          <artifact name="dht-web:war exploded" />
+        </option>
+      </method>
+    </configuration>
+    <configuration default="true" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" factoryName="Plugin">
+      <module name="" />
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+      <option name="PROGRAM_PARAMETERS" />
+      <predefined_log_file id="idea.log" enabled="true" />
+    </configuration>
+    <list size="10">
+      <item index="0" class="java.lang.String" itemvalue="Tomcat Server.hnc_manage" />
+      <item index="1" class="java.lang.String" itemvalue="Tomcat Server.hnc_web" />
+      <item index="2" class="java.lang.String" itemvalue="Tomcat Server.tomcat_dht_web" />
+      <item index="3" class="java.lang.String" itemvalue="Tomcat Server.hnc_manager_tomcat" />
+      <item index="4" class="java.lang.String" itemvalue="Tomcat Server.manage" />
+      <item index="5" class="java.lang.String" itemvalue="Android JUnit.test.test1" />
+      <item index="6" class="java.lang.String" itemvalue="JUnit.test.test2" />
+      <item index="7" class="java.lang.String" itemvalue="Android JUnit.test.test2" />
+      <item index="8" class="java.lang.String" itemvalue="Android JUnit.test.test3" />
+      <item index="9" class="java.lang.String" itemvalue="JUnit.test.test3" />
+    </list>
+    <recent_temporary>
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.test.test3" />
+        <item index="1" class="java.lang.String" itemvalue="Android JUnit.test.test3" />
+        <item index="2" class="java.lang.String" itemvalue="Android JUnit.test.test2" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.test.test2" />
+        <item index="4" class="java.lang.String" itemvalue="Android JUnit.test.test1" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false">
+    <option name="remove_strategy" value="false" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c02a895a-3d58-48be-89bc-414fa44cc820" name="Default" comment="" />
+      <created>1519886584368</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1519886584368</updated>
+      <workItem from="1519886588264" duration="11413000" />
+      <workItem from="1519953757753" duration="5510000" />
+      <workItem from="1519959603280" duration="561000" />
+      <workItem from="1519960348620" duration="20158000" />
+      <workItem from="1520039197273" duration="43877000" />
+      <workItem from="1520299603853" duration="15367000" />
+      <workItem from="1520323638108" duration="5523000" />
+      <workItem from="1520383207788" duration="16238000" />
+      <workItem from="1520473800387" duration="16157000" />
+      <workItem from="1520495915497" duration="7745000" />
+      <workItem from="1520515997565" duration="1034000" />
+      <workItem from="1520556880957" duration="10022000" />
+      <workItem from="1520663462744" duration="2253000" />
+      <workItem from="1521897284332" duration="708000" />
+      <workItem from="1521898086007" duration="42000" />
+      <workItem from="1525155052353" duration="2823000" />
+      <workItem from="1526363746265" duration="9568000" />
+      <workItem from="1526376616396" duration="6289000" />
+      <workItem from="1526443768470" duration="21475000" />
+      <workItem from="1526519382580" duration="2707000" />
+      <workItem from="1527214666094" duration="1887000" />
+      <workItem from="1527218849403" duration="2010000" />
+      <workItem from="1527324494590" duration="7871000" />
+      <workItem from="1527934972116" duration="719000" />
+      <workItem from="1528461502836" duration="1002000" />
+      <workItem from="1528625948077" duration="260000" />
+    </task>
+    <task id="LOCAL-00001" summary="添加结亲商品板块">
+      <created>1519892283081</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1519892283081</updated>
+    </task>
+    <task id="LOCAL-00002" summary="添加评价">
+      <created>1520221331741</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1520221331741</updated>
+    </task>
+    <task id="LOCAL-00003" summary="添加评论模块">
+      <created>1520231587271</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1520231587271</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
+    <servers />
+  </component>
+  <component name="TestHistory">
+    <history-entry file="test_test1 - 2018.05.16 at 17h 26m 07s.xml">
+      <configuration name="test.test1" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test1 - 2018.05.16 at 17h 27m 29s.xml">
+      <configuration name="test.test1" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test1 - 2018.05.16 at 17h 29m 14s.xml">
+      <configuration name="test.test1" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test1 - 2018.05.16 at 17h 30m 55s.xml">
+      <configuration name="test.test1" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test2 - 2018.05.16 at 17h 46m 40s.xml">
+      <configuration name="test.test2" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="test_test2 - 2018.05.16 at 17h 47m 21s.xml">
+      <configuration name="test.test2" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test3 - 2018.05.16 at 22h 28m 43s.xml">
+      <configuration name="test.test3" configurationId="AndroidJUnit" />
+    </history-entry>
+    <history-entry file="test_test3 - 2018.05.16 at 22h 29m 03s.xml">
+      <configuration name="test.test3" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="test_test3 - 2018.05.16 at 22h 30m 32s.xml">
+      <configuration name="test.test3" configurationId="JUnit" />
+    </history-entry>
+    <history-entry file="test_test3 - 2018.05.16 at 22h 31m 00s.xml">
+      <configuration name="test.test3" configurationId="JUnit" />
+    </history-entry>
+  </component>
+  <component name="TimeTrackingManager">
+    <option name="totallyTimeSpent" value="213219000" />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="1358" y="-8" width="1382" height="784" extended-state="6" />
+    <editor active="true" />
+    <layout>
+      <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32730263" sideWeight="0.5" order="15" side_tool="false" content_ui="tabs" />
+      <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.36731392" sideWeight="0.5075643" order="0" side_tool="true" content_ui="tabs" />
+      <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.13117284" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.22039473" sideWeight="0.5" order="13" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3287037" sideWeight="0.4969743" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32730263" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.295764" sideWeight="0.4816626" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.28971255" sideWeight="0.5183374" order="5" side_tool="true" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980332" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.24962178" sideWeight="0.48655257" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.24962178" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.27231467" sideWeight="0.51589245" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.67105263" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="JRebel Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="JRebel Executor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3883495" sideWeight="0.4924357" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.14447807" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.4614221" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
+      <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32894737" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Bean Validation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.32980332" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="JRebel" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="RECENTLY_FILTERED_USER_GROUPS">
+                <collection />
+              </option>
+              <option name="RECENTLY_FILTERED_BRANCH_GROUPS">
+                <collection />
+              </option>
+              <option name="COLUMN_ORDER">
+                <list>
+                  <option value="0" />
+                  <option value="1" />
+                  <option value="2" />
+                  <option value="3" />
+                </list>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="添加结亲商品板块" />
+    <MESSAGE value="添加评价" />
+    <MESSAGE value="添加评论模块" />
+    <option name="LAST_COMMIT_MESSAGE" value="添加评论模块" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager />
+    <watches-manager />
+  </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/src/main/resources/spring-wx-common-mvc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="25" column="0" lean-forward="true" selection-start-line="25" selection-start-column="0" selection-end-line="25" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/src/main/resources/spring-wx-mvc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2354">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/tag/CheckPermissionTag.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="75">
+          <caret line="25" column="22" lean-forward="false" selection-start-line="25" selection-start-column="22" selection-end-line="25" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/vo/ZTreeVo.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="250">
+          <caret line="10" column="7" lean-forward="true" selection-start-line="10" selection-start-column="7" selection-end-line="10" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/resources/db/cra.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-2536">
+          <caret line="7" column="0" lean-forward="true" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/resources/db/cra_oracle.sql">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/resources/META-INF/permission.tld">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="235">
+          <caret line="11" column="4" lean-forward="true" selection-start-line="11" selection-start-column="4" selection-end-line="11" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/resources/spring/spring-auth-application-context.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-757">
+          <caret line="7" column="4" lean-forward="true" selection-start-line="7" selection-start-column="4" selection-end-line="7" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-mybatis/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1654">
+          <caret line="8" column="13" lean-forward="true" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-mybatis/src/main/resources/configuration.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="9" column="15" lean-forward="false" selection-start-line="9" selection-start-column="15" selection-end-line="9" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-mybatis/src/main/resources/db.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="18" column="21" lean-forward="false" selection-start-line="18" selection-start-column="21" selection-end-line="18" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-mybatis/src/main/resources/spring-mybatis.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1532">
+          <caret line="10" column="13" lean-forward="false" selection-start-line="10" selection-start-column="13" selection-end-line="10" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-static/src/main/webapp/WEB-INF/web.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-static/src/main/webapp/index.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/resources/redis.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="25">
+          <caret line="1" column="20" lean-forward="false" selection-start-line="1" selection-start-column="20" selection-end-line="1" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/filters/filter-local-env.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/resources/paramKey.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/resources/share_image.png">
+      <provider selected="true" editor-type-id="images">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/BaseWrite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1865">
+          <caret line="15" column="17" lean-forward="true" selection-start-line="15" selection-start-column="17" selection-end-line="15" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/AsyncCallback.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="8" column="17" lean-forward="false" selection-start-line="8" selection-start-column="17" selection-end-line="8" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/BaseResp.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-265">
+          <caret line="12" column="9" lean-forward="true" selection-start-line="12" selection-start-column="9" selection-end-line="12" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/base/WriteData.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1865">
+          <caret line="11" column="10" lean-forward="true" selection-start-line="11" selection-start-column="10" selection-end-line="11" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/encrypt/ParamKey.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-904">
+          <caret line="11" column="3" lean-forward="false" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/redis/RedisPool.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="600">
+          <caret line="28" column="22" lean-forward="false" selection-start-line="28" selection-start-column="22" selection-end-line="28" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/ValidationUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="19" column="12" lean-forward="false" selection-start-line="19" selection-start-column="12" selection-end-line="19" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/java/com/retailers/tools/utils/UUIDUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="14" column="14" lean-forward="false" selection-start-line="14" selection-start-column="14" selection-end-line="14" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-tools/src/main/resources/desKey.properties">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="6" column="43" lean-forward="false" selection-start-line="6" selection-start-column="43" selection-end-line="6" selection-end-column="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="225">
+          <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/sbj-web/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="17" lean-forward="false" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/TeamController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="325">
+          <caret line="24" column="0" lean-forward="false" selection-start-line="24" selection-start-column="0" selection-end-line="24" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/sbj-common/src/main/java/com/retailers/sbj/common/service/impl/HouseTypeManageServiceImpl.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="35">
+          <caret line="162" column="5" lean-forward="true" selection-start-line="162" selection-start-column="5" selection-end-line="163" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/sbj-common/src/main/java/com/retailers/sbj/common/mapper/EmRelationshipMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="108">
+          <caret line="151" column="22" lean-forward="true" selection-start-line="151" selection-start-column="22" selection-end-line="151" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-static/src/main/webapp/js/jquery.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="338">
+          <caret line="5" column="0" lean-forward="true" selection-start-line="5" selection-start-column="0" selection-end-line="5" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/filter/SystemStartFilter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="24" column="17" lean-forward="false" selection-start-line="24" selection-start-column="17" selection-end-line="24" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/SystemInit.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-web/src/main/java/com/retailers/dht/web/controller/BuyCarController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1300">
+          <caret line="69" column="26" lean-forward="true" selection-start-line="69" selection-start-column="26" selection-end-line="69" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/org/bouncycastle/bcprov-jdk15/1.45/bcprov-jdk15-1.45.jar!/org/bouncycastle/x509/X509AttributeCertStoreSelector.class" />
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/CheckUserPermissionUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="725">
+          <caret line="35" column="29" lean-forward="false" selection-start-line="35" selection-start-column="29" selection-end-line="35" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/interceptor/MenuBeforeAdvisor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="22" column="13" lean-forward="false" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/annotation/CheckSession.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="525">
+          <caret line="21" column="7" lean-forward="false" selection-start-line="21" selection-start-column="7" selection-end-line="21" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/interceptor/CheckSessionAdvisor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="800">
+          <caret line="54" column="44" lean-forward="false" selection-start-line="54" selection-start-column="44" selection-end-line="54" selection-end-column="44" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/utils/JoinPointUtils.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="227">
+          <caret line="31" column="12" lean-forward="true" selection-start-line="31" selection-start-column="12" selection-end-line="31" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-auth/src/main/java/com/retailers/auth/constant/SystemConstant.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="508">
+          <caret line="38" column="67" lean-forward="false" selection-start-line="38" selection-start-column="67" selection-end-line="38" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/webapp/WEB-INF/page/ysjq/famer.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1125">
+          <caret line="45" column="29" lean-forward="false" selection-start-line="45" selection-start-column="29" selection-end-line="45" selection-end-column="29" />
+          <folding>
+            <marker date="1519886552438" expanded="true" signature="1882:1987" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="2046:2071" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="2158:2292" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="2639:2744" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="2803:2828" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="2913:3041" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="26858:26870" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="27657:27663" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="28186:28192" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="28764:28770" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="29498:29508" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="46253:46259" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="46259:46265" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="46265:46271" ph="&amp;nbsp;" />
+            <marker date="1519886552438" expanded="true" signature="46285:46296" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="46321:46352" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="46949:46965" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="50646:50751" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="50822:50847" ph="..." />
+            <marker date="1519886552438" expanded="true" signature="50945:51079" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/sbj-root/sbj-web/src/main/java/com/retailers/sbj/web/controller/ClientIntentionController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="550">
+          <caret line="35" column="9" lean-forward="false" selection-start-line="35" selection-start-column="9" selection-end-line="35" selection-end-column="9" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/java/com/retailers/dht/manage/controller/ArticleClassificationController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="575">
+          <caret line="39" column="19" lean-forward="false" selection-start-line="39" selection-start-column="19" selection-end-line="39" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/retailers-mybatis/src/main/java/com/retailers/mybatis/pagination/Pagination.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="12" column="28" lean-forward="false" selection-start-line="12" selection-start-column="27" selection-end-line="12" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-manage/src/main/java/com/retailers/dht/manage/controller/CityController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="422">
+          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/ArticleClassificationMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="275">
+          <caret line="11" column="16" lean-forward="true" selection-start-line="11" selection-start-column="16" selection-end-line="11" selection-end-column="16" />
+          <folding>
+            <marker date="1519886548217" expanded="true" signature="897:1005" ph="SELECT FROM t_article_classification" />
+            <marker date="1519886548217" expanded="true" signature="1793:1947" ph="SELECT FROM t_article_classification" />
+            <marker date="1519886548217" expanded="true" signature="2130:2342" ph="INSERT INTO t_article_classification... " />
+            <marker date="1519886548217" expanded="true" signature="2485:3070" ph="UPDATE t_article_classification... " />
+            <marker date="1519886548217" expanded="true" signature="3179:3235" ph="DELETE FROM t_article_classification... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dht-root/dht-common/src/main/java/com/retailers/dht/common/mapper/CashOrderMapper.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4350">
+          <caret line="174" column="29" lean-forward="true" selection-start-line="174" selection-start-column="29" selection-end-line="174" selection-end-column="29" />
+          <folding>
+            <marker date="1520212214092" expanded="true" signature="2686:2772" ph="SELECT FROM t_cash_order" />
+            <marker date="1520212214092" expanded="true" signature="4725:4789" ph="SELECT FROM t_cash_order" />
+            <marker date="1520212214092" expanded="true" signature="4988:5691" ph="INSERT INTO t_cash_order... " />
+            <marker date="1520212214092" expanded="true" signature="5812:6973" ph="UPDATE t_cash_order... " />
+            <marker date="1520212214092" expanded="true" signature="7073:7119" ph="DELETE FROM t_cash_order... " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <last-edited>dht-attachment:war</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.5" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="FacetStructureConfigurable.UI">
+        <settings>
+          <last-edited>Spring</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>aliyun-sms</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectJDKs.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>Maven: avalon-framework:avalon-framework:4.1.3</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
+  </component>
+</project>

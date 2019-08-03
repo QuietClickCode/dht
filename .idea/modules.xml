@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/aliyun-sms/aliyun-sms.iml" filepath="$PROJECT_DIR$/aliyun-sms/aliyun-sms.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dht-root/dht-attachment/dht-attachment.iml" filepath="$PROJECT_DIR$/dht-root/dht-attachment/dht-attachment.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dht-root/dht-common/dht-common.iml" filepath="$PROJECT_DIR$/dht-root/dht-common/dht-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dht-root/dht-manage/dht-manage.iml" filepath="$PROJECT_DIR$/dht-root/dht-manage/dht-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dht-root/dht-root.iml" filepath="$PROJECT_DIR$/dht-root/dht-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/dht-root/dht-web/dht-web.iml" filepath="$PROJECT_DIR$/dht-root/dht-web/dht-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hnc-root/hnc-common/hnc-common.iml" filepath="$PROJECT_DIR$/hnc-root/hnc-common/hnc-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hnc-root/hnc-manage/hnc-manage.iml" filepath="$PROJECT_DIR$/hnc-root/hnc-manage/hnc-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hnc-root/hnc-root.iml" filepath="$PROJECT_DIR$/hnc-root/hnc-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/hnc-root/hnc-web/hnc-web.iml" filepath="$PROJECT_DIR$/hnc-root/hnc-web/hnc-web.iml" />
+      <module fileurl="file://$PROJECT_DIR$/razz-root/razz-common/razz-common.iml" filepath="$PROJECT_DIR$/razz-root/razz-common/razz-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/razz-root/razz-manage/razz-manage.iml" filepath="$PROJECT_DIR$/razz-root/razz-manage/razz-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/razz-root/razz-root.iml" filepath="$PROJECT_DIR$/razz-root/razz-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reatilers-wx/reatilers-wx.iml" filepath="$PROJECT_DIR$/reatilers-wx/reatilers-wx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reatilers-wx/reatilers-wx-common/reatilers-wx-common.iml" filepath="$PROJECT_DIR$/reatilers-wx/reatilers-wx-common/reatilers-wx-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/reatilers-wx-manage.iml" filepath="$PROJECT_DIR$/reatilers-wx/reatilers-wx-manage/reatilers-wx-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retailers-auth/retailers-auth.iml" filepath="$PROJECT_DIR$/retailers-auth/retailers-auth.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retailers-mybatis/retailers-mybatis.iml" filepath="$PROJECT_DIR$/retailers-mybatis/retailers-mybatis.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retailers-root.iml" filepath="$PROJECT_DIR$/retailers-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retailers-static/retailers-static.iml" filepath="$PROJECT_DIR$/retailers-static/retailers-static.iml" />
+      <module fileurl="file://$PROJECT_DIR$/retailers-tools/retailers-tools.iml" filepath="$PROJECT_DIR$/retailers-tools/retailers-tools.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sbj-root/sbj-common/sbj-common.iml" filepath="$PROJECT_DIR$/sbj-root/sbj-common/sbj-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sbj-root/sbj-manage/sbj-manage.iml" filepath="$PROJECT_DIR$/sbj-root/sbj-manage/sbj-manage.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sbj-root/sbj-root.iml" filepath="$PROJECT_DIR$/sbj-root/sbj-root.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sbj-root/sbj-web/sbj-web.iml" filepath="$PROJECT_DIR$/sbj-root/sbj-web/sbj-web.iml" />
+    </modules>
+  </component>
+</project>

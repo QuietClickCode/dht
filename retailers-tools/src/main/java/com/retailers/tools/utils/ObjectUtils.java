@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ObjectUtils {
+public class ObjectUtils {//通用的工具类
 
 
 	public static void main(String[] p) {
@@ -14,16 +14,22 @@ public class ObjectUtils {
 		Set set=new HashSet();
 	}
 
-	public static boolean isEquals(Object object1, Object object2) {
+	/**
+	 * 判断两个对象是否相等
+	 * @param object1
+	 * @param object2
+	 * @return
+	 */
+	public static boolean isEquals(Object object1, Object object2) {//判断两个对象是否相等
 		boolean ret = false;
 		try {
-			if (object1 == null && object2 == null) {
+			if (object1 == null && object2 == null) {//两个都为空的话,返回true
 				ret = true;
 				return ret;
 			}
-			ret = object1.equals(object2);
+			ret = object1.equals(object2);//否则,就直接调用java.lang包下的equals判断
 		} catch (NullPointerException e) {
-			ret = false;
+			ret = false;//抛出空指针直接返回false
 		}
 		return ret;
 
@@ -97,7 +103,7 @@ public class ObjectUtils {
 	}
 
 	/**
-	 *
+	 *判断是否不为空,跟isNotEmpty相反
 	 * @param obj
 	 * @return
 	 */

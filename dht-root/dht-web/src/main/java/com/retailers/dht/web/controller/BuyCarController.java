@@ -22,19 +22,23 @@ import java.util.*;
 /**
  * Created by niconiconi on 2017/10/30.
  */
-@Controller
-@RequestMapping("buyCar")
-public class BuyCarController extends BaseController{
+@Controller//控制器
+@RequestMapping("buyCar")//加在类上,在所有方法的url前加上"buyCar"
+public class BuyCarController extends BaseController{//购物车控制器
     @Autowired
     BuyCarService buyCarService;
 
-    @RequestMapping("/gotoShoppingCar")
+   /* @RequestMapping("/gotoShoppingCar")
     public String gotoShoppingCar(HttpServletRequest request){
         return  redirectUrl(request,"user/shopping-car");
     }
 
-
-    @RequestMapping("/saveBuyCar")
+*/
+   @RequestMapping("/gotoShoppingCar")
+   public String gotoShoppingCar(HttpServletRequest request) {
+       return redirectUrl(request, "user/shopping-car");//请求路径为/gotoShoppingCar,则重定向到type+/user/shopping-car;
+   }
+    /*@RequestMapping("/saveBuyCar")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody
     public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request){
@@ -49,7 +53,22 @@ public class BuyCarController extends BaseController{
         boolean flag = buyCarService.saveBuyCar(buyCar);
         return  success(flag);
     }
-
+*/
+    @RequestMapping("/saveBuyCar")
+    @CheckSession(key = SystemConstant.LOG_USER_SESSION_KEY, msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)//没搞懂这个注解的意思
+    @ResponseBody
+    public BaseResp saveBuyCar(BuyCar buyCar, HttpServletRequest request) {
+        buyCar.setIsDelete(0L);
+        buyCar.setIsBuy(0L);
+        buyCar.setBcTimmer(new Date());
+        buyCar.setUid(getCurLoginUserId(request));
+        Long goodsId = getShareGoodsId(request);
+        if (buyCar.getGid().equals(goodsId)) {
+            buyCar.setBcInviterid(getShareUserId(request));
+        }
+        boolean flag = buyCarService.saveBuyCar(buyCar);
+        return success(flag);
+    }
     @RequestMapping("/queryBuyCarList")
     @CheckSession(key= SystemConstant.LOG_USER_SESSION_KEY,msg = SystemConstant.USER_UN_LOGIN_ALERT_MSG)
     @ResponseBody

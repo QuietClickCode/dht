@@ -1,121 +1,110 @@
 package com.retailers.hnc.web.controller;
 
 import
-java.io.IOException;
+        java.io.IOException;
 
- 
-
-import
-javax.servlet.ServletException;
 
 import
-javax.servlet.ServletOutputStream;
+        javax.servlet.ServletException;
 
 import
-javax.servlet.http.HttpServlet;
+        javax.servlet.ServletOutputStream;
 
 import
-javax.servlet.http.HttpServletRequest;
+        javax.servlet.http.HttpServlet;
 
 import
-javax.servlet.http.HttpServletResponse;
-
- 
+        javax.servlet.http.HttpServletRequest;
 
 import
-com.google.zxing.BarcodeFormat;
+        javax.servlet.http.HttpServletResponse;
+
 
 import
-com.google.zxing.WriterException;
+        com.google.zxing.BarcodeFormat;
 
 import
-com.google.zxing.client.j2se.MatrixToImageWriter;
+        com.google.zxing.WriterException;
 
 import
-com.google.zxing.common.BitMatrix;
+        com.google.zxing.client.j2se.MatrixToImageWriter;
 
 import
-com.google.zxing.oned.Code128Writer;
+        com.google.zxing.common.BitMatrix;
 
- 
+import
+        com.google.zxing.oned.Code128Writer;
+
 
 /**
+ * @Description: 生成条码（CODE128格式）
+ */
 
- * @Description: 生成条码（CODE128格式）  */
+public class BarCode1DServlet extends
+        HttpServlet {
 
-public
-class BarCode1DServlet extends
-HttpServlet {
 
- 
-
-    /**  
-
+    /**
      * @Fields serialVersionUID : default serialVersionUID
-
      */
 
     private
-static final long serialVersionUID = 1L;
+    static final long serialVersionUID = 1L;
 
-     
-
-    private
-static final String KEY = "keycode";
 
     private
-static final String WIDTH = "mwidth";
+    static final String KEY = "keycode";
 
     private
-static final String HEIGHT = "mheight";
+    static final String WIDTH = "mwidth";
 
     private
-static final String IMAGETYPE = "JPEG";
+    static final String HEIGHT = "mheight";
 
- 
+    private
+    static final String IMAGETYPE = "JPEG";
+
 
     @Override
 
-    protected
-void doGet(HttpServletRequest req, HttpServletResponse resp)
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 
             throws
-ServletException, IOException {
+            ServletException, IOException {
 
         String keycode = req.getParameter(KEY);
 
         if
-(keycode != null
-&& !"".equals(keycode)) {
+                (keycode != null
+                && !"".equals(keycode)) {
 
             ServletOutputStream stream = null;
 
-            try
-{
+            try {
 
                 Code128Writer writer = new
-Code128Writer();
+                        Code128Writer();
 
                 int
-width=180;
+                        width = 180;
 
                 int
-height=60;
+                        height = 60;
 
                 String mwidth = req.getParameter(WIDTH);
 
                 if
-(mwidth != null
-&& !"".equals(mwidth.trim())) {
+                        (mwidth != null
+                        && !"".equals(mwidth.trim())) {
 
-                    try{
+                    try {
 
-                        width=Integer.valueOf(mwidth);
+                        width = Integer.valueOf(mwidth);
 
                     } catch
-(NumberFormatException e) {
+                            (NumberFormatException e) {
 
-                                        //TODO output to log
+                        //TODO output to log
 
                     }
 
@@ -124,15 +113,15 @@ height=60;
                 String mheight = req.getParameter(HEIGHT);
 
                 if
-(mheight != null
-&& !"".equals(mheight.trim())) {
+                        (mheight != null
+                        && !"".equals(mheight.trim())) {
 
-                    try{
+                    try {
 
                         height = Integer.valueOf(mheight);
 
                     } catch
-(NumberFormatException e) {
+                            (NumberFormatException e) {
 
                         //TODO output to log
 
@@ -147,15 +136,14 @@ height=60;
                 MatrixToImageWriter.writeToStream(m, IMAGETYPE, stream);
 
             } catch
-(WriterException e) {
+                    (WriterException e) {
 
                 e.printStackTrace();
 
-            } finally
-{
+            } finally {
 
                 if
-(stream != null) {
+                        (stream != null) {
 
                     stream.flush();
 
@@ -169,24 +157,17 @@ height=60;
 
     }
 
- 
 
     @Override
 
-    protected
-void doPost(HttpServletRequest req, HttpServletResponse resp)
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 
             throws
-ServletException, IOException {
+            ServletException, IOException {
 
         this.doGet(req, resp);
 
     }
 
-     
-
-     
-
- 
 
 }

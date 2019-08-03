@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="sbj-web:war">
+    <output-path>$PROJECT_DIR$/sbj-root/sbj-web/target</output-path>
+    <root id="archive" name="sbj-web.war">
+      <element id="artifact" artifact-name="sbj-web:war exploded" />
+    </root>
+  </artifact>
+</component>

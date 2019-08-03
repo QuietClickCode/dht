@@ -34,7 +34,7 @@ public class WriteData {
 
 	public static void write(String data,HttpServletResponse response) {
 		try {
-			response.reset();
+			response.reset();//清除空白行
 			response.setCharacterEncoding("UTF-8");
 			response.setContentType("text/html;charset=utf-8");
 			response.setStatus(HttpServletResponse.SC_OK);

@@ -124,9 +124,9 @@ public class UserInfoVIew {
     }
 
     public String getHeadUrl() {
-        if(ObjectUtils.isNotEmpty(headUrl)){
-            if(headUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&headUrl.indexOf("http://")==-1){
-                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,headUrl);
+        if(ObjectUtils.isNotEmpty(headUrl)){//headUrl不为空
+            if(headUrl.indexOf(AttachmentConstant.IMAGE_SHOW_URL)==-1&&headUrl.indexOf("http://")==-1){//不包含图片地址并且不包含http://
+                return StringUtils.concat(AttachmentConstant.IMAGE_SHOW_URL,headUrl);//拼接字符串,附件地址+headUrl
             }
         }
         return headUrl;

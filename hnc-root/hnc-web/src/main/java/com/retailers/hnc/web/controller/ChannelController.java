@@ -28,6 +28,9 @@ public class ChannelController extends BaseController {
     @RequestMapping("/queryChannelList")
     @ResponseBody
     public Map<String,Object> queryChannelList(PageUtils pageForm,String channelVal){
+        System.out.println("--------------------------------"+channelVal);
+//        Map<String,Object> gtm = new HashMap<String,Object>();
+//        gtm.put("channelVal",channelVal);
         Map<String,Object> map = new HashMap<String,Object>();
         map.put("isDelete",0);
         Pagination<Channel> teamPagination = channelService.queryChannelList(map,pageForm.getPageNo(),pageForm.getPageSize());

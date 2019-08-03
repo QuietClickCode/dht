@@ -10,7 +10,7 @@ import java.util.Locale;
  * 基础返回类
  * Created by Administrator on 2014/10/29.
  */
-public class BaseWrite {
+public class BaseWrite {//基础返回类
 	/**
 	 * 系统错误
 	 * @param msg
