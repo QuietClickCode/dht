@@ -27,7 +27,7 @@
         <org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
         <org.aspectj.version>1.8.1</org.aspectj.version>
         <org.slf4j.version>1.7.2</org.slf4j.version>
-        <org.hibernate.validator.version>5.2.0.Beta1</org.hibernate.validator.version>
+        <org.hibernate.validator.version>5.3.5.Final</org.hibernate.validator.version>
         <org.aspectj.version>1.8.1</org.aspectj.version>
         <junit>4.12</junit>
     </properties>
